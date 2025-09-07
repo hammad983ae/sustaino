@@ -1,0 +1,151 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+
+const PropertyAddressForm = () => {
+  return (
+    <Card className="w-full max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-xl font-semibold">Property Address and ESG Assessment Report</CardTitle>
+        <p className="text-sm text-muted-foreground">Find and configure address to begin your valuation report</p>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Property Address Section */}
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="property-address" className="text-sm font-medium">Property Address</Label>
+            <Input 
+              id="property-address"
+              placeholder="Enter property address"
+              className="mt-1"
+            />
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Quick Address Entry Section */}
+        <div className="space-y-4">
+          <div>
+            <Label className="text-sm font-medium">Quick Address Entry</Label>
+            <p className="text-xs text-muted-foreground mt-1">Enter property address to begin your valuation report.</p>
+          </div>
+
+          {/* First Row - Lot Number and Plan Number */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="lot-number" className="text-sm">Lot Number</Label>
+              <Input 
+                id="lot-number"
+                placeholder="Lot number"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="plan-number" className="text-sm">Plan Number</Label>
+              <Input 
+                id="plan-number"
+                placeholder="Plan number"
+                className="mt-1"
+              />
+            </div>
+          </div>
+
+          {/* Second Row - Unit Number, Street Number, Street Name, Street Type */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <Label htmlFor="unit-number" className="text-sm">Unit Number</Label>
+              <Input 
+                id="unit-number"
+                placeholder="Unit"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="street-number" className="text-sm">Street Number</Label>
+              <Input 
+                id="street-number"
+                placeholder="Street number"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="street-name" className="text-sm">Street Name</Label>
+              <Input 
+                id="street-name"
+                placeholder="Street name"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="street-type" className="text-sm">Street Type</Label>
+              <Select>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select street type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="street">Street</SelectItem>
+                  <SelectItem value="avenue">Avenue</SelectItem>
+                  <SelectItem value="road">Road</SelectItem>
+                  <SelectItem value="lane">Lane</SelectItem>
+                  <SelectItem value="drive">Drive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Third Row - State, Postcode, Country */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="state" className="text-sm">State</Label>
+              <Select>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select state" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="nsw">NSW</SelectItem>
+                  <SelectItem value="vic">VIC</SelectItem>
+                  <SelectItem value="qld">QLD</SelectItem>
+                  <SelectItem value="wa">WA</SelectItem>
+                  <SelectItem value="sa">SA</SelectItem>
+                  <SelectItem value="tas">TAS</SelectItem>
+                  <SelectItem value="act">ACT</SelectItem>
+                  <SelectItem value="nt">NT</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="postcode" className="text-sm">Postcode</Label>
+              <Input 
+                id="postcode"
+                placeholder="Postcode"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="country" className="text-sm">Country</Label>
+              <Input 
+                id="country"
+                value="Australia"
+                readOnly
+                className="mt-1 bg-muted"
+              />
+            </div>
+          </div>
+
+          {/* Generate Address Button */}
+          <div className="flex justify-end pt-4">
+            <Button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6">
+              Generate Address
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default PropertyAddressForm;
