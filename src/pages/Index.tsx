@@ -4,6 +4,7 @@ import PropertyAddressForm from "@/components/PropertyAddressForm";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
+import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
         <PlanningDataIntegration />
         <PropertySearchAnalysis />
         <ReportTypeConfiguration />
+        <DocumentPhotoUpload />
       </div>
     </div>
   );
