@@ -5,9 +5,51 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 import { FileText } from "lucide-react";
 
 const ReportTypeConfiguration = () => {
+  const MultiSelectDropdown = ({ 
+    options, 
+    placeholder, 
+    label 
+  }: { 
+    options: string[]; 
+    placeholder: string; 
+    label: string; 
+  }) => {
+    return (
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">{label}</Label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              {placeholder}
+              <ChevronDown className="h-4 w-4 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-full p-0">
+            <div className="max-h-60 overflow-auto">
+              {options.map((option) => (
+                <div key={option} className="flex items-center space-x-2 px-3 py-2 hover:bg-accent">
+                  <Checkbox id={`${label}-${option}`.toLowerCase().replace(/\s+/g, '-')} />
+                  <Label 
+                    htmlFor={`${label}-${option}`.toLowerCase().replace(/\s+/g, '-')} 
+                    className="text-sm cursor-pointer flex-1"
+                  >
+                    {option}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+    );
+  };
+
   const reportTypes = [
     "Desktop Report", "Kerbside", "Short Form", "Long Form", 
     "Virtual Inspection - Short Form", "Virtual Inspection (Long Form)", 
@@ -24,6 +66,17 @@ const ReportTypeConfiguration = () => {
     "Second Mortgage Security", "Third Mortgage Security", "Private Equity Pool",
     "Caveat Loan", "Insurance Purposes", "Acquisition/Disposal",
     "Financial Reporting", "Stamp Duty", "SMSF Reporting"
+  ];
+
+  const basisOfValuation = ["Market Value", "Insurance Value", "Rental Value"];
+  const valuationApproaches = [
+    "Direct Comparison", "Summation Approach", "Capitalisation of Net Income",
+    "Capitalisation of Gross Income", "Hypothetical Development"
+  ];
+  const valueComponents = ["As Is", "As If Complete"];
+  const interestValues = [
+    "Estate in Fee Simple", "Vacant Possession", "Fully Leased", 
+    "Partial Lease", "Leasehold Interest"
   ];
 
   return (
@@ -122,93 +175,30 @@ const ReportTypeConfiguration = () => {
         <div className="space-y-4">
           <h3 className="font-semibold text-lg">Valuation Configuration</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Basis of Valuation */}
-            <div className="space-y-3">
-              <h4 className="font-medium">Basis of Valuation</h4>
-              <div className="space-y-2">
-                {["Market Value", "Insurance Value", "Rental Value"].map((basis) => (
-                  <div key={basis} className="flex items-center space-x-2">
-                    <Checkbox id={basis.toLowerCase().replace(/\s+/g, '-')} />
-                    <Label 
-                      htmlFor={basis.toLowerCase().replace(/\s+/g, '-')} 
-                      className="text-sm cursor-pointer"
-                    >
-                      {basis}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Valuation Approaches */}
-            <div className="space-y-3">
-              <h4 className="font-medium">Valuation Approaches</h4>
-              <div className="space-y-2">
-                {["Direct Comparison", "Summation Approach", "Capitalisation of Net Income"].map((approach) => (
-                  <div key={approach} className="flex items-center space-x-2">
-                    <Checkbox id={approach.toLowerCase().replace(/\s+/g, '-')} />
-                    <Label 
-                      htmlFor={approach.toLowerCase().replace(/\s+/g, '-')} 
-                      className="text-sm cursor-pointer"
-                    >
-                      {approach}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-2 space-y-2">
-                {["Capitalisation of Gross Income", "Hypothetical Development"].map((item) => (
-                  <div key={item} className="flex items-center space-x-2">
-                    <Checkbox id={item.toLowerCase().replace(/\s+/g, '-')} />
-                    <Label 
-                      htmlFor={item.toLowerCase().replace(/\s+/g, '-')} 
-                      className="text-sm cursor-pointer"
-                    >
-                      {item}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Value Component & Interest Values */}
-            <div className="space-y-4">
-              <div className="space-y-3">
-                <h4 className="font-medium">Value Component</h4>
-                <div className="space-y-2">
-                  {["Bulk", "As Complete"].map((component) => (
-                    <div key={component} className="flex items-center space-x-2">
-                      <Checkbox id={component.toLowerCase().replace(/\s+/g, '-')} />
-                      <Label 
-                        htmlFor={component.toLowerCase().replace(/\s+/g, '-')} 
-                        className="text-sm cursor-pointer"
-                      >
-                        {component}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="font-medium">Interest Values</h4>
-                <div className="space-y-2">
-                  {["Dates in the Scope", "Value/Renovation", "Full Interest"].map((interest) => (
-                    <div key={interest} className="flex items-center space-x-2">
-                      <Checkbox id={interest.toLowerCase().replace(/\s+/g, '-')} />
-                      <Label 
-                        htmlFor={interest.toLowerCase().replace(/\s+/g, '-')} 
-                        className="text-sm cursor-pointer"
-                      >
-                        {interest}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <MultiSelectDropdown 
+              options={basisOfValuation}
+              placeholder="Select basis of valuation"
+              label="Basis of Valuation"
+            />
+            
+            <MultiSelectDropdown 
+              options={valuationApproaches}
+              placeholder="Select valuation approaches"
+              label="Valuation Approaches"
+            />
+            
+            <MultiSelectDropdown 
+              options={valueComponents}
+              placeholder="Select value component"
+              label="Value Component"
+            />
+            
+            <MultiSelectDropdown 
+              options={interestValues}
+              placeholder="Select interest values"
+              label="Interest Values"
+            />
           </div>
 
           <div className="pt-4 text-xs text-muted-foreground">
