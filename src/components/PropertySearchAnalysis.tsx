@@ -103,11 +103,6 @@ const PropertySearchAnalysis = () => {
             Note: Location Analysis, Access & Site, and Services & Amenities are handled by RP Data functions and have been removed from this component to avoid duplication.
           </p>
 
-          <div className="flex justify-center pt-4">
-            <Button className="bg-emerald-500 hover:bg-emerald-600 text-white px-8">
-              Continue to Report Details
-            </Button>
-          </div>
         </div>
       </CardContent>
     </Card>
