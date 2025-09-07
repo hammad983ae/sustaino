@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ExecutiveSummary from "./ExecutiveSummary";
+import RPDAndLocation from "./RPDAndLocation";
 
 interface ReportSectionProps {
   title: string;
@@ -19,6 +20,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <ExecutiveSummary onNavigateToSection={onNavigateToSection} />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for RPD and Location section
+  if (sectionIndex === 1) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <RPDAndLocation />
         </CardContent>
       </Card>
     );
