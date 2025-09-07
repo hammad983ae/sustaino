@@ -6,9 +6,75 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { FileText, Upload, Users } from "lucide-react";
+import { FileText, Upload, Users, Eye, FileImage } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const TenancyScheduleLeaseDetails = () => {
+  const [extractedText, setExtractedText] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { toast } = useToast();
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload an image file for OCR processing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+    
+    try {
+      // Import transformers dynamically to avoid bundle size issues
+      const { pipeline } = await import('@huggingface/transformers');
+      
+      // Create OCR pipeline
+      const ocr = await pipeline('image-to-text', 'Xenova/trocr-base-printed', {
+        device: 'webgpu',
+      });
+
+      // Convert file to image element
+      const imageUrl = URL.createObjectURL(file);
+      const img = new Image();
+      
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = imageUrl;
+      });
+
+      // Process with OCR
+      const result = await ocr(imageUrl) as any;
+      const text = result?.generated_text || result?.text || (Array.isArray(result) ? result[0]?.generated_text || result[0]?.text : "") || "No text detected";
+      
+      setExtractedText(text);
+      
+      toast({
+        title: "OCR Processing Complete",
+        description: "Text has been extracted from the document.",
+      });
+
+      // Clean up
+      URL.revokeObjectURL(imageUrl);
+      
+    } catch (error) {
+      console.error('OCR Error:', error);
+      toast({
+        title: "OCR Processing Failed",
+        description: "Unable to extract text from the document. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Ground Lease Section */}
@@ -149,14 +215,78 @@ const TenancyScheduleLeaseDetails = () => {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Upload Section */}
-          <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center">
-            <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">Upload tenant summaries and documents</p>
-            <Button variant="outline" className="mt-2">
-              <Upload className="h-4 w-4 mr-2" />
-              Choose Files
-            </Button>
+          {/* Upload Section with OCR */}
+          <div className="space-y-4">
+            <div className="border-2 border-dashed border-muted rounded-lg p-6">
+              <div className="text-center">
+                <div className="flex justify-center gap-4 mb-4">
+                  <Upload className="h-8 w-8 text-muted-foreground" />
+                  <Eye className="h-8 w-8 text-blue-500" />
+                  <FileImage className="h-8 w-8 text-green-500" />
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">Upload tenant summaries and documents with OCR text extraction</p>
+                <p className="text-xs text-muted-foreground mb-4">Supports image files (PNG, JPG, PDF) for automatic text extraction</p>
+                
+                <div className="flex gap-2 justify-center">
+                  <Button variant="outline" asChild>
+                    <label htmlFor="file-upload" className="cursor-pointer">
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose Files
+                    </label>
+                  </Button>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  {isProcessing && (
+                    <Button disabled variant="outline">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+                      Processing OCR...
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* OCR Results */}
+            {extractedText && (
+              <div className="border rounded-lg p-4 bg-green-50">
+                <div className="flex items-center gap-2 mb-2">
+                  <Eye className="h-4 w-4 text-green-600" />
+                  <h4 className="font-medium text-green-800">Extracted Text (OCR)</h4>
+                </div>
+                <Textarea
+                  value={extractedText}
+                  onChange={(e) => setExtractedText(e.target.value)}
+                  className="h-32 bg-white border-green-200"
+                  placeholder="Extracted text will appear here..."
+                />
+                <div className="flex gap-2 mt-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setExtractedText("")}
+                  >
+                    Clear
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(extractedText);
+                      toast({
+                        title: "Copied to clipboard",
+                        description: "Extracted text has been copied.",
+                      });
+                    }}
+                  >
+                    Copy Text
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Tenant Lease Details */}
