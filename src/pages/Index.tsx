@@ -3,6 +3,7 @@
 import PropertyAddressForm from "@/components/PropertyAddressForm";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
+import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
         <PropertyAddressForm />
         <PlanningDataIntegration />
         <PropertySearchAnalysis />
+        <ReportTypeConfiguration />
       </div>
     </div>
   );
