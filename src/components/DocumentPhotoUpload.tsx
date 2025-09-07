@@ -5,6 +5,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Upload, Image, FileText, Sparkles, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const DocumentPhotoUpload = () => {
@@ -139,9 +140,11 @@ const DocumentPhotoUpload = () => {
           </Button>
           
           <div className="flex gap-3">
-            <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
-              Perform Comprehensive Valuation
-            </Button>
+            <Link to="/report">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+                Perform Comprehensive Valuation
+              </Button>
+            </Link>
             <Button variant="outline" size="lg" className="flex items-center gap-2">
               <Sparkles className="h-4 w-4" />
               Enhance with AI
