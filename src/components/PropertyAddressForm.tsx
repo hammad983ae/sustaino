@@ -9,7 +9,7 @@ const PropertyAddressForm = () => {
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Property Address and ESG Assessment Report</CardTitle>
+        <CardTitle className="text-xl font-semibold">Property Valuation and ESG Assessment Report</CardTitle>
         <p className="text-sm text-muted-foreground">Find and configure address to begin your valuation report</p>
       </CardHeader>
       <CardContent className="space-y-6">
