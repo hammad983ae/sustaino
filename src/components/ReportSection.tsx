@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ExecutiveSummary from "./ExecutiveSummary";
 import RPDAndLocation from "./RPDAndLocation";
 import LegalAndPlanning from "./LegalAndPlanning";
+import TenancyScheduleLeaseDetails from "./TenancyScheduleLeaseDetails";
 
 interface ReportSectionProps {
   title: string;
@@ -36,6 +37,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <RPDAndLocation />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Tenancy Schedule/Lease Details section
+  if (sectionIndex === 3) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <TenancyScheduleLeaseDetails />
         </CardContent>
       </Card>
     );
