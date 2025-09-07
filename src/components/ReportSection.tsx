@@ -3,6 +3,7 @@ import ExecutiveSummary from "./ExecutiveSummary";
 import RPDAndLocation from "./RPDAndLocation";
 import LegalAndPlanning from "./LegalAndPlanning";
 import TenancyScheduleLeaseDetails from "./TenancyScheduleLeaseDetails";
+import StatutoryAssessment from "./StatutoryAssessment";
 
 interface ReportSectionProps {
   title: string;
@@ -42,6 +43,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
+  // Special handling for Legal and Planning section
+  if (sectionIndex === 2) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <LegalAndPlanning />
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Special handling for Tenancy Schedule/Lease Details section
   if (sectionIndex === 3) {
     return (
@@ -57,8 +73,8 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Legal and Planning section
-  if (sectionIndex === 2) {
+  // Special handling for Statutory Assessment section
+  if (sectionIndex === 4) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -66,7 +82,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <LegalAndPlanning />
+          <StatutoryAssessment />
         </CardContent>
       </Card>
     );
