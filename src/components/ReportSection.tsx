@@ -1,11 +1,29 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ExecutiveSummary from "./ExecutiveSummary";
 
 interface ReportSectionProps {
   title: string;
   subtitle?: string;
+  sectionIndex: number;
+  onNavigateToSection: (sectionIndex: number) => void;
 }
 
-const ReportSection = ({ title, subtitle }: ReportSectionProps) => {
+const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: ReportSectionProps) => {
+  // Special handling for Executive Summary section
+  if (sectionIndex === 0) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <ExecutiveSummary onNavigateToSection={onNavigateToSection} />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>

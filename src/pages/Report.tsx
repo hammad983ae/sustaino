@@ -28,6 +28,10 @@ const ReportViewer = () => {
     { title: "Annexures" }
   ];
 
+  const navigateToSection = (sectionIndex: number) => {
+    setCurrentSection(sectionIndex);
+  };
+
   const nextSection = () => {
     if (currentSection < sections.length - 1) {
       setCurrentSection(currentSection + 1);
@@ -70,6 +74,8 @@ const ReportViewer = () => {
           <ReportSection 
             title={sections[currentSection].title}
             subtitle={sections[currentSection].subtitle}
+            sectionIndex={currentSection}
+            onNavigateToSection={navigateToSection}
           />
         </div>
       </div>
