@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,11 +8,273 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { AlertTriangle, CheckCircle, FileText, TrendingUp } from "lucide-react";
+import { AlertTriangle, CheckCircle, FileText, TrendingUp, Calculator, DollarSign } from "lucide-react";
 
 const MarketabilityAndMortgageSecurity = () => {
+  // ESG & Climate Risk Finance Impact State
+  const [includeESGFinancing, setIncludeESGFinancing] = useState(true);
+  const [baseLVR, setBaseLVR] = useState<number>(70);
+  const [baseInterestRate, setBaseInterestRate] = useState<number>(4.0);
+  const [alphaCoefficient, setAlphaCoefficient] = useState<number>(0.2);
+  const [betaCoefficient, setBetaCoefficient] = useState<number>(2.0);
+  
+  const [riskFactors, setRiskFactors] = useState([
+    { id: "water", name: "Water Risk", weight: 0.4, riskLevel: 0 },
+    { id: "temperature", name: "Temperature Risk", weight: 0.3, riskLevel: 0 },
+    { id: "extreme", name: "Extreme Weather", weight: 0.2, riskLevel: 0 },
+    { id: "resilience", name: "Climate Resilience", weight: 0.1, riskLevel: 0 }
+  ]);
+
+  const [financingResults, setFinancingResults] = useState({
+    climateRiskScore: 0,
+    adjustedLVR: 70,
+    adjustedInterestRate: 4.0,
+    lvrImpact: 0,
+    interestRateImpact: 0
+  });
+
+  // Calculate Climate Risk Score
+  const calculateClimateRiskScore = () => {
+    return riskFactors.reduce((total, factor) => total + (factor.weight * factor.riskLevel), 0);
+  };
+
+  // Calculate Adjusted LVR
+  const calculateAdjustedLVR = (riskScore: number) => {
+    return baseLVR * (1 - alphaCoefficient * riskScore);
+  };
+
+  // Calculate Adjusted Interest Rate
+  const calculateAdjustedInterestRate = (riskScore: number) => {
+    return baseInterestRate + betaCoefficient * riskScore;
+  };
+
+  // Update calculations when values change
+  useEffect(() => {
+    const riskScore = calculateClimateRiskScore();
+    const adjLVR = calculateAdjustedLVR(riskScore);
+    const adjRate = calculateAdjustedInterestRate(riskScore);
+    
+    setFinancingResults({
+      climateRiskScore: riskScore,
+      adjustedLVR: adjLVR,
+      adjustedInterestRate: adjRate,
+      lvrImpact: baseLVR - adjLVR,
+      interestRateImpact: adjRate - baseInterestRate
+    });
+  }, [riskFactors, baseLVR, baseInterestRate, alphaCoefficient, betaCoefficient]);
+
+  const updateRiskFactor = (id: string, field: string, value: number) => {
+    setRiskFactors(factors => 
+      factors.map(factor => 
+        factor.id === id ? { ...factor, [field]: value } : factor
+      )
+    );
+  };
+
   return (
     <div className="space-y-6">
+      {/* ESG & Climate Risk Financing Impact */}
+      <Card>
+        <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+          <CardTitle className="text-base font-medium flex items-center gap-2">
+            <Calculator className="h-5 w-5" />
+            ESG & Climate Risk Financing Impact
+          </CardTitle>
+          <Switch
+            checked={includeESGFinancing}
+            onCheckedChange={setIncludeESGFinancing}
+            className="ml-auto"
+          />
+        </CardHeader>
+      </Card>
+
+      {includeESGFinancing && (
+        <>
+          {/* Risk Assessment Parameters */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="h-5 w-5" />
+                Financing Parameters
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="baseLVR">Base LVR (%)</Label>
+                  <Input
+                    id="baseLVR"
+                    type="number"
+                    step="0.1"
+                    value={baseLVR}
+                    onChange={(e) => setBaseLVR(Number(e.target.value))}
+                    placeholder="70"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="baseRate">Base Interest Rate (%)</Label>
+                  <Input
+                    id="baseRate"
+                    type="number"
+                    step="0.01"
+                    value={baseInterestRate}
+                    onChange={(e) => setBaseInterestRate(Number(e.target.value))}
+                    placeholder="4.0"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="alpha">α (LVR Impact)</Label>
+                  <Input
+                    id="alpha"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="1"
+                    value={alphaCoefficient}
+                    onChange={(e) => setAlphaCoefficient(Number(e.target.value))}
+                    placeholder="0.2"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="beta">β (Rate Premium %)</Label>
+                  <Input
+                    id="beta"
+                    type="number"
+                    step="0.1"
+                    value={betaCoefficient}
+                    onChange={(e) => setBetaCoefficient(Number(e.target.value))}
+                    placeholder="2.0"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Climate Risk Factors */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Climate Risk Factors</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Risk levels: 0.0 = No Risk, 0.5 = Moderate Risk, 1.0 = Maximum Risk
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {riskFactors.map((factor) => (
+                <div key={factor.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg">
+                  <div className="space-y-1">
+                    <Label className="font-medium">{factor.name}</Label>
+                    <Badge variant="outline">Weight: {(factor.weight * 100).toFixed(0)}%</Badge>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Weight (W)</Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="1"
+                      value={factor.weight}
+                      onChange={(e) => updateRiskFactor(factor.id, 'weight', Number(e.target.value))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Risk Level (R)</Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="1"
+                      value={factor.riskLevel}
+                      onChange={(e) => updateRiskFactor(factor.id, 'riskLevel', Number(e.target.value))}
+                    />
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* Calculation Results */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calculator className="h-5 w-5" />
+                Financing Impact Calculations
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Climate Risk Score Formula */}
+              <div className="space-y-3">
+                <h4 className="font-medium">Climate Risk Score Calculation</h4>
+                <div className="bg-muted p-4 rounded-lg font-mono text-sm space-y-1">
+                  <div>R_climate = W_water × R_water + W_temperature × R_temperature + W_extreme × R_extreme + W_resilience × R_resilience</div>
+                  <div className="font-bold">R_climate = {financingResults.climateRiskScore.toFixed(4)}</div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* LVR Adjustment Formula */}
+              <div className="space-y-3">
+                <h4 className="font-medium">LVR Adjustment Formula</h4>
+                <div className="bg-muted p-4 rounded-lg font-mono text-sm space-y-1">
+                  <div>LVR_adjusted = LVR_base × (1 - α × R_climate)</div>
+                  <div>LVR_adjusted = {baseLVR}% × (1 - {alphaCoefficient} × {financingResults.climateRiskScore.toFixed(4)})</div>
+                  <div className="font-bold">LVR_adjusted = {financingResults.adjustedLVR.toFixed(2)}%</div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Interest Rate Adjustment Formula */}
+              <div className="space-y-3">
+                <h4 className="font-medium">Interest Rate Adjustment Formula</h4>
+                <div className="bg-muted p-4 rounded-lg font-mono text-sm space-y-1">
+                  <div>i_adjusted = i_base + β × R_climate</div>
+                  <div>i_adjusted = {baseInterestRate}% + {betaCoefficient}% × {financingResults.climateRiskScore.toFixed(4)}</div>
+                  <div className="font-bold">i_adjusted = {financingResults.adjustedInterestRate.toFixed(2)}%</div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Summary Results */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-sm font-medium text-muted-foreground">Climate Risk Score</div>
+                    <div className="text-2xl font-bold">{financingResults.climateRiskScore.toFixed(4)}</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-sm font-medium text-muted-foreground">Adjusted LVR</div>
+                    <div className="text-2xl font-bold">{financingResults.adjustedLVR.toFixed(1)}%</div>
+                    <div className="text-sm text-red-600">-{financingResults.lvrImpact.toFixed(1)}%</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-sm font-medium text-muted-foreground">Adjusted Rate</div>
+                    <div className="text-2xl font-bold">{financingResults.adjustedInterestRate.toFixed(2)}%</div>
+                    <div className="text-sm text-red-600">+{financingResults.interestRateImpact.toFixed(2)}%</div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-sm font-medium text-muted-foreground">Risk Rating</div>
+                    <div className="text-2xl font-bold">
+                      {financingResults.climateRiskScore <= 0.2 ? "Low" :
+                       financingResults.climateRiskScore <= 0.5 ? "Moderate" :
+                       financingResults.climateRiskScore <= 0.8 ? "High" : "Very High"}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Separator className="my-8" />
+        </>
+      )}
       {/* Level of Market Activity */}
       <Card>
         <CardHeader>
