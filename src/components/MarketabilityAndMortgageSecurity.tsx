@@ -12,36 +12,71 @@ import { AlertTriangle, CheckCircle, FileText, TrendingUp } from "lucide-react";
 const MarketabilityAndMortgageSecurity = () => {
   return (
     <div className="space-y-6">
-      {/* Is Property Suitable For Mortgage Purposes */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Property Suitability for Mortgage Purposes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <Label htmlFor="mortgage-suitable">Is property Suitable For Mortgage Purposes?</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Yes or No" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="yes">Yes</SelectItem>
-                <SelectItem value="no">No</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-      {/* Marketability Assessment */}
+      {/* Level of Market Activity */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              <CardTitle>Marketability Assessment</CardTitle>
+            <div>
+              <CardTitle>Level of Market Activity</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">Assess the current market activity level</p>
             </div>
             <div className="flex items-center gap-2">
-              <Label htmlFor="marketability-toggle">Include Section</Label>
+              <Label htmlFor="market-activity-toggle">Include</Label>
+              <Switch id="market-activity-toggle" defaultChecked />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="market-activity-level">Market Activity Level</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="moderate">Moderate</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="assessment-period">Assessment Period</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="3months">Last 3 months</SelectItem>
+                  <SelectItem value="6months">Last 6 months</SelectItem>
+                  <SelectItem value="12months">Last 12 months</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="market-activity-comments">Market Activity Comments</Label>
+            <Textarea 
+              id="market-activity-comments"
+              placeholder="Describe the current market activity level and factors influencing it..."
+              className="min-h-[100px]"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Overall Marketability */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Overall Marketability</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">Evaluate the property's marketability</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="marketability-toggle">Include</Label>
               <Switch id="marketability-toggle" defaultChecked />
             </div>
           </div>
@@ -63,27 +98,50 @@ const MarketabilityAndMortgageSecurity = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="days-on-market">Estimated Days on Market</Label>
-              <Input id="days-on-market" placeholder="e.g., 30-60 days" />
+              <Label htmlFor="expected-sale-period">Expected Sale Period</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="30days">0-30 days</SelectItem>
+                  <SelectItem value="60days">30-60 days</SelectItem>
+                  <SelectItem value="90days">60-90 days</SelectItem>
+                  <SelectItem value="120days">90-120 days</SelectItem>
+                  <SelectItem value="longer">120+ days</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="marketability-factors">Key Marketability Factors</Label>
+            <Label htmlFor="marketability-analysis">Marketability Analysis</Label>
             <Textarea 
-              id="marketability-factors"
-              placeholder="Describe location advantages, property features, market demand, accessibility, etc."
+              id="marketability-analysis"
+              placeholder="Analyze factors affecting the property's marketability..."
               className="min-h-[100px]"
             />
           </div>
+        </CardContent>
+      </Card>
 
+      {/* Is Property Suitable For Mortgage Purposes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Property Suitability for Mortgage Purposes</CardTitle>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-2">
-            <Label htmlFor="market-challenges">Potential Market Challenges</Label>
-            <Textarea 
-              id="market-challenges"
-              placeholder="Identify any factors that may impact marketability..."
-              className="min-h-[80px]"
-            />
+            <Label htmlFor="mortgage-suitable">Is property Suitable For Mortgage Purposes?</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Yes or No" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="yes">Yes</SelectItem>
+                <SelectItem value="no">No</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
