@@ -314,6 +314,140 @@ const MarketabilityAndMortgageSecurity = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Industry Financial Benchmarks */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            <CardTitle>Industry Financial Benchmarks</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-blue-50 p-4 rounded-lg text-center">
+              <div className="text-sm text-muted-foreground mb-1">Industry Avg</div>
+              <div className="text-2xl font-bold text-blue-600">11.1%</div>
+              <div className="text-sm text-muted-foreground">Profit Margin</div>
+              <div className="text-xs mt-1">Real Estate Services</div>
+            </div>
+            <div className="bg-green-50 p-4 rounded-lg text-center">
+              <div className="text-sm text-muted-foreground mb-1">Per Employee</div>
+              <div className="text-2xl font-bold text-green-600">$190k</div>
+              <div className="text-sm text-muted-foreground">Revenue</div>
+              <div className="text-xs mt-1">Annual per employee</div>
+            </div>
+            <div className="bg-purple-50 p-4 rounded-lg text-center">
+              <div className="text-sm text-muted-foreground mb-1">Per Employee</div>
+              <div className="text-2xl font-bold text-purple-600">$69k</div>
+              <div className="text-sm text-muted-foreground">Average Wage</div>
+              <div className="text-xs mt-1">36.3% of revenue</div>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <h4 className="text-lg font-semibold mb-4">Cost Structure Analysis</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm">Wages</span>
+                  <span className="text-sm font-medium">36.3%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-teal-600 h-2 rounded-full" style={{width: '36.3%'}}></div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm">Other Operating Costs</span>
+                  <span className="text-sm font-medium">52.6%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-teal-600 h-2 rounded-full" style={{width: '52.6%'}}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Current Market Drivers */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            <CardTitle>Current Market Drivers</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-green-600">Positive Drivers</h4>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">Number of housing transfers</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">Mortgage affordability</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">Residential housing prices</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">Consumer sentiment index</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">Business confidence index</span>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-red-600">Risk Factors</h4>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="text-sm">Residential housing loan rates</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <h4 className="text-lg font-semibold mb-4">Industry Growth Outlook</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-blue-50 p-4 rounded-lg text-center">
+                <div className="text-sm text-muted-foreground mb-1">Revenue Growth</div>
+                <div className="text-2xl font-bold text-blue-600">+1.3%</div>
+                <div className="text-xs mt-1">2025-2030 CAGR</div>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg text-center">
+                <div className="text-sm text-muted-foreground mb-1">Employment Growth</div>
+                <div className="text-2xl font-bold text-green-600">+3.2%</div>
+                <div className="text-xs mt-1">2025-2030 CAGR</div>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg text-center">
+                <div className="text-sm text-muted-foreground mb-1">Business Growth</div>
+                <div className="text-2xl font-bold text-purple-600">2.5%</div>
+                <div className="text-xs mt-1">2025-2030 CAGR</div>
+              </div>
+            </div>
+            
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-muted-foreground">
+                <strong>Outlook Summary:</strong> Population growth driven by migration intensifying housing demand Rising housing prices shifting market towards renting, driving rental-focused services growth Remote work and affordability driving activity to regional areas Demand for sustainable and eco-friendly properties increasing Industry revenue projected to rise 1.3% annually through 2029-30 to $33.0 billion
+              </p>
+              <p className="text-xs text-muted-foreground mt-2">
+                Source: IBISWorld "Real Estate Services in Australia", Industry Report L6720, 2024-25
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
