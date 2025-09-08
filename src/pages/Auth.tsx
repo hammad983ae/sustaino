@@ -147,8 +147,25 @@ export default function AuthPage() {
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Welcome</h1>
-          <p className="text-muted-foreground">Sign in to your account or create a new one</p>
+          <div className="flex items-center justify-center mb-6">
+            <div className="relative">
+              {/* DeLorenzo Property Group Logo */}
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 transform rotate-45 relative">
+                    <div className="absolute inset-2 bg-gradient-to-tl from-emerald-400 to-emerald-500 transform -rotate-45"></div>
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-amber-600 to-amber-700 transform rotate-45"></div>
+                </div>
+                <div className="text-left">
+                  <div className="text-2xl font-bold text-slate-700 tracking-tight">DELORENZO</div>
+                  <div className="text-lg font-medium text-slate-500 tracking-wide">PROPERTY GROUP</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h1>
+          <p className="text-muted-foreground">Sign in to access your property management platform</p>
         </div>
 
         <Card className="shadow-lg">
