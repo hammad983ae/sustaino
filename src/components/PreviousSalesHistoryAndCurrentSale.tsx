@@ -28,6 +28,10 @@ const PreviousSalesHistoryAndCurrentSale = () => {
   const [marketingPeriod, setMarketingPeriod] = useState("");
   const [settlementPeriod, setSettlementPeriod] = useState("");
   const [transactionComments, setTransactionComments] = useState("");
+  
+  // Transaction Analysis dates
+  const [transactionDate, setTransactionDate] = useState<Date>();
+  const [valuationDate, setValuationDate] = useState<Date>();
 
   return (
     <div className="space-y-6">
@@ -224,6 +228,60 @@ const PreviousSalesHistoryAndCurrentSale = () => {
           <p className="text-sm text-muted-foreground">Overall assessment of sales history and current transaction</p>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="transaction-date">Date of Transaction</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !transactionDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {transactionDate ? format(transactionDate, "PPP") : "Select date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={transactionDate}
+                    onSelect={setTransactionDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="valuation-date">Date of Valuation</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !valuationDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {valuationDate ? format(valuationDate, "PPP") : "Select date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={valuationDate}
+                    onSelect={setValuationDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="market-trends">Market Trends</Label>
