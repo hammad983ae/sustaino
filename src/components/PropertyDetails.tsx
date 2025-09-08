@@ -302,39 +302,135 @@ const PropertyDetails = () => {
                 <CardTitle className="text-base">Residential Property Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="bedrooms">Bedrooms</Label>
-                    <Input id="bedrooms" placeholder="Number of bedrooms" />
+                {/* Building Description */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-red-600">Building Description</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="built-about" className="text-red-600">Built About</Label>
+                      <Input id="built-about" placeholder="e.g., Circa 2005" />
+                    </div>
+                    <div>
+                      <Label htmlFor="additions" className="text-red-600">Additions</Label>
+                      <Input id="additions" placeholder="e.g., N/A" />
+                    </div>
+                    <div>
+                      <Label htmlFor="main-walls" className="text-red-600">Main Walls</Label>
+                      <Input id="main-walls" placeholder="e.g., Rendered Brick Walls" />
+                    </div>
+                    <div>
+                      <Label htmlFor="roof" className="text-red-600">Roof</Label>
+                      <Input id="roof" placeholder="e.g., Tiled" />
+                    </div>
+                    <div>
+                      <Label htmlFor="flooring" className="text-red-600">Flooring</Label>
+                      <Input id="flooring" placeholder="e.g., Concrete slab and timber for second storey" />
+                    </div>
+                    <div>
+                      <Label htmlFor="interior-linings" className="text-red-600">Interior Linings</Label>
+                      <Input id="interior-linings" placeholder="e.g., Plasterboard" />
+                    </div>
+                    <div>
+                      <Label htmlFor="window-frames" className="text-red-600">Window Frames</Label>
+                      <Input id="window-frames" placeholder="e.g., Aluminium" />
+                    </div>
                   </div>
+                  
                   <div>
-                    <Label htmlFor="bathrooms">Bathrooms</Label>
-                    <Input id="bathrooms" placeholder="Number of bathrooms" />
+                    <Label htmlFor="accommodation" className="text-red-600">Accommodation</Label>
+                    <Textarea 
+                      id="accommodation" 
+                      placeholder="e.g., 3 Bedroom(s) And 3 Bathroom(s) Plus study/fourth bedroom, laundry, powdered room, walk in pantry, lounge/theatre room, family/meals/kitchen, gallery, entry, 2 x walk in robes"
+                      className="min-h-[100px]"
+                    />
                   </div>
+
                   <div>
-                    <Label htmlFor="living-areas">Living Areas</Label>
-                    <Input id="living-areas" placeholder="Number of living areas" />
-                  </div>
-                  <div>
-                    <Label htmlFor="garage-spaces">Garage Spaces</Label>
-                    <Input id="garage-spaces" placeholder="Number of garage spaces" />
-                  </div>
-                  <div>
-                    <Label htmlFor="land-area">Land Area (sqm)</Label>
-                    <Input id="land-area" placeholder="Land area" />
-                  </div>
-                  <div>
-                    <Label htmlFor="floor-area">Floor Area (sqm)</Label>
-                    <Input id="floor-area" placeholder="Floor area" />
+                    <Label htmlFor="fixtures-features" className="text-red-600">Fixtures & Features</Label>
+                    <Textarea 
+                      id="fixtures-features" 
+                      placeholder="e.g., reverse cycle heating and cooling, split systems, 2 x gas log fires, evaporative cooling, integrated audio speakers throughout, laminate and marble benchtops, tiles, carpet, high decorative ceilings, timber stair case, 900 mm gas stove, double wall oven, 900 mm rangehood, timber cupboards (floor and wall), down lights, instant gas HWS"
+                      className="min-h-[120px]"
+                    />
                   </div>
                 </div>
-                <div>
-                  <Label htmlFor="residential-features">Additional Features</Label>
-                  <Textarea 
-                    id="residential-features" 
-                    placeholder="Describe additional residential features..."
-                    className="min-h-[100px]"
-                  />
+
+                {/* Areas */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-red-600">Areas</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="living-areas" className="text-red-600">Living Areas</Label>
+                      <Input id="living-areas" placeholder="e.g., 336.00 Sqm" />
+                    </div>
+                    <div>
+                      <Label htmlFor="outdoor-areas" className="text-red-600">Outdoor Areas</Label>
+                      <Input id="outdoor-areas" placeholder="e.g., 14.00 Sqm" />
+                    </div>
+                    <div>
+                      <Label htmlFor="car-areas" className="text-red-600">Car Areas</Label>
+                      <Input id="car-areas" placeholder="e.g., 72.00 Sqm" />
+                    </div>
+                    <div>
+                      <Label htmlFor="other-areas" className="text-red-600">Other Areas</Label>
+                      <Input id="other-areas" placeholder="e.g., 0.00 Sqm" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Details */}
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="ancillary-improvements" className="text-red-600">Ancillary Improvements</Label>
+                    <Textarea 
+                      id="ancillary-improvements" 
+                      placeholder="e.g., Balcony, verandahs/outdoor area, undercover BBQ area with built in BBQ, workshop, fernery, extensive gardens with removable garden beds and gravel surrounds, automated irrigation, clothes line, fountain/pond, full concrete pathing throughout gardens and house surrounds, color bond and powdered coating aluminium fencing"
+                      className="min-h-[120px]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="internal-condition" className="text-red-600">Internal Condition</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select condition" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="excellent">Excellent</SelectItem>
+                          <SelectItem value="good">Good</SelectItem>
+                          <SelectItem value="fair">Fair</SelectItem>
+                          <SelectItem value="poor">Poor</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="external-condition" className="text-red-600">External Condition</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select condition" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="excellent">Excellent</SelectItem>
+                          <SelectItem value="good">Good</SelectItem>
+                          <SelectItem value="fair">Fair</SelectItem>
+                          <SelectItem value="poor">Poor</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="essential-repairs" className="text-red-600">Essential Repairs</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
