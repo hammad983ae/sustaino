@@ -17,6 +17,7 @@ const ValuationCertificate = () => {
   const [includeCertificationStatement, setIncludeCertificationStatement] = useState(true);
   const [includeLimitations, setIncludeLimitations] = useState(true);
   const [includeDisclaimers, setIncludeDisclaimers] = useState(true);
+  const [includePurposeOfValuation, setIncludePurposeOfValuation] = useState(true);
   
   // Individual valuation summary items
   const [summaryItems, setSummaryItems] = useState({
@@ -43,6 +44,55 @@ const ValuationCertificate = () => {
           <p className="text-muted-foreground">This certificate confirms the valuation details and professional compliance</p>
         </CardHeader>
       </Card>
+
+      {/* Purpose of Valuation */}
+      {includePurposeOfValuation && (
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-primary" />
+              Purpose of Valuation
+            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-purpose-of-valuation" className="text-sm">Include</Label>
+              <Switch 
+                id="include-purpose-of-valuation" 
+                checked={includePurposeOfValuation}
+                onCheckedChange={setIncludePurposeOfValuation}
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">Pre-populated from platform</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="purpose-valuation">Purpose of Valuation</Label>
+              <Input
+                id="purpose-valuation"
+                placeholder="Auto-populated from valuation instructions..."
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
+              />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from valuation instructions</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="mortgage-security">Mortgage Security</Label>
+              <Input
+                id="mortgage-security"
+                placeholder="Auto-populated from security assessment..."
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
+              />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from security assessment</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      )}
 
       {/* Automated vs Manual Toggle */}
       <Card>
