@@ -304,40 +304,40 @@ const PropertyDetails = () => {
               <CardContent className="space-y-4">
                 {/* Building Description */}
                 <div className="space-y-4">
-                  <h4 className="font-medium text-red-600">Building Description</h4>
+                  <h4 className="font-medium">Building Description</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="built-about" className="text-red-600">Built About</Label>
+                      <Label htmlFor="built-about">Built About</Label>
                       <Input id="built-about" placeholder="e.g., Circa 2005" />
                     </div>
                     <div>
-                      <Label htmlFor="additions" className="text-red-600">Additions</Label>
+                      <Label htmlFor="additions">Additions</Label>
                       <Input id="additions" placeholder="e.g., N/A" />
                     </div>
                     <div>
-                      <Label htmlFor="main-walls" className="text-red-600">Main Walls</Label>
+                      <Label htmlFor="main-walls">Main Walls</Label>
                       <Input id="main-walls" placeholder="e.g., Rendered Brick Walls" />
                     </div>
                     <div>
-                      <Label htmlFor="roof" className="text-red-600">Roof</Label>
+                      <Label htmlFor="roof">Roof</Label>
                       <Input id="roof" placeholder="e.g., Tiled" />
                     </div>
                     <div>
-                      <Label htmlFor="flooring" className="text-red-600">Flooring</Label>
+                      <Label htmlFor="flooring">Flooring</Label>
                       <Input id="flooring" placeholder="e.g., Concrete slab and timber for second storey" />
                     </div>
                     <div>
-                      <Label htmlFor="interior-linings" className="text-red-600">Interior Linings</Label>
+                      <Label htmlFor="interior-linings">Interior Linings</Label>
                       <Input id="interior-linings" placeholder="e.g., Plasterboard" />
                     </div>
                     <div>
-                      <Label htmlFor="window-frames" className="text-red-600">Window Frames</Label>
+                      <Label htmlFor="window-frames">Window Frames</Label>
                       <Input id="window-frames" placeholder="e.g., Aluminium" />
                     </div>
                   </div>
                   
                   <div>
-                    <Label htmlFor="accommodation" className="text-red-600">Accommodation</Label>
+                    <Label htmlFor="accommodation">Accommodation</Label>
                     <Textarea 
                       id="accommodation" 
                       placeholder="e.g., 3 Bedroom(s) And 3 Bathroom(s) Plus study/fourth bedroom, laundry, powdered room, walk in pantry, lounge/theatre room, family/meals/kitchen, gallery, entry, 2 x walk in robes"
@@ -346,7 +346,7 @@ const PropertyDetails = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="fixtures-features" className="text-red-600">Fixtures & Features</Label>
+                    <Label htmlFor="fixtures-features">Fixtures & Features</Label>
                     <Textarea 
                       id="fixtures-features" 
                       placeholder="e.g., reverse cycle heating and cooling, split systems, 2 x gas log fires, evaporative cooling, integrated audio speakers throughout, laminate and marble benchtops, tiles, carpet, high decorative ceilings, timber stair case, 900 mm gas stove, double wall oven, 900 mm rangehood, timber cupboards (floor and wall), down lights, instant gas HWS"
@@ -357,22 +357,22 @@ const PropertyDetails = () => {
 
                 {/* Areas */}
                 <div className="space-y-4">
-                  <h4 className="font-medium text-red-600">Areas</h4>
+                  <h4 className="font-medium">Areas</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="living-areas" className="text-red-600">Living Areas</Label>
+                      <Label htmlFor="living-areas">Living Areas</Label>
                       <Input id="living-areas" placeholder="e.g., 336.00 Sqm" />
                     </div>
                     <div>
-                      <Label htmlFor="outdoor-areas" className="text-red-600">Outdoor Areas</Label>
+                      <Label htmlFor="outdoor-areas">Outdoor Areas</Label>
                       <Input id="outdoor-areas" placeholder="e.g., 14.00 Sqm" />
                     </div>
                     <div>
-                      <Label htmlFor="car-areas" className="text-red-600">Car Areas</Label>
+                      <Label htmlFor="car-areas">Car Areas</Label>
                       <Input id="car-areas" placeholder="e.g., 72.00 Sqm" />
                     </div>
                     <div>
-                      <Label htmlFor="other-areas" className="text-red-600">Other Areas</Label>
+                      <Label htmlFor="other-areas">Other Areas</Label>
                       <Input id="other-areas" placeholder="e.g., 0.00 Sqm" />
                     </div>
                   </div>
@@ -381,7 +381,7 @@ const PropertyDetails = () => {
                 {/* Additional Details */}
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="ancillary-improvements" className="text-red-600">Ancillary Improvements</Label>
+                    <Label htmlFor="ancillary-improvements">Ancillary Improvements</Label>
                     <Textarea 
                       id="ancillary-improvements" 
                       placeholder="e.g., Balcony, verandahs/outdoor area, undercover BBQ area with built in BBQ, workshop, fernery, extensive gardens with removable garden beds and gravel surrounds, automated irrigation, clothes line, fountain/pond, full concrete pathing throughout gardens and house surrounds, color bond and powdered coating aluminium fencing"
@@ -391,7 +391,7 @@ const PropertyDetails = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="internal-condition" className="text-red-600">Internal Condition</Label>
+                      <Label htmlFor="internal-condition">Internal Condition</Label>
                       <Select>
                         <SelectTrigger>
                           <SelectValue placeholder="Select condition" />
@@ -405,7 +405,7 @@ const PropertyDetails = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="external-condition" className="text-red-600">External Condition</Label>
+                      <Label htmlFor="external-condition">External Condition</Label>
                       <Select>
                         <SelectTrigger>
                           <SelectValue placeholder="Select condition" />
@@ -419,7 +419,7 @@ const PropertyDetails = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="essential-repairs" className="text-red-600">Essential Repairs</Label>
+                      <Label htmlFor="essential-repairs">Essential Repairs</Label>
                       <Select>
                         <SelectTrigger>
                           <SelectValue placeholder="Select option" />
