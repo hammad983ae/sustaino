@@ -308,6 +308,53 @@ export default function MortgageSecurityAssessment() {
             />
           </div>
           
+          <div className="space-y-2">
+            <Label htmlFor="future-value">Future Value Assessment</Label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="future-date">Future Date</Label>
+                <Input id="future-date" type="date" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="future-value-amount">Future Value ($)</Label>
+                <Input id="future-value-amount" type="number" placeholder="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="future-basis">Forecast Basis</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select basis" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="market-growth">Market Growth Trends</SelectItem>
+                    <SelectItem value="inflation">Inflation Indexing</SelectItem>
+                    <SelectItem value="development">Development Completion</SelectItem>
+                    <SelectItem value="other">Other Factors</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="price-vs-value">Price vs Market Value Analysis</Label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="contract-price">Contract/Purchase Price ($)</Label>
+                <Input id="contract-price" type="number" placeholder="0" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="price-variance">Variance from Market Value (%)</Label>
+                <Input id="price-variance" type="number" placeholder="0" step="0.1" />
+              </div>
+            </div>
+            <Textarea 
+              id="price-analysis"
+              placeholder="Explain any difference between contract price and market value, including special circumstances..."
+              className="min-h-[60px]"
+            />
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="loan-to-value">Loan to Value Ratio (%)</Label>
@@ -392,8 +439,38 @@ export default function MortgageSecurityAssessment() {
           </div>
           
           <div className="space-y-2">
+            <Label htmlFor="third-party-inspections">Third-Party Inspections & Cost Estimates</Label>
+            <Textarea 
+              id="third-party-inspections"
+              placeholder="Detail reliance on quantity surveyors, engineers, architects, or other specialists for construction costs and progress assessment..."
+              className="min-h-[80px]"
+            />
+          </div>
+          
+          <div className="space-y-2">
             <Label htmlFor="value-under-construction">Current Value Under Construction ($)</Label>
             <Input id="value-under-construction" type="number" placeholder="0" />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="completion-qualifications">Value 'As If Complete' Qualifications</Label>
+            <Textarea 
+              id="completion-qualifications"
+              defaultValue="This valuation 'as if complete' assumes:
+• Construction completed in accordance with approved plans and specifications
+• All work completed to acceptable building standards and relevant codes
+• No material changes to market conditions between valuation date and completion
+• All necessary approvals and certificates obtained
+• Construction completed within estimated timeframe and budget
+
+IMPORTANT LIMITATIONS:
+• Valuation does not guarantee construction costs or completion timeframes
+• Market conditions at actual completion may differ significantly
+• Cost overruns or delays may materially affect both construction costs and market value
+• Building quality and specification compliance cannot be verified until completion
+• This assessment does not constitute a quantity surveyor's cost estimate or project feasibility study"
+              className="min-h-[120px]"
+            />
           </div>
         </div>
       )
@@ -440,6 +517,49 @@ export default function MortgageSecurityAssessment() {
           </div>
           
           <div className="space-y-2">
+            <Label htmlFor="specific-exclusions">Additional Specific Exclusions</Label>
+            <Textarea 
+              id="specific-exclusions"
+              placeholder="Detail any other specific items excluded from the valuation (e.g., specific chattels, fixtures requiring separate valuation, etc.)..."
+              className="min-h-[60px]"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="propertypro-compliance">PropertyPRO Compliance (Australia)</Label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="risk-rating">PropertyPRO Risk Rating</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select risk rating" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1 - Minimal Risk</SelectItem>
+                    <SelectItem value="2">2 - Low Risk</SelectItem>
+                    <SelectItem value="3">3 - Average Risk</SelectItem>
+                    <SelectItem value="4">4 - Above Average Risk</SelectItem>
+                    <SelectItem value="5">5 - High Risk</SelectItem>
+                    <SelectItem value="6">6 - Unacceptable Risk</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="supporting-memo">Supporting Memorandum Required</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select requirement" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="yes">Yes - Required</SelectItem>
+                    <SelectItem value="no">No - Not Required</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
             <Label htmlFor="future-review">Future Review Requirements</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -473,6 +593,23 @@ export default function MortgageSecurityAssessment() {
                   <li>• Risk level appropriate/inappropriate for standard lending</li>
                   <li>• Market conditions favorable/unfavorable for security</li>
                   <li>• Recommend approval/additional conditions/decline</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div className="space-y-2">
+                <h4 className="text-sm font-semibold text-amber-800">Standard Disclaimers for Mortgage Security</h4>
+                <ul className="text-sm text-amber-700 space-y-1">
+                  <li>• Valuation current at valuation date only - values may change significantly</li>
+                  <li>• Assumes prudent lending practices and conservative loan-to-value ratios</li>
+                  <li>• Based on visual inspection only - no structural or detailed technical assessment</li>
+                  <li>• Excludes hidden defects, contamination, or legal issues not disclosed</li>
+                  <li>• Market value excludes GST unless specifically stated</li>
+                  <li>• Forced sale or mortgagee sale values may be significantly lower</li>
                 </ul>
               </div>
             </div>

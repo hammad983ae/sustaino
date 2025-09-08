@@ -177,6 +177,18 @@ const APINativeGlossary = () => {
     {
       term: "Special Assumption",
       definition: "An assumption that either assumes facts that differ from those existing at the valuation date or assumes a state of affairs that is contrary to fact at the valuation date."
+    },
+    {
+      term: "Future Value",
+      definition: "A forecast of the value of a property at a specified future date, often required for mortgage security purposes to assess potential value changes over the loan term."
+    },
+    {
+      term: "Price",
+      definition: "The amount actually paid or proposed to be paid for a property in a particular transaction, which may differ from market value due to special circumstances."
+    },
+    {
+      term: "PropertyPRO",
+      definition: "A standardized pro-forma valuation report format used in Australia for residential mortgage valuations, with specific risk rating requirements."
     }
   ];
 
