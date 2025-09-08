@@ -152,6 +152,31 @@ const APINativeGlossary = () => {
     {
       term: "Unsettled Market Transactions",
       definition: "Transactions that have not yet settled or have failed to settle, which may provide evidence of market conditions and help establish upper ranges of value."
+    },
+    // Mortgage and Loan Security Terms
+    {
+      term: "Alternative Use Value",
+      definition: "The value of a property for an alternative use to its current use, relevant when current use may not represent highest and best use for mortgage security purposes."
+    },
+    {
+      term: "As If Complete",
+      definition: "A valuation basis for properties under construction assuming the development is complete at the valuation date, commonly required for construction lending."
+    },
+    {
+      term: "Insurance Replacement Cost",
+      definition: "An estimate of the cost to replace a property with a building of equivalent utility using current materials, labor costs, and construction methods."
+    },
+    {
+      term: "Loan to Value Ratio (LVR)",
+      definition: "The ratio of the loan amount to the property value, used by lenders to assess lending risk and determine maximum loan amounts."
+    },
+    {
+      term: "Mortgage Security",
+      definition: "Property held as collateral security for a mortgage loan, where the lender has a legal interest in the property until the loan is repaid."
+    },
+    {
+      term: "Special Assumption",
+      definition: "An assumption that either assumes facts that differ from those existing at the valuation date or assumes a state of affairs that is contrary to fact at the valuation date."
     }
   ];
 
@@ -185,11 +210,11 @@ const APINativeGlossary = () => {
 
             <div className="mt-6 p-4 border border-border rounded-lg bg-muted/20">
               <p className="text-sm text-foreground">
-                <strong>Important Note:</strong> Native title, SDA, and market transaction shortage considerations are extremely complex areas of law and regulation. 
+                <strong>Important Note:</strong> Native title, SDA, market transaction shortage considerations, and mortgage security valuations are extremely complex areas of law and regulation. 
                 This glossary provides basic definitions only. Professional legal advice from specialists should always be 
                 sought when these issues are identified or suspected. For SDA valuations, current knowledge of NDIS 
                 legislation and SDA Rules is essential. During periods of market uncertainty, additional professional 
-                judgment and comprehensive risk analysis are required.
+                judgment and comprehensive risk analysis are required. Mortgage security valuations must comply with banking regulations and prudent lending standards.
               </p>
             </div>
           </div>

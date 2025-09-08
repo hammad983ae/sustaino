@@ -331,6 +331,59 @@ The valuer acknowledges this opinion involves greater subjectivity than would ap
                 className="min-h-40 bg-background border-input text-foreground placeholder:text-muted-foreground"
               />
             </div>
+
+            {/* Mortgage and Loan Security Qualifications */}
+            <div className="space-y-2">
+              <Label htmlFor="mortgage-security-qualifications" className="text-sm font-medium text-foreground">
+                Mortgage and Loan Security Qualifications
+              </Label>
+              <Textarea
+                id="mortgage-security-qualifications"
+                defaultValue="MORTGAGE SECURITY PURPOSE DISCLAIMER: This valuation has been prepared specifically for mortgage and loan security purposes. The valuation must be read in conjunction with all qualifications, assumptions, and limitations contained herein.
+
+LENDER RESPONSIBILITIES: This valuation assumes the lender:
+• Has complied with their own lending guidelines and prudent finance industry practices
+• Has considered all prudent aspects of credit risk for the potential borrower
+• Has assessed the borrower's ability to service and repay the mortgage loan
+• Is providing mortgage financing at a conservative and prudent loan to value ratio
+• Understands that property values can fluctuate significantly over short periods
+
+VALUATION BASIS AND LIMITATIONS:
+• Market Value assessment reflects current market conditions at valuation date only
+• Value may change significantly due to market movements or property-specific factors
+• Valuation excludes consideration of any special purchaser advantages
+• Assessment assumes willing buyer/willing seller in arm's length transaction
+• Property inspected for general condition only, not detailed structural assessment
+
+RISK FACTORS FOR MORTGAGE SECURITY:
+• Market volatility and potential for value decline
+• Property condition issues not apparent during inspection
+• Environmental or contamination risks
+• Legal or planning restrictions affecting marketability
+• Economic factors affecting local property demand
+• Liquidity considerations in specialized property markets
+
+AS IF COMPLETE CONSIDERATIONS (where applicable):
+• Completion risk and potential cost overruns
+• Market conditions at actual completion may differ
+• Construction quality and compliance with specifications
+• Timing delays affecting market value at completion
+
+INSURANCE REPLACEMENT COST (where provided):
+• Based on current building costs and construction methods
+• May differ significantly from market value
+• Should be reviewed annually and after significant cost changes
+• Assumes equivalent utility, not identical reconstruction
+
+MANDATORY EXCLUSIONS: This valuation excludes liability for:
+• Market value changes after valuation date
+• Hidden defects or conditions not apparent during inspection
+• Contamination or environmental hazards requiring specialist assessment
+• Title defects or legal issues not disclosed
+• Future changes in planning or zoning regulations"
+                className="min-h-48 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
           </div>
 
           {/* Valuation Details Table */}
