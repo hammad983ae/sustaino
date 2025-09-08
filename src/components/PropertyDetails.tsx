@@ -10,13 +10,19 @@ import { Lock, Printer } from "lucide-react";
 
 const PropertyDetails = () => {
   const [includeSection, setIncludeSection] = useState(true);
-  const [lockData, setLockData] = useState(false);
   const [propertyTypes, setPropertyTypes] = useState({
     commercial: true,
     residential: false,
     agriculture: false,
     developmentLand: false,
     specialized: false
+  });
+  const [certifications, setCertifications] = useState({
+    include: false,
+    bulkData: false,
+    greenBuilding: false,
+    sustainability: false,
+    improvements: false
   });
 
   return (
@@ -31,14 +37,6 @@ const PropertyDetails = () => {
               id="include-property-details"
               checked={includeSection}
               onCheckedChange={setIncludeSection}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="lock-property-data">Lock Data</Label>
-            <Switch
-              id="lock-property-data"
-              checked={lockData}
-              onCheckedChange={setLockData}
             />
           </div>
           <Button variant="outline" size="sm">
@@ -957,6 +955,103 @@ const PropertyDetails = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Certifications & Compliance */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center justify-between">
+                Certifications & Compliance
+                <Switch
+                  checked={certifications.include}
+                  onCheckedChange={(checked) => 
+                    setCertifications(prev => ({ ...prev, include: checked }))
+                  }
+                />
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Document certifications, compliance status, and sustainability features.
+              </p>
+            </CardHeader>
+            {certifications.include && (
+              <CardContent className="space-y-6">
+                {/* Bulk Certification Data */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Bulk Certification Data (Auto-Categorizes)</Label>
+                    <Switch
+                      checked={certifications.bulkData}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, bulkData: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.bulkData && (
+                    <Textarea
+                      placeholder="Paste certification, compliance, or legal information here..."
+                      className="min-h-[120px]"
+                    />
+                  )}
+                </div>
+
+                {/* Green Building Certifications */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Green Building Certifications</Label>
+                    <Switch
+                      checked={certifications.greenBuilding}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, greenBuilding: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.greenBuilding && (
+                    <Textarea
+                      placeholder="Green Star, LEED, BREEAM, Living Building Challenge..."
+                      className="min-h-[80px]"
+                    />
+                  )}
+                </div>
+
+                {/* Sustainability Compliance Status */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Sustainability Compliance Status</Label>
+                    <Switch
+                      checked={certifications.sustainability}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, sustainability: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.sustainability && (
+                    <Textarea
+                      placeholder="Current compliance with sustainability legislation and requirements..."
+                      className="min-h-[80px]"
+                    />
+                  )}
+                </div>
+
+                {/* Recommended Improvements */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Recommended Improvements</Label>
+                    <Switch
+                      checked={certifications.improvements}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, improvements: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.improvements && (
+                    <Textarea
+                      placeholder="Specific recommendations for improving sustainability rating and compliance..."
+                      className="min-h-[80px]"
+                    />
+                  )}
+                </div>
+              </CardContent>
+            )}
+          </Card>
         </CardContent>
       </Card>
     </div>
