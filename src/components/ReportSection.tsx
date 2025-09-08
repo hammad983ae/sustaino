@@ -10,6 +10,7 @@ import ESGAssessment from "./ESGAssessment";
 import EssentialRepairs from "./EssentialRepairs";
 import RiskAssessmentMarketIndicators from "./RiskAssessmentMarketIndicators";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
+import PropertySearchAnalysis from "./PropertySearchAnalysis";
 import PreviousSalesHistoryAndCurrentSale from "./PreviousSalesHistoryAndCurrentSale";
 import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
@@ -188,8 +189,23 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Sales Evidence section
+  // Special handling for Sustaino Pro Additional Analysis and Risk Features section
   if (sectionIndex === 12) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <PropertySearchAnalysis />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Sales Evidence section
+  if (sectionIndex === 13) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -204,7 +220,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Leasing Evidence section
-  if (sectionIndex === 13) {
+  if (sectionIndex === 14) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -219,7 +235,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Valuation Analysis section
-  if (sectionIndex === 14) {
+  if (sectionIndex === 15) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -234,7 +250,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Marketability and Mortgage Security section
-  if (sectionIndex === 15) {
+  if (sectionIndex === 16) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
