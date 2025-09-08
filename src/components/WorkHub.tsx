@@ -15,10 +15,13 @@ import {
   Download,
   Eye,
   Archive,
-  Filter
+  Filter,
+  ArrowLeft,
+  Home
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface Valuation {
   id: string;
@@ -59,6 +62,7 @@ export default function WorkHub() {
   const [costaAnalyses, setCostaAnalyses] = useState<CostaPortfolioAnalysis[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAllWork();
@@ -174,11 +178,31 @@ export default function WorkHub() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Work Hub</h1>
-          <p className="text-muted-foreground">Manage all your completed valuations, reports, and analyses</p>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Work Hub</h1>
+            <p className="text-muted-foreground">Manage all your completed valuations, reports, and analyses</p>
+          </div>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/comprehensive-valuation')}
+            className="flex items-center gap-2"
+          >
+            <Building className="h-4 w-4" />
+            New Valuation
+          </Button>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
