@@ -663,6 +663,75 @@ export type Database = {
         }
         Relationships: []
       }
+      valuation_jobs: {
+        Row: {
+          address: string | null
+          assigned_to: string | null
+          attachments: string[] | null
+          created_at: string
+          crop_details: Json | null
+          description: string | null
+          due_date: string | null
+          estimated_value: number | null
+          id: string
+          notes: string | null
+          plant_equipment: Json | null
+          priority: string
+          property_details: Json | null
+          property_type: string
+          renewable_energy: Json | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          water_permanent: Json | null
+        }
+        Insert: {
+          address?: string | null
+          assigned_to?: string | null
+          attachments?: string[] | null
+          created_at?: string
+          crop_details?: Json | null
+          description?: string | null
+          due_date?: string | null
+          estimated_value?: number | null
+          id?: string
+          notes?: string | null
+          plant_equipment?: Json | null
+          priority?: string
+          property_details?: Json | null
+          property_type: string
+          renewable_energy?: Json | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          water_permanent?: Json | null
+        }
+        Update: {
+          address?: string | null
+          assigned_to?: string | null
+          attachments?: string[] | null
+          created_at?: string
+          crop_details?: Json | null
+          description?: string | null
+          due_date?: string | null
+          estimated_value?: number | null
+          id?: string
+          notes?: string | null
+          plant_equipment?: Json | null
+          priority?: string
+          property_details?: Json | null
+          property_type?: string
+          renewable_energy?: Json | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          water_permanent?: Json | null
+        }
+        Relationships: []
+      }
       valuations: {
         Row: {
           comparable_properties: Json | null
