@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
+import PropertyValuations from "./pages/PropertyValuations";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<AutomatedValuation />} />
           <Route path="/index" element={<Index />} />
           <Route path="/report" element={<Report />} />
+          <Route path="/property-valuations" element={<PropertyValuations />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

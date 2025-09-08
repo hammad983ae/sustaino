@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Home, Trees, Factory, Leaf } from "lucide-react";
+import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface PropertyTypeSelectorProps {
@@ -134,6 +134,32 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                 <span>• Social Impact Metrics</span>
                 <span>• Governance Compliance</span>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Navigation */}
+        <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/20">
+          <CardHeader>
+            <CardTitle className="text-center">Quick Navigation</CardTitle>
+            <CardDescription className="text-center">
+              Access additional property valuation tools and features
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Button variant="outline" asChild className="flex-1 min-w-[200px]">
+                <Link to="/property-valuations">
+                  <Calculator className="mr-2 h-4 w-4" />
+                  Property Valuations
+                </Link>
+              </Button>
+              <Button variant="outline" asChild className="flex-1 min-w-[200px]">
+                <Link to="/report">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Generate Report
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
