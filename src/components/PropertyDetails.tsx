@@ -1739,6 +1739,135 @@ const PropertyDetails = () => {
           </Card>
         </CardContent>
       </Card>
+
+      {/* Build to Rent Property Details */}
+      {propertyTypes.buildToRent && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Build to Rent Property Details</CardTitle>
+            <p className="text-sm text-muted-foreground">BTR-specific characteristics and management structure</p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="btr-unit-count">Total Number of Units</Label>
+                <Input id="btr-unit-count" placeholder="e.g., 200" />
+              </div>
+              <div>
+                <Label htmlFor="btr-ownership-structure">Ownership Structure</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select ownership structure" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border z-50">
+                    <SelectItem value="single-entity">Single Entity Ownership</SelectItem>
+                    <SelectItem value="unified">Unified Ownership Structure</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="btr-management-model">Management Model</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select management model" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border z-50">
+                    <SelectItem value="opco-propco">OpCo/PropCo Structure</SelectItem>
+                    <SelectItem value="fund-structure">Fund Structure</SelectItem>
+                    <SelectItem value="direct-ownership">Direct Ownership</SelectItem>
+                    <SelectItem value="third-party-managed">Third Party Managed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="btr-target-demographic">Target Demographic</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select target demographic" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border z-50">
+                    <SelectItem value="young-professionals">Young Professionals</SelectItem>
+                    <SelectItem value="families">Families</SelectItem>
+                    <SelectItem value="downsizers">Downsizers</SelectItem>
+                    <SelectItem value="corporate-tenants">Corporate Tenants</SelectItem>
+                    <SelectItem value="mixed-demographic">Mixed Demographic</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="btr-unit-mix">Unit Mix</Label>
+                <Textarea id="btr-unit-mix" placeholder="e.g., 50x Studio, 80x 1BR, 60x 2BR, 10x 3BR" />
+              </div>
+              <div>
+                <Label htmlFor="btr-shared-amenities">Shared Amenities</Label>
+                <Textarea id="btr-shared-amenities" placeholder="e.g., Gym, Pool, Rooftop Terrace, Concierge, Co-working spaces" />
+              </div>
+            </div>
+
+            {/* BTR Income Streams */}
+            <div className="space-y-4">
+              <h4 className="font-medium">Income Streams</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="btr-rental-income">Unit Rental Income (Annual)</Label>
+                  <Input id="btr-rental-income" placeholder="$8,500,000" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-parking-income">Parking Income (Annual)</Label>
+                  <Input id="btr-parking-income" placeholder="$450,000" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-storage-income">Storage Income (Annual)</Label>
+                  <Input id="btr-storage-income" placeholder="$120,000" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-service-income">Service Income (Annual)</Label>
+                  <Input id="btr-service-income" placeholder="$250,000" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-furniture-income">Furniture Hire Income (Annual)</Label>
+                  <Input id="btr-furniture-income" placeholder="$180,000" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-other-income">Other Income (Annual)</Label>
+                  <Input id="btr-other-income" placeholder="$75,000" />
+                </div>
+              </div>
+            </div>
+
+            {/* BTR Operating Considerations */}
+            <div className="space-y-4">
+              <h4 className="font-medium">Operating Considerations</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="btr-vacancy-allowance">Vacancy Allowance (%)</Label>
+                  <Input id="btr-vacancy-allowance" placeholder="3.5%" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-bad-debt-allowance">Bad Debt Allowance (%)</Label>
+                  <Input id="btr-bad-debt-allowance" placeholder="1.2%" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-management-fee">Property Management Fee (%)</Label>
+                  <Input id="btr-management-fee" placeholder="4.5%" />
+                </div>
+                <div>
+                  <Label htmlFor="btr-let-up-period">Average Let-up Period (weeks)</Label>
+                  <Input id="btr-let-up-period" placeholder="2.5" />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="btr-affordable-housing">Affordable Housing Requirements</Label>
+                <Textarea id="btr-affordable-housing" placeholder="Describe any affordable housing obligations, discount percentages, or social housing requirements..." />
+              </div>
+              <div>
+                <Label htmlFor="btr-market-absorption">Market Absorption Analysis</Label>
+                <Textarea id="btr-market-absorption" placeholder="Assessment of local market capacity to absorb additional rental stock, competition analysis, and market depth..." />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

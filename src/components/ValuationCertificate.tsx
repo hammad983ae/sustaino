@@ -32,7 +32,8 @@ const ValuationCertificate = () => {
     marketRentGrossResidential: false, // Default off for desktop valuations
     netRent: false, // Default off for desktop valuations
     netMarketRent: false, // Default off for desktop valuations
-    forcedSaleRange: false // Default off for desktop valuations
+    forcedSaleRange: false, // Default off for desktop valuations
+    totalGrossRealisation: false // Default off for desktop valuations
   });
 
   return (
@@ -335,7 +336,8 @@ const ValuationCertificate = () => {
               { key: "marketRentGrossResidential", label: "Market Rent (Gross Residential)", enabled: summaryItems.marketRentGrossResidential },
               { key: "netRent", label: "Net Rent", enabled: summaryItems.netRent },
               { key: "netMarketRent", label: "Net Market Rent", enabled: summaryItems.netMarketRent },
-              { key: "forcedSaleRange", label: "Forced Sale Range", enabled: summaryItems.forcedSaleRange }
+              { key: "forcedSaleRange", label: "Forced Sale Range", enabled: summaryItems.forcedSaleRange },
+              { key: "totalGrossRealisation", label: "Total Gross Realisation (BTR)", enabled: summaryItems.totalGrossRealisation }
             ].filter(item => item.enabled).map((item, index) => (
               <div key={index} className="flex justify-between items-center py-2 border-b border-border last:border-b-0">
                 <div className="flex items-center justify-between w-full">
