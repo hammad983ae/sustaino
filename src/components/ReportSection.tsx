@@ -7,6 +7,7 @@ import StatutoryAssessment from "./StatutoryAssessment";
 import MarketCommentary from "./MarketCommentary";
 import PropertyDetails from "./PropertyDetails";
 import EnvironmentalAudit from "./EnvironmentalAudit";
+import EssentialRepairs from "./EssentialRepairs";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
 
 interface ReportSectionProps {
@@ -132,6 +133,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <EnvironmentalAudit />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Essential Repairs section
+  if (sectionIndex === 8) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <EssentialRepairs />
         </CardContent>
       </Card>
     );
