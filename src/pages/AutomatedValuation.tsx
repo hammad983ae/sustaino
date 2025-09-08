@@ -14,6 +14,7 @@ import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
 import BrandedHeader from "@/components/BrandedHeader";
 import DashboardCompletedWork from "@/components/DashboardCompletedWork";
+import AIAssistantToggle from "@/components/AIAssistantToggle";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
@@ -45,6 +46,7 @@ export default function AutomatedValuation() {
         <ComprehensiveIPProtection />
         <SecurityCertificatesGrid />
         <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
+        <AIAssistantToggle context="Property Type Selection" />
       </div>
     );
   }
@@ -52,22 +54,33 @@ export default function AutomatedValuation() {
   switch (currentStep) {
     case "propertyDetails":
       return (
-        <AutomatedPropertyDetails
-          propertyType={selectedPropertyType}
-          onNext={handlePropertyDetailsNext}
-          onBack={handleBack}
-        />
+        <>
+          <AutomatedPropertyDetails
+            propertyType={selectedPropertyType}
+            onNext={handlePropertyDetailsNext}
+            onBack={handleBack}
+          />
+          <AIAssistantToggle context={`Property Details - ${selectedPropertyType}`} />
+        </>
       );
     
     case "automatedReport":
       return (
-        <AutomatedReport
-          propertyType={selectedPropertyType}
-          onBack={handleBack}
-        />
+        <>
+          <AutomatedReport
+            propertyType={selectedPropertyType}
+            onBack={handleBack}
+          />
+          <AIAssistantToggle context={`Report Generation - ${selectedPropertyType}`} />
+        </>
       );
     
     default:
-      return <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />;
+      return (
+        <>
+          <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
+          <AIAssistantToggle context="Property Analysis" />
+        </>
+      );
   }
 }
