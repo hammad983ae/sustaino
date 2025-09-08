@@ -139,6 +139,79 @@ const ProfessionalCompliance = () => {
                 className="min-h-24 bg-background border-input text-foreground placeholder:text-muted-foreground"
               />
             </div>
+
+            {/* Environmental and Contamination Qualifications */}
+            <div className="space-y-2">
+              <Label htmlFor="environmental-qualifications" className="text-sm font-medium text-foreground">
+                Environmental and Contamination Assessment Qualifications
+              </Label>
+              <Textarea
+                id="environmental-qualifications"
+                defaultValue="The valuer is not an environmental specialist or expert in contamination assessment. This valuation does not constitute an environmental audit or contamination assessment. Any environmental observations are based on visual inspection only and are general in nature.
+
+Where potential contamination risks have been identified, it is strongly recommended that the client engage qualified environmental consultants to conduct detailed environmental investigations including soil testing, air quality monitoring, and specialist assessment of hazardous substances.
+
+This valuation excludes consideration of:
+• Hidden or non-apparent contamination
+• Subsurface contamination requiring specialist testing
+• Asbestos content (unless visible and obvious)
+• Lead paint or other hazardous building materials (unless obvious)
+• PFAS or other chemical contamination
+• Illegal drug activity residues
+• Underground storage tanks or buried materials
+• Radioactive materials or electromagnetic radiation impacts
+
+The valuer excludes all liability for environmental contamination, hazardous substances, or environmental conditions that are not readily apparent during inspection or that require specialist knowledge to identify."
+                className="min-h-32 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            {/* Contamination Impact Disclaimer */}
+            <div className="space-y-2">
+              <Label htmlFor="contamination-disclaimer" className="text-sm font-medium text-foreground">
+                Contamination Impact on Value Disclaimer
+              </Label>
+              <Textarea
+                id="contamination-disclaimer"
+                defaultValue="The presence of contamination may significantly impact property value through:
+• Direct remediation and clean-up costs
+• Ongoing monitoring and compliance costs
+• Legal and regulatory compliance expenses
+• Reduced marketability and longer selling periods
+• Financing difficulties or restrictions
+• Potential liability for past and future contamination
+• Market stigma that may persist beyond remediation
+
+Where contamination is suspected or identified, the assessed value assumes no contamination unless specifically stated. Any contamination discovered subsequent to this valuation may materially affect the property value and this valuation should be reviewed accordingly."
+                className="min-h-24 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            {/* Expert Referral Requirements */}
+            <div className="space-y-2">
+              <Label htmlFor="expert-referral" className="text-sm font-medium text-foreground">
+                Expert Referral Requirements
+              </Label>
+              <Textarea
+                id="expert-referral"
+                defaultValue="In accordance with API Guidance Paper on Contamination Issues, where potential contamination is identified, the client should engage:
+
+• Qualified environmental consultants for contamination assessment
+• Environmental engineers for remediation planning
+• Occupational hygienists for health risk assessment
+• Legal advisors for liability and compliance matters
+• Specialist testing laboratories for soil, air, and water analysis
+
+The valuer recommends that environmental investigation be undertaken prior to:
+• Property acquisition or disposal
+• Development or redevelopment activities
+• Financing decisions
+• Any change of use that may trigger regulatory requirements
+
+This recommendation applies particularly where the property has current or historical use that appears on the list of potentially contaminating activities as defined in the API Guidance Paper."
+                className="min-h-28 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
           </div>
 
           {/* Valuation Details Table */}
