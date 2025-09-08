@@ -21,6 +21,7 @@ const PreviousSalesHistoryAndCurrentSale = () => {
   const [lastSalePrice, setLastSalePrice] = useState("");
   const [saleMethod, setSaleMethod] = useState("");
   const [saleHistoryNotes, setSaleHistoryNotes] = useState("");
+  const [previousTransactionDate, setPreviousTransactionDate] = useState<Date>();
   
   // Current/Proposed Sale Transaction state
   const [transactionType, setTransactionType] = useState("");
@@ -81,6 +82,32 @@ const PreviousSalesHistoryAndCurrentSale = () => {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="previous-transaction-date">Date of Transaction</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !previousTransactionDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {previousTransactionDate ? format(previousTransactionDate, "PPP") : "Select date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={previousTransactionDate}
+                      onSelect={setPreviousTransactionDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="last-sale-price">Last Sale Price</Label>
                 <Input
                   id="last-sale-price"
@@ -90,23 +117,23 @@ const PreviousSalesHistoryAndCurrentSale = () => {
                   onChange={(e) => setLastSalePrice(e.target.value)}
                 />
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="sale-method">Sale Method</Label>
-                <Select value={saleMethod} onValueChange={setSaleMethod}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="private-treaty">Private Treaty</SelectItem>
-                    <SelectItem value="auction">Auction</SelectItem>
-                    <SelectItem value="tender">Tender</SelectItem>
-                    <SelectItem value="expression-of-interest">Expression of Interest</SelectItem>
-                    <SelectItem value="off-market">Off Market</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="sale-method">Sale Method</Label>
+              <Select value={saleMethod} onValueChange={setSaleMethod}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select method" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="private-treaty">Private Treaty</SelectItem>
+                  <SelectItem value="auction">Auction</SelectItem>
+                  <SelectItem value="tender">Tender</SelectItem>
+                  <SelectItem value="expression-of-interest">Expression of Interest</SelectItem>
+                  <SelectItem value="off-market">Off Market</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
