@@ -8,7 +8,11 @@ import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
 
-const MultiStepForm = () => {
+interface MultiStepFormProps {
+  onSubmit?: (data: any) => void;
+}
+
+const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
