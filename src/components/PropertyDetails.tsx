@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Lock, Printer, Plus, Minus } from "lucide-react";
+import { Lock, Printer, Plus, Minus, Upload, Image, Download } from "lucide-react";
 
 const PropertyDetails = () => {
   const [includeSection, setIncludeSection] = useState(true);
@@ -90,6 +90,51 @@ const PropertyDetails = () => {
           </Button>
         </div>
       </div>
+
+      {/* Property Photos Upload Section */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image className="h-5 w-5 text-blue-500" />
+              <CardTitle className="text-lg">Property Photos</CardTitle>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="include-photos">Include in Report</Label>
+              <Switch id="include-photos" defaultChecked />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center bg-muted/20">
+              <div className="flex justify-center mb-4">
+                <Upload className="h-12 w-12 text-muted-foreground" />
+              </div>
+              <h4 className="text-lg font-medium mb-2 text-foreground">Upload Property Photos</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Photos will be automatically timestamped for report inclusion
+              </p>
+              <div className="flex flex-col items-center gap-3">
+                <Button className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  Choose Photos
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Supports: JPG, PNG, GIF, WebP
+                </p>
+              </div>
+            </div>
+            
+            {/* Photo Gallery Preview Area */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 min-h-[100px] p-4 border rounded-lg bg-background">
+              <div className="text-center text-sm text-muted-foreground col-span-full">
+                Uploaded photos will appear here with timestamps
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
