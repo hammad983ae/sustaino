@@ -27,11 +27,11 @@ const ValuationCertificate = () => {
     currency: true,
     gstTreatment: true,
     marketValue: true,
-    netPassingRent: false, // Default off for desktop valuations
-    marketRent: false, // Default off for desktop valuations
-    capitalisationRate: false, // Default off for desktop valuations
     insuranceReplacement: false, // Default off for desktop valuations
-    forcedSaleEstimate: false // Default off for desktop valuations
+    marketRentGrossResidential: false, // Default off for desktop valuations
+    netRent: false, // Default off for desktop valuations
+    netMarketRent: false, // Default off for desktop valuations
+    forcedSaleRange: false // Default off for desktop valuations
   });
 
   return (
@@ -281,11 +281,11 @@ const ValuationCertificate = () => {
               { key: "currency", label: "Currency of Valuation", enabled: summaryItems.currency },
               { key: "gstTreatment", label: "GST Treatment", enabled: summaryItems.gstTreatment },
               { key: "marketValue", label: "Market Value", enabled: summaryItems.marketValue },
-              { key: "netPassingRent", label: "Net Passing Rent", enabled: summaryItems.netPassingRent },
-              { key: "marketRent", label: "Market Rent", enabled: summaryItems.marketRent },
-              { key: "capitalisationRate", label: "Capitalisation Rate", enabled: summaryItems.capitalisationRate },
               { key: "insuranceReplacement", label: "Insurance Replacement Value", enabled: summaryItems.insuranceReplacement },
-              { key: "forcedSaleEstimate", label: "Forced Sale Price Estimate (Range)", enabled: summaryItems.forcedSaleEstimate }
+              { key: "marketRentGrossResidential", label: "Market Rent (Gross Residential)", enabled: summaryItems.marketRentGrossResidential },
+              { key: "netRent", label: "Net Rent", enabled: summaryItems.netRent },
+              { key: "netMarketRent", label: "Net Market Rent", enabled: summaryItems.netMarketRent },
+              { key: "forcedSaleRange", label: "Forced Sale Range", enabled: summaryItems.forcedSaleRange }
             ].filter(item => item.enabled).map((item, index) => (
               <div key={index} className="flex justify-between items-center py-2 border-b border-border last:border-b-0">
                 <div className="flex items-center justify-between w-full">
