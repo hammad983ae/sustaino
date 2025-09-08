@@ -13,6 +13,7 @@ import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity
 import PreviousSalesHistoryAndCurrentSale from "./PreviousSalesHistoryAndCurrentSale";
 import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
+import ValuationAnalysis from "./ValuationAnalysis";
 
 interface ReportSectionProps {
   title: string;
@@ -212,6 +213,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <LeasingEvidence />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Valuation Analysis section
+  if (sectionIndex === 14) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <ValuationAnalysis />
         </CardContent>
       </Card>
     );
