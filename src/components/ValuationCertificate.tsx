@@ -51,6 +51,9 @@ const ValuationCertificate = () => {
             <MapPin className="h-5 w-5 text-primary" />
             Property Identification
           </CardTitle>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">Pre-populated from platform</Badge>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -58,47 +61,41 @@ const ValuationCertificate = () => {
               <Label htmlFor="property-address">Property Address</Label>
               <Textarea
                 id="property-address"
-                placeholder="Enter complete property address including lot, plan, and title details..."
-                className="min-h-[100px]"
+                placeholder="Complete property address will be auto-populated..."
+                className="min-h-[100px] bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from property data</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="title-reference">Title Reference</Label>
               <Input
                 id="title-reference"
-                placeholder="e.g., Lot 1 on Plan PS123456"
+                placeholder="Auto-populated from title data..."
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from title data</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="property-type">Property Type</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select property type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="residential">Residential</SelectItem>
-                  <SelectItem value="commercial">Commercial</SelectItem>
-                  <SelectItem value="industrial">Industrial</SelectItem>
-                  <SelectItem value="agricultural">Agricultural</SelectItem>
-                  <SelectItem value="specialised">Specialised</SelectItem>
-                  <SelectItem value="development">Development</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                id="property-type"
+                placeholder="Auto-populated from property classification..."
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
+              />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from property data</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="interest-valued">Interest Valued</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select interest type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="freehold">Freehold</SelectItem>
-                  <SelectItem value="leasehold">Leasehold</SelectItem>
-                  <SelectItem value="strata">Strata Title</SelectItem>
-                  <SelectItem value="crown">Crown Lease</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                id="interest-valued"
+                placeholder="Auto-populated from title data..."
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
+              />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from title data</p>
             </div>
           </div>
         </CardContent>
@@ -111,69 +108,21 @@ const ValuationCertificate = () => {
             <FileText className="h-5 w-5 text-primary" />
             Valuation Details
           </CardTitle>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">Pre-populated from platform</Badge>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="purpose">Purpose of Valuation</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select purpose" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="mortgage">Mortgage Security</SelectItem>
-                  <SelectItem value="acquisition">Acquisition</SelectItem>
-                  <SelectItem value="disposal">Disposal</SelectItem>
-                  <SelectItem value="insurance">Insurance</SelectItem>
-                  <SelectItem value="financial">Financial Reporting</SelectItem>
-                  <SelectItem value="legal">Legal Proceedings</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="basis">Basis of Valuation</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Forced Sale Value" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="market">Market Value</SelectItem>
-                  <SelectItem value="forced">Forced Sale Value</SelectItem>
-                  <SelectItem value="replacement">Replacement Cost</SelectItem>
-                  <SelectItem value="fair">Fair Value</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="amount">Valuation Amount ($)</Label>
-              <Input
-                id="amount"
-                type="number"
-                placeholder="0"
-                className="text-right"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="gst">GST Treatment</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select GST treatment" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="inclusive">GST Inclusive</SelectItem>
-                  <SelectItem value="exclusive">GST Exclusive</SelectItem>
-                  <SelectItem value="exempt">GST Exempt</SelectItem>
-                  <SelectItem value="input">Input Taxed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="valuation-date">Date of Valuation</Label>
               <Input
                 id="valuation-date"
                 type="date"
                 placeholder="dd/mm/yyyy"
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from valuation data</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="inspection-date">Date of Inspection</Label>
@@ -181,7 +130,9 @@ const ValuationCertificate = () => {
                 id="inspection-date"
                 type="date"
                 placeholder="dd/mm/yyyy"
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from inspection data</p>
             </div>
           </div>
         </CardContent>
@@ -240,10 +191,11 @@ const ValuationCertificate = () => {
         </CardContent>
       </Card>
 
+
       {/* Automated Valuation Details */}
       <Card>
         <CardHeader>
-          <CardTitle>Valuation Details</CardTitle>
+          <CardTitle>Automated Valuation Summary</CardTitle>
           <div className="flex items-center gap-2">
             <Badge variant="secondary">Pre-populated from platform</Badge>
           </div>
@@ -256,7 +208,8 @@ const ValuationCertificate = () => {
               "Highest and Best Use",
               "Selling Period",
               "Currency of Valuation",
-              "Market Value – exclusive of GST",
+              "GST Treatment",
+              "Market Value",
               "Net Passing Rent",
               "Market Rent",
               "Capitalisation Rate",
