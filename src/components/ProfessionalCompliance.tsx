@@ -384,6 +384,53 @@ MANDATORY EXCLUSIONS: This valuation excludes liability for:
                 className="min-h-48 bg-background border-input text-foreground placeholder:text-muted-foreground"
               />
             </div>
+
+            {/* Insurance Cost Estimates Qualifications */}
+            <div className="space-y-2">
+              <Label htmlFor="insurance-cost-qualifications" className="text-sm font-medium text-foreground">
+                Insurance Cost Estimates Qualifications
+              </Label>
+              <Textarea
+                id="insurance-cost-qualifications"
+                defaultValue="INSURANCE COST ESTIMATE DISCLAIMER: This insurance cost estimate is prepared for insurance purposes only and should not be relied upon for any other purpose. The estimate reflects costs at the date of assessment and may require updating as costs change.
+
+BASIS OF ESTIMATE:
+• Replacement cost basis reflecting current construction methods and materials
+• Reproduction cost basis (for heritage properties) reflecting original construction methods
+• Indemnity value basis considering age, condition, and remaining useful life
+
+COST COMPONENTS INCLUDED/EXCLUDED:
+• Professional fees (architects, engineers, surveyors) [specify if included]
+• Demolition and debris removal costs [specify if included]
+• Lead time cost escalation allowances [specify if included]
+• Reconstruction period cost escalation [specify if included]
+• GST treatment [specify inclusive or exclusive]
+
+HERITAGE PROPERTY CONSIDERATIONS (where applicable):
+• Heritage restrictions may require specialized tradespeople and materials
+• Reproduction costs typically higher than standard replacement costs
+• Compliance with heritage approval processes may extend reconstruction periods
+• Risk of partial loss requiring specialized restoration techniques
+
+PLANT, MACHINERY & EQUIPMENT CONSIDERATIONS (where applicable):
+• Based on replacement cost of currently available equivalent equipment
+• Includes transport, installation, commissioning, and professional fees
+• May require extended lead times for specialized equipment
+• Foreign exchange fluctuations may affect imported equipment costs
+
+IMPORTANT LIMITATIONS:
+• Estimate based on visual inspection only, not detailed structural assessment
+• Does not constitute quantity surveying or detailed cost estimation
+• Asbestos or hazardous materials may significantly increase demolition costs
+• Site access difficulties may affect construction and demolition costs
+• Planning approvals and building code changes may affect reconstruction costs
+
+VALUER'S EXPERTISE: The valuer is not a quantity surveyor, construction cost consultant, or building contractor. This estimate is based on general market knowledge of construction costs and should be supplemented by specialist advice where detailed cost analysis is required.
+
+UPDATE REQUIREMENTS: Insurance cost estimates should be reviewed regularly (typically annually) or when significant cost changes occur in construction markets, building codes, or heritage requirements."
+                className="min-h-48 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
           </div>
 
           {/* Valuation Details Table */}

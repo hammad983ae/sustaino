@@ -189,6 +189,35 @@ const APINativeGlossary = () => {
     {
       term: "PropertyPRO",
       definition: "A standardized pro-forma valuation report format used in Australia for residential mortgage valuations, with specific risk rating requirements."
+    },
+    // Insurance Cost Estimates Terms
+    {
+      term: "Indemnity Value",
+      definition: "The loss that would be suffered by the insured in the event the insured tangible asset is destroyed, considering age, condition, and remaining useful life of the asset."
+    },
+    {
+      term: "Reproduction Cost",
+      definition: "The current cost of reproducing every component of a building in a style and form of construction most closely resembling the original, commonly used for heritage buildings."
+    },
+    {
+      term: "Replacement Cost",
+      definition: "The cost of replacing an asset with a substantially identical asset of equivalent utility, using current materials, labor costs, and construction methods."
+    },
+    {
+      term: "Lead Time",
+      definition: "The period after a loss occurs when remaining improvements are demolished, plans drafted, approvals obtained, and all matters completed in preparation for rebuilding."
+    },
+    {
+      term: "Reconstruction Period",
+      definition: "The period from when building approvals are obtained to completion and handover of the new building, requiring allowances for cost changes during construction."
+    },
+    {
+      term: "Heritage Improvements",
+      definition: "Buildings or structures deemed worthy of conservation because of their cultural significance, often subject to strict renovation and modification requirements."
+    },
+    {
+      term: "Plant, Machinery & Equipment (P&E)",
+      definition: "Industrial equipment and machinery requiring specialized insurance cost estimates based on replacement cost including transport, installation, commissioning, and professional fees."
     }
   ];
 
@@ -222,11 +251,11 @@ const APINativeGlossary = () => {
 
             <div className="mt-6 p-4 border border-border rounded-lg bg-muted/20">
               <p className="text-sm text-foreground">
-                <strong>Important Note:</strong> Native title, SDA, market transaction shortage considerations, and mortgage security valuations are extremely complex areas of law and regulation. 
+                <strong>Important Note:</strong> Native title, SDA, market transaction shortage considerations, mortgage security valuations, and insurance cost estimates are extremely complex areas of law and regulation. 
                 This glossary provides basic definitions only. Professional legal advice from specialists should always be 
                 sought when these issues are identified or suspected. For SDA valuations, current knowledge of NDIS 
                 legislation and SDA Rules is essential. During periods of market uncertainty, additional professional 
-                judgment and comprehensive risk analysis are required. Mortgage security valuations must comply with banking regulations and prudent lending standards.
+                judgment and comprehensive risk analysis are required. Mortgage security valuations must comply with banking regulations and prudent lending standards. Insurance cost estimates require understanding of policy terms, heritage restrictions, and specialized construction considerations.
               </p>
             </div>
           </div>
