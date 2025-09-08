@@ -50,7 +50,7 @@ export default function SustainoProAnalysis() {
                 Functions not covered by RP Data - available for review
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-md flex items-center gap-2">
@@ -90,6 +90,20 @@ export default function SustainoProAnalysis() {
                     <div className="text-sm">• Retail strip analysis</div>
                     <div className="text-sm">• Pedestrian flow patterns</div>
                     <div className="text-sm">• Comparable strip performance</div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-md flex items-center gap-2">
+                      <Zap className="h-4 w-4" />
+                      AI Animator for Analysis
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="text-sm">• Automated visualization generation</div>
+                    <div className="text-sm">• Data-driven animation sequences</div>
+                    <div className="text-sm">• Interactive analysis presentations</div>
                   </CardContent>
                 </Card>
               </div>

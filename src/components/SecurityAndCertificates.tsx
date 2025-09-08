@@ -88,6 +88,8 @@ export default function SecurityAndCertificates() {
                   <div className="text-sm">Property Valuation Platform™</div>
                   <div className="text-sm">ESG Analysis Suite™</div>
                   <div className="text-sm">Smart Property Analytics™</div>
+                  <div className="text-sm">AI Animator for Analysis™</div>
+                  <div className="text-sm">Advanced Urban Analytics™</div>
                 </div>
               </div>
               
@@ -97,6 +99,8 @@ export default function SecurityAndCertificates() {
                   <div className="text-sm">• Patent No: AU2024001215 - Automated Property Valuation Algorithm</div>
                   <div className="text-sm">• Patent No: AU2024001216 - ESG Risk Assessment Method</div>
                   <div className="text-sm">• Patent No: AU2024001217 - Sustainability Scoring System</div>
+                  <div className="text-sm">• Patent No: AU2024001218 - AI Animation Analysis Engine</div>
+                  <div className="text-sm">• Patent No: AU2024001219 - Real-time Urban Analytics Framework</div>
                 </div>
               </div>
 
