@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PROPRIETARY EXECUTIVE SUMMARY TEMPLATES
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * Executive summary templates, content frameworks, and report generation
+ * systems are proprietary intellectual property. Commercial licensing required.
+ * ============================================================================
+ */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

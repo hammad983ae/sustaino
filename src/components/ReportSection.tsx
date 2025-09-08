@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PROPRIETARY REPORT GENERATION SYSTEM
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * Report templates, generation algorithms, and content frameworks are
+ * proprietary intellectual property. Commercial use requires licensing.
+ * ============================================================================
+ */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ExecutiveSummary from "./ExecutiveSummary";
 import RPDAndLocation from "./RPDAndLocation";

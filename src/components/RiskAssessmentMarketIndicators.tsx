@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PROPRIETARY RISK ASSESSMENT METHODOLOGY
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * Risk assessment algorithms and market analysis frameworks are proprietary
+ * intellectual property protected by patents and trade secrets.
+ * ============================================================================
+ */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";

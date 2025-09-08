@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PROPRIETARY NATIVE TITLE ASSESSMENT METHODOLOGY
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * Native title assessment frameworks, risk analysis methodologies, and
+ * legal compliance systems are proprietary intellectual property.
+ * ============================================================================
+ */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";

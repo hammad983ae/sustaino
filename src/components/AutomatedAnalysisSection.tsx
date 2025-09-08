@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * PROPRIETARY AUTOMATED ANALYSIS SYSTEM
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * Automated analysis algorithms, AI models, and assessment methodologies
+ * are proprietary IP protected by patents and trade secrets.
+ * Commercial licensing required.
+ * ============================================================================
+ */
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

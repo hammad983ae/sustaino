@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PROPRIETARY SDA ASSESSMENT METHODOLOGY
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * SDA assessment frameworks, valuation methodologies, and compliance
+ * analysis systems are proprietary intellectual property.
+ * ============================================================================
+ */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";

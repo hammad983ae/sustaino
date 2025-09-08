@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PROPRIETARY PROPERTY ASSESSMENT FRAMEWORK
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * Property assessment methodologies and data collection frameworks are
+ * proprietary IP. Commercial licensing required for use.
+ * ============================================================================
+ */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";

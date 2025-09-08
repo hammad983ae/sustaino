@@ -1,3 +1,16 @@
+/**
+ * ============================================================================
+ * PROPRIETARY VALUATION ANALYSIS METHODOLOGY
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * This valuation analysis system, including algorithms, methodologies, and
+ * assessment frameworks, is proprietary intellectual property protected by
+ * international copyright laws and patents.
+ * 
+ * LICENSING REQUIRED FOR COMMERCIAL USE
+ * Contact: licensing@delderenzoproperty.com
+ * ============================================================================
+ */
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
