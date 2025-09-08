@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { MapPin, TrendingUp, Leaf, DollarSign, Calculator, BarChart3, Save, FolderOpen, Trash2 } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import AuthStatus from "./AuthStatus";
 
 interface Location {
   id: string;
@@ -402,6 +403,7 @@ export const CostaGroupPortfolio = () => {
           <p className="text-muted-foreground">Comprehensive asset valuation and ESG strategy analysis</p>
         </div>
         <div className="flex items-center gap-3">
+          <AuthStatus />
           {user && (
             <>
               <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
