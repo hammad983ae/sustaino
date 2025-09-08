@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronDown, ChevronUp, Shield, Calculator, Clock, AlertTriangle, Building, Hammer } from "lucide-react";
+import { ChevronDown, ChevronUp, Shield, Calculator, Clock, AlertTriangle, Building, Hammer, FileText, TrendingUp } from "lucide-react";
 
 export default function InsuranceCostEstimates() {
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
@@ -32,9 +32,9 @@ export default function InsuranceCostEstimates() {
                 <SelectValue placeholder="Select purpose" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="general-insurance">General Insurance Purposes</SelectItem>
+                <SelectItem value="mortgage-security">Mortgage Security Assessment</SelectItem>
                 <SelectItem value="property-insurance">Property Insurance</SelectItem>
-                <SelectItem value="home-insurance">Home Insurance</SelectItem>
-                <SelectItem value="business-insurance">Business Insurance</SelectItem>
                 <SelectItem value="heritage-insurance">Heritage Property Insurance</SelectItem>
                 <SelectItem value="pe-insurance">Plant, Machinery & Equipment Insurance</SelectItem>
               </SelectContent>
@@ -48,12 +48,27 @@ export default function InsuranceCostEstimates() {
                 <SelectValue placeholder="Select basis" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="replacement-cost">Replacement Cost</SelectItem>
-                <SelectItem value="reproduction-cost">Reproduction Cost (Heritage)</SelectItem>
-                <SelectItem value="indemnity-value">Indemnity Value</SelectItem>
-                <SelectItem value="agreed-value">Agreed Value</SelectItem>
+                <SelectItem value="replacement-cost">Replacement Cost - Current equivalent asset</SelectItem>
+                <SelectItem value="reproduction-cost">Reproduction Cost - Exact replica (Heritage)</SelectItem>
+                <SelectItem value="reinstatement-cost">Reinstatement Cost - Equal to condition when new</SelectItem>
+                <SelectItem value="indemnity-value">Indemnity Value - Depreciated value</SelectItem>
+                <SelectItem value="functional-replacement">Functional Replacement - Modern equivalent capacity</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <FileText className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="space-y-2">
+                <h4 className="text-sm font-semibold text-blue-800">Key Basis Definitions</h4>
+                <ul className="text-sm text-blue-700 space-y-1">
+                  <li>• <strong>Replacement:</strong> Current equivalent asset with similar function</li>
+                  <li>• <strong>Reproduction:</strong> Exact replica using same materials (heritage)</li>
+                  <li>• <strong>Indemnity:</strong> Value considering age, condition & depreciation</li>
+                </ul>
+              </div>
+            </div>
           </div>
           
           <div className="space-y-2">
@@ -579,10 +594,98 @@ export default function InsuranceCostEstimates() {
               </div>
             </div>
           </div>
-        </div>
-      )
-    }
-  ];
+         </div>
+       )
+     },
+     {
+       id: "summary-calculations",
+       title: "Cost Summary & Final Assessment",
+       icon: TrendingUp,
+       content: (
+         <div className="space-y-4">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <div className="space-y-4">
+               <h4 className="font-semibold">Base Cost Components</h4>
+               <div className="space-y-2">
+                 <Label htmlFor="base-construction-cost">Base Construction/Replacement Cost ($)</Label>
+                 <Input id="base-construction-cost" type="number" placeholder="0" />
+               </div>
+               
+               <div className="space-y-2">
+                 <Label htmlFor="professional-fees-total">Professional Fees Total ($)</Label>
+                 <Input id="professional-fees-total" type="number" placeholder="0" />
+               </div>
+               
+               <div className="space-y-2">
+                 <Label htmlFor="demolition-total">Demolition & Debris Removal ($)</Label>
+                 <Input id="demolition-total" type="number" placeholder="0" />
+               </div>
+             </div>
+             
+             <div className="space-y-4">
+               <h4 className="font-semibold">Allowances & Adjustments</h4>
+               <div className="space-y-2">
+                 <Label htmlFor="lead-time-allowance">Lead Time Cost Allowance ($)</Label>
+                 <Input id="lead-time-allowance" type="number" placeholder="0" />
+               </div>
+               
+               <div className="space-y-2">
+                 <Label htmlFor="reconstruction-allowance">Reconstruction Period Allowance ($)</Label>
+                 <Input id="reconstruction-allowance" type="number" placeholder="0" />
+               </div>
+               
+               <div className="space-y-2">
+                 <Label htmlFor="location-adjustment">Location/Heritage/Special Adjustments ($)</Label>
+                 <Input id="location-adjustment" type="number" placeholder="0" />
+               </div>
+             </div>
+           </div>
+           
+           <div className="border-t pt-4 bg-muted/50 rounded-lg p-4">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div className="space-y-2">
+                 <Label htmlFor="total-cost-estimate" className="text-lg font-semibold">Total Insurance Cost Estimate ($)</Label>
+                 <Input id="total-cost-estimate" type="number" placeholder="0" className="text-lg font-semibold bg-background" />
+               </div>
+               
+               <div className="space-y-2">
+                 <Label htmlFor="cost-per-sqm">Cost per Square Metre ($/sqm)</Label>
+                 <Input id="cost-per-sqm" type="number" placeholder="0" className="bg-background" />
+               </div>
+             </div>
+           </div>
+           
+           <div className="space-y-2">
+             <Label htmlFor="cost-estimate-rationale">Cost Estimate Rationale & Methodology</Label>
+             <Textarea 
+               id="cost-estimate-rationale"
+               placeholder="Provide detailed explanation of methodology, key assumptions, supporting evidence, and any limitations..."
+               className="min-h-[100px]"
+             />
+           </div>
+           
+           <div className="space-y-2">
+             <Label htmlFor="recommendations">Recommendations to Client</Label>
+             <Textarea 
+               id="recommendations"
+               placeholder="Include recommendations regarding sum insured, policy considerations, specialist reports needed..."
+               className="min-h-[80px]"
+             />
+           </div>
+           
+           <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+             <div className="flex items-start space-x-3">
+               <TrendingUp className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+               <div className="space-y-2">
+                 <h4 className="text-sm font-semibold text-primary">Final Assessment</h4>
+                 <p className="text-sm text-muted-foreground">This estimate is valid as at the assessment date and subject to all qualifications outlined in this report.</p>
+               </div>
+             </div>
+           </div>
+         </div>
+       )
+     }
+   ];
 
   return (
     <div className="space-y-6">
