@@ -383,9 +383,9 @@ const PropertyDetails = () => {
                 <CardTitle className="text-base">Agriculture Property Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* Agricultural Property Type */}
+                {/* Agricultural Property Type Selection */}
                 <div>
-                  <Label className="text-sm font-medium mb-3 block">Agricultural Property Type</Label>
+                  <Label htmlFor="agricultural-type">Agricultural Property Type</Label>
                   <Select>
                     <SelectTrigger>
                       <SelectValue placeholder="Select agricultural property type" />
@@ -405,7 +405,7 @@ const PropertyDetails = () => {
                   </Select>
                 </div>
 
-                {/* Basic Agricultural Details */}
+                {/* Basic Agricultural Information - Always Shown */}
                 <div className="space-y-4">
                   <h4 className="font-medium">Basic Property Information</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -475,7 +475,7 @@ const PropertyDetails = () => {
                   </div>
                 </div>
 
-                {/* Water Resources */}
+                {/* Water Resources - Always Shown */}
                 <div className="space-y-4">
                   <h4 className="font-medium">Water Resources</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -515,23 +515,15 @@ const PropertyDetails = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div>
-                      <Label htmlFor="dam-capacity">Dam Capacity (ML)</Label>
-                      <Input id="dam-capacity" placeholder="Total dam capacity" />
-                    </div>
-                    <div>
-                      <Label htmlFor="water-quality">Water Quality</Label>
-                      <Input id="water-quality" placeholder="Water quality/salinity" />
-                    </div>
                   </div>
                 </div>
 
-                {/* Grazing Specific */}
+                {/* Grazing Land Specific Fields */}
                 <div className="space-y-4">
-                  <h4 className="font-medium">Grazing & Livestock</h4>
+                  <h4 className="font-medium">Grazing Land Details</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="carrying-capacity">Carrying Capacity (DSE)</Label>
+                      <Label htmlFor="carrying-capacity">Carrying Capacity (DSE/ha)</Label>
                       <Input id="carrying-capacity" placeholder="Dry Sheep Equivalent per hectare" />
                     </div>
                     <div>
@@ -555,7 +547,11 @@ const PropertyDetails = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="fencing">Fencing</Label>
+                      <Label htmlFor="paddock-count">Number of Paddocks</Label>
+                      <Input id="paddock-count" placeholder="Number of paddocks" />
+                    </div>
+                    <div>
+                      <Label htmlFor="fencing-condition">Fencing Condition</Label>
                       <Select>
                         <SelectTrigger>
                           <SelectValue placeholder="Fencing condition" />
@@ -569,22 +565,22 @@ const PropertyDetails = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="paddock-count">Number of Paddocks</Label>
-                      <Input id="paddock-count" placeholder="Number of paddocks" />
+                      <Label htmlFor="livestock-facilities">Livestock Facilities</Label>
+                      <Input id="livestock-facilities" placeholder="Yards, races, crush, etc." />
                     </div>
                   </div>
                 </div>
 
-                {/* Dairy Specific */}
+                {/* Dairy Farm Specific Fields */}
                 <div className="space-y-4">
-                  <h4 className="font-medium">Dairy Operations</h4>
+                  <h4 className="font-medium">Dairy Farm Operations</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <Label htmlFor="milking-platform">Milking Platform (hectares)</Label>
                       <Input id="milking-platform" placeholder="Effective milking area" />
                     </div>
                     <div>
-                      <Label htmlFor="dairy-shed">Dairy Shed Type</Label>
+                      <Label htmlFor="dairy-shed-type">Dairy Shed Type</Label>
                       <Select>
                         <SelectTrigger>
                           <SelectValue placeholder="Select dairy shed type" />
@@ -617,25 +613,25 @@ const PropertyDetails = () => {
                   </div>
                 </div>
 
-                {/* Broadacre Cropping */}
+                {/* Broadacre Cropping Specific Fields */}
                 <div className="space-y-4">
                   <h4 className="font-medium">Broadacre Cropping</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="crop-types">Primary Crops</Label>
-                      <Input id="crop-types" placeholder="e.g., Wheat, Barley, Canola" />
+                      <Label htmlFor="primary-crops">Primary Crops</Label>
+                      <Input id="primary-crops" placeholder="e.g., Wheat, Barley, Canola" />
                     </div>
                     <div>
-                      <Label htmlFor="yield-average">Average Yield (t/ha)</Label>
-                      <Input id="yield-average" placeholder="Average tonnes per hectare" />
+                      <Label htmlFor="crop-yield">Average Yield (t/ha)</Label>
+                      <Input id="crop-yield" placeholder="Average tonnes per hectare" />
                     </div>
                     <div>
-                      <Label htmlFor="cropping-history">Cropping History</Label>
-                      <Input id="cropping-history" placeholder="Years of cropping" />
+                      <Label htmlFor="cropping-history">Cropping History (years)</Label>
+                      <Input id="cropping-history" placeholder="Years under cultivation" />
                     </div>
                     <div>
                       <Label htmlFor="silo-capacity">Silo Capacity (tonnes)</Label>
-                      <Input id="silo-capacity" placeholder="Total storage capacity" />
+                      <Input id="silo-capacity" placeholder="Total grain storage" />
                     </div>
                     <div>
                       <Label htmlFor="machinery-sheds">Machinery Sheds (sqm)</Label>
@@ -648,17 +644,21 @@ const PropertyDetails = () => {
                   </div>
                 </div>
 
-                {/* Vineyard Specific */}
+                {/* Vineyard Specific Fields */}
                 <div className="space-y-4">
                   <h4 className="font-medium">Vineyard Operations</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="vine-area">Total Vine Area (hectares)</Label>
-                      <Input id="vine-area" placeholder="Area under vine" />
+                      <Label htmlFor="vineyard-area">Total Vineyard Area (hectares)</Label>
+                      <Input id="vineyard-area" placeholder="Area under vine" />
                     </div>
                     <div>
                       <Label htmlFor="grape-varieties">Grape Varieties</Label>
-                      <Input id="grape-varieties" placeholder="e.g., Shiraz, Chardonnay" />
+                      <Input id="grape-varieties" placeholder="e.g., Shiraz, Chardonnay, Sauvignon Blanc" />
+                    </div>
+                    <div>
+                      <Label htmlFor="vine-density">Vine Density (vines/ha)</Label>
+                      <Input id="vine-density" placeholder="Vines per hectare" />
                     </div>
                     <div>
                       <Label htmlFor="vine-age">Average Vine Age (years)</Label>
@@ -686,10 +686,27 @@ const PropertyDetails = () => {
                       <Label htmlFor="trellis-system">Trellis System</Label>
                       <Input id="trellis-system" placeholder="e.g., VSP, Scott Henry" />
                     </div>
+                    <div>
+                      <Label htmlFor="harvest-method">Harvest Method</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select harvest method" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="hand">Hand Harvested</SelectItem>
+                          <SelectItem value="mechanical">Mechanical</SelectItem>
+                          <SelectItem value="mixed">Mixed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="winery-facilities">Winery Facilities</Label>
+                      <Input id="winery-facilities" placeholder="On-site processing facilities" />
+                    </div>
                   </div>
                 </div>
 
-                {/* Orchard Specific */}
+                {/* Orchard Specific Fields */}
                 <div className="space-y-4">
                   <h4 className="font-medium">Orchard Operations</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -698,16 +715,34 @@ const PropertyDetails = () => {
                       <Input id="orchard-area" placeholder="Area under orchard" />
                     </div>
                     <div>
-                      <Label htmlFor="fruit-varieties">Fruit Varieties</Label>
-                      <Input id="fruit-varieties" placeholder="e.g., Apples, Citrus, Stone Fruit" />
-                    </div>
-                    <div>
-                      <Label htmlFor="tree-age">Average Tree Age (years)</Label>
-                      <Input id="tree-age" placeholder="Average age of trees" />
+                      <Label htmlFor="orchard-type">Orchard Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select orchard type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="citrus">Citrus (Orange, Lemon, Grapefruit)</SelectItem>
+                          <SelectItem value="stone-fruit">Stone Fruit (Peach, Plum, Apricot)</SelectItem>
+                          <SelectItem value="apple">Apple Orchard</SelectItem>
+                          <SelectItem value="pear">Pear Orchard</SelectItem>
+                          <SelectItem value="avocado">Avocado Orchard</SelectItem>
+                          <SelectItem value="mango">Mango Orchard</SelectItem>
+                          <SelectItem value="cherry">Cherry Orchard</SelectItem>
+                          <SelectItem value="almond">Almond Orchard</SelectItem>
+                          <SelectItem value="walnut">Walnut Orchard</SelectItem>
+                          <SelectItem value="macadamia">Macadamia Orchard</SelectItem>
+                          <SelectItem value="olive">Olive Grove</SelectItem>
+                          <SelectItem value="mixed">Mixed Orchard</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
                       <Label htmlFor="tree-density">Tree Density (trees/ha)</Label>
                       <Input id="tree-density" placeholder="Trees per hectare" />
+                    </div>
+                    <div>
+                      <Label htmlFor="tree-age">Average Tree Age (years)</Label>
+                      <Input id="tree-age" placeholder="Average age of trees" />
                     </div>
                     <div>
                       <Label htmlFor="fruit-yield">Average Yield (t/ha)</Label>
@@ -726,10 +761,22 @@ const PropertyDetails = () => {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div>
+                      <Label htmlFor="rootstock">Rootstock</Label>
+                      <Input id="rootstock" placeholder="Rootstock variety" />
+                    </div>
+                    <div>
+                      <Label htmlFor="pollination">Pollination</Label>
+                      <Input id="pollination" placeholder="Pollination requirements/method" />
+                    </div>
+                    <div>
+                      <Label htmlFor="processing-facilities">Processing Facilities</Label>
+                      <Input id="processing-facilities" placeholder="On-site processing/packing" />
+                    </div>
                   </div>
                 </div>
 
-                {/* Aquaculture Specific */}
+                {/* Aquaculture Specific Fields */}
                 <div className="space-y-4">
                   <h4 className="font-medium">Aquaculture Operations</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -761,6 +808,10 @@ const PropertyDetails = () => {
                       <Input id="production-capacity" placeholder="Annual production capacity" />
                     </div>
                     <div>
+                      <Label htmlFor="stocking-density">Stocking Density (fish/m³)</Label>
+                      <Input id="stocking-density" placeholder="Fish per cubic metre" />
+                    </div>
+                    <div>
                       <Label htmlFor="water-exchange">Water Exchange Rate</Label>
                       <Input id="water-exchange" placeholder="Water turnover rate" />
                     </div>
@@ -768,28 +819,32 @@ const PropertyDetails = () => {
                       <Label htmlFor="aeration-system">Aeration System</Label>
                       <Input id="aeration-system" placeholder="Type of aeration" />
                     </div>
+                    <div>
+                      <Label htmlFor="processing-plant">Processing Plant</Label>
+                      <Input id="processing-plant" placeholder="On-site processing facilities" />
+                    </div>
                   </div>
                 </div>
 
-                {/* Infrastructure */}
+                {/* Infrastructure & Improvements */}
                 <div className="space-y-4">
                   <h4 className="font-medium">Infrastructure & Improvements</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="homestead">Homestead</Label>
-                      <Textarea id="homestead" placeholder="Describe homestead details..." />
+                      <Textarea id="homestead" placeholder="Describe homestead details..." className="min-h-[80px]" />
                     </div>
                     <div>
                       <Label htmlFor="worker-accommodation">Worker Accommodation</Label>
-                      <Textarea id="worker-accommodation" placeholder="Describe worker housing..." />
+                      <Textarea id="worker-accommodation" placeholder="Describe worker housing..." className="min-h-[80px]" />
                     </div>
                     <div>
                       <Label htmlFor="farm-buildings">Farm Buildings</Label>
-                      <Textarea id="farm-buildings" placeholder="Describe sheds, barns, workshops..." />
+                      <Textarea id="farm-buildings" placeholder="Describe sheds, barns, workshops..." className="min-h-[80px]" />
                     </div>
                     <div>
                       <Label htmlFor="machinery-equipment">Machinery & Equipment</Label>
-                      <Textarea id="machinery-equipment" placeholder="List included machinery..." />
+                      <Textarea id="machinery-equipment" placeholder="List included machinery..." className="min-h-[80px]" />
                     </div>
                   </div>
                 </div>
