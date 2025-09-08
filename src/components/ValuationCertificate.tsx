@@ -194,6 +194,9 @@ const ValuationCertificate = () => {
             <User className="h-5 w-5 text-primary" />
             Professional Certification
           </CardTitle>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">Pre-populated from platform</Badge>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -202,28 +205,36 @@ const ValuationCertificate = () => {
               <Input
                 id="valuer-name"
                 placeholder="Enter qualified valuer name"
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from valuer profile</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="qualification">Professional Qualification</Label>
               <Input
                 id="qualification"
                 placeholder="e.g., Certified Practising Valuer (CPV)"
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from valuer profile</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="registration">Registration Number</Label>
               <Input
                 id="registration"
                 placeholder="Enter professional registration number"
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from valuer profile</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="firm">Valuation Firm</Label>
               <Input
                 id="firm"
                 placeholder="Enter firm/company name"
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
               />
+              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from firm profile</p>
             </div>
           </div>
         </CardContent>
