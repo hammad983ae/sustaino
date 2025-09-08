@@ -48,12 +48,52 @@ const APINativeGlossary = () => {
       definition: "The National Native Title Tribunal is an independent body established under the Native Title Act to oversee the administration of native title."
     },
     {
-      term: "Past Act",
-      definition: "An act that may have invalidly affected native title but has been validated under the provisions of the Native Title Act."
+      term: "Existing Stock SDA",
+      definition: "SDA as defined in Part 1 section 6 of the National Disability Insurance Scheme (Specialist Disability Accommodation) Rules 2020."
     },
     {
-      term: "Prescribed Body Corporate (PBC)",
-      definition: "A corporation governed by the Native Title Act and related legislation that acts as agent or trustee for the native title holders and manages all native title matters after a native title determination has been made."
+      term: "Legacy Stock SDA", 
+      definition: "SDA as defined in Part 1 section 7 of the National Disability Insurance Scheme (Specialist Disability Accommodation) Rules 2020."
+    },
+    {
+      term: "Maximum Reasonable Rent Contribution (MRRC)",
+      definition: "A payment by the SDA participant to the SDA provider that is in addition to the SDA payments approved in their NDIS Plan."
+    },
+    {
+      term: "National Disability Insurance Agency (NDIA)",
+      definition: "An independent statutory agency whose role is to implement the NDIS in supporting a better quality of life for hundreds of thousands of Australians with a significant and permanent disability, as well as their families and carers."
+    },
+    {
+      term: "National Disability Insurance Scheme (NDIS)",
+      definition: "An Australian Government scheme that provides funding to eligible people (NDIS Participants) with disability. The scheme entitles people with a permanent and significant disability who are under the age of 65 to funding for any reasonable and necessary support needs related to their disability."
+    },
+    {
+      term: "New Build SDA",
+      definition: "SDA as defined in Part 1 section 8 of the National Disability Insurance Scheme (Specialist Disability Accommodation) Rules 2020."
+    },
+    {
+      term: "On-site Overnight Assistance (OOA)",
+      definition: "An additional payment under the NDIS when an additional space is used by support staff to provide support services overnight to SDA participants living in the same dwelling that contains the OOA space or in a nearby dwelling."
+    },
+    {
+      term: "SDA Participant",
+      definition: "A NDIS participant who is approved for SDA."
+    },
+    {
+      term: "SDA Payment",
+      definition: "A payment from the NDIA to approved SDA providers."
+    },
+    {
+      term: "SDA Provider",
+      definition: "A registered manager of SDA."
+    },
+    {
+      term: "Specialist Disability Accommodation (SDA)",
+      definition: "A range of housing designed for NDIS participants with extreme functional impairment and/or very high support needs and enrolled with the NDIA."
+    },
+    {
+      term: "Supported Independent Living Provider (SIL Provider)",
+      definition: "A NDIS funded support organisation or person that provides help and/or supervision of daily tasks to help the NDIS participant to live as independently as possible, while building life skills."
     },
     {
       term: "Public Works",
@@ -70,14 +110,14 @@ const APINativeGlossary = () => {
       <Card className="bg-card border-border">
         <CardHeader className="border-b border-border bg-muted/50">
           <CardTitle className="text-foreground text-xl font-semibold">
-            Additional API Guidelines - Native Title Glossary
+            Additional API Guidelines - Glossary
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground mb-4">
-              The following definitions are sourced from API Guidance Paper on Native Title Matters and are applicable 
-              to property valuation and assessment where native title considerations may arise.
+              The following definitions are sourced from API Guidance Papers including Native Title Matters 
+              and Specialist Disability Accommodation, applicable to property valuation and assessment.
             </p>
             
             <div className="space-y-4">
@@ -95,9 +135,10 @@ const APINativeGlossary = () => {
 
             <div className="mt-6 p-4 border border-border rounded-lg bg-muted/20">
               <p className="text-sm text-foreground">
-                <strong>Important Note:</strong> Native title is an extremely complex area of law. This glossary provides 
-                basic definitions only. Professional legal advice from specialists in native title law should always be 
-                sought when native title issues are identified or suspected.
+                <strong>Important Note:</strong> Native title and SDA are extremely complex areas of law and regulation. 
+                This glossary provides basic definitions only. Professional legal advice from specialists should always be 
+                sought when these issues are identified or suspected. For SDA valuations, current knowledge of NDIS 
+                legislation and SDA Rules is essential.
               </p>
             </div>
           </div>

@@ -249,6 +249,51 @@ LIMITATION: Native title determinations cover approximately 50% of Australia's l
                 className="min-h-40 bg-background border-input text-foreground placeholder:text-muted-foreground"
               />
             </div>
+
+            {/* SDA Assessment Qualifications */}
+            <div className="space-y-2">
+              <Label htmlFor="sda-qualifications" className="text-sm font-medium text-foreground">
+                Specialist Disability Accommodation (SDA) Assessment Qualifications
+              </Label>
+              <Textarea
+                id="sda-qualifications"
+                defaultValue="IMPORTANT DISCLAIMER: The valuer has limited specialist knowledge of SDA legislation, NDIS regulations, and SDA-specific valuation requirements. This assessment should not be relied upon as comprehensive SDA advice.
+
+SDA is subject to complex and frequently changing legislation including:
+• National Disability Insurance Scheme Act 2013
+• NDIS (Specialist Disability Accommodation) Rules 2020
+• SDA Design Standards published by NDIA
+• NDIS Quality and Safeguards Commission requirements
+
+This valuation excludes detailed consideration of:
+• SDA provider registration requirements and compliance
+• SDA dwelling enrollment status and ongoing compliance
+• Design category certification accuracy (basic, improved liveability, fully accessible, robust, high physical support)
+• Building type compliance (apartment, villa/townhouse/duplex, house, group home)
+• SDA payment calculation accuracy and sustainability
+• MRRC (Maximum Reasonable Rent Contribution) arrangements
+• OOA (On-site Overnight Assistance) payment structures
+• Location factors and fire sprinkler allowances
+• SIL provider relationships and operational dependencies
+• NDIS participant eligibility changes and plan reviews
+
+INCOME STREAM RISKS: SDA income streams are dependent on:
+• Ongoing NDIS participant eligibility and plan approvals
+• SDA provider registration maintenance
+• Dwelling enrollment compliance with evolving standards
+• Government funding policy changes
+• Regulatory compliance requirements
+
+RECOMMENDATIONS: Before relying on this valuation for SDA investment decisions, engage:
+• SDA specialist valuers with current NDIS knowledge
+• Legal advisers specializing in NDIS legislation
+• SDA compliance consultants
+• Specialist SDA property advisers
+
+The valuer recommends comprehensive due diligence of all SDA-specific factors before property acquisition, disposal, or financing decisions."
+                className="min-h-44 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
           </div>
 
           {/* Valuation Details Table */}
