@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Lock, Printer } from "lucide-react";
+import { Lock, Printer, Plus, Minus } from "lucide-react";
 
 const PropertyDetails = () => {
   const [includeSection, setIncludeSection] = useState(true);
@@ -24,6 +24,24 @@ const PropertyDetails = () => {
     sustainability: false,
     improvements: false
   });
+  const [propertyCount, setPropertyCount] = useState(1);
+  const [tbeToggles, setTbeToggles] = useState({
+    commercial: false,
+    residential: false,
+    agriculture: false,
+    developmentLand: false,
+    specialized: false
+  });
+
+  const addPropertySection = () => {
+    setPropertyCount(prev => prev + 1);
+  };
+
+  const removePropertySection = () => {
+    if (propertyCount > 1) {
+      setPropertyCount(prev => prev - 1);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -38,6 +56,31 @@ const PropertyDetails = () => {
               checked={includeSection}
               onCheckedChange={setIncludeSection}
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={addPropertySection}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Property
+            </Button>
+            {propertyCount > 1 && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={removePropertySection}
+                className="flex items-center gap-2"
+              >
+                <Minus className="h-4 w-4" />
+                Remove Property
+              </Button>
+            )}
+            <span className="text-sm text-muted-foreground">
+              Property {propertyCount} of {propertyCount}
+            </span>
           </div>
           <Button variant="outline" size="sm">
             <Lock className="h-4 w-4" />
@@ -327,6 +370,212 @@ const PropertyDetails = () => {
                       <Input id="total-area" placeholder="Total area" />
                     </div>
                   </div>
+                </div>
+
+                {/* TBE (To Be Erected) Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">TBE (To Be Erected/As If Complete)</h4>
+                    <Switch
+                      checked={tbeToggles.commercial}
+                      onCheckedChange={(checked) => 
+                        setTbeToggles(prev => ({ ...prev, commercial: checked }))
+                      }
+                    />
+                  </div>
+                  {tbeToggles.commercial && (
+                    <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="builders-name-commercial">Builders Name</Label>
+                          <Input id="builders-name-commercial" placeholder="Enter builders name" />
+                        </div>
+                        <div>
+                          <Label htmlFor="tender-price-commercial">Tender Price</Label>
+                          <Input id="tender-price-commercial" placeholder="Enter tender price" />
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-type-commercial">Contract Type</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select contract type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="fixed">Fixed Contract</SelectItem>
+                              <SelectItem value="item-plus">Item Plus Contract</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-reasonable-commercial">Is Contract Price Reasonable</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select assessment" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="review">Under Review</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="completion-status-commercial">Will Project Be Complete on Completion</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select completion status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="partial">Partial</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="out-of-contract-commercial">Out of Contract Items</Label>
+                        <Textarea 
+                          id="out-of-contract-commercial" 
+                          placeholder="List items not included in contract..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="payment-schedule-commercial">Progress Payment Schedule</Label>
+                        <Textarea 
+                          id="payment-schedule-commercial" 
+                          placeholder="Describe payment milestones and schedule..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {propertyTypes.residential && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Residential Property Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="bedrooms">Bedrooms</Label>
+                    <Input id="bedrooms" placeholder="Number of bedrooms" />
+                  </div>
+                  <div>
+                    <Label htmlFor="bathrooms">Bathrooms</Label>
+                    <Input id="bathrooms" placeholder="Number of bathrooms" />
+                  </div>
+                  <div>
+                    <Label htmlFor="parking-spaces">Parking Spaces</Label>
+                    <Input id="parking-spaces" placeholder="Number of parking spaces" />
+                  </div>
+                  <div>
+                    <Label htmlFor="land-size">Land Size (sqm)</Label>
+                    <Input id="land-size" placeholder="Land size in sqm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="building-size">Building Size (sqm)</Label>
+                    <Input id="building-size" placeholder="Building size in sqm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="year-built-res">Year Built</Label>
+                    <Input id="year-built-res" placeholder="Construction year" />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="additional-features-res">Additional Features</Label>
+                  <Textarea
+                    id="additional-features-res"
+                    placeholder="Describe additional residential features, amenities, and characteristics..."
+                    className="min-h-[100px]"
+                  />
+                </div>
+
+                {/* TBE Section for Residential */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">TBE (To Be Erected/As If Complete)</h4>
+                    <Switch
+                      checked={tbeToggles.residential}
+                      onCheckedChange={(checked) => 
+                        setTbeToggles(prev => ({ ...prev, residential: checked }))
+                      }
+                    />
+                  </div>
+                  {tbeToggles.residential && (
+                    <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="builders-name-residential">Builders Name</Label>
+                          <Input id="builders-name-residential" placeholder="Enter builders name" />
+                        </div>
+                        <div>
+                          <Label htmlFor="tender-price-residential">Tender Price</Label>
+                          <Input id="tender-price-residential" placeholder="Enter tender price" />
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-type-residential">Contract Type</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select contract type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="fixed">Fixed Contract</SelectItem>
+                              <SelectItem value="item-plus">Item Plus Contract</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-reasonable-residential">Is Contract Price Reasonable</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select assessment" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="review">Under Review</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="completion-status-residential">Will Project Be Complete on Completion</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select completion status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="partial">Partial</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="out-of-contract-residential">Out of Contract Items</Label>
+                        <Textarea 
+                          id="out-of-contract-residential" 
+                          placeholder="List items not included in contract..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="payment-schedule-residential">Progress Payment Schedule</Label>
+                        <Textarea 
+                          id="payment-schedule-residential" 
+                          placeholder="Describe payment milestones and schedule..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -858,6 +1107,87 @@ const PropertyDetails = () => {
                     className="min-h-[120px]"
                   />
                 </div>
+
+                {/* TBE Section for Agriculture */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">TBE (To Be Erected/As If Complete)</h4>
+                    <Switch
+                      checked={tbeToggles.agriculture}
+                      onCheckedChange={(checked) => 
+                        setTbeToggles(prev => ({ ...prev, agriculture: checked }))
+                      }
+                    />
+                  </div>
+                  {tbeToggles.agriculture && (
+                    <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="builders-name-agriculture">Builders Name</Label>
+                          <Input id="builders-name-agriculture" placeholder="Enter builders name" />
+                        </div>
+                        <div>
+                          <Label htmlFor="tender-price-agriculture">Tender Price</Label>
+                          <Input id="tender-price-agriculture" placeholder="Enter tender price" />
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-type-agriculture">Contract Type</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select contract type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="fixed">Fixed Contract</SelectItem>
+                              <SelectItem value="item-plus">Item Plus Contract</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-reasonable-agriculture">Is Contract Price Reasonable</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select assessment" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="review">Under Review</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="completion-status-agriculture">Will Project Be Complete on Completion</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select completion status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="partial">Partial</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="out-of-contract-agriculture">Out of Contract Items</Label>
+                        <Textarea 
+                          id="out-of-contract-agriculture" 
+                          placeholder="List items not included in contract..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="payment-schedule-agriculture">Progress Payment Schedule</Label>
+                        <Textarea 
+                          id="payment-schedule-agriculture" 
+                          placeholder="Describe payment milestones and schedule..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
           )}
@@ -894,6 +1224,87 @@ const PropertyDetails = () => {
                     placeholder="Describe additional development land features, amenities, and characteristics..."
                     className="min-h-[100px]"
                   />
+                </div>
+
+                {/* TBE Section for Development Land */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">TBE (To Be Erected/As If Complete)</h4>
+                    <Switch
+                      checked={tbeToggles.developmentLand}
+                      onCheckedChange={(checked) => 
+                        setTbeToggles(prev => ({ ...prev, developmentLand: checked }))
+                      }
+                    />
+                  </div>
+                  {tbeToggles.developmentLand && (
+                    <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="builders-name-development">Builders Name</Label>
+                          <Input id="builders-name-development" placeholder="Enter builders name" />
+                        </div>
+                        <div>
+                          <Label htmlFor="tender-price-development">Tender Price</Label>
+                          <Input id="tender-price-development" placeholder="Enter tender price" />
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-type-development">Contract Type</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select contract type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="fixed">Fixed Contract</SelectItem>
+                              <SelectItem value="item-plus">Item Plus Contract</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-reasonable-development">Is Contract Price Reasonable</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select assessment" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="review">Under Review</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="completion-status-development">Will Project Be Complete on Completion</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select completion status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="partial">Partial</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="out-of-contract-development">Out of Contract Items</Label>
+                        <Textarea 
+                          id="out-of-contract-development" 
+                          placeholder="List items not included in contract..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="payment-schedule-development">Progress Payment Schedule</Label>
+                        <Textarea 
+                          id="payment-schedule-development" 
+                          placeholder="Describe payment milestones and schedule..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -1006,6 +1417,87 @@ const PropertyDetails = () => {
                     placeholder="Describe any additional specialized features, unique characteristics, market positioning, competitive advantages, etc."
                     className="min-h-[100px]"
                   />
+                </div>
+
+                {/* TBE Section for Specialized */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">TBE (To Be Erected/As If Complete)</h4>
+                    <Switch
+                      checked={tbeToggles.specialized}
+                      onCheckedChange={(checked) => 
+                        setTbeToggles(prev => ({ ...prev, specialized: checked }))
+                      }
+                    />
+                  </div>
+                  {tbeToggles.specialized && (
+                    <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="builders-name-specialized">Builders Name</Label>
+                          <Input id="builders-name-specialized" placeholder="Enter builders name" />
+                        </div>
+                        <div>
+                          <Label htmlFor="tender-price-specialized">Tender Price</Label>
+                          <Input id="tender-price-specialized" placeholder="Enter tender price" />
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-type-specialized">Contract Type</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select contract type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="fixed">Fixed Contract</SelectItem>
+                              <SelectItem value="item-plus">Item Plus Contract</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="contract-reasonable-specialized">Is Contract Price Reasonable</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select assessment" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="review">Under Review</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="completion-status-specialized">Will Project Be Complete on Completion</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select completion status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                              <SelectItem value="partial">Partial</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="out-of-contract-specialized">Out of Contract Items</Label>
+                        <Textarea 
+                          id="out-of-contract-specialized" 
+                          placeholder="List items not included in contract..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="payment-schedule-specialized">Progress Payment Schedule</Label>
+                        <Textarea 
+                          id="payment-schedule-specialized" 
+                          placeholder="Describe payment milestones and schedule..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
