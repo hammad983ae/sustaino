@@ -1,1 +1,4 @@
 project_id = "cxcfxnbvtddwebqprile"
+
+[functions.property-ai-assistant]
+verify_jwt = false

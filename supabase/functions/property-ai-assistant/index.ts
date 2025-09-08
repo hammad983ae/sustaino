@@ -7,15 +7,25 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  console.log('Property AI Assistant function called');
+  
   if (req.method === 'OPTIONS') {
+    console.log('Handling CORS preflight request');
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, context } = await req.json();
+    console.log('Processing AI request...');
+    const body = await req.json();
+    console.log('Request body:', body);
+    
+    const { message, context } = body;
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
+    console.log('OpenAI API Key available:', !!openAIApiKey);
+
     if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
       throw new Error('OpenAI API key not configured');
     }
 
@@ -42,6 +52,7 @@ Always provide professional, accurate, and actionable advice. When discussing fi
 
 Context about the user's current activity: ${context || 'General property consultation'}`;
 
+    console.log('Making OpenAI API call...');
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -59,14 +70,19 @@ Context about the user's current activity: ${context || 'General property consul
       }),
     });
 
+    console.log('OpenAI response status:', response.status);
+    
     if (!response.ok) {
-      const error = await response.json();
+      const errorText = await response.text();
+      console.error('OpenAI API error:', errorText);
+      const error = JSON.parse(errorText);
       throw new Error(error.error?.message || 'Failed to get AI response');
     }
 
     const data = await response.json();
     const aiResponse = data.choices[0].message.content;
-
+    
+    console.log('AI response received successfully');
     return new Response(JSON.stringify({ response: aiResponse }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
