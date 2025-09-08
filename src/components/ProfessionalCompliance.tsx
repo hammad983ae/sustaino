@@ -290,8 +290,45 @@ RECOMMENDATIONS: Before relying on this valuation for SDA investment decisions, 
 • SDA compliance consultants
 • Specialist SDA property advisers
 
-The valuer recommends comprehensive due diligence of all SDA-specific factors before property acquisition, disposal, or financing decisions."
+            The valuer recommends comprehensive due diligence of all SDA-specific factors before property acquisition, disposal, or financing decisions."
                 className="min-h-44 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            {/* Market Transaction Shortage Considerations */}
+            <div className="space-y-2">
+              <Label htmlFor="market-shortage-qualifications" className="text-sm font-medium text-foreground">
+                Market Transaction Shortage Considerations
+              </Label>
+              <Textarea
+                id="market-shortage-qualifications"
+                defaultValue="IMPORTANT LIMITATION: This valuation was prepared during a period of limited market transaction data. Additional professional judgment has been exercised in forming this opinion of value.
+
+CONDITIONS AFFECTING MARKET ANALYSIS:
+• Reduced volume of comparable transactions
+• Increased reliance on alternative data sources and market intelligence
+• Enhanced consideration of prior transactions with time and market adjustments
+• Reliance on unsettled transactions and market participant feedback
+• Consideration of REIT data, market research, and economic indicators
+
+METHODOLOGY ADAPTATIONS:
+• Enhanced market participant consultation and intelligence gathering
+• Extended analysis period for comparable evidence
+• Increased consideration of market sentiment and economic indicators
+• Application of sensitivity analysis due to market uncertainty
+• Enhanced risk analysis reflecting changing market conditions
+
+UNCERTAINTY DISCLOSURE:
+This valuation reflects increased market uncertainty due to limited transaction evidence. The reliability of this valuation may be affected by the reduced availability of recent comparable sales data. Market conditions are subject to rapid change, and this assessment should be reviewed more frequently than under normal market conditions.
+
+RECOMMENDATIONS:
+• Shorter review periods (3-6 months) recommended during uncertain conditions
+• Additional market research advised before major financial decisions
+• Consider sensitivity analysis ranges in decision-making processes
+• Monitor market recovery indicators for valuation updates
+
+The valuer acknowledges this opinion involves greater subjectivity than would apply under normal market conditions with adequate comparable evidence."
+                className="min-h-40 bg-background border-input text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>

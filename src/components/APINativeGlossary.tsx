@@ -102,6 +102,56 @@ const APINativeGlossary = () => {
     {
       term: "Unlawful Future Act",
       definition: "A future act that occurs unlawfully without following the requirements of the Native Title Act."
+    },
+    // Valuation Procedures Terms
+    {
+      term: "Fixtures",
+      definition: "Items that are generally regarded as part of real property, such as electric wiring to light points and power sockets, lighting systems, fire and smoke detectors, heating/air conditioning installations, lifts, domestic hot water systems, and firefighting installations."
+    },
+    {
+      term: "Going Concern",
+      definition: "A property operating as a business where trading figures are considered in the valuation process, requiring statement of trading figure sources and any adjustments made to those figures."
+    },
+    {
+      term: "Highest and Best Use",
+      definition: "The most profitable and legally permissible use of a property, particularly when different from the current use, requiring comment on alternative uses and their impact on value and marketability."
+    },
+    {
+      term: "Marketing Period",
+      definition: "The estimated time necessary to achieve the assessed Market Value under prevailing market conditions, typically preceding the date of valuation."
+    },
+    {
+      term: "Non-Fixtures/Chattels",
+      definition: "Moveable articles of property generally excluded from real property valuations, such as electric power distribution for plant and equipment, lifting equipment, IT cabling, and household furniture."
+    },
+    {
+      term: "Value As If Complete",
+      definition: "A valuation of a proposed building or project assuming completion at the date of valuation."
+    },
+    // Market Transaction Shortage Considerations Terms
+    {
+      term: "Market Intelligence",
+      definition: "Information gathered from market participants including buyers, sellers, agents, researchers, and valuers to understand factors influencing the market and current market sentiment."
+    },
+    {
+      term: "Market Uncertainty",
+      definition: "Conditions where there is limited or unreliable market transaction data, requiring valuers to exercise additional professional judgment and potentially resulting in more subjective opinions of value."
+    },
+    {
+      term: "Prior Transactions",
+      definition: "Empirical historic data from previous market transactions that may provide a foundation for current valuation analysis, requiring adjustment for differences in market conditions between transaction and valuation dates."
+    },
+    {
+      term: "Sensitivity Analysis",
+      definition: "A valuation technique that indicates a range of values under different scenarios or assumptions, particularly useful during periods of market uncertainty."
+    },
+    {
+      term: "Tenancy Risk",
+      definition: "The risk assessment of tenant default, vacancy, or need for rental relief, particularly relevant during periods of economic uncertainty."
+    },
+    {
+      term: "Unsettled Market Transactions",
+      definition: "Transactions that have not yet settled or have failed to settle, which may provide evidence of market conditions and help establish upper ranges of value."
     }
   ];
 
@@ -135,10 +185,11 @@ const APINativeGlossary = () => {
 
             <div className="mt-6 p-4 border border-border rounded-lg bg-muted/20">
               <p className="text-sm text-foreground">
-                <strong>Important Note:</strong> Native title and SDA are extremely complex areas of law and regulation. 
+                <strong>Important Note:</strong> Native title, SDA, and market transaction shortage considerations are extremely complex areas of law and regulation. 
                 This glossary provides basic definitions only. Professional legal advice from specialists should always be 
                 sought when these issues are identified or suspected. For SDA valuations, current knowledge of NDIS 
-                legislation and SDA Rules is essential.
+                legislation and SDA Rules is essential. During periods of market uncertainty, additional professional 
+                judgment and comprehensive risk analysis are required.
               </p>
             </div>
           </div>
