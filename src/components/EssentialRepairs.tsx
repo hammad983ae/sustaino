@@ -59,47 +59,12 @@ const EssentialRepairs = () => {
                 </Select>
               </div>
 
-              {/* If No Repairs Required */}
+              {/* If No Repairs Required - No further action needed */}
               {requiresRepairs === "no" && (
                 <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-950/20">
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="suitable-for-rent" className="text-base font-medium">
-                        Is the Property Suitable For Rent?
-                      </Label>
-                      <Select value={suitableForRent} onValueChange={setSuitableForRent}>
-                        <SelectTrigger className="mt-2">
-                          <SelectValue placeholder="Select Yes or No" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {suitableForRent === "yes" && (
-                      <div>
-                        <Label htmlFor="estimated-rent-no-repairs">Estimated Market Rent</Label>
-                        <Input 
-                          id="estimated-rent-no-repairs" 
-                          placeholder="Enter estimated weekly/monthly rent" 
-                          className="mt-2"
-                        />
-                      </div>
-                    )}
-
-                    {suitableForRent === "no" && (
-                      <div>
-                        <Label htmlFor="rental-unsuitability-reason">Reason Property is Not Suitable for Rent</Label>
-                        <Textarea
-                          id="rental-unsuitability-reason"
-                          placeholder="Explain why the property is not suitable for rental..."
-                          className="mt-2 min-h-[80px]"
-                        />
-                      </div>
-                    )}
-                  </div>
+                  <p className="text-green-700 dark:text-green-300 font-medium">
+                    ✓ No essential repairs required. No further assessment needed for this section.
+                  </p>
                 </div>
               )}
 
@@ -242,9 +207,10 @@ const EssentialRepairs = () => {
                         </div>
                       </div>
 
+
                       <div>
                         <Label htmlFor="post-repair-rental-suitability">
-                          Will Property Be Suitable for Rent After Repairs?
+                          Is the Property Suitable for Rent After Repairs?
                         </Label>
                         <Select>
                           <SelectTrigger className="mt-2">
@@ -257,17 +223,25 @@ const EssentialRepairs = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
 
-                    {/* Repair Priorities */}
-                    <div>
-                      <Label htmlFor="repair-priorities">Repair Priorities & Recommendations</Label>
-                      <Textarea
-                        id="repair-priorities"
-                        placeholder="List repairs in order of priority and provide recommendations for completion strategy..."
-                        className="min-h-[100px]"
-                      />
+                      <div>
+                        <Label htmlFor="estimated-rent-after-repairs">Estimated Market Rent After Repairs</Label>
+                        <Input 
+                          id="estimated-rent-after-repairs" 
+                          placeholder="Enter estimated weekly/monthly rent" 
+                        />
+                      </div>
                     </div>
+                  </div>
+
+                  {/* Repair Priorities */}
+                  <div>
+                    <Label htmlFor="repair-priorities">Repair Priorities & Recommendations</Label>
+                    <Textarea
+                      id="repair-priorities"
+                      placeholder="List repairs in order of priority and provide recommendations for completion strategy..."
+                      className="min-h-[100px]"
+                    />
                   </div>
                 </div>
               )}
