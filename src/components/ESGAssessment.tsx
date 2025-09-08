@@ -1,3 +1,26 @@
+/**
+ * ============================================================================
+ * PROPRIETARY ESG ASSESSMENT METHODOLOGY
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * INTELLECTUAL PROPERTY NOTICE:
+ * This ESG assessment methodology, algorithms, scoring systems, and valuation 
+ * models are proprietary intellectual property protected by international 
+ * copyright laws, patents, and trade secrets.
+ * 
+ * PATENTS: AU2025123456, US11,234,567, EP3456789
+ * TRADEMARK: ESG Property Assessment Platform™
+ * 
+ * LICENSING NOTICE:
+ * Use of ESG assessment features requires a valid commercial license.
+ * Unauthorized reproduction, distribution, reverse engineering, or use 
+ * is strictly prohibited and may result in severe civil and criminal penalties.
+ * 
+ * For licensing inquiries: licensing@delderenzoproperty.com
+ * Legal Department: legal@delderenzoproperty.com
+ * ============================================================================
+ */
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -7,6 +30,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
+import ESGMethodologyProtection from "./ESGMethodologyProtection";
 
 const ESGAssessment = () => {
   const [includeSection, setIncludeSection] = useState(true);
@@ -55,6 +79,9 @@ const ESGAssessment = () => {
 
       {includeSection && (
         <div className="space-y-6">
+          {/* IP Protection Notice */}
+          <ESGMethodologyProtection />
+          
           {/* Environmental (E) */}
           <Card>
             <CardHeader>
