@@ -159,12 +159,15 @@ export default function WorkHub() {
   };
 
   const handleEmailAction = (analysis: any, type: 'view' | 'export', analysisType: 'valuation' | 'report' | 'costa') => {
+    console.log('Email action triggered:', { analysis, type, analysisType });
     setSelectedAnalysis({ ...analysis, analysisType });
     setEmailType(type);
     setEmailDialogOpen(true);
   };
 
-  const sendAnalysisEmail = async () => {
+  const sendAnalysisEmail = React.useCallback(async () => {
+    console.log('sendAnalysisEmail called', { emailAddress, selectedAnalysis });
+    
     if (!emailAddress.trim()) {
       toast({
         title: "Email required",
@@ -176,6 +179,7 @@ export default function WorkHub() {
 
     setEmailLoading(true);
     try {
+      console.log('Invoking send-analysis function...');
       const { error } = await supabase.functions.invoke('send-analysis', {
         body: {
           to: emailAddress,
@@ -206,7 +210,7 @@ export default function WorkHub() {
     } finally {
       setEmailLoading(false);
     }
-  };
+  }, [emailAddress, emailType, selectedAnalysis, toast, setEmailLoading, setEmailDialogOpen, setEmailAddress, setSelectedAnalysis]);
 
   const filteredValuations = valuations.filter(item =>
     item.property_address.toLowerCase().includes(searchTerm.toLowerCase()) ||
