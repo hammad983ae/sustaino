@@ -630,9 +630,9 @@ const AdvancedIPProtection = () => {
                         {Object.entries(ENFORCEMENT_PROCEDURES.penalties.civil_damages).map(([penalty, amount]) => (
                           <div key={penalty} className="flex justify-between items-center border-b pb-2">
                             <span className="text-sm capitalize">{penalty.replace(/_/g, ' ')}</span>
-                            <Badge variant="outline">
-                              {typeof amount === 'string' ? amount : `$${amount.toLocaleString()}`}
-                            </Badge>
+                             <Badge variant="outline">
+                               {typeof amount === 'string' ? amount : `$${(amount as number).toLocaleString()}`}
+                             </Badge>
                           </div>
                         ))}
                       </div>

@@ -15,7 +15,9 @@ import {
   Activity,
   Sprout,
   CloudRain,
-  ArrowLeft
+  ArrowLeft,
+  ArrowRight,
+  Leaf
 } from 'lucide-react';
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
