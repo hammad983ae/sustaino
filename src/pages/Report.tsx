@@ -18,7 +18,7 @@ const ReportViewer = () => {
     { title: "Property Details" },
     { title: "ESG Assessment and Audit" },
     { title: "Essential Repairs" },
-    { title: "Risk Assessment and Recommendations" },
+    { title: "Risk Assessment & Market Indicators" },
     { title: "Previous Sales History and Current Sale" },
     { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural" },
     { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },

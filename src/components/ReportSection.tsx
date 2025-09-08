@@ -8,6 +8,7 @@ import MarketCommentary from "./MarketCommentary";
 import PropertyDetails from "./PropertyDetails";
 import ESGAssessment from "./ESGAssessment";
 import EssentialRepairs from "./EssentialRepairs";
+import RiskAssessmentMarketIndicators from "./RiskAssessmentMarketIndicators";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
 
 interface ReportSectionProps {
@@ -148,6 +149,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <EssentialRepairs />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Risk Assessment & Market Indicators section
+  if (sectionIndex === 9) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <RiskAssessmentMarketIndicators />
         </CardContent>
       </Card>
     );
