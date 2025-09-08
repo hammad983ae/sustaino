@@ -212,6 +212,43 @@ This recommendation applies particularly where the property has current or histo
                 className="min-h-28 bg-background border-input text-foreground placeholder:text-muted-foreground"
               />
             </div>
+
+            {/* Native Title Assessment Qualifications */}
+            <div className="space-y-2">
+              <Label htmlFor="native-title-qualifications" className="text-sm font-medium text-foreground">
+                Native Title Assessment Qualifications
+              </Label>
+              <Textarea
+                id="native-title-qualifications"
+                defaultValue="CRITICAL DISCLAIMER: The valuer is not a native title specialist or expert in native title law. This assessment does not constitute legal advice regarding native title matters.
+
+Native title is an extremely complex area of law governed by the Native Title Act 1993 (Cth) and extensive Federal Court jurisprudence. Any native title observations in this report are preliminary only and based on publicly available information.
+
+This valuation excludes consideration of:
+• Detailed native title due diligence investigations
+• Unregistered or potential native title claims
+• Complex co-existence arrangements with other tenure
+• ILUA (Indigenous Land Use Agreement) requirements
+• Future act implications under the Native Title Act
+• Compensation obligations to native title holders
+• Cultural heritage implications beyond basic observations
+
+Where any native title considerations are identified, immediate specialist legal advice should be sought from qualified native title practitioners before:
+• Property acquisition or disposal decisions
+• Development or change of use applications
+• Grant of new tenure or infrastructure requirements
+• Any activity that may constitute a 'future act'
+
+The valuer strongly recommends comprehensive native title due diligence be undertaken by qualified specialists where:
+• Property is located on or adjacent to Crown land
+• Historical or ongoing First Nations connection is evident
+• Development requires new tenure or infrastructure corridors
+• Property involves pastoral leases, mining tenements, or native title determination areas
+
+LIMITATION: Native title determinations cover approximately 50% of Australia's landmass. The absence of obvious native title does not guarantee no native title interests exist."
+                className="min-h-40 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
           </div>
 
           {/* Valuation Details Table */}
