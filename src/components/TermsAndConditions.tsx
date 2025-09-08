@@ -130,8 +130,40 @@ const TermsAndConditions = () => {
             </div>
           </div>
 
+          {/* Supporting Documents */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground">Supporting Documents</h3>
+            <div className="bg-green-50 dark:bg-green-950/30 p-4 rounded-lg">
+              <h4 className="font-medium mb-2 text-foreground">Uploaded Documents & OCR Content:</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                The following documents and extracted content from OCR processing are included as part of this valuation report:
+              </p>
+              
+              <div className="space-y-2">
+                <div className="text-sm text-foreground">
+                  <strong>Property Photos & Documents:</strong> All uploaded property images and documents from the Document and Photo Upload section
+                </div>
+                <div className="text-sm text-foreground">
+                  <strong>OCR Extracted Text:</strong> Any text content extracted from uploaded documents through optical character recognition
+                </div>
+                <div className="text-sm text-foreground">
+                  <strong>Tenant Documents:</strong> Tenant summaries, lease documents, and supporting legal documents uploaded in the Tenancy Schedule section
+                </div>
+                <div className="text-sm text-foreground">
+                  <strong>Planning Documents:</strong> Any planning-related documents and certificates uploaded during the assessment process
+                </div>
+              </div>
+              
+              <div className="mt-3 p-2 bg-white dark:bg-gray-800 rounded text-xs text-muted-foreground">
+                Note: All uploaded documents are retained as part of the permanent record for this valuation and may be referenced 
+                for verification purposes. Document authenticity and accuracy remain the responsibility of the client.
+              </div>
+            </div>
+          </div>
+
           {/* Additional Banking and Insurance Provisions */}
           <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground">Additional Banking and Insurance Provisions</h3>
             <div className="space-y-3 text-sm text-foreground">
               <p>Specifically, the Lender's Customer should not rely upon the Valuation Report for the purpose of:</p>
               
