@@ -279,11 +279,96 @@ This recommendation applies particularly where the property has current or histo
                 <div className="text-muted-foreground">[Pre-populated from platform]</div>
               </div>
 
-              {/* Forced Sale Value */}
+              {/* Forced Sale Price Estimate */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
-                <div className="font-medium text-foreground">Forced Sale Value</div>
+                <div className="font-medium text-foreground">Forced Sale Price Estimate (Range)</div>
                 <div className="text-muted-foreground">[Pre-populated from platform]</div>
               </div>
+
+              {/* Forced Sale Disclaimers */}
+              <div className="grid grid-cols-1 gap-4 p-4 border border-orange-200 bg-orange-50 dark:bg-orange-950/30 rounded-lg">
+                <div className="font-medium text-orange-800 dark:text-orange-200">Forced Sale Price Estimate Qualifications</div>
+                <div className="text-sm text-orange-700 dark:text-orange-300 space-y-2">
+                  <p><strong>Important:</strong> This is a "forced sale price estimate" not a "forced sale value." The estimate reflects the most probable price under constrained selling conditions and does not represent market value.</p>
+                  <p><strong>Special Assumptions Applied:</strong> This estimate assumes specific constraints including restricted marketing period, potential seller duress, and non-arms length transaction conditions as detailed in the engagement letter.</p>
+                  <p><strong>Range Assessment:</strong> In accordance with API guidelines, forced sale estimates are provided as a range rather than a single figure to reflect the uncertainty of constrained sale conditions.</p>
+                  <p><strong>Market Evidence Limitation:</strong> Limited comparable sales evidence exists for identical forced sale conditions, requiring professional judgment and market adjustments.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Forced Sale Assessment Details */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-foreground">Forced Sale Assessment Details</h3>
+            
+            {/* Special Assumptions */}
+            <div className="space-y-2">
+              <Label htmlFor="forced-sale-assumptions" className="text-sm font-medium text-foreground">
+                Special Assumptions for Forced Sale Scenario
+              </Label>
+              <Textarea
+                id="forced-sale-assumptions"
+                placeholder="Detail the specific constraints and assumptions including marketing period, method of sale, market conditions, seller circumstances..."
+                className="min-h-20 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            {/* Marketing Constraints */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="marketing-period" className="text-sm font-medium text-foreground">
+                  Restricted Marketing Period
+                </Label>
+                <Input
+                  id="marketing-period"
+                  placeholder="e.g., 30 days, immediate sale required"
+                  className="bg-background border-input text-foreground placeholder:text-muted-foreground"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="sale-method" className="text-sm font-medium text-foreground">
+                  Method of Sale
+                </Label>
+                <Input
+                  id="sale-method"
+                  placeholder="e.g., auction, private treaty, mortgagee sale"
+                  className="bg-background border-input text-foreground placeholder:text-muted-foreground"
+                />
+              </div>
+            </div>
+
+            {/* Valuation Approach for Forced Sale */}
+            <div className="space-y-2">
+              <Label htmlFor="forced-sale-methodology" className="text-sm font-medium text-foreground">
+                Valuation Methodology and Adjustments Applied
+              </Label>
+              <Textarea
+                id="forced-sale-methodology"
+                placeholder="Explain the valuation approach used, market evidence considered, and specific adjustments made to account for forced sale constraints..."
+                className="min-h-24 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
+            {/* Forced Sale vs Market Value Distinction */}
+            <div className="space-y-2">
+              <Label htmlFor="forced-sale-distinction" className="text-sm font-medium text-foreground">
+                Distinction from Market Value
+              </Label>
+              <Textarea
+                id="forced-sale-distinction"
+                defaultValue="This forced sale price estimate does not represent market value and should not be confused with market value. The estimate reflects the impact of constrained selling conditions including:
+
+• Inadequate exposure to the market
+• Unreasonably short selling period  
+• Inappropriate method of sale for optimal results
+• Seller under duress or compulsion to sell
+• Limited buyer due diligence opportunity
+• Buyers' awareness of seller's weakened position
+
+Market value assumes willing buyer and seller, adequate marketing, and arms-length transaction conditions which are not present in this forced sale scenario."
+                className="min-h-32 bg-background border-input text-foreground placeholder:text-muted-foreground"
+              />
             </div>
           </div>
 
