@@ -7,8 +7,33 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { MapPin, FileText, User, AlertTriangle, Info } from "lucide-react";
+import { useState } from "react";
 
 const ValuationCertificate = () => {
+  const [includePropertyId, setIncludePropertyId] = useState(true);
+  const [includeValuationDetails, setIncludeValuationDetails] = useState(true);
+  const [includeProfessionalCert, setIncludeProfessionalCert] = useState(true);
+  const [includeValuationSummary, setIncludeValuationSummary] = useState(true);
+  const [includeCertificationStatement, setIncludeCertificationStatement] = useState(true);
+  const [includeLimitations, setIncludeLimitations] = useState(true);
+  const [includeDisclaimers, setIncludeDisclaimers] = useState(true);
+  
+  // Individual valuation summary items
+  const [summaryItems, setSummaryItems] = useState({
+    interestValued: true,
+    valueComponent: true,
+    highestBestUse: true,
+    sellingPeriod: true,
+    currency: true,
+    gstTreatment: true,
+    marketValue: true,
+    netPassingRent: false, // Default off for desktop valuations
+    marketRent: false, // Default off for desktop valuations
+    capitalisationRate: false, // Default off for desktop valuations
+    insuranceReplacement: false, // Default off for desktop valuations
+    forcedSaleEstimate: false // Default off for desktop valuations
+  });
+
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -45,12 +70,23 @@ const ValuationCertificate = () => {
       </Card>
 
       {/* Property Identification */}
+      {includePropertyId && (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-primary" />
-            Property Identification
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-primary" />
+              Property Identification
+            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-property-id" className="text-sm">Include</Label>
+              <Switch 
+                id="include-property-id" 
+                checked={includePropertyId}
+                onCheckedChange={setIncludePropertyId}
+              />
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <Badge variant="secondary">Pre-populated from platform</Badge>
           </div>
@@ -100,14 +136,26 @@ const ValuationCertificate = () => {
           </div>
         </CardContent>
       </Card>
+      )}
 
       {/* Valuation Details */}
+      {includeValuationDetails && (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-primary" />
-            Valuation Details
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-primary" />
+              Valuation Details
+            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-valuation-details" className="text-sm">Include</Label>
+              <Switch 
+                id="include-valuation-details" 
+                checked={includeValuationDetails}
+                onCheckedChange={setIncludeValuationDetails}
+              />
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <Badge variant="secondary">Pre-populated from platform</Badge>
           </div>
@@ -137,14 +185,26 @@ const ValuationCertificate = () => {
           </div>
         </CardContent>
       </Card>
+      )}
 
       {/* Professional Certification */}
+      {includeProfessionalCert && (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5 text-primary" />
-            Professional Certification
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5 text-primary" />
+              Professional Certification
+            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-professional-cert" className="text-sm">Include</Label>
+              <Switch 
+                id="include-professional-cert" 
+                checked={includeProfessionalCert}
+                onCheckedChange={setIncludeProfessionalCert}
+              />
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <Badge variant="secondary">Pre-populated from platform</Badge>
           </div>
@@ -190,12 +250,23 @@ const ValuationCertificate = () => {
           </div>
         </CardContent>
       </Card>
-
+      )}
 
       {/* Automated Valuation Details */}
+      {includeValuationSummary && (
       <Card>
         <CardHeader>
-          <CardTitle>Automated Valuation Summary</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Automated Valuation Summary</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-valuation-summary" className="text-sm">Include</Label>
+              <Switch 
+                id="include-valuation-summary" 
+                checked={includeValuationSummary}
+                onCheckedChange={setIncludeValuationSummary}
+              />
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <Badge variant="secondary">Pre-populated from platform</Badge>
           </div>
@@ -203,32 +274,52 @@ const ValuationCertificate = () => {
         <CardContent>
           <div className="space-y-4">
             {[
-              "Interest Valued",
-              "Value Component", 
-              "Highest and Best Use",
-              "Selling Period",
-              "Currency of Valuation",
-              "GST Treatment",
-              "Market Value",
-              "Net Passing Rent",
-              "Market Rent",
-              "Capitalisation Rate",
-              "Insurance Replacement Value",
-              "Forced Sale Price Estimate (Range)"
-            ].map((field, index) => (
+              { key: "interestValued", label: "Interest Valued", enabled: summaryItems.interestValued },
+              { key: "valueComponent", label: "Value Component", enabled: summaryItems.valueComponent },
+              { key: "highestBestUse", label: "Highest and Best Use", enabled: summaryItems.highestBestUse },
+              { key: "sellingPeriod", label: "Selling Period", enabled: summaryItems.sellingPeriod },
+              { key: "currency", label: "Currency of Valuation", enabled: summaryItems.currency },
+              { key: "gstTreatment", label: "GST Treatment", enabled: summaryItems.gstTreatment },
+              { key: "marketValue", label: "Market Value", enabled: summaryItems.marketValue },
+              { key: "netPassingRent", label: "Net Passing Rent", enabled: summaryItems.netPassingRent },
+              { key: "marketRent", label: "Market Rent", enabled: summaryItems.marketRent },
+              { key: "capitalisationRate", label: "Capitalisation Rate", enabled: summaryItems.capitalisationRate },
+              { key: "insuranceReplacement", label: "Insurance Replacement Value", enabled: summaryItems.insuranceReplacement },
+              { key: "forcedSaleEstimate", label: "Forced Sale Price Estimate (Range)", enabled: summaryItems.forcedSaleEstimate }
+            ].filter(item => item.enabled).map((item, index) => (
               <div key={index} className="flex justify-between items-center py-2 border-b border-border last:border-b-0">
-                <Label className="font-medium text-foreground">{field}</Label>
-                <span className="text-muted-foreground italic">[Pre-populated from platform]</span>
+                <div className="flex items-center justify-between w-full">
+                  <Label className="font-medium text-foreground">{item.label}</Label>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-muted-foreground italic">[Pre-populated from platform]</span>
+                    <Switch 
+                      checked={summaryItems[item.key as keyof typeof summaryItems]}
+                      onCheckedChange={(checked) => setSummaryItems(prev => ({...prev, [item.key]: checked}))}
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
+      )}
 
       {/* Certification Statement */}
+      {includeCertificationStatement && (
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle>Certification Statement</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Certification Statement</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-certification" className="text-sm">Include</Label>
+              <Switch 
+                id="include-certification" 
+                checked={includeCertificationStatement}
+                onCheckedChange={setIncludeCertificationStatement}
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
@@ -266,11 +357,23 @@ const ValuationCertificate = () => {
           </div>
         </CardContent>
       </Card>
+      )}
 
       {/* Limitations and Assumptions */}
+      {includeLimitations && (
       <Card>
         <CardHeader>
-          <CardTitle>Limitations and Assumptions</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Limitations and Assumptions</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-limitations" className="text-sm">Include</Label>
+              <Switch 
+                id="include-limitations" 
+                checked={includeLimitations}
+                onCheckedChange={setIncludeLimitations}
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <Textarea
@@ -279,14 +382,26 @@ const ValuationCertificate = () => {
           />
         </CardContent>
       </Card>
+      )}
 
       {/* Important Disclaimers */}
+      {includeDisclaimers && (
       <Card className="border-amber-200 dark:border-amber-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
-            <AlertTriangle className="h-5 w-5" />
-            Important Disclaimers
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
+              <AlertTriangle className="h-5 w-5" />
+              Important Disclaimers
+            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-disclaimers" className="text-sm">Include</Label>
+              <Switch 
+                id="include-disclaimers" 
+                checked={includeDisclaimers}
+                onCheckedChange={setIncludeDisclaimers}
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="bg-amber-50 dark:bg-amber-950/30 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
           <div className="space-y-4 text-sm">
@@ -305,6 +420,7 @@ const ValuationCertificate = () => {
           </div>
         </CardContent>
       </Card>
+      )}
     </div>
   );
 };
