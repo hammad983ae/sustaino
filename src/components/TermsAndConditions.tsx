@@ -1,5 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from 'lucide-react';
 
 const TermsAndConditions = () => {
   return (
@@ -10,10 +15,206 @@ const TermsAndConditions = () => {
             Section 18: Terms and Conditions
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-6 space-y-8">
-          
-          {/* Terms and Conditions Explanation */}
-          <div className="space-y-4">
+        <CardContent className="p-6">
+          <ScrollArea className="h-[800px] w-full pr-4">
+            <div className="space-y-8">
+              
+              {/* Professional Compliance & Certification Section - Moved from Section 17 */}
+              <div className="space-y-6 border-b border-border pb-8">
+                <h2 className="text-xl font-semibold text-foreground">Professional Compliance & Certification</h2>
+                
+                {/* Definitions Section */}
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-foreground">Key Definitions</h3>
+                  
+                  <div className="grid grid-cols-1 gap-4">
+                    {/* Market Value Definition */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                      <div className="font-medium text-foreground">Market Value Definition</div>
+                      <div className="text-foreground text-sm">
+                        The estimated amount for which an asset or liability should exchange on the valuation date between a willing buyer and a willing seller in an arm's length transaction, after proper marketing, where the parties had each acted knowledgeably, prudently, and without compulsion.
+                      </div>
+                    </div>
+                    
+                    {/* Market Rent Definition */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                      <div className="font-medium text-foreground">Market Rent Definition</div>
+                      <div className="text-foreground text-sm">
+                        The estimated amount for which an interest in real property should be leased on the valuation date between a willing lessor and a willing lessee on appropriate lease terms in an arm's length transaction, after proper marketing and where the parties had each acted knowledgeably, prudently and without compulsion.
+                      </div>
+                    </div>
+
+                    {/* Market Movement Clause */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                      <div className="font-medium text-foreground">Market Movement Clause</div>
+                      <div className="text-foreground text-sm">
+                        "This valuation is current at the date of valuation only. The value assessed herein may change significantly and unexpectedly over a relatively short period of time (including as a result of general market movements or factors specific to the particular property). Liability for losses arising from such subsequent changes in value is excluded as is liability where the"
+                      </div>
+                    </div>
+
+                    {/* Prudent Lender Clause */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                      <div className="font-medium text-foreground">Prudent Lender Clause</div>
+                      <div className="text-foreground text-sm">
+                        Text for prudent lender compliance requirements and limitations.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Professional Compliance Data Collection */}
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-foreground">Professional Compliance Data</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="valuation-date" className="text-sm font-medium">Date of Valuation</Label>
+                      <Input 
+                        id="valuation-date"
+                        type="date" 
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="inspection-date" className="text-sm font-medium">Date of Inspection</Label>
+                      <Input 
+                        id="inspection-date"
+                        type="date" 
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="report-date" className="text-sm font-medium">Date of Report</Label>
+                      <Input 
+                        id="report-date"
+                        type="date" 
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="valuer-name" className="text-sm font-medium">Valuer Name</Label>
+                      <Input 
+                        id="valuer-name"
+                        placeholder="Enter valuer name" 
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="valuer-qualification" className="text-sm font-medium">Valuer Qualification</Label>
+                      <Input 
+                        id="valuer-qualification"
+                        placeholder="e.g., CPV, AAPI" 
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="registration-number" className="text-sm font-medium">Registration Number</Label>
+                      <Input 
+                        id="registration-number"
+                        placeholder="Enter registration number" 
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="compliance-statement" className="text-sm font-medium">Compliance Statement</Label>
+                    <Textarea 
+                      id="compliance-statement"
+                      placeholder="Enter compliance statement and professional certifications..."
+                      className="w-full min-h-[100px]"
+                    />
+                  </div>
+                </div>
+
+                {/* Valuation Details */}
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-foreground">Valuation Details</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="interest-valued" className="text-sm font-medium">Interest Valued</Label>
+                      <Input 
+                        id="interest-valued"
+                        placeholder="e.g., Freehold, Leasehold" 
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="value-component" className="text-sm font-medium">Value Component</Label>
+                      <Input 
+                        id="value-component"
+                        placeholder="e.g., Land and Buildings" 
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="market-value" className="text-sm font-medium">Market Value ($)</Label>
+                      <Input 
+                        id="market-value"
+                        type="number" 
+                        placeholder="0"
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="gst-inclusive" className="text-sm font-medium">GST Treatment</Label>
+                      <Input 
+                        id="gst-inclusive"
+                        placeholder="e.g., Exclusive, Inclusive" 
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Environmental and Contamination Assessment Qualifications */}
+                <div className="space-y-4 p-4 border border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground">Environmental and Contamination Assessment Qualifications</h4>
+                  <div className="text-sm text-foreground space-y-2">
+                    <p>The valuer is not an environmental specialist or expert in contamination assessment. This valuation does not constitute an environmental audit or contamination assessment. Any environmental observations are based on visual inspection only and are general in nature.</p>
+                    <p>Where contamination risks have been identified, it is strongly recommended that the client engage qualified environmental consultants to conduct detailed environmental investigations including soil testing and specialist assessment of hazardous substances.</p>
+                  </div>
+                </div>
+
+                {/* Native Title Assessment Qualifications */}
+                <div className="space-y-4 p-4 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground">Native Title Assessment Qualifications</h4>
+                  <div className="text-sm text-foreground space-y-2">
+                    <p><strong>CRITICAL DISCLAIMER:</strong> The valuer is not a native title specialist or expert in native title law. This assessment does not constitute legal advice regarding native title matters.</p>
+                    <p>Where potential native title issues are identified, immediate specialist legal advice should be obtained from qualified native title practitioners prior to any property transaction or development activities.</p>
+                  </div>
+                </div>
+
+                {/* Market Transaction Shortage Considerations */}
+                <div className="space-y-4 p-4 border border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground">Market Transaction Shortage Considerations</h4>
+                  <div className="text-sm text-foreground space-y-2">
+                    <p><strong>IMPORTANT LIMITATION:</strong> This valuation was prepared during a period of limited market transaction data. Additional professional judgement has been exercised in forming this opinion of value.</p>
+                    <p>Enhanced consideration of prior transactions with time and market adjustments, reliance on unsettled transactions and market participant feedback, consideration of RBA data, market research, and economic indicators.</p>
+                  </div>
+                </div>
+
+                {/* Insurance Cost Estimates Qualifications */}
+                <div className="space-y-4 p-4 border border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground">Insurance Cost Estimates Qualifications</h4>
+                  <div className="text-sm text-foreground space-y-2">
+                    <p><strong>INSURANCE COST ESTIMATE DISCLAIMER:</strong> This insurance cost estimate is prepared for insurance purposes only and should not be relied upon for any other purpose. Estimates should be updated annually and will require updating as costs change.</p>
+                    <p>Professional fees excluded. Reconstruction period cost escalation allowances specified if included. GST treatment specified as inclusive or exclusive.</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Terms and Conditions Explanation */}
+              <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Terms and Conditions: Explanation</h3>
             
             <div className="space-y-3 text-sm text-foreground">
@@ -220,6 +421,8 @@ const TermsAndConditions = () => {
             </div>
           </div>
 
+            </div>
+          </ScrollArea>
         </CardContent>
       </Card>
     </div>

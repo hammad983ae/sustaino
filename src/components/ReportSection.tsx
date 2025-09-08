@@ -267,7 +267,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Professional Compliance & Certification section (Section 17)
+  // Section 17 is now empty - placeholder for future use
   if (sectionIndex === 16) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -275,14 +275,16 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           <CardTitle className="text-xl font-semibold">{title}</CardTitle>
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
-        <CardContent>
-          <ProfessionalCompliance />
+        <CardContent className="space-y-6">
+          <div className="min-h-[200px] flex items-center justify-center text-muted-foreground">
+            <p>Valuation Certificate content will be added here</p>
+          </div>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Terms and Conditions section (Section 18)
+  // Special handling for Terms and Conditions section (Section 18) - now includes Professional Compliance
   if (sectionIndex === 17) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
