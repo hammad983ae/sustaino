@@ -204,6 +204,77 @@ export default function SalesEvidenceAgricultural() {
               <Input placeholder="Arable area comparison..." className="text-sm" />
             </div>
 
+            {/* Farm Type */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Farm Type</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Select>
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select farm type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dairy">Dairy Farm</SelectItem>
+                  <SelectItem value="broadacre">Broadacre Cropping</SelectItem>
+                  <SelectItem value="vineyard">Vineyard</SelectItem>
+                  <SelectItem value="orchard">Orchard/Fruit</SelectItem>
+                  <SelectItem value="livestock">Livestock Grazing</SelectItem>
+                  <SelectItem value="mixed">Mixed Farming</SelectItem>
+                  <SelectItem value="aquaculture">Aquaculture</SelectItem>
+                  <SelectItem value="poultry">Poultry Farm</SelectItem>
+                  <SelectItem value="stud">Stud Farm</SelectItem>
+                  <SelectItem value="forestry">Forestry/Plantation</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input placeholder="Farm type comparison..." className="text-sm" />
+            </div>
+
+            {/* Carrying Capacity */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Carrying Capacity</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <div className="flex gap-2">
+                <Input placeholder="150" className="text-sm" />
+                <Select>
+                  <SelectTrigger className="w-24">
+                    <SelectValue placeholder="DSE/ha" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dse">DSE/ha</SelectItem>
+                    <SelectItem value="head">Head/ha</SelectItem>
+                    <SelectItem value="cows">Cows/ha</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Input placeholder="Carrying capacity comparison..." className="text-sm" />
+            </div>
+
+            {/* Annual Rainfall */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Annual Rainfall</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <div className="flex gap-2">
+                <Input placeholder="650" className="text-sm" />
+                <span className="text-sm text-muted-foreground">mm</span>
+              </div>
+              <Input placeholder="Rainfall comparison..." className="text-sm" />
+            </div>
+
+            {/* Growing Season */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Growing Season</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Input placeholder="7-8 months productive growing" className="text-sm" />
+              <Input placeholder="Growing season comparison..." className="text-sm" />
+            </div>
+
             {/* Land Quality */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Land Quality</Label>

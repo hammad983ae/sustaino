@@ -203,6 +203,99 @@ export default function SalesEvidenceSpecialised() {
               <Input placeholder="Land area comparison..." className="text-sm" />
             </div>
 
+            {/* Specialized Property Type */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Property Type</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Select>
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select specialized type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="motel">Motel</SelectItem>
+                  <SelectItem value="pub">Pub</SelectItem>
+                  <SelectItem value="club">Club</SelectItem>
+                  <SelectItem value="gaming-venue">Gaming Venue</SelectItem>
+                  <SelectItem value="childcare">Childcare</SelectItem>
+                  <SelectItem value="healthcare">Healthcare</SelectItem>
+                  <SelectItem value="sports-stadium">Sports Stadium</SelectItem>
+                  <SelectItem value="cinema-theater">Cinema/Theater</SelectItem>
+                  <SelectItem value="convention-center">Convention/Conference Center</SelectItem>
+                  <SelectItem value="shopping-center">Shopping Center/Mall</SelectItem>
+                  <SelectItem value="marina">Marina</SelectItem>
+                  <SelectItem value="self-storage">Self Storage Facility</SelectItem>
+                  <SelectItem value="funeral-home">Funeral Home</SelectItem>
+                  <SelectItem value="veterinary">Veterinary Clinic</SelectItem>
+                  <SelectItem value="automotive">Automotive (Service/Dealership)</SelectItem>
+                  <SelectItem value="religious">Religious Building</SelectItem>
+                  <SelectItem value="data-center">Data Center</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input placeholder="Property type comparison..." className="text-sm" />
+            </div>
+
+            {/* Units of Comparison - Rooms/Keys */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Rooms/Keys</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Input placeholder="45 rooms" className="text-sm" />
+              <Input placeholder="Rooms/keys comparison..." className="text-sm" />
+            </div>
+
+            {/* Seating Capacity */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Seating Capacity</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Input placeholder="250 seats" className="text-sm" />
+              <Input placeholder="Seating capacity comparison..." className="text-sm" />
+            </div>
+
+            {/* LDC Placements */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>LDC Placements</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Input placeholder="75 licensed placements" className="text-sm" />
+              <Input placeholder="LDC placements comparison..." className="text-sm" />
+            </div>
+
+            {/* Bed Capacity */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Bed Capacity</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Input placeholder="80 beds" className="text-sm" />
+              <Input placeholder="Bed capacity comparison..." className="text-sm" />
+            </div>
+
+            {/* Lettable Area Type */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Lettable Area Type</Label>
+              <div className="flex justify-center">
+                <Switch checked={true} />
+              </div>
+              <Select>
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select area type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="gla">GLA</SelectItem>
+                  <SelectItem value="nla">NLA</SelectItem>
+                  <SelectItem value="glar">GLAR</SelectItem>
+                  <SelectItem value="gba">GBA</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input placeholder="Area type comparison..." className="text-sm" />
+            </div>
+
             {/* Special Purpose */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Special Purpose</Label>
