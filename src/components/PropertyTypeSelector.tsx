@@ -148,16 +148,22 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Button variant="outline" asChild className="flex-1 min-w-[200px]">
+              <Button variant="outline" asChild className="flex-1 min-w-[180px]">
                 <Link to="/property-valuations">
                   <Calculator className="mr-2 h-4 w-4" />
                   Property Valuations
                 </Link>
               </Button>
-              <Button variant="outline" asChild className="flex-1 min-w-[200px]">
-                <Link to="/report">
+              <Button variant="outline" asChild className="flex-1 min-w-[180px]">
+                <Link to="/comprehensive-valuation">
+                  <Building2 className="mr-2 h-4 w-4" />
+                  Complete Valuation
+                </Link>
+              </Button>
+              <Button variant="outline" asChild className="flex-1 min-w-[180px]">
+                <Link to="/work-hub">
                   <FileText className="mr-2 h-4 w-4" />
-                  Generate Report
+                  Work Hub
                 </Link>
               </Button>
             </div>
