@@ -130,6 +130,26 @@ const TermsAndConditions = () => {
             </div>
           </div>
 
+          {/* Additional Banking and Insurance Provisions */}
+          <div className="space-y-4">
+            <div className="space-y-3 text-sm text-foreground">
+              <p>Specifically, the Lender's Customer should not rely upon the Valuation Report for the purpose of:</p>
+              
+              <div className="pl-4 space-y-2">
+                <p>(a) deciding whether to enter a transaction or alter their financial position; or</p>
+                <p>(b) seeking finance from a third party and should seek their own advice and valuation in such circumstances.</p>
+              </div>
+              
+              <p>The insurance value set out in the Valuation Report is an estimate of the cost to replace the property new and is based on construction costs at the date of valuation. The value includes some, but not all, ancillary costs that may be encountered when rebuilding the property as detailed in the Valuation Report. The insurance value should not be relied on as a full and accurate estimation of the insurance value for the purposes of deciding at to the level of insurance coverage you should maintain.</p>
+              
+              <p>The contents of the Valuation Report are confidential and [White Label Firm Name] does not authorise the disclosure of the Valuation Report by the Lender's Customer to any third party.</p>
+              
+              <p>The Lender's Customer should take note of the date of valuation of the subject property and be aware that the Valuation Report is current at the date of valuation only. The market value of the property may change significantly over a short period of time.</p>
+              
+              <p>The Lender's Customer should direct any questions relating to the Valuation Report to the Lender. [White Label Firm Name] is unable to speak to you directly due to privacy and confidentiality obligations owed to the Lender.</p>
+            </div>
+          </div>
+
         </CardContent>
       </Card>
     </div>
