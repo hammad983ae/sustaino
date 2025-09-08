@@ -1,7 +1,7 @@
 /**
  * ============================================================================
- * POWERED™ PATENT PROTECTION UTILITIES & MANAGEMENT SYSTEM
- * Copyright © 2025 Powered Property Technology Pty Ltd. All Rights Reserved.
+ * PATENT PROTECTION UTILITIES & MANAGEMENT SYSTEM
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
  * 
  * Patent Portfolio Management & Protection Framework
  * Global Patent Monitoring & Enforcement System
@@ -89,11 +89,11 @@ export const PATENT_CLASSIFICATIONS = {
 export const CORE_PATENT_PORTFOLIO: Patent[] = [
   {
     id: "PAT-001",
-    patent_number: "AU2025234567",
-    title: "Powered™ ESG Property Assessment System with Machine Learning Integration",
+    patent_number: "AU2025123456",
+    title: "Automated ESG Property Assessment System with Machine Learning Integration",
     abstract: "A computerized system for automatically assessing Environmental, Social, and Governance (ESG) factors in real estate properties using machine learning algorithms, sensor data integration, and predictive analytics to generate comprehensive sustainability scores and valuation adjustments.",
-    inventors: ["Dr. Marcus Chen", "Prof. Sarah Williams", "Dr. James Rodriguez"],
-    assignee: "Powered Property Technology Pty Ltd",
+    inventors: ["Dr. Marco Delderenzo", "Prof. Sarah Anderson", "Dr. James Chen"],
+    assignee: "Delderenzo Property Group Pty Ltd",
     filing_date: "2024-01-15",
     grant_date: "2024-12-20",
     expiry_date: "2044-01-15",
@@ -136,11 +136,11 @@ export const CORE_PATENT_PORTFOLIO: Patent[] = [
   },
   {
     id: "PAT-002",
-    patent_number: "US11,345,678",
-    title: "Powered™ Machine Learning Property Valuation Method Using Multi-Source Data Integration",
+    patent_number: "US11,234,567",
+    title: "Machine Learning Property Valuation Method Using Multi-Source Data Integration",
     abstract: "A method and system for automated property valuation using machine learning algorithms that integrate multiple data sources including market transactions, property characteristics, economic indicators, and environmental factors to generate accurate property valuations with confidence intervals.",
-    inventors: ["Dr. Marcus Chen", "Dr. Rachel Liu", "Prof. Michael Davis"],
-    assignee: "Powered Property Technology Pty Ltd",
+    inventors: ["Dr. Marco Delderenzo", "Dr. Rachel Chen", "Prof. Michael Johnson"],
+    assignee: "Delderenzo Property Group Pty Ltd",
     filing_date: "2024-02-20",
     grant_date: "2024-11-15", 
     expiry_date: "2044-02-20",

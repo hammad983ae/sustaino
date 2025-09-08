@@ -15,9 +15,7 @@ import {
   Activity,
   Sprout,
   CloudRain,
-  ArrowLeft,
-  ArrowRight,
-  Leaf
+  ArrowLeft
 } from 'lucide-react';
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
@@ -80,7 +78,7 @@ const Index = () => {
               <div className="flex items-center justify-center gap-3 mb-6">
                 <Building className="h-12 w-12 text-primary" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
-                  Powered™ Property Technology
+                  ESG Property Assessment Platform
                 </h1>
               </div>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">

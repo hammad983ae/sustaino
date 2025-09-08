@@ -7,8 +7,6 @@ import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
-import ESGStrategyAnalysis from "./pages/ESGStrategyAnalysis";
-import ESGValuationAnalysis from "./pages/ESGValuationAnalysis";
 
 const queryClient = new QueryClient();
 
@@ -19,11 +17,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/automated-valuation" element={<AutomatedValuation />} />
+          <Route path="/" element={<AutomatedValuation />} />
+          <Route path="/index" element={<Index />} />
           <Route path="/report" element={<Report />} />
-          <Route path="/esg-strategy-analysis" element={<ESGStrategyAnalysis />} />
-          <Route path="/esg-valuation" element={<ESGValuationAnalysis />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

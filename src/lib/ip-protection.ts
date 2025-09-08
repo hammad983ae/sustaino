@@ -1,7 +1,7 @@
 /**
  * ============================================================================
- * POWERED™ PROPRIETARY INTELLECTUAL PROPERTY HEADER
- * Copyright © 2025 Powered Property Technology Pty Ltd. All Rights Reserved.
+ * PROPRIETARY INTELLECTUAL PROPERTY HEADER
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
  * 
  * PROTECTED CONTENT INCLUDES:
  * - Property valuation methodologies and algorithms
@@ -12,35 +12,35 @@
  * - Professional compliance frameworks
  * - Risk assessment methodologies
  * 
- * PATENTS: AU2025234567, US11,345,678, EP4567890, CN202410123456, JP2024-567890
- * TRADEMARKS: Powered™, Powered Property Platform™, Powered ESG Valuator™
+ * PATENTS: AU2025123456, US11,234,567, EP3456789
+ * TRADEMARKS: Property Assessment Platform™, Automated Valuation System™
  * 
  * LICENSING REQUIRED:
  * Commercial use requires valid license agreement with royalty payments.
  * Unauthorized reproduction, distribution, or use is strictly prohibited.
  * 
- * Contact: licensing@powered.tech | legal@powered.tech
+ * Contact: licensing@delderenzoproperty.com | legal@delderenzoproperty.com
  * ============================================================================
  */
 
 export const IP_PROTECTION_HEADER = `/**
  * ============================================================================
- * POWERED™ PROPRIETARY INTELLECTUAL PROPERTY
- * Copyright © 2025 Powered Property Technology Pty Ltd. All Rights Reserved.
+ * PROPRIETARY INTELLECTUAL PROPERTY
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
  * 
  * This component contains proprietary methodologies, algorithms, and templates
  * protected by copyright, patents, and trade secrets. Commercial use requires
  * a valid license agreement. Unauthorized use is strictly prohibited.
  * 
- * PATENTS: AU2025234567, US11,345,678, EP4567890, CN202410123456, JP2024-567890
- * Contact: licensing@powered.tech
+ * PATENTS: AU2025123456, US11,234,567, EP3456789
+ * Contact: licensing@delderenzoproperty.com
  * ============================================================================
  */`;
 
 export const LICENSING_NOTICE = {
-  title: "POWERED™ PROTECTED INTELLECTUAL PROPERTY",
+  title: "PROTECTED INTELLECTUAL PROPERTY",
   message: "This methodology is proprietary and requires commercial licensing",
-  contact: "licensing@powered.tech",
-  patents: ["AU2025234567", "US11,345,678", "EP4567890", "CN202410123456", "JP2024-567890"],
-  trademarks: ["Powered™", "Powered Property Platform™", "Powered ESG Valuator™", "Powered Analytics™"]
+  contact: "licensing@delderenzoproperty.com",
+  patents: ["AU2025123456", "US11,234,567", "EP3456789"],
+  trademarks: ["Property Assessment Platform™", "Automated Valuation System™"]
 };

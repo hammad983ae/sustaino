@@ -1,7 +1,7 @@
 /**
  * ============================================================================
- * POWERED™ TRADEMARK PROTECTION & BRAND MANAGEMENT SYSTEM
- * Copyright © 2025 Powered Property Technology Pty Ltd. All Rights Reserved.
+ * TRADEMARK PROTECTION & BRAND MANAGEMENT SYSTEM
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
  * 
  * Global Trademark Portfolio Management & Brand Protection Framework
  * Multi-Jurisdictional Registration & Enforcement System
@@ -182,9 +182,9 @@ export const TRADEMARK_CLASSES = {
 export const CORE_TRADEMARK_PORTFOLIO: Trademark[] = [
   {
     id: "TM-001",
-    mark: "Powered™",
-    registration_number: "2345678",
-    application_number: "2045678",
+    mark: "Property Assessment Platform™",
+    registration_number: "2234567",
+    application_number: "2034567",
     status: "REGISTERED",
     filing_date: "2024-01-15",
     registration_date: "2024-08-20",
@@ -216,7 +216,7 @@ export const CORE_TRADEMARK_PORTFOLIO: Trademark[] = [
       "Business consulting services in the field of real estate and property management",
       "Software as a service (SaaS) featuring property assessment and ESG evaluation tools"
     ],
-    owner: "Powered Property Technology Pty Ltd",
+    owner: "Delderenzo Property Group Pty Ltd",
     agent: {
       name: "Sarah Chen",
       firm: "IP Specialists Australia",
@@ -252,9 +252,9 @@ export const CORE_TRADEMARK_PORTFOLIO: Trademark[] = [
   },
   {
     id: "TM-002",
-    mark: "Powered Property Platform™",
-    registration_number: "2345679",
-    application_number: "2045679", 
+    mark: "DeLorenzoAI™",
+    registration_number: "2234568",
+    application_number: "2034568", 
     status: "REGISTERED",
     filing_date: "2024-02-01",
     registration_date: "2024-09-15",
@@ -276,10 +276,10 @@ export const CORE_TRADEMARK_PORTFOLIO: Trademark[] = [
       }
     ],
     goods_services: [
-      "Property technology platform featuring artificial intelligence for automated valuation and market analysis",
-      "Platform as a service (PaaS) featuring machine learning for real estate assessment"
+      "Artificial intelligence software for automated property valuation and market analysis",
+      "Artificial intelligence as a service (AIaaS) featuring machine learning for real estate"
     ],
-    owner: "Powered Property Technology Pty Ltd",
+    owner: "Delderenzo Property Group Pty Ltd",
     agent: {
       name: "Michael Johnson",
       firm: "Johnson & Associates Patent & Trademark Attorneys",
