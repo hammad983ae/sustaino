@@ -15,7 +15,8 @@ const PropertyDetails = () => {
     commercial: true,
     residential: false,
     agriculture: false,
-    developmentLand: false
+    developmentLand: false,
+    specialized: false
   });
 
   return (
@@ -57,7 +58,7 @@ const PropertyDetails = () => {
           {/* Property Type Selection */}
           <div>
             <Label className="text-base font-medium mb-4 block">Property Type</Label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.commercial}
@@ -93,6 +94,15 @@ const PropertyDetails = () => {
                   }
                 />
                 <Label>Development Land</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={propertyTypes.specialized}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, specialized: checked }))
+                  }
+                />
+                <Label>Specialized</Label>
               </div>
             </div>
           </div>
@@ -606,6 +616,333 @@ const PropertyDetails = () => {
                     id="general-property-description" 
                     placeholder="Provide overall property description, location context, and key characteristics..."
                     className="min-h-[120px]"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Specialized Property Details */}
+          {propertyTypes.specialized && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Specialized Property Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Property Type Selection */}
+                <div>
+                  <Label htmlFor="specialized-type">Specialized Property Type</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select specialized property type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="motel">Motel</SelectItem>
+                      <SelectItem value="pub">Pub</SelectItem>
+                      <SelectItem value="club">Club</SelectItem>
+                      <SelectItem value="gaming-venue">Gaming Venue</SelectItem>
+                      <SelectItem value="childcare">Childcare</SelectItem>
+                      <SelectItem value="healthcare">Healthcare</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Basic Property Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="building-quality-spec">Building Quality</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select quality" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="excellent">Excellent</SelectItem>
+                        <SelectItem value="good">Good</SelectItem>
+                        <SelectItem value="average">Average</SelectItem>
+                        <SelectItem value="poor">Poor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="building-condition-spec">Building Condition</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select condition" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="excellent">Excellent</SelectItem>
+                        <SelectItem value="good">Good</SelectItem>
+                        <SelectItem value="fair">Fair</SelectItem>
+                        <SelectItem value="poor">Poor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="year-built-spec">Year Built</Label>
+                    <Input id="year-built-spec" placeholder="Construction year" />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="car-parking-spec">Car Parking Spaces</Label>
+                    <Input id="car-parking-spec" placeholder="Number of spaces" />
+                  </div>
+                </div>
+
+                {/* Specialized Measurements */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Specialized Measurements & Units of Comparison</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Motel Specific */}
+                    <div>
+                      <Label htmlFor="rooms-keys">Rooms/Keys</Label>
+                      <Input id="rooms-keys" placeholder="Number of rooms/keys" />
+                    </div>
+                    <div>
+                      <Label htmlFor="ask-rate">ASK (Average Selling Rate)</Label>
+                      <Input id="ask-rate" placeholder="Average selling rate per room" />
+                    </div>
+                    <div>
+                      <Label htmlFor="revpar">RevPAR (Revenue Per Available Room)</Label>
+                      <Input id="revpar" placeholder="Revenue per available room" />
+                    </div>
+                    <div>
+                      <Label htmlFor="occupancy-rate">Occupancy Rate (%)</Label>
+                      <Input id="occupancy-rate" placeholder="Annual occupancy percentage" />
+                    </div>
+
+                    {/* Pub/Club/Gaming Specific */}
+                    <div>
+                      <Label htmlFor="gaming-machines">Gaming Machines</Label>
+                      <Input id="gaming-machines" placeholder="Number of gaming machines" />
+                    </div>
+                    <div>
+                      <Label htmlFor="gaming-tables">Gaming Tables</Label>
+                      <Input id="gaming-tables" placeholder="Number of gaming tables" />
+                    </div>
+                    <div>
+                      <Label htmlFor="seating-capacity">Seating Capacity</Label>
+                      <Input id="seating-capacity" placeholder="Total seating capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="liquor-license">Liquor License Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select license type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="on-premises">On-Premises</SelectItem>
+                          <SelectItem value="off-premises">Off-Premises</SelectItem>
+                          <SelectItem value="club">Club License</SelectItem>
+                          <SelectItem value="restaurant">Restaurant License</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Childcare Specific */}
+                    <div>
+                      <Label htmlFor="ldc-placements">LDC Placements (Licensed Day Care)</Label>
+                      <Input id="ldc-placements" placeholder="Licensed placement capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="child-capacity">Total Child Capacity</Label>
+                      <Input id="child-capacity" placeholder="Maximum child capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="age-groups">Age Groups Served</Label>
+                      <Input id="age-groups" placeholder="e.g., 0-2 years, 3-5 years" />
+                    </div>
+
+                    {/* Healthcare Specific */}
+                    <div>
+                      <Label htmlFor="bed-capacity">Bed Capacity</Label>
+                      <Input id="bed-capacity" placeholder="Number of beds" />
+                    </div>
+                    <div>
+                      <Label htmlFor="treatment-rooms">Treatment Rooms</Label>
+                      <Input id="treatment-rooms" placeholder="Number of treatment rooms" />
+                    </div>
+                    <div>
+                      <Label htmlFor="consultation-rooms">Consultation Rooms</Label>
+                      <Input id="consultation-rooms" placeholder="Number of consultation rooms" />
+                    </div>
+                    <div>
+                      <Label htmlFor="operating-theaters">Operating Theaters</Label>
+                      <Input id="operating-theaters" placeholder="Number of operating theaters" />
+                    </div>
+
+                    {/* General Commercial Area */}
+                    <div>
+                      <Label htmlFor="lettable-area-type-spec">Lettable Area Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="gla">GLA</SelectItem>
+                          <SelectItem value="nla">NLA</SelectItem>
+                          <SelectItem value="glar">GLAR</SelectItem>
+                          <SelectItem value="gba">GBA</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="area-measurement-spec">Measurement (sqm)</Label>
+                      <Input id="area-measurement-spec" placeholder="Enter area in sqm" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Specialized Features */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Specialized Features & Amenities</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="kitchen-facilities">Kitchen Facilities</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select kitchen type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="commercial">Commercial Kitchen</SelectItem>
+                          <SelectItem value="domestic">Domestic Kitchen</SelectItem>
+                          <SelectItem value="none">No Kitchen</SelectItem>
+                          <SelectItem value="catering">Catering Kitchen</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="function-rooms">Function Rooms</Label>
+                      <Input id="function-rooms" placeholder="Number of function rooms" />
+                    </div>
+                    <div>
+                      <Label htmlFor="outdoor-areas-spec">Outdoor Areas</Label>
+                      <Input id="outdoor-areas-spec" placeholder="Beer garden, playground, etc." />
+                    </div>
+                    <div>
+                      <Label htmlFor="storage-areas">Storage Areas</Label>
+                      <Input id="storage-areas" placeholder="Storage facilities" />
+                    </div>
+                    <div>
+                      <Label htmlFor="specialized-equipment">Specialized Equipment</Label>
+                      <Textarea id="specialized-equipment" placeholder="List specialized equipment (medical equipment, gaming systems, playground equipment, etc.)" />
+                    </div>
+                    <div>
+                      <Label htmlFor="licensing-compliance">Licensing & Compliance</Label>
+                      <Textarea id="licensing-compliance" placeholder="Current licenses, compliance certifications, regulatory requirements" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Revenue Streams */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Revenue Streams & Operations</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="primary-revenue">Primary Revenue Source</Label>
+                      <Input id="primary-revenue" placeholder="e.g., Accommodation, Gaming, Food & Beverage" />
+                    </div>
+                    <div>
+                      <Label htmlFor="secondary-revenue">Secondary Revenue Sources</Label>
+                      <Input id="secondary-revenue" placeholder="Additional revenue streams" />
+                    </div>
+                    <div>
+                      <Label htmlFor="operating-hours">Operating Hours</Label>
+                      <Input id="operating-hours" placeholder="Daily operating hours" />
+                    </div>
+                    <div>
+                      <Label htmlFor="seasonal-operations">Seasonal Operations</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select operation type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="year-round">Year Round</SelectItem>
+                          <SelectItem value="seasonal">Seasonal</SelectItem>
+                          <SelectItem value="peak-periods">Peak Periods Only</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="operational-notes">Operational Notes</Label>
+                    <Textarea 
+                      id="operational-notes" 
+                      placeholder="Additional operational details, special considerations, market position, etc."
+                      className="min-h-[100px]"
+                    />
+                  </div>
+                </div>
+
+                {/* Construction Details */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Construction Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="foundation-spec">Foundation</Label>
+                      <Input id="foundation-spec" placeholder="Foundation type" />
+                    </div>
+                    <div>
+                      <Label htmlFor="roof-spec">Roof</Label>
+                      <Input id="roof-spec" placeholder="Roof material" />
+                    </div>
+                    <div>
+                      <Label htmlFor="windows-spec">Windows</Label>
+                      <Input id="windows-spec" placeholder="Window type" />
+                    </div>
+                    <div>
+                      <Label htmlFor="exterior-cladding-spec">Exterior Cladding</Label>
+                      <Input id="exterior-cladding-spec" placeholder="Cladding material" />
+                    </div>
+                    <div>
+                      <Label htmlFor="internal-cladding-spec">Internal Cladding</Label>
+                      <Input id="internal-cladding-spec" placeholder="Internal cladding" />
+                    </div>
+                    <div>
+                      <Label htmlFor="floor-coverings-spec">Floor Coverings</Label>
+                      <Input id="floor-coverings-spec" placeholder="Floor covering type" />
+                    </div>
+                    <div>
+                      <Label htmlFor="accessibility-features">Accessibility Features</Label>
+                      <Input id="accessibility-features" placeholder="Disability access features" />
+                    </div>
+                    <div>
+                      <Label htmlFor="security-systems">Security Systems</Label>
+                      <Input id="security-systems" placeholder="Security installations" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Areas Summary */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Areas Summary</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="total-area-spec">Total Building Area (sqm)</Label>
+                      <Input id="total-area-spec" placeholder="Total building area" />
+                    </div>
+                    <div>
+                      <Label htmlFor="land-area-spec">Land Area (sqm)</Label>
+                      <Input id="land-area-spec" placeholder="Total land area" />
+                    </div>
+                    <div>
+                      <Label htmlFor="customer-area">Customer/Public Area (sqm)</Label>
+                      <Input id="customer-area" placeholder="Public accessible area" />
+                    </div>
+                    <div>
+                      <Label htmlFor="service-area">Service/Staff Area (sqm)</Label>
+                      <Input id="service-area" placeholder="Staff/service area" />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="additional-features-spec">Additional Features & Comments</Label>
+                  <Textarea 
+                    id="additional-features-spec" 
+                    placeholder="Describe any additional specialized features, unique characteristics, market positioning, competitive advantages, etc."
+                    className="min-h-[100px]"
                   />
                 </div>
               </CardContent>
