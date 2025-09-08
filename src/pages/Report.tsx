@@ -16,7 +16,7 @@ const ReportViewer = () => {
     { title: "Statutory Assessment" },
     { title: "Market Commentary" },
     { title: "Property Details" },
-    { title: "Environmental Statement and Sustainability Assessment" },
+    { title: "Environmental Audit Checklist" },
     { title: "Essential Repairs" },
     { title: "Risk Assessment and Recommendations" },
     { title: "Previous Sales History and Current Sale" },

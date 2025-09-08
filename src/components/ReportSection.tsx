@@ -6,6 +6,7 @@ import TenancyScheduleLeaseDetails from "./TenancyScheduleLeaseDetails";
 import StatutoryAssessment from "./StatutoryAssessment";
 import MarketCommentary from "./MarketCommentary";
 import PropertyDetails from "./PropertyDetails";
+import EnvironmentalAudit from "./EnvironmentalAudit";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
 
 interface ReportSectionProps {
@@ -121,8 +122,23 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
+  // Special handling for Environmental Audit Checklist section
+  if (sectionIndex === 7) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <EnvironmentalAudit />
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Special handling for Marketability and Mortgage Security section
-  if (sectionIndex === 14) {
+  if (sectionIndex === 15) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
