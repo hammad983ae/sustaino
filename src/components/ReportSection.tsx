@@ -10,6 +10,7 @@ import ESGAssessment from "./ESGAssessment";
 import EssentialRepairs from "./EssentialRepairs";
 import RiskAssessmentMarketIndicators from "./RiskAssessmentMarketIndicators";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
+import PreviousSalesHistoryAndCurrentSale from "./PreviousSalesHistoryAndCurrentSale";
 
 interface ReportSectionProps {
   title: string;
@@ -164,6 +165,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <RiskAssessmentMarketIndicators />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Previous Sales History and Current Sale section
+  if (sectionIndex === 10) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <PreviousSalesHistoryAndCurrentSale />
         </CardContent>
       </Card>
     );
