@@ -44,10 +44,63 @@ interface ESGSavings {
   totalSavings: number;
 }
 
+interface WaterAllocation {
+  locationId: string;
+  permanentWaterRights: number; // ML
+  temporaryWaterAllocations: number; // ML
+  permanentPrice: number; // AUD per ML
+  temporaryPrice: number; // AUD per ML
+  waterEfficiency: number; // kg per ML
+  totalWaterCost: number; // Annual cost
+  waterRiskScore: number; // 0-1 scale
+}
+
+interface PricingSummary {
+  zone: string;
+  landLeaseAnnual: number;
+  waterPermanentTotal: number;
+  waterTemporaryAnnual: number;
+  operationalCostsAnnual: number;
+  maintenanceAnnual: number;
+  labourAnnual: number;
+  totalAnnualCosts: number;
+}
+
 export const CostaGroupPortfolio = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
   const [carbonCreditPrice, setCarbonCreditPrice] = useState<number>(35);
   const [carbonReductionTarget, setCarbonReductionTarget] = useState<number>(15);
+
+  const waterAllocations: WaterAllocation[] = [
+    { locationId: 'wa-gingin', permanentWaterRights: 85, temporaryWaterAllocations: 95, permanentPrice: 1200, temporaryPrice: 850, waterEfficiency: 13.3, totalWaterCost: 182750, waterRiskScore: 0.35 },
+    { locationId: 'wa-casuarina', permanentWaterRights: 25, temporaryWaterAllocations: 20, permanentPrice: 1150, temporaryPrice: 820, waterEfficiency: 188.9, totalWaterCost: 45150, waterRiskScore: 0.32 },
+    { locationId: 'sa-renmark', permanentWaterRights: 5200, temporaryWaterAllocations: 3750, permanentPrice: 950, temporaryPrice: 680, waterEfficiency: 3.2, totalWaterCost: 7490000, waterRiskScore: 0.42 },
+    { locationId: 'sa-monarto', permanentWaterRights: 35, temporaryWaterAllocations: 30, permanentPrice: 1100, temporaryPrice: 780, waterEfficiency: 172.3, totalWaterCost: 61900, waterRiskScore: 0.38 },
+    { locationId: 'vic-mernda', permanentWaterRights: 32, temporaryWaterAllocations: 26, permanentPrice: 1250, temporaryPrice: 890, waterEfficiency: 169.0, totalWaterCost: 63140, waterRiskScore: 0.41 },
+    { locationId: 'vic-nangiloc', permanentWaterRights: 2850, temporaryWaterAllocations: 1900, permanentPrice: 980, temporaryPrice: 720, waterEfficiency: 1.7, totalWaterCost: 4161000, waterRiskScore: 0.45 },
+    { locationId: 'qld-atherton', permanentWaterRights: 750, temporaryWaterAllocations: 500, permanentPrice: 650, temporaryPrice: 480, waterEfficiency: 5.2, totalWaterCost: 727500, waterRiskScore: 0.55 },
+    { locationId: 'qld-walkamin', permanentWaterRights: 220, temporaryWaterAllocations: 160, permanentPrice: 620, temporaryPrice: 450, waterEfficiency: 12.6, totalWaterCost: 208400, waterRiskScore: 0.52 },
+    { locationId: 'qld-emerald', permanentWaterRights: 4200, temporaryWaterAllocations: 3000, permanentPrice: 580, temporaryPrice: 420, waterEfficiency: 1.7, totalWaterCost: 3696000, waterRiskScore: 0.58 },
+    { locationId: 'nsw-corindi', permanentWaterRights: 1100, temporaryWaterAllocations: 750, permanentPrice: 1350, temporaryPrice: 950, waterEfficiency: 3.9, totalWaterCost: 2197500, waterRiskScore: 0.48 },
+    { locationId: 'nsw-guyra', permanentWaterRights: 75, temporaryWaterAllocations: 50, permanentPrice: 1450, temporaryPrice: 1050, waterEfficiency: 54.4, totalWaterCost: 161250, waterRiskScore: 0.35 },
+    { locationId: 'tas-devonport', permanentWaterRights: 180, temporaryWaterAllocations: 105, permanentPrice: 750, temporaryPrice: 550, waterEfficiency: 11.2, totalWaterCost: 192750, waterRiskScore: 0.26 },
+    { locationId: 'cn-bailang', permanentWaterRights: 250, temporaryWaterAllocations: 200, permanentPrice: 420, temporaryPrice: 320, waterEfficiency: 9.3, totalWaterCost: 169000, waterRiskScore: 0.64 },
+    { locationId: 'cn-manhong', permanentWaterRights: 300, temporaryWaterAllocations: 220, permanentPrice: 450, temporaryPrice: 340, waterEfficiency: 9.2, totalWaterCost: 209800, waterRiskScore: 0.66 },
+    { locationId: 'cn-xinze', permanentWaterRights: 220, temporaryWaterAllocations: 160, permanentPrice: 480, temporaryPrice: 360, waterEfficiency: 7.6, totalWaterCost: 163200, waterRiskScore: 0.62 },
+    { locationId: 'ma-northern', permanentWaterRights: 480, temporaryWaterAllocations: 370, permanentPrice: 320, temporaryPrice: 250, waterEfficiency: 6.8, totalWaterCost: 246000, waterRiskScore: 0.68 },
+    { locationId: 'ma-southern', permanentWaterRights: 420, temporaryWaterAllocations: 360, permanentPrice: 340, temporaryPrice: 270, waterEfficiency: 6.7, totalWaterCost: 240000, waterRiskScore: 0.72 }
+  ];
+
+  const pricingSummaries: PricingSummary[] = [
+    { zone: 'Western Australia', landLeaseAnnual: 3500000, waterPermanentTotal: 96750000, waterTemporaryAnnual: 227900, operationalCostsAnnual: 12500000, maintenanceAnnual: 2800000, labourAnnual: 8900000, totalAnnualCosts: 28127900 },
+    { zone: 'South Australia', landLeaseAnnual: 5200000, waterPermanentTotal: 142850000, waterTemporaryAnnual: 7551000, operationalCostsAnnual: 18750000, maintenanceAnnual: 4200000, labourAnnual: 12400000, totalAnnualCosts: 48101000 },
+    { zone: 'Victoria', landLeaseAnnual: 4100000, waterPermanentTotal: 78650000, waterTemporaryAnnual: 4224140, operationalCostsAnnual: 15200000, maintenanceAnnual: 3600000, labourAnnual: 10800000, totalAnnualCosts: 37924140 },
+    { zone: 'Queensland', landLeaseAnnual: 6800000, waterPermanentTotal: 149400000, waterTemporaryAnnual: 4631900, operationalCostsAnnual: 22500000, maintenanceAnnual: 5100000, labourAnnual: 16200000, totalAnnualCosts: 55231900 },
+    { zone: 'New South Wales', landLeaseAnnual: 4500000, waterPermanentTotal: 186750000, waterTemporaryAnnual: 2358750, operationalCostsAnnual: 16800000, maintenanceAnnual: 3900000, labourAnnual: 11700000, totalAnnualCosts: 39258750 },
+    { zone: 'Tasmania', landLeaseAnnual: 2100000, waterPermanentTotal: 13500000, waterTemporaryAnnual: 192750, operationalCostsAnnual: 8500000, maintenanceAnnual: 1800000, labourAnnual: 5200000, totalAnnualCosts: 17792750 },
+    { zone: 'China (Yunnan)', landLeaseAnnual: 1800000, waterPermanentTotal: 36960000, waterTemporaryAnnual: 542000, operationalCostsAnnual: 12000000, maintenanceAnnual: 2500000, labourAnnual: 6800000, totalAnnualCosts: 23642000 },
+    { zone: 'Morocco', landLeaseAnnual: 2200000, waterPermanentTotal: 25840000, waterTemporaryAnnual: 486000, operationalCostsAnnual: 9500000, maintenanceAnnual: 2100000, labourAnnual: 4900000, totalAnnualCosts: 19186000 }
+  ];
 
   const locations: Location[] = [
     // Australia - Western Australia
@@ -182,9 +235,11 @@ export const CostaGroupPortfolio = () => {
       </div>
 
       <Tabs defaultValue="locations" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="locations">Locations</TabsTrigger>
           <TabsTrigger value="valuations">P&E Valuations</TabsTrigger>
+          <TabsTrigger value="water">Water Analysis</TabsTrigger>
+          <TabsTrigger value="pricing">Pricing Summary</TabsTrigger>
           <TabsTrigger value="crops">Crop Estimates</TabsTrigger>
           <TabsTrigger value="esg-savings">ESG Savings</TabsTrigger>
           <TabsTrigger value="carbon-credits">Carbon Credits</TabsTrigger>
@@ -254,6 +309,382 @@ export const CostaGroupPortfolio = () => {
                     </CardContent>
                   </Card>
                 ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="water" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                Water Allocation & Management Analysis
+              </CardTitle>
+              <p className="text-muted-foreground">
+                Comprehensive analysis of water rights, usage efficiency, and risk assessment across all operations
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-muted-foreground">Total Water Usage</p>
+                      <p className="text-2xl font-bold text-blue-600">57,278 ML</p>
+                      <p className="text-xs text-muted-foreground">2024 actual</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-muted-foreground">Permanent Rights</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        {waterAllocations.reduce((sum, w) => sum + w.permanentWaterRights, 0).toLocaleString()} ML
+                      </p>
+                      <p className="text-xs text-muted-foreground">total allocation</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-muted-foreground">Annual Water Cost</p>
+                      <p className="text-2xl font-bold text-orange-600">
+                        ${(waterAllocations.reduce((sum, w) => sum + w.totalWaterCost, 0) / 1000000).toFixed(1)}M
+                      </p>
+                      <p className="text-xs text-muted-foreground">total expenditure</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-muted-foreground">Avg Water Risk</p>
+                      <p className="text-2xl font-bold text-red-600">
+                        {((waterAllocations.reduce((sum, w) => sum + w.waterRiskScore, 0) / waterAllocations.length) * 100).toFixed(1)}%
+                      </p>
+                      <p className="text-xs text-muted-foreground">risk score</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Water Allocation Details by Location</h3>
+                {waterAllocations.map(water => {
+                  const location = locations.find(l => l.id === water.locationId);
+                  if (!location) return null;
+                  
+                  return (
+                    <Card key={water.locationId} className="border-l-4 border-l-blue-500">
+                      <CardContent className="p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
+                          <div>
+                            <h4 className="font-medium">{location.name}</h4>
+                            <p className="text-sm text-muted-foreground">{location.state}</p>
+                          </div>
+                          
+                          <div className="text-center">
+                            <p className="text-sm text-muted-foreground">Permanent Rights</p>
+                            <p className="font-semibold">{water.permanentWaterRights.toLocaleString()} ML</p>
+                            <p className="text-xs text-blue-600">${water.permanentPrice}/ML</p>
+                          </div>
+                          
+                          <div className="text-center">
+                            <p className="text-sm text-muted-foreground">Temporary Alloc.</p>
+                            <p className="font-semibold">{water.temporaryWaterAllocations.toLocaleString()} ML</p>
+                            <p className="text-xs text-green-600">${water.temporaryPrice}/ML</p>
+                          </div>
+                          
+                          <div className="text-center">
+                            <p className="text-sm text-muted-foreground">Efficiency</p>
+                            <p className="font-semibold">{water.waterEfficiency} kg/ML</p>
+                          </div>
+                          
+                          <div className="text-center">
+                            <p className="text-sm text-muted-foreground">Annual Cost</p>
+                            <p className="font-semibold">${(water.totalWaterCost / 1000).toFixed(0)}K</p>
+                          </div>
+                          
+                          <div className="text-center">
+                            <p className="text-sm text-muted-foreground">Risk Score</p>
+                            <Badge variant={water.waterRiskScore > 0.6 ? "destructive" : water.waterRiskScore > 0.4 ? "secondary" : "default"}>
+                              {(water.waterRiskScore * 100).toFixed(0)}%
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+
+              <Separator className="my-6" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Water Usage by Crop Category (2024)</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span>Citrus</span>
+                        <div className="text-right">
+                          <span className="font-semibold">44,537 ML</span>
+                          <p className="text-xs text-muted-foreground">3.2 kg/ML efficiency</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Avocados</span>
+                        <div className="text-right">
+                          <span className="font-semibold">3,772 ML</span>
+                          <p className="text-xs text-muted-foreground">2.2 kg/ML efficiency</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Berries (Australia)</span>
+                        <div className="text-right">
+                          <span className="font-semibold">2,879 ML</span>
+                          <p className="text-xs text-muted-foreground">4.6 kg/ML efficiency</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Tomatoes</span>
+                        <div className="text-right">
+                          <span className="font-semibold">494 ML</span>
+                          <p className="text-xs text-muted-foreground">7.9 kg/ML efficiency</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Mushrooms</span>
+                        <div className="text-right">
+                          <span className="font-semibold">423 ML</span>
+                          <p className="text-xs text-muted-foreground">63.4 kg/ML efficiency</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Bananas</span>
+                        <div className="text-right">
+                          <span className="font-semibold">269 ML</span>
+                          <p className="text-xs text-muted-foreground">11.9 kg/ML efficiency</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">International Water Operations</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-medium">Morocco Operations</h4>
+                        <div className="ml-4 space-y-1 text-sm">
+                          <div className="flex justify-between">
+                            <span>Water Usage:</span>
+                            <span className="font-medium">2,328 ML</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Efficiency:</span>
+                            <span className="font-medium">2.8 kg/ML</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Risk Level:</span>
+                            <Badge variant="destructive">High (70%)</Badge>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div>
+                        <h4 className="font-medium">China (Yunnan) Operations</h4>
+                        <div className="ml-4 space-y-1 text-sm">
+                          <div className="flex justify-between">
+                            <span>Water Usage:</span>
+                            <span className="font-medium">2,576 ML</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Efficiency:</span>
+                            <span className="font-medium">1.9 kg/ML</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Risk Level:</span>
+                            <Badge variant="destructive">High (64%)</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="pricing" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-green-600" />
+                Comprehensive Pricing Summary by Zone
+              </CardTitle>
+              <p className="text-muted-foreground">
+                Detailed breakdown of permanent and temporary costs across all operational zones
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left p-3">Zone</th>
+                      <th className="text-right p-3">Land Lease (Annual)</th>
+                      <th className="text-right p-3">Water Permanent (Total)</th>
+                      <th className="text-right p-3">Water Temporary (Annual)</th>
+                      <th className="text-right p-3">Operations (Annual)</th>
+                      <th className="text-right p-3">Maintenance (Annual)</th>
+                      <th className="text-right p-3">Labour (Annual)</th>
+                      <th className="text-right p-3">Total Annual Costs</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pricingSummaries.map(pricing => (
+                      <tr key={pricing.zone} className="border-b hover:bg-muted/50">
+                        <td className="p-3 font-medium">{pricing.zone}</td>
+                        <td className="p-3 text-right">${(pricing.landLeaseAnnual / 1000000).toFixed(1)}M</td>
+                        <td className="p-3 text-right">${(pricing.waterPermanentTotal / 1000000).toFixed(1)}M</td>
+                        <td className="p-3 text-right">${(pricing.waterTemporaryAnnual / 1000000).toFixed(1)}M</td>
+                        <td className="p-3 text-right">${(pricing.operationalCostsAnnual / 1000000).toFixed(1)}M</td>
+                        <td className="p-3 text-right">${(pricing.maintenanceAnnual / 1000000).toFixed(1)}M</td>
+                        <td className="p-3 text-right">${(pricing.labourAnnual / 1000000).toFixed(1)}M</td>
+                        <td className="p-3 text-right font-semibold text-primary">
+                          ${(pricing.totalAnnualCosts / 1000000).toFixed(1)}M
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="border-b-2 border-primary font-semibold bg-muted/30">
+                      <td className="p-3">TOTAL</td>
+                      <td className="p-3 text-right">
+                        ${(pricingSummaries.reduce((sum, p) => sum + p.landLeaseAnnual, 0) / 1000000).toFixed(1)}M
+                      </td>
+                      <td className="p-3 text-right">
+                        ${(pricingSummaries.reduce((sum, p) => sum + p.waterPermanentTotal, 0) / 1000000).toFixed(1)}M
+                      </td>
+                      <td className="p-3 text-right">
+                        ${(pricingSummaries.reduce((sum, p) => sum + p.waterTemporaryAnnual, 0) / 1000000).toFixed(1)}M
+                      </td>
+                      <td className="p-3 text-right">
+                        ${(pricingSummaries.reduce((sum, p) => sum + p.operationalCostsAnnual, 0) / 1000000).toFixed(1)}M
+                      </td>
+                      <td className="p-3 text-right">
+                        ${(pricingSummaries.reduce((sum, p) => sum + p.maintenanceAnnual, 0) / 1000000).toFixed(1)}M
+                      </td>
+                      <td className="p-3 text-right">
+                        ${(pricingSummaries.reduce((sum, p) => sum + p.labourAnnual, 0) / 1000000).toFixed(1)}M
+                      </td>
+                      <td className="p-3 text-right text-lg text-primary">
+                        ${(pricingSummaries.reduce((sum, p) => sum + p.totalAnnualCosts, 0) / 1000000).toFixed(1)}M
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <Separator className="my-6" />
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Water Cost Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Permanent Water Rights:</span>
+                        <span className="font-semibold">
+                          ${(pricingSummaries.reduce((sum, p) => sum + p.waterPermanentTotal, 0) / 1000000).toFixed(0)}M
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Annual Temporary Water:</span>
+                        <span className="font-semibold">
+                          ${(pricingSummaries.reduce((sum, p) => sum + p.waterTemporaryAnnual, 0) / 1000000).toFixed(1)}M
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Water as % of Total Costs:</span>
+                        <span className="font-semibold text-blue-600">
+                          {(((pricingSummaries.reduce((sum, p) => sum + p.waterTemporaryAnnual, 0)) / 
+                             (pricingSummaries.reduce((sum, p) => sum + p.totalAnnualCosts, 0))) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-l-4 border-l-green-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Operational Efficiency</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Labour Costs:</span>
+                        <span className="font-semibold">
+                          ${(pricingSummaries.reduce((sum, p) => sum + p.labourAnnual, 0) / 1000000).toFixed(0)}M
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Maintenance Costs:</span>
+                        <span className="font-semibold">
+                          ${(pricingSummaries.reduce((sum, p) => sum + p.maintenanceAnnual, 0) / 1000000).toFixed(0)}M
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Labour as % of Total:</span>
+                        <span className="font-semibold text-green-600">
+                          {(((pricingSummaries.reduce((sum, p) => sum + p.labourAnnual, 0)) / 
+                             (pricingSummaries.reduce((sum, p) => sum + p.totalAnnualCosts, 0))) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-l-4 border-l-orange-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Cost Per Hectare Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Total Hectares:</span>
+                        <span className="font-semibold">{totalHectares.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Cost per Hectare:</span>
+                        <span className="font-semibold">
+                          ${((pricingSummaries.reduce((sum, p) => sum + p.totalAnnualCosts, 0)) / totalHectares).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Water Cost per Ha:</span>
+                        <span className="font-semibold text-orange-600">
+                          ${((pricingSummaries.reduce((sum, p) => sum + p.waterTemporaryAnnual, 0)) / totalHectares).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </CardContent>
           </Card>
