@@ -17,6 +17,7 @@ const ReportViewer = () => {
     { title: "Market Commentary" },
     { title: "Property Details" },
     { title: "Plant and Equipment" },
+    { title: "Rent Determination" },
     { title: "ESG Assessment and Audit" },
     { title: "Essential Repairs" },
     { title: "Risk Assessment & Market Indicators" },
