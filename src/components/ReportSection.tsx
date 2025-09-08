@@ -11,6 +11,7 @@ import EssentialRepairs from "./EssentialRepairs";
 import RiskAssessmentMarketIndicators from "./RiskAssessmentMarketIndicators";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
 import PreviousSalesHistoryAndCurrentSale from "./PreviousSalesHistoryAndCurrentSale";
+import SalesEvidence from "./SalesEvidence";
 
 interface ReportSectionProps {
   title: string;
@@ -180,6 +181,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <PreviousSalesHistoryAndCurrentSale />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Sales Evidence section
+  if (sectionIndex === 11) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <SalesEvidence />
         </CardContent>
       </Card>
     );
