@@ -384,31 +384,425 @@ const PropertyDetails = () => {
               <CardHeader>
                 <CardTitle className="text-base">Agriculture Property Details</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="land-size-agri">Land Size (hectares)</Label>
-                    <Input id="land-size-agri" placeholder="Land size in hectares" />
-                  </div>
-                  <div>
-                    <Label htmlFor="water-rights">Water Rights</Label>
-                    <Input id="water-rights" placeholder="Water rights details" />
-                  </div>
-                  <div>
-                    <Label htmlFor="soil-type">Soil Type</Label>
-                    <Input id="soil-type" placeholder="Soil type description" />
-                  </div>
-                  <div>
-                    <Label htmlFor="irrigation-systems">Irrigation Systems</Label>
-                    <Input id="irrigation-systems" placeholder="Irrigation systems details" />
+              <CardContent className="space-y-6">
+                {/* Agricultural Property Type */}
+                <div>
+                  <Label className="text-sm font-medium mb-3 block">Agricultural Property Type</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select agricultural property type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="grazing">Grazing Land</SelectItem>
+                      <SelectItem value="dairy">Dairy Farm</SelectItem>
+                      <SelectItem value="broadacre">Broadacre Cropping</SelectItem>
+                      <SelectItem value="vineyard">Vineyard</SelectItem>
+                      <SelectItem value="orchard">Orchard</SelectItem>
+                      <SelectItem value="aquaculture">Aquaculture</SelectItem>
+                      <SelectItem value="mixed">Mixed Farming</SelectItem>
+                      <SelectItem value="horticulture">Horticulture</SelectItem>
+                      <SelectItem value="poultry">Poultry Farm</SelectItem>
+                      <SelectItem value="stud">Stud Farm</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Basic Agricultural Details */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Basic Property Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="total-area-agri">Total Area (hectares)</Label>
+                      <Input id="total-area-agri" placeholder="Total area in hectares" />
+                    </div>
+                    <div>
+                      <Label htmlFor="effective-area">Effective Area (hectares)</Label>
+                      <Input id="effective-area" placeholder="Effective farming area" />
+                    </div>
+                    <div>
+                      <Label htmlFor="rainfall">Annual Rainfall (mm)</Label>
+                      <Input id="rainfall" placeholder="Average annual rainfall" />
+                    </div>
+                    <div>
+                      <Label htmlFor="soil-type">Soil Classification</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select soil type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="clay">Clay</SelectItem>
+                          <SelectItem value="loam">Loam</SelectItem>
+                          <SelectItem value="sandy">Sandy</SelectItem>
+                          <SelectItem value="volcanic">Volcanic</SelectItem>
+                          <SelectItem value="alluvial">Alluvial</SelectItem>
+                          <SelectItem value="red-brown">Red Brown Earth</SelectItem>
+                          <SelectItem value="black-earth">Black Earth</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="topography">Topography</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select topography" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="flat">Flat</SelectItem>
+                          <SelectItem value="undulating">Undulating</SelectItem>
+                          <SelectItem value="hilly">Hilly</SelectItem>
+                          <SelectItem value="mountainous">Mountainous</SelectItem>
+                          <SelectItem value="rolling">Rolling</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="aspect">Aspect</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select aspect" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="north">North</SelectItem>
+                          <SelectItem value="northeast">North East</SelectItem>
+                          <SelectItem value="east">East</SelectItem>
+                          <SelectItem value="southeast">South East</SelectItem>
+                          <SelectItem value="south">South</SelectItem>
+                          <SelectItem value="southwest">South West</SelectItem>
+                          <SelectItem value="west">West</SelectItem>
+                          <SelectItem value="northwest">North West</SelectItem>
+                          <SelectItem value="multiple">Multiple</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
+
+                {/* Water Resources */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Water Resources</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="water-allocation">Water Allocation (ML)</Label>
+                      <Input id="water-allocation" placeholder="Megalitres per year" />
+                    </div>
+                    <div>
+                      <Label htmlFor="water-source">Water Source</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select water source" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="bore">Bore Water</SelectItem>
+                          <SelectItem value="river">River</SelectItem>
+                          <SelectItem value="dam">Farm Dam</SelectItem>
+                          <SelectItem value="channel">Irrigation Channel</SelectItem>
+                          <SelectItem value="rainfall">Rainfall Dependent</SelectItem>
+                          <SelectItem value="multiple">Multiple Sources</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="irrigation-type">Irrigation System</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select irrigation type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="drip">Drip Irrigation</SelectItem>
+                          <SelectItem value="spray">Spray Irrigation</SelectItem>
+                          <SelectItem value="flood">Flood Irrigation</SelectItem>
+                          <SelectItem value="centre-pivot">Centre Pivot</SelectItem>
+                          <SelectItem value="lateral-move">Lateral Move</SelectItem>
+                          <SelectItem value="none">None</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="dam-capacity">Dam Capacity (ML)</Label>
+                      <Input id="dam-capacity" placeholder="Total dam capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="water-quality">Water Quality</Label>
+                      <Input id="water-quality" placeholder="Water quality/salinity" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Grazing Specific */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Grazing & Livestock</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="carrying-capacity">Carrying Capacity (DSE)</Label>
+                      <Input id="carrying-capacity" placeholder="Dry Sheep Equivalent per hectare" />
+                    </div>
+                    <div>
+                      <Label htmlFor="stocking-rate">Current Stocking Rate</Label>
+                      <Input id="stocking-rate" placeholder="Current stock numbers" />
+                    </div>
+                    <div>
+                      <Label htmlFor="pasture-type">Pasture Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select pasture type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="native">Native Pasture</SelectItem>
+                          <SelectItem value="improved">Improved Pasture</SelectItem>
+                          <SelectItem value="annual">Annual Pasture</SelectItem>
+                          <SelectItem value="perennial">Perennial Pasture</SelectItem>
+                          <SelectItem value="lucerne">Lucerne</SelectItem>
+                          <SelectItem value="mixed">Mixed Pasture</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="fencing">Fencing</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Fencing condition" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="excellent">Excellent</SelectItem>
+                          <SelectItem value="good">Good</SelectItem>
+                          <SelectItem value="fair">Fair</SelectItem>
+                          <SelectItem value="poor">Poor</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="paddock-count">Number of Paddocks</Label>
+                      <Input id="paddock-count" placeholder="Number of paddocks" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dairy Specific */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Dairy Operations</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="milking-platform">Milking Platform (hectares)</Label>
+                      <Input id="milking-platform" placeholder="Effective milking area" />
+                    </div>
+                    <div>
+                      <Label htmlFor="dairy-shed">Dairy Shed Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select dairy shed type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="rotary">Rotary</SelectItem>
+                          <SelectItem value="herringbone">Herringbone</SelectItem>
+                          <SelectItem value="swing-over">Swing Over</SelectItem>
+                          <SelectItem value="parallel">Parallel</SelectItem>
+                          <SelectItem value="robotic">Robotic</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="bail-count">Number of Bails</Label>
+                      <Input id="bail-count" placeholder="Milking bails" />
+                    </div>
+                    <div>
+                      <Label htmlFor="cow-capacity">Cow Capacity</Label>
+                      <Input id="cow-capacity" placeholder="Maximum cow numbers" />
+                    </div>
+                    <div>
+                      <Label htmlFor="milk-production">Annual Milk Production (L)</Label>
+                      <Input id="milk-production" placeholder="Litres per annum" />
+                    </div>
+                    <div>
+                      <Label htmlFor="vat-capacity">Vat Capacity (L)</Label>
+                      <Input id="vat-capacity" placeholder="Milk vat capacity" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Broadacre Cropping */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Broadacre Cropping</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="crop-types">Primary Crops</Label>
+                      <Input id="crop-types" placeholder="e.g., Wheat, Barley, Canola" />
+                    </div>
+                    <div>
+                      <Label htmlFor="yield-average">Average Yield (t/ha)</Label>
+                      <Input id="yield-average" placeholder="Average tonnes per hectare" />
+                    </div>
+                    <div>
+                      <Label htmlFor="cropping-history">Cropping History</Label>
+                      <Input id="cropping-history" placeholder="Years of cropping" />
+                    </div>
+                    <div>
+                      <Label htmlFor="silo-capacity">Silo Capacity (tonnes)</Label>
+                      <Input id="silo-capacity" placeholder="Total storage capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="machinery-sheds">Machinery Sheds (sqm)</Label>
+                      <Input id="machinery-sheds" placeholder="Covered machinery storage" />
+                    </div>
+                    <div>
+                      <Label htmlFor="field-bins">Field Bins</Label>
+                      <Input id="field-bins" placeholder="Number and capacity" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Vineyard Specific */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Vineyard Operations</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="vine-area">Total Vine Area (hectares)</Label>
+                      <Input id="vine-area" placeholder="Area under vine" />
+                    </div>
+                    <div>
+                      <Label htmlFor="grape-varieties">Grape Varieties</Label>
+                      <Input id="grape-varieties" placeholder="e.g., Shiraz, Chardonnay" />
+                    </div>
+                    <div>
+                      <Label htmlFor="vine-age">Average Vine Age (years)</Label>
+                      <Input id="vine-age" placeholder="Average age of vines" />
+                    </div>
+                    <div>
+                      <Label htmlFor="grape-purpose">Grape Purpose</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select grape purpose" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="wine">Wine Grapes</SelectItem>
+                          <SelectItem value="table">Table Grapes</SelectItem>
+                          <SelectItem value="dried">Dried Grapes/Raisins</SelectItem>
+                          <SelectItem value="mixed">Mixed Purpose</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="grape-yield">Average Yield (t/ha)</Label>
+                      <Input id="grape-yield" placeholder="Tonnes per hectare" />
+                    </div>
+                    <div>
+                      <Label htmlFor="trellis-system">Trellis System</Label>
+                      <Input id="trellis-system" placeholder="e.g., VSP, Scott Henry" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Orchard Specific */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Orchard Operations</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="orchard-area">Total Orchard Area (hectares)</Label>
+                      <Input id="orchard-area" placeholder="Area under orchard" />
+                    </div>
+                    <div>
+                      <Label htmlFor="fruit-varieties">Fruit Varieties</Label>
+                      <Input id="fruit-varieties" placeholder="e.g., Apples, Citrus, Stone Fruit" />
+                    </div>
+                    <div>
+                      <Label htmlFor="tree-age">Average Tree Age (years)</Label>
+                      <Input id="tree-age" placeholder="Average age of trees" />
+                    </div>
+                    <div>
+                      <Label htmlFor="tree-density">Tree Density (trees/ha)</Label>
+                      <Input id="tree-density" placeholder="Trees per hectare" />
+                    </div>
+                    <div>
+                      <Label htmlFor="fruit-yield">Average Yield (t/ha)</Label>
+                      <Input id="fruit-yield" placeholder="Tonnes per hectare" />
+                    </div>
+                    <div>
+                      <Label htmlFor="picking-method">Picking Method</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select picking method" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="hand">Hand Picked</SelectItem>
+                          <SelectItem value="mechanical">Mechanical</SelectItem>
+                          <SelectItem value="mixed">Mixed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Aquaculture Specific */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Aquaculture Operations</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="water-body-type">Water Body Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select water body type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="earthen-ponds">Earthen Ponds</SelectItem>
+                          <SelectItem value="concrete-tanks">Concrete Tanks</SelectItem>
+                          <SelectItem value="cage-culture">Cage Culture</SelectItem>
+                          <SelectItem value="raceway">Raceway System</SelectItem>
+                          <SelectItem value="recirculating">Recirculating System</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="water-area">Total Water Area (hectares)</Label>
+                      <Input id="water-area" placeholder="Area of water bodies" />
+                    </div>
+                    <div>
+                      <Label htmlFor="species-cultured">Species Cultured</Label>
+                      <Input id="species-cultured" placeholder="e.g., Barramundi, Trout, Prawns" />
+                    </div>
+                    <div>
+                      <Label htmlFor="production-capacity">Production Capacity (kg/year)</Label>
+                      <Input id="production-capacity" placeholder="Annual production capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="water-exchange">Water Exchange Rate</Label>
+                      <Input id="water-exchange" placeholder="Water turnover rate" />
+                    </div>
+                    <div>
+                      <Label htmlFor="aeration-system">Aeration System</Label>
+                      <Input id="aeration-system" placeholder="Type of aeration" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Infrastructure */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Infrastructure & Improvements</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="homestead">Homestead</Label>
+                      <Textarea id="homestead" placeholder="Describe homestead details..." />
+                    </div>
+                    <div>
+                      <Label htmlFor="worker-accommodation">Worker Accommodation</Label>
+                      <Textarea id="worker-accommodation" placeholder="Describe worker housing..." />
+                    </div>
+                    <div>
+                      <Label htmlFor="farm-buildings">Farm Buildings</Label>
+                      <Textarea id="farm-buildings" placeholder="Describe sheds, barns, workshops..." />
+                    </div>
+                    <div>
+                      <Label htmlFor="machinery-equipment">Machinery & Equipment</Label>
+                      <Textarea id="machinery-equipment" placeholder="List included machinery..." />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Features */}
                 <div>
-                  <Label htmlFor="additional-features-agri">Additional Features</Label>
+                  <Label htmlFor="additional-features-agri">Additional Agricultural Features</Label>
                   <Textarea
                     id="additional-features-agri"
-                    placeholder="Describe additional agricultural features, amenities, and characteristics..."
-                    className="min-h-[100px]"
+                    placeholder="Describe additional agricultural features, certifications (organic, biodynamic), conservation programs, renewable energy, storage facilities, processing equipment, etc..."
+                    className="min-h-[120px]"
                   />
                 </div>
               </CardContent>
