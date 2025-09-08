@@ -643,6 +643,17 @@ const PropertyDetails = () => {
                       <SelectItem value="gaming-venue">Gaming Venue</SelectItem>
                       <SelectItem value="childcare">Childcare</SelectItem>
                       <SelectItem value="healthcare">Healthcare</SelectItem>
+                      <SelectItem value="sports-stadium">Sports Stadium</SelectItem>
+                      <SelectItem value="cinema-theater">Cinema/Theater</SelectItem>
+                      <SelectItem value="convention-center">Convention/Conference Center</SelectItem>
+                      <SelectItem value="shopping-center">Shopping Center/Mall</SelectItem>
+                      <SelectItem value="marina">Marina</SelectItem>
+                      <SelectItem value="self-storage">Self Storage Facility</SelectItem>
+                      <SelectItem value="funeral-home">Funeral Home</SelectItem>
+                      <SelectItem value="veterinary">Veterinary Clinic</SelectItem>
+                      <SelectItem value="automotive">Automotive (Service/Dealership)</SelectItem>
+                      <SelectItem value="religious">Religious Building</SelectItem>
+                      <SelectItem value="data-center">Data Center</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -721,10 +732,102 @@ const PropertyDetails = () => {
                       <Label htmlFor="gaming-tables">Gaming Tables</Label>
                       <Input id="gaming-tables" placeholder="Number of gaming tables" />
                     </div>
+                    {/* Sports Stadium/Entertainment Specific */}
                     <div>
                       <Label htmlFor="seating-capacity">Seating Capacity</Label>
                       <Input id="seating-capacity" placeholder="Total seating capacity" />
                     </div>
+                    <div>
+                      <Label htmlFor="field-court-size">Field/Court Size (sqm)</Label>
+                      <Input id="field-court-size" placeholder="Playing surface area" />
+                    </div>
+                    <div>
+                      <Label htmlFor="screens-theaters">Screens/Theaters</Label>
+                      <Input id="screens-theaters" placeholder="Number of screens/theaters" />
+                    </div>
+                    <div>
+                      <Label htmlFor="vip-corporate-boxes">VIP/Corporate Boxes</Label>
+                      <Input id="vip-corporate-boxes" placeholder="Number of premium boxes" />
+                    </div>
+
+                    {/* Shopping Center/Mall Specific */}
+                    <div>
+                      <Label htmlFor="retail-tenancies">Retail Tenancies</Label>
+                      <Input id="retail-tenancies" placeholder="Number of retail spaces" />
+                    </div>
+                    <div>
+                      <Label htmlFor="anchor-tenants">Anchor Tenants</Label>
+                      <Input id="anchor-tenants" placeholder="Number of anchor tenants" />
+                    </div>
+                    <div>
+                      <Label htmlFor="food-court-seats">Food Court Seating</Label>
+                      <Input id="food-court-seats" placeholder="Food court capacity" />
+                    </div>
+
+                    {/* Marina/Self Storage Specific */}
+                    <div>
+                      <Label htmlFor="berths-units">Berths/Storage Units</Label>
+                      <Input id="berths-units" placeholder="Number of berths or storage units" />
+                    </div>
+                    <div>
+                      <Label htmlFor="unit-sizes">Unit Size Range</Label>
+                      <Input id="unit-sizes" placeholder="e.g., 5x5m to 10x20m" />
+                    </div>
+                    <div>
+                      <Label htmlFor="boat-length-capacity">Boat Length Capacity</Label>
+                      <Input id="boat-length-capacity" placeholder="Maximum boat length (meters)" />
+                    </div>
+
+                    {/* Automotive/Service Specific */}
+                    <div>
+                      <Label htmlFor="service-bays">Service Bays</Label>
+                      <Input id="service-bays" placeholder="Number of service bays" />
+                    </div>
+                    <div>
+                      <Label htmlFor="fuel-pumps">Fuel Pumps</Label>
+                      <Input id="fuel-pumps" placeholder="Number of fuel dispensers" />
+                    </div>
+                    <div>
+                      <Label htmlFor="vehicle-display">Vehicle Display Area</Label>
+                      <Input id="vehicle-display" placeholder="Vehicle display capacity" />
+                    </div>
+
+                    {/* Convention/Conference Specific */}
+                    <div>
+                      <Label htmlFor="meeting-rooms">Meeting Rooms</Label>
+                      <Input id="meeting-rooms" placeholder="Number of meeting rooms" />
+                    </div>
+                    <div>
+                      <Label htmlFor="exhibition-space">Exhibition Space (sqm)</Label>
+                      <Input id="exhibition-space" placeholder="Total exhibition area" />
+                    </div>
+                    <div>
+                      <Label htmlFor="delegate-capacity">Delegate Capacity</Label>
+                      <Input id="delegate-capacity" placeholder="Maximum delegate capacity" />
+                    </div>
+
+                    {/* Data Center/Technical Specific */}
+                    <div>
+                      <Label htmlFor="server-racks">Server Racks</Label>
+                      <Input id="server-racks" placeholder="Number of server racks" />
+                    </div>
+                    <div>
+                      <Label htmlFor="power-capacity">Power Capacity (kW)</Label>
+                      <Input id="power-capacity" placeholder="Total power capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="cooling-capacity">Cooling Capacity</Label>
+                      <Input id="cooling-capacity" placeholder="HVAC/cooling specifications" />
+                    </div>
+
+                    {/* Childcare Specific */}
+                    <div>
+                      <Label htmlFor="ldc-placements">LDC Placements (Licensed Day Care)</Label>
+                      <Input id="ldc-placements" placeholder="Licensed placement capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="child-capacity">Total Child Capacity</Label>
+                      <Input id="child-capacity" placeholder="Maximum child capacity" />
                     <div>
                       <Label htmlFor="liquor-license">Liquor License Type</Label>
                       <Select>
@@ -740,14 +843,18 @@ const PropertyDetails = () => {
                       </Select>
                     </div>
 
-                    {/* Childcare Specific */}
+                    {/* Funeral/Religious/Community Specific */}
                     <div>
-                      <Label htmlFor="ldc-placements">LDC Placements (Licensed Day Care)</Label>
-                      <Input id="ldc-placements" placeholder="Licensed placement capacity" />
+                      <Label htmlFor="chapel-capacity">Chapel/Sanctuary Capacity</Label>
+                      <Input id="chapel-capacity" placeholder="Seating capacity" />
                     </div>
                     <div>
-                      <Label htmlFor="child-capacity">Total Child Capacity</Label>
-                      <Input id="child-capacity" placeholder="Maximum child capacity" />
+                      <Label htmlFor="preparation-facilities">Preparation Facilities</Label>
+                      <Input id="preparation-facilities" placeholder="Number of preparation rooms" />
+                    </div>
+                    <div>
+                      <Label htmlFor="parking-spaces-spec">Parking Spaces</Label>
+                      <Input id="parking-spaces-spec" placeholder="Total parking capacity" />
                     </div>
                     <div>
                       <Label htmlFor="age-groups">Age Groups Served</Label>
@@ -771,6 +878,22 @@ const PropertyDetails = () => {
                       <Label htmlFor="operating-theaters">Operating Theaters</Label>
                       <Input id="operating-theaters" placeholder="Number of operating theaters" />
                     </div>
+                    
+                    {/* Funeral/Religious/Community Specific */}
+                    <div>
+                      <Label htmlFor="chapel-capacity">Chapel/Sanctuary Capacity</Label>
+                      <Input id="chapel-capacity" placeholder="Seating capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="preparation-facilities">Preparation Facilities</Label>
+                      <Input id="preparation-facilities" placeholder="Number of preparation rooms" />
+                    </div>
+                    <div>
+                      <Label htmlFor="parking-spaces-spec">Parking Spaces</Label>
+                      <Input id="parking-spaces-spec" placeholder="Total parking capacity" />
+                    </div>
+                  </div>
+                </div>
 
                     {/* General Commercial Area */}
                     <div>
@@ -790,6 +913,10 @@ const PropertyDetails = () => {
                     <div>
                       <Label htmlFor="area-measurement-spec">Measurement (sqm)</Label>
                       <Input id="area-measurement-spec" placeholder="Enter area in sqm" />
+                    <div>
+                      <Label htmlFor="area-measurement-spec">Measurement (sqm)</Label>
+                      <Input id="area-measurement-spec" placeholder="Enter area in sqm" />
+                    </div>
                     </div>
                   </div>
                 </div>
