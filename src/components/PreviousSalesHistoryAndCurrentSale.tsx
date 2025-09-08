@@ -21,7 +21,6 @@ const PreviousSalesHistoryAndCurrentSale = () => {
   const [lastSalePrice, setLastSalePrice] = useState("");
   const [saleMethod, setSaleMethod] = useState("");
   const [saleHistoryNotes, setSaleHistoryNotes] = useState("");
-  const [previousTransactionDate, setPreviousTransactionDate] = useState<Date>();
   
   // Current/Proposed Sale Transaction state
   const [transactionType, setTransactionType] = useState("");
@@ -29,6 +28,7 @@ const PreviousSalesHistoryAndCurrentSale = () => {
   const [marketingPeriod, setMarketingPeriod] = useState("");
   const [settlementPeriod, setSettlementPeriod] = useState("");
   const [transactionComments, setTransactionComments] = useState("");
+  const [currentTransactionDate, setCurrentTransactionDate] = useState<Date>();
   
   // Transaction Analysis dates
   const [transactionDate, setTransactionDate] = useState<Date>();
@@ -54,7 +54,7 @@ const PreviousSalesHistoryAndCurrentSale = () => {
         </CardHeader>
         {includePreviousSales && (
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="last-sale-date">Last Sale Date</Label>
                 <Popover>
@@ -75,32 +75,6 @@ const PreviousSalesHistoryAndCurrentSale = () => {
                       mode="single"
                       selected={lastSaleDate}
                       onSelect={setLastSaleDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="previous-transaction-date">Date of Transaction</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !previousTransactionDate && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {previousTransactionDate ? format(previousTransactionDate, "PPP") : "Select date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={previousTransactionDate}
-                      onSelect={setPreviousTransactionDate}
                       initialFocus
                     />
                   </PopoverContent>
@@ -182,7 +156,7 @@ const PreviousSalesHistoryAndCurrentSale = () => {
         </CardHeader>
         {includeCurrentSale && (
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="transaction-type">Transaction Type</Label>
                 <Select value={transactionType} onValueChange={setTransactionType}>
@@ -203,6 +177,32 @@ const PreviousSalesHistoryAndCurrentSale = () => {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="current-transaction-date">Date of Transaction</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !currentTransactionDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {currentTransactionDate ? format(currentTransactionDate, "PPP") : "Select date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={currentTransactionDate}
+                      onSelect={setCurrentTransactionDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="transaction-price">Transaction Price</Label>
                 <Input
                   id="transaction-price"
@@ -212,7 +212,9 @@ const PreviousSalesHistoryAndCurrentSale = () => {
                   onChange={(e) => setTransactionPrice(e.target.value)}
                 />
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="marketing-period">Marketing Period</Label>
                 <Input
