@@ -15,6 +15,7 @@ import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
 import ValuationAnalysis from "./ValuationAnalysis";
 import SustainoProAnalysis from "./SustainoProAnalysis";
+import ValuationCertificate from "./ValuationCertificate";
 import ProfessionalCompliance from "./ProfessionalCompliance";
 import TermsAndConditions from "./TermsAndConditions";
 import SecurityAndCertificates from "./SecurityAndCertificates";
@@ -267,7 +268,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Section 17 is now empty - placeholder for future use
+  // Special handling for Valuation Certificate section (Section 17)
   if (sectionIndex === 16) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -275,10 +276,8 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           <CardTitle className="text-xl font-semibold">{title}</CardTitle>
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="min-h-[200px] flex items-center justify-center text-muted-foreground">
-            <p>Valuation Certificate content will be added here</p>
-          </div>
+        <CardContent>
+          <ValuationCertificate />
         </CardContent>
       </Card>
     );
