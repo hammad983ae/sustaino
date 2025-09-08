@@ -13,6 +13,7 @@ const PropertyDetails = () => {
   const [propertyTypes, setPropertyTypes] = useState({
     commercial: true,
     residential: false,
+    buildToRent: false,
     agriculture: false,
     developmentLand: false,
     specialized: false
@@ -31,6 +32,7 @@ const PropertyDetails = () => {
   const [tbeToggles, setTbeToggles] = useState({
     commercial: false,
     residential: false,
+    buildToRent: false,
     agriculture: false,
     developmentLand: false,
     specialized: false
@@ -147,7 +149,7 @@ const PropertyDetails = () => {
           {/* Property Type Selection */}
           <div>
             <Label className="text-base font-medium mb-4 block">Property Type</Label>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.commercial}
@@ -165,6 +167,15 @@ const PropertyDetails = () => {
                   }
                 />
                 <Label>Residential</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={propertyTypes.buildToRent}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, buildToRent: checked }))
+                  }
+                />
+                <Label>Build to Rent</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch

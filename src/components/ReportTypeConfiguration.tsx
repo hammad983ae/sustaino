@@ -57,7 +57,7 @@ const ReportTypeConfiguration = () => {
   ];
 
   const propertyTypes = [
-    "Residential", "Commercial", "Industrial", "Retail", 
+    "Residential", "Build to Rent", "Commercial", "Industrial", "Retail", 
     "Development Land", "Agricultural", "Other"
   ];
 
