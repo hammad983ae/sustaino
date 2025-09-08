@@ -136,10 +136,10 @@ const PropertyDetails = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="net-lettable-area">Net Lettable Area</Label>
+                    <Label htmlFor="lettable-area-type">Lettable Area Type</Label>
                     <Select>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select area type" />
+                        <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="gla">GLA</SelectItem>
@@ -148,6 +148,11 @@ const PropertyDetails = () => {
                         <SelectItem value="gba">GBA</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="area-measurement">Measurement (sqm)</Label>
+                    <Input id="area-measurement" placeholder="Enter area in sqm" />
                   </div>
 
                   <div>
@@ -285,10 +290,10 @@ const PropertyDetails = () => {
                   <h4 className="font-medium">Areas</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="glar">GLAR</Label>
+                      <Label htmlFor="glar-type">Lettable Area Type</Label>
                       <Select>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select area type" />
+                          <SelectValue placeholder="Select type" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="gla">GLA</SelectItem>
@@ -297,6 +302,10 @@ const PropertyDetails = () => {
                           <SelectItem value="gba">GBA</SelectItem>
                         </SelectContent>
                       </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="glar-measurement">Measurement (sqm)</Label>
+                      <Input id="glar-measurement" placeholder="Enter area in sqm" />
                     </div>
                     <div>
                       <Label htmlFor="awning">Awning (sqm)</Label>
