@@ -27,9 +27,10 @@ const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
     { title: "Sales Evidence (Commercial, Residential and Agricultural)", page: 12 },
     { title: "Leasing Evidence (Commercial, Residential and Agricultural)", page: 13 },
     { title: "Valuation Analysis and Rationale", page: 14 },
-    { title: "Valuation Certificate", page: 15 },
-    { title: "Qualifications, Disclaimers, Terms and Conditions", page: 16 },
-    { title: "Annexures", page: 17 }
+    { title: "Marketability and Mortgage Security", page: 15 },
+    { title: "Valuation Certificate", page: 16 },
+    { title: "Qualifications, Disclaimers, Terms and Conditions", page: 17 },
+    { title: "Annexures", page: 18 }
   ];
 
   return (

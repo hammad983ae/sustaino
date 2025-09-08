@@ -5,6 +5,7 @@ import LegalAndPlanning from "./LegalAndPlanning";
 import TenancyScheduleLeaseDetails from "./TenancyScheduleLeaseDetails";
 import StatutoryAssessment from "./StatutoryAssessment";
 import MarketCommentary from "./MarketCommentary";
+import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
 
 interface ReportSectionProps {
   title: string;
@@ -99,6 +100,21 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <StatutoryAssessment />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Marketability and Mortgage Security section
+  if (sectionIndex === 14) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <MarketabilityAndMortgageSecurity />
         </CardContent>
       </Card>
     );

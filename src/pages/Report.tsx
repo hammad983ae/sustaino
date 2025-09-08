@@ -23,6 +23,7 @@ const ReportViewer = () => {
     { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural" },
     { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },
     { title: "Valuation Analysis and Rationale" },
+    { title: "Marketability and Mortgage Security" },
     { title: "Valuation Certificate" },
     { title: "Qualifications, Disclaimers, Terms and Conditions" },
     { title: "Annexures" }
