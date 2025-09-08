@@ -16,6 +16,45 @@ const ProfessionalCompliance = () => {
         </CardHeader>
         <CardContent className="p-6 space-y-8">
           
+          {/* Definitions Section */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-foreground">Key Definitions</h3>
+            
+            <div className="grid grid-cols-1 gap-4">
+              {/* Market Value Definition */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                <div className="font-medium text-foreground">Market Value Definition</div>
+                <div className="text-foreground text-sm">
+                  The estimated amount for which an asset or liability should exchange on the valuation date between a willing buyer and a willing seller in an arm's length transaction, after proper marketing, where the parties had each acted knowledgeably, prudently, and without compulsion.
+                </div>
+              </div>
+              
+              {/* Market Rent Definition */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                <div className="font-medium text-foreground">Market Rent Definition</div>
+                <div className="text-foreground text-sm">
+                  The estimated amount for which an interest in real property should be leased on the valuation date between a willing lessor and a willing lessee on appropriate lease terms in an arm's length transaction, after proper marketing and where the parties had each acted knowledgeably, prudently and without compulsion.
+                </div>
+              </div>
+
+              {/* Market Movement Clause */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                <div className="font-medium text-foreground">Market Movement Clause</div>
+                <div className="text-foreground text-sm">
+                  "This valuation is current at the date of valuation only. The value assessed herein may change significantly and unexpectedly over a relatively short period of time (including as a result of general market movements or factors specific to the particular property). Liability for losses arising from such subsequent changes in value is excluded as is liability where the"
+                </div>
+              </div>
+
+              {/* Prudent Lender Clause */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/20">
+                <div className="font-medium text-foreground">Prudent Lender Clause</div>
+                <div className="text-foreground text-sm">
+                  "This valuation is prepared on the assumption that the lender as referred to in the valuation report (and no other), may rely on the valuation for mortgage finance purposes and the lender has complied with its own lending guidelines as well as prudent finance industry lending practices, and has considered all prudent aspects of credit risk for any potential borrower, including the borrower's ability to service and repay any mortgage loan. Further, the valuation is prepared on the assumption that any such lender is providing mortgage financing at a conservative and prudent loan to value ratio. This clause (Prudent Lender Clause) only applies if the lender is not a lender regulated by the Banking Act of 1959"."
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Professional Compliance & Certification */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-foreground">Professional Compliance & Certification</h3>
