@@ -161,6 +161,44 @@ const TermsAndConditions = () => {
             </div>
           </div>
 
+          {/* Environmental and Contamination Disclaimers */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground">Environmental and Contamination Disclaimers</h3>
+            <div className="space-y-3 text-sm text-foreground">
+              <p><strong>18. Environmental Assessment Limitations:</strong></p>
+              
+              <div className="pl-4 space-y-2">
+                <p>(a) We are not environmental specialists or experts in contamination assessment. Any environmental observations or assessments provided are general in nature and should not be relied upon as a comprehensive environmental investigation.</p>
+                
+                <p>(b) We recommend that You engage qualified environmental consultants to conduct detailed environmental investigations where there is any indication of potential contamination or environmental risk.</p>
+                
+                <p>(c) Our assessment of environmental factors is limited to visual inspection and readily apparent conditions. We do not conduct soil testing, air quality monitoring, or other specialist environmental testing unless specifically engaged and qualified to do so.</p>
+                
+                <p>(d) We exclude all liability for environmental contamination, hazardous substances, or other environmental conditions that are not readily apparent during inspection or that require specialist knowledge or testing to identify.</p>
+              </div>
+              
+              <p><strong>19. Contamination and Hazardous Substances:</strong></p>
+              
+              <div className="pl-4 space-y-2">
+                <p>(a) We do not warrant that the property is free from contamination by hazardous substances including but not limited to asbestos, lead paint, PFAS, petroleum products, chemicals, or residues from illegal drug activities.</p>
+                
+                <p>(b) The presence of contamination may significantly impact property value, marketability, financing options, and ongoing costs. You should seek specialist advice regarding potential contamination risks.</p>
+                
+                <p>(c) Where we identify potential contamination risks, this should be treated as preliminary only and professional environmental assessment is strongly recommended before making any property-related decisions.</p>
+                
+                <p>(d) We exclude liability for any costs associated with environmental remediation, ongoing monitoring, legal compliance, or health impacts related to environmental contamination.</p>
+              </div>
+              
+              <p><strong>20. Professional Indemnity Exclusions:</strong></p>
+              
+              <div className="pl-4 space-y-2">
+                <p>(a) Our Professional Indemnity Insurance may exclude or limit coverage for claims related to environmental contamination, hazardous substances, or specialist environmental advice.</p>
+                
+                <p>(b) You acknowledge that environmental risks may require separate specialist advice and insurance coverage.</p>
+              </div>
+            </div>
+          </div>
+
           {/* Additional Banking and Insurance Provisions */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Additional Banking and Insurance Provisions</h3>

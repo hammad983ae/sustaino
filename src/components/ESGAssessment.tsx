@@ -88,6 +88,17 @@ const ESGAssessment = () => {
                   </CardHeader>
                   {envSubsections.environmentalStatement && (
                     <CardContent className="space-y-4">
+                      {/* Contamination Risk Assessment */}
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-foreground">Contamination Risk Assessment</h4>
+                        <div className="p-4 border border-orange-200 bg-orange-50 dark:bg-orange-950/30 rounded-lg">
+                          <p className="text-sm text-orange-800 dark:text-orange-200 mb-2">
+                            <strong>Important:</strong> This assessment is not a substitute for professional environmental investigation. 
+                            Expert environmental assessment is recommended where contamination risk is identified.
+                          </p>
+                        </div>
+                      </div>
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="prev-contaminating-use">Previous Potential Contaminating Use</Label>
@@ -100,6 +111,27 @@ const ESGAssessment = () => {
                               <SelectItem value="evident">Evident</SelectItem>
                               <SelectItem value="possible">Possible</SelectItem>
                               <SelectItem value="unknown">Unknown</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="contaminating-activities">Potentially Contaminating Activities (Current/Historical)</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select activity type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none">None Identified</SelectItem>
+                              <SelectItem value="service-station">Service Station/Fuel Storage</SelectItem>
+                              <SelectItem value="dry-cleaning">Dry Cleaning</SelectItem>
+                              <SelectItem value="manufacturing">Manufacturing/Industrial</SelectItem>
+                              <SelectItem value="waste-disposal">Waste Disposal</SelectItem>
+                              <SelectItem value="agriculture">Agricultural/Horticultural</SelectItem>
+                              <SelectItem value="transport">Transport/Storage</SelectItem>
+                              <SelectItem value="healthcare">Healthcare/Laboratory</SelectItem>
+                              <SelectItem value="automotive">Automotive/Metal Treatment</SelectItem>
+                              <SelectItem value="chemical">Chemical/Paint Formulation</SelectItem>
+                              <SelectItem value="other">Other (specify in notes)</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -300,7 +332,208 @@ const ESGAssessment = () => {
                             </SelectContent>
                           </Select>
                         </div>
+                       </div>
+
+                       {/* Physical Contaminants */}
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-foreground">Physical Contaminants</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="lead-products">Lead Paint and Products</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="not-present">Not Present</SelectItem>
+                                <SelectItem value="possible">Possible (pre-1970s construction)</SelectItem>
+                                <SelectItem value="confirmed">Confirmed Present</SelectItem>
+                                <SelectItem value="unknown">Unknown</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="pfas-contamination">PFAS (PFOA/PFOS) Contamination</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="not-evident">Not Evident</SelectItem>
+                                <SelectItem value="possible">Possible Risk</SelectItem>
+                                <SelectItem value="confirmed">Confirmed</SelectItem>
+                                <SelectItem value="requires-testing">Requires Testing</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="drug-contamination">Clandestine Drug Activity Contamination</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="no-evidence">No Evidence</SelectItem>
+                                <SelectItem value="possible">Possible</SelectItem>
+                                <SelectItem value="confirmed">Confirmed</SelectItem>
+                                <SelectItem value="remediated">Previously Remediated</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="soil-contamination">Soil Contamination</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="not-evident">Not Evident</SelectItem>
+                                <SelectItem value="possible">Possible</SelectItem>
+                                <SelectItem value="confirmed">Confirmed</SelectItem>
+                                <SelectItem value="testing-required">Testing Required</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Non-Physical Contaminants */}
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-foreground">Non-Physical Contaminants</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="electromagnetic-radiation">Electromagnetic Radiation (Power Lines, Towers)</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select exposure" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">None</SelectItem>
+                                <SelectItem value="low">Low Exposure</SelectItem>
+                                <SelectItem value="moderate">Moderate Exposure</SelectItem>
+                                <SelectItem value="high">High Exposure</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="noise-pollution">Excessive Noise Levels</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select level" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="acceptable">Acceptable</SelectItem>
+                                <SelectItem value="moderate">Moderate</SelectItem>
+                                <SelectItem value="excessive">Excessive</SelectItem>
+                                <SelectItem value="requires-assessment">Requires Professional Assessment</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="air-pollution">Air Pollution</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select level" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="minimal">Minimal</SelectItem>
+                                <SelectItem value="moderate">Moderate</SelectItem>
+                                <SelectItem value="significant">Significant</SelectItem>
+                                <SelectItem value="unknown">Unknown</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="radioactive-materials">Radioactive Materials/Sources</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">None</SelectItem>
+                                <SelectItem value="possible">Possible</SelectItem>
+                                <SelectItem value="confirmed">Confirmed</SelectItem>
+                                <SelectItem value="requires-investigation">Requires Investigation</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Impact Assessment */}
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-foreground">Contamination Impact Assessment</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="remediation-costs">Estimated Remediation Costs</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select cost range" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                                <SelectItem value="under-50k">Under $50,000</SelectItem>
+                                <SelectItem value="50k-200k">$50,000 - $200,000</SelectItem>
+                                <SelectItem value="200k-500k">$200,000 - $500,000</SelectItem>
+                                <SelectItem value="over-500k">Over $500,000</SelectItem>
+                                <SelectItem value="requires-assessment">Requires Professional Assessment</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="financing-impact">Impact on Property Financing</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select impact" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">No Impact</SelectItem>
+                                <SelectItem value="minimal">Minimal Impact</SelectItem>
+                                <SelectItem value="significant">Significant Impact</SelectItem>
+                                <SelectItem value="prevents-financing">May Prevent Financing</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="market-stigma">Market Stigma Impact</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select impact" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">No Stigma</SelectItem>
+                                <SelectItem value="temporary">Temporary Impact</SelectItem>
+                                <SelectItem value="ongoing">Ongoing Impact</SelectItem>
+                                <SelectItem value="permanent">Permanent Impact</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="liability-risks">Ongoing Liability Risks</Label>
+                            <Select>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select risk level" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low Risk</SelectItem>
+                                <SelectItem value="moderate">Moderate Risk</SelectItem>
+                                <SelectItem value="high">High Risk</SelectItem>
+                                <SelectItem value="requires-legal-advice">Requires Legal Advice</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="expert-recommendations">Expert Assessment Recommendations</Label>
+                        <Textarea
+                          id="expert-recommendations"
+                          placeholder="Specify any recommendations for expert environmental assessment, testing, or remediation advice..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
+
                       <div>
                         <Label htmlFor="env-other">Other Environmental Issues</Label>
                         <Textarea
