@@ -6,17 +6,44 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { AlertTriangle, CheckCircle, FileText, TrendingUp } from "lucide-react";
 
 const MarketabilityAndMortgageSecurity = () => {
   return (
     <div className="space-y-6">
+      {/* Is Property Suitable For Mortgage Purposes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Property Suitability for Mortgage Purposes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Label htmlFor="mortgage-suitable">Is property Suitable For Mortgage Purposes?</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Yes or No" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="yes">Yes</SelectItem>
+                <SelectItem value="no">No</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
       {/* Marketability Assessment */}
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
-            <CardTitle>Marketability Assessment</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              <CardTitle>Marketability Assessment</CardTitle>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="marketability-toggle">Include Section</Label>
+              <Switch id="marketability-toggle" defaultChecked />
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -64,9 +91,15 @@ const MarketabilityAndMortgageSecurity = () => {
       {/* Mortgage Security Assessment */}
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <CheckCircle className="h-5 w-5" />
-            <CardTitle>Mortgage Security Assessment</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5" />
+              <CardTitle>Mortgage Security Assessment</CardTitle>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="security-toggle">Include Section</Label>
+              <Switch id="security-toggle" defaultChecked />
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -116,24 +149,57 @@ const MarketabilityAndMortgageSecurity = () => {
       {/* Risk Factors */}
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            <CardTitle>Risk Analysis</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5" />
+              <CardTitle>Risk Analysis</CardTitle>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="risk-toggle">Include Section</Label>
+              <Switch id="risk-toggle" defaultChecked />
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 border rounded-lg">
+            <div className="text-center p-4 border rounded-lg space-y-2">
               <div className="font-semibold text-sm text-muted-foreground mb-2">MARKET RISK</div>
-              <Badge variant="secondary">Low</Badge>
+              <Select defaultValue="low">
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div className="text-center p-4 border rounded-lg">
+            <div className="text-center p-4 border rounded-lg space-y-2">
               <div className="font-semibold text-sm text-muted-foreground mb-2">LIQUIDITY RISK</div>
-              <Badge variant="secondary">Medium</Badge>
+              <Select defaultValue="medium">
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div className="text-center p-4 border rounded-lg">
+            <div className="text-center p-4 border rounded-lg space-y-2">
               <div className="font-semibold text-sm text-muted-foreground mb-2">CREDIT RISK</div>
-              <Badge variant="secondary">Low</Badge>
+              <Select defaultValue="low">
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -153,9 +219,15 @@ const MarketabilityAndMortgageSecurity = () => {
       {/* Lender Considerations */}
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
-            <CardTitle>Lender Considerations</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              <CardTitle>Lender Considerations</CardTitle>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="lender-toggle">Include Section</Label>
+              <Switch id="lender-toggle" defaultChecked />
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
