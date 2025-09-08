@@ -22,6 +22,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Label } from "./ui/label";
 
 interface Valuation {
   id: string;
@@ -63,6 +65,13 @@ export default function WorkHub() {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  // Email dialog state
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  const [emailAddress, setEmailAddress] = useState('');
+  const [emailType, setEmailType] = useState<'view' | 'export'>('view');
+  const [selectedAnalysis, setSelectedAnalysis] = useState<any>(null);
+  const [emailLoading, setEmailLoading] = useState(false);
 
   useEffect(() => {
     fetchAllWork();
@@ -146,6 +155,56 @@ export default function WorkHub() {
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       case 'in_progress': return 'bg-blue-100 text-blue-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const handleEmailAction = (analysis: any, type: 'view' | 'export', analysisType: 'valuation' | 'report' | 'costa') => {
+    setSelectedAnalysis({ ...analysis, analysisType });
+    setEmailType(type);
+    setEmailDialogOpen(true);
+  };
+
+  const sendAnalysisEmail = async () => {
+    if (!emailAddress.trim()) {
+      toast({
+        title: "Email required",
+        description: "Please enter an email address",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setEmailLoading(true);
+    try {
+      const { error } = await supabase.functions.invoke('send-analysis', {
+        body: {
+          to: emailAddress,
+          subject: `${emailType === 'view' ? 'View' : 'Export'} - ${selectedAnalysis?.title || selectedAnalysis?.property_address || 'Analysis'}`,
+          type: emailType,
+          analysisData: selectedAnalysis,
+          analysisType: selectedAnalysis?.analysisType
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: `${emailType === 'view' ? 'Analysis' : 'Export'} sent successfully`,
+        description: `The ${emailType === 'view' ? 'analysis details' : 'export'} has been sent to ${emailAddress}`,
+      });
+
+      setEmailDialogOpen(false);
+      setEmailAddress('');
+      setSelectedAnalysis(null);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Email failed",
+        description: "Failed to send the analysis. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setEmailLoading(false);
     }
   };
 
@@ -326,11 +385,19 @@ export default function WorkHub() {
                         </div>
                         
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEmailAction(valuation, 'view', 'valuation')}
+                          >
                             <Eye className="h-4 w-4 mr-2" />
                             View
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEmailAction(valuation, 'export', 'valuation')}
+                          >
                             <Download className="h-4 w-4 mr-2" />
                             Export
                           </Button>
@@ -390,11 +457,19 @@ export default function WorkHub() {
                         </div>
                         
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEmailAction(report, 'view', 'report')}
+                          >
                             <Eye className="h-4 w-4 mr-2" />
                             View
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEmailAction(report, 'export', 'report')}
+                          >
                             <Download className="h-4 w-4 mr-2" />
                             Download
                           </Button>
@@ -449,11 +524,19 @@ export default function WorkHub() {
                         </div>
                         
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEmailAction(analysis, 'view', 'costa')}
+                          >
                             <Eye className="h-4 w-4 mr-2" />
                             View
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEmailAction(analysis, 'export', 'costa')}
+                          >
                             <Download className="h-4 w-4 mr-2" />
                             Export
                           </Button>
@@ -467,6 +550,57 @@ export default function WorkHub() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Email Dialog */}
+      <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {emailType === 'view' ? 'Email Analysis Details' : 'Email Export'}
+            </DialogTitle>
+            <DialogDescription>
+              {emailType === 'view' 
+                ? 'Send analysis details to your email for review'
+                : 'Export and send comprehensive analysis data to your email'
+              }
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={emailAddress}
+                onChange={(e) => setEmailAddress(e.target.value)}
+                placeholder="Enter email address"
+                className="col-span-3"
+              />
+            </div>
+            
+            {selectedAnalysis && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Analysis</Label>
+                <div className="col-span-3 text-sm text-muted-foreground">
+                  {selectedAnalysis.title || selectedAnalysis.property_address || 'Analysis Data'}
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEmailDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={sendAnalysisEmail} disabled={emailLoading}>
+              {emailLoading ? 'Sending...' : `Send ${emailType === 'view' ? 'Analysis' : 'Export'}`}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
