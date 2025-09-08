@@ -15,6 +15,8 @@ import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
 import ValuationAnalysis from "./ValuationAnalysis";
 import SustainoProAnalysis from "./SustainoProAnalysis";
+import ProfessionalCompliance from "./ProfessionalCompliance";
+import TermsAndConditions from "./TermsAndConditions";
 import SecurityAndCertificates from "./SecurityAndCertificates";
 
 interface ReportSectionProps {
@@ -260,6 +262,36 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <SustainoProAnalysis />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Professional Compliance & Certification section (Section 17)
+  if (sectionIndex === 16) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <ProfessionalCompliance />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Terms and Conditions section (Section 18)
+  if (sectionIndex === 17) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <TermsAndConditions />
         </CardContent>
       </Card>
     );
