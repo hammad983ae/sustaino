@@ -38,6 +38,19 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* ESG Enhancement Colors - Added from your platform */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 210 24% 16%;
+    --info: 210 92% 45%;
+    --info-foreground: 0 0% 98%;
+    
+    /* Risk Assessment Colors - For property analysis */
+    --risk-low: 142 76% 36%;
+    --risk-moderate: 43 96% 56%;
+    --risk-high: 0 84% 60%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;

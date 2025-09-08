@@ -16,7 +16,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       description: "Office, retail, industrial, and investment properties",
       icon: Building2,
       features: ["Income analysis", "Tenant assessment", "Market yields", "WALE calculations"],
-      color: "bg-blue-50 border-blue-200 hover:bg-blue-100"
+      color: "bg-gradient-to-br from-card to-info/10 border-info/20"
     },
     {
       id: "residential",
@@ -24,7 +24,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       description: "Houses, units, townhouses, and residential investments",
       icon: Home,
       features: ["Comparable sales", "Rental yields", "Market trends", "Condition assessment"],
-      color: "bg-green-50 border-green-200 hover:bg-green-100"
+      color: "bg-gradient-to-br from-card to-success/10 border-success/20"
     },
     {
       id: "agricultural",
@@ -32,7 +32,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       description: "Farms, rural land, and agricultural enterprises",
       icon: Trees,
       features: ["Land productivity", "Water rights", "Carbon credits", "Commodity analysis"],
-      color: "bg-amber-50 border-amber-200 hover:bg-amber-100"
+      color: "bg-gradient-to-br from-card to-warning/10 border-warning/20"
     },
     {
       id: "specialised",
@@ -40,7 +40,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       description: "Purpose-built assets with unique operational requirements",
       icon: Factory,
       features: ["Replacement cost", "Operational analysis", "Industry metrics", "Specialized comps"],
-      color: "bg-purple-50 border-purple-200 hover:bg-purple-100"
+      color: "bg-gradient-to-br from-card to-primary/10 border-primary/20"
     }
   ];
 
