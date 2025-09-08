@@ -15,7 +15,7 @@ import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
 import ValuationAnalysis from "./ValuationAnalysis";
 import SustainoProAnalysis from "./SustainoProAnalysis";
-import ProfessionalCompliance from "./ProfessionalCompliance";
+import ValuationCertificate from "./ValuationCertificate";
 import TermsAndConditions from "./TermsAndConditions";
 import SecurityAndCertificates from "./SecurityAndCertificates";
 
@@ -267,7 +267,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Professional Compliance & Certification section (Section 17)
+  // Special handling for Valuation Certificate section (Section 17)
   if (sectionIndex === 16) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -276,7 +276,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <ProfessionalCompliance />
+          <ValuationCertificate />
         </CardContent>
       </Card>
     );
