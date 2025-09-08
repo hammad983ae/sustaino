@@ -52,7 +52,9 @@ Always provide professional, accurate, and actionable advice. When discussing fi
 
 Context about the user's current activity: ${context || 'General property consultation'}`;
 
-    console.log('Making OpenAI API call...');
+    console.log('System prompt created, making OpenAI API call...');
+    console.log('Message:', message);
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -87,8 +89,14 @@ Context about the user's current activity: ${context || 'General property consul
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error('Error in property-ai-assistant:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error('Detailed error in property-ai-assistant:', error);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      details: 'Check function logs for more information'
+    }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
