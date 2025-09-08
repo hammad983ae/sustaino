@@ -240,6 +240,7 @@ export const CostaGroupPortfolio = () => {
       const { data, error } = await supabase
         .from('costa_portfolio_analyses')
         .select('*')
+        .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
 
       if (error) throw error;

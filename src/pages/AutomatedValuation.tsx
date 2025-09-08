@@ -13,6 +13,7 @@ import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
 import BrandedHeader from "@/components/BrandedHeader";
+import DashboardCompletedWork from "@/components/DashboardCompletedWork";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
@@ -39,6 +40,7 @@ export default function AutomatedValuation() {
   if (currentStep === "propertyType") {
     return (
       <div className="space-y-8">
+        <DashboardCompletedWork />
         <CostaGroupPortfolio />
         <ComprehensiveIPProtection />
         <SecurityCertificatesGrid />
