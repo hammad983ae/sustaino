@@ -136,8 +136,18 @@ const PropertyDetails = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="net-lettable-area">Net Lettable Area (sqm)</Label>
-                    <Input id="net-lettable-area" placeholder="Enter lettable area" />
+                    <Label htmlFor="net-lettable-area">Net Lettable Area</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select area type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="gla">GLA</SelectItem>
+                        <SelectItem value="nla">NLA</SelectItem>
+                        <SelectItem value="glar">GLAR</SelectItem>
+                        <SelectItem value="gba">GBA</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
@@ -185,14 +195,6 @@ const PropertyDetails = () => {
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="additional-features">Additional Features</Label>
-                  <Textarea 
-                    id="additional-features" 
-                    placeholder="Describe additional commercial features, amenities, and characteristics..."
-                    className="min-h-[100px]"
-                  />
-                </div>
 
                 {/* Construction Details */}
                 <div className="space-y-4">
@@ -267,6 +269,15 @@ const PropertyDetails = () => {
                       <Input id="communal-areas" placeholder="Communal areas" />
                     </div>
                   </div>
+                  
+                  <div>
+                    <Label htmlFor="additional-features">Additional Features</Label>
+                    <Textarea 
+                      id="additional-features" 
+                      placeholder="Describe additional commercial features, amenities, and characteristics..."
+                      className="min-h-[100px]"
+                    />
+                  </div>
                 </div>
 
                 {/* Areas */}
@@ -274,8 +285,18 @@ const PropertyDetails = () => {
                   <h4 className="font-medium">Areas</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="glar">GLAR (sqm)</Label>
-                      <Input id="glar" placeholder="Gross lettable area" />
+                      <Label htmlFor="glar">GLAR</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select area type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="gla">GLA</SelectItem>
+                          <SelectItem value="nla">NLA</SelectItem>
+                          <SelectItem value="glar">GLAR</SelectItem>
+                          <SelectItem value="gba">GBA</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
                       <Label htmlFor="awning">Awning (sqm)</Label>
