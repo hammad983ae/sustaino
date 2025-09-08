@@ -416,8 +416,10 @@ export default function WorkHub() {
                               <p className="font-medium">{formatDate(analysis.updated_at)}</p>
                             </div>
                             <div>
-                              <p className="text-muted-foreground">Type</p>
-                              <p className="font-medium">Portfolio Analysis</p>
+                              <p className="text-muted-foreground">Analysis Data</p>
+                              <p className="font-medium">
+                                {analysis.analysis_data?.locationCount || 0} locations
+                              </p>
                             </div>
                           </div>
                         </div>

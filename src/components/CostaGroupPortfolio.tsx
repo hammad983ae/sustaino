@@ -275,6 +275,12 @@ export const CostaGroupPortfolio = () => {
         selectedLocation,
         carbonCreditPrice,
         carbonReductionTarget,
+        locationCount: filteredLocations.length,
+        totalPropertyValue,
+        totalEquipmentValue,
+        totalHectares,
+        totalWaterUsage,
+        carbonCreditValue: carbonSwapBenefits.creditValue,
         timestamp: new Date().toISOString()
       };
 
