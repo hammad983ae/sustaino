@@ -29,6 +29,7 @@ const PreviousSalesHistoryAndCurrentSale = () => {
   const [settlementPeriod, setSettlementPeriod] = useState("");
   const [transactionComments, setTransactionComments] = useState("");
   const [currentTransactionDate, setCurrentTransactionDate] = useState<Date>();
+  const [currentSaleMethod, setCurrentSaleMethod] = useState("");
   
   // Transaction Analysis dates
   const [transactionDate, setTransactionDate] = useState<Date>();
@@ -214,7 +215,7 @@ const PreviousSalesHistoryAndCurrentSale = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="marketing-period">Marketing Period</Label>
                 <Input
@@ -233,6 +234,23 @@ const PreviousSalesHistoryAndCurrentSale = () => {
                   value={settlementPeriod}
                   onChange={(e) => setSettlementPeriod(e.target.value)}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="current-sale-method">Sale Method</Label>
+                <Select value={currentSaleMethod} onValueChange={setCurrentSaleMethod}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="private-treaty">Private Treaty</SelectItem>
+                    <SelectItem value="auction">Auction</SelectItem>
+                    <SelectItem value="tender">Tender</SelectItem>
+                    <SelectItem value="expression-of-interest">Expression of Interest</SelectItem>
+                    <SelectItem value="off-market">Off Market</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
