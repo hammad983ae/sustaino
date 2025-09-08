@@ -10,6 +10,7 @@ import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
+import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
@@ -37,6 +38,7 @@ export default function AutomatedValuation() {
     return (
       <div className="space-y-8">
         <ComprehensiveIPProtection />
+        <SecurityCertificatesGrid />
         <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
       </div>
     );
