@@ -12,6 +12,8 @@ import { MapPin, TrendingUp, Leaf, DollarSign, Calculator, BarChart3, Save, Fold
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import AuthStatus from "./AuthStatus";
+import BrandedHeader from "./BrandedHeader";
+import { useBranding } from "@/contexts/BrandingContext";
 
 interface Location {
   id: string;
@@ -81,6 +83,7 @@ export const CostaGroupPortfolio = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
+  const { branding } = useBranding();
 
   const waterAllocations: WaterAllocation[] = [
     { locationId: 'wa-gingin', permanentWaterRights: 85, temporaryWaterAllocations: 95, permanentPrice: 1200, temporaryPrice: 850, waterEfficiency: 13.3, totalWaterCost: 182750, waterRiskScore: 0.35 },
@@ -398,10 +401,10 @@ export const CostaGroupPortfolio = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Costa Group Portfolio Analysis</h1>
-          <p className="text-muted-foreground">Comprehensive asset valuation and ESG strategy analysis</p>
-        </div>
+        <BrandedHeader 
+          title={`${branding?.company_name || 'Portfolio'} Analysis`}
+          subtitle="Comprehensive asset valuation and ESG strategy analysis"
+        />
         <div className="flex items-center gap-3">
           <AuthStatus />
           {user && (

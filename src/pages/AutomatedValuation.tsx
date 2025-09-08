@@ -12,6 +12,7 @@ import AutomatedReport from "./AutomatedReport";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
+import BrandedHeader from "@/components/BrandedHeader";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");

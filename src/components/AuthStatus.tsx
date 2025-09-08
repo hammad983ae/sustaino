@@ -109,6 +109,10 @@ export default function AuthStatus() {
           <Settings className="mr-2 h-4 w-4" />
           Manage Valuations
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/white-label')}>
+          <Settings className="mr-2 h-4 w-4" />
+          White Label Config
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
