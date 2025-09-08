@@ -189,7 +189,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Sales Evidence section
-  if (sectionIndex === 11) {
+  if (sectionIndex === 12) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -204,7 +204,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Leasing Evidence section
-  if (sectionIndex === 14) {
+  if (sectionIndex === 13) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -219,7 +219,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Valuation Analysis section
-  if (sectionIndex === 15) {
+  if (sectionIndex === 14) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -234,7 +234,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Marketability and Mortgage Security section
-  if (sectionIndex === 16) {
+  if (sectionIndex === 15) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
