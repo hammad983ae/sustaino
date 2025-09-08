@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { MapPin, TrendingUp, Leaf, DollarSign, Calculator, BarChart3 } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { MapPin, TrendingUp, Leaf, DollarSign, Calculator, BarChart3, Save, FolderOpen, Trash2 } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Location {
   id: string;
@@ -70,6 +73,13 @@ export const CostaGroupPortfolio = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
   const [carbonCreditPrice, setCarbonCreditPrice] = useState<number>(35);
   const [carbonReductionTarget, setCarbonReductionTarget] = useState<number>(15);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [loadDialogOpen, setLoadDialogOpen] = useState(false);
+  const [analysisTitle, setAnalysisTitle] = useState('');
+  const [savedAnalyses, setSavedAnalyses] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const { toast } = useToast();
 
   const waterAllocations: WaterAllocation[] = [
     { locationId: 'wa-gingin', permanentWaterRights: 85, temporaryWaterAllocations: 95, permanentPrice: 1200, temporaryPrice: 850, waterEfficiency: 13.3, totalWaterCost: 182750, waterRiskScore: 0.35 },
@@ -197,6 +207,163 @@ export const CostaGroupPortfolio = () => {
     }
   ];
 
+  // Authentication and data loading
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+      if (session?.user) {
+        loadSavedAnalyses();
+      }
+    };
+
+    checkUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+      if (session?.user) {
+        loadSavedAnalyses();
+      } else {
+        setSavedAnalyses([]);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const loadSavedAnalyses = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('costa_portfolio_analyses')
+        .select('*')
+        .order('updated_at', { ascending: false });
+
+      if (error) throw error;
+      setSavedAnalyses(data || []);
+    } catch (error) {
+      console.error('Error loading analyses:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load saved analyses",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const saveAnalysis = async () => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to save analyses",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!analysisTitle.trim()) {
+      toast({
+        title: "Title Required",
+        description: "Please enter a title for this analysis",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const analysisData = {
+        selectedLocation,
+        carbonCreditPrice,
+        carbonReductionTarget,
+        timestamp: new Date().toISOString()
+      };
+
+      const { error } = await supabase
+        .from('costa_portfolio_analyses')
+        .insert({
+          user_id: user.id,
+          title: analysisTitle.trim(),
+          analysis_data: analysisData
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Analysis saved successfully",
+      });
+
+      setAnalysisTitle('');
+      setSaveDialogOpen(false);
+      loadSavedAnalyses();
+    } catch (error) {
+      console.error('Error saving analysis:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save analysis",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadAnalysis = async (analysisId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('costa_portfolio_analyses')
+        .select('*')
+        .eq('id', analysisId)
+        .single();
+
+      if (error) throw error;
+
+      const analysisData = data.analysis_data as any;
+      setSelectedLocation(analysisData?.selectedLocation || 'all');
+      setCarbonCreditPrice(analysisData?.carbonCreditPrice || 35);
+      setCarbonReductionTarget(analysisData?.carbonReductionTarget || 15);
+
+      toast({
+        title: "Success",
+        description: `Loaded analysis: ${data.title}`,
+      });
+
+      setLoadDialogOpen(false);
+    } catch (error) {
+      console.error('Error loading analysis:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load analysis",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const deleteAnalysis = async (analysisId: string) => {
+    try {
+      const { error } = await supabase
+        .from('costa_portfolio_analyses')
+        .delete()
+        .eq('id', analysisId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Analysis deleted successfully",
+      });
+
+      loadSavedAnalyses();
+    } catch (error) {
+      console.error('Error deleting analysis:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete analysis",
+        variant: "destructive",
+      });
+    }
+  };
+
   const calculateCarbonCreditSwapBenefits = () => {
     const currentEmissions = 132282; // tonnes CO2-e (2023-24 data)
     const reductionTarget = (carbonReductionTarget / 100) * currentEmissions;
@@ -228,10 +395,106 @@ export const CostaGroupPortfolio = () => {
           <h1 className="text-3xl font-bold text-foreground">Costa Group Portfolio Analysis</h1>
           <p className="text-muted-foreground">Comprehensive asset valuation and ESG strategy analysis</p>
         </div>
-        <Badge variant="outline" className="text-sm">
-          <Leaf className="w-4 h-4 mr-1" />
-          Sustainability Report 2024
-        </Badge>
+        <div className="flex items-center gap-3">
+          {user && (
+            <>
+              <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Analysis
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Save Portfolio Analysis</DialogTitle>
+                    <DialogDescription>
+                      Enter a title for this analysis to save it for later reference.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="title" className="text-right">
+                        Title
+                      </Label>
+                      <Input
+                        id="title"
+                        value={analysisTitle}
+                        onChange={(e) => setAnalysisTitle(e.target.value)}
+                        className="col-span-3"
+                        placeholder="e.g., Q4 2024 Analysis"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={saveAnalysis} disabled={isLoading}>
+                      {isLoading ? 'Saving...' : 'Save Analysis'}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={loadDialogOpen} onOpenChange={setLoadDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <FolderOpen className="h-4 w-4 mr-2" />
+                    Load Analysis
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>Load Saved Analysis</DialogTitle>
+                    <DialogDescription>
+                      Select a previously saved analysis to load.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="max-h-96 overflow-y-auto">
+                    {savedAnalyses.length === 0 ? (
+                      <p className="text-center text-muted-foreground py-8">
+                        No saved analyses found
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {savedAnalyses.map((analysis) => (
+                          <Card key={analysis.id} className="cursor-pointer hover:shadow-md transition-shadow">
+                            <CardContent className="p-4">
+                              <div className="flex items-center justify-between">
+                                <div onClick={() => loadAnalysis(analysis.id)} className="flex-1">
+                                  <h4 className="font-medium">{analysis.title}</h4>
+                                  <p className="text-sm text-muted-foreground">
+                                    {new Date(analysis.updated_at).toLocaleDateString()} at{' '}
+                                    {new Date(analysis.updated_at).toLocaleTimeString()}
+                                  </p>
+                                </div>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteAnalysis(analysis.id);
+                                  }}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+          {!user && (
+            <Badge variant="outline">Login to save analyses</Badge>
+          )}
+          <Badge variant="outline" className="text-sm">
+            <Leaf className="w-4 h-4 mr-1" />
+            Sustainability Report 2024
+          </Badge>
+        </div>
       </div>
 
       <Tabs defaultValue="locations" className="space-y-6">

@@ -53,6 +53,33 @@ export type Database = {
         }
         Relationships: []
       }
+      costa_portfolio_analyses: {
+        Row: {
+          analysis_data: Json
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          analysis_data: Json
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          analysis_data?: Json
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       document_uploads: {
         Row: {
           admin_notes: string | null
