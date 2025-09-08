@@ -160,10 +160,10 @@ const ReportTypeConfiguration = () => {
               </div>
 
               <div>
-                <Label htmlFor="instructing-rely" className="text-sm font-medium">Instructing Party</Label>
+                <Label htmlFor="reliant-party" className="text-sm font-medium">Reliant Party</Label>
                 <Textarea 
-                  id="instructing-rely"
-                  placeholder="Enter instructing party"
+                  id="reliant-party"
+                  placeholder="Enter reliant party"
                   className="mt-1"
                 />
               </div>
