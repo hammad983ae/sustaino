@@ -20,6 +20,9 @@ const PropertyDetails = () => {
   const [certifications, setCertifications] = useState({
     include: false,
     bulkData: false,
+    professionalDates: false,
+    valuerCredentials: false,
+    complianceStatement: false,
     greenBuilding: false,
     sustainability: false,
     improvements: false
@@ -1507,7 +1510,7 @@ const PropertyDetails = () => {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center justify-between">
-                Certifications & Compliance
+                Professional Compliance & Certification
                 <Switch
                   checked={certifications.include}
                   onCheckedChange={(checked) => 
@@ -1516,15 +1519,15 @@ const PropertyDetails = () => {
                 />
               </CardTitle>
               <p className="text-sm text-muted-foreground">
-                Document certifications, compliance status, and sustainability features.
+                Document professional compliance, certifications, and valuation standards adherence.
               </p>
             </CardHeader>
             {certifications.include && (
               <CardContent className="space-y-6">
-                {/* Bulk Certification Data */}
+                {/* Bulk Compliance Data */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="text-base font-medium">Bulk Certification Data (Auto-Categorizes)</Label>
+                    <Label className="text-base font-medium">Bulk Compliance Data (Auto-Categorizes)</Label>
                     <Switch
                       checked={certifications.bulkData}
                       onCheckedChange={(checked) => 
@@ -1534,8 +1537,87 @@ const PropertyDetails = () => {
                   </div>
                   {certifications.bulkData && (
                     <Textarea
-                      placeholder="Paste certification, compliance, or legal information here..."
+                      placeholder="Paste compliance, certification, or legal information here..."
                       className="min-h-[120px]"
+                    />
+                  )}
+                </div>
+
+                {/* Professional Dates */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Professional Dates</Label>
+                    <Switch
+                      checked={certifications.professionalDates}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, professionalDates: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.professionalDates && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <Label htmlFor="inspection-date">Inspection Date</Label>
+                        <Input 
+                          id="inspection-date" 
+                          type="date"
+                          placeholder="dd/mm/yyyy" 
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="report-date">Report Date</Label>
+                        <Input 
+                          id="report-date" 
+                          type="date"
+                          placeholder="dd/mm/yyyy" 
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="next-review-date">Next Review Date</Label>
+                        <Input 
+                          id="next-review-date" 
+                          type="date"
+                          placeholder="dd/mm/yyyy" 
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Valuer Credentials & Qualifications */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Valuer Credentials & Qualifications</Label>
+                    <Switch
+                      checked={certifications.valuerCredentials}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, valuerCredentials: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.valuerCredentials && (
+                    <Input
+                      placeholder="API Certified Practicing Valuer"
+                      className="min-h-[40px]"
+                    />
+                  )}
+                </div>
+
+                {/* Compliance Statement */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Compliance Statement</Label>
+                    <Switch
+                      checked={certifications.complianceStatement}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, complianceStatement: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.complianceStatement && (
+                    <Textarea
+                      placeholder="This valuation has been prepared in accordance with Australian Property Institute standards and International Valuation Standards."
+                      className="min-h-[80px]"
                     />
                   )}
                 </div>
