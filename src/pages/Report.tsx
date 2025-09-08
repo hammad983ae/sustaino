@@ -24,9 +24,11 @@ const ReportViewer = () => {
     { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },
     { title: "Valuation Analysis and Rationale" },
     { title: "Marketability and Mortgage Security" },
+    { title: "Sustaino Pro Additional Analysis and Features" },
     { title: "Valuation Certificate" },
     { title: "Qualifications, Disclaimers, Terms and Conditions" },
-    { title: "Annexures" }
+    { title: "Annexures" },
+    { title: "Security and Certificates" }
   ];
 
   const navigateToSection = (sectionIndex: number) => {

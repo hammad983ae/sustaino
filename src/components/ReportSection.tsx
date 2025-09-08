@@ -14,6 +14,8 @@ import PreviousSalesHistoryAndCurrentSale from "./PreviousSalesHistoryAndCurrent
 import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
 import ValuationAnalysis from "./ValuationAnalysis";
+import SustainoProAnalysis from "./SustainoProAnalysis";
+import SecurityAndCertificates from "./SecurityAndCertificates";
 
 interface ReportSectionProps {
   title: string;
@@ -243,6 +245,36 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <MarketabilityAndMortgageSecurity />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Sustaino Pro Additional Analysis and Features section
+  if (sectionIndex === 15) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <SustainoProAnalysis />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Security and Certificates section
+  if (sectionIndex === 19) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <SecurityAndCertificates />
         </CardContent>
       </Card>
     );
