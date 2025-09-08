@@ -6,7 +6,7 @@ import TenancyScheduleLeaseDetails from "./TenancyScheduleLeaseDetails";
 import StatutoryAssessment from "./StatutoryAssessment";
 import MarketCommentary from "./MarketCommentary";
 import PropertyDetails from "./PropertyDetails";
-import EnvironmentalAudit from "./EnvironmentalAudit";
+import ESGAssessment from "./ESGAssessment";
 import EssentialRepairs from "./EssentialRepairs";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
 
@@ -132,7 +132,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <EnvironmentalAudit />
+          <ESGAssessment />
         </CardContent>
       </Card>
     );
