@@ -490,36 +490,92 @@ const PropertyDetails = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="site-area">Site Area (sqm)</Label>
-                    <Input id="site-area" placeholder="Site area" />
-                  </div>
-                  <div>
-                    <Label htmlFor="zoning">Zoning</Label>
-                    <Input id="zoning" placeholder="Current zoning" />
-                  </div>
-                  <div>
                     <Label htmlFor="development-potential">Development Potential</Label>
-                    <Input id="development-potential" placeholder="Development potential" />
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select potential use" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="residential">Residential</SelectItem>
+                        <SelectItem value="commercial">Commercial</SelectItem>
+                        <SelectItem value="industrial">Industrial</SelectItem>
+                        <SelectItem value="mixed-use">Mixed Use</SelectItem>
+                        <SelectItem value="agricultural">Agricultural</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
+
                   <div>
-                    <Label htmlFor="planning-permits">Planning Permits</Label>
-                    <Input id="planning-permits" placeholder="Existing permits" />
+                    <Label htmlFor="potential-yield">Potential Yield</Label>
+                    <Input id="potential-yield" placeholder="Estimated lots/units" />
                   </div>
+
+                  <div>
+                    <Label htmlFor="total-area-hectares">Total Area (hectares)</Label>
+                    <Input id="total-area-hectares" placeholder="Total land area" />
+                  </div>
+
                   <div>
                     <Label htmlFor="infrastructure">Infrastructure</Label>
-                    <Input id="infrastructure" placeholder="Available infrastructure" />
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Infrastructure status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fully-serviced">Fully Serviced</SelectItem>
+                        <SelectItem value="partial">Partial Services</SelectItem>
+                        <SelectItem value="minimal">Minimal Services</SelectItem>
+                        <SelectItem value="none">No Services</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
+
                   <div>
-                    <Label htmlFor="site-constraints">Site Constraints</Label>
-                    <Input id="site-constraints" placeholder="Development constraints" />
+                    <Label htmlFor="zoning">Zoning</Label>
+                    <Input id="zoning" placeholder="Current zoning designation" />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="access">Access</Label>
+                    <Input id="access" placeholder="Road access details" />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="planning-status">Planning Status</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="approved">Approved</SelectItem>
+                        <SelectItem value="pending">Pending Approval</SelectItem>
+                        <SelectItem value="pre-application">Pre-Application</SelectItem>
+                        <SelectItem value="none">No Application</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="development-timeframe">Development Timeframe</Label>
+                    <Input id="development-timeframe" placeholder="Estimated development period" />
                   </div>
                 </div>
+
                 <div>
-                  <Label htmlFor="development-features">Development Features</Label>
+                  <Label htmlFor="development-constraints">Development Constraints</Label>
                   <Textarea 
-                    id="development-features" 
-                    placeholder="Describe development opportunities and constraints..."
-                    className="min-h-[100px]"
+                    id="development-constraints" 
+                    placeholder="Describe topography, environmental factors, planning restrictions..."
+                    className="min-h-[120px]"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="general-property-description">General Property Description</Label>
+                  <Textarea 
+                    id="general-property-description" 
+                    placeholder="Provide overall property description, location context, and key characteristics..."
+                    className="min-h-[120px]"
                   />
                 </div>
               </CardContent>
