@@ -11,6 +11,7 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
   const baseSections: ReportSectionConfig[] = [
     { title: "Executive Summary and Contents", automated: true, description: "AI-generated summary based on analysis" },
     { title: "Property Details", automated: true, description: "Auto-populated from address analysis" },
+    { title: "Retrospective Valuations", subtitle: "Historical date valuation analysis (ANZVGP 101)", component: "RetrospectiveValuations", description: "Comprehensive retrospective valuation framework complying with ANZVGP 101 and IVS 2025 standards" },
   ];
 
   const commonEndSections: ReportSectionConfig[] = [
@@ -110,16 +111,18 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
 };
 
 export const getAutomatedAnalysisDescription = (propertyType: string): string => {
+  const baseDescription = "This automated analysis incorporates retrospective valuation requirements, ";
+  
   switch (propertyType) {
     case "commercial":
-      return "Automated commercial property analysis including income assessment, tenant evaluation, market positioning, and investment performance metrics.";
+      return baseDescription + "commercial market data, income analysis, and tenant assessments to provide comprehensive commercial property insights.";
     case "residential":
-      return "Automated residential property analysis including comparable sales, rental potential, market trends, and investment viability.";
+      return baseDescription + "residential market trends, comparable sales analysis, and local area factors for accurate residential valuations.";
     case "agricultural":
-      return "Automated agricultural property analysis including land productivity, water rights, commodity markets, and carbon credit potential.";
+      return baseDescription + "agricultural commodity data, land productivity metrics, and rural market factors for specialized rural property analysis.";
     case "specialised":
-      return "Automated specialised property analysis including operational performance, replacement cost assessment, and industry benchmarking.";
+      return baseDescription + "specialized asset data, replacement cost analysis, and industry-specific factors for unique property valuations.";
     default:
-      return "Comprehensive automated property analysis.";
+      return baseDescription + "comprehensive market data and property-specific factors for accurate valuation analysis.";
   }
 };
