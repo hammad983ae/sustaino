@@ -1,7 +1,15 @@
+/**
+ * ============================================================================
+ * PROPRIETARY AUTOMATED VALUATION PLATFORM
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * Property Pro™ - Registered Trademark - Licensed Software
+ * ============================================================================
+ */
 import React, { useState } from "react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
+import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
@@ -24,10 +32,17 @@ export default function AutomatedValuation() {
     }
   };
 
+  // Show IP protection on main screen
+  if (currentStep === "propertyType") {
+    return (
+      <div className="space-y-8">
+        <ComprehensiveIPProtection />
+        <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
+      </div>
+    );
+  }
+
   switch (currentStep) {
-    case "propertyType":
-      return <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />;
-    
     case "propertyDetails":
       return (
         <AutomatedPropertyDetails
