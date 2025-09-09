@@ -1,12 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Save } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
+import { useAutosave } from "@/hooks/useAutosave";
+import { useToast } from "@/hooks/use-toast";
 
 const ReportViewer = () => {
   const [currentSection, setCurrentSection] = useState(0);
+  const [reportData, setReportData] = useState({});
+  const { toast } = useToast();
+
+  // Initialize autosave
+  const { saveNow, loadSaved, clearSaved } = useAutosave({
+    key: 'report_progress',
+    data: { currentSection, reportData },
+    delay: 5000, // Save every 5 seconds
+    enabled: true
+  });
+
+  // Load saved progress on component mount
+  useEffect(() => {
+    const savedData = loadSaved();
+    if (savedData) {
+      if (savedData.currentSection !== undefined) {
+        setCurrentSection(savedData.currentSection);
+      }
+      if (savedData.reportData) {
+        setReportData(savedData.reportData);
+      }
+      toast({
+        title: "Progress restored",
+        description: "Your previous work has been restored",
+        duration: 3000,
+      });
+    }
+  }, []);
 
   const sections = [
     { title: "Executive Summary and Contents" },
@@ -65,6 +95,15 @@ const ReportViewer = () => {
             <h1 className="text-lg font-semibold truncate">
               Section {currentSection + 1}: {sections[currentSection].title}
             </h1>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={saveNow}
+              className="flex items-center gap-1"
+            >
+              <Save className="h-3 w-3" />
+              Save
+            </Button>
           </div>
           <div className="text-sm text-muted-foreground">
             {currentSection + 1} of {sections.length}
@@ -81,6 +120,8 @@ const ReportViewer = () => {
             subtitle={sections[currentSection].subtitle}
             sectionIndex={currentSection}
             onNavigateToSection={navigateToSection}
+            reportData={reportData}
+            onDataChange={setReportData}
           />
         </div>
       </div>

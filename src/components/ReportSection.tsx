@@ -36,9 +36,11 @@ interface ReportSectionProps {
   subtitle?: string;
   sectionIndex: number;
   onNavigateToSection: (sectionIndex: number) => void;
+  reportData?: any;
+  onDataChange?: (data: any) => void;
 }
 
-const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: ReportSectionProps) => {
+const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, reportData, onDataChange }: ReportSectionProps) => {
   // Special handling for Executive Summary section
   if (sectionIndex === 0) {
     return (
