@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,11 +23,13 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   className = "" 
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const markerInstanceRef = useRef<google.maps.Marker | null>(null);
   const [searchAddress, setSearchAddress] = useState('');
   const [mapType, setMapType] = useState<'roadmap' | 'satellite'>('roadmap');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [mapKey, setMapKey] = useState(0);
+  const [isMapReady, setIsMapReady] = useState(false);
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
 
   // Auto-populate search address from context
@@ -38,17 +40,63 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     }
   }, [addressData, getFormattedAddress, searchAddress]);
 
-  // Map initialization effect
+  // Map type change effect
   useEffect(() => {
-    let mounted = true;
-    let map: google.maps.Map | null = null;
-    let marker: google.maps.Marker | null = null;
-    let mapContainer: HTMLDivElement | null = null;
+    if (mapInstanceRef.current && isMapReady) {
+      mapInstanceRef.current.setMapTypeId(mapType);
+    }
+  }, [mapType, isMapReady]);
 
-    const initMap = async () => {
-      if (!mapContainerRef.current || !mounted) return;
-      
-      mapContainer = mapContainerRef.current;
+  const searchOnMap = useCallback(async (address: string) => {
+    if (!mapInstanceRef.current || !address.trim()) return;
+
+    const geocoder = new google.maps.Geocoder();
+    
+    try {
+      const results = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
+        geocoder.geocode({ address }, (results, status) => {
+          if (status === 'OK' && results) {
+            resolve(results);
+          } else {
+            reject(new Error(`Geocoding failed: ${status}`));
+          }
+        });
+      });
+
+      if (results?.[0] && mapInstanceRef.current) {
+        const location = results[0].geometry.location;
+        
+        mapInstanceRef.current.setCenter(location);
+        mapInstanceRef.current.setZoom(17);
+
+        // Remove old marker
+        if (markerInstanceRef.current) {
+          markerInstanceRef.current.setMap(null);
+        }
+
+        // Add new marker
+        markerInstanceRef.current = new google.maps.Marker({
+          position: location,
+          map: mapInstanceRef.current,
+          title: address,
+          animation: google.maps.Animation.DROP
+        });
+
+        updateAddressData({ propertyAddress: results[0].formatted_address });
+        setError(null);
+      }
+    } catch (err) {
+      console.error('Geocoding error:', err);
+      setError('Failed to find address');
+    }
+  }, [updateAddressData]);
+
+  // Initial map setup
+  useEffect(() => {
+    let isMounted = true;
+
+    const initializeMap = async () => {
+      if (!mapContainerRef.current) return;
 
       try {
         setIsLoading(true);
@@ -60,7 +108,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           throw new Error('Google Maps API key not available');
         }
 
-        if (!mounted || !mapContainer) return;
+        if (!isMounted || !mapContainerRef.current) return;
 
         // Load Google Maps
         const loader = new Loader({
@@ -70,10 +118,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         });
 
         await loader.load();
-        if (!mounted || !mapContainer) return;
+        if (!isMounted || !mapContainerRef.current) return;
 
         // Create map
-        map = new google.maps.Map(mapContainer, {
+        mapInstanceRef.current = new google.maps.Map(mapContainerRef.current, {
           center: { lat: -25.2744, lng: 133.7751 },
           zoom: 6,
           mapTypeId: mapType,
@@ -83,93 +131,48 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           mapTypeControl: false
         });
 
+        setIsMapReady(true);
         setIsLoading(false);
-
-        // Search address if available
-        if (searchAddress && mounted && map) {
-          searchOnMap(searchAddress, map, marker);
-        }
 
       } catch (err) {
         console.error('Map initialization error:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load map');
-        setIsLoading(false);
-      }
-    };
-
-    const searchOnMap = async (address: string, mapInstance: google.maps.Map, currentMarker: google.maps.Marker | null) => {
-      if (!mapInstance) return;
-
-      const geocoder = new google.maps.Geocoder();
-      
-      try {
-        const results = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
-          geocoder.geocode({ address }, (results, status) => {
-            if (status === 'OK' && results) {
-              resolve(results);
-            } else {
-              reject(new Error(`Geocoding failed: ${status}`));
-            }
-          });
-        });
-
-        if (results?.[0] && mapInstance) {
-          const location = results[0].geometry.location;
-          
-          mapInstance.setCenter(location);
-          mapInstance.setZoom(17);
-
-          // Remove old marker
-          if (currentMarker) {
-            currentMarker.setMap(null);
-          }
-
-          // Add new marker
-          marker = new google.maps.Marker({
-            position: location,
-            map: mapInstance,
-            title: address,
-            animation: google.maps.Animation.DROP
-          });
-
-          updateAddressData({ propertyAddress: results[0].formatted_address });
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : 'Failed to load map');
+          setIsLoading(false);
         }
-      } catch (err) {
-        console.error('Geocoding error:', err);
-        setError('Failed to find address');
       }
     };
 
-    initMap();
+    initializeMap();
 
     return () => {
-      mounted = false;
-      // Safely cleanup marker
-      if (marker) {
-        try {
-          marker.setMap(null);
-        } catch (e) {
-          console.warn('Error removing marker:', e);
+      isMounted = false;
+      // Clean up in next tick to avoid React conflicts
+      setTimeout(() => {
+        if (markerInstanceRef.current) {
+          try {
+            markerInstanceRef.current.setMap(null);
+          } catch (e) {
+            // Ignore cleanup errors
+          }
         }
-      }
-      // Clear map reference
-      if (map && mapContainer) {
-        try {
-          // Let React handle DOM cleanup
-          map = null;
-        } catch (e) {
-          console.warn('Error cleaning up map:', e);
-        }
-      }
-      marker = null;
-      mapContainer = null;
+        markerInstanceRef.current = null;
+        mapInstanceRef.current = null;
+      }, 0);
     };
-  }, [mapKey, mapType]); // Remount when key or type changes
+  }, []); // Only run once on mount
+
+  // Search effect
+  useEffect(() => {
+    if (isMapReady && searchAddress && mapInstanceRef.current) {
+      searchOnMap(searchAddress);
+    }
+  }, [isMapReady, searchAddress, searchOnMap]);
 
   const handleSearch = () => {
-    if (searchAddress.trim()) {
+    if (searchAddress.trim() && isMapReady) {
       setError(null);
-      setMapKey(prev => prev + 1); // Force remount to search
+      searchOnMap(searchAddress);
     }
   };
 
@@ -201,7 +204,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             onKeyPress={handleKeyPress}
             className="flex-1"
           />
-          <Button onClick={handleSearch} className="gap-1">
+          <Button onClick={handleSearch} className="gap-1" disabled={!isMapReady}>
             <Search className="h-4 w-4" />
             Search
           </Button>
@@ -214,6 +217,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             size="sm" 
             onClick={() => mapType !== 'roadmap' && toggleMapType()}
             className="gap-1"
+            disabled={!isMapReady}
           >
             <MapIcon className="h-3 w-3" />
             Map
@@ -223,6 +227,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             size="sm" 
             onClick={() => mapType !== 'satellite' && toggleMapType()}
             className="gap-1"
+            disabled={!isMapReady}
           >
             <Satellite className="h-3 w-3" />
             Satellite
@@ -238,7 +243,6 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         
         {/* Map Container */}
         <div 
-          key={mapKey}
           ref={mapContainerRef} 
           style={{ height, width: '100%' }}
           className="rounded-lg border bg-muted flex items-center justify-center"
