@@ -232,8 +232,9 @@ const ReportViewer = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/">
-              <Button variant="ghost" size="sm">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
+                <span className="hidden sm:inline">Home</span>
               </Button>
             </Link>
             <h1 className="text-lg font-semibold truncate">
