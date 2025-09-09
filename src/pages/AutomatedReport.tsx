@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, Home, ArrowLeft, Sparkles, Zap, Loader2 } fr
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import AutomatedAnalysisSection from "@/components/AutomatedAnalysisSection";
+import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import { getPropertyTypeReportSections, getAutomatedAnalysisDescription } from "@/components/PropertyTypeReportConfig";
 
 interface AutomatedReportProps {
@@ -87,6 +88,16 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
 
   const renderSectionContent = () => {
     const section = sections[currentStep];
+    
+    // Check for specific component overrides
+    if (section.component === "PlanningDataIntegration") {
+      return (
+        <PlanningDataIntegration 
+          propertyAddress="Sample Property Address"
+          onDataFetched={(data) => console.log("Planning data:", data)}
+        />
+      );
+    }
     
     // Check if this is an automated section
     if (section.automated) {

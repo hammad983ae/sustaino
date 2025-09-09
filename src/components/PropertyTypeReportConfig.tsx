@@ -27,7 +27,7 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
     case "commercial":
       return [
         ...baseSections,
-        { title: "Legal and Planning", automated: true, description: "Zoning, permits, and compliance analysis" },
+        { title: "Legal and Planning", component: "PlanningDataIntegration", description: "Zoning, permits, and compliance analysis with VicPlan integration" },
         { title: "Tenancy Schedule/Lease Details", component: "TenancyScheduleLeaseDetails" },
         { title: "Commercial Market Commentary", automated: true, description: "Local commercial market trends and analysis" },
         { title: "Commercial Sales Evidence", component: "SalesEvidenceCommercial" },
