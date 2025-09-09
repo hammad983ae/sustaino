@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, MapPin } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Search, MapPin, AlertTriangle } from "lucide-react";
 import { useProperty } from "@/contexts/PropertyContext";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,6 +28,8 @@ const PropertySearchAnalysis = () => {
   const [selectedState, setSelectedState] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [analysisData, setAnalysisData] = useState<PropertyAnalysisData | null>(null);
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { updateAddressData } = useProperty();
 
   const handleIdentifyAddress = async () => {
@@ -80,14 +83,61 @@ const PropertySearchAnalysis = () => {
       }
     } catch (error) {
       console.error('Property analysis error:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to analyze property",
-        variant: "destructive",
-      });
+      setErrorMessage(error.message || "Failed to analyze property");
+      setShowErrorDialog(true);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleContinueWithSimulated = () => {
+    // Create simulated data for the user to continue working
+    const simulatedData = {
+      address: propertyAddress,
+      state: selectedState,
+      timestamp: new Date().toISOString(),
+      locationData: {
+        formattedAddress: `${propertyAddress}, ${selectedState}`,
+        coordinates: { lat: -34.9285, lng: 138.6007 }
+      },
+      propertyDetails: { nearbyAmenities: { total: 45 } },
+      marketData: {
+        estimatedValue: { average: 750000, min: 650000, max: 850000 }
+      },
+      environmentalData: {
+        climateRisk: { floodRisk: 'low', bushfireRisk: 'medium' }
+      },
+      planningData: { zoning: 'Residential 1' },
+      transportData: { walkScore: 72 },
+      demographicData: { medianIncome: 85000 }
+    };
+
+    updateAddressData({
+      propertyAddress: propertyAddress,
+      state: selectedState,
+    });
+
+    setAnalysisData(simulatedData);
+    setShowErrorDialog(false);
+    
+    toast({
+      title: "Continuing with simulated data",
+      description: "You can keep working on your report with sample data.",
+    });
+  };
+
+  const handleSkipAnalysis = () => {
+    updateAddressData({
+      propertyAddress: propertyAddress,
+      state: selectedState,
+    });
+    
+    setShowErrorDialog(false);
+    
+    toast({
+      title: "Address saved",
+      description: "Property address saved without analysis. You can continue with your report.",
+    });
   };
 
   return (
@@ -287,6 +337,39 @@ const PropertySearchAnalysis = () => {
             Note: Location Analysis, Access & Site, and Services & Amenities are handled by RP Data functions and have been removed from this component to avoid duplication.
           </p>
         </div>
+
+        {/* Error Dialog */}
+        <Dialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-amber-500" />
+                Analysis Service Unavailable
+              </DialogTitle>
+              <DialogDescription className="space-y-2">
+                <p>The property analysis service is currently experiencing issues:</p>
+                <p className="text-sm text-muted-foreground italic">{errorMessage}</p>
+                <p>You have these options to continue working on your report:</p>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="flex-col gap-2 sm:flex-row">
+              <Button 
+                variant="outline" 
+                onClick={handleSkipAnalysis}
+                className="w-full sm:w-auto"
+              >
+                Skip Analysis
+              </Button>
+              <Button 
+                onClick={handleContinueWithSimulated}
+                className="w-full sm:w-auto"
+              >
+                Continue with Sample Data
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
       </CardContent>
     </Card>
   );
