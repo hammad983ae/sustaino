@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight, Home, Save } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Save, Eye, FileText, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
+import ReportPreview from "@/components/ReportPreview";
+import AIReportPresentation from "@/components/AIReportPresentation";
 import { useAutosave } from "@/hooks/useAutosave";
 import { useToast } from "@/hooks/use-toast";
 
 const ReportViewer = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [reportData, setReportData] = useState({});
+  const [viewMode, setViewMode] = useState<'edit' | 'preview' | 'presentation'>('edit');
   const { toast } = useToast();
 
   // Initialize autosave
@@ -81,6 +84,71 @@ const ReportViewer = () => {
 
   const progress = ((currentSection + 1) / sections.length) * 100;
 
+  const handleShowPreview = () => {
+    setViewMode('preview');
+  };
+
+  const handleShowPresentation = () => {
+    setViewMode('presentation');
+  };
+
+  const handleBackToEdit = () => {
+    setViewMode('edit');
+  };
+
+  const handleGenerateReport = () => {
+    // Report generation logic here
+    toast({
+      title: "Report Generated Successfully",
+      description: "Your comprehensive property report is ready for download",
+      duration: 5000,
+    });
+  };
+
+  const handlePresentationComplete = () => {
+    setViewMode('edit');
+    toast({
+      title: "AI Analysis Complete",
+      description: "Presentation finished. You can now continue with the detailed report.",
+      duration: 3000,
+    });
+  };
+
+  // Show AI Presentation
+  if (viewMode === 'presentation') {
+    return (
+      <AIReportPresentation 
+        propertyData={reportData}
+        onComplete={handlePresentationComplete}
+        onSkip={handleBackToEdit}
+      />
+    );
+  }
+
+  // Show Report Preview
+  if (viewMode === 'preview') {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="sticky top-0 z-10 bg-background border-b p-4">
+          <div className="flex items-center justify-between max-w-6xl mx-auto">
+            <h1 className="text-2xl font-bold">Report Preview & Generate</h1>
+            <Button variant="outline" onClick={handleBackToEdit}>
+              <Eye className="h-4 w-4 mr-2" />
+              Back to Editing
+            </Button>
+          </div>
+        </div>
+        <div className="p-4 max-w-6xl mx-auto">
+          <ReportPreview 
+            reportData={reportData}
+            onGenerate={handleGenerateReport}
+            onClose={handleBackToEdit}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile-friendly header with progress */}
@@ -95,15 +163,35 @@ const ReportViewer = () => {
             <h1 className="text-lg font-semibold truncate">
               Section {currentSection + 1}: {sections[currentSection].title}
             </h1>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={saveNow}
-              className="flex items-center gap-1"
-            >
-              <Save className="h-3 w-3" />
-              Save
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={saveNow}
+                className="flex items-center gap-1"
+              >
+                <Save className="h-3 w-3" />
+                Save
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleShowPresentation}
+                className="flex items-center gap-1"
+              >
+                <Play className="h-3 w-3" />
+                AI Preview
+              </Button>
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                onClick={handleShowPreview}
+                className="flex items-center gap-1"
+              >
+                <FileText className="h-3 w-3" />
+                Preview & Generate
+              </Button>
+            </div>
           </div>
           <div className="text-sm text-muted-foreground">
             {currentSection + 1} of {sections.length}
