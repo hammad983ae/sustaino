@@ -27,6 +27,10 @@ const RiskAssessmentMarketIndicators = () => {
   const [includeSwotAnalysis, setIncludeSwotAnalysis] = useState(true);
   const [includeTowsAnalysis, setIncludeTowsAnalysis] = useState(true);
 
+  // Risk category ratings state
+  const [riskRatings, setRiskRatings] = useState<{[key: string]: number}>({});
+  const [riskSummaries, setRiskSummaries] = useState<{[key: string]: string}>({});
+
   const [strengths, setStrengths] = useState(["Strength 1"]);
   const [weaknesses, setWeaknesses] = useState(["Weakness 1"]);
   const [opportunities, setOpportunities] = useState(["Opportunity 1"]);
@@ -44,6 +48,14 @@ const RiskAssessmentMarketIndicators = () => {
     const updated = [...list];
     updated[index] = value;
     setList(updated);
+  };
+
+  const setRating = (category: string, rating: number) => {
+    setRiskRatings(prev => ({ ...prev, [category]: rating }));
+  };
+
+  const setSummary = (category: string, summary: string) => {
+    setRiskSummaries(prev => ({ ...prev, [category]: summary }));
   };
 
   const riskCategories = [
@@ -248,18 +260,35 @@ const RiskAssessmentMarketIndicators = () => {
                     <tr key={index} className="border-b">
                       <td className="p-3 font-medium">{category}</td>
                       <td className="p-3">
-                        <div className="flex gap-2">
+                        <div className="flex gap-1">
                           {[1, 2, 3, 4, 5].map((rating) => (
                             <button
                               key={rating}
-                              className="w-8 h-8 rounded-full border-2 border-muted hover:border-primary transition-colors"
-                              aria-label={`Rate ${rating}`}
-                            />
+                              onClick={() => setRating(category, rating)}
+                              className={`w-6 h-6 text-sm transition-colors ${
+                                riskRatings[category] >= rating
+                                  ? 'text-yellow-500 hover:text-yellow-600'
+                                  : 'text-gray-300 hover:text-yellow-400'
+                              }`}
+                              aria-label={`Rate ${category} ${rating} out of 5`}
+                            >
+                              ★
+                            </button>
                           ))}
+                          {riskRatings[category] && (
+                            <span className="ml-2 text-sm text-muted-foreground">
+                              {riskRatings[category]}/5
+                            </span>
+                          )}
                         </div>
                       </td>
                       <td className="p-3">
-                        <Input placeholder="Enter summary..." className="w-full" />
+                        <Input 
+                          placeholder="Enter summary..." 
+                          className="w-full"
+                          value={riskSummaries[category] || ''}
+                          onChange={(e) => setSummary(category, e.target.value)}
+                        />
                       </td>
                     </tr>
                   ))}
