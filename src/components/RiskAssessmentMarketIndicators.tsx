@@ -260,26 +260,27 @@ const RiskAssessmentMarketIndicators = () => {
                     <tr key={index} className="border-b">
                       <td className="p-3 font-medium">{category}</td>
                       <td className="p-3">
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 items-center">
                           {[1, 2, 3, 4, 5].map((rating) => (
                             <button
                               key={rating}
                               onClick={() => setRating(category, rating)}
-                              className={`w-6 h-6 text-sm transition-colors ${
+                              className={`w-8 h-8 flex items-center justify-center text-lg font-bold transition-colors border rounded ${
                                 riskRatings[category] >= rating
-                                  ? 'text-yellow-500 hover:text-yellow-600'
-                                  : 'text-gray-300 hover:text-yellow-400'
+                                  ? 'text-yellow-500 bg-yellow-50 border-yellow-200 hover:text-yellow-600'
+                                  : 'text-gray-400 bg-gray-50 border-gray-200 hover:text-yellow-400 hover:bg-yellow-50'
                               }`}
                               aria-label={`Rate ${category} ${rating} out of 5`}
+                              type="button"
                             >
-                              ★
+                              {riskRatings[category] >= rating ? '★' : '☆'}
                             </button>
                           ))}
                           {riskRatings[category] && (
-                            <span className="ml-2 text-sm text-muted-foreground">
-                              {riskRatings[category]}/5
-                            </span>
-                          )}
+                             <span className="ml-2 text-sm font-medium text-muted-foreground">
+                               {riskRatings[category]}/5
+                             </span>
+                           )}
                         </div>
                       </td>
                       <td className="p-3">
