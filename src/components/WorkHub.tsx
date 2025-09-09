@@ -24,6 +24,7 @@ import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Label } from "./ui/label";
+import PortfolioFinalReport from "./PortfolioFinalReport";
 
 interface Valuation {
   id: string;
@@ -313,7 +314,7 @@ export default function WorkHub() {
             <div className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-purple-600" />
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Costa Analyses</p>
+                <p className="text-sm font-medium text-muted-foreground">Portfolio Assessments</p>
                 <p className="text-2xl font-bold">{costaAnalyses.length}</p>
               </div>
             </div>
@@ -340,7 +341,7 @@ export default function WorkHub() {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="valuations">Property Valuations ({valuations.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
-          <TabsTrigger value="costa">Costa Portfolio ({costaAnalyses.length})</TabsTrigger>
+          <TabsTrigger value="costa">Portfolio Assessments ({costaAnalyses.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="valuations" className="mt-6">
@@ -488,13 +489,33 @@ export default function WorkHub() {
         </TabsContent>
 
         <TabsContent value="costa" className="mt-6">
-          <div className="space-y-4">
-            {filteredCostaAnalyses.length === 0 ? (
+          <div className="space-y-6">
+            {/* Portfolio Final Report Section */}
+            <PortfolioFinalReport 
+              analysisData={filteredCostaAnalyses[0]} // Use first analysis as base data
+              onExport={() => {
+                toast({
+                  title: "Portfolio Report Exported",
+                  description: "Comprehensive portfolio assessment has been downloaded",
+                });
+              }}
+              onView={() => {
+                toast({
+                  title: "Opening Report Preview",
+                  description: "Portfolio assessment preview is loading...",
+                });
+              }}
+            />
+            
+            {/* Existing Analyses Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Saved Portfolio Analyses</h3>
+              {filteredCostaAnalyses.length === 0 ? (
               <Card>
                 <CardContent className="text-center py-12">
                   <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-medium mb-2">No Costa analyses found</h3>
-                  <p className="text-muted-foreground">Create your first Costa Group portfolio analysis</p>
+                  <h3 className="text-lg font-medium mb-2">No saved analyses found</h3>
+                  <p className="text-muted-foreground">Create and save your first portfolio analysis</p>
                 </CardContent>
               </Card>
             ) : (
@@ -551,6 +572,7 @@ export default function WorkHub() {
                 ))}
               </div>
             )}
+          </div>
           </div>
         </TabsContent>
       </Tabs>
