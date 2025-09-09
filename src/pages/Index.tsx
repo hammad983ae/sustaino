@@ -71,19 +71,19 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/20 to-background">
       <div className="container mx-auto px-4 py-8">
         {currentStep === 'form' ? (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* Header */}
             <div className="text-center">
-              <div className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
+              <div className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
                 🌍 First in the World ESG Property Assessment Platform
               </div>
-              <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="flex items-center justify-center gap-3 mb-4">
                 <Building className="h-12 w-12 text-primary" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
                   ESG Property Assessment Platform
                 </h1>
               </div>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-4">
                 The world's first comprehensive ESG-integrated property valuation system.
                 Professional sustainability and risk evaluation platform for real estate properties. 
                 Choose between basic ESG assessment or advanced automated calculations with comprehensive risk analysis.
@@ -143,9 +143,9 @@ const Index = () => {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="basic" className="space-y-6">
+              <TabsContent value="basic" className="space-y-4">
                 {/* Basic Features Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <Card className="bg-gradient-to-br from-card to-success/10 border-success/20">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-success">
@@ -198,9 +198,9 @@ const Index = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="before-after" className="space-y-6">
+              <TabsContent value="before-after" className="space-y-4">
                 {/* Before & After Features Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <Card className="bg-gradient-to-br from-card to-primary/10 border-primary/20">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-primary">
@@ -255,9 +255,9 @@ const Index = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="advanced" className="space-y-6">
+              <TabsContent value="advanced" className="space-y-4">
                 {/* Advanced Features Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <Card className="bg-gradient-to-br from-card to-primary/10 border-primary/20">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-primary">
@@ -315,7 +315,7 @@ const Index = () => {
 
             {/* ESG Analysis Section */}
             {activeSection === 'esg-analysis' && (
-              <Card className="shadow-xl">
+              <Card className="shadow-xl mt-2">
                 <CardHeader className="border-b">
                   <CardTitle className="text-2xl flex items-center gap-3">
                     <Target className="h-6 w-6 text-primary" />
@@ -355,14 +355,14 @@ const Index = () => {
 
             {/* Climate Risk Section */}
             {activeSection === 'climate-risk' && (
-              <Card className="shadow-xl">
+              <Card className="shadow-xl mt-2">
                 <CardHeader className="border-b">
                   <CardTitle className="text-2xl flex items-center gap-3">
                     <CloudRain className="h-6 w-6 text-primary" />
                     Climate Risk Assessment
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6">
+                <CardContent className="p-4">
                   <ClimateRiskAssessment />
                 </CardContent>
               </Card>
