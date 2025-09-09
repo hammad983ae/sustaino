@@ -7,40 +7,50 @@ import ReportSection from "@/components/ReportSection";
 import ReportGenerator from "@/components/ReportGenerator";
 import AIReportPresentation from "@/components/AIReportPresentation";
 import WhiteLabelHeader from "@/components/WhiteLabelHeader";
-import { useAutosave } from "@/hooks/useAutosave";
+import { useReportData } from "@/hooks/useReportData";
 import { useToast } from "@/hooks/use-toast";
 
 const ReportViewer = () => {
   const [currentSection, setCurrentSection] = useState(0);
-  const [reportData, setReportData] = useState({});
   const [viewMode, setViewMode] = useState<'edit' | 'preview' | 'presentation'>('edit');
   const { toast } = useToast();
-
-  // Initialize autosave
-  const { saveNow, loadSaved, clearSaved } = useAutosave({
-    key: 'report_progress',
-    data: { currentSection, reportData },
-    delay: 2000, // Save every 2 seconds for better user experience
-    enabled: true
-  });
+  
+  // Use the unified report data hook
+  const { reportData, setReportData, loadFromStorage, saveToStorage } = useReportData();
 
   // Load saved progress on component mount
   useEffect(() => {
-    const savedData = loadSaved();
+    const savedData = loadFromStorage();
     if (savedData) {
-      if (savedData.currentSection !== undefined) {
-        setCurrentSection(savedData.currentSection);
-      }
-      if (savedData.reportData) {
-        setReportData(savedData.reportData);
-      }
       toast({
         title: "Progress restored",
         description: "Your previous work has been restored",
         duration: 3000,
       });
     }
-  }, []);
+    
+    // Load section progress from localStorage
+    const savedSection = localStorage.getItem('report_current_section');
+    if (savedSection) {
+      setCurrentSection(parseInt(savedSection, 10) || 0);
+    }
+  }, [loadFromStorage, toast]);
+
+  // Auto-save section progress
+  useEffect(() => {
+    localStorage.setItem('report_current_section', currentSection.toString());
+  }, [currentSection]);
+
+  // Auto-save report data when it changes
+  useEffect(() => {
+    if (Object.keys(reportData).length > 0) {
+      const timeoutId = setTimeout(() => {
+        saveToStorage();
+      }, 2000);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [reportData, saveToStorage]);
 
   const sections = [
     { title: "Executive Summary and Contents" },
@@ -175,7 +185,7 @@ const ReportViewer = () => {
                 variant="outline" 
                 size="sm" 
                 onClick={() => {
-                  saveNow();
+                  saveToStorage();
                   toast({
                     title: "Report saved manually",
                     description: "Your progress has been saved",
