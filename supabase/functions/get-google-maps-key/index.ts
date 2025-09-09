@@ -39,9 +39,9 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ error: 'Internal server error' }), 
       { 
-        status: 500, 
+ ;       status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       }
     );
   }
-});
+})
