@@ -57,15 +57,8 @@ serve(async (req) => {
     // 1. Geocoding and basic location data
     try {
       const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address + ', ' + state)}&key=${googleMapsApiKey}`;
-      console.log('Making geocoding request to:', geocodeUrl.replace(googleMapsApiKey, 'API_KEY_HIDDEN'));
-      
       const geocodeResponse = await fetch(geocodeUrl);
       const geocodeData = await geocodeResponse.json();
-      
-      console.log('Geocoding response status:', geocodeData.status);
-      if (geocodeData.status !== 'OK') {
-        console.error('Geocoding error details:', geocodeData);
-      }
       
       if (geocodeData.status === 'OK' && geocodeData.results[0]) {
         const result = geocodeData.results[0];
@@ -242,33 +235,14 @@ serve(async (req) => {
         };
 
       } else {
-        console.error('Geocoding failed:', geocodeData.status, geocodeData.error_message);
-        
-        // Continue with simulated data for analysis even if geocoding fails
-        console.log('Continuing with simulated location data for analysis');
-        
-        // Create fallback location data
-        analysisData.locationData = {
-          formattedAddress: `${address}, ${state}`,
-          coordinates: {
-            lat: state === 'VIC' ? -37.8136 : -33.8688,
-            lng: state === 'VIC' ? 144.9631 : 151.2093
-          },
-          placeId: 'simulated_place_id',
-          addressComponents: [],
-          locationType: 'APPROXIMATE',
-          viewport: null
-        };
-        
-        // Continue with simulated analysis data
-        analysisData.propertyDetails.nearbyAmenities = {
-          total: 5,
-          schools: [{ name: 'Local Primary School', type: 'school', rating: 4.2 }],
-          hospitals: [{ name: 'Community Hospital', type: 'hospital', rating: 4.0 }],
-          shopping: [{ name: 'Local Shopping Center', type: 'shopping_mall', rating: 4.1 }],
-          transport: [{ name: 'Bus Station', type: 'transit_station', rating: 3.8 }],
-          restaurants: [{ name: 'Local Cafe', type: 'restaurant', rating: 4.3 }]
-        };
+        console.error('Geocoding failed:', geocodeData.status);
+        return new Response(
+          JSON.stringify({ error: 'Could not geocode address' }), 
+          { 
+            status: 400, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        );
       }
     } catch (error) {
       console.error('Error fetching location data:', error);

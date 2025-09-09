@@ -26,20 +26,11 @@ export const useReportJobSaver = ({
 
   // Save or update report job
   const saveReportJob = useCallback(async (showToast = false) => {
-    console.log('📊 Starting saveReportJob...', { enabled, propertyAddress, showToast });
-    
-    if (!enabled || !propertyAddress) {
-      console.log('❌ Save cancelled - missing requirements:', { enabled, propertyAddress });
-      return null;
-    }
+    if (!enabled || !propertyAddress) return null;
 
     try {
-      console.log('🔐 Getting user authentication...');
       const { data: { user } } = await supabase.auth.getUser();
-      console.log('👤 User status:', { user: user ? 'authenticated' : 'not authenticated', userId: user?.id });
-      
       if (!user) {
-        console.log('❌ No authenticated user found');
         if (showToast) {
           toast({
             title: "Authentication required",
@@ -58,15 +49,6 @@ export const useReportJobSaver = ({
       }
 
       const progress = Math.round((currentSection / 20) * 100); // Assuming 20 sections total
-      
-      console.log('📋 Preparing job data...', { 
-        propertyAddress, 
-        reportType, 
-        progress, 
-        currentSection,
-        userId: user.id 
-      });
-      
       const jobData = {
         title: `${reportType} - ${propertyAddress}`,
         description: `Auto-saved report in progress`,

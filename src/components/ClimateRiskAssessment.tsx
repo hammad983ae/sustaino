@@ -160,84 +160,40 @@ export default function ClimateRiskAssessment() {
   }
 
   return (
-    <div className="space-y-4">
-      {/* Header with Toggle */}
-      <Card className="border-l-4 border-l-primary">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Calculator className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="text-lg">Climate Risk Assessment</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Comprehensive climate risk evaluation with property value impact analysis
-                </p>
-              </div>
-            </div>
-            <Switch
-              checked={includeAssessment}
-              onCheckedChange={setIncludeAssessment}
-            />
-          </div>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+          <CardTitle className="text-base font-medium flex items-center gap-2">
+            <Calculator className="h-5 w-5" />
+            Climate Risk Assessment
+          </CardTitle>
+          <Switch
+            checked={includeAssessment}
+            onCheckedChange={setIncludeAssessment}
+            className="ml-auto"
+          />
         </CardHeader>
       </Card>
 
-      {/* Quick Results Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card className="bg-gradient-to-br from-background to-muted/20">
-          <CardContent className="p-4 text-center">
-            <div className="text-sm font-medium text-muted-foreground mb-1">Risk Score</div>
-            <div className="text-xl font-bold">{calculatedResults.climateRiskScore.toFixed(3)}</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gradient-to-br from-background to-muted/20">
-          <CardContent className="p-4 text-center">
-            <div className="text-sm font-medium text-muted-foreground mb-1">Risk Rating</div>
-            <div className={`text-xl font-bold ${getRiskColor(calculatedResults.riskRating)}`}>
-              {calculatedResults.riskRating}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gradient-to-br from-background to-muted/20">
-          <CardContent className="p-4 text-center">
-            <div className="text-sm font-medium text-muted-foreground mb-1">Value Impact</div>
-            <div className="text-lg font-bold text-red-600">
-              -${(calculatedResults.valueImpact / 1000).toFixed(0)}k
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gradient-to-br from-background to-muted/20">
-          <CardContent className="p-4 text-center">
-            <div className="text-sm font-medium text-muted-foreground mb-1">vs Benchmark</div>
-            <div className="text-xl font-bold">
-              {calculatedResults.riskDifferential.toFixed(1)}x
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Assessment Parameters */}
+      {/* Base Parameters */}
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Assessment Parameters</CardTitle>
+        <CardHeader>
+          <CardTitle>Assessment Parameters</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="baseValue" className="text-sm font-medium">Base Property Value ($)</Label>
+              <Label htmlFor="baseValue">Base Property Value ($)</Label>
               <Input
                 id="baseValue"
                 type="number"
                 value={basePropertyValue}
                 onChange={(e) => setBasePropertyValue(Number(e.target.value))}
                 placeholder="10000000"
-                className="h-9"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="sensitivity" className="text-sm font-medium">Sensitivity Coefficient (β)</Label>
+              <Label htmlFor="sensitivity">Sensitivity Coefficient (β)</Label>
               <Input
                 id="sensitivity"
                 type="number"
@@ -247,11 +203,10 @@ export default function ClimateRiskAssessment() {
                 value={sensitivityCoefficient}
                 onChange={(e) => setSensitivityCoefficient(Number(e.target.value))}
                 placeholder="0.15"
-                className="h-9"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="benchmark" className="text-sm font-medium">Benchmark Risk Score</Label>
+              <Label htmlFor="benchmark">Benchmark Risk Score</Label>
               <Input
                 id="benchmark"
                 type="number"
@@ -261,7 +216,6 @@ export default function ClimateRiskAssessment() {
                 value={benchmarkRiskScore}
                 onChange={(e) => setBenchmarkRiskScore(Number(e.target.value))}
                 placeholder="0.5"
-                className="h-9"
               />
             </div>
           </div>
@@ -270,131 +224,163 @@ export default function ClimateRiskAssessment() {
 
       {/* Climate Risk Factors */}
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Climate Risk Factors</CardTitle>
+        <CardHeader>
+          <CardTitle>Climate Risk Factors</CardTitle>
           <p className="text-sm text-muted-foreground">
             Risk levels: 0.0 = No Risk, 0.5 = Moderate Risk, 1.0 = Maximum Risk
           </p>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            {riskFactors.map((factor, index) => (
-              <div key={factor.id} className="p-4 bg-muted/30 rounded-lg border border-border/50">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-1 rounded">
-                        #{index + 1}
-                      </span>
-                      <h4 className="font-medium text-sm">{factor.name}</h4>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{factor.description}</p>
-                  </div>
-                  <Badge variant="secondary" className="ml-2 text-xs">
-                    Weight: {(factor.weight * 100).toFixed(0)}%
-                  </Badge>
+        <CardContent className="space-y-6">
+          {riskFactors.map((factor) => (
+            <div key={factor.id} className="space-y-3 p-4 border rounded-lg">
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium">{factor.name}</h4>
+                <Badge variant="outline">Weight: {(factor.weight * 100).toFixed(0)}%</Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">{factor.description}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Weight (W_j)</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="1"
+                    value={factor.weight}
+                    onChange={(e) => updateRiskFactor(factor.id, 'weight', Number(e.target.value))}
+                  />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <Label className="text-xs font-medium">Weight (W_j)</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max="1"
-                      value={factor.weight}
-                      onChange={(e) => updateRiskFactor(factor.id, 'weight', Number(e.target.value))}
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs font-medium">Risk Level (R_j)</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max="1"
-                      value={factor.riskLevel}
-                      onChange={(e) => updateRiskFactor(factor.id, 'riskLevel', Number(e.target.value))}
-                      className="h-8 text-sm"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Risk Level (R_j)</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="1"
+                    value={factor.riskLevel}
+                    onChange={(e) => updateRiskFactor(factor.id, 'riskLevel', Number(e.target.value))}
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </CardContent>
       </Card>
 
-      {/* Detailed Calculation Results */}
+      {/* Calculation Results */}
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2">
-            <div className="p-1.5 bg-primary/10 rounded">
-              <Calculator className="h-4 w-4 text-primary" />
-            </div>
-            Detailed Risk Calculations
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calculator className="h-5 w-5" />
+            Risk Assessment Results
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Compact Formula Section */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 mb-2">
-                <h4 className="text-sm font-medium">Risk Score Formula</h4>
-                <Badge variant="outline" className={`text-xs ${getRiskColor(calculatedResults.riskRating)}`}>
-                  {getRiskIcon(calculatedResults.riskRating)}
-                  {calculatedResults.riskRating}
-                </Badge>
-              </div>
-              <div className="bg-muted/50 p-3 rounded border text-xs font-mono">
-                Climate Risk Score = Σ(W_j × R_j)<br/>
-                <span className="font-bold">= {calculatedResults.climateRiskScore.toFixed(4)}</span>
-              </div>
+        <CardContent className="space-y-6">
+          {/* Climate Risk Score Formula */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <h4 className="font-medium">Climate Risk Score Calculation</h4>
+              <Badge variant="outline" className={getRiskColor(calculatedResults.riskRating)}>
+                {getRiskIcon(calculatedResults.riskRating)}
+                {calculatedResults.riskRating}
+              </Badge>
             </div>
-            
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Value Adjustment</h4>
-              <div className="bg-muted/50 p-3 rounded border text-xs font-mono space-y-1">
-                <div>V_adj = V_base × (1 - β × Risk)</div>
-                <div>= ${basePropertyValue.toLocaleString()} × (1 - {sensitivityCoefficient} × {calculatedResults.climateRiskScore.toFixed(4)})</div>
-                <div className="font-bold">= ${calculatedResults.adjustedPropertyValue.toLocaleString()}</div>
+            <div className="bg-muted p-4 rounded-lg font-mono text-sm">
+              Climate Risk Score = Σ(W_j × R_j) = {calculatedResults.climateRiskScore.toFixed(4)}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Property Value Adjustment */}
+          <div className="space-y-3">
+            <h4 className="font-medium">Climate Risk-Adjusted Property Value</h4>
+            <div className="bg-muted p-4 rounded-lg space-y-2">
+              <div className="font-mono text-sm">
+                V_adjusted = V_base × (1 - β × Climate Risk Score)
+              </div>
+              <div className="font-mono text-sm">
+                V_adjusted = ${basePropertyValue.toLocaleString()} × (1 - {sensitivityCoefficient} × {calculatedResults.climateRiskScore.toFixed(4)})
+              </div>
+              <div className="font-mono text-sm font-bold">
+                V_adjusted = ${calculatedResults.adjustedPropertyValue.toLocaleString()}
               </div>
             </div>
           </div>
 
-          {/* Benchmark Comparison */}
-          <div className="bg-accent/20 p-3 rounded border">
-            <h4 className="text-sm font-medium mb-2">Benchmark Comparison</h4>
-            <div className="text-xs font-mono">
-              Risk Differential = {calculatedResults.climateRiskScore.toFixed(4)} / {benchmarkRiskScore} = <span className="font-bold">{calculatedResults.riskDifferential.toFixed(4)}</span>
+          <Separator />
+
+          {/* Risk Differential & Comparative Analysis */}
+          <div className="space-y-3">
+            <h4 className="font-medium">Comparative Risk Analysis</h4>
+            <div className="bg-muted p-4 rounded-lg space-y-2">
+              <div className="font-mono text-sm">
+                Risk Differential = Climate Risk Score / Benchmark Risk Score
+              </div>
+              <div className="font-mono text-sm">
+                Risk Differential = {calculatedResults.climateRiskScore.toFixed(4)} / {benchmarkRiskScore} = {calculatedResults.riskDifferential.toFixed(4)}
+              </div>
             </div>
+          </div>
+
+          <Separator />
+
+          {/* Summary Metrics */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-sm font-medium text-muted-foreground">Climate Risk Score</div>
+                <div className="text-2xl font-bold">{calculatedResults.climateRiskScore.toFixed(4)}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-sm font-medium text-muted-foreground">Risk Rating</div>
+                <div className={`text-2xl font-bold ${getRiskColor(calculatedResults.riskRating)}`}>
+                  {calculatedResults.riskRating}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-sm font-medium text-muted-foreground">Value Impact</div>
+                <div className="text-2xl font-bold text-red-600">
+                  -${calculatedResults.valueImpact.toLocaleString()}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-sm font-medium text-muted-foreground">Risk vs Benchmark</div>
+                <div className="text-2xl font-bold">
+                  {calculatedResults.riskDifferential.toFixed(2)}x
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </CardContent>
       </Card>
 
-      {/* Risk Assessment Commentary */}
+      {/* Additional Analysis */}
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Risk Assessment Commentary</CardTitle>
+        <CardHeader>
+          <CardTitle>Risk Assessment Commentary</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="riskAnalysis" className="text-sm font-medium">Climate Risk Analysis & Regional Comparison</Label>
+            <Label htmlFor="riskAnalysis">Climate Risk Analysis & Regional Comparison</Label>
             <Textarea
               id="riskAnalysis"
               placeholder="Provide detailed analysis of climate risks specific to this location, comparison with benchmark properties, and regional climate projections..."
-              rows={3}
-              className="text-sm"
+              rows={4}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="mitigationMeasures" className="text-sm font-medium">Climate Risk Mitigation Measures</Label>
+            <Label htmlFor="mitigationMeasures">Climate Risk Mitigation Measures</Label>
             <Textarea
               id="mitigationMeasures"
               placeholder="Detail existing and recommended climate adaptation measures, infrastructure improvements, and risk management strategies..."
               rows={3}
-              className="text-sm"
             />
           </div>
         </CardContent>

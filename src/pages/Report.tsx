@@ -168,18 +168,12 @@ const ReportViewer = () => {
   const handleGenerateReport = async () => {
     // Mark report as completed in Work Hub
     await markAsCompleted();
-    
-    // Show success message
+    // Report generation logic here
     toast({
       title: "Report Generated Successfully",
-      description: "Your report has been saved to Work Hub. Redirecting...",
-      duration: 3000,
+      description: "Your comprehensive property report is ready for download",
+      duration: 5000,
     });
-    
-    // Redirect to Work Hub after a short delay
-    setTimeout(() => {
-      window.location.href = '/work-hub';
-    }, 2000);
   };
 
   const handlePresentationComplete = () => {

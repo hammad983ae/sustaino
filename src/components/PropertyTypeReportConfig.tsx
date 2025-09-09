@@ -17,7 +17,6 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
   const commonEndSections: ReportSectionConfig[] = [
     { title: "Sustaino Pro ESG Analysis", subtitle: "Environmental, Social & Governance Assessment", component: "SustainoProAnalysis" },
     { title: "Risk Assessment & Market Indicators", automated: true },
-    { title: "Climate Risk Assessment", subtitle: "Climate Risk Analysis & Valuation Impact", component: "ClimateRiskAssessment", description: "Comprehensive climate risk evaluation with property value impact analysis" },
     { title: "Marketability and Mortgage Security", automated: true },
     { title: "Valuation Certificate", component: "ValuationCertificate" },
     { title: "Property Compliance & Certifications", component: "PropertyComplianceAndCertifications" },
@@ -97,7 +96,6 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
         { title: "ESG Assessment and Audit" },
         { title: "Essential Repairs" },
         { title: "Risk Assessment & Market Indicators" },
-        { title: "Climate Risk Assessment", subtitle: "Climate Risk Analysis & Valuation Impact", component: "ClimateRiskAssessment" },
         { title: "Previous Sales History and Current Sale" },
         { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural" },
         { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },
