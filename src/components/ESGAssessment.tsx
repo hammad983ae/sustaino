@@ -660,6 +660,39 @@ const ESGAssessment = () => {
                           <Input id="nabers-rating" placeholder="NABERS energy rating" />
                         </div>
                         <div>
+                          <Label htmlFor="nabers-water-efficiency">NABERS Water Efficiency</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select water efficiency rating" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="6-star">6 Star - Excellent</SelectItem>
+                              <SelectItem value="5-star">5 Star - Very Good</SelectItem>
+                              <SelectItem value="4-star">4 Star - Good</SelectItem>
+                              <SelectItem value="3-star">3 Star - Average</SelectItem>
+                              <SelectItem value="2-star">2 Star - Below Average</SelectItem>
+                              <SelectItem value="1-star">1 Star - Poor</SelectItem>
+                              <SelectItem value="not-rated">Not Rated</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="nabers-ieq">NABERS IEQ Assessment</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select IEQ assessment type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="air-quality">Air Quality Assessment</SelectItem>
+                              <SelectItem value="thermal-comfort">Thermal Comfort</SelectItem>
+                              <SelectItem value="acoustic-comfort">Acoustic Comfort</SelectItem>
+                              <SelectItem value="visual-comfort">Visual Comfort & Lighting</SelectItem>
+                              <SelectItem value="comprehensive">Comprehensive IEQ</SelectItem>
+                              <SelectItem value="not-assessed">Not Assessed</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
                           <Label htmlFor="green-star">Green Star (0 to 6)</Label>
                           <Input id="green-star" placeholder="Green Star rating (0-6)" />
                         </div>
