@@ -94,7 +94,10 @@ const AIReportPresentation: React.FC<AIReportPresentationProps> = ({
           setCurrentSlide(current => {
             if (current >= slides.length - 1) {
               setIsPlaying(false);
-              onComplete?.();
+              // Use setTimeout to avoid state update during render
+              setTimeout(() => {
+                onComplete?.();
+              }, 0);
               return current;
             }
             return current + 1;
@@ -106,7 +109,7 @@ const AIReportPresentation: React.FC<AIReportPresentationProps> = ({
     }, 100);
 
     return () => clearInterval(slideInterval);
-  }, [currentSlide, isPlaying, slides]);
+  }, [currentSlide, isPlaying, slides, onComplete]);
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -118,7 +121,10 @@ const AIReportPresentation: React.FC<AIReportPresentationProps> = ({
       setCurrentSlide(currentSlide + 1);
       setProgress(0);
     } else {
-      onComplete?.();
+      // Use setTimeout to avoid state update during render
+      setTimeout(() => {
+        onComplete?.();
+      }, 0);
     }
   };
 
