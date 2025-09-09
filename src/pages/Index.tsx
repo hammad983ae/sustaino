@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
+import { PropertyProvider } from '@/contexts/PropertyContext';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
@@ -66,6 +67,7 @@ const Index = () => {
   };
 
   return (
+    <PropertyProvider>
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/20 to-background">
       <div className="container mx-auto px-4 py-8">
         {currentStep === 'form' ? (
@@ -453,6 +455,7 @@ const Index = () => {
         )}
       </div>
     </div>
+    </PropertyProvider>
   );
 };
 
