@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Loader } from '@googlemaps/js-api-loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,135 +23,132 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   className = "" 
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapPortalRef = useRef<HTMLDivElement | null>(null);
+  const googleMapsDivRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
-  const initializationRef = useRef<boolean>(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchAddress, setSearchAddress] = useState('');
   const [mapType, setMapType] = useState<'roadmap' | 'satellite'>('roadmap');
+  const [isInitialized, setIsInitialized] = useState(false);
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
 
-  // Create portal container outside React tree on mount
   useEffect(() => {
-    // Create a completely independent div that React will never touch
-    mapPortalRef.current = document.createElement('div');
-    mapPortalRef.current.style.width = '100%';
-    mapPortalRef.current.style.height = '100%';
-    mapPortalRef.current.style.borderRadius = '0.5rem';
-    mapPortalRef.current.id = `google-map-${Date.now()}-${Math.random()}`;
-
-    return () => {
-      // Cleanup: remove from DOM completely
-      if (mapPortalRef.current && mapPortalRef.current.parentNode) {
-        mapPortalRef.current.parentNode.removeChild(mapPortalRef.current);
-      }
-      mapPortalRef.current = null;
-    };
-  }, []);
-
-  // Auto-populate search address from context
-  useEffect(() => {
+    // Auto-populate search address from context
     const fullAddress = getFormattedAddress();
     if (fullAddress && fullAddress !== searchAddress) {
       setSearchAddress(fullAddress);
     }
   }, [addressData, getFormattedAddress]);
 
-  // Initialize Google Maps
   useEffect(() => {
     let isMounted = true;
+    let initializationPromise: Promise<void> | null = null;
     
     const initializeMap = async () => {
       // Prevent multiple initializations
-      if (initializationRef.current || !isMounted || !mapContainerRef.current || !mapPortalRef.current) {
-        return;
-      }
+      if (isInitialized || !isMounted || initializationPromise) return;
       
-      initializationRef.current = true;
+      initializationPromise = (async () => {
+        try {
+          setIsInitialized(true);
+          
+          // Get API key from Supabase function
+          const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
+          
+          if (error || !apiKeyData?.apiKey) {
+            console.error('Error fetching Google Maps API key:', error);
+            return;
+          }
+
+          if (!isMounted) return;
+
+          const loader = new Loader({
+            apiKey: apiKeyData.apiKey,
+            version: 'weekly',
+            libraries: ['places', 'geometry']
+          });
+
+          await loader.load();
+          
+          if (!isMounted || !mapContainerRef.current) return;
+          
+          setIsLoaded(true);
+
+          // Create a completely isolated div for Google Maps that React won't touch
+          if (googleMapsDivRef.current) {
+            googleMapsDivRef.current.remove();
+          }
+          
+          googleMapsDivRef.current = document.createElement('div');
+          googleMapsDivRef.current.style.width = '100%';
+          googleMapsDivRef.current.style.height = '100%';
+          googleMapsDivRef.current.style.borderRadius = '0.5rem';
+          
+          // Clear container and add our isolated div
+          mapContainerRef.current.innerHTML = '';
+          mapContainerRef.current.appendChild(googleMapsDivRef.current);
+
+          // Initialize map on the isolated div
+          mapInstanceRef.current = new google.maps.Map(googleMapsDivRef.current, {
+            center: { lat: -25.2744, lng: 133.7751 }, // Australia center
+            zoom: 6,
+            mapTypeId: mapType,
+            zoomControl: true,
+            streetViewControl: true,
+            fullscreenControl: true,
+            mapTypeControl: false
+          });
+
+          // Search for address if available
+          if (searchAddress && isMounted) {
+            searchAddressOnMap(searchAddress);
+          }
+        } catch (error) {
+          console.error('Error loading Google Maps:', error);
+        }
+      })();
       
-      try {
-        console.log('Initializing Google Maps...');
-        
-        // Get API key from Supabase function
-        const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
-        
-        if (error || !apiKeyData?.apiKey) {
-          console.error('Error fetching Google Maps API key:', error);
-          return;
-        }
-
-        if (!isMounted) return;
-
-        const loader = new Loader({
-          apiKey: apiKeyData.apiKey,
-          version: 'weekly',
-          libraries: ['places', 'geometry']
-        });
-
-        await loader.load();
-        
-        if (!isMounted || !mapContainerRef.current || !mapPortalRef.current) return;
-        
-        // Append our portal div to the container
-        mapContainerRef.current.innerHTML = '';
-        mapContainerRef.current.appendChild(mapPortalRef.current);
-        
-        setIsLoaded(true);
-
-        // Initialize map on the portal div
-        mapInstanceRef.current = new google.maps.Map(mapPortalRef.current, {
-          center: { lat: -25.2744, lng: 133.7751 }, // Australia center
-          zoom: 6,
-          mapTypeId: mapType,
-          zoomControl: true,
-          streetViewControl: true,
-          fullscreenControl: true,
-          mapTypeControl: false
-        });
-
-        console.log('Google Maps initialized successfully');
-
-        // Search for address if available
-        if (searchAddress && isMounted) {
-          searchAddressOnMap(searchAddress);
-        }
-      } catch (error) {
-        console.error('Error loading Google Maps:', error);
-        setIsLoaded(false);
-        initializationRef.current = false;
-      }
+      await initializationPromise;
     };
 
-    // Delay initialization to ensure DOM is ready
+    // Use a timeout to ensure DOM is ready
     const timeoutId = setTimeout(initializeMap, 100);
     
+    // Cleanup function
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
       
-      // Clean up marker
+      // Clean up marker first
       if (markerRef.current) {
         try {
           markerRef.current.setMap(null);
         } catch (e) {
-          console.log('Marker cleanup error (ignored):', e);
+          // Ignore cleanup errors
         }
         markerRef.current = null;
       }
       
       // Clear map instance
       mapInstanceRef.current = null;
-      initializationRef.current = false;
+      
+      // Remove the Google Maps div completely to avoid React conflicts
+      if (googleMapsDivRef.current) {
+        try {
+          googleMapsDivRef.current.remove();
+        } catch (e) {
+          // Ignore cleanup errors
+        }
+        googleMapsDivRef.current = null;
+      }
+      
       setIsLoaded(false);
+      setIsInitialized(false);
     };
   }, []);
 
   const searchAddressOnMap = async (address: string) => {
-    if (!mapInstanceRef.current || !isLoaded) {
-      console.log('Map not ready for search');
-      return;
-    }
+    if (!mapInstanceRef.current || !isLoaded) return;
 
     const geocoder = new google.maps.Geocoder();
     
@@ -179,8 +175,9 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           try {
             markerRef.current.setMap(null);
           } catch (e) {
-            console.log('Previous marker cleanup error (ignored):', e);
+            // Ignore cleanup errors
           }
+          markerRef.current = null;
         }
 
         // Add new marker
@@ -194,8 +191,6 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         // Update property context with geocoded address
         const formattedAddress = results[0].formatted_address;
         updateAddressData({ propertyAddress: formattedAddress });
-        
-        console.log('Address geocoded successfully:', formattedAddress);
       }
     } catch (error) {
       console.error('Error geocoding address:', error);
@@ -245,7 +240,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             onKeyPress={handleKeyPress}
             className="flex-1"
           />
-          <Button onClick={handleSearch} className="gap-1" disabled={!isLoaded}>
+          <Button onClick={handleSearch} className="gap-1">
             <Search className="h-4 w-4" />
             Search
           </Button>
@@ -258,7 +253,6 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             size="sm" 
             onClick={() => mapType !== 'roadmap' && toggleMapType()}
             className="gap-1"
-            disabled={!isLoaded}
           >
             <MapIcon className="h-3 w-3" />
             Map
@@ -268,14 +262,13 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             size="sm" 
             onClick={() => mapType !== 'satellite' && toggleMapType()}
             className="gap-1"
-            disabled={!isLoaded}
           >
             <Satellite className="h-3 w-3" />
             Satellite
           </Button>
         </div>
         
-        {/* Map Container - React will never manipulate the contents */}
+        {/* Map Container */}
         <div 
           ref={mapContainerRef} 
           style={{ height, width: '100%' }}

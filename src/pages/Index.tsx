@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -16,8 +17,9 @@ import {
   CloudRain,
   ArrowLeft
 } from 'lucide-react';
-import SimplifiedClimateRisk from '@/components/SimplifiedClimateRisk';
-import SimplifiedMultiStepForm from '@/components/SimplifiedMultiStepForm';
+import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
+import MultiStepForm from '@/components/MultiStepForm';
+import { PropertyProvider } from '@/contexts/PropertyContext';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
@@ -65,6 +67,7 @@ const Index = () => {
   };
 
   return (
+    <PropertyProvider>
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/20 to-background">
       <div className="container mx-auto px-4 py-8">
         {currentStep === 'form' ? (
@@ -191,7 +194,7 @@ const Index = () => {
 
                 <div className="bg-card p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold mb-4">Property Assessment Form</h3>
-                  <SimplifiedMultiStepForm onSubmit={handleBasicFormSubmit} />
+                  <MultiStepForm onSubmit={handleBasicFormSubmit} />
                 </div>
               </TabsContent>
 
@@ -322,7 +325,7 @@ const Index = () => {
                 <CardContent className="p-6">
                   <div className="space-y-6">
                     <p className="text-muted-foreground">
-                      ESG Automated Analysis section with comprehensive 
+                      ESG Automated Analysis section will be implemented with comprehensive 
                       environmental, social, and governance assessment tools.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -360,7 +363,7 @@ const Index = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <SimplifiedClimateRisk />
+                  <ClimateRiskAssessment />
                 </CardContent>
               </Card>
             )}
@@ -404,7 +407,7 @@ const Index = () => {
                       </div>
                       <div className="text-center p-4 border rounded-lg">
                         <div className="text-2xl font-bold text-primary">{esgScores.overall}%</div>
-                        <p className="text-sm text-muted-foreground">Overall ESG</p>
+                        <p className="text-sm text-muted-foreground">Overall Score</p>
                       </div>
                     </div>
                   </CardContent>
@@ -418,33 +421,31 @@ const Index = () => {
                   <CardTitle>Before & After Analysis Results</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>Before & After analysis results would appear here.</p>
+                  <p className="text-muted-foreground">
+                    Before and after valuation comparison results would be displayed here.
+                  </p>
                 </CardContent>
               </Card>
             )}
 
-            {activeTab === 'advanced' && advancedResults && (
+            {activeTab === 'advanced' && advancedPropertyData && advancedResults && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Advanced Calculations Results</CardTitle>
+                  <CardTitle>Advanced Analysis Results</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <span className="font-medium">Risk Score: </span>
-                      <Badge variant="secondary">{advancedResults.riskScore}</Badge>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="text-center p-4 border rounded-lg">
+                      <div className="text-2xl font-bold">{(advancedResults.riskScore * 100).toFixed(1)}%</div>
+                      <p className="text-sm text-muted-foreground">Risk Score</p>
                     </div>
-                    <div>
-                      <span className="font-medium">Adjusted Value: </span>
-                      <span className="text-lg font-bold">${advancedResults.adjustedValue.toLocaleString()}</span>
+                    <div className="text-center p-4 border rounded-lg">
+                      <div className="text-2xl font-bold">${advancedResults.adjustedValue.toLocaleString()}</div>
+                      <p className="text-sm text-muted-foreground">Adjusted Value</p>
                     </div>
-                    <div>
-                      <span className="font-medium">Recommendations: </span>
-                      <div className="flex gap-2 mt-2">
-                        {advancedResults.recommendations.map((rec, index) => (
-                          <Badge key={index} variant="outline">{rec}</Badge>
-                        ))}
-                      </div>
+                    <div className="text-center p-4 border rounded-lg">
+                      <div className="text-lg font-bold">{advancedResults.recommendations.length}</div>
+                      <p className="text-sm text-muted-foreground">Recommendations</p>
                     </div>
                   </div>
                 </CardContent>
@@ -454,6 +455,7 @@ const Index = () => {
         )}
       </div>
     </div>
+    </PropertyProvider>
   );
 };
 

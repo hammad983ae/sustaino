@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle, KeyRound } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -14,8 +14,6 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showResetForm, setShowResetForm] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -145,36 +143,6 @@ export default function AuthPage() {
     }
   };
 
-  const handlePasswordReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/auth?reset=true`
-      });
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      toast({
-        title: "Password reset sent!",
-        description: "Please check your email for password reset instructions.",
-      });
-
-      setShowResetForm(false);
-      setResetEmail('');
-    } catch (error) {
-      console.error('Password reset error:', error);
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -268,66 +236,7 @@ export default function AuthPage() {
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
-
-                  <div className="text-center">
-                    <Button
-                      type="button"
-                      variant="link"
-                      className="text-sm text-muted-foreground hover:text-foreground"
-                      onClick={() => setShowResetForm(true)}
-                    >
-                      Forgot your password?
-                    </Button>
-                  </div>
                 </form>
-
-                {showResetForm && (
-                  <Card className="mt-4 border-muted">
-                    <CardHeader className="pb-4">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <KeyRound className="h-5 w-5" />
-                        Reset Password
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <form onSubmit={handlePasswordReset} className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="reset-email">Email Address</Label>
-                          <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              id="reset-email"
-                              type="email"
-                              placeholder="Enter your email"
-                              value={resetEmail}
-                              onChange={(e) => setResetEmail(e.target.value)}
-                              className="pl-10"
-                              required
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="flex gap-2">
-                          <Button type="submit" className="flex-1" disabled={isLoading}>
-                            {isLoading ? 'Sending...' : 'Send Reset Email'}
-                          </Button>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            onClick={() => {
-                              setShowResetForm(false);
-                              setResetEmail('');
-                              setError(null);
-                            }}
-                            disabled={isLoading}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </form>
-                    </CardContent>
-                  </Card>
-                )}
               </TabsContent>
 
               <TabsContent value="signup" className="mt-6">

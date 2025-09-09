@@ -1,59 +1,47 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import ComprehensiveValuation from "./pages/ComprehensiveValuation";
-import WhiteLabelConfig from "./pages/WhiteLabelConfig";
-import Auth from "./pages/Auth";
+import Report from "./pages/Report";
+import NotFound from "./pages/NotFound";
+import AutomatedValuation from "./pages/AutomatedValuation";
 import PropertyValuations from "./pages/PropertyValuations";
-import WorkHub from "./pages/WorkHub";
-import ProtectedRoute from "./components/ProtectedRoute";
+import WorkHubPage from "./pages/WorkHub";
+import WhiteLabelConfig from "./pages/WhiteLabelConfig";
+import AuthPage from "./pages/Auth";
+import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
+import { BrandingProvider } from "./contexts/BrandingContext";
+import { PropertyProvider } from "./contexts/PropertyContext";
+
+const queryClient = new QueryClient();
 
 const App = () => (
-  <TooltipProvider>
-    <Toaster />
-    <Sonner />
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route 
-          path="/comprehensive-valuation" 
-          element={
-            <ProtectedRoute requireAuth={true}>
-              <ComprehensiveValuation />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/white-label" 
-          element={
-            <ProtectedRoute requireAdmin={true}>
-              <WhiteLabelConfig />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/property-valuations" 
-          element={
-            <ProtectedRoute requireAuth={true}>
-              <PropertyValuations />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/work-hub" 
-          element={
-            <ProtectedRoute requireAuth={true}>
-              <WorkHub />
-            </ProtectedRoute>
-          } 
-        />
-        <Route path="*" element={<Index />} />
-      </Routes>
-    </BrowserRouter>
-  </TooltipProvider>
+  <QueryClientProvider client={queryClient}>
+    <BrandingProvider>
+      <PropertyProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<AutomatedValuation />} />
+              <Route path="/index" element={<Index />} />
+              <Route path="/report" element={<Report />} />
+              <Route path="/property-valuations" element={<PropertyValuations />} />
+              <Route path="/work-hub" element={<WorkHubPage />} />
+              <Route path="/white-label" element={<WhiteLabelConfig />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </PropertyProvider>
+    </BrandingProvider>
+  </QueryClientProvider>
 );
 
 export default App;
