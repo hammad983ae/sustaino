@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MapPin, Sparkles, Building, FileText } from "lucide-react";
 import { AutofillAddressFields } from "@/components/AutofillAddressFields";
+import GoogleMapComponent from "@/components/GoogleMapComponent";
 
 const RPDAndLocation = () => {
   return (
@@ -76,27 +77,18 @@ const RPDAndLocation = () => {
         </CardContent>
       </Card>
 
-      {/* 3. Google Maps and Property Identified by */}
+      {/* 3. Google Maps Integration */}
+      <GoogleMapComponent height="400px" />
+
+      {/* 4. Property Identification */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <MapPin className="h-5 w-5 text-green-500" />
-            <CardTitle className="text-lg">Google Maps - Subject Property Location</CardTitle>
+            <CardTitle className="text-lg">Property Identification Methods</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Input placeholder="3 Freshwater Court" className="w-full" />
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm">Map View</Button>
-            <Button variant="outline" size="sm">Satellite</Button>
-            <Button className="ml-auto bg-emerald-500 hover:bg-emerald-600 text-white">Search</Button>
-          </div>
-          
-          {/* Map Placeholder */}
-          <div className="h-64 bg-muted rounded-lg flex items-center justify-center">
-            <p className="text-muted-foreground">Interactive Map View</p>
-          </div>
-
+        <CardContent>
           <div>
             <h4 className="font-semibold mb-3 flex items-center gap-2">
               Property Identified By
@@ -140,7 +132,7 @@ const RPDAndLocation = () => {
         </CardContent>
       </Card>
 
-      {/* 4. Property Location and Site Analysis */}
+      {/* 5. Property Location and Site Analysis */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Property Location & Site Analysis</CardTitle>
