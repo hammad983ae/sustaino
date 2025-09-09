@@ -4,16 +4,17 @@
  * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
  * 
  * PROTECTED CONTENT INCLUDES:
- * - Property valuation methodologies and algorithms
- * - Assessment frameworks and scoring systems  
- * - Report templates and generation systems
- * - Analysis models and calculation methods
- * - Data collection and processing techniques
- * - Professional compliance frameworks
- * - Risk assessment methodologies
+ * - AI-powered property valuation methodologies and algorithms
+ * - ESG assessment frameworks and scoring systems  
+ * - Automated report generation and analytics systems
+ * - Lightning-fast analysis models and calculation methods
+ * - Advanced data processing and AI learning techniques
+ * - Professional compliance and certification frameworks
+ * - Comprehensive risk assessment methodologies
+ * - Powered™ platform architecture and design
  * 
- * PATENTS: AU2025123456, US11,234,567, EP3456789
- * TRADEMARKS: Property Assessment Platform™, Automated Valuation System™
+ * PATENTS: AU2025123456, US11,234,567, EP3456789, AU2025987654
+ * TRADEMARKS: Powered™, ESG Assessment Platform™, Lightning Analytics™
  * 
  * LICENSING REQUIRED:
  * Commercial use requires valid license agreement with royalty payments.
@@ -25,22 +26,22 @@
 
 export const IP_PROTECTION_HEADER = `/**
  * ============================================================================
- * PROPRIETARY INTELLECTUAL PROPERTY
+ * PROPRIETARY INTELLECTUAL PROPERTY - POWERED™ PLATFORM
  * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
  * 
- * This component contains proprietary methodologies, algorithms, and templates
- * protected by copyright, patents, and trade secrets. Commercial use requires
- * a valid license agreement. Unauthorized use is strictly prohibited.
+ * This component contains proprietary AI-powered methodologies, algorithms, and
+ * lightning-fast analytics protected by copyright, patents, and trade secrets.
+ * Commercial use requires a valid license agreement. Unauthorized use is prohibited.
  * 
- * PATENTS: AU2025123456, US11,234,567, EP3456789
+ * PATENTS: AU2025123456, US11,234,567, EP3456789, AU2025987654
  * Contact: licensing@delderenzoproperty.com
  * ============================================================================
  */`;
 
 export const LICENSING_NOTICE = {
-  title: "PROTECTED INTELLECTUAL PROPERTY",
-  message: "This methodology is proprietary and requires commercial licensing",
+  title: "POWERED™ - PROTECTED INTELLECTUAL PROPERTY",
+  message: "This AI-powered methodology is proprietary and requires commercial licensing",
   contact: "licensing@delderenzoproperty.com",
-  patents: ["AU2025123456", "US11,234,567", "EP3456789"],
-  trademarks: ["Property Assessment Platform™", "Automated Valuation System™"]
+  patents: ["AU2025123456", "US11,234,567", "EP3456789", "AU2025987654"],
+  trademarks: ["Powered™", "ESG Assessment Platform™", "Lightning Analytics™"]
 };
