@@ -23,7 +23,6 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   className = "" 
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const googleMapsDivRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -74,22 +73,24 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           
           setIsLoaded(true);
 
-          // Create a completely isolated div for Google Maps that React won't touch
-          if (googleMapsDivRef.current) {
-            googleMapsDivRef.current.remove();
+          // Use the React ref directly instead of creating new elements
+          if (!mapContainerRef.current) return;
+          
+          // Clear any existing content safely
+          while (mapContainerRef.current.firstChild) {
+            mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
           }
           
-          googleMapsDivRef.current = document.createElement('div');
-          googleMapsDivRef.current.style.width = '100%';
-          googleMapsDivRef.current.style.height = '100%';
-          googleMapsDivRef.current.style.borderRadius = '0.5rem';
+          // Create map div as a child of the React-managed container
+          const mapDiv = document.createElement('div');
+          mapDiv.style.width = '100%';
+          mapDiv.style.height = '100%';
+          mapDiv.style.borderRadius = '0.5rem';
           
-          // Clear container and add our isolated div
-          mapContainerRef.current.innerHTML = '';
-          mapContainerRef.current.appendChild(googleMapsDivRef.current);
+          mapContainerRef.current.appendChild(mapDiv);
 
-          // Initialize map on the isolated div
-          mapInstanceRef.current = new google.maps.Map(googleMapsDivRef.current, {
+          // Initialize map on the new div
+          mapInstanceRef.current = new google.maps.Map(mapDiv, {
             center: { lat: -25.2744, lng: 133.7751 }, // Australia center
             zoom: 6,
             mapTypeId: mapType,
@@ -132,14 +133,15 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
       // Clear map instance
       mapInstanceRef.current = null;
       
-      // Remove the Google Maps div completely to avoid React conflicts
-      if (googleMapsDivRef.current) {
+      // Clear the container safely without conflicting with React
+      if (mapContainerRef.current) {
         try {
-          googleMapsDivRef.current.remove();
+          while (mapContainerRef.current.firstChild) {
+            mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
+          }
         } catch (e) {
           // Ignore cleanup errors
         }
-        googleMapsDivRef.current = null;
       }
       
       setIsLoaded(false);
