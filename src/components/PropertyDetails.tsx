@@ -91,6 +91,30 @@ const PropertyDetails = () => {
     valuationImpact: reportData.propertyDetails?.propertyCondition?.valuationImpact ?? ''
   });
 
+  // Property description text fields state
+  const [propertyDescriptions, setPropertyDescriptions] = useState({
+    accessLoading: reportData.propertyDetails?.descriptions?.accessLoading ?? '',
+    layout: reportData.propertyDetails?.descriptions?.layout ?? '',
+    generalDescription: reportData.propertyDetails?.descriptions?.generalDescription ?? '',
+    buildingDetails: reportData.propertyDetails?.descriptions?.buildingDetails ?? '',
+    siteLandDetails: reportData.propertyDetails?.descriptions?.siteLandDetails ?? '',
+    homestead: reportData.propertyDetails?.descriptions?.homestead ?? '',
+    workerAccommodation: reportData.propertyDetails?.descriptions?.workerAccommodation ?? '',
+    farmBuildings: reportData.propertyDetails?.descriptions?.farmBuildings ?? '',
+    machineryEquipment: reportData.propertyDetails?.descriptions?.machineryEquipment ?? '',
+    zoningDescription: reportData.propertyDetails?.descriptions?.zoningDescription ?? '',
+    developmentDetails: reportData.propertyDetails?.descriptions?.developmentDetails ?? '',
+    specializedDescription: reportData.propertyDetails?.descriptions?.specializedDescription ?? '',
+    btrUnitMix: reportData.propertyDetails?.descriptions?.btrUnitMix ?? '',
+    btrSharedAmenities: reportData.propertyDetails?.descriptions?.btrSharedAmenities ?? '',
+    btrAffordableHousing: reportData.propertyDetails?.descriptions?.btrAffordableHousing ?? '',
+    btrMarketAbsorption: reportData.propertyDetails?.descriptions?.btrMarketAbsorption ?? ''
+  });
+
+  const handleDescriptionChange = (field: keyof typeof propertyDescriptions, value: string) => {
+    setPropertyDescriptions(prev => ({ ...prev, [field]: value }));
+  };
+
   // Auto-save function with immediate execution
   const savePropertyData = () => {
     const dataToSave = {
@@ -99,7 +123,8 @@ const PropertyDetails = () => {
       certifications,
       propertyCount,
       tbeToggles,
-      propertyCondition
+      propertyCondition,
+      descriptions: propertyDescriptions
     };
     updateSection('propertyDetails', dataToSave);
     console.log('Saved property data:', dataToSave);
@@ -108,7 +133,7 @@ const PropertyDetails = () => {
   // Save data immediately when component mounts and whenever state changes
   React.useEffect(() => {
     savePropertyData();
-  }, [includeSection, propertyTypes, certifications, propertyCount, tbeToggles, propertyCondition]);
+  }, [includeSection, propertyTypes, certifications, propertyCount, tbeToggles, propertyCondition, propertyDescriptions]);
 
   const addPropertySection = () => {
     setPropertyCount(prev => prev + 1);
@@ -394,7 +419,12 @@ const PropertyDetails = () => {
 
                   <div>
                     <Label htmlFor="access-loading">Access & Loading</Label>
-                    <Textarea id="access-loading" placeholder="Describe access facilities" />
+                    <Textarea 
+                      id="access-loading" 
+                      placeholder="Describe access facilities"
+                      value={propertyDescriptions.accessLoading}
+                      onChange={(e) => handleDescriptionChange('accessLoading', e.target.value)}
+                    />
                   </div>
                 </div>
 
