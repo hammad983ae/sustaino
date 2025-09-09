@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Building, Calculator, DollarSign, FileText, TrendingUp, Calendar, MapPin } from "lucide-react";
+import { Building, Calculator, DollarSign, FileText, TrendingUp, Calendar, MapPin, ArrowLeft } from "lucide-react";
 
 interface Property {
   id: string;
@@ -156,6 +156,14 @@ const PropertyValuationManagement = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
+          <Button 
+            variant="outline" 
+            className="mb-4" 
+            onClick={() => window.location.href = '/'}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
           <h1 className="text-3xl font-bold">Property Valuations</h1>
           <p className="text-muted-foreground">Manage individual property valuations and assessments</p>
         </div>
@@ -176,14 +184,17 @@ const PropertyValuationManagement = () => {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="property-select">Select Property</Label>
-                <Select onValueChange={(value) => {
-                  const property = properties.find(p => p.id === value);
-                  setSelectedProperty(property || null);
-                }}>
+                <Select 
+                  value={selectedProperty?.id || ""} 
+                  onValueChange={(value) => {
+                    const property = properties.find(p => p.id === value);
+                    setSelectedProperty(property || null);
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Choose a property to value" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background border shadow-lg z-50">
                     {properties.map((property) => (
                       <SelectItem key={property.id} value={property.id}>
                         <div className="flex items-center gap-2">
