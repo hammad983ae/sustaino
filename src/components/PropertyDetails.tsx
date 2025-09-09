@@ -7,7 +7,7 @@
  * proprietary IP. Commercial licensing required for use.
  * ============================================================================
  */
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -20,15 +20,43 @@ import { useReportData } from "@/hooks/useReportData";
 
 const PropertyDetails = () => {
   const { reportData, updateSection } = useReportData();
+  
+  // Smart property type detection from URL or context
+  const getInitialPropertyTypes = () => {
+    const saved = reportData.propertyDetails?.propertyTypes;
+    if (saved && Object.values(saved).some(Boolean)) {
+      return saved;
+    }
+    
+    // Check URL for property type hints
+    const currentPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    const propertyType = urlParams.get('propertyType');
+    
+    // Default based on context or make residential default instead of commercial
+    if (propertyType) {
+      return {
+        commercial: propertyType === 'commercial',
+        residential: propertyType === 'residential',
+        buildToRent: propertyType === 'buildToRent',
+        agriculture: propertyType === 'agriculture',
+        developmentLand: propertyType === 'developmentLand',
+        specialized: propertyType === 'specialized'
+      };
+    }
+    
+    return {
+      commercial: false,
+      residential: true, // Default to residential instead of commercial
+      buildToRent: false,
+      agriculture: false,
+      developmentLand: false,
+      specialized: false
+    };
+  };
+
   const [includeSection, setIncludeSection] = useState(reportData.propertyDetails?.includeSection ?? true);
-  const [propertyTypes, setPropertyTypes] = useState({
-    commercial: reportData.propertyDetails?.propertyTypes?.commercial ?? true,
-    residential: reportData.propertyDetails?.propertyTypes?.residential ?? false,
-    buildToRent: reportData.propertyDetails?.propertyTypes?.buildToRent ?? false,
-    agriculture: reportData.propertyDetails?.propertyTypes?.agriculture ?? false,
-    developmentLand: reportData.propertyDetails?.propertyTypes?.developmentLand ?? false,
-    specialized: reportData.propertyDetails?.propertyTypes?.specialized ?? false
-  });
+  const [propertyTypes, setPropertyTypes] = useState(getInitialPropertyTypes);
   const [certifications, setCertifications] = useState({
     include: reportData.propertyDetails?.certifications?.include ?? false,
     bulkData: reportData.propertyDetails?.certifications?.bulkData ?? false,
@@ -49,16 +77,23 @@ const PropertyDetails = () => {
     specialized: reportData.propertyDetails?.tbeToggles?.specialized ?? false
   });
 
-  // Save data to context whenever state changes
+  // Auto-save function with immediate execution
   const savePropertyData = () => {
-    updateSection('propertyDetails', {
+    const dataToSave = {
       includeSection,
       propertyTypes,
       certifications,
       propertyCount,
       tbeToggles
-    });
+    };
+    updateSection('propertyDetails', dataToSave);
+    console.log('Saved property data:', dataToSave);
   };
+
+  // Save data immediately when component mounts and whenever state changes
+  React.useEffect(() => {
+    savePropertyData();
+  }, [includeSection, propertyTypes, certifications, propertyCount, tbeToggles]);
 
   const addPropertySection = () => {
     setPropertyCount(prev => prev + 1);
@@ -81,10 +116,7 @@ const PropertyDetails = () => {
             <Switch
               id="include-property-details"
               checked={includeSection}
-              onCheckedChange={(checked) => {
-                setIncludeSection(checked);
-                setTimeout(savePropertyData, 0);
-              }}
+              onCheckedChange={setIncludeSection}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -178,60 +210,54 @@ const PropertyDetails = () => {
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.commercial}
-                  onCheckedChange={(checked) => {
-                    setPropertyTypes(prev => ({ ...prev, commercial: checked }));
-                    setTimeout(savePropertyData, 0);
-                  }}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, commercial: checked }))
+                  }
                 />
                 <Label>Commercial</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.residential}
-                  onCheckedChange={(checked) => {
-                    setPropertyTypes(prev => ({ ...prev, residential: checked }));
-                    setTimeout(savePropertyData, 0);
-                  }}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, residential: checked }))
+                  }
                 />
                 <Label>Residential</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.buildToRent}
-                  onCheckedChange={(checked) => {
-                    setPropertyTypes(prev => ({ ...prev, buildToRent: checked }));
-                    setTimeout(savePropertyData, 0);
-                  }}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, buildToRent: checked }))
+                  }
                 />
                 <Label>Build to Rent</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.agriculture}
-                  onCheckedChange={(checked) => {
-                    setPropertyTypes(prev => ({ ...prev, agriculture: checked }));
-                    setTimeout(savePropertyData, 0);
-                  }}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, agriculture: checked }))
+                  }
                 />
                 <Label>Agriculture</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.developmentLand}
-                  onCheckedChange={(checked) => {
-                    setPropertyTypes(prev => ({ ...prev, developmentLand: checked }));
-                    setTimeout(savePropertyData, 0);
-                  }}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, developmentLand: checked }))
+                  }
                 />
                 <Label>Development Land</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.specialized}
-                  onCheckedChange={(checked) => {
-                    setPropertyTypes(prev => ({ ...prev, specialized: checked }));
-                    setTimeout(savePropertyData, 0);
-                  }}
+                  onCheckedChange={(checked) => 
+                    setPropertyTypes(prev => ({ ...prev, specialized: checked }))
+                  }
                 />
                 <Label>Specialized</Label>
               </div>
