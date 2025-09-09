@@ -28,6 +28,7 @@ import LeasingEvidence from "./LeasingEvidence";
 import ValuationAnalysis from "./ValuationAnalysis";
 import SustainoProAnalysis from "./SustainoProAnalysis";
 import ValuationCertificate from "./ValuationCertificate";
+import AdditionalComments from "./AdditionalComments";
 import TermsAndConditions from "./TermsAndConditions";
 import SecurityAndCertificates from "./SecurityAndCertificates";
 import RetrospectiveValuations from "./RetrospectiveValuations";
@@ -371,8 +372,23 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
     );
   }
 
-  // Special handling for Property Compliance & Certifications section
+  // Special handling for Additional Comments section
   if (sectionIndex === 20) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <AdditionalComments />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Property Compliance & Certifications section
+  if (sectionIndex === 21) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -387,7 +403,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
   }
 
   // Special handling for Terms and Conditions section
-  if (sectionIndex === 21) {
+  if (sectionIndex === 22) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -402,7 +418,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
   }
 
   // Special handling for Annexures section
-  if (sectionIndex === 22) {
+  if (sectionIndex === 23) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -419,7 +435,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
   }
 
   // Special handling for Security and Certificates section
-  if (sectionIndex === 23) {
+  if (sectionIndex === 24) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>

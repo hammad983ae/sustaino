@@ -128,6 +128,7 @@ const ReportViewer = () => {
     { title: "Marketability and Mortgage Security" },
     { title: "Sustaino Pro Additional Analysis and Features" },
     { title: "Valuation Certificate" },
+    { title: "Additional Comments & Strategic Recommendations" },
     { title: "Qualifications, Disclaimers, Terms and Conditions" },
     { title: "Annexures" },
     { title: "Security and Certificates" }
