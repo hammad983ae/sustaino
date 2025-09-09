@@ -16,36 +16,49 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock, Printer, Plus, Minus, Upload, Image, Download } from "lucide-react";
+import { useReportData } from "@/hooks/useReportData";
 
 const PropertyDetails = () => {
-  const [includeSection, setIncludeSection] = useState(true);
+  const { reportData, updateSection } = useReportData();
+  const [includeSection, setIncludeSection] = useState(reportData.propertyDetails?.includeSection ?? true);
   const [propertyTypes, setPropertyTypes] = useState({
-    commercial: true,
-    residential: false,
-    buildToRent: false,
-    agriculture: false,
-    developmentLand: false,
-    specialized: false
+    commercial: reportData.propertyDetails?.propertyTypes?.commercial ?? true,
+    residential: reportData.propertyDetails?.propertyTypes?.residential ?? false,
+    buildToRent: reportData.propertyDetails?.propertyTypes?.buildToRent ?? false,
+    agriculture: reportData.propertyDetails?.propertyTypes?.agriculture ?? false,
+    developmentLand: reportData.propertyDetails?.propertyTypes?.developmentLand ?? false,
+    specialized: reportData.propertyDetails?.propertyTypes?.specialized ?? false
   });
   const [certifications, setCertifications] = useState({
-    include: false,
-    bulkData: false,
-    professionalDates: false,
-    valuerCredentials: false,
-    complianceStatement: false,
-    greenBuilding: false,
-    sustainability: false,
-    improvements: false
+    include: reportData.propertyDetails?.certifications?.include ?? false,
+    bulkData: reportData.propertyDetails?.certifications?.bulkData ?? false,
+    professionalDates: reportData.propertyDetails?.certifications?.professionalDates ?? false,
+    valuerCredentials: reportData.propertyDetails?.certifications?.valuerCredentials ?? false,
+    complianceStatement: reportData.propertyDetails?.certifications?.complianceStatement ?? false,
+    greenBuilding: reportData.propertyDetails?.certifications?.greenBuilding ?? false,
+    sustainability: reportData.propertyDetails?.certifications?.sustainability ?? false,
+    improvements: reportData.propertyDetails?.certifications?.improvements ?? false
   });
-  const [propertyCount, setPropertyCount] = useState(1);
+  const [propertyCount, setPropertyCount] = useState(reportData.propertyDetails?.propertyCount ?? 1);
   const [tbeToggles, setTbeToggles] = useState({
-    commercial: false,
-    residential: false,
-    buildToRent: false,
-    agriculture: false,
-    developmentLand: false,
-    specialized: false
+    commercial: reportData.propertyDetails?.tbeToggles?.commercial ?? false,
+    residential: reportData.propertyDetails?.tbeToggles?.residential ?? false,
+    buildToRent: reportData.propertyDetails?.tbeToggles?.buildToRent ?? false,
+    agriculture: reportData.propertyDetails?.tbeToggles?.agriculture ?? false,
+    developmentLand: reportData.propertyDetails?.tbeToggles?.developmentLand ?? false,
+    specialized: reportData.propertyDetails?.tbeToggles?.specialized ?? false
   });
+
+  // Save data to context whenever state changes
+  const savePropertyData = () => {
+    updateSection('propertyDetails', {
+      includeSection,
+      propertyTypes,
+      certifications,
+      propertyCount,
+      tbeToggles
+    });
+  };
 
   const addPropertySection = () => {
     setPropertyCount(prev => prev + 1);
@@ -68,7 +81,10 @@ const PropertyDetails = () => {
             <Switch
               id="include-property-details"
               checked={includeSection}
-              onCheckedChange={setIncludeSection}
+              onCheckedChange={(checked) => {
+                setIncludeSection(checked);
+                setTimeout(savePropertyData, 0);
+              }}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -162,54 +178,60 @@ const PropertyDetails = () => {
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.commercial}
-                  onCheckedChange={(checked) => 
-                    setPropertyTypes(prev => ({ ...prev, commercial: checked }))
-                  }
+                  onCheckedChange={(checked) => {
+                    setPropertyTypes(prev => ({ ...prev, commercial: checked }));
+                    setTimeout(savePropertyData, 0);
+                  }}
                 />
                 <Label>Commercial</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.residential}
-                  onCheckedChange={(checked) => 
-                    setPropertyTypes(prev => ({ ...prev, residential: checked }))
-                  }
+                  onCheckedChange={(checked) => {
+                    setPropertyTypes(prev => ({ ...prev, residential: checked }));
+                    setTimeout(savePropertyData, 0);
+                  }}
                 />
                 <Label>Residential</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.buildToRent}
-                  onCheckedChange={(checked) => 
-                    setPropertyTypes(prev => ({ ...prev, buildToRent: checked }))
-                  }
+                  onCheckedChange={(checked) => {
+                    setPropertyTypes(prev => ({ ...prev, buildToRent: checked }));
+                    setTimeout(savePropertyData, 0);
+                  }}
                 />
                 <Label>Build to Rent</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.agriculture}
-                  onCheckedChange={(checked) => 
-                    setPropertyTypes(prev => ({ ...prev, agriculture: checked }))
-                  }
+                  onCheckedChange={(checked) => {
+                    setPropertyTypes(prev => ({ ...prev, agriculture: checked }));
+                    setTimeout(savePropertyData, 0);
+                  }}
                 />
                 <Label>Agriculture</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.developmentLand}
-                  onCheckedChange={(checked) => 
-                    setPropertyTypes(prev => ({ ...prev, developmentLand: checked }))
-                  }
+                  onCheckedChange={(checked) => {
+                    setPropertyTypes(prev => ({ ...prev, developmentLand: checked }));
+                    setTimeout(savePropertyData, 0);
+                  }}
                 />
                 <Label>Development Land</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={propertyTypes.specialized}
-                  onCheckedChange={(checked) => 
-                    setPropertyTypes(prev => ({ ...prev, specialized: checked }))
-                  }
+                  onCheckedChange={(checked) => {
+                    setPropertyTypes(prev => ({ ...prev, specialized: checked }));
+                    setTimeout(savePropertyData, 0);
+                  }}
                 />
                 <Label>Specialized</Label>
               </div>
@@ -311,6 +333,10 @@ const PropertyDetails = () => {
                   <div>
                     <Label htmlFor="year-built">Year Built</Label>
                     <Input id="year-built" placeholder="Construction year" />
+                  </div>
+                  <div>
+                    <Label htmlFor="year-renovated">Year Renovated</Label>
+                    <Input id="year-renovated" placeholder="Year of renovation" />
                   </div>
 
                   <div>
@@ -676,10 +702,14 @@ const PropertyDetails = () => {
                     <Label htmlFor="building-size">Building Size (sqm)</Label>
                     <Input id="building-size" placeholder="Building size in sqm" />
                   </div>
-                  <div>
-                    <Label htmlFor="year-built-res">Year Built</Label>
-                    <Input id="year-built-res" placeholder="Construction year" />
-                  </div>
+                    <div>
+                      <Label htmlFor="year-built-res">Year Built</Label>
+                      <Input id="year-built-res" placeholder="Construction year" />
+                    </div>
+                    <div>
+                      <Label htmlFor="year-renovated-res">Year Renovated</Label>
+                      <Input id="year-renovated-res" placeholder="Year of renovation" />
+                    </div>
                 </div>
                 <div>
                   <Label htmlFor="additional-features-res">Additional Features</Label>
@@ -1397,6 +1427,7 @@ const PropertyDetails = () => {
                       <SelectItem value="pub">Pub</SelectItem>
                       <SelectItem value="club">Club</SelectItem>
                       <SelectItem value="gaming-venue">Gaming Venue</SelectItem>
+                      <SelectItem value="workers-accommodation">Workers Accommodation</SelectItem>
                       <SelectItem value="childcare">Childcare</SelectItem>
                       <SelectItem value="healthcare">Healthcare</SelectItem>
                       <SelectItem value="sports-stadium">Sports Stadium</SelectItem>
@@ -1434,6 +1465,10 @@ const PropertyDetails = () => {
                     <Label htmlFor="year-built-spec">Year Built</Label>
                     <Input id="year-built-spec" placeholder="Construction year" />
                   </div>
+                  <div>
+                    <Label htmlFor="year-renovated-spec">Year Renovated</Label>
+                    <Input id="year-renovated-spec" placeholder="Year of renovation" />
+                  </div>
                 </div>
 
                 {/* Specialized Measurements */}
@@ -1446,12 +1481,12 @@ const PropertyDetails = () => {
                       <Input id="rooms-keys" placeholder="Number of rooms/keys" />
                     </div>
                     <div>
-                      <Label htmlFor="seating-capacity">Seating Capacity</Label>
-                      <Input id="seating-capacity" placeholder="Total seating capacity" />
+                      <Label htmlFor="contracting-fee">Contracting Fee</Label>
+                      <Input id="contracting-fee" placeholder="Total contracting fee" />
                     </div>
                     <div>
-                      <Label htmlFor="ldc-placements">LDC Placements (Licensed Day Care)</Label>
-                      <Input id="ldc-placements" placeholder="Licensed placement capacity" />
+                      <Label htmlFor="ebitda">EBITDA</Label>
+                      <Input id="ebitda" placeholder="EBITDA value" />
                     </div>
                     <div>
                       <Label htmlFor="bed-capacity">Bed Capacity</Label>

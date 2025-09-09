@@ -163,6 +163,7 @@ export default function LeasingEvidenceSpecialised() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="aged-care">Aged Care</SelectItem>
+                  <SelectItem value="workers-accommodation">Workers Accommodation</SelectItem>
                   <SelectItem value="childcare">Childcare</SelectItem>
                   <SelectItem value="medical">Medical Centre</SelectItem>
                   <SelectItem value="hospital">Hospital</SelectItem>
@@ -185,24 +186,24 @@ export default function LeasingEvidenceSpecialised() {
               <Input placeholder="Rooms/keys comparison..." className="text-sm" />
             </div>
 
-            {/* Seating Capacity */}
+            {/* Contracting Fee */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>Seating Capacity</Label>
+              <Label>Contracting Fee</Label>
               <div className="flex justify-center">
                 <Switch checked={seatingCapacity} onCheckedChange={setSeatingCapacity} />
               </div>
-              <Input placeholder="300 seats" className="text-sm" />
-              <Input placeholder="Seating capacity comparison..." className="text-sm" />
+              <Input placeholder="$300,000" className="text-sm" />
+              <Input placeholder="Contracting fee comparison..." className="text-sm" />
             </div>
 
-            {/* LDC Placements */}
+            {/* EBITDA */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>LDC Placements</Label>
+              <Label>EBITDA</Label>
               <div className="flex justify-center">
                 <Switch checked={ldcPlacements} onCheckedChange={setLdcPlacements} />
               </div>
-              <Input placeholder="75 licensed places" className="text-sm" />
-              <Input placeholder="LDC placements comparison..." className="text-sm" />
+              <Input placeholder="$1,200,000" className="text-sm" />
+              <Input placeholder="EBITDA comparison..." className="text-sm" />
             </div>
 
             {/* Bed Capacity */}

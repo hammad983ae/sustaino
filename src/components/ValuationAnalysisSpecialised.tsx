@@ -120,6 +120,7 @@ export default function ValuationAnalysisSpecialised() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="aged-care">Aged Care Facility</SelectItem>
+                  <SelectItem value="workers-accommodation">Workers Accommodation</SelectItem>
                   <SelectItem value="childcare">Childcare Centre</SelectItem>
                   <SelectItem value="medical">Medical Centre</SelectItem>
                   <SelectItem value="hospital">Hospital</SelectItem>
