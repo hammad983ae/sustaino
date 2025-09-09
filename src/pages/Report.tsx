@@ -8,20 +8,57 @@ import ReportGenerator from "@/components/ReportGenerator";
 import AIReportPresentation from "@/components/AIReportPresentation";
 import WhiteLabelHeader from "@/components/WhiteLabelHeader";
 import { useReportData } from "@/hooks/useReportData";
+import { useReportJobSaver } from "@/hooks/useReportJobSaver";
 import { useToast } from "@/hooks/use-toast";
 
 const ReportViewer = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [viewMode, setViewMode] = useState<'edit' | 'preview' | 'presentation'>('edit');
+  const [propertyAddress, setPropertyAddress] = useState('');
   const { toast } = useToast();
   
   // Use the unified report data hook
   const { reportData, setReportData, loadFromStorage, saveToStorage } = useReportData();
 
+  // Auto-save to Work Hub
+  const { saveNow, loadSavedReport, markAsCompleted } = useReportJobSaver({
+    reportData,
+    currentSection,
+    propertyAddress,
+    reportType: 'Property Report',
+    enabled: true,
+    autoSaveDelay: 5000
+  });
+
   // Load saved progress on component mount
   useEffect(() => {
+    // Check if continuing from Work Hub
+    const continueData = localStorage.getItem('continue_report_data');
+    if (continueData) {
+      try {
+        const parsedData = JSON.parse(continueData);
+        setReportData(parsedData.reportData || {});
+        setCurrentSection(parsedData.currentSection);
+        setPropertyAddress(parsedData.propertyAddress);
+        localStorage.removeItem('continue_report_data');
+        toast({
+          title: "Report resumed",
+          description: "Continuing your report from Work Hub",
+          duration: 3000,
+        });
+        return;
+      } catch (error) {
+        console.error('Failed to parse continue data:', error);
+      }
+    }
+
     const savedData = loadFromStorage();
     if (savedData) {
+      // Extract property address from saved data if available
+      const address = savedData.propertyDetails?.address || savedData.address || '';
+      if (address) {
+        setPropertyAddress(address);
+      }
       toast({
         title: "Progress restored",
         description: "Your previous work has been restored",
@@ -34,7 +71,18 @@ const ReportViewer = () => {
     if (savedSection) {
       setCurrentSection(parseInt(savedSection, 10) || 0);
     }
-  }, [loadFromStorage, toast]);
+
+    // Try to load from Work Hub if no local data
+    if (!savedData || Object.keys(savedData).length === 0) {
+      loadSavedReport().then(workHubData => {
+        if (workHubData) {
+          setReportData(workHubData.reportData as any || {});
+          setCurrentSection(workHubData.currentSection || 0);
+          console.log('Loaded from Work Hub:', workHubData);
+        }
+      });
+    }
+  }, [loadFromStorage, loadSavedReport, setReportData, toast]);
 
   // Auto-save section progress
   useEffect(() => {
@@ -51,6 +99,14 @@ const ReportViewer = () => {
       return () => clearTimeout(timeoutId);
     }
   }, [reportData, saveToStorage]);
+
+  // Update property address when report data changes
+  useEffect(() => {
+    const address = reportData.propertyDetails?.address || reportData.address || '';
+    if (address && address !== propertyAddress) {
+      setPropertyAddress(address);
+    }
+  }, [reportData, propertyAddress]);
 
   const sections = [
     { title: "Executive Summary and Contents" },
@@ -107,7 +163,9 @@ const ReportViewer = () => {
     setViewMode('edit');
   };
 
-  const handleGenerateReport = () => {
+  const handleGenerateReport = async () => {
+    // Mark report as completed in Work Hub
+    await markAsCompleted();
     // Report generation logic here
     toast({
       title: "Report Generated Successfully",
@@ -184,18 +242,14 @@ const ReportViewer = () => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => {
+                onClick={async () => {
                   saveToStorage();
-                  toast({
-                    title: "Report saved manually",
-                    description: "Your progress has been saved",
-                    duration: 2000,
-                  });
+                  await saveNow();
                 }}
                 className="flex items-center gap-1"
               >
                 <Save className="h-3 w-3" />
-                Save Now
+                Save to Work Hub
               </Button>
               <Button 
                 variant="outline" 

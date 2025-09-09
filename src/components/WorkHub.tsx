@@ -49,6 +49,9 @@ interface Report {
   sustainability_score: number;
   file_path: string;
   created_at: string;
+  report_data?: any;
+  report_progress?: number;
+  current_section?: number;
 }
 
 interface CostaPortfolioAnalysis {
@@ -107,7 +110,7 @@ export default function WorkHub() {
         .from('reports')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('updated_at', { ascending: false });
 
       if (reportsError) throw reportsError;
 
@@ -157,6 +160,18 @@ export default function WorkHub() {
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       case 'in_progress': return 'bg-blue-100 text-blue-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const handleContinueReport = (report: Report) => {
+    if (report.status === 'in_progress' && report.report_data) {
+      // Store the report data in localStorage for the report page to pick up
+      localStorage.setItem('continue_report_data', JSON.stringify({
+        reportData: report.report_data,
+        currentSection: report.current_section || 0,
+        propertyAddress: report.property_address
+      }));
+      navigate('/report');
     }
   };
 
@@ -453,8 +468,13 @@ export default function WorkHub() {
                               <p className="font-medium">{report.report_type}</p>
                             </div>
                             <div>
-                              <p className="text-muted-foreground">Sustainability Score</p>
-                              <p className="font-medium">{report.sustainability_score || 'N/A'}</p>
+                              <p className="text-muted-foreground">{report.status === 'in_progress' ? 'Progress' : 'Sustainability Score'}</p>
+                              <p className="font-medium">
+                                {report.status === 'in_progress' 
+                                  ? `${report.report_progress || 0}%` 
+                                  : (report.sustainability_score || 'N/A')
+                                }
+                              </p>
                             </div>
                             <div>
                               <p className="text-muted-foreground">Generated</p>

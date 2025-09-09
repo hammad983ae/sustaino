@@ -639,12 +639,15 @@ export type Database = {
       reports: {
         Row: {
           created_at: string
+          current_section: number | null
           file_path: string | null
           file_size: string | null
           generated_date: string
           id: string
           property_address: string
           property_id: string | null
+          report_data: Json | null
+          report_progress: number | null
           report_type: string
           status: string
           sustainability_score: number | null
@@ -654,12 +657,15 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          current_section?: number | null
           file_path?: string | null
           file_size?: string | null
           generated_date?: string
           id?: string
           property_address: string
           property_id?: string | null
+          report_data?: Json | null
+          report_progress?: number | null
           report_type?: string
           status?: string
           sustainability_score?: number | null
@@ -669,12 +675,15 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          current_section?: number | null
           file_path?: string | null
           file_size?: string | null
           generated_date?: string
           id?: string
           property_address?: string
           property_id?: string | null
+          report_data?: Json | null
+          report_progress?: number | null
           report_type?: string
           status?: string
           sustainability_score?: number | null
