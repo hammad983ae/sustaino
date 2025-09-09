@@ -24,6 +24,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   className = "" 
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapPortalRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
   const initializationRef = useRef<boolean>(false);
@@ -31,6 +32,24 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   const [searchAddress, setSearchAddress] = useState('');
   const [mapType, setMapType] = useState<'roadmap' | 'satellite'>('roadmap');
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
+
+  // Create portal container outside React tree on mount
+  useEffect(() => {
+    // Create a completely independent div that React will never touch
+    mapPortalRef.current = document.createElement('div');
+    mapPortalRef.current.style.width = '100%';
+    mapPortalRef.current.style.height = '100%';
+    mapPortalRef.current.style.borderRadius = '0.5rem';
+    mapPortalRef.current.id = `google-map-${Date.now()}-${Math.random()}`;
+
+    return () => {
+      // Cleanup: remove from DOM completely
+      if (mapPortalRef.current && mapPortalRef.current.parentNode) {
+        mapPortalRef.current.parentNode.removeChild(mapPortalRef.current);
+      }
+      mapPortalRef.current = null;
+    };
+  }, []);
 
   // Auto-populate search address from context
   useEffect(() => {
@@ -46,7 +65,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     
     const initializeMap = async () => {
       // Prevent multiple initializations
-      if (initializationRef.current || !isMounted || !mapContainerRef.current) {
+      if (initializationRef.current || !isMounted || !mapContainerRef.current || !mapPortalRef.current) {
         return;
       }
       
@@ -73,12 +92,16 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
         await loader.load();
         
-        if (!isMounted || !mapContainerRef.current) return;
+        if (!isMounted || !mapContainerRef.current || !mapPortalRef.current) return;
+        
+        // Append our portal div to the container
+        mapContainerRef.current.innerHTML = '';
+        mapContainerRef.current.appendChild(mapPortalRef.current);
         
         setIsLoaded(true);
 
-        // Initialize map directly on the container
-        mapInstanceRef.current = new google.maps.Map(mapContainerRef.current, {
+        // Initialize map on the portal div
+        mapInstanceRef.current = new google.maps.Map(mapPortalRef.current, {
           center: { lat: -25.2744, lng: 133.7751 }, // Australia center
           zoom: 6,
           mapTypeId: mapType,
