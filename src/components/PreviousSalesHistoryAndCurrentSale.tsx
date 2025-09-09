@@ -34,6 +34,16 @@ const PreviousSalesHistoryAndCurrentSale = () => {
   // Transaction Analysis dates
   const [transactionDate, setTransactionDate] = useState<Date>();
   const [valuationDate, setValuationDate] = useState<Date>();
+  
+  // Transaction Analysis Summary state
+  const [includeTransactionAnalysis, setIncludeTransactionAnalysis] = useState(true);
+  const [includeTransactionDate, setIncludeTransactionDate] = useState(true);
+  const [includeValuationDate, setIncludeValuationDate] = useState(true);
+  const [includeMarketTrends, setIncludeMarketTrends] = useState(true);
+  const [includePriceVariation, setIncludePriceVariation] = useState(true);
+  const [includeTransactionReliability, setIncludeTransactionReliability] = useState(true);
+  const [includeValuationImpact, setIncludeValuationImpact] = useState(true);
+  const [includeOverallComments, setIncludeOverallComments] = useState(true);
 
   return (
     <div className="space-y-6">
@@ -271,123 +281,219 @@ const PreviousSalesHistoryAndCurrentSale = () => {
       {/* Transaction Analysis Summary */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Transaction Analysis Summary</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">Transaction Analysis Summary</CardTitle>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="include-transaction-analysis">Include</Label>
+              <Switch
+                id="include-transaction-analysis"
+                checked={includeTransactionAnalysis}
+                onCheckedChange={setIncludeTransactionAnalysis}
+              />
+            </div>
+          </div>
           <p className="text-sm text-muted-foreground">Overall assessment of sales history and current transaction</p>
         </CardHeader>
-        <CardContent className="space-y-4">
+        {includeTransactionAnalysis && (
+          <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="transaction-date">Date of Transaction</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !transactionDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {transactionDate ? format(transactionDate, "PPP") : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={transactionDate}
-                    onSelect={setTransactionDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+            {includeTransactionDate && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="transaction-date">Date of Transaction</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="include-transaction-date" className="text-xs">Include</Label>
+                    <Switch
+                      id="include-transaction-date"
+                      checked={includeTransactionDate}
+                      onCheckedChange={setIncludeTransactionDate}
+                    />
+                  </div>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !transactionDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {transactionDate ? format(transactionDate, "PPP") : "Select date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={transactionDate}
+                      onSelect={setTransactionDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="valuation-date">Date of Valuation</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !valuationDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {valuationDate ? format(valuationDate, "PPP") : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={valuationDate}
-                    onSelect={setValuationDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+            {includeValuationDate && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="valuation-date">Date of Valuation</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="include-valuation-date" className="text-xs">Include</Label>
+                    <Switch
+                      id="include-valuation-date"
+                      checked={includeValuationDate}
+                      onCheckedChange={setIncludeValuationDate}
+                    />
+                  </div>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !valuationDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {valuationDate ? format(valuationDate, "PPP") : "Select date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={valuationDate}
+                      onSelect={setValuationDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {includeMarketTrends && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="market-trends">Market Trends</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="include-market-trends" className="text-xs">Include</Label>
+                    <Switch
+                      id="include-market-trends"
+                      checked={includeMarketTrends}
+                      onCheckedChange={setIncludeMarketTrends}
+                    />
+                  </div>
+                </div>
+                <Textarea
+                  id="market-trends"
+                  placeholder="Analysis of market trends between sales..."
+                  rows={3}
+                />
+              </div>
+            )}
+
+            {includePriceVariation && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="price-variation">Price Variation Analysis</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="include-price-variation" className="text-xs">Include</Label>
+                    <Switch
+                      id="include-price-variation"
+                      checked={includePriceVariation}
+                      onCheckedChange={setIncludePriceVariation}
+                    />
+                  </div>
+                </div>
+                <Textarea
+                  id="price-variation"
+                  placeholder="Analysis of price changes and factors..."
+                  rows={3}
+                />
+              </div>
+            )}
+
+            {includeTransactionReliability && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="transaction-reliability">Transaction Reliability</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="include-transaction-reliability" className="text-xs">Include</Label>
+                    <Switch
+                      id="include-transaction-reliability"
+                      checked={includeTransactionReliability}
+                      onCheckedChange={setIncludeTransactionReliability}
+                    />
+                  </div>
+                </div>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select reliability" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="high">High - Arms length transaction</SelectItem>
+                    <SelectItem value="medium">Medium - Some constraints</SelectItem>
+                    <SelectItem value="low">Low - Special circumstances</SelectItem>
+                    <SelectItem value="na">N/A - No recent sales</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {includeValuationImpact && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="valuation-impact">Valuation Impact</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="include-valuation-impact" className="text-xs">Include</Label>
+                    <Switch
+                      id="include-valuation-impact"
+                      checked={includeValuationImpact}
+                      onCheckedChange={setIncludeValuationImpact}
+                    />
+                  </div>
+                </div>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select impact" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="positive">Positive - Supports valuation</SelectItem>
+                    <SelectItem value="neutral">Neutral - Limited impact</SelectItem>
+                    <SelectItem value="negative">Negative - Requires adjustment</SelectItem>
+                    <SelectItem value="inconclusive">Inconclusive - Insufficient data</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+
+          {includeOverallComments && (
             <div className="space-y-2">
-              <Label htmlFor="market-trends">Market Trends</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="overall-comments">Overall Comments</Label>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="include-overall-comments" className="text-xs">Include</Label>
+                  <Switch
+                    id="include-overall-comments"
+                    checked={includeOverallComments}
+                    onCheckedChange={setIncludeOverallComments}
+                  />
+                </div>
+              </div>
               <Textarea
-                id="market-trends"
-                placeholder="Analysis of market trends between sales..."
-                rows={3}
+                id="overall-comments"
+                placeholder="Summary of sales history analysis and impact on valuation..."
+                rows={4}
               />
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="price-variation">Price Variation Analysis</Label>
-              <Textarea
-                id="price-variation"
-                placeholder="Analysis of price changes and factors..."
-                rows={3}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="transaction-reliability">Transaction Reliability</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select reliability" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="high">High - Arms length transaction</SelectItem>
-                  <SelectItem value="medium">Medium - Some constraints</SelectItem>
-                  <SelectItem value="low">Low - Special circumstances</SelectItem>
-                  <SelectItem value="na">N/A - No recent sales</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="valuation-impact">Valuation Impact</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select impact" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="positive">Positive - Supports valuation</SelectItem>
-                  <SelectItem value="neutral">Neutral - Limited impact</SelectItem>
-                  <SelectItem value="negative">Negative - Requires adjustment</SelectItem>
-                  <SelectItem value="inconclusive">Inconclusive - Insufficient data</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="overall-comments">Overall Comments</Label>
-            <Textarea
-              id="overall-comments"
-              placeholder="Summary of sales history analysis and impact on valuation..."
-              rows={4}
-            />
-          </div>
+          )}
         </CardContent>
+        )}
       </Card>
     </div>
   );
