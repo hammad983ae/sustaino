@@ -71,52 +71,147 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           </p>
         </div>
 
-        {/* Property Type Cards */}
+        {/* Core Business Services - Valuations & ESG */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {propertyTypes.map((type) => {
-            const IconComponent = type.icon;
-            return (
-              <Card 
-                key={type.id} 
-                className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${type.color}`}
-                onClick={() => onSelect(type.id)}
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-lg bg-white shadow-sm">
-                      <IconComponent className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">{type.title}</CardTitle>
-                      <CardDescription className="text-sm">
-                        {type.description}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="space-y-2 mb-4">
-                    <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
-                    <ul className="text-sm space-y-1">
-                      {type.features.map((feature, index) => (
-                        <li key={index} className="flex items-center text-muted-foreground">
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <Button className="w-full" variant="default">
-                    Start {type.title} Valuation
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
+          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-primary/10 border-primary/20">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-lg bg-white shadow-sm">
+                  <Calculator className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Property Valuations</CardTitle>
+                  <CardDescription className="text-sm">
+                    Comprehensive automated property valuation services
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-2 mb-4">
+                <h4 className="text-sm font-medium text-muted-foreground">All Property Types Include:</h4>
+                <ul className="text-sm space-y-1">
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Market analysis & comparables
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Risk assessment
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Portfolio aggregation
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Performance metrics
+                  </li>
+                </ul>
+              </div>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white">
+                Start Property Valuation
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-success/10 border-success/20">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-lg bg-white shadow-sm">
+                  <Leaf className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">ESG Assessment</CardTitle>
+                  <CardDescription className="text-sm">
+                    Environmental, social, and governance analysis
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-2 mb-4">
+                <h4 className="text-sm font-medium text-muted-foreground">ESG Intelligence Includes:</h4>
+                <ul className="text-sm space-y-1">
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    ESG scoring & sustainability metrics
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Carbon footprint analysis
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Climate risk assessment
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Value premium identification
+                  </li>
+                </ul>
+              </div>
+              <Button className="w-full bg-success hover:bg-success/90 text-white">
+                Start ESG Assessment
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Additional Report Options */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Property Type Selection */}
+        <div className="mb-8">
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-semibold mb-2">Property Type Valuations</h3>
+            <p className="text-muted-foreground">
+              Select your specific property type for targeted valuation analysis
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {propertyTypes.map((type) => {
+              const IconComponent = type.icon;
+              return (
+                <Card 
+                  key={type.id} 
+                  className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${type.color}`}
+                  onClick={() => onSelect(type.id)}
+                >
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 rounded-lg bg-white shadow-sm">
+                        <IconComponent className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg">{type.title}</CardTitle>
+                        <CardDescription className="text-sm">
+                          {type.description}
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="space-y-2 mb-4">
+                      <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
+                      <ul className="text-sm space-y-1">
+                        {type.features.map((feature, index) => (
+                          <li key={index} className="flex items-center text-muted-foreground">
+                            <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <Button className="w-full" variant="outline">
+                      Start {type.title} Valuation
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Additional Services */}
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
           <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-secondary/10 border-secondary/20">
             <CardHeader className="pb-4">
               <div className="flex items-center space-x-3">
