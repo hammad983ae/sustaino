@@ -314,6 +314,18 @@ const PropertyDetails = () => {
                     <Label htmlFor="car-parking">Car Parking Spaces</Label>
                     <Input id="car-parking" placeholder="Number of spaces" />
                   </div>
+                  <div>
+                    <Label htmlFor="floor-plan">Floor Plan</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select floor plan status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="functional">Functional</SelectItem>
+                        <SelectItem value="non-functional">Non Functional</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                   <div>
                     <Label htmlFor="building-condition">Building Condition</Label>
@@ -637,7 +649,19 @@ const PropertyDetails = () => {
                               <SelectItem value="review">Under Review</SelectItem>
                             </SelectContent>
                           </Select>
-                        </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="floor-plan-res">Floor Plan</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select floor plan status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="functional">Functional</SelectItem>
+                          <SelectItem value="non-functional">Non Functional</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                         <div>
                           <Label htmlFor="completion-status-residential">Will Project Be Complete on Completion</Label>
                           <Select>
@@ -801,6 +825,18 @@ const PropertyDetails = () => {
                       </Select>
                     </div>
                     <div>
+                      <Label htmlFor="floor-plan-btr">Floor Plan</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select floor plan status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="functional">Functional</SelectItem>
+                          <SelectItem value="non-functional">Non Functional</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
                       <Label htmlFor="aspect">Aspect</Label>
                       <Select>
                         <SelectTrigger>
@@ -956,6 +992,18 @@ const PropertyDetails = () => {
                     <div>
                       <Label htmlFor="vat-capacity">Vat Capacity (L)</Label>
                       <Input id="vat-capacity" placeholder="Milk vat capacity" />
+                    </div>
+                    <div>
+                      <Label htmlFor="floor-plan-agri">Floor Plan</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select floor plan status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="functional">Functional</SelectItem>
+                          <SelectItem value="non-functional">Non Functional</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
@@ -1443,7 +1491,19 @@ const PropertyDetails = () => {
                       <SelectItem value="data-center">Data Center</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="floor-plan-spec">Floor Plan</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select floor plan status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="functional">Functional</SelectItem>
+                        <SelectItem value="non-functional">Non Functional</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                 {/* Basic Property Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
