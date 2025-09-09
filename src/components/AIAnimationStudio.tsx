@@ -12,13 +12,19 @@ import { Separator } from '@/components/ui/separator';
 import { Play, Settings, History, Sparkles, Wand2 } from 'lucide-react';
 import AIAnimationPreview from './AIAnimationPreview';
 import { useAIAnimation, type AnimationParams } from '@/hooks/useAIAnimation';
+import { useReportScript } from '@/hooks/useReportScript';
 
 const AIAnimationStudio: React.FC = () => {
   const [prompt, setPrompt] = useState('');
+  const [manualScript, setManualScript] = useState('');
+  const [useManualScript, setUseManualScript] = useState(false);
+  const [useReportData, setUseReportData] = useState(false);
   const [width, setWidth] = useState([1024]);
   const [height, setHeight] = useState([1024]);
   const [steps, setSteps] = useState([4]);
   const [model, setModel] = useState('runware:100@1');
+  
+  const { script, hasReportData } = useReportScript();
   
   const { 
     generateAnimation, 
@@ -36,10 +42,16 @@ const AIAnimationStudio: React.FC = () => {
   }>>([]);
 
   const handleGenerate = async () => {
-    if (!prompt.trim()) return;
+    const finalPrompt = useReportData && hasReportData
+      ? script.combined
+      : useManualScript && manualScript.trim() 
+        ? manualScript.trim() 
+        : prompt.trim();
+        
+    if (!finalPrompt) return;
 
     const params: AnimationParams = {
-      prompt: prompt.trim(),
+      prompt: finalPrompt,
       width: width[0],
       height: height[0],
       steps: steps[0],
@@ -89,6 +101,7 @@ const AIAnimationStudio: React.FC = () => {
         </h1>
         <p className="text-muted-foreground">
           Create stunning animations with AI-powered generation technology
+          {hasReportData && <span className="text-primary"> • Auto-script from your report data available</span>}
         </p>
       </div>
 
@@ -103,17 +116,104 @@ const AIAnimationStudio: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="prompt">Describe your animation</Label>
-                <Textarea
-                  id="prompt"
-                  placeholder="A magical forest with glowing trees and floating particles..."
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  rows={4}
-                  className="resize-none"
-                />
+              {/* Script Input Options */}
+              <div className="space-y-3 p-4 border rounded-lg bg-secondary/10">
+                <Label className="text-base font-medium">Animation Script Options</Label>
+                
+                {hasReportData && (
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id="use-report-data"
+                      name="script-option"
+                      checked={useReportData}
+                      onChange={(e) => {
+                        setUseReportData(e.target.checked);
+                        if (e.target.checked) {
+                          setUseManualScript(false);
+                        }
+                      }}
+                      className="rounded"
+                    />
+                    <Label htmlFor="use-report-data">Auto-Generate from Report Data</Label>
+                    <Badge variant="secondary" className="text-xs">Smart</Badge>
+                  </div>
+                )}
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="use-manual-script"
+                    name="script-option"
+                    checked={useManualScript}
+                    onChange={(e) => {
+                      setUseManualScript(e.target.checked);
+                      if (e.target.checked) {
+                        setUseReportData(false);
+                      }
+                    }}
+                    className="rounded"
+                  />
+                  <Label htmlFor="use-manual-script">Manual Script Input</Label>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="use-simple-prompt"
+                    name="script-option"
+                    checked={!useManualScript && !useReportData}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setUseManualScript(false);
+                        setUseReportData(false);
+                      }
+                    }}
+                    className="rounded"
+                  />
+                  <Label htmlFor="use-simple-prompt">Simple Prompt</Label>
+                </div>
               </div>
+
+              {/* Content based on selection */}
+              {useReportData && hasReportData ? (
+                <div className="space-y-2">
+                  <Label>Generated Script from Report Data</Label>
+                  <div className="p-3 border rounded bg-muted/50 text-sm">
+                    <p className="text-muted-foreground">{script.combined}</p>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    This script was automatically generated from your report data including property details, market analysis, and location information.
+                  </p>
+                </div>
+              ) : useManualScript ? (
+                <div className="space-y-2">
+                  <Label htmlFor="manual-script">Manual Animation Script</Label>
+                  <Textarea
+                    id="manual-script"
+                    placeholder="Enter detailed animation script or instructions from your report..."
+                    value={manualScript}
+                    onChange={(e) => setManualScript(e.target.value)}
+                    rows={6}
+                    className="resize-none"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Enter your custom script for animation generation
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label htmlFor="prompt">Describe your animation</Label>
+                  <Textarea
+                    id="prompt"
+                    placeholder="A magical forest with glowing trees and floating particles..."
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    rows={4}
+                    className="resize-none"
+                  />
+                </div>
+              )}
               
               <div className="space-y-2">
                 <Label>Quick Suggestions</Label>
@@ -123,7 +223,17 @@ const AIAnimationStudio: React.FC = () => {
                       key={index}
                       variant="outline" 
                       className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-                      onClick={() => setPrompt(suggestion)}
+                      onClick={() => {
+                        if (useReportData) {
+                          setUseReportData(false);
+                          setUseManualScript(true);
+                          setManualScript(suggestion);
+                        } else if (useManualScript) {
+                          setManualScript(suggestion);
+                        } else {
+                          setPrompt(suggestion);
+                        }
+                      }}
                     >
                       {suggestion.split(' ').slice(0, 4).join(' ')}...
                     </Badge>
@@ -133,7 +243,7 @@ const AIAnimationStudio: React.FC = () => {
 
               <Button 
                 onClick={handleGenerate} 
-                disabled={!prompt.trim() || isGenerating}
+                disabled={(!prompt.trim() && !manualScript.trim() && !useReportData) || isGenerating}
                 className="w-full"
                 size="lg"
               >
@@ -270,9 +380,9 @@ const AIAnimationStudio: React.FC = () => {
                             <Button 
                               size="sm" 
                               variant="outline"
-                              onClick={() => setPrompt(item.prompt)}
+                              onClick={() => useManualScript ? setManualScript(item.prompt) : setPrompt(item.prompt)}
                             >
-                              Use Prompt
+                              Use {useManualScript ? 'Script' : 'Prompt'}
                             </Button>
                           </div>
                         </div>
