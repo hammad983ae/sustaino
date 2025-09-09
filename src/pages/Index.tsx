@@ -17,8 +17,8 @@ import {
   CloudRain,
   ArrowLeft
 } from 'lucide-react';
-import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
-import MultiStepForm from '@/components/MultiStepForm';
+import SimplifiedClimateRisk from '@/components/SimplifiedClimateRisk';
+import SimplifiedMultiStepForm from '@/components/SimplifiedMultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 
 const Index = () => {
@@ -194,7 +194,7 @@ const Index = () => {
 
                 <div className="bg-card p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold mb-4">Property Assessment Form</h3>
-                  <MultiStepForm onSubmit={handleBasicFormSubmit} />
+                  <SimplifiedMultiStepForm onSubmit={handleBasicFormSubmit} />
                 </div>
               </TabsContent>
 
@@ -363,7 +363,7 @@ const Index = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <ClimateRiskAssessment />
+                  <SimplifiedClimateRisk />
                 </CardContent>
               </Card>
             )}
