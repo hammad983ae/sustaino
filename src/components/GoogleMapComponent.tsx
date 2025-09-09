@@ -25,10 +25,12 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
+  const mapDivRef = useRef<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchAddress, setSearchAddress] = useState('');
   const [mapType, setMapType] = useState<'roadmap' | 'satellite'>('roadmap');
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isCleanedUp, setIsCleanedUp] = useState(false);
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
 
   useEffect(() => {
@@ -44,8 +46,8 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     let initializationPromise: Promise<void> | null = null;
     
     const initializeMap = async () => {
-      // Prevent multiple initializations
-      if (isInitialized || !isMounted || initializationPromise) return;
+      // Prevent multiple initializations and check if component is still mounted
+      if (isInitialized || !isMounted || initializationPromise || isCleanedUp) return;
       
       initializationPromise = (async () => {
         try {
@@ -73,12 +75,17 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           
           setIsLoaded(true);
 
-          // Use the React ref directly instead of creating new elements
-          if (!mapContainerRef.current) return;
+          // Safe DOM manipulation with existence checks
+          if (!mapContainerRef.current || !isMounted) return;
           
           // Clear any existing content safely
-          while (mapContainerRef.current.firstChild) {
-            mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
+          const container = mapContainerRef.current;
+          try {
+            while (container.firstChild && container.contains(container.firstChild)) {
+              container.removeChild(container.firstChild);
+            }
+          } catch (e) {
+            console.error('Failed to clear map container:', e);
           }
           
           // Create map div as a child of the React-managed container
@@ -86,8 +93,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           mapDiv.style.width = '100%';
           mapDiv.style.height = '100%';
           mapDiv.style.borderRadius = '0.5rem';
+          mapDiv.setAttribute('data-map-div', 'true'); // Add identifier
           
-          mapContainerRef.current.appendChild(mapDiv);
+          mapDivRef.current = mapDiv;
+          container.appendChild(mapDiv);
 
           // Initialize map on the new div
           mapInstanceRef.current = new google.maps.Map(mapDiv, {
@@ -115,17 +124,21 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     // Use a timeout to ensure DOM is ready
     const timeoutId = setTimeout(initializeMap, 100);
     
-    // Cleanup function
+    // Cleanup function with robust error handling
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
       
-      // Clean up marker first
+      // Prevent multiple cleanup attempts
+      if (isCleanedUp) return;
+      setIsCleanedUp(true);
+      
+      // Clean up marker first with existence check
       if (markerRef.current) {
         try {
           markerRef.current.setMap(null);
         } catch (e) {
-          // Ignore cleanup errors
+          console.error('Failed to remove marker:', e);
         }
         markerRef.current = null;
       }
@@ -133,15 +146,20 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
       // Clear map instance
       mapInstanceRef.current = null;
       
-      // Clear the container safely without conflicting with React
-      if (mapContainerRef.current) {
+      // Clear the container safely with existence checks
+      if (mapContainerRef.current && mapDivRef.current) {
         try {
-          while (mapContainerRef.current.firstChild) {
-            mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
+          const container = mapContainerRef.current;
+          const mapDiv = mapDivRef.current;
+          
+          // Check if the node exists and is a child before removing
+          if (container.contains(mapDiv)) {
+            container.removeChild(mapDiv);
           }
         } catch (e) {
-          // Ignore cleanup errors
+          console.error('Failed to remove map div:', e);
         }
+        mapDivRef.current = null;
       }
       
       setIsLoaded(false);
@@ -172,12 +190,12 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         mapInstanceRef.current.setCenter(location);
         mapInstanceRef.current.setZoom(17);
 
-        // Remove existing marker safely
+        // Remove existing marker safely with existence check
         if (markerRef.current) {
           try {
             markerRef.current.setMap(null);
           } catch (e) {
-            // Ignore cleanup errors
+            console.error('Failed to remove existing marker:', e);
           }
           markerRef.current = null;
         }
