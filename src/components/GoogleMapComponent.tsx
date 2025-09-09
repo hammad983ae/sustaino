@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,147 +25,107 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
-  const mapDivRef = useRef<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchAddress, setSearchAddress] = useState('');
   const [mapType, setMapType] = useState<'roadmap' | 'satellite'>('roadmap');
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isCleanedUp, setIsCleanedUp] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
 
+  // Auto-populate search address from context
   useEffect(() => {
-    // Auto-populate search address from context
     const fullAddress = getFormattedAddress();
     if (fullAddress && fullAddress !== searchAddress) {
       setSearchAddress(fullAddress);
     }
-  }, [addressData, getFormattedAddress]);
+  }, [addressData, getFormattedAddress, searchAddress]);
 
+  // Safe cleanup function
+  const cleanup = useCallback(() => {
+    if (markerRef.current) {
+      try {
+        markerRef.current.setMap(null);
+      } catch (e) {
+        console.warn('Marker cleanup error:', e);
+      }
+      markerRef.current = null;
+    }
+    
+    mapInstanceRef.current = null;
+    setIsLoaded(false);
+    setIsInitialized(false);
+  }, []);
+
+  // Initialize map with React-friendly approach
   useEffect(() => {
     let isMounted = true;
-    let initializationPromise: Promise<void> | null = null;
     
     const initializeMap = async () => {
-      // Prevent multiple initializations and check if component is still mounted
-      if (isInitialized || !isMounted || initializationPromise || isCleanedUp) return;
+      if (isInitialized || !mapContainerRef.current) return;
       
-      initializationPromise = (async () => {
-        try {
-          setIsInitialized(true);
-          
-          // Get API key from Supabase function
-          const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
-          
-          if (error || !apiKeyData?.apiKey) {
-            console.error('Error fetching Google Maps API key:', error);
-            return;
-          }
-
-          if (!isMounted) return;
-
-          const loader = new Loader({
-            apiKey: apiKeyData.apiKey,
-            version: 'weekly',
-            libraries: ['places', 'geometry']
-          });
-
-          await loader.load();
-          
-          if (!isMounted || !mapContainerRef.current) return;
-          
-          setIsLoaded(true);
-
-          // Safe DOM manipulation with existence checks
-          if (!mapContainerRef.current || !isMounted) return;
-          
-          // Clear any existing content safely
-          const container = mapContainerRef.current;
-          try {
-            while (container.firstChild && container.contains(container.firstChild)) {
-              container.removeChild(container.firstChild);
-            }
-          } catch (e) {
-            console.error('Failed to clear map container:', e);
-          }
-          
-          // Create map div as a child of the React-managed container
-          const mapDiv = document.createElement('div');
-          mapDiv.style.width = '100%';
-          mapDiv.style.height = '100%';
-          mapDiv.style.borderRadius = '0.5rem';
-          mapDiv.setAttribute('data-map-div', 'true'); // Add identifier
-          
-          mapDivRef.current = mapDiv;
-          container.appendChild(mapDiv);
-
-          // Initialize map on the new div
-          mapInstanceRef.current = new google.maps.Map(mapDiv, {
-            center: { lat: -25.2744, lng: 133.7751 }, // Australia center
-            zoom: 6,
-            mapTypeId: mapType,
-            zoomControl: true,
-            streetViewControl: true,
-            fullscreenControl: true,
-            mapTypeControl: false
-          });
-
-          // Search for address if available
-          if (searchAddress && isMounted) {
-            searchAddressOnMap(searchAddress);
-          }
-        } catch (error) {
-          console.error('Error loading Google Maps:', error);
+      try {
+        setIsInitialized(true);
+        setError(null);
+        
+        // Get API key from Supabase function
+        const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
+        
+        if (error || !apiKeyData?.apiKey) {
+          throw new Error('Google Maps API key not available');
         }
-      })();
-      
-      await initializationPromise;
+
+        if (!isMounted || !mapContainerRef.current) return;
+
+        const loader = new Loader({
+          apiKey: apiKeyData.apiKey,
+          version: 'weekly',
+          libraries: ['places', 'geometry']
+        });
+
+        await loader.load();
+        
+        if (!isMounted || !mapContainerRef.current) return;
+        
+        setIsLoaded(true);
+
+        // Initialize map directly on the React ref - no DOM manipulation
+        mapInstanceRef.current = new google.maps.Map(mapContainerRef.current, {
+          center: { lat: -25.2744, lng: 133.7751 }, // Australia center
+          zoom: 6,
+          mapTypeId: mapType,
+          zoomControl: true,
+          streetViewControl: true,
+          fullscreenControl: true,
+          mapTypeControl: false
+        });
+
+        // Search for address if available
+        if (searchAddress && isMounted) {
+          searchAddressOnMap(searchAddress);
+        }
+      } catch (error) {
+        console.error('Error loading Google Maps:', error);
+        setError(error.message || 'Failed to load Google Maps');
+        setIsInitialized(false);
+      }
     };
 
-    // Use a timeout to ensure DOM is ready
+    // Small delay to ensure DOM is ready
     const timeoutId = setTimeout(initializeMap, 100);
     
-    // Cleanup function with robust error handling
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
-      
-      // Prevent multiple cleanup attempts
-      if (isCleanedUp) return;
-      setIsCleanedUp(true);
-      
-      // Clean up marker first with existence check
-      if (markerRef.current) {
-        try {
-          markerRef.current.setMap(null);
-        } catch (e) {
-          console.error('Failed to remove marker:', e);
-        }
-        markerRef.current = null;
-      }
-      
-      // Clear map instance
-      mapInstanceRef.current = null;
-      
-      // Clear the container safely with existence checks
-      if (mapContainerRef.current && mapDivRef.current) {
-        try {
-          const container = mapContainerRef.current;
-          const mapDiv = mapDivRef.current;
-          
-          // Check if the node exists and is a child before removing
-          if (container.contains(mapDiv)) {
-            container.removeChild(mapDiv);
-          }
-        } catch (e) {
-          console.error('Failed to remove map div:', e);
-        }
-        mapDivRef.current = null;
-      }
-      
-      setIsLoaded(false);
-      setIsInitialized(false);
+      cleanup();
     };
-  }, []);
+  }, []); // Empty dependency array - only run once
+
+  // Handle map type changes
+  useEffect(() => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.setMapTypeId(mapType);
+    }
+  }, [mapType]);
 
   const searchAddressOnMap = async (address: string) => {
     if (!mapInstanceRef.current || !isLoaded) return;
@@ -190,12 +150,12 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         mapInstanceRef.current.setCenter(location);
         mapInstanceRef.current.setZoom(17);
 
-        // Remove existing marker safely with existence check
+        // Remove existing marker safely
         if (markerRef.current) {
           try {
             markerRef.current.setMap(null);
           } catch (e) {
-            console.error('Failed to remove existing marker:', e);
+            console.warn('Existing marker removal error:', e);
           }
           markerRef.current = null;
         }
@@ -214,11 +174,13 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
       }
     } catch (error) {
       console.error('Error geocoding address:', error);
+      setError('Failed to find address');
     }
   };
 
   const handleSearch = () => {
     if (searchAddress.trim()) {
+      setError(null);
       searchAddressOnMap(searchAddress);
     }
   };
@@ -226,10 +188,6 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   const toggleMapType = () => {
     const newMapType = mapType === 'roadmap' ? 'satellite' : 'roadmap';
     setMapType(newMapType);
-    
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.setMapTypeId(newMapType);
-    }
   };
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -288,13 +246,20 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           </Button>
         </div>
         
-        {/* Map Container */}
+        {/* Error Display */}
+        {error && (
+          <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+            <p className="text-sm text-destructive">{error}</p>
+          </div>
+        )}
+        
+        {/* Map Container - No manual DOM manipulation */}
         <div 
           ref={mapContainerRef} 
           style={{ height, width: '100%' }}
           className="rounded-lg border bg-muted flex items-center justify-center"
         >
-          {!isLoaded && (
+          {!isLoaded && !error && (
             <div className="text-center text-muted-foreground">
               <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
               <p>Loading Google Maps...</p>
