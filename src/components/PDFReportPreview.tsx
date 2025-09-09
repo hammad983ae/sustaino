@@ -45,22 +45,65 @@ const PDFReportPreview: React.FC<PDFReportPreviewProps> = ({
         });
       };
 
-      // Title Page
-      pdf.setFontSize(24);
+      // Cover Page - Dark blue background
+      pdf.setFillColor(30, 41, 59); // Dark slate blue
+      pdf.rect(0, 0, 210, 297, 'F');
+      
+      // Title
+      pdf.setTextColor(251, 191, 36); // Amber color
+      pdf.setFontSize(32);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('COMPREHENSIVE PROPERTY REPORT', 105, 40, { align: 'center' });
+      pdf.text('Valuation Report', 105, 40, { align: 'center' });
       
-      pdf.setFontSize(16);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(reportData.propertyAddress || '123 Example Street, Suburb', 105, 55, { align: 'center' });
+      // Logo area with squares
+      pdf.setFillColor(52, 211, 153); // Emerald
+      pdf.rect(85, 60, 8, 8, 'F');
+      pdf.setFillColor(217, 119, 6); // Amber-600
+      pdf.rect(85, 70, 8, 8, 'F');
       
+      // Company name
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('DELORENZO', 100, 67);
+      pdf.setFontSize(14);
+      pdf.text('PROPERTY', 100, 74);
+      pdf.text('GROUP', 100, 81);
+      
+      // Tagline
       pdf.setFontSize(12);
-      pdf.text(`Prepared: ${new Date().toLocaleDateString()}`, 105, 70, { align: 'center' });
-      pdf.text('Commercial Valuation Report', 105, 80, { align: 'center' });
-
-      // Add company logo placeholder
-      pdf.rect(75, 100, 60, 30);
-      pdf.text('Company Logo', 105, 118, { align: 'center' });
+      pdf.setTextColor(52, 211, 153); // Emerald
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('POWERED BY ', 75, 95, { align: 'left' });
+      pdf.setTextColor(203, 213, 225); // Slate-300
+      pdf.text('SUSTAINO PRO', 115, 95, { align: 'left' });
+      
+      // Property image placeholder
+      pdf.setFillColor(71, 85, 105); // Slate-600
+      pdf.rect(55, 110, 100, 60, 'F');
+      pdf.setTextColor(148, 163, 184);
+      pdf.setFontSize(10);
+      pdf.text('Property Photo', 105, 145, { align: 'center' });
+      
+      // Address
+      pdf.setTextColor(52, 211, 153); // Emerald
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(`Address: ${reportData.propertyAddress || '148-150 Pine Avenue Mildura, VIC, 3500, Australia'}`, 105, 190, { align: 'center' });
+      
+      // Bottom information
+      pdf.setTextColor(251, 191, 36); // Amber
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(`Prepared For: ${reportData.preparedFor || 'XXX'}`, 105, 220, { align: 'center' });
+      
+      pdf.setTextColor(203, 213, 225); // Slate-300
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('Prepared By:', 105, 235, { align: 'center' });
+      pdf.text('Delorenzo Property Group Pty Ltd', 105, 245, { align: 'center' });
+      
+      pdf.text(`Reference: ${reportData.referenceNumber || 'REF-001'}`, 70, 260);
+      pdf.text(`Date: ${reportData.dateOfValuation || new Date().toLocaleDateString()}`, 140, 260);
 
       pdf.addPage();
       yPosition = 20;
