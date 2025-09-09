@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useLayoutEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerInstanceRef = useRef<google.maps.Marker | null>(null);
+  const isInitializedRef = useRef(false);
   const [searchAddress, setSearchAddress] = useState('');
   const [mapType, setMapType] = useState<'roadmap' | 'satellite'>('roadmap');
   const [error, setError] = useState<string | null>(null);
@@ -91,16 +92,61 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     }
   }, [updateAddressData]);
 
+  // Cleanup function that can be called safely
+  const cleanupMap = useCallback(() => {
+    if (markerInstanceRef.current) {
+      try {
+        markerInstanceRef.current.setMap(null);
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+      markerInstanceRef.current = null;
+    }
+    
+    if (mapInstanceRef.current) {
+      try {
+        // Don't try to manipulate DOM, just clear the reference
+        mapInstanceRef.current = null;
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+    }
+    
+    // Clear the container by creating a new div inside it
+    if (mapContainerRef.current && mapContainerRef.current.firstChild) {
+      try {
+        const newDiv = document.createElement('div');
+        newDiv.style.width = '100%';
+        newDiv.style.height = '100%';
+        mapContainerRef.current.innerHTML = '';
+        mapContainerRef.current.appendChild(newDiv);
+      } catch (e) {
+        // Ignore DOM manipulation errors
+      }
+    }
+    
+    setIsMapReady(false);
+    isInitializedRef.current = false;
+  }, []);
+
+  // Use useLayoutEffect for cleanup to run before React commits DOM changes
+  useLayoutEffect(() => {
+    return () => {
+      cleanupMap();
+    };
+  }, [cleanupMap]);
+
   // Initial map setup
   useEffect(() => {
-    let isMounted = true;
+    if (isInitializedRef.current) return;
 
     const initializeMap = async () => {
-      if (!mapContainerRef.current) return;
+      if (!mapContainerRef.current || isInitializedRef.current) return;
 
       try {
         setIsLoading(true);
         setError(null);
+        isInitializedRef.current = true;
 
         // Get API key
         const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
@@ -108,7 +154,13 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           throw new Error('Google Maps API key not available');
         }
 
-        if (!isMounted || !mapContainerRef.current) return;
+        if (!mapContainerRef.current) return;
+
+        // Create a child div to isolate from React's DOM management
+        const mapDiv = document.createElement('div');
+        mapDiv.style.width = '100%';
+        mapDiv.style.height = '100%';
+        mapContainerRef.current.appendChild(mapDiv);
 
         // Load Google Maps
         const loader = new Loader({
@@ -118,10 +170,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         });
 
         await loader.load();
-        if (!isMounted || !mapContainerRef.current) return;
+        if (!mapDiv.parentElement) return;
 
-        // Create map
-        mapInstanceRef.current = new google.maps.Map(mapContainerRef.current, {
+        // Create map in the isolated div
+        mapInstanceRef.current = new google.maps.Map(mapDiv, {
           center: { lat: -25.2744, lng: 133.7751 },
           zoom: 6,
           mapTypeId: mapType,
@@ -136,41 +188,13 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
       } catch (err) {
         console.error('Map initialization error:', err);
-        if (isMounted) {
-          setError(err instanceof Error ? err.message : 'Failed to load map');
-          setIsLoading(false);
-        }
+        setError(err instanceof Error ? err.message : 'Failed to load map');
+        setIsLoading(false);
+        isInitializedRef.current = false;
       }
     };
 
     initializeMap();
-
-    return () => {
-      isMounted = false;
-      setIsMapReady(false);
-      
-      // Proper cleanup order: marker first, then map
-      if (markerInstanceRef.current) {
-        try {
-          markerInstanceRef.current.setMap(null);
-          markerInstanceRef.current = null;
-        } catch (e) {
-          console.warn('Marker cleanup warning:', e);
-        }
-      }
-      
-      if (mapInstanceRef.current && mapContainerRef.current) {
-        try {
-          // Clear the container content completely before React unmounts it
-          if (mapContainerRef.current.firstChild) {
-            mapContainerRef.current.innerHTML = '';
-          }
-          mapInstanceRef.current = null;
-        } catch (e) {
-          console.warn('Map cleanup warning:', e);
-        }
-      }
-    };
   }, []); // Only run once on mount
 
   // Search effect
