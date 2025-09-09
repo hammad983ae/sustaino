@@ -4,8 +4,17 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useProperty } from "@/contexts/PropertyContext";
+import { useEffect } from "react";
 
 const PropertyAddressForm = () => {
+  const { addressData, updateAddressData, getFormattedAddress } = useProperty();
+
+  const handleGenerateAddress = () => {
+    const formatted = getFormattedAddress();
+    updateAddressData({ propertyAddress: formatted });
+  };
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
@@ -21,6 +30,8 @@ const PropertyAddressForm = () => {
               id="property-address"
               placeholder="Enter property address"
               className="mt-1"
+              value={addressData.propertyAddress}
+              onChange={(e) => updateAddressData({ propertyAddress: e.target.value })}
             />
           </div>
         </div>
@@ -42,6 +53,8 @@ const PropertyAddressForm = () => {
                 id="lot-number"
                 placeholder="Lot number"
                 className="mt-1"
+                value={addressData.lotNumber}
+                onChange={(e) => updateAddressData({ lotNumber: e.target.value })}
               />
             </div>
             <div>
@@ -50,6 +63,8 @@ const PropertyAddressForm = () => {
                 id="plan-number"
                 placeholder="Plan number"
                 className="mt-1"
+                value={addressData.planNumber}
+                onChange={(e) => updateAddressData({ planNumber: e.target.value })}
               />
             </div>
           </div>
@@ -62,6 +77,8 @@ const PropertyAddressForm = () => {
                 id="unit-number"
                 placeholder="Unit"
                 className="mt-1"
+                value={addressData.unitNumber}
+                onChange={(e) => updateAddressData({ unitNumber: e.target.value })}
               />
             </div>
             <div>
@@ -70,6 +87,8 @@ const PropertyAddressForm = () => {
                 id="street-number"
                 placeholder="Street number"
                 className="mt-1"
+                value={addressData.streetNumber}
+                onChange={(e) => updateAddressData({ streetNumber: e.target.value })}
               />
             </div>
             <div>
@@ -78,11 +97,13 @@ const PropertyAddressForm = () => {
                 id="street-name"
                 placeholder="Street name"
                 className="mt-1"
+                value={addressData.streetName}
+                onChange={(e) => updateAddressData({ streetName: e.target.value })}
               />
             </div>
             <div>
               <Label htmlFor="street-type" className="text-sm">Street Type</Label>
-              <Select>
+              <Select value={addressData.streetType} onValueChange={(value) => updateAddressData({ streetType: value })}>
                 <SelectTrigger className="mt-1">
                   <SelectValue placeholder="Select street type" />
                 </SelectTrigger>
@@ -101,10 +122,10 @@ const PropertyAddressForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="state" className="text-sm">State</Label>
-              <Select>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Select state" />
-                </SelectTrigger>
+            <Select value={addressData.state} onValueChange={(value) => updateAddressData({ state: value })}>
+              <SelectTrigger className="mt-1">
+                <SelectValue placeholder="Select state" />
+              </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="nsw">NSW</SelectItem>
                   <SelectItem value="vic">VIC</SelectItem>
@@ -123,22 +144,27 @@ const PropertyAddressForm = () => {
                 id="postcode"
                 placeholder="Postcode"
                 className="mt-1"
+                value={addressData.postcode}
+                onChange={(e) => updateAddressData({ postcode: e.target.value })}
               />
             </div>
             <div>
               <Label htmlFor="country" className="text-sm">Country</Label>
               <Input 
                 id="country"
-                value="Australia"
-                readOnly
-                className="mt-1 bg-muted"
+                value={addressData.country}
+                onChange={(e) => updateAddressData({ country: e.target.value })}
+                className="mt-1"
               />
             </div>
           </div>
 
           {/* Generate Address Button */}
           <div className="flex justify-end pt-4">
-            <Button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6">
+            <Button 
+              className="bg-emerald-500 hover:bg-emerald-600 text-white px-6"
+              onClick={handleGenerateAddress}
+            >
               Generate Address
             </Button>
           </div>

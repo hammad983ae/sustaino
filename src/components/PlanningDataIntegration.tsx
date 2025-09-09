@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, FileText, MapPin, Search, ExternalLink, Loader2, Map } from "lucide-react";
+import { useProperty } from "@/contexts/PropertyContext";
 
 interface PlanningDataIntegrationProps {
   propertyAddress?: string;
@@ -12,11 +13,25 @@ interface PlanningDataIntegrationProps {
 }
 
 const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: PlanningDataIntegrationProps) => {
+  const { addressData, getFormattedAddress } = useProperty();
   const [selectedState, setSelectedState] = useState("");
-  const [searchAddress, setSearchAddress] = useState(propertyAddress);
+  const [searchAddress, setSearchAddress] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [planningData, setPlanningData] = useState(null);
   const [searchStep, setSearchStep] = useState(1);
+
+  // Auto-populate address from context
+  useEffect(() => {
+    const fullAddress = propertyAddress || getFormattedAddress();
+    if (fullAddress && fullAddress !== searchAddress) {
+      setSearchAddress(fullAddress);
+    }
+    
+    // Auto-select state if available
+    if (addressData.state && addressData.state !== selectedState) {
+      setSelectedState(addressData.state.toLowerCase());
+    }
+  }, [addressData, propertyAddress, getFormattedAddress]);
 
   const handleStateChange = (state: string) => {
     setSelectedState(state);

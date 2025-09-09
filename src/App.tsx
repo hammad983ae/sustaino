@@ -13,30 +13,33 @@ import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import AuthPage from "./pages/Auth";
 import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
 import { BrandingProvider } from "./contexts/BrandingContext";
+import { PropertyProvider } from "./contexts/PropertyContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrandingProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<AutomatedValuation />} />
-            <Route path="/index" element={<Index />} />
-            <Route path="/report" element={<Report />} />
-            <Route path="/property-valuations" element={<PropertyValuations />} />
-            <Route path="/work-hub" element={<WorkHubPage />} />
-            <Route path="/white-label" element={<WhiteLabelConfig />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <PropertyProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<AutomatedValuation />} />
+              <Route path="/index" element={<Index />} />
+              <Route path="/report" element={<Report />} />
+              <Route path="/property-valuations" element={<PropertyValuations />} />
+              <Route path="/work-hub" element={<WorkHubPage />} />
+              <Route path="/white-label" element={<WhiteLabelConfig />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </PropertyProvider>
     </BrandingProvider>
   </QueryClientProvider>
 );

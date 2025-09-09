@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MapPin, Sparkles, Building, FileText } from "lucide-react";
+import { AutofillAddressFields } from "@/components/AutofillAddressFields";
 
 const RPDAndLocation = () => {
   return (
@@ -42,107 +43,11 @@ const RPDAndLocation = () => {
             </TabsList>
             
             <TabsContent value="street-address" className="space-y-4 mt-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="unit">Unit (Optional)</Label>
-                  <Input id="unit" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="street-number">Street Number *</Label>
-                  <Input id="street-number" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="street-name">Street Name *</Label>
-                  <Input id="street-name" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="street-type">Street Type</Label>
-                  <Select>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="street">Street</SelectItem>
-                      <SelectItem value="road">Road</SelectItem>
-                      <SelectItem value="avenue">Avenue</SelectItem>
-                      <SelectItem value="court">Court</SelectItem>
-                      <SelectItem value="close">Close</SelectItem>
-                      <SelectItem value="drive">Drive</SelectItem>
-                      <SelectItem value="lane">Lane</SelectItem>
-                      <SelectItem value="place">Place</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="suburb">Suburb *</Label>
-                  <Input id="suburb" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="state">State *</Label>
-                  <Select>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="nsw">NSW</SelectItem>
-                      <SelectItem value="vic">VIC</SelectItem>
-                      <SelectItem value="qld">QLD</SelectItem>
-                      <SelectItem value="wa">WA</SelectItem>
-                      <SelectItem value="sa">SA</SelectItem>
-                      <SelectItem value="tas">TAS</SelectItem>
-                      <SelectItem value="act">ACT</SelectItem>
-                      <SelectItem value="nt">NT</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="postcode">Postcode</Label>
-                  <Input id="postcode" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="country">Country</Label>
-                  <Input id="country" value="Australia" readOnly className="mt-1 bg-muted" />
-                </div>
-              </div>
+              <AutofillAddressFields showUnit={true} showSuburb={true} />
             </TabsContent>
 
             <TabsContent value="lot-plan" className="space-y-4 mt-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="lot-number">Lot Number *</Label>
-                  <Input id="lot-number" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="plan-number">Plan Number *</Label>
-                  <Input id="plan-number" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="lot-suburb">Suburb *</Label>
-                  <Input id="lot-suburb" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="lot-state">State *</Label>
-                  <Select>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="nsw">NSW</SelectItem>
-                      <SelectItem value="vic">VIC</SelectItem>
-                      <SelectItem value="qld">QLD</SelectItem>
-                      <SelectItem value="wa">WA</SelectItem>
-                      <SelectItem value="sa">SA</SelectItem>
-                      <SelectItem value="tas">TAS</SelectItem>
-                      <SelectItem value="act">ACT</SelectItem>
-                      <SelectItem value="nt">NT</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="lot-postcode">Postcode</Label>
-                  <Input id="lot-postcode" placeholder="" className="mt-1" />
-                </div>
-              </div>
+              <AutofillAddressFields showLotPlan={true} showSuburb={true} />
             </TabsContent>
           </Tabs>
         </CardContent>
