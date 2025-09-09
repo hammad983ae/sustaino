@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,13 +23,11 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   className = "" 
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<google.maps.Map | null>(null);
-  const markerRef = useRef<google.maps.Marker | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [searchAddress, setSearchAddress] = useState('');
   const [mapType, setMapType] = useState<'roadmap' | 'satellite'>('roadmap');
-  const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mapKey, setMapKey] = useState(0);
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
 
   // Auto-populate search address from context
@@ -40,42 +38,28 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     }
   }, [addressData, getFormattedAddress, searchAddress]);
 
-  // Safe cleanup function
-  const cleanup = useCallback(() => {
-    if (markerRef.current) {
-      try {
-        markerRef.current.setMap(null);
-      } catch (e) {
-        console.warn('Marker cleanup error:', e);
-      }
-      markerRef.current = null;
-    }
-    
-    mapInstanceRef.current = null;
-    setIsLoaded(false);
-    setIsInitialized(false);
-  }, []);
-
-  // Initialize map with React-friendly approach
+  // Map initialization effect
   useEffect(() => {
-    let isMounted = true;
-    
-    const initializeMap = async () => {
-      if (isInitialized || !mapContainerRef.current) return;
-      
+    let mounted = true;
+    let map: google.maps.Map | null = null;
+    let marker: google.maps.Marker | null = null;
+
+    const initMap = async () => {
+      if (!mapContainerRef.current || !mounted) return;
+
       try {
-        setIsInitialized(true);
+        setIsLoading(true);
         setError(null);
-        
-        // Get API key from Supabase function
+
+        // Get API key
         const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
-        
         if (error || !apiKeyData?.apiKey) {
           throw new Error('Google Maps API key not available');
         }
 
-        if (!isMounted || !mapContainerRef.current) return;
+        if (!mounted || !mapContainerRef.current) return;
 
+        // Load Google Maps
         const loader = new Loader({
           apiKey: apiKeyData.apiKey,
           version: 'weekly',
@@ -83,14 +67,11 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         });
 
         await loader.load();
-        
-        if (!isMounted || !mapContainerRef.current) return;
-        
-        setIsLoaded(true);
+        if (!mounted || !mapContainerRef.current) return;
 
-        // Initialize map directly on the React ref - no DOM manipulation
-        mapInstanceRef.current = new google.maps.Map(mapContainerRef.current, {
-          center: { lat: -25.2744, lng: 133.7751 }, // Australia center
+        // Create map
+        map = new google.maps.Map(mapContainerRef.current, {
+          center: { lat: -25.2744, lng: 133.7751 },
           zoom: 6,
           mapTypeId: mapType,
           zoomControl: true,
@@ -99,99 +80,84 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           mapTypeControl: false
         });
 
-        // Search for address if available
-        if (searchAddress && isMounted) {
-          searchAddressOnMap(searchAddress);
+        setIsLoading(false);
+
+        // Search address if available
+        if (searchAddress && mounted) {
+          searchOnMap(searchAddress, map, marker);
         }
-      } catch (error) {
-        console.error('Error loading Google Maps:', error);
-        setError(error.message || 'Failed to load Google Maps');
-        setIsInitialized(false);
+
+      } catch (err) {
+        console.error('Map initialization error:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load map');
+        setIsLoading(false);
       }
     };
 
-    // Small delay to ensure DOM is ready
-    const timeoutId = setTimeout(initializeMap, 100);
-    
+    const searchOnMap = async (address: string, mapInstance: google.maps.Map, currentMarker: google.maps.Marker | null) => {
+      if (!mapInstance) return;
+
+      const geocoder = new google.maps.Geocoder();
+      
+      try {
+        const results = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
+          geocoder.geocode({ address }, (results, status) => {
+            if (status === 'OK' && results) {
+              resolve(results);
+            } else {
+              reject(new Error(`Geocoding failed: ${status}`));
+            }
+          });
+        });
+
+        if (results?.[0] && mapInstance) {
+          const location = results[0].geometry.location;
+          
+          mapInstance.setCenter(location);
+          mapInstance.setZoom(17);
+
+          // Remove old marker
+          if (currentMarker) {
+            currentMarker.setMap(null);
+          }
+
+          // Add new marker
+          marker = new google.maps.Marker({
+            position: location,
+            map: mapInstance,
+            title: address,
+            animation: google.maps.Animation.DROP
+          });
+
+          updateAddressData({ propertyAddress: results[0].formatted_address });
+        }
+      } catch (err) {
+        console.error('Geocoding error:', err);
+        setError('Failed to find address');
+      }
+    };
+
+    initMap();
+
     return () => {
-      isMounted = false;
-      clearTimeout(timeoutId);
-      cleanup();
-    };
-  }, []); // Empty dependency array - only run once
-
-  // Handle map type changes
-  useEffect(() => {
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.setMapTypeId(mapType);
-    }
-  }, [mapType]);
-
-  const searchAddressOnMap = async (address: string) => {
-    if (!mapInstanceRef.current || !isLoaded) return;
-
-    const geocoder = new google.maps.Geocoder();
-    
-    try {
-      const results = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
-        geocoder.geocode({ address }, (results, status) => {
-          if (status === 'OK' && results) {
-            resolve(results);
-          } else {
-            reject(new Error(`Geocoding failed: ${status}`));
-          }
-        });
-      });
-
-      if (results && results[0]) {
-        const location = results[0].geometry.location;
-        
-        // Center map on the location
-        mapInstanceRef.current.setCenter(location);
-        mapInstanceRef.current.setZoom(17);
-
-        // Remove existing marker safely
-        if (markerRef.current) {
-          try {
-            markerRef.current.setMap(null);
-          } catch (e) {
-            console.warn('Existing marker removal error:', e);
-          }
-          markerRef.current = null;
-        }
-
-        // Add new marker
-        markerRef.current = new google.maps.Marker({
-          position: location,
-          map: mapInstanceRef.current,
-          title: address,
-          animation: google.maps.Animation.DROP
-        });
-
-        // Update property context with geocoded address
-        const formattedAddress = results[0].formatted_address;
-        updateAddressData({ propertyAddress: formattedAddress });
+      mounted = false;
+      if (marker) {
+        marker.setMap(null);
       }
-    } catch (error) {
-      console.error('Error geocoding address:', error);
-      setError('Failed to find address');
-    }
-  };
+      map = null;
+      marker = null;
+    };
+  }, [mapKey, mapType]); // Remount when key or type changes
 
   const handleSearch = () => {
     if (searchAddress.trim()) {
       setError(null);
-      searchAddressOnMap(searchAddress);
+      setMapKey(prev => prev + 1); // Force remount to search
     }
   };
 
   const toggleMapType = () => {
-    const newMapType = mapType === 'roadmap' ? 'satellite' : 'roadmap';
-    setMapType(newMapType);
-  };
-
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchAddress(e.target.value);
+    setMapType(prev => prev === 'roadmap' ? 'satellite' : 'roadmap');
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -214,7 +180,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           <Input
             placeholder="Enter property address..."
             value={searchAddress}
-            onChange={handleAddressChange}
+            onChange={(e) => setSearchAddress(e.target.value)}
             onKeyPress={handleKeyPress}
             className="flex-1"
           />
@@ -253,13 +219,14 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           </div>
         )}
         
-        {/* Map Container - No manual DOM manipulation */}
+        {/* Map Container */}
         <div 
+          key={mapKey}
           ref={mapContainerRef} 
           style={{ height, width: '100%' }}
           className="rounded-lg border bg-muted flex items-center justify-center"
         >
-          {!isLoaded && !error && (
+          {isLoading && !error && (
             <div className="text-center text-muted-foreground">
               <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
               <p>Loading Google Maps...</p>
