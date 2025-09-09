@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, Circle, FileText, Calculator, TrendingUp, Home } from "lucide-react";
+import { CheckCircle, Circle, FileText, Calculator, TrendingUp, Home, ArrowLeft } from "lucide-react";
 import PropertyDetails from "./PropertyDetails";
 import ValuationAnalysis from "./ValuationAnalysis";
 import SalesEvidence from "./SalesEvidence";
@@ -12,6 +12,7 @@ import MarketCommentary from "./MarketCommentary";
 import ValuationCertificate from "./ValuationCertificate";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   { id: "property", title: "Property Details", icon: Home, description: "Basic property information" },
@@ -47,6 +48,7 @@ export default function ComprehensivePropertyValuation() {
     notes: ""
   });
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const getCurrentStepIndex = () => steps.findIndex(step => step.id === currentStep);
   const progress = (Object.values(completedSections).filter(Boolean).length / steps.length) * 100;
@@ -113,8 +115,19 @@ export default function ComprehensivePropertyValuation() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 max-w-7xl">
-        {/* Header */}
+        {/* Header with Back Button */}
         <div className="mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Dashboard
+            </Button>
+          </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">Comprehensive Property Valuation</h1>
           <p className="text-muted-foreground">Complete professional property valuation workflow</p>
         </div>
