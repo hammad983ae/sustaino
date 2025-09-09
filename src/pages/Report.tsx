@@ -20,7 +20,7 @@ const ReportViewer = () => {
   const { saveNow, loadSaved, clearSaved } = useAutosave({
     key: 'report_progress',
     data: { currentSection, reportData },
-    delay: 5000, // Save every 5 seconds
+    delay: 2000, // Save every 2 seconds for better user experience
     enabled: true
   });
 
@@ -174,11 +174,18 @@ const ReportViewer = () => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={saveNow}
+                onClick={() => {
+                  saveNow();
+                  toast({
+                    title: "Report saved manually",
+                    description: "Your progress has been saved",
+                    duration: 2000,
+                  });
+                }}
                 className="flex items-center gap-1"
               >
                 <Save className="h-3 w-3" />
-                Save
+                Save Now
               </Button>
               <Button 
                 variant="outline" 

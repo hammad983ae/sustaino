@@ -8,6 +8,7 @@
  * ============================================================================
  */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import FormDataSaver from "./FormDataSaver";
 import ExecutiveSummary from "./ExecutiveSummary";
 import RPDAndLocation from "./RPDAndLocation";
 import LegalAndPlanning from "./LegalAndPlanning";
@@ -50,7 +51,9 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <ExecutiveSummary onNavigateToSection={onNavigateToSection} />
+          <FormDataSaver sectionKey="executiveSummary" reportData={reportData} onDataChange={onDataChange}>
+            <ExecutiveSummary onNavigateToSection={onNavigateToSection} />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
@@ -65,7 +68,9 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <RPDAndLocation />
+          <FormDataSaver sectionKey="rpdAndLocation" reportData={reportData} onDataChange={onDataChange}>
+            <RPDAndLocation />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
@@ -80,7 +85,9 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <LegalAndPlanning />
+          <FormDataSaver sectionKey="legalAndPlanning" reportData={reportData} onDataChange={onDataChange}>
+            <LegalAndPlanning />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
@@ -95,7 +102,9 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <TenancyScheduleLeaseDetails />
+          <FormDataSaver sectionKey="tenancySchedule" reportData={reportData} onDataChange={onDataChange}>
+            <TenancyScheduleLeaseDetails />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
@@ -110,7 +119,9 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <StatutoryAssessment />
+          <FormDataSaver sectionKey="statutoryAssessment" reportData={reportData} onDataChange={onDataChange}>
+            <StatutoryAssessment />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
@@ -125,13 +136,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <MarketCommentary />
+          <FormDataSaver sectionKey="marketCommentary" reportData={reportData} onDataChange={onDataChange}>
+            <MarketCommentary />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Market Commentary section
+  // Special handling for Property Details section
   if (sectionIndex === 6) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -140,13 +153,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <MarketCommentary />
+          <FormDataSaver sectionKey="propertyDetails" reportData={reportData} onDataChange={onDataChange}>
+            <PropertyDetails />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Property Details section
+  // Special handling for Plant and Equipment section
   if (sectionIndex === 7) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -155,13 +170,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <PropertyDetails />
+          <FormDataSaver sectionKey="plantAndEquipment" reportData={reportData} onDataChange={onDataChange}>
+            <PlantAndEquipment />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Plant and Equipment section
+  // Special handling for Rent Determination section
   if (sectionIndex === 8) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -170,13 +187,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <PlantAndEquipment />
+          <FormDataSaver sectionKey="rentDetermination" reportData={reportData} onDataChange={onDataChange}>
+            <RentDetermination />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Rent Determination section
+  // Special handling for ESG Assessment section
   if (sectionIndex === 9) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -185,13 +204,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <RentDetermination />
+          <FormDataSaver sectionKey="esgAssessment" reportData={reportData} onDataChange={onDataChange}>
+            <ESGAssessment />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for ESG Assessment section
+  // Special handling for Essential Repairs section
   if (sectionIndex === 10) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -200,13 +221,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <ESGAssessment />
+          <FormDataSaver sectionKey="essentialRepairs" reportData={reportData} onDataChange={onDataChange}>
+            <EssentialRepairs />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Essential Repairs section
+  // Special handling for Risk Assessment & Market Indicators section
   if (sectionIndex === 11) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -215,13 +238,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <EssentialRepairs />
+          <FormDataSaver sectionKey="riskAssessment" reportData={reportData} onDataChange={onDataChange}>
+            <RiskAssessmentMarketIndicators />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Risk Assessment & Market Indicators section
+  // Special handling for Previous Sales History and Current Sale section
   if (sectionIndex === 12) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -230,13 +255,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <RiskAssessmentMarketIndicators />
+          <FormDataSaver sectionKey="previousSalesHistory" reportData={reportData} onDataChange={onDataChange}>
+            <PreviousSalesHistoryAndCurrentSale />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Previous Sales History and Current Sale section
+  // Special handling for Sales Evidence section
   if (sectionIndex === 13) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -245,7 +272,9 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <PreviousSalesHistoryAndCurrentSale />
+          <FormDataSaver sectionKey="salesEvidence" reportData={reportData} onDataChange={onDataChange}>
+            <SalesEvidence />
+          </FormDataSaver>
         </CardContent>
       </Card>
     );
