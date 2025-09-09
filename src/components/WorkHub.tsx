@@ -26,6 +26,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "./ui/label";
 import PortfolioFinalReport from "./PortfolioFinalReport";
 import { EmailProcessor } from "./EmailProcessor";
+import { CostaGroupPortfolio } from "./CostaGroupPortfolio";
 
 interface Valuation {
   id: string;
@@ -354,10 +355,11 @@ export default function WorkHub() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="valuations" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="valuations">Property Valuations ({valuations.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
           <TabsTrigger value="costa">Portfolio Assessments ({costaAnalyses.length})</TabsTrigger>
+          <TabsTrigger value="global-portfolio">Global Operations</TabsTrigger>
           <TabsTrigger value="email-processor">Email Processor</TabsTrigger>
         </TabsList>
 
@@ -596,6 +598,10 @@ export default function WorkHub() {
             )}
           </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="global-portfolio" className="mt-6">
+          <CostaGroupPortfolio />
         </TabsContent>
 
         <TabsContent value="email-processor" className="mt-6">

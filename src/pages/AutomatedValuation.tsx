@@ -11,7 +11,6 @@ import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
-import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
 import BrandedHeader from "@/components/BrandedHeader";
 import DashboardCompletedWork from "@/components/DashboardCompletedWork";
 import AIAssistantToggle from "@/components/AIAssistantToggle";
@@ -41,12 +40,13 @@ export default function AutomatedValuation() {
   if (currentStep === "propertyType") {
     return (
       <div className="space-y-8">
-        <DashboardCompletedWork />
-        <CostaGroupPortfolio />
-        <ComprehensiveIPProtection />
-        <SecurityCertificatesGrid />
+        {/* Sustaino Pro Valuation Platform at top */}
         <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
         <AIAssistantToggle context="Property Type Selection" />
+        
+        {/* IP Protection and Security at bottom */}
+        <ComprehensiveIPProtection />
+        <SecurityCertificatesGrid />
       </div>
     );
   }
