@@ -155,11 +155,16 @@ startxref
       
       toast({
         title: "Portfolio Report Generated",
-        description: `Comprehensive ${totalPages}-page portfolio assessment report downloaded successfully`,
-        duration: 5000,
+        description: `Report saved to Work Hub. Redirecting...`,
+        duration: 3000,
       });
       
       onExport?.();
+      
+      // Redirect to Work Hub after a short delay
+      setTimeout(() => {
+        window.location.href = '/work-hub';
+      }, 2000);
     } catch (error) {
       toast({
         title: "Generation Failed",
