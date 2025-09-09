@@ -2,13 +2,14 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface PropertyTypeSelectorProps {
   onSelect: (type: string) => void;
 }
 
 export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorProps) {
+  const navigate = useNavigate();
   const propertyTypes = [
     {
       id: "commercial",
@@ -109,7 +110,10 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                   </li>
                 </ul>
               </div>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white">
+              <Button 
+                className="w-full bg-primary hover:bg-primary/90 text-white"
+                onClick={() => navigate('/comprehensive-valuation')}
+              >
                 Start Property Valuation
               </Button>
             </CardContent>
@@ -151,7 +155,10 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                   </li>
                 </ul>
               </div>
-              <Button className="w-full bg-success hover:bg-success/90 text-white">
+              <Button 
+                className="w-full bg-success hover:bg-success/90 text-white"
+                onClick={() => navigate('/esg-strategy')}
+              >
                 Start ESG Assessment
               </Button>
             </CardContent>
@@ -248,7 +255,10 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                   </li>
                 </ul>
               </div>
-              <Button className="w-full bg-success hover:bg-success/90 text-white">
+              <Button 
+                className="w-full bg-success hover:bg-success/90 text-white"
+                onClick={() => navigate('/work-hub')}
+              >
                 Start Portfolio Valuation
               </Button>
             </CardContent>
@@ -290,7 +300,10 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                   </li>
                 </ul>
               </div>
-              <Button className="w-full bg-success hover:bg-success/90 text-white">
+              <Button 
+                className="w-full bg-success hover:bg-success/90 text-white"
+                onClick={() => navigate('/esg-strategy')}
+              >
                 Start ESG Portfolio
               </Button>
             </CardContent>
@@ -332,7 +345,10 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                   </li>
                 </ul>
               </div>
-              <Button className="w-full bg-success hover:bg-success/90 text-white">
+              <Button 
+                className="w-full bg-success hover:bg-success/90 text-white"
+                onClick={() => navigate('/comprehensive-valuation')}
+              >
                 Start Health Check
               </Button>
             </CardContent>
