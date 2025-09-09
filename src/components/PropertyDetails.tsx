@@ -60,9 +60,10 @@ const PropertyDetails = () => {
   const [certifications, setCertifications] = useState({
     include: reportData.propertyDetails?.certifications?.include ?? false,
     bulkData: reportData.propertyDetails?.certifications?.bulkData ?? false,
-    professionalDates: reportData.propertyDetails?.certifications?.professionalDates ?? false,
-    valuerCredentials: reportData.propertyDetails?.certifications?.valuerCredentials ?? false,
-    complianceStatement: reportData.propertyDetails?.certifications?.complianceStatement ?? false,
+    smokeDetectors: reportData.propertyDetails?.certifications?.smokeDetectors ?? false,
+    airConditioning: reportData.propertyDetails?.certifications?.airConditioning ?? false,
+    fireSafety: reportData.propertyDetails?.certifications?.fireSafety ?? false,
+    electricalCertificate: reportData.propertyDetails?.certifications?.electricalCertificate ?? false,
     greenBuilding: reportData.propertyDetails?.certifications?.greenBuilding ?? false,
     sustainability: reportData.propertyDetails?.certifications?.sustainability ?? false,
     improvements: reportData.propertyDetails?.certifications?.improvements ?? false
@@ -508,6 +509,8 @@ const PropertyDetails = () => {
                       id="additional-features" 
                       placeholder="Describe additional commercial features, amenities, and characteristics..."
                       className="min-h-[100px]"
+                      value={propertyDescriptions.generalDescription}
+                      onChange={(e) => handleDescriptionChange('generalDescription', e.target.value)}
                     />
                   </div>
                 </div>
@@ -671,6 +674,8 @@ const PropertyDetails = () => {
                     id="additional-features-res"
                     placeholder="Describe additional residential features, amenities, and characteristics..."
                     className="min-h-[100px]"
+                    value={propertyDescriptions.buildingDetails}
+                    onChange={(e) => handleDescriptionChange('buildingDetails', e.target.value)}
                   />
                 </div>
 
@@ -1298,19 +1303,43 @@ const PropertyDetails = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="homestead">Homestead</Label>
-                      <Textarea id="homestead" placeholder="Describe homestead details..." className="min-h-[80px]" />
+                      <Textarea 
+                        id="homestead" 
+                        placeholder="Describe homestead details..." 
+                        className="min-h-[80px]"
+                        value={propertyDescriptions.homestead}
+                        onChange={(e) => handleDescriptionChange('homestead', e.target.value)}
+                      />
                     </div>
                     <div>
                       <Label htmlFor="worker-accommodation">Worker Accommodation</Label>
-                      <Textarea id="worker-accommodation" placeholder="Describe worker housing..." className="min-h-[80px]" />
+                      <Textarea 
+                        id="worker-accommodation" 
+                        placeholder="Describe worker housing..." 
+                        className="min-h-[80px]"
+                        value={propertyDescriptions.workerAccommodation}
+                        onChange={(e) => handleDescriptionChange('workerAccommodation', e.target.value)}
+                      />
                     </div>
                     <div>
                       <Label htmlFor="farm-buildings">Farm Buildings</Label>
-                      <Textarea id="farm-buildings" placeholder="Describe sheds, barns, workshops..." className="min-h-[80px]" />
+                      <Textarea 
+                        id="farm-buildings" 
+                        placeholder="Describe sheds, barns, workshops..." 
+                        className="min-h-[80px]"
+                        value={propertyDescriptions.farmBuildings}
+                        onChange={(e) => handleDescriptionChange('farmBuildings', e.target.value)}
+                      />
                     </div>
                     <div>
                       <Label htmlFor="machinery-equipment">Machinery & Equipment</Label>
-                      <Textarea id="machinery-equipment" placeholder="List included machinery..." className="min-h-[80px]" />
+                      <Textarea 
+                        id="machinery-equipment" 
+                        placeholder="List included machinery..." 
+                        className="min-h-[80px]"
+                        value={propertyDescriptions.machineryEquipment}
+                        onChange={(e) => handleDescriptionChange('machineryEquipment', e.target.value)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -1650,6 +1679,8 @@ const PropertyDetails = () => {
                     id="additional-features-spec" 
                     placeholder="Describe any additional specialized features, unique characteristics, market positioning, competitive advantages, etc."
                     className="min-h-[100px]"
+                    value={propertyDescriptions.specializedDescription}
+                    onChange={(e) => handleDescriptionChange('specializedDescription', e.target.value)}
                   />
                 </div>
 
@@ -1992,11 +2023,11 @@ const PropertyDetails = () => {
             )}
           </Card>
 
-          {/* Certifications & Compliance */}
+          {/* Building Compliance */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center justify-between">
-                Professional Compliance & Certification
+                Building Compliance
                 <Switch
                   checked={certifications.include}
                   onCheckedChange={(checked) => 
@@ -2005,7 +2036,7 @@ const PropertyDetails = () => {
                 />
               </CardTitle>
               <p className="text-sm text-muted-foreground">
-                Document professional compliance, certifications, and valuation standards adherence.
+                Document building compliance certificates and safety requirements.
               </p>
             </CardHeader>
             {certifications.include && (
@@ -2029,80 +2060,77 @@ const PropertyDetails = () => {
                   )}
                 </div>
 
-                {/* Professional Dates */}
+                {/* Smoke Detectors */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="text-base font-medium">Professional Dates</Label>
+                    <Label className="text-base font-medium">Smoke Detectors</Label>
                     <Switch
-                      checked={certifications.professionalDates}
+                      checked={certifications.smokeDetectors}
                       onCheckedChange={(checked) => 
-                        setCertifications(prev => ({ ...prev, professionalDates: checked }))
+                        setCertifications(prev => ({ ...prev, smokeDetectors: checked }))
                       }
                     />
                   </div>
-                  {certifications.professionalDates && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <Label htmlFor="inspection-date">Inspection Date</Label>
-                        <Input 
-                          id="inspection-date" 
-                          type="date"
-                          placeholder="dd/mm/yyyy" 
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="report-date">Report Date</Label>
-                        <Input 
-                          id="report-date" 
-                          type="date"
-                          placeholder="dd/mm/yyyy" 
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="next-review-date">Next Review Date</Label>
-                        <Input 
-                          id="next-review-date" 
-                          type="date"
-                          placeholder="dd/mm/yyyy" 
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Valuer Credentials & Qualifications */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-base font-medium">Valuer Credentials & Qualifications</Label>
-                    <Switch
-                      checked={certifications.valuerCredentials}
-                      onCheckedChange={(checked) => 
-                        setCertifications(prev => ({ ...prev, valuerCredentials: checked }))
-                      }
-                    />
-                  </div>
-                  {certifications.valuerCredentials && (
-                    <Input
-                      placeholder="API Certified Practicing Valuer"
-                      className="min-h-[40px]"
-                    />
-                  )}
-                </div>
-
-                {/* Compliance Statement */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-base font-medium">Compliance Statement</Label>
-                    <Switch
-                      checked={certifications.complianceStatement}
-                      onCheckedChange={(checked) => 
-                        setCertifications(prev => ({ ...prev, complianceStatement: checked }))
-                      }
-                    />
-                  </div>
-                  {certifications.complianceStatement && (
+                  {certifications.smokeDetectors && (
                     <Textarea
-                      placeholder="This valuation has been prepared in accordance with Australian Property Institute standards and International Valuation Standards."
+                      placeholder="Smoke detector installation, maintenance records, and compliance status..."
+                      className="min-h-[80px]"
+                    />
+                  )}
+                </div>
+
+                {/* Air Conditioning */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Air Conditioning</Label>
+                    <Switch
+                      checked={certifications.airConditioning}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, airConditioning: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.airConditioning && (
+                    <Textarea
+                      placeholder="Air conditioning system details, maintenance schedules, and compliance certificates..."
+                      className="min-h-[80px]"
+                    />
+                  )}
+                </div>
+
+                {/* Fire Safety */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Fire Safety</Label>
+                    <Switch
+                      checked={certifications.fireSafety}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, fireSafety: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.fireSafety && (
+                    <Textarea
+                      placeholder="Fire safety systems, emergency exits, fire extinguishers, and safety compliance certificates..."
+                      className="min-h-[80px]"
+                    />
+                  )}
+                </div>
+
+                {/* Electrical Certificate */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Electrical Certificate</Label>
+                    <Switch
+                      checked={certifications.electricalCertificate}
+                      onCheckedChange={(checked) => 
+                        setCertifications(prev => ({ ...prev, electricalCertificate: checked }))
+                      }
+                    />
+                  </div>
+                  {certifications.electricalCertificate && (
+                    <Textarea
+                      placeholder="Electrical safety certificates, wiring compliance, and electrical system maintenance records..."
                       className="min-h-[80px]"
                     />
                   )}
@@ -2226,11 +2254,21 @@ const PropertyDetails = () => {
               </div>
               <div>
                 <Label htmlFor="btr-unit-mix">Unit Mix</Label>
-                <Textarea id="btr-unit-mix" placeholder="e.g., 50x Studio, 80x 1BR, 60x 2BR, 10x 3BR" />
+                <Textarea 
+                  id="btr-unit-mix" 
+                  placeholder="e.g., 50x Studio, 80x 1BR, 60x 2BR, 10x 3BR"
+                  value={propertyDescriptions.btrUnitMix}
+                  onChange={(e) => handleDescriptionChange('btrUnitMix', e.target.value)}
+                />
               </div>
               <div>
                 <Label htmlFor="btr-shared-amenities">Shared Amenities</Label>
-                <Textarea id="btr-shared-amenities" placeholder="e.g., Gym, Pool, Rooftop Terrace, Concierge, Co-working spaces" />
+                <Textarea 
+                  id="btr-shared-amenities" 
+                  placeholder="e.g., Gym, Pool, Rooftop Terrace, Concierge, Co-working spaces"
+                  value={propertyDescriptions.btrSharedAmenities}
+                  onChange={(e) => handleDescriptionChange('btrSharedAmenities', e.target.value)}
+                />
               </div>
             </div>
 
@@ -2288,11 +2326,21 @@ const PropertyDetails = () => {
               </div>
               <div>
                 <Label htmlFor="btr-affordable-housing">Affordable Housing Requirements</Label>
-                <Textarea id="btr-affordable-housing" placeholder="Describe any affordable housing obligations, discount percentages, or social housing requirements..." />
+                <Textarea 
+                  id="btr-affordable-housing" 
+                  placeholder="Describe any affordable housing obligations, discount percentages, or social housing requirements..."
+                  value={propertyDescriptions.btrAffordableHousing}
+                  onChange={(e) => handleDescriptionChange('btrAffordableHousing', e.target.value)}
+                />
               </div>
               <div>
                 <Label htmlFor="btr-market-absorption">Market Absorption Analysis</Label>
-                <Textarea id="btr-market-absorption" placeholder="Assessment of local market capacity to absorb additional rental stock, competition analysis, and market depth..." />
+                <Textarea 
+                  id="btr-market-absorption" 
+                  placeholder="Assessment of local market capacity to absorb additional rental stock, competition analysis, and market depth..."
+                  value={propertyDescriptions.btrMarketAbsorption}
+                  onChange={(e) => handleDescriptionChange('btrMarketAbsorption', e.target.value)}
+                />
               </div>
             </div>
           </CardContent>
