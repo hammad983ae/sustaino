@@ -34,7 +34,7 @@ const SimplifiedMultiStepForm = ({ onSubmit }: SimplifiedMultiStepFormProps = {}
       component: <PropertyAddressStep formData={formData} setFormData={setFormData} />
     },
     {
-      title: "Property Details",
+      title: "Property Details", 
       component: <PropertyDetailsStep formData={formData} setFormData={setFormData} />
     },
     {

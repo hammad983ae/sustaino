@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -19,7 +18,6 @@ import {
 } from 'lucide-react';
 import SimplifiedClimateRisk from '@/components/SimplifiedClimateRisk';
 import SimplifiedMultiStepForm from '@/components/SimplifiedMultiStepForm';
-import { PropertyProvider } from '@/contexts/PropertyContext';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
@@ -67,7 +65,6 @@ const Index = () => {
   };
 
   return (
-    <PropertyProvider>
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/20 to-background">
       <div className="container mx-auto px-4 py-8">
         {currentStep === 'form' ? (
@@ -325,7 +322,7 @@ const Index = () => {
                 <CardContent className="p-6">
                   <div className="space-y-6">
                     <p className="text-muted-foreground">
-                      ESG Automated Analysis section will be implemented with comprehensive 
+                      ESG Automated Analysis section with comprehensive 
                       environmental, social, and governance assessment tools.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -407,7 +404,7 @@ const Index = () => {
                       </div>
                       <div className="text-center p-4 border rounded-lg">
                         <div className="text-2xl font-bold text-primary">{esgScores.overall}%</div>
-                        <p className="text-sm text-muted-foreground">Overall Score</p>
+                        <p className="text-sm text-muted-foreground">Overall ESG</p>
                       </div>
                     </div>
                   </CardContent>
@@ -421,31 +418,33 @@ const Index = () => {
                   <CardTitle>Before & After Analysis Results</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">
-                    Before and after valuation comparison results would be displayed here.
-                  </p>
+                  <p>Before & After analysis results would appear here.</p>
                 </CardContent>
               </Card>
             )}
 
-            {activeTab === 'advanced' && advancedPropertyData && advancedResults && (
+            {activeTab === 'advanced' && advancedResults && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Advanced Analysis Results</CardTitle>
+                  <CardTitle>Advanced Calculations Results</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-2xl font-bold">{(advancedResults.riskScore * 100).toFixed(1)}%</div>
-                      <p className="text-sm text-muted-foreground">Risk Score</p>
+                  <div className="space-y-4">
+                    <div>
+                      <span className="font-medium">Risk Score: </span>
+                      <Badge variant="secondary">{advancedResults.riskScore}</Badge>
                     </div>
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-2xl font-bold">${advancedResults.adjustedValue.toLocaleString()}</div>
-                      <p className="text-sm text-muted-foreground">Adjusted Value</p>
+                    <div>
+                      <span className="font-medium">Adjusted Value: </span>
+                      <span className="text-lg font-bold">${advancedResults.adjustedValue.toLocaleString()}</span>
                     </div>
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-lg font-bold">{advancedResults.recommendations.length}</div>
-                      <p className="text-sm text-muted-foreground">Recommendations</p>
+                    <div>
+                      <span className="font-medium">Recommendations: </span>
+                      <div className="flex gap-2 mt-2">
+                        {advancedResults.recommendations.map((rec, index) => (
+                          <Badge key={index} variant="outline">{rec}</Badge>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -455,7 +454,6 @@ const Index = () => {
         )}
       </div>
     </div>
-    </PropertyProvider>
   );
 };
 

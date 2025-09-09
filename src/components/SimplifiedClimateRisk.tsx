@@ -116,7 +116,7 @@ const SimplifiedClimateRisk = () => {
 
       {/* Analysis Progress */}
       {isAnalyzing && (
-        <Card>
+        <Card className="animate-fade-in">
           <CardContent className="p-6">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -137,7 +137,7 @@ const SimplifiedClimateRisk = () => {
 
       {/* Results */}
       {showResults && (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in">
           {/* Overall Risk Score */}
           <Card>
             <CardHeader>
@@ -169,7 +169,7 @@ const SimplifiedClimateRisk = () => {
           {/* Individual Risk Factors */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {riskFactors.map((factor, index) => (
-              <Card key={index}>
+              <Card key={index} className="hover-scale">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-2 text-sm">
                     <factor.icon className="h-4 w-4" />

@@ -107,10 +107,10 @@ const MockGoogleMapComponent: React.FC<MockGoogleMapComponentProps> = ({
           <div className="relative z-10 text-center">
             {hasSearched ? (
               <div className="space-y-3">
-                <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-full mx-auto shadow-lg">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-full mx-auto shadow-lg animate-fade-in">
                   <MapPin className="h-8 w-8 text-primary-foreground" />
                 </div>
-                <div className="bg-background/90 backdrop-blur-sm rounded-lg p-3 shadow-md">
+                <div className="bg-background/90 backdrop-blur-sm rounded-lg p-3 shadow-md animate-scale-in">
                   <p className="font-medium">{searchAddress}</p>
                   <p className="text-sm text-muted-foreground">
                     {mapType === 'satellite' ? 'Satellite View' : 'Street Map View'}
@@ -137,7 +137,7 @@ const MockGoogleMapComponent: React.FC<MockGoogleMapComponentProps> = ({
 
         {/* Current Location Info */}
         {hasSearched && searchAddress && (
-          <div className="p-3 bg-secondary/50 rounded-lg">
+          <div className="p-3 bg-secondary/50 rounded-lg animate-fade-in">
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Current Location:</span>
