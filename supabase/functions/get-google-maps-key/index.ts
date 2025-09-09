@@ -13,10 +13,17 @@ serve(async (req) => {
   }
 
   try {
-    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
+    // Try multiple possible secret names for Google Maps API key
+    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY') || 
+                             Deno.env.get('Google Maps') || 
+                             Deno.env.get('GM');
+    
+    console.log('Available env vars:', Object.keys(Deno.env.toObject()).filter(key => key.toLowerCase().includes('google') || key.toLowerCase().includes('map')));
+    console.log('Google Maps API key found:', !!googleMapsApiKey);
     
     if (!googleMapsApiKey) {
       console.error('Google Maps API key not found in environment variables');
+      console.error('Checked: GOOGLE_MAPS_API_KEY, Google Maps, GM');
       return new Response(
         JSON.stringify({ error: 'Google Maps API key not configured' }), 
         { 

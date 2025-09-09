@@ -7,18 +7,31 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MapPin, Sparkles, Building, FileText } from "lucide-react";
+import { MapPin, Sparkles, Building, FileText, RefreshCw } from "lucide-react";
 import { AutofillAddressFields } from "@/components/AutofillAddressFields";
 import GoogleMapComponent from "@/components/GoogleMapComponent";
+import { usePropertyLocationData } from "@/hooks/usePropertyLocationData";
+import { useProperty } from "@/contexts/PropertyContext";
 
 const RPDAndLocation = () => {
+  const { addressData } = useProperty();
+  const { analysisData, isGenerating, generateLocationAnalysis, updateAnalysisField } = usePropertyLocationData();
+  
   return (
     <div className="space-y-6">
       {/* Auto Generate Button */}
-      <div className="flex justify-center">
-        <Button className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white">
-          <Sparkles className="h-4 w-4 mr-2" />
-          Auto-Generate Location Data
+      <div className="flex justify-center gap-3">
+        <Button 
+          onClick={generateLocationAnalysis}
+          disabled={isGenerating || !addressData?.propertyAddress}
+          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white"
+        >
+          {isGenerating ? (
+            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <Sparkles className="h-4 w-4 mr-2" />
+          )}
+          {isGenerating ? 'Generating...' : 'Auto-Generate Location Data'}
         </Button>
       </div>
 
@@ -141,26 +154,32 @@ const RPDAndLocation = () => {
           {[
             {
               title: "Location",
+              field: "location" as const,
               placeholder: "Describe the property location in relation to major landmarks, transport routes, and commercial centers..."
             },
             {
-              title: "Access",
+              title: "Access", 
+              field: "access" as const,
               placeholder: "Describe property access including road types, traffic conditions, public transport, and parking availability..."
             },
             {
               title: "Site Description",
+              field: "siteDescription" as const,
               placeholder: "Describe the physical characteristics of the site including shape, topography, frontage, and area..."
             },
             {
               title: "Neighbourhood",
+              field: "neighbourhood" as const,
               placeholder: "Describe the surrounding area including property types, land use, and general character..."
             },
             {
               title: "Amenities",
+              field: "amenities" as const,
               placeholder: "List nearby amenities including shopping centers, schools, hospitals, recreational facilities, and their distances..."
             },
             {
               title: "Services",
+              field: "services" as const,
               placeholder: "Describe available services including utilities (water, gas, electricity, sewerage), telecommunications, and internet..."
             }
           ].map((section, index) => (
@@ -174,6 +193,8 @@ const RPDAndLocation = () => {
               </div>
               <Textarea 
                 placeholder={section.placeholder}
+                value={analysisData[section.field]}
+                onChange={(e) => updateAnalysisField(section.field, e.target.value)}
                 className="h-24"
               />
             </div>
