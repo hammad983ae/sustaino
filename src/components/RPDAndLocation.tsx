@@ -5,7 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MapPin, Sparkles, Building, FileText, RefreshCw } from "lucide-react";
 import { AutofillAddressFields } from "@/components/AutofillAddressFields";
@@ -35,42 +34,23 @@ const RPDAndLocation = () => {
         </Button>
       </div>
 
-      {/* 1. Street Address/Lot/Plan */}
+      {/* 1. Street Address and RPD */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <Building className="h-5 w-5 text-blue-500" />
-            <CardTitle className="text-lg">Street Address / Lot Plan</CardTitle>
+            <CardTitle className="text-lg">Street Address and RPD</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="street-address" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="street-address" className="flex items-center gap-2">
-                <Building className="h-4 w-4" />
-                Street Address
-              </TabsTrigger>
-              <TabsTrigger value="lot-plan" className="flex items-center gap-2">
-                <FileText className="h-4 w-4" />
-                Lot/Plan
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="street-address" className="space-y-4 mt-4">
-              <AutofillAddressFields showUnit={true} showSuburb={true} />
-            </TabsContent>
-
-            <TabsContent value="lot-plan" className="space-y-4 mt-4">
-              <AutofillAddressFields showLotPlan={true} showSuburb={true} />
-            </TabsContent>
-          </Tabs>
+          <AutofillAddressFields showUnit={true} showLotPlan={true} showSuburb={true} />
         </CardContent>
       </Card>
 
-      {/* 2. Google Maps Integration */}
+      {/* 2. Google Maps - Property Location */}
       <GoogleMapComponent height="400px" />
 
-      {/* 3. Property Identification */}
+      {/* 3. Property Identification Methods */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -122,7 +102,7 @@ const RPDAndLocation = () => {
         </CardContent>
       </Card>
 
-      {/* 4. Property Location and Site Analysis */}
+      {/* 4. Property Location & Site Analysis */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Property Location & Site Analysis</CardTitle>
