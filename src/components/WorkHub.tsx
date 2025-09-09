@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Label } from "./ui/label";
 import PortfolioFinalReport from "./PortfolioFinalReport";
+import { EmailProcessor } from "./EmailProcessor";
 
 interface Valuation {
   id: string;
@@ -338,10 +339,11 @@ export default function WorkHub() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="valuations" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="valuations">Property Valuations ({valuations.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
           <TabsTrigger value="costa">Portfolio Assessments ({costaAnalyses.length})</TabsTrigger>
+          <TabsTrigger value="email-processor">Email Processor</TabsTrigger>
         </TabsList>
 
         <TabsContent value="valuations" className="mt-6">
@@ -574,6 +576,10 @@ export default function WorkHub() {
             )}
           </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="email-processor" className="mt-6">
+          <EmailProcessor />
         </TabsContent>
       </Tabs>
 

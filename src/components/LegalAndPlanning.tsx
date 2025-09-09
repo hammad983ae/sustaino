@@ -176,10 +176,11 @@ const LegalAndPlanning = () => {
                 <SelectValue placeholder="Select impact rating" />
               </SelectTrigger>
               <SelectContent className="bg-background border shadow-lg z-50">
-                <SelectItem value="low">Low Impact</SelectItem>
-                <SelectItem value="medium">Medium Impact</SelectItem>
-                <SelectItem value="high">High Impact</SelectItem>
-                <SelectItem value="very-high">Very High Impact</SelectItem>
+                <SelectItem value="1">1 - Very Low Impact</SelectItem>
+                <SelectItem value="2">2 - Low Impact</SelectItem>
+                <SelectItem value="3">3 - Medium Impact</SelectItem>
+                <SelectItem value="4">4 - High Impact</SelectItem>
+                <SelectItem value="5">5 - Very High Impact</SelectItem>
               </SelectContent>
             </Select>
           </div>
