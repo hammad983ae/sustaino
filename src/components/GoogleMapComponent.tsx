@@ -39,7 +39,12 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   }, [addressData, getFormattedAddress]);
 
   useEffect(() => {
+    let isMounted = true;
+    
     const initializeMap = async () => {
+      // Prevent multiple initializations
+      if (mapInstanceRef.current || !isMounted) return;
+      
       try {
         // Get API key from Supabase function
         const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
@@ -49,6 +54,8 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           return;
         }
 
+        if (!isMounted) return;
+
         const loader = new Loader({
           apiKey: apiKeyData.apiKey,
           version: 'weekly',
@@ -56,9 +63,12 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         });
 
         await loader.load();
+        
+        if (!isMounted) return;
+        
         setIsLoaded(true);
 
-        if (mapRef.current) {
+        if (mapRef.current && !mapInstanceRef.current) {
           // Initialize map centered on Australia
           mapInstanceRef.current = new google.maps.Map(mapRef.current, {
             center: { lat: -25.2744, lng: 133.7751 }, // Australia center
@@ -81,6 +91,21 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     };
 
     initializeMap();
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      if (markerRef.current) {
+        markerRef.current.setMap(null);
+        markerRef.current = null;
+      }
+      // Don't destroy the map instance as it can cause DOM issues
+      // Just clear the reference
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current = null;
+      }
+      setIsLoaded(false);
+    };
   }, []);
 
   const searchAddressOnMap = async (address: string) => {
