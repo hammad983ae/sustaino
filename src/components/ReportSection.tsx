@@ -71,23 +71,8 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
     );
   }
 
-  // Special handling for Retrospective Valuations section
+  // Legal and Planning section is now section 2
   if (sectionIndex === 2) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
-        </CardHeader>
-        <CardContent>
-          <RetrospectiveValuations />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Special handling for Legal and Planning section
-  if (sectionIndex === 3) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -101,7 +86,22 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
     );
   }
 
-  // Special handling for Statutory Assessment section
+  // Tenancy Schedule/Lease Details section is now section 3
+  if (sectionIndex === 3) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <TenancyScheduleLeaseDetails />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Statutory Assessment section is now section 4
   if (sectionIndex === 4) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -116,7 +116,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
     );
   }
 
-  // Special handling for Tenancy Schedule/Lease Details section
+  // Market Commentary section is now section 5  
   if (sectionIndex === 5) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -125,7 +125,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <TenancyScheduleLeaseDetails />
+          <MarketCommentary />
         </CardContent>
       </Card>
     );
