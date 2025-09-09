@@ -43,9 +43,12 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     let mounted = true;
     let map: google.maps.Map | null = null;
     let marker: google.maps.Marker | null = null;
+    let mapContainer: HTMLDivElement | null = null;
 
     const initMap = async () => {
       if (!mapContainerRef.current || !mounted) return;
+      
+      mapContainer = mapContainerRef.current;
 
       try {
         setIsLoading(true);
@@ -57,7 +60,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           throw new Error('Google Maps API key not available');
         }
 
-        if (!mounted || !mapContainerRef.current) return;
+        if (!mounted || !mapContainer) return;
 
         // Load Google Maps
         const loader = new Loader({
@@ -67,10 +70,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         });
 
         await loader.load();
-        if (!mounted || !mapContainerRef.current) return;
+        if (!mounted || !mapContainer) return;
 
         // Create map
-        map = new google.maps.Map(mapContainerRef.current, {
+        map = new google.maps.Map(mapContainer, {
           center: { lat: -25.2744, lng: 133.7751 },
           zoom: 6,
           mapTypeId: mapType,
@@ -83,7 +86,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         setIsLoading(false);
 
         // Search address if available
-        if (searchAddress && mounted) {
+        if (searchAddress && mounted && map) {
           searchOnMap(searchAddress, map, marker);
         }
 
@@ -141,11 +144,25 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
     return () => {
       mounted = false;
+      // Safely cleanup marker
       if (marker) {
-        marker.setMap(null);
+        try {
+          marker.setMap(null);
+        } catch (e) {
+          console.warn('Error removing marker:', e);
+        }
       }
-      map = null;
+      // Clear map reference
+      if (map && mapContainer) {
+        try {
+          // Let React handle DOM cleanup
+          map = null;
+        } catch (e) {
+          console.warn('Error cleaning up map:', e);
+        }
+      }
       marker = null;
+      mapContainer = null;
     };
   }, [mapKey, mapType]); // Remount when key or type changes
 

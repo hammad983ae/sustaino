@@ -354,6 +354,23 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
+  // Special handling for Annexures section
+  if (sectionIndex === 21) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="min-h-[400px] flex items-center justify-center text-muted-foreground">
+            <p>Annexures content will be added here</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Special handling for Security and Certificates section
   if (sectionIndex === 22) {
     return (
