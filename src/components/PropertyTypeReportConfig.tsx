@@ -19,7 +19,7 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
     { title: "Risk Assessment & Market Indicators", automated: true },
     { title: "Marketability and Mortgage Security", automated: true },
     { title: "Valuation Certificate", component: "ValuationCertificate" },
-    { title: "Professional Compliance", component: "ProfessionalCompliance" },
+    { title: "Property Compliance & Certifications", component: "PropertyComplianceAndCertifications" },
     { title: "Terms and Conditions", component: "TermsAndConditions" }
   ];
 
