@@ -67,33 +67,10 @@ const RPDAndLocation = () => {
         </CardContent>
       </Card>
 
-      {/* 2. LGA, Zoning, Current Use */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">LGA, Zoning & Current Use</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="lga">LGA</Label>
-              <Input id="lga" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="zoning">Zoning</Label>
-              <Input id="zoning" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="current-use">Current Use</Label>
-              <Input id="current-use" placeholder="" className="mt-1" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 3. Google Maps Integration */}
+      {/* 2. Google Maps Integration */}
       <GoogleMapComponent height="400px" />
 
-      {/* 4. Property Identification */}
+      {/* 3. Property Identification */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -145,7 +122,7 @@ const RPDAndLocation = () => {
         </CardContent>
       </Card>
 
-      {/* 5. Property Location and Site Analysis */}
+      {/* 4. Property Location and Site Analysis */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Property Location & Site Analysis</CardTitle>

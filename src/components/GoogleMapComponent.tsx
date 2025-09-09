@@ -150,8 +150,14 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
         // Get API key
         const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
-        if (error || !apiKeyData?.apiKey) {
+        if (error) {
+          console.warn('API key error:', error);
+          // Use a fallback or continue without API key for development
           throw new Error('Google Maps API key not available');
+        }
+        
+        if (!apiKeyData?.apiKey) {
+          throw new Error('Google Maps API key not found');
         }
 
         if (!mapContainerRef.current) return;
