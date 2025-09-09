@@ -129,30 +129,35 @@ const ReportViewer = () => {
   // Show Report Preview
   if (viewMode === 'preview') {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="sticky top-0 z-10 bg-background border-b p-4">
-          <div className="flex items-center justify-between max-w-6xl mx-auto">
-            <h1 className="text-2xl font-bold">Report Preview & Generate</h1>
-            <Button variant="outline" onClick={handleBackToEdit}>
-              <Eye className="h-4 w-4 mr-2" />
-              Back to Editing
-            </Button>
+      <div className="min-h-screen bg-slate-100">
+        <WhiteLabelHeader />
+        <div className="max-w-6xl mx-auto bg-background border border-slate-300 shadow-lg min-h-screen">
+          <div className="sticky top-0 z-10 bg-background border-b p-4">
+            <div className="flex items-center justify-between max-w-6xl mx-auto">
+              <h1 className="text-2xl font-bold">Report Preview & Generate</h1>
+              <Button variant="outline" onClick={handleBackToEdit}>
+                <Eye className="h-4 w-4 mr-2" />
+                Back to Editing
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="p-4 max-w-6xl mx-auto">
-          <ReportGenerator 
-            reportData={reportData}
-            onGenerate={handleGenerateReport}
-            onClose={handleBackToEdit}
-          />
+          <div className="p-4 max-w-6xl mx-auto">
+            <ReportGenerator 
+              reportData={reportData}
+              onGenerate={handleGenerateReport}
+              onClose={handleBackToEdit}
+            />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-100">
       <WhiteLabelHeader />
+      {/* Main content with dark border */}
+      <div className="max-w-6xl mx-auto bg-background border border-slate-300 shadow-lg min-h-screen">
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
         <div className="flex items-center justify-between">
@@ -255,9 +260,10 @@ const ReportViewer = () => {
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default ReportViewer;
