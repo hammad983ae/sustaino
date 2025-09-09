@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Upload, MapPin } from "lucide-react";
+import RPDataSearch from "./RPDataSearch";
 
 export default function SalesEvidenceResidential() {
   const [saleDate, setSaleDate] = useState(true);
@@ -23,9 +24,45 @@ export default function SalesEvidenceResidential() {
   const [nathersRating, setNathersRating] = useState(true);
   const [seifaScore, setSeifaScore] = useState(true);
   const [schoolingZone, setSchoolingZone] = useState(true);
+  
+  // RP Data populated fields
+  const [propertyData, setPropertyData] = useState({
+    address: "",
+    salePrice: "",
+    saleDate: "",
+    bedrooms: "",
+    bathrooms: "",
+    carSpaces: "",
+    landSize: "",
+    buildingArea: "",
+    propertyType: "",
+    zoning: ""
+  });
+
+  const handleRPDataSelection = (data: any) => {
+    console.log('Selected RP Data:', data);
+    setPropertyData({
+      address: data.address || "",
+      salePrice: data.salePrice?.toString() || "",
+      saleDate: data.saleDate || "",
+      bedrooms: data.bedrooms?.toString() || "",
+      bathrooms: data.bathrooms?.toString() || "",
+      carSpaces: data.carSpaces?.toString() || "",
+      landSize: data.landSize?.toString() || "",
+      buildingArea: data.buildingArea?.toString() || "",
+      propertyType: data.propertyType || "",
+      zoning: data.zoning || ""
+    });
+  };
 
   return (
     <div className="space-y-6">
+      {/* RP Data Search Integration */}
+      <RPDataSearch 
+        onDataSelected={handleRPDataSelection}
+        searchType="sales"
+      />
+      
       <Card>
         <CardContent className="p-6">
           <h3 className="text-lg font-semibold mb-4">Residential Sales Evidence</h3>
@@ -36,6 +73,8 @@ export default function SalesEvidenceResidential() {
               <Input 
                 placeholder="Property Address: Eg. 3 St Andrews Drive Cabarita VIC 3505"
                 className="border-0 bg-transparent text-sm font-medium placeholder:text-muted-foreground/60"
+                value={propertyData.address}
+                onChange={(e) => setPropertyData(prev => ({ ...prev, address: e.target.value }))}
               />
             </div>
           </div>
@@ -75,7 +114,12 @@ export default function SalesEvidenceResidential() {
               <div className="flex justify-center">
                 <Switch checked={saleDate} onCheckedChange={setSaleDate} />
               </div>
-              <Input placeholder="2/09/2024 - Not Settled" className="text-sm" />
+              <Input 
+                placeholder="2/09/2024 - Not Settled" 
+                className="text-sm"
+                value={propertyData.saleDate}
+                onChange={(e) => setPropertyData(prev => ({ ...prev, saleDate: e.target.value }))}
+              />
               <Input placeholder="Comparison notes for sale date..." className="text-sm" />
             </div>
 
@@ -85,7 +129,12 @@ export default function SalesEvidenceResidential() {
               <div className="flex justify-center">
                 <Switch checked={salePrice} onCheckedChange={setSalePrice} />
               </div>
-              <Input placeholder="$998,000" className="text-sm" />
+              <Input 
+                placeholder="$998,000" 
+                className="text-sm"
+                value={propertyData.salePrice}
+                onChange={(e) => setPropertyData(prev => ({ ...prev, salePrice: e.target.value }))}
+              />
               <Input placeholder="Price comparison analysis..." className="text-sm" />
             </div>
 
