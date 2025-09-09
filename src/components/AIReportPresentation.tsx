@@ -314,11 +314,8 @@ const AIReportPresentation: React.FC<AIReportPresentationProps> = ({
         <AIAnimationPreview 
           title="Real-Time AI Processing Engine"
           isActive={isAnimating}
-          progress={{
-            currentFrame: Math.round((progress / 100) * 7200),
-            totalFrames: 7200,
-            time: `00:${Math.round((progress / 100) * currentSlideData.duration / 1000).toString().padStart(2, '0')}.${Math.round(((progress / 100) * currentSlideData.duration % 1000) / 10).toString().padStart(2, '0')}`
-          }}
+          progress={progress}
+          isGenerating={isAnimating}
         />
 
       </div>
