@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -5,8 +6,43 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { MapPin, FileText } from "lucide-react";
+import PlanningDataIntegration from "./PlanningDataIntegration";
 
 const LegalAndPlanning = () => {
+  const [planningData, setPlanningData] = useState({
+    lga: "",
+    zoning: "",
+    currentUse: "",
+    permissibleUse: "",
+    permitNumber: "",
+    overlays: "",
+    overlayImpactAssessment: "",
+    overlayImpactRating: "",
+    heightOfBuilding: "",
+    floorSpaceRatio: "",
+    minimumLotSize: "",
+    planningRestrictions: "",
+    developmentPotential: ""
+  });
+
+  const handlePlanningDataFetched = (data: any) => {
+    setPlanningData(prev => ({
+      ...prev,
+      zoning: data.zoning || "",
+      overlays: data.overlays?.join(", ") || "",
+      heightOfBuilding: data.heightRestriction || "",
+      permissibleUse: data.landUse || "",
+      developmentPotential: data.developmentPotential || "",
+      planningRestrictions: data.overlays?.length > 0 ? `Planning overlays apply: ${data.overlays.join(", ")}` : ""
+    }));
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setPlanningData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
   return (
     <div className="space-y-6">
       {/* Header with Include Toggle */}
@@ -43,37 +79,8 @@ const LegalAndPlanning = () => {
         </CardContent>
       </Card>
 
-      {/* State Planning Portal */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">State Planning Portal</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="max-w-md">
-            <Label htmlFor="state-territory">Select state/territory</Label>
-            <Select>
-              <SelectTrigger className="mt-1 bg-background">
-                <SelectValue placeholder="Select state/territory" />
-              </SelectTrigger>
-              <SelectContent className="bg-background border shadow-lg z-50">
-                <SelectItem value="nsw">NSW</SelectItem>
-                <SelectItem value="vic">VIC</SelectItem>
-                <SelectItem value="qld">QLD</SelectItem>
-                <SelectItem value="wa">WA</SelectItem>
-                <SelectItem value="sa">SA</SelectItem>
-                <SelectItem value="tas">TAS</SelectItem>
-                <SelectItem value="act">ACT</SelectItem>
-                <SelectItem value="nt">NT</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="mt-6 bg-muted rounded-lg p-8 text-center">
-            <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="font-medium mb-2">Select a State/Territory</h3>
-            <p className="text-sm text-muted-foreground">Choose a state or territory to view planning information</p>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Planning Data Integration */}
+      <PlanningDataIntegration onDataFetched={handlePlanningDataFetched} />
 
       {/* Planning Information */}
       <Card>
@@ -85,19 +92,43 @@ const LegalAndPlanning = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <Label htmlFor="lga-legal">LGA</Label>
-              <Input id="lga-legal" placeholder="" className="mt-1" />
+              <Input 
+                id="lga-legal" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.lga}
+                onChange={(e) => handleInputChange('lga', e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="zoning-legal">Zoning</Label>
-              <Input id="zoning-legal" placeholder="" className="mt-1" />
+              <Input 
+                id="zoning-legal" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.zoning}
+                onChange={(e) => handleInputChange('zoning', e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="current-use-legal">Current Use</Label>
-              <Input id="current-use-legal" placeholder="" className="mt-1" />
+              <Input 
+                id="current-use-legal" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.currentUse}
+                onChange={(e) => handleInputChange('currentUse', e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="permissible-use">Permissible Use</Label>
-              <Input id="permissible-use" placeholder="" className="mt-1" />
+              <Input 
+                id="permissible-use" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.permissibleUse}
+                onChange={(e) => handleInputChange('permissibleUse', e.target.value)}
+              />
             </div>
           </div>
 
@@ -105,11 +136,23 @@ const LegalAndPlanning = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="permit-number">Permit Number</Label>
-              <Input id="permit-number" placeholder="" className="mt-1" />
+              <Input 
+                id="permit-number" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.permitNumber}
+                onChange={(e) => handleInputChange('permitNumber', e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="overlays">Overlays</Label>
-              <Input id="overlays" placeholder="" className="mt-1" />
+              <Input 
+                id="overlays" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.overlays}
+                onChange={(e) => handleInputChange('overlays', e.target.value)}
+              />
             </div>
           </div>
 
@@ -120,13 +163,15 @@ const LegalAndPlanning = () => {
               id="overlay-impact-assessment"
               placeholder=""
               className="mt-1 h-32"
+              value={planningData.overlayImpactAssessment}
+              onChange={(e) => handleInputChange('overlayImpactAssessment', e.target.value)}
             />
           </div>
 
           {/* Overlay Impact Rating */}
           <div className="max-w-md">
             <Label htmlFor="overlay-impact-rating">Overlay Impact Rating</Label>
-            <Select>
+            <Select value={planningData.overlayImpactRating} onValueChange={(value) => handleInputChange('overlayImpactRating', value)}>
               <SelectTrigger className="mt-1 bg-background">
                 <SelectValue placeholder="Select impact rating" />
               </SelectTrigger>
@@ -143,15 +188,33 @@ const LegalAndPlanning = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="height-building">Height of Building</Label>
-              <Input id="height-building" placeholder="" className="mt-1" />
+              <Input 
+                id="height-building" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.heightOfBuilding}
+                onChange={(e) => handleInputChange('heightOfBuilding', e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="floor-space-ratio">Floor Space Ratio</Label>
-              <Input id="floor-space-ratio" placeholder="" className="mt-1" />
+              <Input 
+                id="floor-space-ratio" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.floorSpaceRatio}
+                onChange={(e) => handleInputChange('floorSpaceRatio', e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="minimum-lot-size">Minimum Lot Size</Label>
-              <Input id="minimum-lot-size" placeholder="" className="mt-1" />
+              <Input 
+                id="minimum-lot-size" 
+                placeholder="" 
+                className="mt-1" 
+                value={planningData.minimumLotSize}
+                onChange={(e) => handleInputChange('minimumLotSize', e.target.value)}
+              />
             </div>
           </div>
 
@@ -162,6 +225,8 @@ const LegalAndPlanning = () => {
               id="planning-restrictions"
               placeholder=""
               className="mt-1 h-32"
+              value={planningData.planningRestrictions}
+              onChange={(e) => handleInputChange('planningRestrictions', e.target.value)}
             />
           </div>
 
@@ -172,6 +237,8 @@ const LegalAndPlanning = () => {
               id="development-potential"
               placeholder=""
               className="mt-1 h-32"
+              value={planningData.developmentPotential}
+              onChange={(e) => handleInputChange('developmentPotential', e.target.value)}
             />
           </div>
         </CardContent>
