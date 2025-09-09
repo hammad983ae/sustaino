@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   FileText, 
   Download, 
@@ -14,9 +15,12 @@ import {
   Building,
   BarChart3,
   Calculator,
-  Eye
+  Eye,
+  PieChart,
+  Globe
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import PortfolioCoverPage from './PortfolioCoverPage';
 
 interface PortfolioFinalReportProps {
   analysisData?: any;
@@ -179,162 +183,283 @@ startxref
 
   return (
     <div className="space-y-6">
-      {/* Report Header */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
+      <Tabs defaultValue="cover" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="cover">Cover Page</TabsTrigger>
+          <TabsTrigger value="summary">Executive Summary</TabsTrigger>
+          <TabsTrigger value="sections">Report Sections</TabsTrigger>
+          <TabsTrigger value="generate">Generate Report</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="cover" className="space-y-6">
+          <Card>
+            <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
-                Comprehensive Portfolio Assessment Report
+                Portfolio Cover Page Preview
               </CardTitle>
-              <p className="text-muted-foreground mt-1">
-                Complete analysis of global agricultural portfolio performance and opportunities
+              <p className="text-muted-foreground">
+                Professional cover page with key portfolio metrics
               </p>
-            </div>
-            <Badge variant="outline" className="text-sm">
-              <Leaf className="w-4 h-4 mr-1" />
-              ESG Certified
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {keyMetrics.map((metric, index) => (
-              <div key={index} className="text-center p-4 bg-secondary/20 rounded-lg">
-                <metric.icon className={`h-8 w-8 mx-auto mb-2 ${metric.color}`} />
-                <div className="text-2xl font-bold">{metric.value}</div>
-                <div className="text-sm text-muted-foreground">{metric.title}</div>
+            </CardHeader>
+            <CardContent>
+              <div className="scale-75 origin-top border rounded-lg overflow-hidden">
+                <PortfolioCoverPage
+                  totalPortfolioValue={portfolioSummary.totalPortfolioValue}
+                  totalLocations={portfolioSummary.totalLocations}
+                  totalHectares={portfolioSummary.totalHectares}
+                  sustainabilityScore={portfolioSummary.sustainabilityScore}
+                  companyName="Costa Group"
+                />
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      {/* Report Sections */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Report Structure</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            {totalPages} pages across {reportSections.length} comprehensive sections
-          </p>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {reportSections.map((section, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-secondary/20 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="bg-green-100 text-green-800">
-                    {section.status}
-                  </Badge>
-                  <span className="font-medium">{section.title}</span>
+        <TabsContent value="summary" className="space-y-6">
+          {/* Enhanced Key Metrics */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-primary" />
+                    Portfolio Performance Dashboard
+                  </CardTitle>
+                  <p className="text-muted-foreground mt-1">
+                    Real-time analysis of global agricultural portfolio
+                  </p>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {section.pages} pages
-                </span>
+                <Badge variant="outline" className="text-sm bg-emerald-100 text-emerald-800">
+                  <Leaf className="w-4 h-4 mr-1" />
+                  ESG Certified
+                </Badge>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Portfolio Performance Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Portfolio Performance Metrics</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Sustainability Score</span>
-                <span className="text-sm font-bold">{portfolioSummary.sustainabilityScore}%</span>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {keyMetrics.map((metric, index) => (
+                  <Card key={index} className="p-4 bg-gradient-to-br from-white to-slate-50 border-slate-200 hover:shadow-md transition-shadow">
+                    <div className="text-center">
+                      <metric.icon className={`h-10 w-10 mx-auto mb-3 ${metric.color}`} />
+                      <div className="text-2xl font-bold text-slate-800 mb-1">{metric.value}</div>
+                      <div className="text-sm text-slate-600">{metric.title}</div>
+                    </div>
+                  </Card>
+                ))}
               </div>
-              <Progress value={portfolioSummary.sustainabilityScore} className="h-2" />
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Water Efficiency</span>
-                <span className="text-sm font-bold">{portfolioSummary.waterEfficiency}%</span>
+            </CardContent>
+          </Card>
+
+          {/* Enhanced Portfolio Performance Summary */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <PieChart className="h-5 w-5 text-primary" />
+                Portfolio Performance Metrics
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-emerald-800">Sustainability Score</span>
+                      <Badge className="bg-emerald-600 text-white">
+                        {portfolioSummary.sustainabilityScore}%
+                      </Badge>
+                    </div>
+                    <Progress value={portfolioSummary.sustainabilityScore} className="h-3" />
+                    <p className="text-xs text-emerald-700">ESG compliance and environmental impact</p>
+                  </div>
+                </Card>
+                
+                <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-blue-800">Water Efficiency</span>
+                      <Badge className="bg-blue-600 text-white">
+                        {portfolioSummary.waterEfficiency}%
+                      </Badge>
+                    </div>
+                    <Progress value={portfolioSummary.waterEfficiency} className="h-3" />
+                    <p className="text-xs text-blue-700">Water conservation and management</p>
+                  </div>
+                </Card>
+                
+                <Card className="p-4 bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-amber-800">Energy Efficiency</span>
+                      <Badge className="bg-amber-600 text-white">
+                        {portfolioSummary.energyEfficiency}%
+                      </Badge>
+                    </div>
+                    <Progress value={portfolioSummary.energyEfficiency} className="h-3" />
+                    <p className="text-xs text-amber-700">Renewable energy and efficiency gains</p>
+                  </div>
+                </Card>
               </div>
-              <Progress value={portfolioSummary.waterEfficiency} className="h-2" />
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Energy Efficiency</span>
-                <span className="text-sm font-bold">{portfolioSummary.energyEfficiency}%</span>
+
+              <Separator />
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <Card className="p-4 text-center bg-slate-50">
+                  <Globe className="h-8 w-8 mx-auto mb-2 text-slate-600" />
+                  <p className="text-slate-600 text-sm mb-1">Global Locations</p>
+                  <p className="text-2xl font-bold text-slate-800">{portfolioSummary.totalLocations}</p>
+                </Card>
+                <Card className="p-4 text-center bg-slate-50">
+                  <MapPin className="h-8 w-8 mx-auto mb-2 text-slate-600" />
+                  <p className="text-slate-600 text-sm mb-1">Total Hectares</p>
+                  <p className="text-2xl font-bold text-slate-800">{portfolioSummary.totalHectares.toLocaleString()}</p>
+                </Card>
+                <Card className="p-4 text-center bg-slate-50">
+                  <Building className="h-8 w-8 mx-auto mb-2 text-slate-600" />
+                  <p className="text-slate-600 text-sm mb-1">Countries</p>
+                  <p className="text-2xl font-bold text-slate-800">4</p>
+                </Card>
+                <Card className="p-4 text-center bg-slate-50">
+                  <Leaf className="h-8 w-8 mx-auto mb-2 text-slate-600" />
+                  <p className="text-slate-600 text-sm mb-1">Crop Types</p>
+                  <p className="text-2xl font-bold text-slate-800">6</p>
+                </Card>
               </div>
-              <Progress value={portfolioSummary.energyEfficiency} className="h-2" />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          <Separator />
+        <TabsContent value="sections" className="space-y-6">
+          {/* Report Sections with Enhanced Design */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-primary" />
+                Report Structure & Content
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                {totalPages} pages across {reportSections.length} comprehensive sections
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                {reportSections.map((section, index) => (
+                  <Card key={index} className="p-4 hover:shadow-md transition-shadow border-slate-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                          <span className="text-sm font-bold text-emerald-700">{index + 1}</span>
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-slate-800">{section.title}</h4>
+                          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+                            {section.status}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-lg font-bold text-slate-800">{section.pages}</span>
+                        <p className="text-xs text-slate-500">pages</p>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <p className="text-muted-foreground">Global Locations</p>
-              <p className="text-xl font-bold">{portfolioSummary.totalLocations}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Total Hectares</p>
-              <p className="text-xl font-bold">{portfolioSummary.totalHectares.toLocaleString()}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Countries</p>
-              <p className="text-xl font-bold">4</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Crop Types</p>
-              <p className="text-xl font-bold">6</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Action Buttons */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button 
-              variant="outline" 
-              onClick={handleViewReport}
-              className="flex-1"
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              Preview Report
-            </Button>
-            <Button 
-              onClick={handleGenerateReport} 
-              disabled={isGenerating}
-              className="flex-1"
-            >
-              {isGenerating ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Generating {totalPages}-page Report...
-                </>
-              ) : (
-                <>
-                  <Download className="h-4 w-4 mr-2" />
-                  Generate Full Report ({totalPages} pages)
-                </>
+        <TabsContent value="generate" className="space-y-6">
+          {/* Generation Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Download className="h-5 w-5 text-primary" />
+                Generate Portfolio Report
+              </CardTitle>
+              <p className="text-muted-foreground">
+                Create comprehensive PDF report with all analysis and recommendations
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  variant="outline" 
+                  onClick={handleViewReport}
+                  className="flex-1"
+                  size="lg"
+                >
+                  <Eye className="h-5 w-5 mr-2" />
+                  Preview Report
+                </Button>
+                <Button 
+                  onClick={handleGenerateReport} 
+                  disabled={isGenerating}
+                  className="flex-1"
+                  size="lg"
+                >
+                  {isGenerating ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+                      Generating {totalPages}-page Report...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="h-5 w-5 mr-2" />
+                      Generate Full Report ({totalPages} pages)
+                    </>
+                  )}
+                </Button>
+              </div>
+              
+              {isGenerating && (
+                <Card className="p-4 bg-blue-50 border-blue-200">
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm text-blue-800">
+                      <span>Generating comprehensive portfolio assessment...</span>
+                      <span>Please wait</span>
+                    </div>
+                    <Progress value={75} className="h-3" />
+                    <p className="text-xs text-blue-600">
+                      Processing {totalPages} pages of analysis and data visualization
+                    </p>
+                  </div>
+                </Card>
               )}
-            </Button>
-          </div>
-          
-          {isGenerating && (
-            <div className="mt-4 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Generating comprehensive portfolio assessment...</span>
-                <span>Please wait</span>
-              </div>
-              <Progress value={75} className="h-2" />
-            </div>
-          )}
-        </CardContent>
-      </Card>
+
+              <Card className="p-4 bg-slate-50">
+                <h4 className="font-medium text-slate-800 mb-2">Report Features</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    Professional cover page with branding
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    Executive summary and key findings
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    Detailed location analysis
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    ESG and sustainability metrics
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    Financial projections and valuations
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    Strategic recommendations
+                  </div>
+                </div>
+              </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
