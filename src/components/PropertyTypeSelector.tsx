@@ -115,6 +115,135 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           })}
         </div>
 
+        {/* Additional Report Options */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-secondary/10 border-secondary/20">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-lg bg-white shadow-sm">
+                  <Calculator className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Portfolio Valuations</CardTitle>
+                  <CardDescription className="text-sm">
+                    Comprehensive portfolio assessment and valuation
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-2 mb-4">
+                <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
+                <ul className="text-sm space-y-1">
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Portfolio aggregation
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Risk assessment
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Market analysis
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Performance metrics
+                  </li>
+                </ul>
+              </div>
+              <Button className="w-full bg-success hover:bg-success/90 text-white">
+                Start Portfolio Valuation
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-success/10 border-success/20">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-lg bg-white shadow-sm">
+                  <Leaf className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">ESG Portfolio</CardTitle>
+                  <CardDescription className="text-sm">
+                    Environmental, social, and governance portfolio analysis
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-2 mb-4">
+                <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
+                <ul className="text-sm space-y-1">
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    ESG scoring
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Sustainability metrics
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Carbon footprint
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Climate risk assessment
+                  </li>
+                </ul>
+              </div>
+              <Button className="w-full bg-success hover:bg-success/90 text-white">
+                Start ESG Portfolio
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-warning/10 border-warning/20">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-lg bg-white shadow-sm">
+                  <FileText className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Health Check</CardTitle>
+                  <CardDescription className="text-sm">
+                    Comprehensive property health and condition assessment
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-2 mb-4">
+                <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
+                <ul className="text-sm space-y-1">
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Condition assessment
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Maintenance planning
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Risk identification
+                  </li>
+                  <li className="flex items-center text-muted-foreground">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                    Compliance review
+                  </li>
+                </ul>
+              </div>
+              <Button className="w-full bg-success hover:bg-success/90 text-white">
+                Start Health Check
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Features Banner */}
         <Card className="bg-gradient-to-r from-primary/5 to-secondary/10 border-primary/20">
           <CardContent className="p-6">
