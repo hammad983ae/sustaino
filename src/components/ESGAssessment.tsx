@@ -44,6 +44,36 @@ const ESGAssessment = () => {
     epaAudits: false,
     sustainabilityClimate: false
   });
+  
+  // NABERS calculation state
+  const [nabersScores, setNabersScores] = useState({
+    energyScore: 0,
+    waterScore: 0,
+    wasteScore: 0,
+    ieqScore: 0
+  });
+
+  // Calculate overall NABERS score using the formula
+  const calculateNABERSScore = (): number => {
+    const { energyScore, waterScore, wasteScore, ieqScore } = nabersScores;
+    return (energyScore * 0.4) + (waterScore * 0.3) + (wasteScore * 0.2) + (ieqScore * 0.1);
+  };
+
+  const getNABERSStarRating = (score: number): string => {
+    if (score >= 90) return "6 Stars";
+    if (score >= 75) return "5 Stars";
+    if (score >= 60) return "4 Stars";
+    if (score >= 45) return "3 Stars";
+    if (score >= 30) return "2 Stars";
+    if (score >= 15) return "1 Star";
+    return "Below 1 Star";
+  };
+
+  const handleNabersScoreChange = (field: keyof typeof nabersScores, value: string) => {
+    const numValue = parseFloat(value) || 0;
+    setNabersScores(prev => ({ ...prev, [field]: numValue }));
+  };
+
   const [socialSubsections, setSocialSubsections] = useState({
     socioEconomic: false,
     accessibility: false,
@@ -656,41 +686,52 @@ const ESGAssessment = () => {
                           </Select>
                         </div>
                         <div>
-                          <Label htmlFor="nabers-rating">NABERS Rating</Label>
-                          <Input id="nabers-rating" placeholder="NABERS energy rating" />
+                          <Label htmlFor="energy-score">NABERS Energy Score (0-100)</Label>
+                          <Input 
+                            id="energy-score"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={nabersScores.energyScore}
+                            onChange={(e) => handleNabersScoreChange('energyScore', e.target.value)}
+                            placeholder="Enter energy efficiency score" 
+                          />
                         </div>
                         <div>
-                          <Label htmlFor="nabers-water-efficiency">NABERS Water Efficiency</Label>
-                          <Select>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select water efficiency rating" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="6-star">6 Star - Excellent</SelectItem>
-                              <SelectItem value="5-star">5 Star - Very Good</SelectItem>
-                              <SelectItem value="4-star">4 Star - Good</SelectItem>
-                              <SelectItem value="3-star">3 Star - Average</SelectItem>
-                              <SelectItem value="2-star">2 Star - Below Average</SelectItem>
-                              <SelectItem value="1-star">1 Star - Poor</SelectItem>
-                              <SelectItem value="not-rated">Not Rated</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <Label htmlFor="water-score">NABERS Water Efficiency Score (0-100)</Label>
+                          <Input 
+                            id="water-score"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={nabersScores.waterScore}
+                            onChange={(e) => handleNabersScoreChange('waterScore', e.target.value)}
+                            placeholder="Enter water efficiency score" 
+                          />
                         </div>
                         <div>
-                          <Label htmlFor="nabers-ieq">NABERS IEQ Assessment</Label>
-                          <Select>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select IEQ assessment type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="air-quality">Air Quality Assessment</SelectItem>
-                              <SelectItem value="thermal-comfort">Thermal Comfort</SelectItem>
-                              <SelectItem value="acoustic-comfort">Acoustic Comfort</SelectItem>
-                              <SelectItem value="visual-comfort">Visual Comfort & Lighting</SelectItem>
-                              <SelectItem value="comprehensive">Comprehensive IEQ</SelectItem>
-                              <SelectItem value="not-assessed">Not Assessed</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <Label htmlFor="waste-score">NABERS Waste Management Score (0-100)</Label>
+                          <Input 
+                            id="waste-score"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={nabersScores.wasteScore}
+                            onChange={(e) => handleNabersScoreChange('wasteScore', e.target.value)}
+                            placeholder="Percentage diverted from landfill" 
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="ieq-score">NABERS IEQ Score (0-100)</Label>
+                          <Input 
+                            id="ieq-score"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={nabersScores.ieqScore}
+                            onChange={(e) => handleNabersScoreChange('ieqScore', e.target.value)}
+                            placeholder="Indoor environment quality score" 
+                          />
                         </div>
                         <div>
                           <Label htmlFor="green-star">Green Star (0 to 6)</Label>
@@ -699,6 +740,20 @@ const ESGAssessment = () => {
                         <div>
                           <Label htmlFor="nathers-rating">NatHERS Rating (0 to 10)</Label>
                           <Input id="nathers-rating" placeholder="NatHERS rating (0-10)" />
+                        </div>
+                      </div>
+                      
+                      {/* NABERS Overall Score Display */}
+                      <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-medium">Overall NABERS Score</h4>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold text-primary">{calculateNABERSScore().toFixed(1)}</div>
+                            <div className="text-sm text-muted-foreground">{getNABERSStarRating(calculateNABERSScore())}</div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Formula: (Energy × 0.4) + (Water × 0.3) + (Waste × 0.2) + (IEQ × 0.1)
                         </div>
                       </div>
                       <div>
