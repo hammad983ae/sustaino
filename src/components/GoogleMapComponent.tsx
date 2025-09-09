@@ -147,18 +147,29 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
     return () => {
       isMounted = false;
-      // Clean up in next tick to avoid React conflicts
-      setTimeout(() => {
-        if (markerInstanceRef.current) {
-          try {
-            markerInstanceRef.current.setMap(null);
-          } catch (e) {
-            // Ignore cleanup errors
-          }
+      setIsMapReady(false);
+      
+      // Proper cleanup order: marker first, then map
+      if (markerInstanceRef.current) {
+        try {
+          markerInstanceRef.current.setMap(null);
+          markerInstanceRef.current = null;
+        } catch (e) {
+          console.warn('Marker cleanup warning:', e);
         }
-        markerInstanceRef.current = null;
-        mapInstanceRef.current = null;
-      }, 0);
+      }
+      
+      if (mapInstanceRef.current && mapContainerRef.current) {
+        try {
+          // Clear the container content completely before React unmounts it
+          if (mapContainerRef.current.firstChild) {
+            mapContainerRef.current.innerHTML = '';
+          }
+          mapInstanceRef.current = null;
+        } catch (e) {
+          console.warn('Map cleanup warning:', e);
+        }
+      }
     };
   }, []); // Only run once on mount
 
