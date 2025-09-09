@@ -195,6 +195,13 @@ export type Database = {
             referencedRelation: "marketplace_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "marketplace_inquiries_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_profiles_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       marketplace_profiles: {
@@ -317,6 +324,13 @@ export type Database = {
             referencedRelation: "marketplace_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "marketplace_properties_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_profiles_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       marketplace_property_images: {
@@ -431,6 +445,13 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "marketplace_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_transactions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_profiles_public"
             referencedColumns: ["id"]
           },
         ]
@@ -854,9 +875,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      marketplace_profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          company_name: string | null
+          created_at: string | null
+          id: string | null
+          name: string | null
+          role: Database["public"]["Enums"]["marketplace_user_role"] | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          name?: string | null
+          role?: Database["public"]["Enums"]["marketplace_user_role"] | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          name?: string | null
+          role?: Database["public"]["Enums"]["marketplace_user_role"] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      get_marketplace_profile_contact: {
+        Args: { profile_id: string }
+        Returns: {
+          email: string
+          phone: string
+        }[]
+      }
       get_partner_branding: {
         Args: { domain_name?: string }
         Returns: {
