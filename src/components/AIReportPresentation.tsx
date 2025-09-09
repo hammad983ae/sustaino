@@ -38,48 +38,48 @@ const AIReportPresentation: React.FC<AIReportPresentationProps> = ({
   const slides = [
     {
       title: "Property Overview",
-      subtitle: "Aerial perspective analysis",
-      source: "Google Earth Satellite",
+      subtitle: "8-story premium CBD office building",
+      source: "Google Earth Satellite + Building Intelligence",
       duration: 8000,
-      content: "AI-enhanced aerial view showing property boundaries, surrounding infrastructure, and geographical context.",
+      content: "Prime Collins Street location featuring modern glass facade, dedicated parking, and premium commercial tenants. Building constructed 2018 with A-grade specifications.",
       image: "/api/placeholder/800/450",
-      animation: "Satellite zoom and pan sequence"
+      animation: "3D building model with aerial context view"
     },
     {
-      title: "District Analysis",
-      subtitle: "Neighborhood characteristics",
-      source: "RP Data Integration",
+      title: "Market Intelligence",
+      subtitle: "Premium CBD commercial district - $8,500/sqm average",
+      source: "RP Data + CoreLogic Integration",
       duration: 6000,
-      content: "Comprehensive district analysis including demographics, market trends, and comparative property values.",
+      content: "Analysis of 47 comparable sales in 12-month period. Average yield 6.2%, with premium buildings achieving 6.8%+. High tenant demand with 96% occupancy rates.",
       image: "/api/placeholder/800/450",
-      animation: "Heat map overlay with data visualization"
+      animation: "Interactive market heat map with comparable sales"
     },
     {
-      title: "Property Features",
-      subtitle: "Detailed structural analysis",
-      source: "Property Photos + AI Enhancement",
+      title: "ESG & Sustainability",
+      subtitle: "NABERS 5-star energy rating achieved",
+      source: "Building Analytics + ESG Assessment",
       duration: 7000,
-      content: "AI-processed property imagery highlighting key features, condition assessment, and unique characteristics.",
+      content: "Excellent sustainability credentials including solar panels, rainwater harvesting, EV charging stations. Green building certification enhances tenant appeal and rental premiums.",
       image: "/api/placeholder/800/450",
-      animation: "3D reconstruction from multiple angles"
+      animation: "Sustainability metrics visualization with energy flow diagrams"
     },
     {
-      title: "Market Context",
-      subtitle: "Comparative market analysis",
-      source: "RP Data + Market Intelligence",
+      title: "Risk Assessment",
+      subtitle: "Low risk profile - Stable tenant base",
+      source: "Integrated Risk Analytics Engine",
       duration: 6000,
-      content: "Real-time market positioning analysis with comparable sales, rental yields, and growth projections.",
+      content: "Comprehensive risk analysis shows low vacancy risk (major bank 10-year lease), minimal building defects, excellent transport access. Insurance costs optimized.",
       image: "/api/placeholder/800/450",
-      animation: "Dynamic chart animations and market trends"
+      animation: "Risk matrix visualization with mitigation strategies"
     },
     {
-      title: "Valuation Preview",
-      subtitle: "AI-driven preliminary assessment",
-      source: "Integrated Analysis Engine",
+      title: "Valuation Indication",
+      subtitle: "Market value range: $12.2M - $12.8M",
+      source: "AI Valuation Engine + Market Analytics",
       duration: 5000,
-      content: "Preliminary valuation range based on AI analysis of all gathered data points and market intelligence.",
+      content: "Preliminary assessment indicates strong value position at $12.5M (midpoint). Based on 6.8% yield, comparable sales analysis, and premium building classification.",
       image: "/api/placeholder/800/450",
-      animation: "Value calculation visualization"
+      animation: "Valuation calculation breakdown with confidence intervals"
     }
   ];
 
@@ -139,7 +139,7 @@ const AIReportPresentation: React.FC<AIReportPresentationProps> = ({
             AI Property Analysis Presentation
           </h1>
           <p className="text-muted-foreground">
-            {propertyData.address || "123 Example Street, Premium District"} • Intelligent Pre-Report Analysis
+            {propertyData.address || "123 Collins Street, Melbourne VIC 3000"} • Intelligent Pre-Report Analysis
           </p>
         </div>
 

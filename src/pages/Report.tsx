@@ -4,8 +4,9 @@ import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight, Home, Save, Eye, FileText, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
-import ReportPreview from "@/components/ReportPreview";
+import ReportGenerator from "@/components/ReportGenerator";
 import AIReportPresentation from "@/components/AIReportPresentation";
+import WhiteLabelHeader from "@/components/WhiteLabelHeader";
 import { useAutosave } from "@/hooks/useAutosave";
 import { useToast } from "@/hooks/use-toast";
 
@@ -139,7 +140,7 @@ const ReportViewer = () => {
           </div>
         </div>
         <div className="p-4 max-w-6xl mx-auto">
-          <ReportPreview 
+          <ReportGenerator 
             reportData={reportData}
             onGenerate={handleGenerateReport}
             onClose={handleBackToEdit}
@@ -151,6 +152,7 @@ const ReportViewer = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <WhiteLabelHeader />
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
         <div className="flex items-center justify-between">
