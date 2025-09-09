@@ -1,11 +1,61 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search, MapPin } from "lucide-react";
+import { useProperty } from "@/contexts/PropertyContext";
+import { toast } from "@/hooks/use-toast";
 
 const PropertySearchAnalysis = () => {
+  const [propertyAddress, setPropertyAddress] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { updateAddressData } = useProperty();
+
+  const handleIdentifyAddress = async () => {
+    if (!propertyAddress.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a property address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!selectedState) {
+      toast({
+        title: "Error", 
+        description: "Please select a state",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      // Update property context with the address data
+      updateAddressData({
+        propertyAddress: propertyAddress,
+        state: selectedState,
+      });
+
+      toast({
+        title: "Success",
+        description: "Property address identified successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to identify address",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
@@ -34,31 +84,37 @@ const PropertySearchAnalysis = () => {
                 id="property-address-search"
                 placeholder="Enter full property address..."
                 className="mt-1"
+                value={propertyAddress}
+                onChange={(e) => setPropertyAddress(e.target.value)}
               />
             </div>
             <div>
               <Label htmlFor="state-search" className="text-sm">State</Label>
-              <Select>
+              <Select value={selectedState} onValueChange={setSelectedState}>
                 <SelectTrigger className="mt-1">
                   <SelectValue placeholder="Select state" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="nsw">NSW</SelectItem>
-                  <SelectItem value="vic">VIC</SelectItem>
-                  <SelectItem value="qld">QLD</SelectItem>
-                  <SelectItem value="wa">WA</SelectItem>
-                  <SelectItem value="sa">SA</SelectItem>
-                  <SelectItem value="tas">TAS</SelectItem>
-                  <SelectItem value="act">ACT</SelectItem>
-                  <SelectItem value="nt">NT</SelectItem>
+                  <SelectItem value="NSW">NSW</SelectItem>
+                  <SelectItem value="VIC">VIC</SelectItem>
+                  <SelectItem value="QLD">QLD</SelectItem>
+                  <SelectItem value="WA">WA</SelectItem>
+                  <SelectItem value="SA">SA</SelectItem>
+                  <SelectItem value="TAS">TAS</SelectItem>
+                  <SelectItem value="ACT">ACT</SelectItem>
+                  <SelectItem value="NT">NT</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <Button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">
+          <Button 
+            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white"
+            onClick={handleIdentifyAddress}
+            disabled={isLoading}
+          >
             <Search className="h-4 w-4 mr-2" />
-            1. Identify Address
+            {isLoading ? "Identifying..." : "1. Identify Address"}
           </Button>
         </div>
 

@@ -237,6 +237,8 @@ export const CostaGroupPortfolio = () => {
 
   const loadSavedAnalyses = async () => {
     try {
+      if (!user?.id) return; // Guard against null user
+      
       const { data, error } = await supabase
         .from('costa_portfolio_analyses')
         .select('*')
