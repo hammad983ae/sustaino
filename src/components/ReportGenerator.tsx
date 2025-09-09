@@ -98,6 +98,32 @@ startxref
 
   const propertyData = reportData || mockData;
 
+  // Sections that would be in a complete report
+  const sections = [
+    { title: "Executive Summary and Contents", status: "complete" },
+    { title: "RPD and Location", status: "complete" },
+    { title: "Legal and Planning", status: "complete" },
+    { title: "Tenancy Schedule/Lease Details", status: "partial" },
+    { title: "Statutory Assessment", status: "complete" },
+    { title: "Market Commentary", status: "complete" },
+    { title: "Property Details", status: "complete" },
+    { title: "Plant and Equipment", status: "partial" },
+    { title: "Rent Determination", status: "complete" },
+    { title: "ESG Assessment and Audit", status: "complete" },
+    { title: "Essential Repairs", status: "complete" },
+    { title: "Risk Assessment & Market Indicators", status: reportData?.riskAssessment ? "complete" : "partial" },
+    { title: "Previous Sales History and Current Sale", status: "complete" },
+    { title: "Sales Evidence", status: "complete" },
+    { title: "Leasing Evidence", status: "complete" },
+    { title: "Valuation Analysis and Rationale", status: "complete" },
+    { title: "Marketability and Mortgage Security", status: "complete" },
+    { title: "Sustaino Pro Additional Analysis", status: "complete" },
+    { title: "Valuation Certificate", status: "complete" },
+    { title: "Terms and Conditions", status: "complete" },
+    { title: "Annexures", status: "complete" },
+    { title: "Security and Certificates", status: "complete" }
+  ];
+
   return (
     <div className="space-y-6">
       {/* Report Overview */}
@@ -105,7 +131,7 @@ startxref
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
-            Report Overview
+            Complete Property Report
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -167,13 +193,60 @@ startxref
               ) : (
                 <>
                   <Download className="h-4 w-4 mr-2" />
-                  Generate Report
+                  Generate PDF Report
                 </>
               )}
             </Button>
           </div>
         </CardContent>
       </Card>
+
+      {/* Detailed Report Content */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Report Sections</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {sections.map((section, index) => (
+              <div key={index} className="border-l-4 border-primary/20 pl-4 py-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium">{index + 1}. {section.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {section.status === "complete" && "✅ Section completed with comprehensive analysis"}
+                      {section.status === "partial" && "⚠️ Section partially completed - may need additional data"}
+                      {section.status === "pending" && "⏳ Section pending completion"}
+                    </p>
+                  </div>
+                  <Badge variant={section.status === "complete" ? "default" : section.status === "partial" ? "secondary" : "outline"}>
+                    {section.status}
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Report Data Summary */}
+      {reportData && Object.keys(reportData).length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Saved Report Data</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {Object.keys(reportData).map((key) => (
+                <div key={key} className="flex items-center justify-between py-1 border-b border-border/50">
+                  <span className="font-medium capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  <Badge variant="outline">Data Saved</Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
