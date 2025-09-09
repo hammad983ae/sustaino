@@ -9,8 +9,31 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { FileText } from "lucide-react";
+import { useState } from "react";
 
 const ReportTypeConfiguration = () => {
+  const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
+  const [formData, setFormData] = useState<Record<string, string>>({});
+
+  const handleCheckboxChange = (label: string, option: string, checked: boolean) => {
+    setSelectedValues(prev => {
+      const current = prev[label] || [];
+      if (checked) {
+        return { ...prev, [label]: [...current, option] };
+      } else {
+        return { ...prev, [label]: current.filter(item => item !== option) };
+      }
+    });
+  };
+
+  const handleSelectChange = (key: string, value: string) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleInputChange = (key: string, value: string) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+  };
+
   const MultiSelectDropdown = ({ 
     options, 
     placeholder, 
@@ -20,13 +43,18 @@ const ReportTypeConfiguration = () => {
     placeholder: string; 
     label: string; 
   }) => {
+    const selected = selectedValues[label] || [];
+    const displayText = selected.length > 0 
+      ? `${selected.length} selected` 
+      : placeholder;
+
     return (
       <div className="space-y-2">
         <Label className="text-sm font-medium">{label}</Label>
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-full justify-between">
-              {placeholder}
+              {displayText}
               <ChevronDown className="h-4 w-4 opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -34,7 +62,11 @@ const ReportTypeConfiguration = () => {
             <div className="max-h-60 overflow-auto">
               {options.map((option) => (
                 <div key={option} className="flex items-center space-x-2 px-3 py-2 hover:bg-accent">
-                  <Checkbox id={`${label}-${option}`.toLowerCase().replace(/\s+/g, '-')} />
+                  <Checkbox 
+                    id={`${label}-${option}`.toLowerCase().replace(/\s+/g, '-')} 
+                    checked={selected.includes(option)}
+                    onCheckedChange={(checked) => handleCheckboxChange(label, option, !!checked)}
+                  />
                   <Label 
                     htmlFor={`${label}-${option}`.toLowerCase().replace(/\s+/g, '-')} 
                     className="text-sm cursor-pointer flex-1"
@@ -76,7 +108,7 @@ const ReportTypeConfiguration = () => {
   const valueComponents = ["As Is", "As If Complete"];
   const interestValues = [
     "Estate in Fee Simple", "Vacant Possession", "Fully Leased", 
-    "Partial Lease", "Leasehold Interest"
+    "Partial Lease", "Leasehold Interest", "Freehold Going Concern"
   ];
 
   return (
@@ -98,7 +130,7 @@ const ReportTypeConfiguration = () => {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="report-type" className="text-sm font-medium">Report Type</Label>
-                <Select>
+                <Select value={formData['report-type'] || ''} onValueChange={(value) => handleSelectChange('report-type', value)}>
                   <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Select report type" />
                   </SelectTrigger>
@@ -114,7 +146,7 @@ const ReportTypeConfiguration = () => {
 
               <div>
                 <Label htmlFor="property-type" className="text-sm font-medium">Property Type</Label>
-                <Select>
+                <Select value={formData['property-type'] || ''} onValueChange={(value) => handleSelectChange('property-type', value)}>
                   <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Residential" />
                   </SelectTrigger>
@@ -134,6 +166,8 @@ const ReportTypeConfiguration = () => {
                   id="instructing-party"
                   placeholder="Enter instructing party details"
                   className="mt-1"
+                  value={formData['instructing-party'] || ''}
+                  onChange={(e) => handleInputChange('instructing-party', e.target.value)}
                 />
               </div>
             </div>
@@ -146,7 +180,11 @@ const ReportTypeConfiguration = () => {
                   <div className="space-y-2">
                     {valuationPurposes.map((purpose) => (
                       <div key={purpose} className="flex items-center space-x-2">
-                        <Checkbox id={purpose.toLowerCase().replace(/\s+/g, '-')} />
+                        <Checkbox 
+                          id={purpose.toLowerCase().replace(/\s+/g, '-')} 
+                          checked={(selectedValues['Valuation Purpose'] || []).includes(purpose)}
+                          onCheckedChange={(checked) => handleCheckboxChange('Valuation Purpose', purpose, !!checked)}
+                        />
                         <Label 
                           htmlFor={purpose.toLowerCase().replace(/\s+/g, '-')} 
                           className="text-sm cursor-pointer"
@@ -165,6 +203,8 @@ const ReportTypeConfiguration = () => {
                   id="reliant-party"
                   placeholder="Enter reliant party"
                   className="mt-1"
+                  value={formData['reliant-party'] || ''}
+                  onChange={(e) => handleInputChange('reliant-party', e.target.value)}
                 />
               </div>
             </div>
@@ -213,7 +253,7 @@ const ReportTypeConfiguration = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="rental-assessment-type" className="text-sm font-medium">Rental Assessment Type</Label>
-              <Select>
+              <Select value={formData['rental-assessment-type'] || ''} onValueChange={(value) => handleSelectChange('rental-assessment-type', value)}>
                 <SelectTrigger id="rental-assessment-type" className="mt-1">
                   <SelectValue placeholder="Select assessment type" />
                 </SelectTrigger>
@@ -229,7 +269,7 @@ const ReportTypeConfiguration = () => {
 
             <div>
               <Label htmlFor="rental-basis" className="text-sm font-medium">Basis of Rent</Label>
-              <Select>
+              <Select value={formData['rental-basis'] || ''} onValueChange={(value) => handleSelectChange('rental-basis', value)}>
                 <SelectTrigger id="rental-basis" className="mt-1">
                   <SelectValue placeholder="Select rental basis" />
                 </SelectTrigger>
@@ -245,7 +285,7 @@ const ReportTypeConfiguration = () => {
 
             <div>
               <Label htmlFor="property-classification" className="text-sm font-medium">Property Classification</Label>
-              <Select>
+              <Select value={formData['property-classification'] || ''} onValueChange={(value) => handleSelectChange('property-classification', value)}>
                 <SelectTrigger id="property-classification" className="mt-1">
                   <SelectValue placeholder="Select classification" />
                 </SelectTrigger>
@@ -258,7 +298,7 @@ const ReportTypeConfiguration = () => {
 
             <div>
               <Label htmlFor="comparison-unit" className="text-sm font-medium">Comparison Unit (Specialised)</Label>
-              <Select>
+              <Select value={formData['comparison-unit'] || ''} onValueChange={(value) => handleSelectChange('comparison-unit', value)}>
                 <SelectTrigger id="comparison-unit" className="mt-1">
                   <SelectValue placeholder="Select comparison unit" />
                 </SelectTrigger>
@@ -271,13 +311,14 @@ const ReportTypeConfiguration = () => {
                   <SelectItem value="cents-per-litre">Cents per Litre (Service Stations)</SelectItem>
                   <SelectItem value="turnover-percentage">Turnover Percentage (Licensed)</SelectItem>
                   <SelectItem value="per-bed">Per Bed (Healthcare)</SelectItem>
+                  <SelectItem value="workers-accommodation-per-bed">Workers Accommodation - Per/Bed</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
               <Label htmlFor="outgoings-liability" className="text-sm font-medium">Outgoings Liability</Label>
-              <Select>
+              <Select value={formData['outgoings-liability'] || ''} onValueChange={(value) => handleSelectChange('outgoings-liability', value)}>
                 <SelectTrigger id="outgoings-liability" className="mt-1">
                   <SelectValue placeholder="Select outgoings structure" />
                 </SelectTrigger>
@@ -293,7 +334,7 @@ const ReportTypeConfiguration = () => {
 
             <div>
               <Label htmlFor="incentives-treatment" className="text-sm font-medium">Incentives Treatment</Label>
-              <Select>
+              <Select value={formData['incentives-treatment'] || ''} onValueChange={(value) => handleSelectChange('incentives-treatment', value)}>
                 <SelectTrigger id="incentives-treatment" className="mt-1">
                   <SelectValue placeholder="Select incentives approach" />
                 </SelectTrigger>
@@ -308,7 +349,7 @@ const ReportTypeConfiguration = () => {
 
             <div>
               <Label htmlFor="evidence-hierarchy" className="text-sm font-medium">Market Evidence Priority</Label>
-              <Select>
+              <Select value={formData['evidence-hierarchy'] || ''} onValueChange={(value) => handleSelectChange('evidence-hierarchy', value)}>
                 <SelectTrigger id="evidence-hierarchy" className="mt-1">
                   <SelectValue placeholder="Select evidence weighting" />
                 </SelectTrigger>
@@ -324,7 +365,7 @@ const ReportTypeConfiguration = () => {
 
             <div>
               <Label htmlFor="gst-treatment" className="text-sm font-medium">GST Treatment</Label>
-              <Select>
+              <Select value={formData['gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('gst-treatment', value)}>
                 <SelectTrigger id="gst-treatment" className="mt-1">
                   <SelectValue placeholder="Select GST approach" />
                 </SelectTrigger>
@@ -350,6 +391,8 @@ const ReportTypeConfiguration = () => {
                 id="custom-basis-description"
                 placeholder="Describe custom rental basis or specific requirements"
                 className="mt-1"
+                value={formData['custom-basis-description'] || ''}
+                onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
               />
             </div>
           </div>
