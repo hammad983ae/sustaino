@@ -914,6 +914,13 @@ export type Database = {
           phone: string
         }[]
       }
+      get_marketplace_profile_contact_secure: {
+        Args: { profile_id: string }
+        Returns: {
+          email: string
+          phone: string
+        }[]
+      }
       get_partner_branding: {
         Args: { domain_name?: string }
         Returns: {
