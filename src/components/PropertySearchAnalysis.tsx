@@ -7,11 +7,26 @@ import { Button } from "@/components/ui/button";
 import { Search, MapPin } from "lucide-react";
 import { useProperty } from "@/contexts/PropertyContext";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+
+interface PropertyAnalysisData {
+  address: string;
+  state: string;
+  timestamp: string;
+  locationData: any;
+  propertyDetails: any;
+  marketData: any;
+  environmentalData: any;
+  planningData: any;
+  transportData: any;
+  demographicData: any;
+}
 
 const PropertySearchAnalysis = () => {
   const [propertyAddress, setPropertyAddress] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [analysisData, setAnalysisData] = useState<PropertyAnalysisData | null>(null);
   const { updateAddressData } = useProperty();
 
   const handleIdentifyAddress = async () => {
@@ -36,26 +51,45 @@ const PropertySearchAnalysis = () => {
     setIsLoading(true);
     
     try {
-      // Update property context with the address data
-      updateAddressData({
-        propertyAddress: propertyAddress,
-        state: selectedState,
+      // Call the property data analysis edge function
+      const { data, error } = await supabase.functions.invoke('property-data-analysis', {
+        body: {
+          address: propertyAddress,
+          state: selectedState
+        }
       });
 
-      toast({
-        title: "Success",
-        description: "Property address identified successfully",
-      });
+      if (error) throw error;
+
+      if (data.success) {
+        // Update property context with the address data
+        updateAddressData({
+          propertyAddress: propertyAddress,
+          state: selectedState,
+        });
+
+        // Store the analysis data
+        setAnalysisData(data.data);
+
+        toast({
+          title: "Success",
+          description: `Property analysis completed! Found ${Object.keys(data.sections).length} automated sections.`,
+        });
+      } else {
+        throw new Error(data.error || 'Analysis failed');
+      }
     } catch (error) {
+      console.error('Property analysis error:', error);
       toast({
         title: "Error",
-        description: "Failed to identify address",
+        description: error.message || "Failed to analyze property",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
@@ -114,9 +148,103 @@ const PropertySearchAnalysis = () => {
             disabled={isLoading}
           >
             <Search className="h-4 w-4 mr-2" />
-            {isLoading ? "Identifying..." : "1. Identify Address"}
+            {isLoading ? "Analyzing Property..." : "1. Identify Address"}
           </Button>
         </div>
+
+        {/* Analysis Results */}
+        {analysisData && (
+          <div className="space-y-6 p-4 bg-secondary/50 rounded-lg">
+            <h3 className="font-semibold text-lg">Automated Analysis Results</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Location Data */}
+              <div className="p-3 bg-white rounded border">
+                <h4 className="font-medium text-sm text-green-700">✓ Location Analysis</h4>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Coordinates, address validation, nearby amenities
+                </p>
+                {analysisData.locationData?.coordinates && (
+                  <p className="text-xs mt-1">
+                    Lat: {analysisData.locationData.coordinates.lat.toFixed(4)}, 
+                    Lng: {analysisData.locationData.coordinates.lng.toFixed(4)}
+                  </p>
+                )}
+              </div>
+
+              {/* Market Data */}
+              <div className="p-3 bg-white rounded border">
+                <h4 className="font-medium text-sm text-green-700">✓ Market Valuation</h4>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Property values, market trends, comparables
+                </p>
+                {analysisData.marketData?.estimatedValue && (
+                  <p className="text-xs mt-1 font-medium">
+                    Est. Value: ${analysisData.marketData.estimatedValue.average.toLocaleString()}
+                  </p>
+                )}
+              </div>
+
+              {/* Environmental Data */}
+              <div className="p-3 bg-white rounded border">
+                <h4 className="font-medium text-sm text-green-700">✓ Environmental Assessment</h4>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Climate risks, sustainability factors
+                </p>
+                {analysisData.environmentalData?.climateRisk && (
+                  <p className="text-xs mt-1">
+                    Flood: {analysisData.environmentalData.climateRisk.floodRisk}, 
+                    Fire: {analysisData.environmentalData.climateRisk.bushfireRisk}
+                  </p>
+                )}
+              </div>
+
+              {/* Planning Data */}
+              <div className="p-3 bg-white rounded border">
+                <h4 className="font-medium text-sm text-green-700">✓ Planning Analysis</h4>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Zoning, land use, development potential
+                </p>
+                {analysisData.planningData?.zoning && (
+                  <p className="text-xs mt-1">
+                    Zone: {analysisData.planningData.zoning}
+                  </p>
+                )}
+              </div>
+
+              {/* Transport Data */}
+              <div className="p-3 bg-white rounded border">
+                <h4 className="font-medium text-sm text-green-700">✓ Transport Analysis</h4>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Accessibility, walkability, transit
+                </p>
+                {analysisData.transportData?.walkScore && (
+                  <p className="text-xs mt-1">
+                    Walk Score: {analysisData.transportData.walkScore}/100
+                  </p>
+                )}
+              </div>
+
+              {/* Demographic Data */}
+              <div className="p-3 bg-white rounded border">
+                <h4 className="font-medium text-sm text-green-700">✓ Demographic Profile</h4>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Population, income, education stats
+                </p>
+                {analysisData.demographicData?.medianIncome && (
+                  <p className="text-xs mt-1">
+                    Median Income: ${analysisData.demographicData.medianIncome.toLocaleString()}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="text-xs text-muted-foreground italic">
+              Analysis completed at {new Date(analysisData.timestamp).toLocaleString()}. 
+              This data will be used to automatically populate relevant sections in your reports.
+            </div>
+          </div>
+        )}
 
         {/* Additional Analysis Features */}
         <div className="space-y-4">
@@ -158,7 +286,6 @@ const PropertySearchAnalysis = () => {
           <p className="text-xs text-muted-foreground italic">
             Note: Location Analysis, Access & Site, and Services & Amenities are handled by RP Data functions and have been removed from this component to avoid duplication.
           </p>
-
         </div>
       </CardContent>
     </Card>
