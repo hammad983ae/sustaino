@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Home, Save, Eye, FileText, Play } from "luci
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import ReportGenerator from "@/components/ReportGenerator";
+import PDFReportPreview from "@/components/PDFReportPreview";
 import AIReportPresentation from "@/components/AIReportPresentation";
 import WhiteLabelHeader from "@/components/WhiteLabelHeader";
 import { useReportData } from "@/hooks/useReportData";
@@ -211,9 +212,8 @@ const ReportViewer = () => {
             </div>
           </div>
           <div className="p-4 max-w-6xl mx-auto">
-            <ReportGenerator 
+            <PDFReportPreview 
               reportData={reportData}
-              onGenerate={handleGenerateReport}
               onClose={handleBackToEdit}
             />
           </div>
