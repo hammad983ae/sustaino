@@ -99,8 +99,23 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Tenancy Schedule/Lease Details section
+  // Special handling for Statutory Assessment section
   if (sectionIndex === 4) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        </CardHeader>
+        <CardContent>
+          <StatutoryAssessment />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Tenancy Schedule/Lease Details section
+  if (sectionIndex === 5) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -124,21 +139,6 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <MarketCommentary />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Special handling for Statutory Assessment section
-  if (sectionIndex === 5) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
-        </CardHeader>
-        <CardContent>
-          <StatutoryAssessment />
         </CardContent>
       </Card>
     );
