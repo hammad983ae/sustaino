@@ -77,6 +77,20 @@ const PropertyDetails = () => {
     specialized: reportData.propertyDetails?.tbeToggles?.specialized ?? false
   });
 
+  // Property Condition Summary state
+  const [propertyCondition, setPropertyCondition] = useState({
+    include: reportData.propertyDetails?.propertyCondition?.include ?? false,
+    overallCondition: reportData.propertyDetails?.propertyCondition?.overallCondition ?? 'good',
+    internalCondition: reportData.propertyDetails?.propertyCondition?.internalCondition ?? 'good',
+    externalCondition: reportData.propertyDetails?.propertyCondition?.externalCondition ?? 'good',
+    maintenanceLevel: reportData.propertyDetails?.propertyCondition?.maintenanceLevel ?? 'well-maintained',
+    yearBuilt: reportData.propertyDetails?.propertyCondition?.yearBuilt ?? '',
+    expectedLifespan: reportData.propertyDetails?.propertyCondition?.expectedLifespan ?? 50,
+    depreciationRate: reportData.propertyDetails?.propertyCondition?.depreciationRate ?? 2.5,
+    remainingUsefulLife: reportData.propertyDetails?.propertyCondition?.remainingUsefulLife ?? 0,
+    valuationImpact: reportData.propertyDetails?.propertyCondition?.valuationImpact ?? ''
+  });
+
   // Auto-save function with immediate execution
   const savePropertyData = () => {
     const dataToSave = {
@@ -84,7 +98,8 @@ const PropertyDetails = () => {
       propertyTypes,
       certifications,
       propertyCount,
-      tbeToggles
+      tbeToggles,
+      propertyCondition
     };
     updateSection('propertyDetails', dataToSave);
     console.log('Saved property data:', dataToSave);
@@ -93,7 +108,7 @@ const PropertyDetails = () => {
   // Save data immediately when component mounts and whenever state changes
   React.useEffect(() => {
     savePropertyData();
-  }, [includeSection, propertyTypes, certifications, propertyCount, tbeToggles]);
+  }, [includeSection, propertyTypes, certifications, propertyCount, tbeToggles, propertyCondition]);
 
   const addPropertySection = () => {
     setPropertyCount(prev => prev + 1);
@@ -1691,6 +1706,261 @@ const PropertyDetails = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Property Condition Summary */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center justify-between">
+                Property Condition Summary
+                <Switch
+                  checked={propertyCondition.include}
+                  onCheckedChange={(checked) => 
+                    setPropertyCondition(prev => ({ ...prev, include: checked }))
+                  }
+                />
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Assess property condition and calculate depreciation rates for valuation impact.
+              </p>
+            </CardHeader>
+            {propertyCondition.include && (
+              <CardContent className="space-y-6">
+                {/* Condition Assessment */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="overall-condition">Overall Property Condition</Label>
+                    <Select 
+                      value={propertyCondition.overallCondition}
+                      onValueChange={(value) => 
+                        setPropertyCondition(prev => ({ ...prev, overallCondition: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select condition" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="excellent">Excellent</SelectItem>
+                        <SelectItem value="good">Good</SelectItem>
+                        <SelectItem value="average">Average</SelectItem>
+                        <SelectItem value="below-average">Below Average</SelectItem>
+                        <SelectItem value="poor">Poor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="maintenance-level">Maintenance Level</Label>
+                    <Select 
+                      value={propertyCondition.maintenanceLevel}
+                      onValueChange={(value) => 
+                        setPropertyCondition(prev => ({ ...prev, maintenanceLevel: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select maintenance level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="well-maintained">Well Maintained</SelectItem>
+                        <SelectItem value="adequately-maintained">Adequately Maintained</SelectItem>
+                        <SelectItem value="poorly-maintained">Poorly Maintained</SelectItem>
+                        <SelectItem value="deferred-maintenance">Deferred Maintenance</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="internal-condition">Internal Condition</Label>
+                    <Select 
+                      value={propertyCondition.internalCondition}
+                      onValueChange={(value) => 
+                        setPropertyCondition(prev => ({ ...prev, internalCondition: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select internal condition" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="excellent">Excellent</SelectItem>
+                        <SelectItem value="good">Good</SelectItem>
+                        <SelectItem value="average">Average</SelectItem>
+                        <SelectItem value="below-average">Below Average</SelectItem>
+                        <SelectItem value="poor">Poor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="external-condition">External Condition</Label>
+                    <Select 
+                      value={propertyCondition.externalCondition}
+                      onValueChange={(value) => 
+                        setPropertyCondition(prev => ({ ...prev, externalCondition: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select external condition" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="excellent">Excellent</SelectItem>
+                        <SelectItem value="good">Good</SelectItem>
+                        <SelectItem value="average">Average</SelectItem>
+                        <SelectItem value="below-average">Below Average</SelectItem>
+                        <SelectItem value="poor">Poor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Depreciation Calculations */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Depreciation Analysis</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="year-built-depreciation">Year Built</Label>
+                      <Input 
+                        id="year-built-depreciation"
+                        type="number"
+                        placeholder="e.g., 1985"
+                        value={propertyCondition.yearBuilt}
+                        onChange={(e) => {
+                          const yearBuilt = e.target.value;
+                          const currentYear = new Date().getFullYear();
+                          const age = yearBuilt ? currentYear - parseInt(yearBuilt) : 0;
+                          const remainingLife = Math.max(0, propertyCondition.expectedLifespan - age);
+                          
+                          setPropertyCondition(prev => ({ 
+                            ...prev, 
+                            yearBuilt,
+                            remainingUsefulLife: remainingLife
+                          }));
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="expected-lifespan">Expected Lifespan (Years)</Label>
+                      <Input 
+                        id="expected-lifespan"
+                        type="number"
+                        placeholder="e.g., 50"
+                        value={propertyCondition.expectedLifespan}
+                        onChange={(e) => {
+                          const expectedLifespan = parseInt(e.target.value) || 50;
+                          const currentYear = new Date().getFullYear();
+                          const age = propertyCondition.yearBuilt ? currentYear - parseInt(propertyCondition.yearBuilt) : 0;
+                          const remainingLife = Math.max(0, expectedLifespan - age);
+                          const depreciationRate = expectedLifespan > 0 ? (100 / expectedLifespan) : 2.5;
+                          
+                          setPropertyCondition(prev => ({ 
+                            ...prev, 
+                            expectedLifespan,
+                            remainingUsefulLife: remainingLife,
+                            depreciationRate: parseFloat(depreciationRate.toFixed(2))
+                          }));
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="remaining-useful-life">Remaining Useful Life (Years)</Label>
+                      <Input 
+                        id="remaining-useful-life"
+                        type="number"
+                        placeholder="Calculated automatically"
+                        value={propertyCondition.remainingUsefulLife}
+                        onChange={(e) => 
+                          setPropertyCondition(prev => ({ 
+                            ...prev, 
+                            remainingUsefulLife: parseInt(e.target.value) || 0 
+                          }))
+                        }
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Formula: Expected Lifespan - Current Age
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="depreciation-rate">Estimated Depreciation Rate (%)</Label>
+                    <Input 
+                      id="depreciation-rate"
+                      type="number"
+                      step="0.1"
+                      placeholder="Annual depreciation percentage"
+                      value={propertyCondition.depreciationRate}
+                      onChange={(e) => 
+                        setPropertyCondition(prev => ({ 
+                          ...prev, 
+                          depreciationRate: parseFloat(e.target.value) || 2.5 
+                        }))
+                      }
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Formula: 100 ÷ Expected Lifespan (or manual override based on condition)
+                    </p>
+                  </div>
+                </div>
+
+                {/* Impact Assessment */}
+                <div>
+                  <Label htmlFor="valuation-impact">Impact on Property Valuation</Label>
+                  <Textarea
+                    id="valuation-impact"
+                    placeholder="Explain how the repair requirements (or lack thereof) impact the property valuation, marketability, and investment potential..."
+                    value={propertyCondition.valuationImpact}
+                    onChange={(e) => 
+                      setPropertyCondition(prev => ({ ...prev, valuationImpact: e.target.value }))
+                    }
+                    className="min-h-[100px]"
+                  />
+                </div>
+
+                {/* Condition Summary Display */}
+                <div className="p-4 border rounded-lg bg-muted/50">
+                  <h4 className="font-medium mb-2">Condition Analysis Summary</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <span className="font-medium">Overall:</span>
+                      <p className="text-muted-foreground capitalize">{propertyCondition.overallCondition}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium">Internal:</span>
+                      <p className="text-muted-foreground capitalize">{propertyCondition.internalCondition}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium">External:</span>
+                      <p className="text-muted-foreground capitalize">{propertyCondition.externalCondition}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium">Maintenance:</span>
+                      <p className="text-muted-foreground capitalize">{propertyCondition.maintenanceLevel.replace('-', ' ')}</p>
+                    </div>
+                  </div>
+                  {propertyCondition.yearBuilt && (
+                    <div className="mt-3 pt-3 border-t">
+                      <div className="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium">Property Age:</span>
+                          <p className="text-muted-foreground">
+                            {new Date().getFullYear() - parseInt(propertyCondition.yearBuilt)} years
+                          </p>
+                        </div>
+                        <div>
+                          <span className="font-medium">Depreciation Rate:</span>
+                          <p className="text-muted-foreground">{propertyCondition.depreciationRate}% per annum</p>
+                        </div>
+                        <div>
+                          <span className="font-medium">Remaining Life:</span>
+                          <p className="text-muted-foreground">{propertyCondition.remainingUsefulLife} years</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            )}
+          </Card>
 
           {/* Certifications & Compliance */}
           <Card>
