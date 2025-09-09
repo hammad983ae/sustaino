@@ -184,6 +184,7 @@ serve(async (req) => {
           planningRestrictions: ['Heritage controls apply', 'Neighbourhood character overlay'],
           permitRequired: true,
           buildingHeight: '9m maximum (2 storeys)',
+          heightRestriction: '9m maximum (2 storeys)', // Alias for compatibility
           floorSpaceRatio: state === 'NSW' ? '0.5:1' : 'Not specified',
           minimumLotSize: '300m²',
           setbacks: {

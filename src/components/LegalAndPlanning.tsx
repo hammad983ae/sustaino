@@ -26,14 +26,22 @@ const LegalAndPlanning = () => {
   });
 
   const handlePlanningDataFetched = (data: any) => {
+    console.log('Planning data received:', data);
+    
     setPlanningData(prev => ({
       ...prev,
+      lga: data.lga || data.planningScheme?.replace(' Planning Scheme', '') || "",
       zoning: data.zoning || "",
-      overlays: data.overlays?.join(", ") || "",
-      heightOfBuilding: data.heightRestriction || "",
+      overlays: Array.isArray(data.overlays) ? data.overlays.join(", ") : (data.overlays || ""),
+      heightOfBuilding: data.heightRestriction || data.buildingHeight || "",
+      floorSpaceRatio: data.floorSpaceRatio || "",
+      minimumLotSize: data.minimumLotSize || "",
       permissibleUse: data.landUse || "",
       developmentPotential: data.developmentPotential || "",
-      planningRestrictions: data.overlays?.length > 0 ? `Planning overlays apply: ${data.overlays.join(", ")}` : ""
+      planningRestrictions: Array.isArray(data.overlays) && data.overlays.length > 0 
+        ? `Planning overlays apply: ${data.overlays.join(", ")}` 
+        : (data.planningRestrictions?.join(", ") || ""),
+      overlayImpactRating: data.overlays && Array.isArray(data.overlays) && data.overlays.length > 0 ? "3" : "1"
     }));
   };
 

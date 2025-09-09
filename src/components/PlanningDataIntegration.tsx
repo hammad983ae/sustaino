@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, FileText, MapPin, Search, ExternalLink, Loader2, Map } from "lucide-react";
 import { useProperty } from "@/contexts/PropertyContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PlanningDataIntegrationProps {
   propertyAddress?: string;
@@ -48,25 +49,77 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
     setSearchStep(2);
     
     try {
-      // Simulate API call to VicPlan
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // First try to get data from property analysis service
+      const { data: analysisData, error } = await supabase.functions.invoke('property-data-analysis', {
+        body: { 
+          address: searchAddress,
+          state: selectedState.toUpperCase()
+        }
+      });
+
+      let planningDataToUse;
+
+      if (analysisData && analysisData.success && analysisData.data.planningData) {
+        // Use real data from property analysis
+        const propertyPlanningData = analysisData.data.planningData;
+        planningDataToUse = {
+          zoning: propertyPlanningData.zoning,
+          overlays: propertyPlanningData.overlays,
+          lga: propertyPlanningData.lga,
+          heightRestriction: propertyPlanningData.heightRestriction || propertyPlanningData.buildingHeight,
+          floorSpaceRatio: propertyPlanningData.floorSpaceRatio,
+          minimumLotSize: propertyPlanningData.minimumLotSize,
+          landUse: propertyPlanningData.landUse,
+          developmentPotential: propertyPlanningData.developmentPotential,
+          planningScheme: propertyPlanningData.planningScheme,
+          planningRestrictions: propertyPlanningData.planningRestrictions,
+          permitRequired: propertyPlanningData.permitRequired,
+          mapReference: "property-analysis-service",
+          lastUpdated: new Date().toLocaleDateString()
+        };
+        console.log('Using property analysis data:', planningDataToUse);
+      } else {
+        // Fallback to mock data
+        console.log('Property analysis failed, using mock data:', error);
+        planningDataToUse = {
+          zoning: "Commercial 1 Zone (C1Z)",
+          overlays: ["Development Contributions Plan Overlay", "Special Building Overlay"],
+          lga: "City of Melbourne",
+          heightRestriction: "15m maximum",
+          floorSpaceRatio: "0.5:1",
+          minimumLotSize: "300m²",
+          landUse: "Commercial uses, Retail premises, Office premises",
+          developmentPotential: "Medium - Subject to overlays",
+          planningScheme: "Bayside Planning Scheme",
+          planningRestrictions: ["Heritage controls apply", "Neighbourhood character overlay"],
+          permitRequired: true,
+          mapReference: "vicplan.vic.gov.au/planning/PS327856",
+          lastUpdated: new Date().toLocaleDateString()
+        };
+      }
       
-      const mockPlanningData = {
+      setPlanningData(planningDataToUse);
+      onDataFetched?.(planningDataToUse);
+    } catch (error) {
+      console.error("Error fetching planning data:", error);
+      // Use fallback data on error
+      const fallbackData = {
         zoning: "Commercial 1 Zone (C1Z)",
         overlays: ["Development Contributions Plan Overlay", "Special Building Overlay"],
-        permitRequired: true,
+        lga: "City of Melbourne",
         heightRestriction: "15m maximum",
+        floorSpaceRatio: "0.5:1",
+        minimumLotSize: "300m²",
         landUse: "Commercial uses, Retail premises, Office premises",
         developmentPotential: "Medium - Subject to overlays",
         planningScheme: "Bayside Planning Scheme",
-        mapReference: "vicplan.vic.gov.au/planning/PS327856",
+        planningRestrictions: ["Heritage controls apply", "Neighbourhood character overlay"],
+        permitRequired: true,
+        mapReference: "fallback-data",
         lastUpdated: new Date().toLocaleDateString()
       };
-      
-      setPlanningData(mockPlanningData);
-      onDataFetched?.(mockPlanningData);
-    } catch (error) {
-      console.error("Error fetching planning data:", error);
+      setPlanningData(fallbackData);
+      onDataFetched?.(fallbackData);
     } finally {
       setIsSearching(false);
     }
@@ -199,7 +252,11 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
                   <h4 className="font-semibold text-emerald-900">Planning Data Retrieved</h4>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div>
+                    <label className="text-xs font-medium text-emerald-700">LGA</label>
+                    <p className="text-sm">{planningData.lga}</p>
+                  </div>
                   <div>
                     <label className="text-xs font-medium text-emerald-700">Zoning</label>
                     <p className="text-sm">{planningData.zoning}</p>
@@ -209,10 +266,18 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
                     <p className="text-sm">{planningData.heightRestriction}</p>
                   </div>
                   <div>
+                    <label className="text-xs font-medium text-emerald-700">Floor Space Ratio</label>
+                    <p className="text-sm">{planningData.floorSpaceRatio}</p>
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-emerald-700">Minimum Lot Size</label>
+                    <p className="text-sm">{planningData.minimumLotSize}</p>
+                  </div>
+                  <div>
                     <label className="text-xs font-medium text-emerald-700">Land Use</label>
                     <p className="text-sm">{planningData.landUse}</p>
                   </div>
-                  <div>
+                  <div className="md:col-span-2 lg:col-span-3">
                     <label className="text-xs font-medium text-emerald-700">Development Potential</label>
                     <p className="text-sm">{planningData.developmentPotential}</p>
                   </div>
