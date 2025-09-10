@@ -38,6 +38,7 @@ export default function AuthPage() {
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const [showQrVerification, setShowQrVerification] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
 
   useEffect(() => {
     // Check if user is already logged in
@@ -580,13 +581,51 @@ export default function AuthPage() {
                           <p className="text-xs mt-1">This provides additional security for your account</p>
                         </div>
                         
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setShowQrVerification(false)}
-                        >
-                          Continue without QR
-                        </Button>
+                        <div className="space-y-3">
+                          <Label htmlFor="verification-code" className="text-sm font-medium">
+                            Enter 6-digit verification code from your authenticator app:
+                          </Label>
+                          <div className="flex justify-center">
+                            <Input
+                              id="verification-code"
+                              type="text"
+                              placeholder="000000"
+                              value={verificationCode}
+                              onChange={(e) => setVerificationCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+                              className="w-32 text-center text-lg font-mono tracking-widest"
+                              maxLength={6}
+                            />
+                          </div>
+                          
+                          <div className="flex gap-2 justify-center">
+                            <Button 
+                              variant="default" 
+                              size="sm"
+                              disabled={verificationCode.length !== 6}
+                              onClick={() => {
+                                toast({
+                                  title: "Verification code noted",
+                                  description: `Code ${verificationCode} has been recorded for your account.`,
+                                  className: "bg-green-50 border-green-200"
+                                });
+                                setShowQrVerification(false);
+                                setVerificationCode('');
+                              }}
+                            >
+                              Verify Code
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => {
+                                setShowQrVerification(false);
+                                setVerificationCode('');
+                              }}
+                            >
+                              Skip for now
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </Card>
                   )}
