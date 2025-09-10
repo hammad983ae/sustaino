@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Trash2, Plus, AlertTriangle } from 'lucide-react';
 import { useSalesEvidence, SalesRecord } from '@/hooks/useSalesEvidence';
-import { usePropertyContext } from '@/contexts/PropertyContext';
+import { usePropertyContext } from '@/hooks/usePropertyContext';
 
 export default function SalesEvidenceForm() {
   const { getFormattedAddress } = usePropertyContext();

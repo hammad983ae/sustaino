@@ -189,10 +189,5 @@ export const useProperty = () => {
   return context;
 };
 
-export const usePropertyContext = () => {
-  const context = useContext(PropertyContext);
-  if (context === undefined) {
-    throw new Error('usePropertyContext must be used within a PropertyProvider');
-  }
-  return context;
-};
+// Alias for backward compatibility
+export const usePropertyContext = useProperty;
