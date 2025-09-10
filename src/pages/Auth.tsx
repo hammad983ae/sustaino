@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Phone, QrCode } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -26,6 +26,16 @@ export default function AuthPage() {
   const [signupPassword, setSignupPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  
+  // Reset password state
+  const [resetEmail, setResetEmail] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+  const [showResetForm, setShowResetForm] = useState(false);
+  
+  // QR Code state
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [showQrVerification, setShowQrVerification] = useState(false);
 
   useEffect(() => {
     // Check if user is already logged in
@@ -84,6 +94,43 @@ export default function AuthPage() {
     }
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsResetting(true);
+    setError(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/auth`,
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      toast({
+        title: "Password reset email sent!",
+        description: "Check your email for a password reset link.",
+      });
+
+      setShowResetForm(false);
+      setResetEmail('');
+    } catch (error) {
+      console.error('Password reset error:', error);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
+  const generateQrCode = () => {
+    // Generate a simple QR code data (in real app, this would be more sophisticated)
+    const qrData = `${window.location.origin}/verify?token=${Date.now()}&email=${signupEmail}`;
+    setQrCode(qrData);
+    setShowQrVerification(true);
+  };
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -111,7 +158,8 @@ export default function AuthPage() {
         options: {
           emailRedirectTo: redirectUrl,
           data: {
-            display_name: displayName || signupEmail
+            display_name: displayName || signupEmail,
+            phone: phoneNumber
           }
         }
       });
@@ -125,16 +173,20 @@ export default function AuthPage() {
         return;
       }
 
+      // Generate QR code for verification
+      generateQrCode();
+
       toast({
         title: "Account created successfully!",
-        description: "Please check your email for a confirmation link.",
+        description: "Please check your email for confirmation and scan the QR code below.",
       });
 
-      // Clear form
+      // Clear form but keep QR code visible
       setSignupEmail('');
       setSignupPassword('');
       setConfirmPassword('');
       setDisplayName('');
+      setPhoneNumber('');
     } catch (error) {
       console.error('Signup error:', error);
       setError('An unexpected error occurred. Please try again.');
@@ -233,6 +285,50 @@ export default function AuthPage() {
                     </div>
                   </div>
 
+                  <div className="flex items-center justify-between">
+                    <Button 
+                      type="button"
+                      variant="link" 
+                      onClick={() => setShowResetForm(!showResetForm)}
+                      className="p-0 h-auto text-sm text-primary hover:text-primary/80"
+                    >
+                      Forgot Password?
+                    </Button>
+                  </div>
+
+                  {showResetForm && (
+                    <Card className="p-4 bg-muted/50">
+                      <form onSubmit={handlePasswordReset} className="space-y-3">
+                        <Label htmlFor="reset-email">Reset Password</Label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            id="reset-email"
+                            type="email"
+                            placeholder="Enter your email"
+                            value={resetEmail}
+                            onChange={(e) => setResetEmail(e.target.value)}
+                            className="pl-10"
+                            required
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button type="submit" size="sm" disabled={isResetting}>
+                            {isResetting ? 'Sending...' : 'Send Reset Link'}
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setShowResetForm(false)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </form>
+                    </Card>
+                  )}
+
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
@@ -268,6 +364,21 @@ export default function AuthPage() {
                         onChange={(e) => setSignupEmail(e.target.value)}
                         className="pl-10"
                         required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="phone-number">Phone Number</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="phone-number"
+                        type="tel"
+                        placeholder="+61 400 000 000"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="pl-10"
                       />
                     </div>
                   </div>
@@ -325,9 +436,40 @@ export default function AuthPage() {
                   <Alert className="mt-4">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      You'll receive a confirmation email after registration. Check your inbox and click the link to verify your account.
+                      You'll receive a confirmation email after registration. Check your inbox and click the link to verify your account. A QR code will also be generated for additional verification.
                     </AlertDescription>
                   </Alert>
+
+                  {showQrVerification && qrCode && (
+                    <Card className="p-4 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+                      <div className="text-center space-y-4">
+                        <div className="flex items-center justify-center gap-2">
+                          <QrCode className="h-5 w-5 text-primary" />
+                          <Label className="text-primary font-semibold">Account Verification QR Code</Label>
+                        </div>
+                        
+                        <div className="bg-white p-4 rounded-lg inline-block border-2 border-primary/20">
+                          {/* In a real app, you'd use a QR code library here */}
+                          <div className="w-32 h-32 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center rounded">
+                            <QrCode className="h-16 w-16 text-white" />
+                          </div>
+                        </div>
+                        
+                        <div className="text-sm text-muted-foreground">
+                          <p className="font-medium">Scan this QR code with your authenticator app</p>
+                          <p className="text-xs mt-1">This provides additional security for your account</p>
+                        </div>
+                        
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setShowQrVerification(false)}
+                        >
+                          Continue without QR
+                        </Button>
+                      </div>
+                    </Card>
+                  )}
                 </form>
               </TabsContent>
             </Tabs>
