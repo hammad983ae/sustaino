@@ -261,22 +261,6 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              {/* Quick Access to Completed Report */}
-              <Card className="border border-success/20 bg-success/5">
-                <CardContent className="pt-6">
-                  <div className="text-center">
-                    <Button 
-                      onClick={() => window.location.href = '/?mildura=true'}
-                      className="bg-success hover:bg-success/90 text-white px-6 py-3 text-lg mb-2"
-                    >
-                      📋 View Completed Report: 320 Deakin Avenue, Mildura
-                    </Button>
-                    <p className="text-sm text-muted-foreground">
-                      See the fully completed property valuation report with photos
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
 
 
