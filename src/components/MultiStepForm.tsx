@@ -8,7 +8,7 @@ import PropertySearchAnalysisEnhanced from "@/components/PropertySearchAnalysisE
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
 import ReportSectionManager from "@/components/ReportSectionManager";
-import { useReportJobSaver } from "@/hooks/useReportJobSaver";
+// Removed useReportJobSaver import
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 
@@ -43,18 +43,9 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
     return () => subscription.unsubscribe();
   }, []);
 
-  // Auto-save functionality - only enabled when user is authenticated
-  const { saveNow, markAsCompleted } = useReportJobSaver({
-    reportData: { ...reportData, enhancedAnalysisData },
-    currentSection: currentStep,
-    propertyAddress: reportData.propertyAddress,
-    reportType: reportData.reportType,
-    enabled: !!user, // Only enable when user is authenticated
-    includedSections: selectedSections,
-    geolocationData: enhancedAnalysisData?.geolocation,
-    vicplanData: enhancedAnalysisData?.vicPlanData,
-    marketAnalysis: enhancedAnalysisData?.marketData
-  });
+  // Removed auto-save functionality
+  const saveNow = () => console.log('Save functionality removed');
+  const markAsCompleted = () => Promise.resolve();
 
   const nextStep = () => {
     console.log('Next button clicked, current step:', currentStep, 'total steps:', steps.length);

@@ -13,7 +13,7 @@ import { PropertyPROLiability } from './PropertyPROLiability';
 import { PropertyPROTBE } from './PropertyPROTBE';
 import { PropertyPROProgress } from './PropertyPROProgress';
 import { PropertyPROColdStorage } from './PropertyPROColdStorage';
-import BrandedHeader from './BrandedHeader';
+// Removed BrandedHeader import
 
 interface PropertyPROReportProps {
   reportData?: any;
@@ -161,7 +161,7 @@ export const PropertyPROReport: React.FC<PropertyPROReportProps> = ({
 
   return (
     <div className="space-y-6">
-      <BrandedHeader />
+      <div className="header-placeholder">Header</div>
       
       <Card className="p-6">
         <div className="text-center mb-6">

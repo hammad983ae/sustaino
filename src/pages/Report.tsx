@@ -9,7 +9,7 @@ import PDFReportPreview from "@/components/PDFReportPreview";
 import AIReportPresentation from "@/components/AIReportPresentation";
 import WhiteLabelHeader from "@/components/WhiteLabelHeader";
 import { useReportData } from "@/hooks/useReportData";
-import { useReportJobSaver } from "@/hooks/useReportJobSaver";
+// Removed useReportJobSaver import
 import { useToast } from "@/hooks/use-toast";
 
 const ReportViewer = () => {
@@ -22,14 +22,10 @@ const ReportViewer = () => {
   const { reportData, setReportData, loadFromStorage, saveToStorage } = useReportData();
 
   // Auto-save to Work Hub  
-  const { saveNow, loadSavedReport, markAsCompleted } = useReportJobSaver({
-    reportData,
-    currentSection,
-    propertyAddress,
-    reportType: 'Property Report',
-    enabled: true,
-    autoSaveDelay: 2000 // Reduced delay for more frequent saves
-  });
+  // Removed auto-save functionality
+  const saveNow = () => console.log('Save functionality removed');
+  const loadSavedReport = () => Promise.resolve({ reportData: {}, currentSection: '', progress: 0 });
+  const markAsCompleted = () => Promise.resolve();
 
   // Load saved progress on component mount
   useEffect(() => {
