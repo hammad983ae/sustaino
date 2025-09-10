@@ -135,39 +135,27 @@ export default function AuthPage() {
     }
 
     try {
-      // First generate the reset link using Supabase
-      const { data, error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/auth?mode=recovery`,
+      console.log("Starting password reset for:", resetEmail);
+      
+      // Generate reset URL
+      const resetUrl = `${window.location.origin}/auth?mode=recovery&email=${encodeURIComponent(resetEmail)}`;
+      
+      // Send password reset email using our reliable system
+      const { error: emailError } = await supabase.functions.invoke('send-password-reset', {
+        body: {
+          email: resetEmail,
+          resetUrl: resetUrl
+        }
       });
 
-      if (error) {
-        console.error('Supabase password reset error:', error);
-        
-        // If Supabase fails, send custom email via our edge function
-        console.log('Falling back to custom email sending...');
-        
-        const resetUrl = `${window.location.origin}/auth?mode=recovery&email=${encodeURIComponent(resetEmail)}`;
-        
-        const { error: emailError } = await supabase.functions.invoke('send-password-reset', {
-          body: {
-            email: resetEmail,
-            resetUrl: resetUrl
-          }
-        });
-
-        if (emailError) {
-          console.error('Custom email error:', emailError);
-          if (error.message.includes('User not found')) {
-            setError('No account found with this email address.');
-          } else if (error.message.includes('Email rate limit exceeded')) {
-            setError('Too many reset attempts. Please wait before trying again.');
-          } else {
-            setError('Failed to send password reset email. Please try again later.');
-          }
-          return;
-        }
+      if (emailError) {
+        console.error('Password reset email error:', emailError);
+        setError('Failed to send password reset email. Please check your email address and try again.');
+        return;
       }
 
+      console.log("Password reset email sent successfully");
+      
       toast({
         title: "Password reset email sent! ✉️",
         description: "Check your email (including spam folder) for a password reset link. The link will expire in 1 hour.",
@@ -228,13 +216,13 @@ export default function AuthPage() {
     }
 
     try {
-      const redirectUrl = `${window.location.origin}/`;
+      console.log("Starting signup process for:", signupEmail);
       
-      const { error } = await supabase.auth.signUp({
+      // First create the user account without email confirmation
+      const { data, error } = await supabase.auth.signUp({
         email: signupEmail,
         password: signupPassword,
         options: {
-          emailRedirectTo: redirectUrl,
           data: {
             display_name: displayName || signupEmail,
             phone: phoneNumber
@@ -243,6 +231,7 @@ export default function AuthPage() {
       });
 
       if (error) {
+        console.error("Signup error:", error);
         if (error.message.includes('already registered')) {
           setError('An account with this email already exists. Please try logging in instead.');
         } else {
@@ -251,13 +240,45 @@ export default function AuthPage() {
         return;
       }
 
+      console.log("User created successfully:", data);
+
+      // Send verification email using our reliable system
+      try {
+        const confirmationUrl = `${window.location.origin}/auth?confirmed=true&email=${encodeURIComponent(signupEmail)}`;
+        
+        const { error: emailError } = await supabase.functions.invoke('send-verification-email', {
+          body: {
+            email: signupEmail,
+            confirmationUrl: confirmationUrl
+          }
+        });
+
+        if (emailError) {
+          console.error("Email sending error:", emailError);
+          toast({
+            title: "Account Created",
+            description: "Account created but verification email failed. You can try logging in or request a new verification email.",
+            className: "bg-yellow-50 border-yellow-200"
+          });
+        } else {
+          console.log("Verification email sent successfully");
+          toast({
+            title: "Account created successfully! ✅",
+            description: "Please check your email (including spam folder) for a verification link. Then you can log in.",
+            className: "bg-green-50 border-green-200"
+          });
+        }
+      } catch (emailError) {
+        console.error("Email function error:", emailError);
+        toast({
+          title: "Account Created",
+          description: "Account created but email system is having issues. You can try logging in after a few minutes.",
+          className: "bg-yellow-50 border-yellow-200"
+        });
+      }
+
       // Generate QR code for verification
       await generateQrCode();
-
-      toast({
-        title: "Account created successfully!",
-        description: "Please check your email for confirmation and scan the QR code below.",
-      });
 
       // Clear form but keep QR code visible
       setSignupEmail('');
@@ -527,7 +548,7 @@ export default function AuthPage() {
                   <Alert className="mt-4">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      You'll receive a confirmation email after registration. Check your inbox and click the link to verify your account. A QR code will also be generated for additional verification.
+                      After creating your account, you'll receive a verification email. Check your inbox and click the link to verify your account, then you can log in. A QR code is also generated for additional security.
                     </AlertDescription>
                   </Alert>
 

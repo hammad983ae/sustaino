@@ -9,6 +9,9 @@ verify_jwt = false
 [functions.send-password-reset]
 verify_jwt = false
 
+[functions.send-verification-email]
+verify_jwt = false
+
 [functions.get-google-maps-key]
 verify_jwt = false
 
