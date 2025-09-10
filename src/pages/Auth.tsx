@@ -318,6 +318,49 @@ export default function AuthPage() {
     }
   };
 
+  const handleResendVerification = async (email: string) => {
+    if (!email.trim()) {
+      setError('Please enter your email address.');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      console.log("Resending verification email for:", email);
+      
+      const confirmationUrl = `${window.location.origin}/auth?confirmed=true&email=${encodeURIComponent(email)}`;
+      
+      const { error: emailError } = await supabase.functions.invoke('send-verification-email', {
+        body: {
+          email: email,
+          confirmationUrl: confirmationUrl
+        }
+      });
+
+      if (emailError) {
+        console.error("Resend email error:", emailError);
+        setError('Failed to resend verification email. Please check your email address and try again.');
+        return;
+      }
+
+      console.log("Verification email resent successfully");
+      
+      toast({
+        title: "Verification email resent! ✉️",
+        description: "Check your email (including spam folder) for the verification link.",
+        className: "bg-green-50 border-green-200"
+      });
+
+    } catch (error) {
+      console.error('Resend verification error:', error);
+      setError('Failed to resend verification email. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -349,9 +392,10 @@ export default function AuthPage() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="resend">Resend Email</TabsTrigger>
               </TabsList>
 
               {error && (
@@ -661,6 +705,49 @@ export default function AuthPage() {
                     </Card>
                   )}
                 </form>
+              </TabsContent>
+
+              <TabsContent value="resend" className="mt-6">
+                <div className="space-y-4">
+                  <div className="text-center mb-4">
+                    <h3 className="text-lg font-semibold">Resend Verification Email</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Enter your email to receive a new verification link
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="resend-email">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="resend-email"
+                        type="email"
+                        placeholder="Enter your email address"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <Button 
+                    className="w-full" 
+                    onClick={() => handleResendVerification(resetEmail)}
+                    disabled={isLoading || !resetEmail.trim()}
+                  >
+                    {isLoading ? 'Sending...' : 'Resend Verification Email'}
+                  </Button>
+
+                  <Alert className="bg-blue-50 border-blue-200">
+                    <AlertCircle className="h-4 w-4 text-blue-600" />
+                    <AlertDescription className="text-blue-800">
+                      <strong>Note:</strong> If you don't receive the email within 5 minutes, please check your spam/junk folder. 
+                      You can also try the test login: <code className="bg-blue-100 px-1 rounded">test@test.com</code> / <code className="bg-blue-100 px-1 rounded">test123</code>
+                    </AlertDescription>
+                  </Alert>
+                </div>
               </TabsContent>
             </Tabs>
 
