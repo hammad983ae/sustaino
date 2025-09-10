@@ -240,31 +240,95 @@ export default function AuthPage() {
               </TabsContent>
 
               <TabsContent value="signup" className="mt-6">
-                <div className="space-y-4">
-                  <Alert variant="destructive">
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="display-name">Display Name (Optional)</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="display-name"
+                        type="text"
+                        placeholder="Enter your name"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        placeholder="Enter your email"
+                        value={signupEmail}
+                        onChange={(e) => setSignupEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="signup-password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Create a password (min 6 characters)"
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                        className="pl-10 pr-10"
+                        required
+                        minLength={6}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="confirm-password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Confirm your password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Creating account...' : 'Create Account'}
+                  </Button>
+
+                  <Alert className="mt-4">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      New registrations are currently disabled. Please contact an administrator if you need access.
+                      You'll receive a confirmation email after registration. Check your inbox and click the link to verify your account.
                     </AlertDescription>
                   </Alert>
-                  
-                  <div className="text-center p-8">
-                    <div className="text-muted-foreground mb-4">
-                      Account creation is temporarily unavailable
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        // Switch to login tab
-                        const loginTab = document.querySelector('[value="login"]') as HTMLElement;
-                        loginTab?.click();
-                      }}
-                      className="w-full"
-                    >
-                      Switch to Login
-                    </Button>
-                  </div>
-                </div>
+                </form>
               </TabsContent>
             </Tabs>
 

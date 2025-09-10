@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
+import AuthStatus from '@/components/AuthStatus';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 
 const Index = () => {
@@ -24,6 +25,11 @@ const Index = () => {
   return (
     <PropertyProvider>
       <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
+        {/* Navigation with Auth Status */}
+        <div className="absolute top-4 right-4 z-10">
+          <AuthStatus />
+        </div>
+        
         <div className="container mx-auto px-4 py-8">
           <div className="space-y-12">
             {/* Header */}
