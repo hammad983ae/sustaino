@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CompletedMilduraReport from '@/components/CompletedMilduraReport';
+import PropertyAddressFormStep from '@/components/PropertyAddressFormStep';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +25,7 @@ import { User as SupabaseUser } from "@supabase/supabase-js";
 const Index = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [currentStep, setCurrentStep] = useState<'dashboard' | 'propertyAddress'>('dashboard');
   
   // Check authentication status
   useEffect(() => {
@@ -50,6 +52,15 @@ const Index = () => {
 
   if (showMilduraReport) {
     return <CompletedMilduraReport />;
+  }
+
+  if (currentStep === 'propertyAddress') {
+    return (
+      <PropertyAddressFormStep
+        onContinue={() => navigate('/report')}
+        onBack={() => setCurrentStep('dashboard')}
+      />
+    );
   }
 
   const handleBasicFormSubmit = (data) => {
@@ -159,7 +170,7 @@ const Index = () => {
                   </div>
                   <Button 
                     className="w-full bg-success hover:bg-success/90 text-white"
-                    onClick={handleBasicFormSubmit}
+                    onClick={() => setCurrentStep('propertyAddress')}
                   >
                     Start ESG Assessment
                   </Button>
@@ -201,7 +212,7 @@ const Index = () => {
                   </div>
                   <Button 
                     className="w-full bg-success hover:bg-success/90 text-white"
-                    onClick={() => navigate('/report')}
+                    onClick={() => setCurrentStep('propertyAddress')}
                   >
                     Start Portfolio Valuation
                   </Button>
@@ -243,7 +254,7 @@ const Index = () => {
                   </div>
                   <Button 
                     className="w-full bg-success hover:bg-success/90 text-white"
-                    onClick={() => navigate('/enhanced-esg-strategy')}
+                    onClick={() => setCurrentStep('propertyAddress')}
                   >
                     Start ESG Portfolio Analysis
                   </Button>
