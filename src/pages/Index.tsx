@@ -147,9 +147,7 @@ const HomeContent = () => {
 
 const Index = () => {
   return (
-    <PropertyProvider>
-      <HomeContent />
-    </PropertyProvider>
+    <HomeContent />
   );
 };
 

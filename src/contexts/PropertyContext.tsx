@@ -115,8 +115,11 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [jobNumber]);
 
   const updateAddressData = (data: Partial<PropertyAddressData>) => {
+    console.log('PropertyContext updateAddressData called with:', data);
+    console.log('Current addressData before update:', addressData);
     const newData = { ...addressData, ...data };
     setAddressData(newData);
+    console.log('New addressData after update:', newData);
     
     // Note: Job creation is now handled manually via the "Generate Address & Create Job" button
     // This prevents interference with form input while typing
