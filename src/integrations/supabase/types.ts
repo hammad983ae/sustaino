@@ -14,134 +14,524 @@ export type Database = {
   }
   public: {
     Tables: {
-      audit_logs: {
+      esg_assessments: {
         Row: {
-          action: string
+          carbon_footprint: number | null
+          climate_risk_assessment: Json | null
           created_at: string
+          energy_efficiency_rating: string | null
+          environmental_score: number | null
+          esg_compliance_status: string | null
+          estimated_esg_premium: number | null
+          governance_score: number | null
           id: string
-          ip_address: unknown | null
-          new_values: Json | null
-          old_values: Json | null
-          record_id: string | null
-          table_name: string | null
-          user_agent: string | null
-          user_id: string
-        }
-        Insert: {
-          action: string
-          created_at?: string
-          id?: string
-          ip_address?: unknown | null
-          new_values?: Json | null
-          old_values?: Json | null
-          record_id?: string | null
-          table_name?: string | null
-          user_agent?: string | null
-          user_id: string
-        }
-        Update: {
-          action?: string
-          created_at?: string
-          id?: string
-          ip_address?: unknown | null
-          new_values?: Json | null
-          old_values?: Json | null
-          record_id?: string | null
-          table_name?: string | null
-          user_agent?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      costa_portfolio_analyses: {
-        Row: {
-          analysis_data: Json
-          created_at: string
-          id: string
-          title: string
+          overall_esg_score: number | null
+          property_id: string
+          social_score: number | null
+          sustainability_features: Json | null
           updated_at: string
           user_id: string
+          valuation_id: string | null
+          water_efficiency_rating: string | null
         }
         Insert: {
-          analysis_data: Json
+          carbon_footprint?: number | null
+          climate_risk_assessment?: Json | null
           created_at?: string
+          energy_efficiency_rating?: string | null
+          environmental_score?: number | null
+          esg_compliance_status?: string | null
+          estimated_esg_premium?: number | null
+          governance_score?: number | null
           id?: string
-          title: string
+          overall_esg_score?: number | null
+          property_id: string
+          social_score?: number | null
+          sustainability_features?: Json | null
           updated_at?: string
           user_id: string
+          valuation_id?: string | null
+          water_efficiency_rating?: string | null
         }
         Update: {
-          analysis_data?: Json
+          carbon_footprint?: number | null
+          climate_risk_assessment?: Json | null
           created_at?: string
+          energy_efficiency_rating?: string | null
+          environmental_score?: number | null
+          esg_compliance_status?: string | null
+          estimated_esg_premium?: number | null
+          governance_score?: number | null
           id?: string
-          title?: string
+          overall_esg_score?: number | null
+          property_id?: string
+          social_score?: number | null
+          sustainability_features?: Json | null
           updated_at?: string
           user_id?: string
-        }
-        Relationships: []
-      }
-      document_uploads: {
-        Row: {
-          admin_notes: string | null
-          created_at: string
-          document_type: string
-          file_name: string
-          file_path: string
-          file_size: number | null
-          id: string
-          mime_type: string | null
-          partner_id: string | null
-          property_id: string | null
-          reviewed_at: string | null
-          reviewed_by: string | null
-          updated_at: string
-          user_id: string
-          verification_status: string | null
-        }
-        Insert: {
-          admin_notes?: string | null
-          created_at?: string
-          document_type: string
-          file_name: string
-          file_path: string
-          file_size?: number | null
-          id?: string
-          mime_type?: string | null
-          partner_id?: string | null
-          property_id?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          updated_at?: string
-          user_id: string
-          verification_status?: string | null
-        }
-        Update: {
-          admin_notes?: string | null
-          created_at?: string
-          document_type?: string
-          file_name?: string
-          file_path?: string
-          file_size?: number | null
-          id?: string
-          mime_type?: string | null
-          partner_id?: string | null
-          property_id?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          updated_at?: string
-          user_id?: string
-          verification_status?: string | null
+          valuation_id?: string | null
+          water_efficiency_rating?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "document_uploads_partner_id_fkey"
-            columns: ["partner_id"]
+            foreignKeyName: "esg_assessments_property_id_fkey"
+            columns: ["property_id"]
             isOneToOne: false
-            referencedRelation: "partners"
+            referencedRelation: "properties"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "document_uploads_property_id_fkey"
+            foreignKeyName: "esg_assessments_valuation_id_fkey"
+            columns: ["valuation_id"]
+            isOneToOne: false
+            referencedRelation: "valuations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          company_name: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          phone: string | null
+          professional_license: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          company_name?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          phone?: string | null
+          professional_license?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          company_name?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          phone?: string | null
+          professional_license?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          address_line_1: string
+          address_line_2: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          building_area: number | null
+          car_spaces: number | null
+          council: string | null
+          country: string | null
+          created_at: string
+          id: string
+          land_area: number | null
+          latitude: number | null
+          longitude: number | null
+          lot_number: string | null
+          plan_number: string | null
+          postcode: string
+          property_type: string
+          state: string
+          street_name: string | null
+          street_number: string | null
+          street_type: string | null
+          suburb: string
+          unit_number: string | null
+          updated_at: string
+          user_id: string
+          year_built: number | null
+          zoning: string | null
+        }
+        Insert: {
+          address_line_1: string
+          address_line_2?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          council?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          land_area?: number | null
+          latitude?: number | null
+          longitude?: number | null
+          lot_number?: string | null
+          plan_number?: string | null
+          postcode: string
+          property_type: string
+          state: string
+          street_name?: string | null
+          street_number?: string | null
+          street_type?: string | null
+          suburb: string
+          unit_number?: string | null
+          updated_at?: string
+          user_id: string
+          year_built?: number | null
+          zoning?: string | null
+        }
+        Update: {
+          address_line_1?: string
+          address_line_2?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          council?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          land_area?: number | null
+          latitude?: number | null
+          longitude?: number | null
+          lot_number?: string | null
+          plan_number?: string | null
+          postcode?: string
+          property_type?: string
+          state?: string
+          street_name?: string | null
+          street_number?: string | null
+          street_type?: string | null
+          suburb?: string
+          unit_number?: string | null
+          updated_at?: string
+          user_id?: string
+          year_built?: number | null
+          zoning?: string | null
+        }
+        Relationships: []
+      }
+      rental_evidence: {
+        Row: {
+          adjusted_rental: number | null
+          adjustments: Json | null
+          bathrooms: number | null
+          bedrooms: number | null
+          building_area: number | null
+          car_spaces: number | null
+          comparable_address: string
+          created_at: string
+          distance_km: number | null
+          id: string
+          land_area: number | null
+          lease_date: string
+          lease_term_months: number | null
+          notes: string | null
+          property_id: string | null
+          property_type: string
+          rental_amount: number
+          rental_period: string
+          source: string | null
+          user_id: string
+          valuation_id: string | null
+          weight_percentage: number | null
+        }
+        Insert: {
+          adjusted_rental?: number | null
+          adjustments?: Json | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparable_address: string
+          created_at?: string
+          distance_km?: number | null
+          id?: string
+          land_area?: number | null
+          lease_date: string
+          lease_term_months?: number | null
+          notes?: string | null
+          property_id?: string | null
+          property_type: string
+          rental_amount: number
+          rental_period: string
+          source?: string | null
+          user_id: string
+          valuation_id?: string | null
+          weight_percentage?: number | null
+        }
+        Update: {
+          adjusted_rental?: number | null
+          adjustments?: Json | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparable_address?: string
+          created_at?: string
+          distance_km?: number | null
+          id?: string
+          land_area?: number | null
+          lease_date?: string
+          lease_term_months?: number | null
+          notes?: string | null
+          property_id?: string | null
+          property_type?: string
+          rental_amount?: number
+          rental_period?: string
+          source?: string | null
+          user_id?: string
+          valuation_id?: string | null
+          weight_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_evidence_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rental_evidence_valuation_id_fkey"
+            columns: ["valuation_id"]
+            isOneToOne: false
+            referencedRelation: "valuations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          current_section: string | null
+          esg_assessment_id: string | null
+          id: string
+          pdf_file_path: string | null
+          progress: number | null
+          property_id: string
+          report_type: string
+          sections_data: Json | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          valuation_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          current_section?: string | null
+          esg_assessment_id?: string | null
+          id?: string
+          pdf_file_path?: string | null
+          progress?: number | null
+          property_id: string
+          report_type: string
+          sections_data?: Json | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          valuation_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          current_section?: string | null
+          esg_assessment_id?: string | null
+          id?: string
+          pdf_file_path?: string | null
+          progress?: number | null
+          property_id?: string
+          report_type?: string
+          sections_data?: Json | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          valuation_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_esg_assessment_id_fkey"
+            columns: ["esg_assessment_id"]
+            isOneToOne: false
+            referencedRelation: "esg_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_valuation_id_fkey"
+            columns: ["valuation_id"]
+            isOneToOne: false
+            referencedRelation: "valuations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_evidence: {
+        Row: {
+          adjusted_price: number | null
+          adjustments: Json | null
+          bathrooms: number | null
+          bedrooms: number | null
+          building_area: number | null
+          car_spaces: number | null
+          comparable_address: string
+          created_at: string
+          distance_km: number | null
+          id: string
+          land_area: number | null
+          notes: string | null
+          property_id: string | null
+          property_type: string
+          sale_date: string
+          sale_price: number
+          source: string | null
+          user_id: string
+          valuation_id: string | null
+          weight_percentage: number | null
+        }
+        Insert: {
+          adjusted_price?: number | null
+          adjustments?: Json | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparable_address: string
+          created_at?: string
+          distance_km?: number | null
+          id?: string
+          land_area?: number | null
+          notes?: string | null
+          property_id?: string | null
+          property_type: string
+          sale_date: string
+          sale_price: number
+          source?: string | null
+          user_id: string
+          valuation_id?: string | null
+          weight_percentage?: number | null
+        }
+        Update: {
+          adjusted_price?: number | null
+          adjustments?: Json | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparable_address?: string
+          created_at?: string
+          distance_km?: number | null
+          id?: string
+          land_area?: number | null
+          notes?: string | null
+          property_id?: string | null
+          property_type?: string
+          sale_date?: string
+          sale_price?: number
+          source?: string | null
+          user_id?: string
+          valuation_id?: string | null
+          weight_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_evidence_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_evidence_valuation_id_fkey"
+            columns: ["valuation_id"]
+            isOneToOne: false
+            referencedRelation: "valuations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      valuation_jobs: {
+        Row: {
+          actual_hours: number | null
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          due_date: string | null
+          estimated_hours: number | null
+          fee_charged: number | null
+          fee_quoted: number | null
+          id: string
+          instruction_date: string
+          job_number: string
+          job_type: string
+          notes: string | null
+          priority: string | null
+          property_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actual_hours?: number | null
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          due_date?: string | null
+          estimated_hours?: number | null
+          fee_charged?: number | null
+          fee_quoted?: number | null
+          id?: string
+          instruction_date?: string
+          job_number: string
+          job_type: string
+          notes?: string | null
+          priority?: string | null
+          property_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actual_hours?: number | null
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          due_date?: string | null
+          estimated_hours?: number | null
+          fee_charged?: number | null
+          fee_quoted?: number | null
+          id?: string
+          instruction_date?: string
+          job_number?: string
+          job_type?: string
+          notes?: string | null
+          priority?: string | null
+          property_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "valuation_jobs_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
@@ -149,1075 +539,67 @@ export type Database = {
           },
         ]
       }
-      job_files: {
-        Row: {
-          ai_analysis: Json | null
-          created_at: string | null
-          description: string | null
-          file_category: string | null
-          file_name: string
-          file_path: string
-          file_size: number | null
-          file_type: string
-          id: string
-          is_primary: boolean | null
-          job_id: string | null
-          metadata: Json | null
-          mime_type: string | null
-          ocr_text: string | null
-          processing_status: string | null
-          tags: string[] | null
-          updated_at: string | null
-          upload_source: string | null
-          user_id: string | null
-        }
-        Insert: {
-          ai_analysis?: Json | null
-          created_at?: string | null
-          description?: string | null
-          file_category?: string | null
-          file_name: string
-          file_path: string
-          file_size?: number | null
-          file_type: string
-          id?: string
-          is_primary?: boolean | null
-          job_id?: string | null
-          metadata?: Json | null
-          mime_type?: string | null
-          ocr_text?: string | null
-          processing_status?: string | null
-          tags?: string[] | null
-          updated_at?: string | null
-          upload_source?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          ai_analysis?: Json | null
-          created_at?: string | null
-          description?: string | null
-          file_category?: string | null
-          file_name?: string
-          file_path?: string
-          file_size?: number | null
-          file_type?: string
-          id?: string
-          is_primary?: boolean | null
-          job_id?: string | null
-          metadata?: Json | null
-          mime_type?: string | null
-          ocr_text?: string | null
-          processing_status?: string | null
-          tags?: string[] | null
-          updated_at?: string | null
-          upload_source?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_files_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "valuation_jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      job_notes: {
-        Row: {
-          content: string
-          created_at: string | null
-          id: string
-          is_private: boolean | null
-          job_id: string | null
-          location_tag: string | null
-          metadata: Json | null
-          note_type: string | null
-          priority: string | null
-          title: string
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          content: string
-          created_at?: string | null
-          id?: string
-          is_private?: boolean | null
-          job_id?: string | null
-          location_tag?: string | null
-          metadata?: Json | null
-          note_type?: string | null
-          priority?: string | null
-          title: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          content?: string
-          created_at?: string | null
-          id?: string
-          is_private?: boolean | null
-          job_id?: string | null
-          location_tag?: string | null
-          metadata?: Json | null
-          note_type?: string | null
-          priority?: string | null
-          title?: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_notes_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "valuation_jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      leasing_evidence: {
-        Row: {
-          bathrooms: number | null
-          bedrooms: number | null
-          building_area: number | null
-          car_spaces: number | null
-          comparison_notes: string | null
-          created_at: string
-          id: string
-          is_comparable: boolean | null
-          land_area: number | null
-          lease_duration_months: number | null
-          lease_end_date: string | null
-          lease_start_date: string
-          lease_status: string
-          property_address: string
-          property_features: Json | null
-          property_type: string
-          rent_amount: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          lease_duration_months?: number | null
-          lease_end_date?: string | null
-          lease_start_date: string
-          lease_status?: string
-          property_address: string
-          property_features?: Json | null
-          property_type: string
-          rent_amount: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          lease_duration_months?: number | null
-          lease_end_date?: string | null
-          lease_start_date?: string
-          lease_status?: string
-          property_address?: string
-          property_features?: Json | null
-          property_type?: string
-          rent_amount?: number
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      marketplace_inquiries: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          message: string
-          name: string
-          phone: string | null
-          property_id: string
-          vendor_id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          message: string
-          name: string
-          phone?: string | null
-          property_id: string
-          vendor_id: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          message?: string
-          name?: string
-          phone?: string | null
-          property_id?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_inquiries_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_properties"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_inquiries_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_inquiries_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_profiles_public"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_profiles: {
-        Row: {
-          avatar_url: string | null
-          bio: string | null
-          company_name: string | null
-          created_at: string
-          email: string
-          id: string
-          name: string
-          phone: string | null
-          role: Database["public"]["Enums"]["marketplace_user_role"]
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          avatar_url?: string | null
-          bio?: string | null
-          company_name?: string | null
-          created_at?: string
-          email: string
-          id?: string
-          name: string
-          phone?: string | null
-          role?: Database["public"]["Enums"]["marketplace_user_role"]
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          avatar_url?: string | null
-          bio?: string | null
-          company_name?: string | null
-          created_at?: string
-          email?: string
-          id?: string
-          name?: string
-          phone?: string | null
-          role?: Database["public"]["Enums"]["marketplace_user_role"]
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      marketplace_properties: {
-        Row: {
-          address: string
-          bathrooms: number | null
-          bedrooms: number | null
-          car_spaces: number | null
-          created_at: string
-          description: string | null
-          id: string
-          land_size: number | null
-          latitude: number | null
-          longitude: number | null
-          main_image: string | null
-          postcode: string | null
-          price: number
-          state: string | null
-          status: Database["public"]["Enums"]["marketplace_property_status"]
-          suburb: string | null
-          title: string
-          type: Database["public"]["Enums"]["marketplace_property_type"]
-          updated_at: string
-          vendor_id: string
-          views_count: number | null
-        }
-        Insert: {
-          address: string
-          bathrooms?: number | null
-          bedrooms?: number | null
-          car_spaces?: number | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          land_size?: number | null
-          latitude?: number | null
-          longitude?: number | null
-          main_image?: string | null
-          postcode?: string | null
-          price: number
-          state?: string | null
-          status?: Database["public"]["Enums"]["marketplace_property_status"]
-          suburb?: string | null
-          title: string
-          type: Database["public"]["Enums"]["marketplace_property_type"]
-          updated_at?: string
-          vendor_id: string
-          views_count?: number | null
-        }
-        Update: {
-          address?: string
-          bathrooms?: number | null
-          bedrooms?: number | null
-          car_spaces?: number | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          land_size?: number | null
-          latitude?: number | null
-          longitude?: number | null
-          main_image?: string | null
-          postcode?: string | null
-          price?: number
-          state?: string | null
-          status?: Database["public"]["Enums"]["marketplace_property_status"]
-          suburb?: string | null
-          title?: string
-          type?: Database["public"]["Enums"]["marketplace_property_type"]
-          updated_at?: string
-          vendor_id?: string
-          views_count?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_properties_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_properties_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_profiles_public"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_property_images: {
-        Row: {
-          alt_text: string | null
-          created_at: string
-          id: string
-          image_url: string
-          order_index: number | null
-          property_id: string
-        }
-        Insert: {
-          alt_text?: string | null
-          created_at?: string
-          id?: string
-          image_url: string
-          order_index?: number | null
-          property_id: string
-        }
-        Update: {
-          alt_text?: string | null
-          created_at?: string
-          id?: string
-          image_url?: string
-          order_index?: number | null
-          property_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_property_images_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_properties"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_settings: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          setting_key: string
-          setting_value: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          setting_key: string
-          setting_value: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          setting_key?: string
-          setting_value?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      marketplace_transactions: {
-        Row: {
-          amount: number
-          created_at: string
-          currency: string
-          id: string
-          property_id: string | null
-          status: Database["public"]["Enums"]["marketplace_transaction_status"]
-          stripe_payment_intent_id: string | null
-          stripe_session_id: string | null
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          amount: number
-          created_at?: string
-          currency?: string
-          id?: string
-          property_id?: string | null
-          status?: Database["public"]["Enums"]["marketplace_transaction_status"]
-          stripe_payment_intent_id?: string | null
-          stripe_session_id?: string | null
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          amount?: number
-          created_at?: string
-          currency?: string
-          id?: string
-          property_id?: string | null
-          status?: Database["public"]["Enums"]["marketplace_transaction_status"]
-          stripe_payment_intent_id?: string | null
-          stripe_session_id?: string | null
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_transactions_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_properties"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_transactions_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_transactions_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_profiles_public"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      partner_users: {
-        Row: {
-          created_at: string
-          id: string
-          is_active: boolean | null
-          partner_id: string
-          role: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          is_active?: boolean | null
-          partner_id: string
-          role?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          is_active?: boolean | null
-          partner_id?: string
-          role?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "partner_users_partner_id_fkey"
-            columns: ["partner_id"]
-            isOneToOne: false
-            referencedRelation: "partners"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      partners: {
-        Row: {
-          company_name: string
-          contact_email: string | null
-          created_at: string
-          domain: string | null
-          features: Json | null
-          id: string
-          is_active: boolean | null
-          license_type: string | null
-          logo_url: string | null
-          max_properties: number | null
-          max_users: number | null
-          partner_code: string
-          primary_color: string | null
-          secondary_color: string | null
-          updated_at: string
-        }
-        Insert: {
-          company_name: string
-          contact_email?: string | null
-          created_at?: string
-          domain?: string | null
-          features?: Json | null
-          id?: string
-          is_active?: boolean | null
-          license_type?: string | null
-          logo_url?: string | null
-          max_properties?: number | null
-          max_users?: number | null
-          partner_code: string
-          primary_color?: string | null
-          secondary_color?: string | null
-          updated_at?: string
-        }
-        Update: {
-          company_name?: string
-          contact_email?: string | null
-          created_at?: string
-          domain?: string | null
-          features?: Json | null
-          id?: string
-          is_active?: boolean | null
-          license_type?: string | null
-          logo_url?: string | null
-          max_properties?: number | null
-          max_users?: number | null
-          partner_code?: string
-          primary_color?: string | null
-          secondary_color?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      pdf_uploads: {
-        Row: {
-          analysis_result: Json | null
-          analysis_status: string
-          consent_given: boolean
-          created_at: string
-          file_name: string
-          file_path: string
-          file_size: number
-          id: string
-          implemented: boolean
-          mime_type: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          analysis_result?: Json | null
-          analysis_status?: string
-          consent_given?: boolean
-          created_at?: string
-          file_name: string
-          file_path: string
-          file_size: number
-          id?: string
-          implemented?: boolean
-          mime_type?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          analysis_result?: Json | null
-          analysis_status?: string
-          consent_given?: boolean
-          created_at?: string
-          file_name?: string
-          file_path?: string
-          file_size?: number
-          id?: string
-          implemented?: boolean
-          mime_type?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          display_name: string | null
-          email: string | null
-          id: string
-          partner_id: string | null
-          role: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
-          id?: string
-          partner_id?: string | null
-          role?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
-          id?: string
-          partner_id?: string | null
-          role?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_partner_id_fkey"
-            columns: ["partner_id"]
-            isOneToOne: false
-            referencedRelation: "partners"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      properties: {
-        Row: {
-          address: string
-          created_at: string
-          description: string | null
-          id: string
-          partner_id: string | null
-          property_type: string | null
-          status: string | null
-          sustainability_score: number | null
-          updated_at: string
-          user_id: string
-          verification_required: boolean | null
-        }
-        Insert: {
-          address: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          partner_id?: string | null
-          property_type?: string | null
-          status?: string | null
-          sustainability_score?: number | null
-          updated_at?: string
-          user_id: string
-          verification_required?: boolean | null
-        }
-        Update: {
-          address?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          partner_id?: string | null
-          property_type?: string | null
-          status?: string | null
-          sustainability_score?: number | null
-          updated_at?: string
-          user_id?: string
-          verification_required?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "properties_partner_id_fkey"
-            columns: ["partner_id"]
-            isOneToOne: false
-            referencedRelation: "partners"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      reports: {
-        Row: {
-          aerial_image_url: string | null
-          created_at: string
-          current_section: number | null
-          file_path: string | null
-          file_size: string | null
-          generated_date: string
-          geolocation_data: Json | null
-          id: string
-          included_sections: string[] | null
-          job_number: string | null
-          market_analysis: Json | null
-          property_address: string
-          property_id: string | null
-          report_data: Json | null
-          report_progress: number | null
-          report_type: string
-          status: string
-          sustainability_score: number | null
-          title: string
-          updated_at: string
-          user_id: string
-          vicplan_data: Json | null
-        }
-        Insert: {
-          aerial_image_url?: string | null
-          created_at?: string
-          current_section?: number | null
-          file_path?: string | null
-          file_size?: string | null
-          generated_date?: string
-          geolocation_data?: Json | null
-          id?: string
-          included_sections?: string[] | null
-          job_number?: string | null
-          market_analysis?: Json | null
-          property_address: string
-          property_id?: string | null
-          report_data?: Json | null
-          report_progress?: number | null
-          report_type?: string
-          status?: string
-          sustainability_score?: number | null
-          title: string
-          updated_at?: string
-          user_id: string
-          vicplan_data?: Json | null
-        }
-        Update: {
-          aerial_image_url?: string | null
-          created_at?: string
-          current_section?: number | null
-          file_path?: string | null
-          file_size?: string | null
-          generated_date?: string
-          geolocation_data?: Json | null
-          id?: string
-          included_sections?: string[] | null
-          job_number?: string | null
-          market_analysis?: Json | null
-          property_address?: string
-          property_id?: string | null
-          report_data?: Json | null
-          report_progress?: number | null
-          report_type?: string
-          status?: string
-          sustainability_score?: number | null
-          title?: string
-          updated_at?: string
-          user_id?: string
-          vicplan_data?: Json | null
-        }
-        Relationships: []
-      }
-      sales_evidence: {
-        Row: {
-          bathrooms: number | null
-          bedrooms: number | null
-          building_area: number | null
-          car_spaces: number | null
-          comparison_notes: string | null
-          created_at: string
-          id: string
-          is_comparable: boolean | null
-          land_area: number | null
-          property_address: string
-          property_features: Json | null
-          property_type: string
-          sale_date: string
-          sale_price: number
-          sale_status: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          property_address: string
-          property_features?: Json | null
-          property_type: string
-          sale_date: string
-          sale_price: number
-          sale_status?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          property_address?: string
-          property_features?: Json | null
-          property_type?: string
-          sale_date?: string
-          sale_price?: number
-          sale_status?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      valuation_jobs: {
-        Row: {
-          address: string | null
-          aerial_image_url: string | null
-          assigned_to: string | null
-          attachments: string[] | null
-          auto_saved_at: string | null
-          completion_percentage: number | null
-          created_at: string
-          crop_details: Json | null
-          description: string | null
-          due_date: string | null
-          estimated_value: number | null
-          geolocation_data: Json | null
-          id: string
-          job_number: number
-          market_analysis: Json | null
-          missing_fields_analysis: Json | null
-          notes: string | null
-          pdf_file_path: string | null
-          plant_equipment: Json | null
-          priority: string
-          property_details: Json | null
-          property_type: string
-          renewable_energy: Json | null
-          status: string
-          title: string
-          updated_at: string
-          user_id: string
-          vicplan_data: Json | null
-          water_permanent: Json | null
-        }
-        Insert: {
-          address?: string | null
-          aerial_image_url?: string | null
-          assigned_to?: string | null
-          attachments?: string[] | null
-          auto_saved_at?: string | null
-          completion_percentage?: number | null
-          created_at?: string
-          crop_details?: Json | null
-          description?: string | null
-          due_date?: string | null
-          estimated_value?: number | null
-          geolocation_data?: Json | null
-          id?: string
-          job_number?: number
-          market_analysis?: Json | null
-          missing_fields_analysis?: Json | null
-          notes?: string | null
-          pdf_file_path?: string | null
-          plant_equipment?: Json | null
-          priority?: string
-          property_details?: Json | null
-          property_type: string
-          renewable_energy?: Json | null
-          status?: string
-          title: string
-          updated_at?: string
-          user_id: string
-          vicplan_data?: Json | null
-          water_permanent?: Json | null
-        }
-        Update: {
-          address?: string | null
-          aerial_image_url?: string | null
-          assigned_to?: string | null
-          attachments?: string[] | null
-          auto_saved_at?: string | null
-          completion_percentage?: number | null
-          created_at?: string
-          crop_details?: Json | null
-          description?: string | null
-          due_date?: string | null
-          estimated_value?: number | null
-          geolocation_data?: Json | null
-          id?: string
-          job_number?: number
-          market_analysis?: Json | null
-          missing_fields_analysis?: Json | null
-          notes?: string | null
-          pdf_file_path?: string | null
-          plant_equipment?: Json | null
-          priority?: string
-          property_details?: Json | null
-          property_type?: string
-          renewable_energy?: Json | null
-          status?: string
-          title?: string
-          updated_at?: string
-          user_id?: string
-          vicplan_data?: Json | null
-          water_permanent?: Json | null
-        }
-        Relationships: []
-      }
       valuations: {
         Row: {
-          comparable_properties: Json | null
-          confidence_score: number | null
+          assumptions: string | null
           created_at: string
-          estimated_value: number
+          effective_date: string
+          forced_sale_value: number | null
           id: string
-          market_factors: Json | null
+          limiting_conditions: string | null
+          market_value: number | null
           methodology: string | null
-          notes: string | null
-          property_address: string
-          property_id: string | null
-          status: string | null
+          property_id: string
+          rental_value: number | null
+          status: string
           updated_at: string
           user_id: string
           valuation_date: string
+          valuation_purpose: string
           valuation_type: string
+          yield_percentage: number | null
         }
         Insert: {
-          comparable_properties?: Json | null
-          confidence_score?: number | null
+          assumptions?: string | null
           created_at?: string
-          estimated_value: number
+          effective_date?: string
+          forced_sale_value?: number | null
           id?: string
-          market_factors?: Json | null
+          limiting_conditions?: string | null
+          market_value?: number | null
           methodology?: string | null
-          notes?: string | null
-          property_address: string
-          property_id?: string | null
-          status?: string | null
+          property_id: string
+          rental_value?: number | null
+          status?: string
           updated_at?: string
           user_id: string
           valuation_date?: string
-          valuation_type?: string
+          valuation_purpose: string
+          valuation_type: string
+          yield_percentage?: number | null
         }
         Update: {
-          comparable_properties?: Json | null
-          confidence_score?: number | null
+          assumptions?: string | null
           created_at?: string
-          estimated_value?: number
+          effective_date?: string
+          forced_sale_value?: number | null
           id?: string
-          market_factors?: Json | null
+          limiting_conditions?: string | null
+          market_value?: number | null
           methodology?: string | null
-          notes?: string | null
-          property_address?: string
-          property_id?: string | null
-          status?: string | null
+          property_id?: string
+          rental_value?: number | null
+          status?: string
           updated_at?: string
           user_id?: string
           valuation_date?: string
+          valuation_purpose?: string
           valuation_type?: string
-        }
-        Relationships: []
-      }
-      verification_requests: {
-        Row: {
-          admin_notes: string | null
-          assigned_to: string | null
-          client_notes: string | null
-          completed_at: string | null
-          created_at: string
-          due_date: string | null
-          id: string
-          partner_id: string | null
-          priority: string | null
-          property_id: string | null
-          request_type: string
-          status: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          admin_notes?: string | null
-          assigned_to?: string | null
-          client_notes?: string | null
-          completed_at?: string | null
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          partner_id?: string | null
-          priority?: string | null
-          property_id?: string | null
-          request_type?: string
-          status?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          admin_notes?: string | null
-          assigned_to?: string | null
-          client_notes?: string | null
-          completed_at?: string | null
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          partner_id?: string | null
-          priority?: string | null
-          property_id?: string | null
-          request_type?: string
-          status?: string | null
-          updated_at?: string
-          user_id?: string
+          yield_percentage?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "verification_requests_partner_id_fkey"
-            columns: ["partner_id"]
-            isOneToOne: false
-            referencedRelation: "partners"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "verification_requests_property_id_fkey"
+            foreignKeyName: "valuations_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
@@ -1227,90 +609,13 @@ export type Database = {
       }
     }
     Views: {
-      marketplace_profiles_public: {
-        Row: {
-          avatar_url: string | null
-          bio: string | null
-          company_name: string | null
-          created_at: string | null
-          id: string | null
-          name: string | null
-          role: Database["public"]["Enums"]["marketplace_user_role"] | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          bio?: string | null
-          company_name?: string | null
-          created_at?: string | null
-          id?: string | null
-          name?: string | null
-          role?: Database["public"]["Enums"]["marketplace_user_role"] | null
-        }
-        Update: {
-          avatar_url?: string | null
-          bio?: string | null
-          company_name?: string | null
-          created_at?: string | null
-          id?: string | null
-          name?: string | null
-          role?: Database["public"]["Enums"]["marketplace_user_role"] | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
-      get_marketplace_profile_contact: {
-        Args: { profile_id: string }
-        Returns: {
-          email: string
-          phone: string
-        }[]
-      }
-      get_marketplace_profile_contact_secure: {
-        Args: { profile_id: string }
-        Returns: {
-          email: string
-          phone: string
-        }[]
-      }
-      get_partner_branding: {
-        Args: { domain_name?: string }
-        Returns: {
-          company_name: string
-          features: Json
-          logo_url: string
-          partner_code: string
-          primary_color: string
-          secondary_color: string
-        }[]
-      }
-      is_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_marketplace_admin: {
-        Args: { user_uuid?: string }
-        Returns: boolean
-      }
-      is_partner_admin_for_partner: {
-        Args: { target_partner_id: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      marketplace_property_status:
-        | "draft"
-        | "pending_payment"
-        | "active"
-        | "inactive"
-        | "archived"
-      marketplace_property_type: "for_sale" | "for_rent"
-      marketplace_transaction_status:
-        | "pending"
-        | "completed"
-        | "failed"
-        | "refunded"
-      marketplace_user_role: "vendor" | "admin"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1437,22 +742,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      marketplace_property_status: [
-        "draft",
-        "pending_payment",
-        "active",
-        "inactive",
-        "archived",
-      ],
-      marketplace_property_type: ["for_sale", "for_rent"],
-      marketplace_transaction_status: [
-        "pending",
-        "completed",
-        "failed",
-        "refunded",
-      ],
-      marketplace_user_role: ["vendor", "admin"],
-    },
+    Enums: {},
   },
 } as const
