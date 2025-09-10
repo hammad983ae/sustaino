@@ -522,7 +522,7 @@ const ReportTypeConfiguration = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <MultiSelectDropdown 
-              options={['Rent-free periods', 'Fitout contributions', 'Cash incentives', 'Previous lease payout', 'Reduced rent periods', 'Other inducements']}
+              options={['Rent-free periods', 'Fitout contributions', 'Cash incentives', 'Previous lease payout', 'Reduced rent periods', 'Other inducements', 'Not applicable']}
               placeholder="Select incentive types to consider"
               label="Incentive Types"
             />
