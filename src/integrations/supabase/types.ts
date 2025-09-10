@@ -276,6 +276,72 @@ export type Database = {
           },
         ]
       }
+      leasing_evidence: {
+        Row: {
+          bathrooms: number | null
+          bedrooms: number | null
+          building_area: number | null
+          car_spaces: number | null
+          comparison_notes: string | null
+          created_at: string
+          id: string
+          is_comparable: boolean | null
+          land_area: number | null
+          lease_duration_months: number | null
+          lease_end_date: string | null
+          lease_start_date: string
+          lease_status: string
+          property_address: string
+          property_features: Json | null
+          property_type: string
+          rent_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          lease_duration_months?: number | null
+          lease_end_date?: string | null
+          lease_start_date: string
+          lease_status?: string
+          property_address: string
+          property_features?: Json | null
+          property_type: string
+          rent_amount: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          lease_duration_months?: number | null
+          lease_end_date?: string | null
+          lease_start_date?: string
+          lease_status?: string
+          property_address?: string
+          property_features?: Json | null
+          property_type?: string
+          rent_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       marketplace_inquiries: {
         Row: {
           created_at: string
@@ -765,12 +831,17 @@ export type Database = {
       }
       reports: {
         Row: {
+          aerial_image_url: string | null
           created_at: string
           current_section: number | null
           file_path: string | null
           file_size: string | null
           generated_date: string
+          geolocation_data: Json | null
           id: string
+          included_sections: string[] | null
+          job_number: string | null
+          market_analysis: Json | null
           property_address: string
           property_id: string | null
           report_data: Json | null
@@ -781,14 +852,20 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          vicplan_data: Json | null
         }
         Insert: {
+          aerial_image_url?: string | null
           created_at?: string
           current_section?: number | null
           file_path?: string | null
           file_size?: string | null
           generated_date?: string
+          geolocation_data?: Json | null
           id?: string
+          included_sections?: string[] | null
+          job_number?: string | null
+          market_analysis?: Json | null
           property_address: string
           property_id?: string | null
           report_data?: Json | null
@@ -799,14 +876,20 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          vicplan_data?: Json | null
         }
         Update: {
+          aerial_image_url?: string | null
           created_at?: string
           current_section?: number | null
           file_path?: string | null
           file_size?: string | null
           generated_date?: string
+          geolocation_data?: Json | null
           id?: string
+          included_sections?: string[] | null
+          job_number?: string | null
+          market_analysis?: Json | null
           property_address?: string
           property_id?: string | null
           report_data?: Json | null
@@ -817,21 +900,90 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          vicplan_data?: Json | null
+        }
+        Relationships: []
+      }
+      sales_evidence: {
+        Row: {
+          bathrooms: number | null
+          bedrooms: number | null
+          building_area: number | null
+          car_spaces: number | null
+          comparison_notes: string | null
+          created_at: string
+          id: string
+          is_comparable: boolean | null
+          land_area: number | null
+          property_address: string
+          property_features: Json | null
+          property_type: string
+          sale_date: string
+          sale_price: number
+          sale_status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          property_address: string
+          property_features?: Json | null
+          property_type: string
+          sale_date: string
+          sale_price: number
+          sale_status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          property_address?: string
+          property_features?: Json | null
+          property_type?: string
+          sale_date?: string
+          sale_price?: number
+          sale_status?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
       valuation_jobs: {
         Row: {
           address: string | null
+          aerial_image_url: string | null
           assigned_to: string | null
           attachments: string[] | null
+          auto_saved_at: string | null
+          completion_percentage: number | null
           created_at: string
           crop_details: Json | null
           description: string | null
           due_date: string | null
           estimated_value: number | null
+          geolocation_data: Json | null
           id: string
+          job_number: number
+          market_analysis: Json | null
+          missing_fields_analysis: Json | null
           notes: string | null
+          pdf_file_path: string | null
           plant_equipment: Json | null
           priority: string
           property_details: Json | null
@@ -841,19 +993,28 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          vicplan_data: Json | null
           water_permanent: Json | null
         }
         Insert: {
           address?: string | null
+          aerial_image_url?: string | null
           assigned_to?: string | null
           attachments?: string[] | null
+          auto_saved_at?: string | null
+          completion_percentage?: number | null
           created_at?: string
           crop_details?: Json | null
           description?: string | null
           due_date?: string | null
           estimated_value?: number | null
+          geolocation_data?: Json | null
           id?: string
+          job_number?: number
+          market_analysis?: Json | null
+          missing_fields_analysis?: Json | null
           notes?: string | null
+          pdf_file_path?: string | null
           plant_equipment?: Json | null
           priority?: string
           property_details?: Json | null
@@ -863,19 +1024,28 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          vicplan_data?: Json | null
           water_permanent?: Json | null
         }
         Update: {
           address?: string | null
+          aerial_image_url?: string | null
           assigned_to?: string | null
           attachments?: string[] | null
+          auto_saved_at?: string | null
+          completion_percentage?: number | null
           created_at?: string
           crop_details?: Json | null
           description?: string | null
           due_date?: string | null
           estimated_value?: number | null
+          geolocation_data?: Json | null
           id?: string
+          job_number?: number
+          market_analysis?: Json | null
+          missing_fields_analysis?: Json | null
           notes?: string | null
+          pdf_file_path?: string | null
           plant_equipment?: Json | null
           priority?: string
           property_details?: Json | null
@@ -885,6 +1055,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          vicplan_data?: Json | null
           water_permanent?: Json | null
         }
         Relationships: []
@@ -1074,6 +1245,10 @@ export type Database = {
       }
       is_marketplace_admin: {
         Args: { user_uuid?: string }
+        Returns: boolean
+      }
+      is_partner_admin_for_partner: {
+        Args: { target_partner_id: string }
         Returns: boolean
       }
     }
