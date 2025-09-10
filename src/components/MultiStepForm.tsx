@@ -38,6 +38,23 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
     marketAnalysis: enhancedAnalysisData?.marketData
   });
 
+  const nextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+      // Auto-save on step change
+      saveNow();
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+      // Auto-save on step change
+      saveNow();
+    }
+  };
+
+  // Define steps after all state and functions are available
   const steps = [
     {
       title: "Property Address",
@@ -75,22 +92,6 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
       />
     }
   ];
-
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-      // Auto-save on step change
-      saveNow();
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-      // Auto-save on step change
-      saveNow();
-    }
-  };
 
   const progress = ((currentStep + 1) / steps.length) * 100;
 
