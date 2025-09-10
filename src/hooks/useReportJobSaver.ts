@@ -237,7 +237,14 @@ export const useReportJobSaver = ({
 
   // Auto-save with debouncing
   useEffect(() => {
-    if (!enabled || !propertyAddress) return;
+    if (!enabled) return;
+
+    console.log('🔄 Auto-save effect triggered:', { 
+      enabled, 
+      propertyAddress: propertyAddress || 'NO ADDRESS', 
+      hasReportData: Object.keys(reportData).length > 0,
+      reportDataKeys: Object.keys(reportData)
+    });
 
     // Clear existing timeout
     if (timeoutRef.current) {
@@ -246,6 +253,7 @@ export const useReportJobSaver = ({
 
     // Set new timeout for auto-save
     timeoutRef.current = setTimeout(() => {
+      console.log('🚀 Triggering auto-save after timeout');
       saveReportJob(false);
     }, autoSaveDelay);
 

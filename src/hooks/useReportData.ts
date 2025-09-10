@@ -10,25 +10,40 @@ export const useReportData = () => {
   const { toast } = useToast();
 
   const updateSection = useCallback((sectionKey: string, data: any) => {
-    setReportData(prev => ({
-      ...prev,
-      [sectionKey]: {
-        ...prev[sectionKey],
-        ...data
-      }
-    }));
+    console.log('🔧 updateSection called:', { sectionKey, data, hasData: !!data });
+    setReportData(prev => {
+      const newData = {
+        ...prev,
+        [sectionKey]: {
+          ...prev[sectionKey],
+          ...data
+        }
+      };
+      console.log('📝 Updated report data:', { 
+        previousKeys: Object.keys(prev),
+        newKeys: Object.keys(newData),
+        updatedSection: sectionKey
+      });
+      return newData;
+    });
   }, []);
 
   const saveToStorage = useCallback(() => {
+    console.log('💾 saveToStorage called:', { 
+      reportDataKeys: Object.keys(reportData),
+      reportDataLength: JSON.stringify(reportData).length
+    });
     try {
-      localStorage.setItem('report_data', JSON.stringify(reportData));
+      const dataToSave = JSON.stringify(reportData);
+      localStorage.setItem('report_data', dataToSave);
+      console.log('✅ Data saved to localStorage successfully');
       toast({
         title: "Data saved",
         description: "Your report data has been saved locally",
         duration: 2000,
       });
     } catch (error) {
-      console.error('Failed to save data:', error);
+      console.error('❌ Failed to save data:', error);
       toast({
         title: "Save failed",
         description: "Unable to save your data",

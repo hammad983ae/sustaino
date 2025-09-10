@@ -92,18 +92,25 @@ const ReportViewer = () => {
 
   // Auto-save report data when it changes
   useEffect(() => {
+    console.log('📊 Report data changed:', { 
+      sectionsCount: Object.keys(reportData).length,
+      sections: Object.keys(reportData),
+      propertyAddress: propertyAddress || 'NO ADDRESS'
+    });
+    
     if (Object.keys(reportData).length > 0) {
-      console.log('Auto-saving report data:', Object.keys(reportData).length, 'sections');
+      console.log('⏰ Setting up auto-save timeout');
       const timeoutId = setTimeout(() => {
+        console.log('💾 Executing localStorage save');
         saveToStorage();
-        // Also try to save to Supabase if we have a property address
-        if (propertyAddress) {
-          console.log('Attempting Supabase save with address:', propertyAddress);
-          saveNow();
-        }
+        console.log('🔄 Also attempting Supabase save regardless of address');
+        saveNow();
       }, 2000);
       
-      return () => clearTimeout(timeoutId);
+      return () => {
+        console.log('🧹 Clearing auto-save timeout');
+        clearTimeout(timeoutId);
+      };
     }
   }, [reportData, saveToStorage, propertyAddress, saveNow]);
 
