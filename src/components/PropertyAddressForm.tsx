@@ -7,11 +7,13 @@ import { Separator } from "@/components/ui/separator";
 import { useProperty } from "@/contexts/PropertyContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useTestAuth } from "@/contexts/TestAuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 const PropertyAddressForm = () => {
   const { addressData, updateAddressData, getFormattedAddress, setJobNumber } = useProperty();
   const { toast } = useToast();
+  const { isTestMode, testUser } = useTestAuth();
   const [isCreatingJob, setIsCreatingJob] = useState(false);
 
   const handleGenerateAddress = async () => {
@@ -35,7 +37,15 @@ const PropertyAddressForm = () => {
     setIsCreatingJob(true);
     
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      let user;
+      
+      // Check test mode first
+      if (isTestMode && testUser) {
+        user = testUser;
+      } else {
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        user = authUser;
+      }
       
       if (!user) {
         toast({

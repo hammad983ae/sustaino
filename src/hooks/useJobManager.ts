@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
+import { useTestAuth } from '@/contexts/TestAuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 export interface Job {
@@ -27,6 +28,7 @@ export const useJobManager = () => {
   const autoSaveIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastSaveTimeRef = useRef<number>(Date.now());
   const { toast } = useToast();
+  const { isTestMode, testUser } = useTestAuth();
 
   const AUTO_SAVE_DELAY = 2500; // 2.5 seconds
 
@@ -46,7 +48,14 @@ export const useJobManager = () => {
       };
 
       // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
+      let user;
+      if (isTestMode && testUser) {
+        user = testUser;
+      } else {
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        user = authUser;
+      }
+      
       if (user) {
         newJob.userId = user.id;
       }
