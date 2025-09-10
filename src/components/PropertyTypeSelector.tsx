@@ -97,51 +97,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
         </div>
 
         {/* Core Business Services - Valuations & ESG */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-primary/10 border-primary/20">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-white shadow-sm">
-                  <Calculator className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Property Valuations</CardTitle>
-                  <CardDescription className="text-sm">
-                    Comprehensive automated property valuation services
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-2 mb-4">
-                <h4 className="text-sm font-medium text-muted-foreground">All Property Types Include:</h4>
-                <ul className="text-sm space-y-1">
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Market analysis & comparables
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Risk assessment
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Portfolio aggregation
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Performance metrics
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full bg-primary hover:bg-primary/90 text-white"
-                onClick={() => navigate('/comprehensive-valuation')}
-              >
-                Start Property Valuation
-              </Button>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 gap-6 mb-8">
 
           <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-success/10 border-success/20">
             <CardHeader className="pb-4">
@@ -361,12 +317,6 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Button variant="outline" asChild className="flex-1 min-w-[180px]">
-                <Link to="/property-valuations">
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Property Valuations
-                </Link>
-              </Button>
               <Button variant="outline" asChild className="flex-1 min-w-[180px]">
                 <Link to="/comprehensive-valuation">
                   <Building2 className="mr-2 h-4 w-4" />
