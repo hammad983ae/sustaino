@@ -44,14 +44,43 @@ export default function AuthStatus() {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
+      // Clear ALL localStorage data to prevent data persistence
+      const keysToRemove = [
+        'propertyAddressData',
+        'propertyTypeData', 
+        'propertyJobNumber',
+        'report_section_data',
+        'continue_report_data',
+        'report_data',
+        'report_current_section'
+      ];
+      
+      // Remove specific keys
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+      });
+      
+      // Also remove any autosave keys (they start with 'autosave_')
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('autosave_')) {
+          localStorage.removeItem(key);
+        }
+      });
+      
+      // Clear any session storage as well
+      sessionStorage.clear();
+      
+      // Force a page reload to ensure all state is cleared
+      window.location.href = '/';
+      
       toast({
         title: "Signed out successfully",
-        description: "You have been logged out of your account.",
+        description: "All data has been cleared and you have been logged out.",
       });
     } catch (error) {
       console.error('Error signing out:', error);
       toast({
-        title: "Error signing out",
+        title: "Error signing out", 
         description: "Please try again.",
         variant: "destructive",
       });
