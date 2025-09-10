@@ -178,32 +178,53 @@ export const PropertyPROSummary: React.FC<PropertyPROSummaryProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
+              <Label htmlFor="propertyType">Property Type</Label>
+              <Select value={data.propertyType || ''} onValueChange={(value) => handleInputChange('propertyType', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select property type..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="house">House</SelectItem>
+                  <SelectItem value="unit">Unit/Apartment</SelectItem>
+                  <SelectItem value="townhouse">Townhouse</SelectItem>
+                  <SelectItem value="vacant-land">Vacant Land</SelectItem>
+                  <SelectItem value="land-minor-improvements">Land with Minor Improvements</SelectItem>
+                  <SelectItem value="cold-storage">Cold Storage Facility</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
               <Label htmlFor="currentUse">Current Use</Label>
               <Input
                 id="currentUse"
                 value={data.currentUse || ''}
                 onChange={(e) => handleInputChange('currentUse', e.target.value)}
-                placeholder="e.g. residential, vacant residential site"
-              />
-            </div>
-            <div>
-              <Label htmlFor="lga">LGA</Label>
-              <Input
-                id="lga"
-                value={data.lga || ''}
-                onChange={(e) => handleInputChange('lga', e.target.value)}
-                placeholder="Local Government Area"
+                placeholder="e.g. residential, vacant residential site, cold storage"
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="mainDwelling">Main Dwelling</Label>
+            <Label htmlFor="lga">LGA</Label>
+            <Input
+              id="lga"
+              value={data.lga || ''}
+              onChange={(e) => handleInputChange('lga', e.target.value)}
+              placeholder="Local Government Area"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="mainDwelling">Main Building/Structure</Label>
             <Input
               id="mainDwelling"
               value={data.mainDwelling || ''}
               onChange={(e) => handleInputChange('mainDwelling', e.target.value)}
-              placeholder="e.g. House with 3 bedrooms, 2 bathrooms"
+              placeholder={
+                data.propertyType === 'cold-storage' 
+                  ? "e.g. Cold Storage Facility with 5,000 pallet capacity" 
+                  : "e.g. House with 3 bedrooms, 2 bathrooms"
+              }
             />
           </div>
 
@@ -218,68 +239,117 @@ export const PropertyPROSummary: React.FC<PropertyPROSummaryProps> = ({
               />
             </div>
             <div>
-              <Label htmlFor="additions">Addition(s)</Label>
+              <Label htmlFor="additions">Addition(s)/Upgrades</Label>
               <Input
                 id="additions"
                 value={data.additions || ''}
                 onChange={(e) => handleInputChange('additions', e.target.value)}
-                placeholder="Year of extensions or N/A"
+                placeholder={
+                  data.propertyType === 'cold-storage' 
+                    ? "System upgrades, expansions, etc." 
+                    : "Year of extensions or N/A"
+                }
               />
             </div>
           </div>
 
           {/* Areas */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-              <Label htmlFor="livingArea">Living Area (sqm)</Label>
-              <Input
-                id="livingArea"
-                type="number"
-                value={data.livingArea || ''}
-                onChange={(e) => handleInputChange('livingArea', e.target.value)}
-                placeholder="Living area"
-              />
+          {data.propertyType === 'cold-storage' ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <Label htmlFor="storageArea">Storage Area (sqm)</Label>
+                <Input
+                  id="storageArea"
+                  type="number"
+                  value={data.storageArea || ''}
+                  onChange={(e) => handleInputChange('storageArea', e.target.value)}
+                  placeholder="Cold storage area"
+                />
+              </div>
+              <div>
+                <Label htmlFor="officeArea">Office Area (sqm)</Label>
+                <Input
+                  id="officeArea"
+                  type="number"
+                  value={data.officeArea || ''}
+                  onChange={(e) => handleInputChange('officeArea', e.target.value)}
+                  placeholder="Office/admin area"
+                />
+              </div>
+              <div>
+                <Label htmlFor="loadingArea">Loading Area (sqm)</Label>
+                <Input
+                  id="loadingArea"
+                  type="number"
+                  value={data.loadingArea || ''}
+                  onChange={(e) => handleInputChange('loadingArea', e.target.value)}
+                  placeholder="Loading dock area"
+                />
+              </div>
+              <div>
+                <Label htmlFor="carSpaces">Parking Spaces</Label>
+                <Input
+                  id="carSpaces"
+                  type="number"
+                  value={data.carSpaces || ''}
+                  onChange={(e) => handleInputChange('carSpaces', e.target.value)}
+                  placeholder="Vehicle parking"
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="outdoorArea">Outdoor Area (sqm)</Label>
-              <Input
-                id="outdoorArea"
-                type="number"
-                value={data.outdoorArea || ''}
-                onChange={(e) => handleInputChange('outdoorArea', e.target.value)}
-                placeholder="Outdoor area"
-              />
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <Label htmlFor="livingArea">Living Area (sqm)</Label>
+                <Input
+                  id="livingArea"
+                  type="number"
+                  value={data.livingArea || ''}
+                  onChange={(e) => handleInputChange('livingArea', e.target.value)}
+                  placeholder="Living area"
+                />
+              </div>
+              <div>
+                <Label htmlFor="outdoorArea">Outdoor Area (sqm)</Label>
+                <Input
+                  id="outdoorArea"
+                  type="number"
+                  value={data.outdoorArea || ''}
+                  onChange={(e) => handleInputChange('outdoorArea', e.target.value)}
+                  placeholder="Outdoor area"
+                />
+              </div>
+              <div>
+                <Label htmlFor="otherArea">Other Area (sqm)</Label>
+                <Input
+                  id="otherArea"
+                  type="number"
+                  value={data.otherArea || ''}
+                  onChange={(e) => handleInputChange('otherArea', e.target.value)}
+                  placeholder="Other area"
+                />
+              </div>
+              <div>
+                <Label htmlFor="carSpaces">Number of Car Spaces</Label>
+                <Input
+                  id="carSpaces"
+                  type="number"
+                  value={data.carSpaces || ''}
+                  onChange={(e) => handleInputChange('carSpaces', e.target.value)}
+                  placeholder="Car spaces"
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="otherArea">Other Area (sqm)</Label>
-              <Input
-                id="otherArea"
-                type="number"
-                value={data.otherArea || ''}
-                onChange={(e) => handleInputChange('otherArea', e.target.value)}
-                placeholder="Other area"
-              />
-            </div>
-            <div>
-              <Label htmlFor="carSpaces">Number of Car Spaces</Label>
-              <Input
-                id="carSpaces"
-                type="number"
-                value={data.carSpaces || ''}
-                onChange={(e) => handleInputChange('carSpaces', e.target.value)}
-                placeholder="Car spaces"
-              />
-            </div>
-          </div>
+          )}
 
           <div>
-            <Label htmlFor="carArea">Car Areas (sqm)</Label>
+            <Label htmlFor="carArea">{data.propertyType === 'cold-storage' ? 'Total Parking Area (sqm)' : 'Car Areas (sqm)'}</Label>
             <Input
               id="carArea"
               type="number"
               value={data.carArea || ''}
               onChange={(e) => handleInputChange('carArea', e.target.value)}
-              placeholder="Total car area"
+              placeholder={data.propertyType === 'cold-storage' ? 'Total parking area' : 'Total car area'}
             />
           </div>
 
@@ -299,6 +369,11 @@ export const PropertyPROSummary: React.FC<PropertyPROSummaryProps> = ({
                   <SelectItem value="poor">Poor</SelectItem>
                 </SelectContent>
               </Select>
+              {data.propertyType === 'cold-storage' && (
+                <p className="text-xs text-orange-600 mt-1">
+                  Cold storage facilities typically have limited marketability due to specialized nature
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="heritageIssues">Heritage Issues</Label>
@@ -325,8 +400,25 @@ export const PropertyPROSummary: React.FC<PropertyPROSummaryProps> = ({
                 <SelectItem value="unknown">Not Known</SelectItem>
               </SelectContent>
             </Select>
+            {data.propertyType === 'cold-storage' && (
+              <p className="text-xs text-blue-600 mt-1">
+                Consider refrigerants, energy consumption, noise impacts, and waste disposal requirements
+              </p>
+            )}
           </div>
         </div>
+
+        {/* Cold Storage Specific Notice */}
+        {data.propertyType === 'cold-storage' && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h4 className="font-medium text-blue-800 mb-2">Cold Storage Valuation Notice</h4>
+            <p className="text-sm text-blue-700">
+              Cold storage facilities require specialized valuation approaches due to their unique nature. 
+              Additional sections will be available for detailed facility specifications, refrigeration systems, 
+              and operational considerations. Marketability is typically limited to specialized operators.
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

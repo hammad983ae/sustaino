@@ -41,6 +41,13 @@ const PROPERTY_RISK_MATRIX = `
 4 - Medium to high risk: Essential repairs required, dwelling under construction/renovation, observable unstable asbestos (broken/cracked), possible building code issues (low ceiling height/non-approved improvements), partial damage by fire/flood, suspected active termites, dwellings with less than 50m² living areas, progress payment schedule not supplied for TBE/renovation, TBEs where progress payment schedule doesn't reflect final contract price, TBEs where progress payments are front-end loaded or outside legislative/industry parameters, overcapitalised property, unit/apartment development 'appears to be clad' or 'known to be clad', dwellings with significant/adverse design issues
 5 - High risk: Evidence of major structural faults or issues, entire dwelling gutted, observable friable asbestos, unit/apartment development known to contain 'non-compliant/non-conforming cladding', other extreme risk
 
+#### Cold Storage Facility Improvements (specialized criteria)
+1 - Low risk: Fully operational cold storage with current refrigeration systems, all certifications current, modern energy-efficient equipment
+2 - Low to medium risk: Operational facility with minor maintenance required, certifications current, standard efficiency systems
+3 - Medium risk: Operational but aging refrigeration systems (10-15 years), some certifications pending renewal, moderate energy efficiency, requires routine maintenance
+4 - Medium to high risk: Older refrigeration systems (15+ years), expired or pending critical certifications (HACCP, building certificates), high energy costs, significant maintenance required, limited backup systems
+5 - High risk: Non-operational or failing refrigeration systems, no current certifications, obsolete technology, structural issues affecting temperature control, environmental compliance issues, no backup power/refrigeration
+
 ### MARKET RISK RATINGS (1-5 scale)
 
 #### Market Direction (price)
@@ -70,6 +77,13 @@ const PROPERTY_RISK_MATRIX = `
 3 - Medium risk: Expected marketing/selling period of up to 6 months, limited available sales evidence within last 6 months that supports AMV, sales evidence suggests fairly broad range in value, known restriction on re-sale of subject property in open market, Over 55's unit/apartment with restriction on occupation/ownership
 4 - Medium to high risk: Expected marketing/selling period of up to 12 months, unique property for locality, limited available sales evidence within last 12 months that supports AMV, market largely driven by interstate/overseas investors and/or other factors, contract price unable to be supported by available sales evidence
 5 - High risk: Expected marketing/selling period of over 12 months, limited potential purchasers for subject property, no available sales evidence within last 12 months that supports AMV, AMV not meeting current sale price by 10% or more, other extreme risk
+
+#### Cold Storage Market Segment Conditions (specialized criteria)
+1 - Low risk: Strong demand from cold storage operators, readily saleable to specialized market within 6 weeks, supported by recent comparable sales
+2 - Low to medium risk: Moderate demand in specialized market, expected selling period up to 3 months, some comparable sales evidence
+3 - Medium risk: Limited specialized market demand, expected selling period up to 6 months, limited comparable sales, may require conversion considerations
+4 - Medium to high risk: Very limited market demand, expected selling period up to 12 months, virtually no comparable sales, high conversion costs to alternative use, market driven by very few specialized operators
+5 - High risk: Extremely limited market (single-purpose facility), expected selling period over 12 months, no comparable sales evidence, prohibitive conversion costs, obsolete technology limiting appeal to modern operators
 `;
 
 serve(async (req) => {

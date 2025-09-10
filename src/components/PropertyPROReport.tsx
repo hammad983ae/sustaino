@@ -12,6 +12,7 @@ import { PropertyPROAssumptions } from './PropertyPROAssumptions';
 import { PropertyPROLiability } from './PropertyPROLiability';
 import { PropertyPROTBE } from './PropertyPROTBE';
 import { PropertyPROProgress } from './PropertyPROProgress';
+import { PropertyPROColdStorage } from './PropertyPROColdStorage';
 import BrandedHeader from './BrandedHeader';
 
 interface PropertyPROReportProps {
@@ -58,6 +59,12 @@ export const PropertyPROReport: React.FC<PropertyPROReportProps> = ({
               data={reportData.tbe} 
               onUpdate={(data) => handleSectionUpdate('tbe', data)}
             />
+            {propertyType === 'cold-storage' && (
+              <PropertyPROColdStorage 
+                data={reportData.coldStorage} 
+                onUpdate={(data) => handleSectionUpdate('coldStorage', data)}
+              />
+            )}
             <PropertyPROLand 
               data={reportData.land} 
               onUpdate={(data) => handleSectionUpdate('land', data)}
@@ -114,6 +121,12 @@ export const PropertyPROReport: React.FC<PropertyPROReportProps> = ({
               data={reportData.valuationSummary} 
               onUpdate={(data) => handleSectionUpdate('valuationSummary', data)}
             />
+            {propertyType === 'cold-storage' && (
+              <PropertyPROColdStorage 
+                data={reportData.coldStorage} 
+                onUpdate={(data) => handleSectionUpdate('coldStorage', data)}
+              />
+            )}
             <PropertyPROLand 
               data={reportData.land} 
               onUpdate={(data) => handleSectionUpdate('land', data)}
