@@ -9,6 +9,7 @@ import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Phone, QrCode } from 'lucid
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import QRCode from 'qrcode';
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +36,7 @@ export default function AuthPage() {
   
   // QR Code state
   const [qrCode, setQrCode] = useState<string | null>(null);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const [showQrVerification, setShowQrVerification] = useState(false);
 
   useEffect(() => {
@@ -182,11 +184,29 @@ export default function AuthPage() {
     }
   };
 
-  const generateQrCode = () => {
-    // Generate a simple QR code data (in real app, this would be more sophisticated)
-    const qrData = `${window.location.origin}/verify?token=${Date.now()}&email=${signupEmail}`;
-    setQrCode(qrData);
-    setShowQrVerification(true);
+  const generateQrCode = async () => {
+    try {
+      // Generate QR code data for 2FA setup (simulated)
+      const qrData = `otpauth://totp/${encodeURIComponent('DeLorenzo Property')}:${encodeURIComponent(signupEmail)}?secret=${btoa(signupEmail + Date.now()).slice(0, 16)}&issuer=${encodeURIComponent('DeLorenzo Property Group')}`;
+      
+      // Generate the actual QR code image
+      const qrCodeDataUrl = await QRCode.toDataURL(qrData, {
+        width: 200,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      });
+      
+      setQrCode(qrData);
+      setQrCodeDataUrl(qrCodeDataUrl);
+      setShowQrVerification(true);
+    } catch (error) {
+      console.error('Failed to generate QR code:', error);
+      // Fallback: still show the QR section but with an error message
+      setShowQrVerification(true);
+    }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -232,7 +252,7 @@ export default function AuthPage() {
       }
 
       // Generate QR code for verification
-      generateQrCode();
+      await generateQrCode();
 
       toast({
         title: "Account created successfully!",
@@ -520,10 +540,18 @@ export default function AuthPage() {
                         </div>
                         
                         <div className="bg-white p-4 rounded-lg inline-block border-2 border-primary/20">
-                          {/* In a real app, you'd use a QR code library here */}
-                          <div className="w-32 h-32 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center rounded">
-                            <QrCode className="h-16 w-16 text-white" />
-                          </div>
+                          {qrCodeDataUrl ? (
+                            <img 
+                              src={qrCodeDataUrl} 
+                              alt="QR Code for 2FA setup" 
+                              className="w-40 h-40"
+                            />
+                          ) : (
+                            <div className="w-40 h-40 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center rounded">
+                              <QrCode className="h-16 w-16 text-white" />
+                              <div className="absolute text-white text-xs">Generating...</div>
+                            </div>
+                          )}
                         </div>
                         
                         <div className="text-sm text-muted-foreground">
