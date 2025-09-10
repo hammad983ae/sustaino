@@ -208,30 +208,58 @@ const ValuationCertificate = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="secondary">Pre-populated from platform</Badge>
+            <Badge variant="secondary">Pre-populated from STEP FIVE</Badge>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="valuation-date">Date of Valuation</Label>
-              <Input
-                id="valuation-date"
-                type="date"
-                placeholder="dd/mm/yyyy"
-                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+          <div className="space-y-4">
+            {/* Retrospective Valuation Toggle */}
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <div className="space-y-1">
+                <Label htmlFor="retrospective-valuation" className="font-medium">Retrospective Valuation</Label>
+                <p className="text-xs text-muted-foreground">
+                  If enabled, inspection and valuation dates can be different
+                </p>
+              </div>
+              <Switch 
+                id="retrospective-valuation" 
+                checked={false}
+                onCheckedChange={(checked) => {
+                  // Add logic to handle retrospective valuation toggle
+                }}
               />
-              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from valuation data</p>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="inspection-date">Date of Inspection</Label>
-              <Input
-                id="inspection-date"
-                type="date"
-                placeholder="dd/mm/yyyy"
-                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
-              />
-              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from inspection data</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="valuation-date">Date of Valuation</Label>
+                <Input
+                  id="valuation-date"
+                  type="date"
+                  placeholder="dd/mm/yyyy"
+                  className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                  onChange={(e) => {
+                    // Auto-populate inspection date unless retrospective
+                    const inspectionDateInput = document.getElementById('inspection-date') as HTMLInputElement;
+                    if (inspectionDateInput && !document.getElementById('retrospective-valuation')?.getAttribute('data-state')?.includes('checked')) {
+                      inspectionDateInput.value = e.target.value;
+                    }
+                  }}
+                />
+                <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from STEP FIVE valuation data</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="inspection-date">Date of Inspection</Label>
+                <Input
+                  id="inspection-date"
+                  type="date"
+                  placeholder="dd/mm/yyyy"
+                  className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                />
+                <p className="text-xs text-blue-600 dark:text-blue-400">
+                  Auto-populated from valuation date (unless retrospective)
+                </p>
+              </div>
             </div>
           </div>
         </CardContent>

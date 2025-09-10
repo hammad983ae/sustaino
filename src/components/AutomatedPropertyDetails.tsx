@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { MapPin, Search, Calendar, FileText, Zap } from "lucide-react";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -21,6 +22,8 @@ interface AutomatedPropertyDetailsProps {
 export default function AutomatedPropertyDetails({ propertyType, onNext, onBack }: AutomatedPropertyDetailsProps) {
   const [address, setAddress] = useState("");
   const [valuationDate, setValuationDate] = useState<Date>();
+  const [inspectionDate, setInspectionDate] = useState<Date>();
+  const [isRetrospective, setIsRetrospective] = useState(false);
   const [valuationPurpose, setValuationPurpose] = useState("");
   const [clientDetails, setClientDetails] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -182,8 +185,24 @@ export default function AutomatedPropertyDetails({ propertyType, onNext, onBack 
                 <FileText className="h-5 w-5 mr-2" />
                 Valuation Details
               </CardTitle>
+              <Badge variant="secondary">Pre-populated from STEP FIVE</Badge>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Retrospective Valuation Toggle */}
+              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                <div className="space-y-1">
+                  <Label htmlFor="retrospective-valuation" className="font-medium">Retrospective Valuation</Label>
+                  <p className="text-xs text-muted-foreground">
+                    If enabled, inspection and valuation dates can be different
+                  </p>
+                </div>
+                <Switch 
+                  id="retrospective-valuation" 
+                  checked={isRetrospective}
+                  onCheckedChange={setIsRetrospective}
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label>Valuation Date</Label>
                 <Popover>
@@ -203,13 +222,63 @@ export default function AutomatedPropertyDetails({ propertyType, onNext, onBack 
                     <CalendarComponent
                       mode="single"
                       selected={valuationDate}
-                      onSelect={setValuationDate}
+                      onSelect={(date) => {
+                        setValuationDate(date);
+                        // Auto-populate inspection date unless retrospective
+                        if (!isRetrospective && date) {
+                          setInspectionDate(date);
+                        }
+                      }}
                       initialFocus
                       className="p-3 pointer-events-auto"
                     />
                   </PopoverContent>
                 </Popover>
+                <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from STEP FIVE</p>
               </div>
+
+              {isRetrospective && (
+                <div className="space-y-2">
+                  <Label>Inspection Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !inspectionDate && "text-muted-foreground"
+                        )}
+                      >
+                        <Calendar className="mr-2 h-4 w-4" />
+                        {inspectionDate ? format(inspectionDate, "PPP") : "Select date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <CalendarComponent
+                        mode="single"
+                        selected={inspectionDate}
+                        onSelect={setInspectionDate}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <p className="text-xs text-muted-foreground">Different date for retrospective valuation</p>
+                </div>
+              )}
+
+              {!isRetrospective && (
+                <div className="space-y-2">
+                  <Label>Inspection Date</Label>
+                  <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg">
+                    <Calendar className="h-4 w-4 text-green-600" />
+                    <span className="text-sm text-green-700 dark:text-green-300">
+                      {valuationDate ? format(valuationDate, "PPP") : "Same as valuation date"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-green-600 dark:text-green-400">Automatically matches valuation date</p>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label>Purpose of Valuation</Label>
