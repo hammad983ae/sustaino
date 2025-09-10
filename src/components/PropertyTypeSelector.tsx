@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText, Zap } from "lucide-react";
+import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useProperty } from "@/contexts/PropertyContext";
 
@@ -52,55 +52,22 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <Leaf className="h-8 w-8 text-primary mr-3" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Sustaino Pro Valuation Platform
-            </h1>
+          <div className="flex items-center justify-between mb-4">
+            <Link to="/index" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
+              <Home className="h-4 w-4" />
+              Back to Original Platform
+            </Link>
+            <div className="flex items-center justify-center">
+              <Leaf className="h-8 w-8 text-primary mr-3" />
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Sustaino Pro Valuation Platform
+              </h1>
+            </div>
+            <div></div>
           </div>
-          <p className="text-xl text-muted-foreground mb-6">
+          <p className="text-xl text-muted-foreground mb-2">
             Automated Property Valuations with ESG Intelligence
           </p>
-          
-          
-          {/* Animated Lightning Bolt "Powered" Link */}
-          <div className="flex justify-center mb-6">
-            <Link to="/index" className="group relative p-6 rounded-xl bg-gradient-to-br from-yellow-50 to-amber-50 hover:from-yellow-100 hover:to-amber-100 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-yellow-200 hover:border-yellow-300 transform hover:scale-105">
-              {/* Lightning bolt with animation */}
-              <div className="relative flex items-center space-x-3">
-                <div className="relative">
-                  {/* Main lightning bolt */}
-                  <div className="p-3 rounded-lg bg-gradient-to-br from-yellow-400 to-amber-500 shadow-lg group-hover:shadow-yellow-300/50 transition-all duration-300">
-                    <Zap className="h-8 w-8 text-white animate-pulse group-hover:animate-bounce" />
-                  </div>
-                  
-                  {/* Electric glow effect */}
-                  <div className="absolute inset-0 bg-yellow-400/30 rounded-lg blur-sm animate-pulse group-hover:bg-yellow-300/50 transition-all duration-300"></div>
-                  
-                  {/* Sparks animation */}
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-300 rounded-full animate-ping"></div>
-                  <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-amber-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
-                </div>
-                
-                {/* "Earth" being hit */}
-                <div className="relative">
-                  <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-green-500 rounded-full shadow-sm group-hover:animate-pulse"></div>
-                  {/* Explosion effect */}
-                  <div className="absolute inset-0 bg-orange-400/0 group-hover:bg-orange-400/60 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                  <div className="absolute inset-0 bg-red-400/0 group-hover:bg-red-400/40 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-all duration-500" style={{animationDelay: '0.1s'}}></div>
-                </div>
-                
-                <div className="flex flex-col">
-                  <span className="text-xl font-bold text-gray-800 group-hover:text-yellow-700 transition-colors duration-300">Powered</span>
-                  <span className="text-sm text-gray-600 group-hover:text-yellow-600 transition-colors duration-300">AI Lightning</span>
-                </div>
-              </div>
-              
-              {/* Background energy waves */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-200/0 via-yellow-300/20 to-yellow-200/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </Link>
-          </div>
-          
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
             Select your property type to begin an automated valuation powered by AI market analysis, 
             comparable sales data, and comprehensive ESG assessment.

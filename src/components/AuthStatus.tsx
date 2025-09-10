@@ -44,21 +44,14 @@ export default function AuthStatus() {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
-      // COMPLETELY CLEAR ALL DATA - nuclear option to ensure nothing persists
-      localStorage.clear();
-      sessionStorage.clear();
-      
-      // Force page reload to ensure complete state reset
-      window.location.href = '/';
-      
       toast({
         title: "Signed out successfully",
-        description: "All data has been cleared and you have been logged out.",
+        description: "You have been logged out of your account.",
       });
     } catch (error) {
       console.error('Error signing out:', error);
       toast({
-        title: "Error signing out", 
+        title: "Error signing out",
         description: "Please try again.",
         variant: "destructive",
       });
