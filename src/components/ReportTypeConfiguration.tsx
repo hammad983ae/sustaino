@@ -309,17 +309,7 @@ const ReportTypeConfiguration = () => {
 
         {/* Valuation Configuration */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-lg">Valuation Configuration</h3>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="include-gst" className="text-sm font-medium">Include GST</Label>
-              <Switch
-                id="include-gst"
-                checked={includeGST}
-                onCheckedChange={setIncludeGST}
-              />
-            </div>
-          </div>
+          <h3 className="font-semibold text-lg">Valuation Configuration</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MultiSelectDropdown 
@@ -356,6 +346,35 @@ const ReportTypeConfiguration = () => {
                 GST will be included in all valuation calculations
               </div>
             )}
+          </div>
+
+          {/* GST Treatment Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+            <div>
+              <Label htmlFor="gst-treatment" className="text-sm font-medium">GST Treatment</Label>
+              <Select value={formData['gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('gst-treatment', value)}>
+                <SelectTrigger id="gst-treatment" className="mt-1">
+                  <SelectValue placeholder="Select GST approach" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border z-50">
+                  <SelectItem value="inclusive">GST Inclusive</SelectItem>
+                  <SelectItem value="exclusive">GST Exclusive</SelectItem>
+                  <SelectItem value="going-concern">Going Concern (GST Inclusive)</SelectItem>
+                  <SelectItem value="vacant-possession">Vacant Possession (GST Free)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="custom-basis-description" className="text-sm font-medium">Custom Basis Description (if applicable)</Label>
+              <Textarea 
+                id="custom-basis-description"
+                placeholder="Describe custom rental basis or specific requirements"
+                className="mt-1"
+                value={formData['custom-basis-description'] || ''}
+                onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
+              />
+            </div>
           </div>
         </div>
 
