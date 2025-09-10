@@ -1205,6 +1205,10 @@ export type Database = {
         Args: { user_uuid?: string }
         Returns: boolean
       }
+      is_partner_admin_for_partner: {
+        Args: { target_partner_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       marketplace_property_status:
