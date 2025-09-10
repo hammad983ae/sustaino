@@ -252,116 +252,116 @@ const ReportViewer = () => {
       <WhiteLabelHeader />
       {/* Main content with dark border */}
       <div className="max-w-6xl mx-auto bg-background border border-slate-300 shadow-lg min-h-screen">
-      {/* Mobile-friendly header with progress */}
-      <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link to="/">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Home className="h-4 w-4" />
-                <span className="hidden sm:inline">Home</span>
-              </Button>
-            </Link>
-            <h1 className="text-lg font-semibold truncate">
-              Section {currentSection + 1}: {sections[currentSection].title}
-            </h1>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={async () => {
-                  saveToStorage();
-                  await saveNow();
-                }}
-                className="flex items-center gap-1"
-              >
-                <Save className="h-3 w-3" />
-                Save to Work Hub
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleShowPresentation}
-                className="flex items-center gap-1"
-              >
-                <Play className="h-3 w-3" />
-                AI Preview
-              </Button>
-              <Button 
-                variant="secondary" 
-                size="sm" 
-                onClick={handleShowPreview}
-                className="flex items-center gap-1"
-              >
-                <FileText className="h-3 w-3" />
-                Preview & Generate
-              </Button>
+        {/* Mobile-friendly header with progress */}
+        <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Link to="/">
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Home className="h-4 w-4" />
+                  <span className="hidden sm:inline">Home</span>
+                </Button>
+              </Link>
+              <h1 className="text-lg font-semibold truncate">
+                Section {currentSection + 1}: {sections[currentSection].title}
+              </h1>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={async () => {
+                    saveToStorage();
+                    await saveNow();
+                  }}
+                  className="flex items-center gap-1"
+                >
+                  <Save className="h-3 w-3" />
+                  Save to Work Hub
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleShowPresentation}
+                  className="flex items-center gap-1"
+                >
+                  <Play className="h-3 w-3" />
+                  AI Preview
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  onClick={handleShowPreview}
+                  className="flex items-center gap-1"
+                >
+                  <FileText className="h-3 w-3" />
+                  Preview & Generate
+                </Button>
+              </div>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              {currentSection + 1} of {sections.length}
             </div>
           </div>
-          <div className="text-sm text-muted-foreground">
-            {currentSection + 1} of {sections.length}
+          <Progress value={progress} className="w-full" />
+        </div>
+
+        {/* Report content */}
+        <div className="p-4 pb-24">
+          <div className="max-w-4xl mx-auto">
+            <ReportSection 
+              title={sections[currentSection].title}
+              subtitle={sections[currentSection].subtitle}
+              sectionIndex={currentSection}
+              onNavigateToSection={navigateToSection}
+              reportData={reportData}
+              onDataChange={setReportData}
+            />
           </div>
         </div>
-        <Progress value={progress} className="w-full" />
-      </div>
 
-      {/* Report content */}
-      <div className="p-4 pb-24">
-        <div className="max-w-4xl mx-auto">
-          <ReportSection 
-            title={sections[currentSection].title}
-            subtitle={sections[currentSection].subtitle}
-            sectionIndex={currentSection}
-            onNavigateToSection={navigateToSection}
-            reportData={reportData}
-            onDataChange={setReportData}
-          />
-        </div>
-      </div>
+        {/* Mobile-friendly navigation footer */}
+        <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4">
+          <div className="flex justify-between items-center max-w-4xl mx-auto">
+            <Button
+              variant="outline"
+              onClick={prevSection}
+              disabled={currentSection === 0}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">Back</span>
+            </Button>
 
-      {/* Mobile-friendly navigation footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4">
-        <div className="flex justify-between items-center max-w-4xl mx-auto">
-          <Button
-            variant="outline"
-            onClick={prevSection}
-            disabled={currentSection === 0}
-            className="flex items-center gap-2"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            <span className="hidden sm:inline">Back</span>
-          </Button>
+            <div className="flex gap-1 overflow-x-auto max-w-[200px] sm:max-w-none">
+              {sections.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSection(index)}
+                  className={`w-2 h-2 rounded-full transition-colors flex-shrink-0 ${
+                    index === currentSection
+                      ? "bg-primary"
+                      : index < currentSection
+                      ? "bg-primary/60"
+                      : "bg-muted"
+                  }`}
+                  aria-label={`Go to section ${index + 1}`}
+                />
+              ))}
+            </div>
 
-          <div className="flex gap-1 overflow-x-auto max-w-[200px] sm:max-w-none">
-            {sections.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSection(index)}
-                className={`w-2 h-2 rounded-full transition-colors flex-shrink-0 ${
-                  index === currentSection
-                    ? "bg-primary"
-                    : index < currentSection
-                    ? "bg-primary/60"
-                    : "bg-muted"
-                }`}
-                aria-label={`Go to section ${index + 1}`}
-              />
-            ))}
-          </div>
-
-          <Button
-            onClick={nextSection}
-            disabled={currentSection === sections.length - 1}
-            className="flex items-center gap-2"
-          >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+            <Button
+              onClick={nextSection}
+              disabled={currentSection === sections.length - 1}
+              className="flex items-center gap-2"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>
-    );
+    </div>
+  );
 };
 
 export default ReportViewer;
