@@ -55,145 +55,26 @@ export default function AuthPage() {
     return () => subscription.unsubscribe();
   }, [navigate, isResettingPassword]);
 
-  // Login form state
-  const [loginEmail, setLoginEmail] = useState('john@delorenzopropertygroup.com');
-  const [loginPassword, setLoginPassword] = useState('');
+  // Email form state
+  const [email, setEmail] = useState('john@delorenzopropertygroup.com');
 
-  // Signup form state
-  const [signupEmail, setSignupEmail] = useState('john@delorenzopropertygroup.com');
-  const [signupPassword, setSignupPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [displayName, setDisplayName] = useState('John DeLorenzo');
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: loginEmail,
-        password: loginPassword,
-      });
-
-      if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          setError('Invalid email or password. Please check your credentials and try again.');
-        } else if (error.message.includes('Email not confirmed')) {
-          setError('Please check your email and click the confirmation link before logging in.');
-        } else {
-          setError(error.message);
-        }
-        return;
-      }
-
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      });
-
-      navigate('/');
+      // For now, just show a message that password login is disabled
+      setError('Password authentication is currently disabled. Please contact your administrator for access.');
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Auth error:', error);
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
 
-    // Validation
-    if (signupPassword !== confirmPassword) {
-      setError('Passwords do not match.');
-      setIsLoading(false);
-      return;
-    }
-
-    if (signupPassword.length < 6) {
-      setError('Password must be at least 6 characters long.');
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const redirectUrl = window.location.href.replace(/\/auth.*$/, '/auth');
-      
-      const { error } = await supabase.auth.signUp({
-        email: signupEmail,
-        password: signupPassword,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            display_name: displayName || signupEmail
-          }
-        }
-      });
-
-      if (error) {
-        if (error.message.includes('already registered')) {
-          setError('An account with this email already exists. Please try logging in instead.');
-        } else {
-          setError(error.message);
-        }
-        return;
-      }
-
-      toast({
-        title: "Account created successfully!",
-        description: "Please check your email for a confirmation link.",
-      });
-
-      // Clear form
-      setSignupEmail('john@delorenzopropertygroup.com');
-      setSignupPassword('');
-      setConfirmPassword('');
-      setDisplayName('John DeLorenzo');
-    } catch (error) {
-      console.error('Signup error:', error);
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleForgotPassword = async () => {
-    if (!loginEmail.trim()) {
-      setError('Please enter your email address first.');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Use the exact current URL structure to stay in Lovable
-      const currentUrl = window.location.href.split('?')[0]; // Remove any query params
-      const baseUrl = currentUrl.replace('/auth', '').replace('/#', ''); // Handle both /auth and root
-      
-      const { error } = await supabase.auth.resetPasswordForEmail(loginEmail, {
-        redirectTo: `${baseUrl}/auth`,
-      });
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      toast({
-        title: "Password reset email sent",
-        description: "Check your email for a password reset link. The reset link will keep you in Lovable.",
-      });
-    } catch (error) {
-      console.error('Password reset error:', error);
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -357,169 +238,43 @@ export default function AuthPage() {
                   </div>
                 </div>
               ) : (
-                // Regular Login/Signup Forms
-                <div>
-                  <Tabs defaultValue="login" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="login">Login</TabsTrigger>
-                      <TabsTrigger value="signup">Sign Up</TabsTrigger>
-                    </TabsList>
+                 // Email Entry Form
+                <div className="space-y-4">
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
 
-                    {error && (
-                      <Alert variant="destructive" className="mt-4">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
-                    )}
+                  <Alert className="bg-info/10 border-info/20">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Account Access:</strong> Password authentication is temporarily disabled. Contact your administrator for access.
+                    </AlertDescription>
+                  </Alert>
 
-                    <TabsContent value="login" className="mt-6">
-                      <div className="space-y-4">
-                        {/* Quick Account Info */}
-                        <Alert className="bg-info/10 border-info/20">
-                          <AlertCircle className="h-4 w-4" />
-                          <AlertDescription>
-                            <strong>Your Account:</strong> john@delorenzopropertygroup.com - Set your password using Sign Up tab if first time
-                          </AlertDescription>
-                        </Alert>
-
-                        <form onSubmit={handleLogin} className="space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="login-email">Email</Label>
-                            <div className="relative">
-                              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                id="login-email"
-                                type="email"
-                                placeholder="Enter your email"
-                                value={loginEmail}
-                                onChange={(e) => setLoginEmail(e.target.value)}
-                                className="pl-10"
-                                required
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="login-password">Password</Label>
-                            <div className="relative">
-                              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                id="login-password"
-                                type={showPassword ? 'text' : 'password'}
-                                placeholder="Enter your password"
-                                value={loginPassword}
-                                onChange={(e) => setLoginPassword(e.target.value)}
-                                className="pl-10 pr-10"
-                                required
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                onClick={() => setShowPassword(!showPassword)}
-                              >
-                                {showPassword ? (
-                                  <EyeOff className="h-4 w-4 text-muted-foreground" />
-                                ) : (
-                                  <Eye className="h-4 w-4 text-muted-foreground" />
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-
-                          <div className="flex justify-between items-center">
-                            <Button
-                              type="button"
-                              variant="link"
-                              size="sm"
-                              onClick={handleForgotPassword}
-                              className="text-sm text-muted-foreground hover:text-foreground p-0"
-                            >
-                              Forgot Password?
-                            </Button>
-                          </div>
-
-                          <Button type="submit" className="w-full" disabled={isLoading}>
-                            {isLoading ? 'Signing in...' : 'Sign In'}
-                          </Button>
-                        </form>
+                  <form onSubmit={handleEmailSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="john@delorenzopropertygroup.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="pl-10"
+                          required
+                        />
                       </div>
-                    </TabsContent>
+                    </div>
 
-                    <TabsContent value="signup" className="mt-6">
-                      <form onSubmit={handleSignup} className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="display-name">Display Name (Optional)</Label>
-                          <div className="relative">
-                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              id="display-name"
-                              type="text"
-                              placeholder="Enter your display name"
-                              value={displayName}
-                              onChange={(e) => setDisplayName(e.target.value)}
-                              className="pl-10"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="signup-email">Email</Label>
-                          <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              id="signup-email"
-                              type="email"
-                              placeholder="Enter your email"
-                              value={signupEmail}
-                              onChange={(e) => setSignupEmail(e.target.value)}
-                              className="pl-10"
-                              required
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="signup-password">Password</Label>
-                          <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              id="signup-password"
-                              type={showPassword ? 'text' : 'password'}
-                              placeholder="Enter your password"
-                              value={signupPassword}
-                              onChange={(e) => setSignupPassword(e.target.value)}
-                              className="pl-10"
-                              required
-                              minLength={6}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="confirm-password">Confirm Password</Label>
-                          <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              id="confirm-password"
-                              type={showPassword ? 'text' : 'password'}
-                              placeholder="Confirm your password"
-                              value={confirmPassword}
-                              onChange={(e) => setConfirmPassword(e.target.value)}
-                              className="pl-10"
-                              required
-                              minLength={6}
-                            />
-                          </div>
-                        </div>
-
-                        <Button type="submit" className="w-full" disabled={isLoading}>
-                          {isLoading ? 'Creating account...' : 'Create Account'}
-                        </Button>
-                      </form>
-                    </TabsContent>
-                  </Tabs>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                      {isLoading ? 'Processing...' : 'Request Access'}
+                    </Button>
+                  </form>
 
                   <div className="mt-6 text-center">
                     <Button
