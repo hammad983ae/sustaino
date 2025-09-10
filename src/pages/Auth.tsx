@@ -419,6 +419,14 @@ export default function AuthPage() {
                     </Button>
                   </div>
 
+                  {/* Test Login Notice */}
+                  <Alert className="bg-emerald-50 border-emerald-200">
+                    <AlertCircle className="h-4 w-4 text-emerald-600" />
+                    <AlertDescription className="text-emerald-800">
+                      <strong>Quick Test Login:</strong> Use email: <code className="bg-emerald-100 px-1 rounded">test@test.com</code> and password: <code className="bg-emerald-100 px-1 rounded">test123</code> to access the system immediately without email verification.
+                    </AlertDescription>
+                  </Alert>
+
                   {showResetForm && (
                     <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
                       <form onSubmit={handlePasswordReset} className="space-y-4">
