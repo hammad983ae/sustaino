@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -8,6 +8,8 @@ import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
+import { useProperty } from "@/contexts/PropertyContext";
+import { useReportJobSaver } from "@/hooks/useReportJobSaver";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
@@ -15,7 +17,19 @@ interface MultiStepFormProps {
 
 const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [stepData, setStepData] = useState({});
   const navigate = useNavigate();
+  const { addressData, getFormattedAddress } = useProperty();
+
+  // Auto-save functionality using the job saver hook
+  const { saveNow } = useReportJobSaver({
+    reportData: stepData,
+    currentSection: currentStep,
+    propertyAddress: getFormattedAddress(),
+    reportType: 'Property Assessment',
+    enabled: !!getFormattedAddress(),
+    autoSaveDelay: 3000
+  });
 
   const steps = [
     {
@@ -40,8 +54,10 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
     }
   ];
 
-  const nextStep = () => {
+  const nextStep = async () => {
     if (currentStep < steps.length - 1) {
+      // Save current step data before moving to next
+      await saveNow();
       setCurrentStep(currentStep + 1);
     }
   };
@@ -53,6 +69,17 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
       navigate(-1); // Navigate back to previous page when on first step
     }
   };
+
+  // Auto-save when step data changes
+  useEffect(() => {
+    if (getFormattedAddress() && Object.keys(stepData).length > 0) {
+      const timeoutId = setTimeout(() => {
+        saveNow();
+      }, 2000);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [stepData, saveNow, getFormattedAddress]);
 
   const progress = ((currentStep + 1) / steps.length) * 100;
 
