@@ -46,24 +46,52 @@ const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Executive Summary Section */}
+      {/* Introduction Page */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Introduction</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-medium">Report Introduction</h3>
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                Generate Introduction
+              </Button>
+            </div>
+            <Textarea 
+              placeholder="Introduction to the property valuation report, purpose, scope, and methodology overview..."
+              className="min-h-[100px] resize-none"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* STEP SIX Executive Summary Generation */}
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger className="flex items-center gap-2 w-full text-left">
           <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'transform rotate-180' : ''}`} />
-          <h2 className="text-lg font-semibold">Executive Summary</h2>
+          <h2 className="text-lg font-semibold">STEP SIX: Executive Summary Generation</h2>
         </CollapsibleTrigger>
         <CollapsibleContent className="mt-4">
           <div className="space-y-4">
+            <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+              <h4 className="font-medium text-primary mb-2">STEP SIX Process</h4>
+              <p className="text-sm text-muted-foreground">
+                Automated analysis of all report sections to generate comprehensive executive summary with key findings, valuation conclusions, and strategic recommendations.
+              </p>
+            </div>
             <div className="flex items-center justify-between">
               <h3 className="font-medium">Executive Summary</h3>
               <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4" />
-                Auto-Generate Summary
+                STEP SIX Auto-Generate
               </Button>
             </div>
             <Textarea 
-              placeholder="Comprehensive overview of the property valuation, key findings, and investment recommendation..."
-              className="min-h-[120px] resize-none"
+              placeholder="STEP SIX will analyze all completed sections to generate a comprehensive executive summary including key findings, valuation conclusions, risk assessment, and investment recommendations..."
+              className="min-h-[150px] resize-none"
             />
           </div>
         </CollapsibleContent>
