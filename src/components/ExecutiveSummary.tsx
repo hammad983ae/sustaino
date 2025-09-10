@@ -12,8 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, FileText, Sparkles } from "lucide-react";
+import { ChevronDown, FileText, Sparkles, CheckCircle, Zap, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface ExecutiveSummaryProps {
   onNavigateToSection: (sectionIndex: number) => void;
@@ -37,6 +38,7 @@ interface ExecutiveSummaryProps {
 
 const ExecutiveSummary = ({ onNavigateToSection, reportConfiguration, includedSections = [], reportData }: ExecutiveSummaryProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [isEnhancementOpen, setIsEnhancementOpen] = useState(false);
 
   // Generate introduction content based on configuration
   const generateIntroductionContent = () => {
@@ -261,6 +263,105 @@ Valuation prepared in accordance with ANZVGP 101, IVS 2025, incorporating retros
               </div>
             </div>
             <Badge variant="secondary" className="mt-2">Auto-Generated from All {includedSections.length} Report Sections</Badge>
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+
+      {/* STEP SIX AI Enhancement & Completion */}
+      <Collapsible open={isEnhancementOpen} onOpenChange={setIsEnhancementOpen}>
+        <CollapsibleTrigger className="flex items-center gap-2 w-full text-left">
+          <ChevronDown className={`h-4 w-4 transition-transform ${isEnhancementOpen ? "transform rotate-180" : ""}`} />
+          <h2 className="text-lg font-semibold">STEP SIX: AI Enhancement & Report Completion</h2>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="mt-4">
+          <div className="space-y-6">
+            {/* AI Enhancement Features */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900">
+                    <Sparkles className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-100">Enhance with AI</h3>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">Professional content generation</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Generate professional content, market analytics, and sustainability insights instantly using AI-powered analysis.
+                </p>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Enhance Report with AI
+                </Button>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 p-6 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-green-900 dark:text-green-100">Complete Missing Fields</h3>
+                    <p className="text-sm text-green-700 dark:text-green-300">Automated field completion</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Automatically identify and complete any missing required fields across all report sections.
+                </p>
+                <Button variant="outline" className="w-full border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/20">
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Complete Missing Fields
+                </Button>
+              </div>
+            </div>
+
+            {/* Final Actions */}
+            <div className="bg-gradient-to-r from-primary/5 to-secondary/10 border border-primary/20 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Ready to Generate Final Report?</h3>
+                  <p className="text-sm text-muted-foreground">
+                    All sections completed and enhanced. Generate your comprehensive valuation report.
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Zap className="h-4 w-4" />
+                    Preview Report
+                  </Button>
+                  <Link to="/report">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2">
+                      Generate Final Report
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Enhancement Progress */}
+            <div className="bg-muted/50 rounded-lg p-4">
+              <h4 className="font-medium mb-3">Enhancement Progress</h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span>Executive Summary</span>
+                  <Badge variant="secondary">✓ Auto-Generated</Badge>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span>Section Analysis</span>
+                  <Badge variant="secondary">✓ {includedSections.length} Sections</Badge>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span>Configuration</span>
+                  <Badge variant="secondary">✓ Complete</Badge>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span>Market Data</span>
+                  <Badge variant="outline">Mildura Data Locked</Badge>
+                </div>
+              </div>
+            </div>
           </div>
         </CollapsibleContent>
       </Collapsible>
