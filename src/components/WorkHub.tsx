@@ -106,11 +106,7 @@ export default function WorkHub() {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast({
-          title: "Authentication required",
-          description: "Please log in to view your work",
-          variant: "destructive"
-        });
+        setLoading(false);
         return;
       }
 
@@ -272,6 +268,48 @@ export default function WorkHub() {
   const filteredCostaAnalyses = costaAnalyses.filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Check authentication first
+  const [user, setUser] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setAuthLoading(false);
+    };
+    checkAuth();
+  }, []);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <div className="text-center">
+          <Archive className="h-12 w-12 mx-auto mb-4 text-muted-foreground animate-pulse" />
+          <p className="text-muted-foreground">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <div className="text-center">
+          <Archive className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+          <h3 className="text-lg font-medium mb-2">Authentication Required</h3>
+          <p className="text-muted-foreground mb-4">Please log in to view your work</p>
+          <Button onClick={() => navigate('/auth')} className="mb-2">
+            Log In
+          </Button>
+          <p className="text-xs text-muted-foreground">
+            Test account: test@example.com / password123
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
