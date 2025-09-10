@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import MarketCommentaryMildura from "./MarketCommentaryMildura";
 
 const MarketCommentary = () => {
   const [isAutoUpdating, setIsAutoUpdating] = useState(false);
@@ -48,6 +49,8 @@ const MarketCommentary = () => {
 
   return (
     <div className="space-y-6">
+      {/* Mildura Specific Market Commentary - Pre-populated */}
+      <MarketCommentaryMildura />
       {/* Auto Update AI Function */}
       <div className="flex justify-center">
         <Button 

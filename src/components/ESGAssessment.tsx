@@ -31,6 +31,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
 import ESGMethodologyProtection from "./ESGMethodologyProtection";
+import ClimateRiskAssessmentMildura from "./ClimateRiskAssessmentMildura";
 
 const ESGAssessment = () => {
   const [includeSection, setIncludeSection] = useState(true);
@@ -109,6 +110,9 @@ const ESGAssessment = () => {
 
       {includeSection && (
         <div className="space-y-6">
+          {/* Pre-populated Climate Risk Assessment for Mildura */}
+          <ClimateRiskAssessmentMildura />
+          
           {/* IP Protection Notice */}
           <ESGMethodologyProtection />
           

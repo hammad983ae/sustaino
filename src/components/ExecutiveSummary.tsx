@@ -10,6 +10,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, FileText, Sparkles } from "lucide-react";
 import { useState } from "react";
@@ -61,9 +62,11 @@ const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
               </Button>
             </div>
             <Textarea 
-              placeholder="Introduction to the property valuation report, purpose, scope, and methodology overview..."
+              value="This report provides a comprehensive valuation of the property at 320 Deakin Avenue, Mildura, incorporating recent market transactions, sector-specific data, regional economic outlook, and climate change risk assessments. The analysis aims to support an informed understanding of the property's current market value and associated risks."
               className="min-h-[100px] resize-none"
+              readOnly
             />
+            <Badge variant="secondary" className="mt-2">Data Locked</Badge>
           </div>
         </CardContent>
       </Card>
