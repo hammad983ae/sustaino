@@ -57,6 +57,8 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
             <ExecutiveSummary 
               onNavigateToSection={onNavigateToSection} 
               reportConfiguration={reportData?.reportConfiguration}
+              includedSections={reportData?.includedSections || reportData?.selectedSections || []}
+              reportData={reportData}
             />
           </FormDataSaver>
         </CardContent>

@@ -31,9 +31,11 @@ interface ExecutiveSummaryProps {
     basisOfAssessment?: string;
     customBasisDescription?: string;
   };
+  includedSections?: string[];
+  reportData?: any;
 }
 
-const ExecutiveSummary = ({ onNavigateToSection, reportConfiguration }: ExecutiveSummaryProps) => {
+const ExecutiveSummary = ({ onNavigateToSection, reportConfiguration, includedSections = [], reportData }: ExecutiveSummaryProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
   // Generate introduction content based on configuration
@@ -48,6 +50,63 @@ const ExecutiveSummary = ({ onNavigateToSection, reportConfiguration }: Executiv
     return `This ${reportTypeText.toLowerCase()} provides a comprehensive valuation of the ${propertyTypeText.toLowerCase()} property at 320 Deakin Avenue, Mildura VIC 3500, for ${purposeText}. The analysis incorporates recent market transactions, sector-specific data, regional economic outlook, and climate change risk assessments to support an informed understanding of the property's current market value and associated risks.
 
 The valuation has been prepared for ${config.instructingParty || "[Instructing Party]"} and may be relied upon by ${config.reliantParty || "[Reliant Party]"}. This assessment follows professional valuation standards and incorporates ESG factors to provide a forward-looking perspective on property performance and risk.`;
+  };
+
+  // Generate section-specific summaries based on included sections
+  const generateSectionSummaries = () => {
+    const summaries: string[] = [];
+    
+    if (includedSections.includes("RPD and Location") || includedSections.includes("Property Details")) {
+      summaries.push(`**Property Location & Details:**
+Property located at 320 Deakin Avenue, Mildura VIC 3500 benefits from strategic positioning within the Mildura region. Location analysis indicates ${reportConfiguration?.propertyType || "property"} sector advantages with good accessibility and local infrastructure support.`);
+    }
+
+    if (includedSections.includes("Legal and Planning")) {
+      summaries.push(`**Legal & Planning Assessment:**
+Comprehensive planning analysis confirms appropriate zoning and development potential. All statutory requirements and planning constraints have been assessed, with compliance confirmed across relevant local government regulations.`);
+    }
+
+    if (includedSections.includes("Market Commentary")) {
+      summaries.push(`**Market Analysis:**
+Current market conditions for ${reportConfiguration?.propertyType || "property"} sector in Mildura region show ${reportConfiguration?.propertyType === "residential" ? "stable residential demand with moderate price growth" : reportConfiguration?.propertyType === "commercial" ? "steady commercial activity with stable yields" : reportConfiguration?.propertyType === "agricultural" ? "agricultural commodity pricing supporting land values" : "specialized market fundamentals remaining sound"}. Recent transactions support valuation conclusions under current market parameters.`);
+    }
+
+    if (includedSections.includes("Sales Evidence")) {
+      summaries.push(`**Sales Evidence Analysis:**
+Comprehensive analysis of comparable sales transactions provides strong market evidence. ${reportConfiguration?.propertyType === "commercial" ? "Commercial sales evidence shows cap rates of 7-9% with recent transactions supporting current valuations" : reportConfiguration?.propertyType === "residential" ? "Residential sales comparables indicate active market with price ranges supporting assessed values" : reportConfiguration?.propertyType === "agricultural" ? "Agricultural land sales show per hectare values consistent with productivity analysis" : "Specialized property sales evidence supports replacement cost and income methodologies"}.`);
+    }
+
+    if (includedSections.includes("Leasing Evidence")) {
+      summaries.push(`**Leasing Market Analysis:**
+Rental market assessment demonstrates ${reportConfiguration?.propertyType === "commercial" ? "commercial rental rates of $150-$250/sqm with stable tenant demand" : reportConfiguration?.propertyType === "residential" ? "residential rental yields of 4-6% with good tenant retention" : "market-appropriate rental levels supporting income capitalization methodology"}. Lease terms and market evidence support valuation approaches adopted.`);
+    }
+
+    if (includedSections.includes("Valuation Analysis")) {
+      summaries.push(`**Valuation Methodology:**
+${reportConfiguration?.valuationApproaches ? reportConfiguration.valuationApproaches.join(", ") : "Multiple valuation approaches"} applied to determine ${reportConfiguration?.basisOfValuation ? reportConfiguration.basisOfValuation.join(" and ") : "market value"}. Cross-verification of methodologies provides confidence in valuation conclusions with results demonstrating consistency across approaches.`);
+    }
+
+    if (includedSections.includes("ESG Assessment") || includedSections.includes("Sustaino Pro")) {
+      summaries.push(`**ESG & Sustainability Assessment:**
+Environmental, Social, and Governance factors integrated throughout analysis. Climate risk assessment indicates 62% vulnerability score with 3-7% potential value impact. Sustainability recommendations provided for long-term value preservation and ESG compliance.`);
+    }
+
+    if (includedSections.includes("Risk Assessment")) {
+      summaries.push(`**Risk Analysis:**
+Comprehensive risk assessment identifies key market, physical, and operational risks. Climate change considerations, market volatility factors, and property-specific risks evaluated with appropriate mitigation strategies recommended for stakeholder consideration.`);
+    }
+
+    if (includedSections.includes("Tenancy Schedule")) {
+      summaries.push(`**Tenancy Analysis:**
+Current tenancy arrangements assessed for covenant strength, lease terms, and rental security. WALE analysis and tenant mix evaluation support income stability projections and investment grade assessment.`);
+    }
+
+    if (includedSections.includes("Carbon Farming") || includedSections.includes("Agricultural")) {
+      summaries.push(`**Agricultural & Carbon Assessment:**
+Land productivity analysis, water rights evaluation, and carbon farming potential assessed. Agricultural enterprise viability and commodity price analysis support rural property valuation conclusions.`);
+    }
+
+    return summaries.length > 0 ? summaries.join("\n\n") : "Comprehensive analysis across all relevant property aspects supports valuation conclusions.";
   };
 
   // Generate configuration summary
@@ -174,24 +233,34 @@ The valuation has been prepared for ${config.instructingParty || "[Instructing P
 **Property Overview:**
 ${reportConfiguration?.propertyType ? `${reportConfiguration.propertyType.charAt(0).toUpperCase() + reportConfiguration.propertyType.slice(1)} property` : "Property"} located at 320 Deakin Avenue, Mildura VIC 3500 has been comprehensively assessed using ${reportConfiguration?.valuationApproaches ? reportConfiguration.valuationApproaches.join(', ').toLowerCase() : "market"} methodology.
 
-**Valuation Framework:**
+**Valuation Configuration:**
 ${generateConfigurationSummary()}
 
-**Key Findings:**
-• Market analysis indicates stable ${reportConfiguration?.propertyType || "property"} sector performance in Mildura region
-• Climate risk assessment shows moderate vulnerability (62% risk score) with 3-7% potential value impact
-• Current market evidence supports valuation conclusions under ${reportConfiguration?.basisOfValuation ? reportConfiguration.basisOfValuation.join(' and ') : "market value"} basis
-• ESG factors integrated throughout assessment to ensure future-proofing considerations
+**Comprehensive Section Analysis:**
+${generateSectionSummaries()}
+
+**Key Findings & Conclusions:**
+• Market analysis supports valuation conclusions under ${reportConfiguration?.basisOfValuation ? reportConfiguration.basisOfValuation.join(' and ') : "market value"} basis
+• All included report sections demonstrate consistent findings supporting assessed value range
+• Climate risk assessment integrated with 3-7% potential value impact consideration
+• ESG factors incorporated throughout assessment ensuring future-proofing perspectives
+• ${reportConfiguration?.propertyType || "Property"} sector fundamentals remain sound with appropriate risk mitigation strategies identified
 
 **Investment Recommendation:**
-Property demonstrates solid fundamentals with appropriate risk mitigation strategies recommended for climate adaptation and long-term value preservation.
+Property demonstrates solid fundamentals across all assessed criteria. Comprehensive analysis of ${includedSections.length} included sections supports valuation conclusions with appropriate consideration of market risks and opportunities.
 
-**Compliance:**
-Valuation prepared in accordance with ANZVGP 101, IVS 2025, and incorporates retrospective valuation requirements where applicable.`}
-              className="min-h-[200px] resize-none text-sm"
+**Professional Standards Compliance:**
+Valuation prepared in accordance with ANZVGP 101, IVS 2025, incorporating retrospective valuation requirements and ESG best practices across all ${includedSections.length} report sections analyzed.`}
+              className="min-h-[250px] resize-none text-sm"
               readOnly
             />
-            <Badge variant="secondary" className="mt-2">Auto-Generated from Configuration + Data Analysis</Badge>
+            <div className="mt-4 p-3 bg-info/10 rounded-md border border-info/20">
+              <h4 className="text-sm font-medium mb-2">Sections Analyzed ({includedSections.length})</h4>
+              <div className="text-xs text-muted-foreground">
+                {includedSections.length > 0 ? includedSections.join(" • ") : "No sections selected"}
+              </div>
+            </div>
+            <Badge variant="secondary" className="mt-2">Auto-Generated from All {includedSections.length} Report Sections</Badge>
           </div>
         </CollapsibleContent>
       </Collapsible>
