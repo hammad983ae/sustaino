@@ -14,9 +14,6 @@ export default function WhiteLabelHeader({ className = "" }: WhiteLabelHeaderPro
           alt="Delorenzo Property Group"
           className="w-full h-auto max-h-24 object-contain"
         />
-        <p className="text-center text-sm text-muted-foreground mt-2">
-          Professional Property Analysis Platform
-        </p>
       </div>
     </div>
   );
