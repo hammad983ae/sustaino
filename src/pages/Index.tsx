@@ -20,11 +20,11 @@ import { useEffect } from 'react';
 const HomeContent = () => {
   const { clearAddressData, clearPropertyTypeData } = useProperty();
 
-  // Clear address data when component mounts (returning to home)
-  useEffect(() => {
-    clearAddressData();
-    clearPropertyTypeData();
-  }, [clearAddressData, clearPropertyTypeData]);
+  // Clear address data when component mounts (returning to home) - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   clearAddressData();
+  //   clearPropertyTypeData();
+  // }, [clearAddressData, clearPropertyTypeData]);
 
   const handleBasicFormSubmit = (data) => {
     // Navigate to report with ESG assessment
