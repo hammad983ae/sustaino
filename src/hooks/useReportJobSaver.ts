@@ -34,10 +34,22 @@ export const useReportJobSaver = ({
 
   // Save or update report job
   const saveReportJob = useCallback(async (showToast = false) => {
-    if (!enabled || !propertyAddress) return null;
+    console.log('saveReportJob called:', { enabled, propertyAddress, showToast });
+    
+    if (!enabled) {
+      console.log('Saving disabled');
+      return null;
+    }
+    
+    if (!propertyAddress) {
+      console.log('No property address provided');
+      return null;
+    }
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
+      console.log('User check result:', user ? 'authenticated' : 'not authenticated');
+      
       if (!user) {
         if (showToast) {
           toast({
@@ -50,9 +62,11 @@ export const useReportJobSaver = ({
       }
 
       const dataString = JSON.stringify(reportData);
+      console.log('Data check:', { dataLength: dataString.length, hasChanged: dataString !== lastSavedDataRef.current });
       
       // Only save if data has changed
       if (dataString === lastSavedDataRef.current) {
+        console.log('No data changes, skipping save');
         return reportJobIdRef.current;
       }
 

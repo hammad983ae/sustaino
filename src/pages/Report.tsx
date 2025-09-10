@@ -93,19 +93,27 @@ const ReportViewer = () => {
   // Auto-save report data when it changes
   useEffect(() => {
     if (Object.keys(reportData).length > 0) {
+      console.log('Auto-saving report data:', Object.keys(reportData).length, 'sections');
       const timeoutId = setTimeout(() => {
         saveToStorage();
+        // Also try to save to Supabase if we have a property address
+        if (propertyAddress) {
+          console.log('Attempting Supabase save with address:', propertyAddress);
+          saveNow();
+        }
       }, 2000);
       
       return () => clearTimeout(timeoutId);
     }
-  }, [reportData, saveToStorage]);
+  }, [reportData, saveToStorage, propertyAddress, saveNow]);
 
   // Update property address when report data changes
   useEffect(() => {
     const address = reportData.propertyDetails?.address || reportData.address || '';
+    console.log('Property address update:', { address, currentPropertyAddress: propertyAddress });
     if (address && address !== propertyAddress) {
       setPropertyAddress(address);
+      console.log('Property address updated to:', address);
     }
   }, [reportData, propertyAddress]);
 
