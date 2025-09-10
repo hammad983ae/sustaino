@@ -7,12 +7,14 @@ import { Separator } from "@/components/ui/separator";
 import { useProperty } from "@/contexts/PropertyContext";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin, Search } from "lucide-react";
+import { MapPin, Search, CheckCircle2, AlertCircle } from "lucide-react";
 
 const PropertyAddressForm = () => {
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
   const autocompleteRef = useRef<HTMLInputElement>(null);
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
+  const [isLoadingApi, setIsLoadingApi] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<google.maps.places.AutocompletePrediction[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const autocompleteServiceRef = useRef<google.maps.places.AutocompleteService | null>(null);
@@ -22,40 +24,71 @@ const PropertyAddressForm = () => {
   useEffect(() => {
     const initGooglePlaces = async () => {
       try {
+        setIsLoadingApi(true);
+        setApiError(null);
+        
         // Get API key from edge function
+        console.log('Fetching Google Maps API key...');
         const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
+        
         if (error || !apiKeyData?.apiKey) {
           console.error('Failed to get Google Maps API key:', error);
+          setApiError('Failed to load address identifier service');
+          setIsLoadingApi(false);
           return;
         }
 
+        console.log('Google Maps API key retrieved successfully');
+
         // Load Google Maps API if not already loaded
         if (!window.google) {
+          console.log('Loading Google Maps API...');
           const script = document.createElement('script');
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKeyData.apiKey}&libraries=places`;
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKeyData.apiKey}&libraries=places&callback=initMap`;
           script.async = true;
           script.defer = true;
-          script.onload = () => {
+          
+          // Create a global callback for when the API loads
+          (window as any).initMap = () => {
+            console.log('Google Maps API loaded successfully');
             setIsGoogleLoaded(true);
+            setIsLoadingApi(false);
             initServices();
           };
+          
+          script.onerror = () => {
+            console.error('Failed to load Google Maps API');
+            setApiError('Failed to load address identifier service');
+            setIsLoadingApi(false);
+          };
+          
           document.head.appendChild(script);
         } else {
+          console.log('Google Maps API already loaded');
           setIsGoogleLoaded(true);
+          setIsLoadingApi(false);
           initServices();
         }
       } catch (error) {
         console.error('Error initializing Google Places:', error);
+        setApiError('Failed to initialize address identifier');
+        setIsLoadingApi(false);
       }
     };
 
     const initServices = () => {
       if (window.google && window.google.maps && window.google.maps.places) {
+        console.log('Initializing Google Places services...');
         autocompleteServiceRef.current = new window.google.maps.places.AutocompleteService();
         
         // Create a dummy map for PlacesService (required)
         const map = new window.google.maps.Map(document.createElement('div'));
         placesServiceRef.current = new window.google.maps.places.PlacesService(map);
+        
+        console.log('Google Places services initialized successfully');
+      } else {
+        console.error('Google Maps API not available');
+        setApiError('Google Maps services not available');
       }
     };
 
@@ -150,22 +183,34 @@ const PropertyAddressForm = () => {
             <Label htmlFor="property-address" className="text-sm font-medium flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
               Property Address
-              {isGoogleLoaded && (
-                <span className="text-xs text-success bg-success/10 px-2 py-1 rounded">
+              {isLoadingApi ? (
+                <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded flex items-center gap-1">
+                  <div className="h-3 w-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  Loading Address Identifier...
+                </span>
+              ) : isGoogleLoaded ? (
+                <span className="text-xs text-success bg-success/10 px-2 py-1 rounded flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" />
                   Address Identifier Active
                 </span>
-              )}
+              ) : apiError ? (
+                <span className="text-xs text-destructive bg-destructive/10 px-2 py-1 rounded flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3" />
+                  Address Identifier Error
+                </span>
+              ) : null}
             </Label>
             <div className="relative">
               <Input 
                 ref={autocompleteRef}
                 id="property-address"
-                placeholder="Start typing an Australian address..."
+                placeholder={isGoogleLoaded ? "Start typing an Australian address..." : isLoadingApi ? "Loading address identifier..." : "Enter property address manually"}
                 className="mt-1 pr-10"
                 value={addressData.propertyAddress}
                 onChange={(e) => handleAddressSearch(e.target.value)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 onFocus={() => addressData.propertyAddress && suggestions.length > 0 && setShowSuggestions(true)}
+                disabled={isLoadingApi}
               />
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
