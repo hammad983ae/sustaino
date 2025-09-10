@@ -58,13 +58,20 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
               Sustaino Pro Valuation Platform
             </h1>
           </div>
-          <Link to="/index" className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary/80 rounded-lg border border-primary/20 transition-colors font-medium">
-            <Home className="h-5 w-5" />
-            Powered
-          </Link>
-          <p className="text-xl text-muted-foreground mb-2">
+          <p className="text-xl text-muted-foreground mb-6">
             Automated Property Valuations with ESG Intelligence
           </p>
+          
+          {/* Powered Link - styled to match the section icons */}
+          <div className="flex justify-center mb-6">
+            <Link to="/index" className="flex items-center space-x-3 p-4 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow border border-border/50">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Home className="h-6 w-6 text-primary" />
+              </div>
+              <span className="text-lg font-medium text-foreground">Powered</span>
+            </Link>
+          </div>
+          
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
             Select your property type to begin an automated valuation powered by AI market analysis, 
             comparable sales data, and comprehensive ESG assessment.
