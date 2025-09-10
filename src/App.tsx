@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
@@ -11,8 +12,6 @@ import PropertyValuations from "./pages/PropertyValuations";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import AuthPage from "./pages/Auth";
-import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
-import AIAnimationStudio from "./components/AIAnimationStudio";
 import EnhancedESGStrategy from "./pages/EnhancedESGStrategy";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
@@ -28,15 +27,15 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<AutomatedValuation />} />
+              <Route path="/" element={<Dashboard />} />
               <Route path="/index" element={<Index />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/report" element={<Report />} />
               <Route path="/property-valuations" element={<PropertyValuations />} />
               <Route path="/work-hub" element={<WorkHubPage />} />
               <Route path="/white-label" element={<WhiteLabelConfig />} />
               <Route path="/auth" element={<AuthPage />} />
-              <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
-              <Route path="/ai-animation" element={<AIAnimationStudio />} />
+              <Route path="/comprehensive-valuation" element={<PropertyValuations />} />
               <Route path="/esg-strategy" element={<EnhancedESGStrategy />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

@@ -170,7 +170,13 @@ const Index = () => {
                   </div>
                   <Button 
                     className="w-full bg-success hover:bg-success/90 text-white"
-                    onClick={() => setCurrentStep('propertyAddress')}
+                    onClick={() => {
+                      if (!user) {
+                        navigate('/auth');
+                        return;
+                      }
+                      navigate('/esg-strategy');
+                    }}
                   >
                     Start ESG Assessment
                   </Button>
@@ -212,7 +218,13 @@ const Index = () => {
                   </div>
                   <Button 
                     className="w-full bg-success hover:bg-success/90 text-white"
-                    onClick={() => setCurrentStep('propertyAddress')}
+                    onClick={() => {
+                      if (!user) {
+                        navigate('/auth');
+                        return;
+                      }
+                      navigate('/comprehensive-valuation');
+                    }}
                   >
                     Start Portfolio Valuation
                   </Button>
@@ -254,7 +266,13 @@ const Index = () => {
                   </div>
                   <Button 
                     className="w-full bg-success hover:bg-success/90 text-white"
-                    onClick={() => setCurrentStep('propertyAddress')}
+                    onClick={() => {
+                      if (!user) {
+                        navigate('/auth');
+                        return;
+                      }
+                      navigate('/work-hub');
+                    }}
                   >
                     Start ESG Portfolio Analysis
                   </Button>
