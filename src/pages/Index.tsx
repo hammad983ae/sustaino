@@ -14,6 +14,7 @@ import {
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
+import { PDFUploadAnalysis } from '@/components/PDFUploadAnalysis';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -118,6 +119,11 @@ const Index = () => {
                   </div>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* PDF Upload & Analysis Section */}
+            <div className="max-w-4xl mx-auto">
+              <PDFUploadAnalysis />
             </div>
 
             {/* Footer - IP Protection */}

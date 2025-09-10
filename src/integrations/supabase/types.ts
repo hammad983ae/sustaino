@@ -738,6 +738,51 @@ export type Database = {
         }
         Relationships: []
       }
+      pdf_uploads: {
+        Row: {
+          analysis_result: Json | null
+          analysis_status: string
+          consent_given: boolean
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number
+          id: string
+          implemented: boolean
+          mime_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          analysis_result?: Json | null
+          analysis_status?: string
+          consent_given?: boolean
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size: number
+          id?: string
+          implemented?: boolean
+          mime_type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          analysis_result?: Json | null
+          analysis_status?: string
+          consent_given?: boolean
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          id?: string
+          implemented?: boolean
+          mime_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
