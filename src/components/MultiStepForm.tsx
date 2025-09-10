@@ -7,13 +7,17 @@ import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
+import ReportSectionManager from "@/components/ReportSectionManager";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
+  onContinueToReport?: () => void;
 }
 
-const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
+const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [reportData, setReportData] = useState<any>({});
+  const [selectedSections, setSelectedSections] = useState<string[]>([]);
 
   const steps = [
     {
@@ -35,6 +39,16 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
     {
       title: "Document Upload",
       component: <DocumentPhotoUpload />
+    },
+    {
+      title: "Report Sections",
+      component: <ReportSectionManager 
+        reportType={reportData.reportType || "long-form"}
+        propertyType={reportData.propertyType || "residential"}
+        reportData={reportData}
+        onSectionsChange={setSelectedSections}
+        onContinueToReport={() => onContinueToReport?.()}
+      />
     }
   ];
 
@@ -104,14 +118,24 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
             ))}
           </div>
 
-          <Button
-            onClick={nextStep}
-            disabled={currentStep === steps.length - 1}
-            className="flex items-center gap-2"
-          >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+          {currentStep === steps.length - 1 ? (
+            <Button
+              onClick={() => onContinueToReport?.()}
+              className="flex items-center gap-2"
+            >
+              <span className="hidden sm:inline">Continue to Report</span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              onClick={nextStep}
+              disabled={currentStep === steps.length - 1}
+              className="flex items-center gap-2"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       </div>
     </div>

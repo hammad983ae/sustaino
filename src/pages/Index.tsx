@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,9 +16,16 @@ import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   const handleBasicFormSubmit = (data) => {
     // Navigate to report with ESG assessment
-    window.location.href = '/report';
+    navigate('/report');
+  };
+
+  const handleContinueToReport = () => {
+    // Navigate to report page after completing all steps
+    navigate('/report');
   };
 
   return (
@@ -91,7 +98,10 @@ const Index = () => {
                   {/* Assessment Form */}
                   <div className="space-y-6">
                     <div className="p-6 bg-gradient-to-r from-primary/5 to-transparent rounded-lg border border-primary/10">
-                      <MultiStepForm onSubmit={handleBasicFormSubmit} />
+                      <MultiStepForm 
+                        onSubmit={handleBasicFormSubmit} 
+                        onContinueToReport={handleContinueToReport}
+                      />
                     </div>
                     
                     <div className="text-center">
