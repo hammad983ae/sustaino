@@ -5,6 +5,8 @@ export interface ReportSectionConfig {
   component?: string;
   automated?: boolean;
   description?: string;
+  required?: boolean;
+  propertyTypes?: string[];
 }
 
 export const getPropertyTypeReportSections = (propertyType: string): ReportSectionConfig[] => {
@@ -84,28 +86,29 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
 
     default:
       return [
-        { title: "Executive Summary and Contents" },
-        { title: "RPD and Location" },
-        { title: "Legal and Planning" },
-        { title: "Tenancy Schedule/Lease Details" },
-        { title: "Statutory Assessment" },
-        { title: "Market Commentary" },
-        { title: "Property Details" },
-        { title: "Plant and Equipment" },
-        { title: "Rent Determination" },
-        { title: "ESG Assessment and Audit" },
-        { title: "Essential Repairs" },
-        { title: "Risk Assessment & Market Indicators" },
-        { title: "Previous Sales History and Current Sale" },
-        { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural" },
-        { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },
-        { title: "Valuation Analysis and Rationale" },
-        { title: "Marketability and Mortgage Security" },
-        { title: "Sustaino Pro Additional Analysis and Features" },
-        { title: "Valuation Certificate" },
-        { title: "Qualifications, Disclaimers, Terms and Conditions" },
-        { title: "Annexures" },
-        { title: "Security and Certificates" }
+        { title: "Executive Summary and Contents", required: true, automated: true },
+        { title: "RPD and Location", required: true, automated: true },
+        { title: "Legal and Planning", required: true, automated: true },
+        { title: "Tenancy Schedule/Lease Details", required: false, automated: false },
+        { title: "Statutory Assessment", required: true, automated: true },
+        { title: "Market Commentary", required: true, automated: true },
+        { title: "Property Details", required: true, automated: true },
+        { title: "Plant and Equipment", required: false, automated: false },
+        { title: "Rent Determination", required: false, automated: false },
+        { title: "ESG Assessment and Audit", required: true, automated: true },
+        { title: "Essential Repairs", required: false, automated: false },
+        { title: "Risk Assessment & Market Indicators", required: true, automated: true },
+        { title: "Previous Sales History and Current Sale", required: true, automated: true },
+        { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural", required: true, automated: true },
+        { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural", required: true, automated: true },
+        { title: "Valuation Analysis and Rationale", required: true, automated: true },
+        { title: "Marketability and Mortgage Security", required: true, automated: true },
+        { title: "Sustaino Pro Additional Analysis and Features", required: false, automated: true },
+        { title: "Valuation Certificate", required: true, automated: true },
+        { title: "Additional Comments & Strategic Recommendations", required: false, automated: false },
+        { title: "Qualifications, Disclaimers, Terms and Conditions", required: true, automated: true },
+        { title: "Annexures", required: false, automated: false },
+        { title: "Security and Certificates", required: true, automated: true }
       ];
   }
 };

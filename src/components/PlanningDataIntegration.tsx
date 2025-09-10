@@ -49,18 +49,47 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
     setSearchStep(2);
     
     try {
-      // First try to get data from property analysis service
-      const { data: analysisData, error } = await supabase.functions.invoke('property-data-analysis', {
+      // Use VicPlan integration service for Victorian properties
+      const { data: vicPlanData, error: vicPlanError } = await supabase.functions.invoke('vicplan-integration', {
         body: { 
           address: searchAddress,
-          state: selectedState.toUpperCase()
+          propertyType: 'commercial', // Default property type
+          analysisType: 'comprehensive'
+        }
+      });
+
+      // Also get enhanced property analysis
+      const { data: analysisData, error } = await supabase.functions.invoke('enhanced-property-analysis', {
+        body: { 
+          address: searchAddress,
+          propertyType: 'commercial',
+          jobNumber: `10001-${Date.now()}`
         }
       });
 
       let planningDataToUse;
 
-      if (analysisData && analysisData.success && analysisData.data.planningData) {
-        // Use real data from property analysis
+      if (vicPlanData && !vicPlanError) {
+        // Use VicPlan data
+        planningDataToUse = {
+          zoning: vicPlanData.zoning?.zone || 'Unknown',
+          overlays: vicPlanData.overlays?.map(o => o.type) || [],
+          lga: vicPlanData.planningData?.municipalityName || 'Unknown Council',
+          heightRestriction: vicPlanData.developmentPotential?.maxHeight || 'Not specified',
+          floorSpaceRatio: vicPlanData.developmentPotential?.plotRatio || 'Not applicable',
+          minimumLotSize: 'As per zoning requirements',
+          landUse: vicPlanData.zoning?.permittedUses?.slice(0, 5).join(', ') || 'As per zoning',
+          developmentPotential: vicPlanData.zoning?.description || 'See zoning description',
+          planningScheme: vicPlanData.planningData?.planningScheme || 'Victorian Planning Scheme',
+          planningRestrictions: vicPlanData.zoning?.restrictions?.join('; ') || 'See zoning requirements',
+          permitRequired: vicPlanData.overlays?.length > 0 ? 'Yes - overlays apply' : 'Check planning requirements',
+          mapReference: "VicPlan Integration",
+          lastUpdated: vicPlanData.planningData?.lastUpdated || new Date().toLocaleDateString(),
+          constraints: vicPlanData.constraints || []
+        };
+        console.log('Using VicPlan data:', planningDataToUse);
+      } else if (analysisData && analysisData.success && analysisData.data.planningData) {
+        // Use enhanced property analysis as fallback
         const propertyPlanningData = analysisData.data.planningData;
         const lotPlanData = analysisData.data.lotPlan;
         
@@ -87,17 +116,16 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
           planningScheme: propertyPlanningData.planningScheme,
           planningRestrictions: propertyPlanningData.planningRestrictions,
           permitRequired: propertyPlanningData.permitRequired,
-          mapReference: "property-analysis-service",
+          mapReference: "Enhanced Property Analysis",
           lastUpdated: new Date().toLocaleDateString()
         };
-        console.log('Using property analysis data:', planningDataToUse);
+        console.log('Using enhanced property analysis data:', planningDataToUse);
         console.log('Updated lot/plan data:', lotPlanData);
       } else {
-        // Property analysis failed - do not use mock data for legal reasons
-        console.error('Property analysis failed, no data available:', error);
-        
+        // Both services failed
+        console.error('Planning data services failed:', { vicPlanError, error });
         setPlanningData(null);
-        console.warn('Unable to retrieve property data. Please verify the address and try again.');
+        console.warn('Unable to retrieve planning data. Please verify the address and try again.');
         return;
       }
       
@@ -275,16 +303,36 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
                   </div>
                 </div>
                 
-                <div className="mt-4">
-                  <label className="text-xs font-medium text-emerald-700">Overlays</label>
-                  <div className="flex gap-2 mt-1">
-                    {planningData.overlays.map((overlay, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {overlay}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+                 <div className="mt-4">
+                   <label className="text-xs font-medium text-emerald-700">Overlays</label>
+                   <div className="flex gap-2 mt-1">
+                     {Array.isArray(planningData.overlays) && planningData.overlays.length > 0 ? (
+                       planningData.overlays.map((overlay, index) => (
+                         <Badge key={index} variant="secondary" className="text-xs">
+                           {overlay}
+                         </Badge>
+                       ))
+                     ) : (
+                       <span className="text-xs text-muted-foreground">No overlays detected</span>
+                     )}
+                   </div>
+                 </div>
+                 
+                 {planningData.constraints && planningData.constraints.length > 0 && (
+                   <div className="mt-4">
+                     <label className="text-xs font-medium text-emerald-700">Planning Constraints</label>
+                     <div className="flex gap-2 mt-1 flex-wrap">
+                       {planningData.constraints.map((constraint, index) => (
+                         <Badge key={index} variant={
+                           constraint.severity === 'high' ? 'destructive' : 
+                           constraint.severity === 'medium' ? 'default' : 'secondary'
+                         } className="text-xs">
+                           {constraint.type}: {constraint.severity}
+                         </Badge>
+                       ))}
+                     </div>
+                   </div>
+                 )}
                 
                 <div className="mt-4 pt-3 border-t border-emerald-200">
                   <p className="text-xs text-emerald-600">

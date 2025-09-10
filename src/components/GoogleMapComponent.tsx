@@ -148,12 +148,11 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         setError(null);
         isInitializedRef.current = true;
 
-        // Get API key
+        // Get API key from edge function
         const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
         if (error) {
-          console.warn('API key error:', error);
-          // Use a fallback or continue without API key for development
-          throw new Error('Google Maps API key not available');
+          console.error('API key error:', error);
+          throw new Error('Google Maps API key not available. Please configure the GOOGLE_MAPS_API_KEY secret.');
         }
         
         if (!apiKeyData?.apiKey) {

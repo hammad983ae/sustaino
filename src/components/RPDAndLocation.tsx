@@ -14,25 +14,42 @@ import { useProperty } from "@/contexts/PropertyContext";
 
 const RPDAndLocation = () => {
   const { addressData } = useProperty();
-  const { analysisData, isGenerating, generateLocationAnalysis, updateAnalysisField } = usePropertyLocationData();
+  const { 
+    analysisData, 
+    isGenerating, 
+    generateLocationAnalysis, 
+    updateAnalysisField 
+  } = usePropertyLocationData();
+
+  const handleGenerateAnalysis = async () => {
+    await generateLocationAnalysis();
+  };
   
   return (
     <div className="space-y-6">
       {/* Auto Generate Button */}
-      <div className="flex justify-center gap-3">
-        <Button 
-          onClick={generateLocationAnalysis}
-          disabled={isGenerating || !addressData?.propertyAddress}
-          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white"
-        >
-          {isGenerating ? (
-            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-          ) : (
-            <Sparkles className="h-4 w-4 mr-2" />
-          )}
-          {isGenerating ? 'Generating...' : 'Auto-Generate Location Data'}
-        </Button>
-      </div>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-primary" />
+              <CardTitle>Property Location Data Generation</CardTitle>
+            </div>
+            <Button 
+              onClick={handleGenerateAnalysis}
+              disabled={isGenerating}
+              className="flex items-center gap-2"
+            >
+              {isGenerating ? (
+                <RefreshCw className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              Auto-Generate Location Data
+            </Button>
+          </div>
+        </CardHeader>
+      </Card>
 
       {/* 1. Street Address and RPD */}
       <Card>
@@ -150,7 +167,7 @@ const RPDAndLocation = () => {
               </div>
               <Textarea 
                 placeholder={section.placeholder}
-                value={analysisData[section.field]}
+                value={analysisData[section.field] || ''}
                 onChange={(e) => updateAnalysisField(section.field, e.target.value)}
                 className="h-24"
               />

@@ -48,15 +48,15 @@ const ReportSectionManager = ({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [reportSections, setReportSections] = useState<ReportSectionConfig[]>([]);
 
-  // Initialize sections based on property type
+  // Initialize sections based on property type  
   useEffect(() => {
     const sections = getPropertyTypeReportSections(propertyType);
     setReportSections(sections);
     
-    // Include all sections by default
-    const sectionTitles = sections.map(section => section.title);
-    setIncludedSections(sectionTitles);
-    onSectionsChange(sectionTitles);
+    // Include all required sections by default
+    const requiredSections = sections.filter(s => s.required !== false).map(s => s.title);
+    setIncludedSections(requiredSections);
+    onSectionsChange(requiredSections);
   }, [propertyType, onSectionsChange]);
 
   const toggleSection = (sectionTitle: string) => {
