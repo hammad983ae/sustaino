@@ -84,6 +84,37 @@ export default function AuthPage() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!loginEmail.trim()) {
+      setError('Please enter your email address first.');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(loginEmail, {
+        redirectTo: `${window.location.origin}/auth?reset=true`,
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      toast({
+        title: "Password reset email sent",
+        description: "Check your email for a password reset link.",
+      });
+    } catch (error) {
+      console.error('Password reset error:', error);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -251,6 +282,18 @@ export default function AuthPage() {
                           )}
                         </Button>
                       </div>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
+                        onClick={handleForgotPassword}
+                        className="text-sm text-muted-foreground hover:text-foreground p-0"
+                      >
+                        Forgot Password?
+                      </Button>
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isLoading}>
