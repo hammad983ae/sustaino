@@ -67,132 +67,202 @@ const Index = () => {
       <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
         <div className="container mx-auto px-4 py-8">
           <div className="space-y-12">
-            {/* Header */}
-            <div className="text-center space-y-6">
-              {/* Navigation Bar */}
-              <div className="flex justify-between items-center mb-8">
-                <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
-                  ← Back to Dashboard
-                </Link>
-                {user ? (
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <User className="h-4 w-4" />
-                      <span>{user.email}</span>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={handleSignOut}
-                      className="flex items-center gap-2"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Sign Out
-                    </Button>
-                  </div>
-                ) : (
-                  <Link 
-                    to="/auth" 
-                    className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-                  >
-                    Sign In / Sign Up
-                  </Link>
-                )}
-              </div>
+            {/* Progress Bar */}
+            <div className="w-full bg-muted rounded-full h-2 mb-6">
+              <div className="bg-success h-2 rounded-full" style={{ width: '33%' }}></div>
+            </div>
+            <div className="text-sm text-muted-foreground mb-6">33% Complete</div>
 
-              <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full border border-primary/20 backdrop-blur-sm">
-                <Zap className="h-5 w-5 text-primary mr-2 animate-pulse" />
-                <span className="text-primary font-semibold">World's First AI-Powered ESG Property Platform</span>
-              </div>
-              
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="relative">
-                  <Zap className="h-16 w-16 text-primary animate-pulse" />
-                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+            {/* Navigation */}
+            <div className="flex justify-between items-center mb-8">
+              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
+                <Building className="h-4 w-4" />
+                Back to Original Platform
+              </Link>
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <User className="h-4 w-4" />
+                    <span>{user.email}</span>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </Button>
                 </div>
-                <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Powered
-                </h1>
-              </div>
-              
-              <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-                Revolutionary AI-driven ESG property assessment platform delivering instant 
-                valuations with comprehensive environmental, social, and governance analytics. 
-                The future of property evaluation, powered by lightning-fast intelligence.
-              </p>
-              
-              {/* Quick Access to Completed Report */}
-              <div className="mb-8">
-                <Button 
-                  onClick={() => window.location.href = '/?mildura=true'}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-lg mb-2"
+              ) : (
+                <Link 
+                  to="/auth" 
+                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
                 >
-                  📋 View Completed Report: 320 Deakin Avenue, Mildura
-                </Button>
-                <p className="text-sm text-muted-foreground">
-                  See the fully completed property valuation report with photos
-                </p>
-              </div>
+                  Sign In / Sign Up
+                </Link>
+              )}
             </div>
 
-            {/* Main CTA Card */}
-            <div className="max-w-2xl mx-auto">
-              <Card className="relative overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-card via-primary/5 to-card shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10"></div>
-                <CardHeader className="relative text-center space-y-4 pb-8">
-                  <div className="flex items-center justify-center gap-3">
-                    <div className="p-3 bg-primary/20 rounded-xl">
-                      <BarChart3 className="h-8 w-8 text-primary" />
+            {/* Header */}
+            <div className="text-center space-y-4 mb-12">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Zap className="h-8 w-8 text-success" />
+                <h1 className="text-4xl font-bold text-success">
+                  Sustaino Pro Valuation Platform
+                </h1>
+              </div>
+              <p className="text-xl text-muted-foreground">
+                Automated Property Valuations with ESG Intelligence
+              </p>
+              <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+                Select your property type to begin an automated valuation powered by AI market analysis, comparable sales 
+                data, and comprehensive ESG assessment.
+              </p>
+            </div>
+
+            {/* Assessment Cards */}
+            <div className="max-w-4xl mx-auto space-y-6">
+              {/* ESG Assessment */}
+              <Card className="border border-border bg-card">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <Zap className="h-6 w-6 text-success" />
+                    <div>
+                      <CardTitle className="text-xl font-semibold">ESG Assessment</CardTitle>
+                      <p className="text-sm text-muted-foreground">Environmental, social, and governance analysis</p>
                     </div>
-                    <CardTitle className="text-3xl font-bold">
-                      Power Your Valuation and ESG Assessment
-                    </CardTitle>
                   </div>
-                  <p className="text-muted-foreground text-lg">
-                    Complete comprehensive property evaluation in minutes with our AI-powered assessment engine
-                  </p>
                 </CardHeader>
-                
-                <CardContent className="relative space-y-8">
-                  {/* Feature Highlights */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-success/10 rounded-lg border border-success/20">
-                      <Calculator className="h-6 w-6 text-success mx-auto mb-2" />
-                      <p className="font-semibold text-success">Smart Scoring</p>
-                      <p className="text-xs text-muted-foreground">AI-driven ESG analysis</p>
-                    </div>
-                    <div className="text-center p-4 bg-info/10 rounded-lg border border-info/20">
-                      <Shield className="h-6 w-6 text-info mx-auto mb-2" />
-                      <p className="font-semibold text-info">Risk Analysis</p>
-                      <p className="text-xs text-muted-foreground">Comprehensive risk evaluation</p>
-                    </div>
-                    <div className="text-center p-4 bg-warning/10 rounded-lg border border-warning/20">
-                      <Building className="h-6 w-6 text-warning mx-auto mb-2" />
-                      <p className="font-semibold text-warning">Professional Reports</p>
-                      <p className="text-xs text-muted-foreground">Export-ready documentation</p>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="font-medium mb-2">ESG Intelligence Includes:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        ESG scoring & sustainability metrics
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Carbon footprint analysis
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Climate risk assessment
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Value premium identification
+                      </li>
+                    </ul>
+                  </div>
+                  <Button 
+                    className="w-full bg-success hover:bg-success/90 text-white"
+                    onClick={handleBasicFormSubmit}
+                  >
+                    Start ESG Assessment
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Portfolio Valuations */}
+              <Card className="border border-border bg-card">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <BarChart3 className="h-6 w-6 text-success" />
+                    <div>
+                      <CardTitle className="text-xl font-semibold">Portfolio Valuations</CardTitle>
+                      <p className="text-sm text-muted-foreground">Comprehensive portfolio assessment and valuation</p>
                     </div>
                   </div>
-                  
-                  {/* Assessment Form */}
-                  <div className="space-y-6">
-                    <div className="p-6 bg-gradient-to-r from-primary/5 to-transparent rounded-lg border border-primary/10">
-                      <MultiStepForm 
-                        onSubmit={handleBasicFormSubmit} 
-                        onContinueToReport={handleContinueToReport}
-                      />
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="font-medium mb-2">Automated Analysis Includes:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Portfolio aggregation
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Risk assessment
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Market analysis
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Performance metrics
+                      </li>
+                    </ul>
+                  </div>
+                  <Button 
+                    className="w-full bg-success hover:bg-success/90 text-white"
+                    onClick={() => navigate('/report')}
+                  >
+                    Start Portfolio Valuation
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* ESG Portfolio */}
+              <Card className="border border-border bg-card">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <Shield className="h-6 w-6 text-success" />
+                    <div>
+                      <CardTitle className="text-xl font-semibold">ESG Portfolio</CardTitle>
+                      <p className="text-sm text-muted-foreground">Environmental, social, and governance portfolio analysis</p>
                     </div>
-                    
-                    <div className="text-center">
-                      <Button 
-                        size="lg" 
-                        className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                        onClick={handleBasicFormSubmit}
-                      >
-                        <Zap className="mr-2 h-5 w-5" />
-                        Launch Assessment
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Button>
-                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="font-medium mb-2">Automated Analysis Includes:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        ESG portfolio scoring
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Sustainability benchmarking
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        Climate resilience assessment
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        ESG risk identification
+                      </li>
+                    </ul>
+                  </div>
+                  <Button 
+                    className="w-full bg-success hover:bg-success/90 text-white"
+                    onClick={() => navigate('/enhanced-esg-strategy')}
+                  >
+                    Start ESG Portfolio Analysis
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Quick Access to Completed Report */}
+              <Card className="border border-success/20 bg-success/5">
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <Button 
+                      onClick={() => window.location.href = '/?mildura=true'}
+                      className="bg-success hover:bg-success/90 text-white px-6 py-3 text-lg mb-2"
+                    >
+                      📋 View Completed Report: 320 Deakin Avenue, Mildura
+                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      See the fully completed property valuation report with photos
+                    </p>
                   </div>
                 </CardContent>
               </Card>
