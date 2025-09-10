@@ -118,11 +118,8 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const newData = { ...addressData, ...data };
     setAddressData(newData);
     
-    // Create job immediately when address is complete
-    const formattedAddress = getFormattedAddressFromData(newData);
-    if (formattedAddress && !currentJob) {
-      createJobForAddress(formattedAddress);
-    }
+    // Note: Job creation is now handled manually via the "Generate Address & Create Job" button
+    // This prevents interference with form input while typing
   };
 
   const updatePropertyTypeData = (data: Partial<PropertyTypeData>) => {
