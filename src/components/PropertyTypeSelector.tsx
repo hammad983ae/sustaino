@@ -52,19 +52,16 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-between mb-4">
-            <Link to="/index" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
-              <Home className="h-4 w-4" />
-              Back to Original Platform
-            </Link>
-            <div className="flex items-center justify-center">
-              <Leaf className="h-8 w-8 text-primary mr-3" />
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Sustaino Pro Valuation Platform
-              </h1>
-            </div>
-            <div></div>
+          <div className="flex items-center justify-center mb-4">
+            <Leaf className="h-8 w-8 text-primary mr-3" />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              Sustaino Pro Valuation Platform
+            </h1>
           </div>
+          <Link to="/index" className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-center gap-2 mt-2">
+            <Home className="h-4 w-4" />
+            Powered
+          </Link>
           <p className="text-xl text-muted-foreground mb-2">
             Automated Property Valuations with ESG Intelligence
           </p>
