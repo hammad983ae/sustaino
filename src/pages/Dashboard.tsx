@@ -51,15 +51,6 @@ const Dashboard = () => {
   };
 
   const handleNavigate = (path: string) => {
-    if (!user) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to access this feature.",
-        variant: "destructive"
-      });
-      navigate('/auth');
-      return;
-    }
     navigate(path);
   };
 
