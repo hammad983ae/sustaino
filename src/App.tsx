@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Report from "./pages/Report";
 import PropertyValuation from "./pages/PropertyValuation";
+import WorkHub from "./pages/WorkHub";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/Auth";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
@@ -28,7 +29,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/report" element={<Report />} />
             <Route path="/property-valuations" element={<PropertyValuation />} />
-            <Route path="/work-hub" element={<Dashboard />} />
+            <Route path="/work-hub" element={<WorkHub />} />
             <Route path="/white-label" element={<WhiteLabelConfig />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/comprehensive-valuation" element={<Dashboard />} />

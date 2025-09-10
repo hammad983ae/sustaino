@@ -56,15 +56,6 @@ const WhiteLabelConfig = () => {
   }, []);
 
   const handleSave = async () => {
-    if (!user) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to save configuration.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setSaving(true);
     try {
       // Save configuration to local storage for now
@@ -109,26 +100,6 @@ const WhiteLabelConfig = () => {
     });
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
-            <CardTitle>Authentication Required</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center">
-            <p className="text-muted-foreground mb-4">
-              Please sign in to access white label configuration.
-            </p>
-            <Button onClick={() => window.location.href = '/auth'}>
-              Sign In
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
