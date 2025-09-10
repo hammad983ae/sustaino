@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Report from "./pages/Report";
+import PropertyValuation from "./pages/PropertyValuation";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/Auth";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
@@ -26,7 +27,7 @@ const App = () => (
             <Route path="/index" element={<Index />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/report" element={<Report />} />
-            <Route path="/property-valuations" element={<Dashboard />} />
+            <Route path="/property-valuations" element={<PropertyValuation />} />
             <Route path="/work-hub" element={<Dashboard />} />
             <Route path="/white-label" element={<WhiteLabelConfig />} />
             <Route path="/auth" element={<AuthPage />} />
