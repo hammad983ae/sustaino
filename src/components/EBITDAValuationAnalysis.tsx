@@ -23,13 +23,23 @@ const EBITDAValuationAnalysis = () => {
   const [amortization, setAmortization] = useState(10000);
   const [interest, setInterest] = useState(0);
   const [capRate, setCapRate] = useState(7.5);
+  
+  // Adjustment items for Adjusted EBITDA
+  const [oneTimeCharges, setOneTimeCharges] = useState(0);
+  const [restructuringCosts, setRestructuringCosts] = useState(0);
+  const [legalSettlements, setLegalSettlements] = useState(0);
+  const [nonCashExpenses, setNonCashExpenses] = useState(0);
+  const [otherAdjustments, setOtherAdjustments] = useState(0);
 
   // Calculations
   const ebitda = revenue - operatingExpenses;
+  const totalAdjustments = oneTimeCharges + restructuringCosts + legalSettlements + nonCashExpenses + otherAdjustments;
+  const adjustedEbitda = ebitda + totalAdjustments;
   const ebit = ebitda - depreciation - amortization;
   const netOperatingIncome = revenue - operatingExpenses;
   const estimatedValue = netOperatingIncome / (capRate / 100);
   const ebitdaMargin = (ebitda / revenue) * 100;
+  const adjustedEbitdaMargin = (adjustedEbitda / revenue) * 100;
   const ebitMargin = (ebit / revenue) * 100;
 
   if (!includeSection) {
@@ -150,6 +160,70 @@ const EBITDAValuationAnalysis = () => {
         </CardContent>
       </Card>
 
+      {/* Adjustment Items for Adjusted EBITDA */}
+      <Card>
+        <CardHeader>
+          <CardTitle>EBITDA Adjustments</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Add back or subtract non-recurring, extraordinary, or non-operational items
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="one-time-charges">One-time Charges/Gains ($)</Label>
+              <Input
+                id="one-time-charges"
+                type="number"
+                value={oneTimeCharges}
+                onChange={(e) => setOneTimeCharges(Number(e.target.value))}
+                placeholder="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="restructuring">Restructuring Costs ($)</Label>
+              <Input
+                id="restructuring"
+                type="number"
+                value={restructuringCosts}
+                onChange={(e) => setRestructuringCosts(Number(e.target.value))}
+                placeholder="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="legal-settlements">Legal Settlements ($)</Label>
+              <Input
+                id="legal-settlements"
+                type="number"
+                value={legalSettlements}
+                onChange={(e) => setLegalSettlements(Number(e.target.value))}
+                placeholder="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="non-cash">Non-cash Expenses ($)</Label>
+              <Input
+                id="non-cash"
+                type="number"
+                value={nonCashExpenses}
+                onChange={(e) => setNonCashExpenses(Number(e.target.value))}
+                placeholder="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="other-adjustments">Other Adjustments ($)</Label>
+              <Input
+                id="other-adjustments"
+                type="number"
+                value={otherAdjustments}
+                onChange={(e) => setOtherAdjustments(Number(e.target.value))}
+                placeholder="0"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* EBITDA Calculation */}
       <Card>
         <CardHeader>
@@ -176,6 +250,25 @@ const EBITDAValuationAnalysis = () => {
                     </Badge>
                   </div>
                 </div>
+                {totalAdjustments !== 0 && (
+                  <>
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <span className="font-medium">Adjustments</span>
+                      <span className={`font-semibold ${totalAdjustments >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        {totalAdjustments >= 0 ? '+' : ''}${totalAdjustments.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center border-b-2 border-secondary pb-2">
+                      <span className="font-bold text-lg text-secondary">Adjusted EBITDA</span>
+                      <div className="text-right">
+                        <div className="text-secondary font-bold text-lg">${adjustedEbitda.toLocaleString()}</div>
+                        <Badge variant="outline" className="text-xs">
+                          {adjustedEbitdaMargin.toFixed(1)}% margin
+                        </Badge>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
               <div className="space-y-2">
                 <div className="bg-muted p-4 rounded-lg">
@@ -185,6 +278,16 @@ const EBITDAValuationAnalysis = () => {
                     operational cash flow potential. This metric excludes non-cash expenses and financing costs, 
                     providing a clear view of operating performance.
                   </p>
+                  {totalAdjustments !== 0 && (
+                    <>
+                      <h4 className="font-semibold mb-2 mt-4">Adjusted EBITDA</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Adjusted EBITDA = Net Income + Interest + Taxes + Depreciation + Amortization ± Non-recurring items. 
+                        This metric excludes one-time charges, restructuring costs, and other extraordinary items to reflect 
+                        ongoing operational performance.
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
