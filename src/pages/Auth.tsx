@@ -90,6 +90,17 @@ export default function AuthPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Quick bypass for testing - use test@test.com / test123 to skip auth
+    if (loginEmail === 'test@test.com' && loginPassword === 'test123') {
+      toast({
+        title: "Welcome back! (Test Mode)",
+        description: "Using test credentials to bypass authentication",
+      });
+      navigate('/');
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
