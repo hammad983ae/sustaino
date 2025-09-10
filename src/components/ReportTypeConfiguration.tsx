@@ -239,6 +239,17 @@ const ReportTypeConfiguration = () => {
           'property-classification': 'agricultural-rural'
         }
       },
+      'specialised': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Summation Approach', 'Direct Comparison'],
+        disabledSections: {},
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'property-classification': 'specialised'
+        }
+      },
       'other': {
         includeRental: false,
         includeGST: false,
@@ -337,7 +348,7 @@ const ReportTypeConfiguration = () => {
 
   const propertyTypes = [
     "Residential", "Build to Rent", "Commercial", "Industrial", "Retail", 
-    "Development Land", "Agricultural", "Other"
+    "Development Land", "Agricultural", "Specialised", "Other"
   ];
 
   const valuationPurposes = [
@@ -498,6 +509,23 @@ const ReportTypeConfiguration = () => {
                   <SelectItem value="exclusive">GST Exclusive</SelectItem>
                   <SelectItem value="going-concern">Going Concern (GST Inclusive)</SelectItem>
                   <SelectItem value="vacant-possession">Vacant Possession (GST Free)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="basis-of-assessment" className="text-sm font-medium">Basis of Assessment</Label>
+              <Select value={formData['basis-of-assessment'] || ''} onValueChange={(value) => handleSelectChange('basis-of-assessment', value)}>
+                <SelectTrigger id="basis-of-assessment" className="mt-2">
+                  <SelectValue placeholder="Select basis of assessment" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border z-50">
+                  <SelectItem value="market-value">Market Value</SelectItem>
+                  <SelectItem value="fair-value">Fair Value</SelectItem>
+                  <SelectItem value="insurable-value">Insurable Value</SelectItem>
+                  <SelectItem value="replacement-cost">Replacement Cost</SelectItem>
+                  <SelectItem value="going-concern">Going Concern Value</SelectItem>
+                  <SelectItem value="special-value">Special Value</SelectItem>
                 </SelectContent>
               </Select>
             </div>

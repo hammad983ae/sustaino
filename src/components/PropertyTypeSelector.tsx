@@ -12,6 +12,22 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
   const navigate = useNavigate();
   const propertyTypes = [
     {
+      id: "residential",
+      title: "Residential Property",
+      description: "Houses, units, townhouses, and residential investments",
+      icon: Home,
+      features: ["Comparable sales", "Rental yields", "Market trends", "Condition assessment"],
+      color: "bg-gradient-to-br from-card to-success/10 border-success/20"
+    },
+    {
+      id: "build-to-rent",
+      title: "Build to Rent",
+      description: "Purpose-built rental accommodation and BTR developments",
+      icon: Building2,
+      features: ["Rental income", "Build costs", "Market analysis", "Investment yields"],
+      color: "bg-gradient-to-br from-card to-info/10 border-info/20"
+    },
+    {
       id: "commercial",
       title: "Commercial Property",
       description: "Office, retail, industrial, and investment properties",
@@ -20,11 +36,27 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       color: "bg-gradient-to-br from-card to-info/10 border-info/20"
     },
     {
-      id: "residential",
-      title: "Residential Property",
-      description: "Houses, units, townhouses, and residential investments",
-      icon: Home,
-      features: ["Comparable sales", "Rental yields", "Market trends", "Condition assessment"],
+      id: "industrial",
+      title: "Industrial Property",
+      description: "Warehouses, manufacturing facilities, and distribution centers",
+      icon: Factory,
+      features: ["Functional obsolescence", "Operational efficiency", "Location analysis", "Specialized markets"],
+      color: "bg-gradient-to-br from-card to-primary/10 border-primary/20"
+    },
+    {
+      id: "retail",
+      title: "Retail Property",
+      description: "Shopping centers, standalone retail, and food & beverage",
+      icon: Building2,
+      features: ["Foot traffic", "Sales per sqm", "Anchor tenancy", "Trade area analysis"],
+      color: "bg-gradient-to-br from-card to-warning/10 border-warning/20"
+    },
+    {
+      id: "development-land",
+      title: "Development Land",
+      description: "Vacant land, development sites, and subdivision opportunities",
+      icon: Trees,
+      features: ["Highest & best use", "Development potential", "Planning constraints", "Feasibility analysis"],
       color: "bg-gradient-to-br from-card to-success/10 border-success/20"
     },
     {
@@ -173,7 +205,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
               Select your specific property type for targeted valuation analysis
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {propertyTypes.map((type) => {
               const IconComponent = type.icon;
               return (
