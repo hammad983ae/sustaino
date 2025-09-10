@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/Auth";
+import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import EnhancedESGStrategy from "./pages/EnhancedESGStrategy";
 import { PropertyProvider } from "./contexts/PropertyContext";
 
@@ -27,7 +28,7 @@ const App = () => (
             <Route path="/report" element={<Report />} />
             <Route path="/property-valuations" element={<Dashboard />} />
             <Route path="/work-hub" element={<Dashboard />} />
-            <Route path="/white-label" element={<Dashboard />} />
+            <Route path="/white-label" element={<WhiteLabelConfig />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/comprehensive-valuation" element={<Dashboard />} />
             <Route path="/esg-strategy" element={<EnhancedESGStrategy />} />

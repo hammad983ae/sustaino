@@ -74,7 +74,7 @@ const ReportViewer = () => {
       loadSavedReport().then(workHubData => {
         if (workHubData) {
           setReportData(workHubData.reportData as any || {});
-          setCurrentSection(workHubData.currentSection || 0);
+          setCurrentSection(Number(workHubData.currentSection) || 0);
           console.log('Loaded from Work Hub:', workHubData);
         }
       });
