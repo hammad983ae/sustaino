@@ -98,22 +98,29 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile-friendly header with progress */}
-      <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b p-4 space-y-4 animate-fade-in">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold truncate">
+          <h1 className="text-lg font-semibold truncate animate-scale-in">
             Step {currentStep + 1}: {steps[currentStep].title}
           </h1>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground animate-fade-in">
             {currentStep + 1} of {steps.length}
           </div>
         </div>
-        <Progress value={progress} className="w-full" />
+        <div className="space-y-2">
+          <Progress value={progress} className="w-full transition-all duration-500 ease-out" />
+          <div className="text-xs text-center text-muted-foreground">
+            {progress.toFixed(0)}% Complete
+          </div>
+        </div>
       </div>
 
-      {/* Form content */}
+      {/* Form content with smooth transitions */}
       <div className="p-4 pb-24">
         <div className="max-w-4xl mx-auto">
-          {steps[currentStep].component}
+          <div key={currentStep} className="animate-fade-in">
+            {steps[currentStep].component}
+          </div>
         </div>
       </div>
 
@@ -134,13 +141,16 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
             {steps.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentStep(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
+                onClick={() => {
+                  setCurrentStep(index);
+                  saveNow();
+                }}
+                className={`w-3 h-3 rounded-full transition-all duration-300 hover-scale ${
                   index === currentStep
-                    ? "bg-primary"
+                    ? "bg-primary shadow-lg shadow-primary/50"
                     : index < currentStep
-                    ? "bg-primary/60"
-                    : "bg-muted"
+                    ? "bg-primary/60 hover:bg-primary/80"
+                    : "bg-muted hover:bg-muted-foreground/20"
                 }`}
                 aria-label={`Go to step ${index + 1}`}
               />
