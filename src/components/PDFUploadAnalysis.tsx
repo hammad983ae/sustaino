@@ -361,12 +361,20 @@ export const PDFUploadAnalysis = () => {
               Please sign in to access PDF upload and analysis features.
             </AlertDescription>
           </Alert>
-          <Button 
-            onClick={() => window.location.href = '/auth'}
-            className="bg-primary hover:bg-primary/90"
-          >
-            Sign In to Continue
-          </Button>
+          <div className="flex gap-4 justify-center">
+            <Button 
+              onClick={() => window.location.href = '/auth'}
+              className="bg-primary hover:bg-primary/90"
+            >
+              Sign In to Continue
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => window.location.href = '/'}
+            >
+              Back to Dashboard
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );

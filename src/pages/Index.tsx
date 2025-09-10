@@ -36,6 +36,19 @@ const Index = () => {
           <div className="space-y-12">
             {/* Header */}
             <div className="text-center space-y-6">
+              {/* Navigation Bar */}
+              <div className="flex justify-between items-center mb-8">
+                <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+                  ← Back to Dashboard
+                </Link>
+                <Link 
+                  to="/auth" 
+                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  Sign In / Sign Up
+                </Link>
+              </div>
+
               <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full border border-primary/20 backdrop-blur-sm">
                 <Zap className="h-5 w-5 text-primary mr-2 animate-pulse" />
                 <span className="text-primary font-semibold">World's First AI-Powered ESG Property Platform</span>
