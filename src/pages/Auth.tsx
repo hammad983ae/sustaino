@@ -133,25 +133,42 @@ export default function AuthPage() {
     }
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      // First generate the reset link using Supabase
+      const { data, error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
         redirectTo: `${window.location.origin}/auth?mode=recovery`,
       });
 
       if (error) {
-        console.error('Password reset error:', error);
-        if (error.message.includes('User not found')) {
-          setError('No account found with this email address.');
-        } else if (error.message.includes('Email rate limit exceeded')) {
-          setError('Too many reset attempts. Please wait before trying again.');
-        } else {
-          setError(error.message);
+        console.error('Supabase password reset error:', error);
+        
+        // If Supabase fails, send custom email via our edge function
+        console.log('Falling back to custom email sending...');
+        
+        const resetUrl = `${window.location.origin}/auth?mode=recovery&email=${encodeURIComponent(resetEmail)}`;
+        
+        const { error: emailError } = await supabase.functions.invoke('send-password-reset', {
+          body: {
+            email: resetEmail,
+            resetUrl: resetUrl
+          }
+        });
+
+        if (emailError) {
+          console.error('Custom email error:', emailError);
+          if (error.message.includes('User not found')) {
+            setError('No account found with this email address.');
+          } else if (error.message.includes('Email rate limit exceeded')) {
+            setError('Too many reset attempts. Please wait before trying again.');
+          } else {
+            setError('Failed to send password reset email. Please try again later.');
+          }
+          return;
         }
-        return;
       }
 
       toast({
         title: "Password reset email sent! ✉️",
-        description: "Check your email for a password reset link. The link will expire in 1 hour.",
+        description: "Check your email (including spam folder) for a password reset link. The link will expire in 1 hour.",
         className: "bg-green-50 border-green-200"
       });
 
