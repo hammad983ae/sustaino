@@ -88,31 +88,18 @@ const ReportViewer = () => {
 
   // Auto-save report data when it changes
   useEffect(() => {
-    console.log('📊 Report data changed:', { 
-      sectionsCount: Object.keys(reportData).length,
-      sections: Object.keys(reportData),
-      propertyAddress: propertyAddress || 'NO ADDRESS'
-    });
-    
     if (Object.keys(reportData).length > 0) {
-      console.log('⏰ Setting up auto-save timeout');
       const timeoutId = setTimeout(() => {
-        console.log('💾 Executing localStorage save');
         saveToStorage();
-        console.log('🔄 Also attempting Supabase save regardless of address');
         saveNow();
       }, 2000);
       
-      return () => {
-        console.log('🧹 Clearing auto-save timeout');
-        clearTimeout(timeoutId);
-      };
+      return () => clearTimeout(timeoutId);
     }
-  }, [reportData, saveToStorage, propertyAddress, saveNow]);
+  }, [reportData, saveToStorage, saveNow]);
 
   // Update property address when report data changes
   useEffect(() => {
-    // Try multiple possible locations for the address
     const address = reportData.propertyDetails?.address || 
                    reportData.address || 
                    reportData.propertyDetails?.propertyAddress ||
@@ -121,18 +108,10 @@ const ReportViewer = () => {
                    reportData.addressForm?.address ||
                    '';
     
-    console.log('🏠 Property address update:', { 
-      address, 
-      currentPropertyAddress: propertyAddress,
-      allReportDataKeys: Object.keys(reportData),
-      propertyDetailsKeys: reportData.propertyDetails ? Object.keys(reportData.propertyDetails) : []
-    });
-    
     if (address && address !== propertyAddress) {
       setPropertyAddress(address);
-      console.log('✅ Property address updated to:', address);
     }
-  }, [reportData, propertyAddress]);
+  }, [reportData]);
 
   const sections = [
     { title: "Executive Summary and Contents" },
