@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CompletedMilduraReport from '@/components/CompletedMilduraReport';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,16 +10,39 @@ import {
   Calculator,
   Building,
   ArrowRight,
-  Shield
+  Shield,
+  User,
+  LogOut
 } from 'lucide-react';
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 import { PDFUploadAnalysis } from '@/components/PDFUploadAnalysis';
+import { supabase } from "@/integrations/supabase/client";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   
+  // Check authentication status
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
   
   // Check if user wants to see the completed Mildura report
   const urlParams = new URLSearchParams(window.location.search);
@@ -51,12 +74,30 @@ const Index = () => {
                 <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
                   ← Back to Dashboard
                 </Link>
-                <Link 
-                  to="/auth" 
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                  Sign In / Sign Up
-                </Link>
+                {user ? (
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <User className="h-4 w-4" />
+                      <span>{user.email}</span>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={handleSignOut}
+                      className="flex items-center gap-2"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <Link 
+                    to="/auth" 
+                    className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                  >
+                    Sign In / Sign Up
+                  </Link>
+                )}
               </div>
 
               <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full border border-primary/20 backdrop-blur-sm">

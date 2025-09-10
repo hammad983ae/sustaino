@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -9,6 +9,8 @@ import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
 import ReportSectionManager from "@/components/ReportSectionManager";
 import { useReportJobSaver } from "@/hooks/useReportJobSaver";
+import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
@@ -17,6 +19,7 @@ interface MultiStepFormProps {
 
 const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [user, setUser] = useState<User | null>(null);
   const [reportData, setReportData] = useState<any>({
     propertyAddress: "520 Deakin Avenue Mildura VIC 3500",
     reportType: "long-form",
@@ -25,13 +28,28 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [enhancedAnalysisData, setEnhancedAnalysisData] = useState<any>(null);
 
-  // Auto-save functionality
+  // Check authentication status
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Auto-save functionality - only enabled when user is authenticated
   const { saveNow, markAsCompleted } = useReportJobSaver({
     reportData: { ...reportData, enhancedAnalysisData },
     currentSection: currentStep,
     propertyAddress: reportData.propertyAddress,
     reportType: reportData.reportType,
-    enabled: true,
+    enabled: !!user, // Only enable when user is authenticated
     includedSections: selectedSections,
     geolocationData: enhancedAnalysisData?.geolocation,
     vicplanData: enhancedAnalysisData?.vicPlanData,
@@ -43,11 +61,13 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
       console.log('Moving to step:', currentStep + 1);
-      // Auto-save on step change
-      try {
-        saveNow();
-      } catch (error) {
-        console.error('Error saving:', error);
+      // Auto-save on step change only if authenticated
+      if (user) {
+        try {
+          saveNow();
+        } catch (error) {
+          console.error('Error saving:', error);
+        }
       }
     } else {
       console.log('Already at last step');
@@ -57,8 +77,10 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      // Auto-save on step change
-      saveNow();
+      // Auto-save on step change only if authenticated
+      if (user) {
+        saveNow();
+      }
     }
   };
 
@@ -156,7 +178,9 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
                 key={index}
                 onClick={() => {
                   setCurrentStep(index);
-                  saveNow();
+                  if (user) {
+                    saveNow();
+                  }
                 }}
                 className={`w-3 h-3 rounded-full transition-all duration-300 hover-scale ${
                   index === currentStep
