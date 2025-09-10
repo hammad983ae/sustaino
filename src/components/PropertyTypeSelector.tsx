@@ -58,8 +58,8 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
               Sustaino Pro Valuation Platform
             </h1>
           </div>
-          <Link to="/index" className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-center gap-2 mt-2">
-            <Home className="h-4 w-4" />
+          <Link to="/index" className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary/80 rounded-lg border border-primary/20 transition-colors font-medium">
+            <Home className="h-5 w-5" />
             Powered
           </Link>
           <p className="text-xl text-muted-foreground mb-2">
