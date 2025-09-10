@@ -19,7 +19,7 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepData, setStepData] = useState({});
   const navigate = useNavigate();
-  const { addressData, getFormattedAddress } = useProperty();
+  const { addressData, getFormattedAddress, currentJobNumber } = useProperty();
 
   // Auto-save functionality using the job saver hook
   const { saveNow } = useReportJobSaver({
@@ -89,9 +89,14 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold truncate">
-            Step {currentStep + 1}: {steps[currentStep].title}
-          </h1>
+          <div>
+            <h1 className="text-lg font-semibold truncate">
+              Step {currentStep + 1}: {steps[currentStep].title}
+            </h1>
+            {currentJobNumber && (
+              <p className="text-xs text-muted-foreground">Job #{currentJobNumber}</p>
+            )}
+          </div>
           <div className="text-sm text-muted-foreground">
             {currentStep + 1} of {steps.length}
           </div>

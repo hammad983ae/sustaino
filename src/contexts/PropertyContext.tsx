@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useJobManager } from '@/hooks/useJobManager';
 
 export interface PropertyAddressData {
   propertyAddress: string;
@@ -29,12 +30,14 @@ interface PropertyContextType {
   addressData: PropertyAddressData;
   propertyTypeData: PropertyTypeData;
   jobNumber: string | null;
+  currentJobNumber?: number;
   updateAddressData: (data: Partial<PropertyAddressData>) => void;
   updatePropertyTypeData: (data: Partial<PropertyTypeData>) => void;
   setJobNumber: (jobNumber: string) => void;
   getFormattedAddress: () => string;
   clearAddressData: () => void;
   clearPropertyTypeData: () => void;
+  createJobForAddress: (address: string) => Promise<void>;
 }
 
 const defaultAddressData: PropertyAddressData = {
@@ -64,6 +67,8 @@ const defaultPropertyTypeData: PropertyTypeData = {
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
 
 export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { createJob, currentJob, startAutoSave } = useJobManager();
+  
   const [addressData, setAddressData] = useState<PropertyAddressData>(() => {
     // Load from localStorage on init
     const saved = localStorage.getItem('propertyAddressData');
@@ -81,6 +86,16 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const saved = localStorage.getItem('propertyJobNumber');
     return saved || null;
   });
+
+  // Create job immediately when address is set
+  const createJobForAddress = async (address: string) => {
+    try {
+      await createJob(address);
+      startAutoSave();
+    } catch (error) {
+      console.error('Failed to create job for address:', error);
+    }
+  };
 
   // Save to localStorage whenever data changes
   useEffect(() => {
@@ -100,15 +115,22 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [jobNumber]);
 
   const updateAddressData = (data: Partial<PropertyAddressData>) => {
-    setAddressData(prev => ({ ...prev, ...data }));
+    const newData = { ...addressData, ...data };
+    setAddressData(newData);
+    
+    // Create job immediately when address is complete
+    const formattedAddress = getFormattedAddressFromData(newData);
+    if (formattedAddress && !currentJob) {
+      createJobForAddress(formattedAddress);
+    }
   };
 
   const updatePropertyTypeData = (data: Partial<PropertyTypeData>) => {
     setPropertyTypeData(prev => ({ ...prev, ...data }));
   };
 
-  const getFormattedAddress = () => {
-    const { unitNumber, streetNumber, streetName, streetType, suburb, state, postcode } = addressData;
+  const getFormattedAddressFromData = (data: PropertyAddressData) => {
+    const { unitNumber, streetNumber, streetName, streetType, suburb, state, postcode } = data;
     
     let address = '';
     if (unitNumber) address += `${unitNumber}/`;
@@ -120,6 +142,10 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (postcode) address += postcode;
     
     return address.trim();
+  };
+
+  const getFormattedAddress = () => {
+    return getFormattedAddressFromData(addressData);
   };
 
   const clearAddressData = () => {
@@ -141,12 +167,14 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       addressData,
       propertyTypeData,
       jobNumber,
+      currentJobNumber: currentJob?.jobNumber,
       updateAddressData,
       updatePropertyTypeData,
       setJobNumber,
       getFormattedAddress,
       clearAddressData,
-      clearPropertyTypeData
+      clearPropertyTypeData,
+      createJobForAddress
     }}>
       {children}
     </PropertyContext.Provider>
