@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -14,6 +15,7 @@ interface MultiStepFormProps {
 
 const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const navigate = useNavigate();
 
   const steps = [
     {
@@ -47,6 +49,8 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+    } else {
+      navigate(-1); // Navigate back to previous page when on first step
     }
   };
 
@@ -80,7 +84,6 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
           <Button
             variant="outline"
             onClick={prevStep}
-            disabled={currentStep === 0}
             className="flex items-center gap-2"
           >
             <ChevronLeft className="h-4 w-4" />
