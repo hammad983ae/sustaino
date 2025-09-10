@@ -27,10 +27,13 @@ serve(async (req) => {
 
     console.log('Analyzing property:', address, state);
 
-    // Get Google Maps API key
-    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
+    // Get Google Maps API key - try multiple possible secret names
+    let googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY') || 
+                          Deno.env.get('Geolocation') || 
+                          Deno.env.get('GOOGLE_MAPS_API_KE');
+    
     if (!googleMapsApiKey) {
-      console.error('Google Maps API key not found');
+      console.error('Google Maps API key not found in any of: GOOGLE_MAPS_API_KEY, Geolocation, GOOGLE_MAPS_API_KE');
       return new Response(
         JSON.stringify({ error: 'Google Maps API key not configured' }), 
         { 
