@@ -217,7 +217,7 @@ export default function AuthPage() {
             </div>
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h1>
-          <p className="text-muted-foreground">Sign in to access your property management platform</p>
+          <p className="text-muted-foreground">Property Valuation and ESG Assessment Powered By Sustaino Pro</p>
         </div>
 
         <Card className="shadow-lg">
