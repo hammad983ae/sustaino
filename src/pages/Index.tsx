@@ -40,14 +40,19 @@ const Index = () => {
               </div>
               
               <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="relative">
-                  <Zap className="h-16 w-16 text-primary animate-pulse" />
-                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+                <div className="relative p-4 bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 rounded-2xl shadow-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400/80 via-orange-500/80 to-amber-600/80 rounded-2xl blur-sm"></div>
+                  <Zap className="h-12 w-12 text-white relative z-10" />
                 </div>
-                <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Powered
-                </h1>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <span className="text-2xl font-bold text-muted-foreground">Powered</span>
+                </div>
               </div>
+              
+              <h1 className="text-5xl font-bold text-center mb-4">
+                AI Lightning
+              </h1>
               
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
                 Revolutionary AI-driven ESG property assessment platform delivering instant 

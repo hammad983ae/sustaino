@@ -35,26 +35,19 @@ const PropertyAddressForm = () => {
     setIsCreatingJob(true);
     
     try {
-      // Get current session first
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      // Get current session and user simultaneously
+      const [{ data: { session } }, { data: { user } }] = await Promise.all([
+        supabase.auth.getSession(),
+        supabase.auth.getUser()
+      ]);
       
-      if (sessionError) {
-        console.error('Session error:', sessionError);
-      }
-      
-      // Get user info
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
-      if (userError || !user) {
-        console.log('Auth error:', userError);
-        console.log('Session:', session);
+      if (!session || !user) {
         toast({
-          title: "Authentication Required", 
-          description: "Please log in to create a job file. Redirecting to login...",
+          title: "Please log in first", 
+          description: "You need to be logged in to create a job file",
           variant: "destructive"
         });
         setIsCreatingJob(false);
-        // Redirect to auth page instead of failing
         window.location.href = '/auth';
         return;
       }

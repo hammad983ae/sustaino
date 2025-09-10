@@ -44,34 +44,12 @@ export default function AuthStatus() {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
-      // Clear ALL localStorage data to prevent data persistence
-      const keysToRemove = [
-        'propertyAddressData',
-        'propertyTypeData', 
-        'propertyJobNumber',
-        'report_section_data',
-        'continue_report_data',
-        'report_data',
-        'report_current_section'
-      ];
-      
-      // Remove specific keys
-      keysToRemove.forEach(key => {
-        localStorage.removeItem(key);
-      });
-      
-      // Also remove any autosave keys (they start with 'autosave_')
-      Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('autosave_')) {
-          localStorage.removeItem(key);
-        }
-      });
-      
-      // Clear any session storage as well
+      // COMPLETELY CLEAR ALL DATA - nuclear option to ensure nothing persists
+      localStorage.clear();
       sessionStorage.clear();
       
-      // Note: Removed window.location.href = '/' to prevent full page reload
-      // React Router will handle the navigation properly
+      // Force page reload to ensure complete state reset
+      window.location.href = '/';
       
       toast({
         title: "Signed out successfully",

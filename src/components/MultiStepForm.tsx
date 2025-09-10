@@ -59,11 +59,16 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
       <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <Home className="h-4 w-4" />
-              <span className="hidden sm:inline">Back to Platform</span>
-            </Link>
-            <div className="h-4 w-px bg-border hidden sm:block" />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => window.location.href = '/'}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span>Back</span>
+            </Button>
+            <div className="h-4 w-px bg-border" />
             <h1 className="text-lg font-semibold truncate">
               Step {currentStep + 1}: {steps[currentStep].title}
             </h1>
