@@ -42,12 +42,15 @@ const PropertyAddressForm = () => {
       // Check test mode first
       if (isTestMode && testUser) {
         user = testUser;
+        console.log('Using test user:', testUser);
       } else {
         const { data: { user: authUser } } = await supabase.auth.getUser();
         user = authUser;
+        console.log('Using auth user:', authUser);
       }
       
       if (!user) {
+        console.error('No user found - authentication required');
         toast({
           title: "Authentication Required", 
           description: "Please log in to create a job file",
@@ -55,6 +58,8 @@ const PropertyAddressForm = () => {
         });
         return;
       }
+
+      console.log('Creating job for user:', user.id, 'address:', propertyAddress);
 
       const { data, error } = await supabase
         .from('valuation_jobs')
@@ -71,7 +76,12 @@ const PropertyAddressForm = () => {
         .select('job_number, id')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Job created successfully:', data);
 
       // Save job number to context
       setJobNumber(data.job_number.toString());
@@ -86,7 +96,7 @@ const PropertyAddressForm = () => {
       console.error('Error creating job:', error);
       toast({
         title: "Failed to Create Job File",
-        description: "There was an error creating your job file. Please try again.",
+        description: `There was an error creating your job file. Please try again. Error: ${error.message}`,
         variant: "destructive"
       });
     } finally {
