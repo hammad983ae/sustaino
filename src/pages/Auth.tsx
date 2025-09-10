@@ -153,8 +153,12 @@ export default function AuthPage() {
     setError(null);
 
     try {
+      // Use the exact current URL structure to stay in Lovable
+      const currentUrl = window.location.href.split('?')[0]; // Remove any query params
+      const baseUrl = currentUrl.replace('/auth', '').replace('/#', ''); // Handle both /auth and root
+      
       const { error } = await supabase.auth.resetPasswordForEmail(loginEmail, {
-        redirectTo: `${window.location.origin}/auth`,
+        redirectTo: `${baseUrl}/auth`,
       });
 
       if (error) {
@@ -164,7 +168,7 @@ export default function AuthPage() {
 
       toast({
         title: "Password reset email sent",
-        description: "Check your email for a password reset link.",
+        description: "Check your email for a password reset link. The reset link will keep you in Lovable.",
       });
     } catch (error) {
       console.error('Password reset error:', error);
