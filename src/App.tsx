@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { TestAuthProvider } from "@/contexts/TestAuthContext";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
+import ReportFinalization from "./pages/ReportFinalization";
 import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
 import PropertyValuations from "./pages/PropertyValuations";
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/" element={<AutomatedValuation />} />
               <Route path="/index" element={<Index />} />
               <Route path="/report" element={<Report />} />
+              <Route path="/report-finalization" element={<ReportFinalization />} />
               <Route path="/property-valuations" element={<PropertyValuations />} />
               <Route path="/work-hub" element={<WorkHubPage />} />
               <Route path="/white-label" element={<WhiteLabelConfig />} />

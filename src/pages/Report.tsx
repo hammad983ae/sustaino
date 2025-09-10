@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight, Home, Save, Eye, FileText, Play } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight, Home, Save, Eye, FileText, Play, CheckCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import ReportGenerator from "@/components/ReportGenerator";
 import PDFReportPreview from "@/components/PDFReportPreview";
@@ -13,6 +13,7 @@ import { useReportJobSaver } from "@/hooks/useReportJobSaver";
 import { useToast } from "@/hooks/use-toast";
 
 const ReportViewer = () => {
+  const navigate = useNavigate();
   const [currentSection, setCurrentSection] = useState(0);
   const [viewMode, setViewMode] = useState<'edit' | 'preview' | 'presentation'>('edit');
   const [propertyAddress, setPropertyAddress] = useState('');
@@ -142,6 +143,9 @@ const ReportViewer = () => {
   const nextSection = () => {
     if (currentSection < sections.length - 1) {
       setCurrentSection(currentSection + 1);
+    } else {
+      // Navigate to finalization page when at the last section
+      navigate('/report-finalization');
     }
   };
 
@@ -271,6 +275,16 @@ const ReportViewer = () => {
                 <FileText className="h-3 w-3" />
                 Preview & Generate
               </Button>
+              {currentSection === sections.length - 1 && (
+                <Button 
+                  size="sm" 
+                  onClick={() => navigate('/report-finalization')}
+                  className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
+                >
+                  <CheckCircle className="h-3 w-3" />
+                  Finalize Report
+                </Button>
+              )}
             </div>
           </div>
           <div className="text-sm text-muted-foreground">
@@ -326,11 +340,15 @@ const ReportViewer = () => {
 
           <Button
             onClick={nextSection}
-            disabled={currentSection === sections.length - 1}
             className="flex items-center gap-2"
           >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="h-4 w-4" />
+            <span className="hidden sm:inline">
+              {currentSection === sections.length - 1 ? 'Finalize Report' : 'Next'}
+            </span>
+            {currentSection === sections.length - 1 ? 
+              <CheckCircle className="h-4 w-4" /> : 
+              <ChevronRight className="h-4 w-4" />
+            }
           </Button>
         </div>
           </div>
