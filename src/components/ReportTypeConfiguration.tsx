@@ -311,7 +311,7 @@ const ReportTypeConfiguration = () => {
         <div className="space-y-4">
           <h3 className="font-semibold text-lg">Valuation Configuration</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <MultiSelectDropdown 
               options={basisOfValuation}
               placeholder="Select basis of valuation"
@@ -335,25 +335,11 @@ const ReportTypeConfiguration = () => {
               placeholder="Select interest values"
               label="Interest Values"
             />
-          </div>
 
-          <div className="flex items-center justify-between pt-4">
-            <div className="text-xs text-muted-foreground">
-              <p>Also extend interest valued to include: <span className="underline">Partially Leased and Leasehold Interest</span></p>
-            </div>
-            {includeGST && (
-              <div className="text-xs text-green-600 font-medium">
-                GST will be included in all valuation calculations
-              </div>
-            )}
-          </div>
-
-          {/* GST Treatment Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
             <div>
               <Label htmlFor="gst-treatment" className="text-sm font-medium">GST Treatment</Label>
               <Select value={formData['gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('gst-treatment', value)}>
-                <SelectTrigger id="gst-treatment" className="mt-1">
+                <SelectTrigger id="gst-treatment" className="mt-2">
                   <SelectValue placeholder="Select GST approach" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border border-border z-50">
@@ -370,11 +356,15 @@ const ReportTypeConfiguration = () => {
               <Textarea 
                 id="custom-basis-description"
                 placeholder="Describe custom rental basis or specific requirements"
-                className="mt-1"
+                className="mt-2"
                 value={formData['custom-basis-description'] || ''}
                 onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
               />
             </div>
+          </div>
+
+          <div className="text-xs text-muted-foreground pt-2">
+            <p>Also extend interest valued to include: <span className="underline">Partially Leased and Leasehold Interest</span></p>
           </div>
         </div>
 
