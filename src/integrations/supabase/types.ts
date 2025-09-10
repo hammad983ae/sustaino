@@ -276,6 +276,72 @@ export type Database = {
           },
         ]
       }
+      leasing_evidence: {
+        Row: {
+          bathrooms: number | null
+          bedrooms: number | null
+          building_area: number | null
+          car_spaces: number | null
+          comparison_notes: string | null
+          created_at: string
+          id: string
+          is_comparable: boolean | null
+          land_area: number | null
+          lease_duration_months: number | null
+          lease_end_date: string | null
+          lease_start_date: string
+          lease_status: string
+          property_address: string
+          property_features: Json | null
+          property_type: string
+          rent_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          lease_duration_months?: number | null
+          lease_end_date?: string | null
+          lease_start_date: string
+          lease_status?: string
+          property_address: string
+          property_features?: Json | null
+          property_type: string
+          rent_amount: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          lease_duration_months?: number | null
+          lease_end_date?: string | null
+          lease_start_date?: string
+          lease_status?: string
+          property_address?: string
+          property_features?: Json | null
+          property_type?: string
+          rent_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       marketplace_inquiries: {
         Row: {
           created_at: string
@@ -815,6 +881,66 @@ export type Database = {
           status?: string
           sustainability_score?: number | null
           title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sales_evidence: {
+        Row: {
+          bathrooms: number | null
+          bedrooms: number | null
+          building_area: number | null
+          car_spaces: number | null
+          comparison_notes: string | null
+          created_at: string
+          id: string
+          is_comparable: boolean | null
+          land_area: number | null
+          property_address: string
+          property_features: Json | null
+          property_type: string
+          sale_date: string
+          sale_price: number
+          sale_status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          property_address: string
+          property_features?: Json | null
+          property_type: string
+          sale_date: string
+          sale_price: number
+          sale_status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_area?: number | null
+          car_spaces?: number | null
+          comparison_notes?: string | null
+          created_at?: string
+          id?: string
+          is_comparable?: boolean | null
+          land_area?: number | null
+          property_address?: string
+          property_features?: Json | null
+          property_type?: string
+          sale_date?: string
+          sale_price?: number
+          sale_status?: string
           updated_at?: string
           user_id?: string
         }
