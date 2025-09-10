@@ -9,6 +9,7 @@ import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Phone, QrCode } from 'lucid
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useTestAuth } from '@/contexts/TestAuthContext';
 import QRCode from 'qrcode';
 
 export default function AuthPage() {
@@ -17,6 +18,7 @@ export default function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { setTestMode } = useTestAuth();
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
@@ -93,9 +95,10 @@ export default function AuthPage() {
     
     // Quick bypass for testing - use test@test.com / test123 to skip auth
     if (loginEmail === 'test@test.com' && loginPassword === 'test123') {
+      setTestMode(true);
       toast({
         title: "Welcome back! (Test Mode)",
-        description: "Using test credentials to bypass authentication",
+        description: "Using test credentials - authentication bypassed",
       });
       navigate('/');
       return;

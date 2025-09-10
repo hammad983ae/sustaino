@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogIn, LogOut, User as UserIcon, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useTestAuth } from '@/contexts/TestAuthContext';
 
 export default function AuthStatus() {
   const [user, setUser] = useState<User | null>(null);
@@ -20,6 +21,7 @@ export default function AuthStatus() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { isTestMode, testUser } = useTestAuth();
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -66,7 +68,7 @@ export default function AuthStatus() {
     );
   }
 
-  if (!user) {
+  if (!user && !isTestMode) {
     return (
       <Button onClick={() => navigate('/auth')} variant="outline" size="sm">
         <LogIn className="h-4 w-4 mr-2" />
@@ -75,16 +77,18 @@ export default function AuthStatus() {
     );
   }
 
-  const initials = user.user_metadata?.display_name 
-    ? user.user_metadata.display_name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
-    : user.email?.charAt(0).toUpperCase() || 'U';
+  const currentUser = isTestMode ? testUser : user;
+
+  const initials = currentUser.user_metadata?.display_name 
+    ? currentUser.user_metadata.display_name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
+    : currentUser.email?.charAt(0).toUpperCase() || 'U';
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.user_metadata?.avatar_url} />
+            <AvatarImage src={currentUser.user_metadata?.avatar_url} />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -93,10 +97,10 @@ export default function AuthStatus() {
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-1 leading-none">
             <p className="font-medium">
-              {user.user_metadata?.display_name || user.email}
+              {currentUser.user_metadata?.display_name || currentUser.email}
             </p>
             <p className="w-[200px] truncate text-sm text-muted-foreground">
-              {user.email}
+              {currentUser.email}
             </p>
           </div>
         </div>
