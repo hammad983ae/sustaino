@@ -12,26 +12,64 @@ import { ChevronDown } from "lucide-react";
 import { FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 
-const ReportTypeConfiguration = () => {
+interface ReportTypeConfigurationProps {
+  onConfigurationChange?: (config: any) => void;
+}
+
+const ReportTypeConfiguration = ({ onConfigurationChange }: ReportTypeConfigurationProps = {}) => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [includeRentalConfig, setIncludeRentalConfig] = useState(false);
   const [includeGST, setIncludeGST] = useState(false);
   const [disabledSections, setDisabledSections] = useState<Record<string, boolean>>({});
 
+  // Notify parent component of configuration changes
+  const notifyConfigurationChange = () => {
+    const config = {
+      reportType: formData['report-type'],
+      propertyType: formData['property-type'],
+      valuationPurpose: selectedValues['Valuation Purpose'] || [],
+      instructingParty: formData['instructing-party'],
+      reliantParty: formData['reliant-party'],
+      basisOfValuation: selectedValues['Basis of Valuation'] || [],
+      valuationApproaches: selectedValues['Valuation Approaches'] || [],
+      valueComponent: selectedValues['Value Component'] || [],
+      interestValues: selectedValues['Interest Values'] || [],
+      gstTreatment: formData['gst-treatment'],
+      basisOfAssessment: formData['basis-of-assessment'],
+      customBasisDescription: formData['custom-basis-description'],
+      includeRentalConfig,
+      includeGST,
+      disabledSections
+    };
+    onConfigurationChange?.(config);
+  };
+
+  // Update notification calls
   const handleCheckboxChange = (label: string, option: string, checked: boolean) => {
     setSelectedValues(prev => {
       const current = prev[label] || [];
       if (checked) {
-        return { ...prev, [label]: [...current, option] };
+        const newValues = { ...prev, [label]: [...current, option] };
+        // Trigger notification after state update
+        setTimeout(() => notifyConfigurationChange(), 0);
+        return newValues;
       } else {
-        return { ...prev, [label]: current.filter(item => item !== option) };
+        const newValues = { ...prev, [label]: current.filter(item => item !== option) };
+        // Trigger notification after state update
+        setTimeout(() => notifyConfigurationChange(), 0);
+        return newValues;
       }
     });
   };
 
   const handleSelectChange = (key: string, value: string) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
+    setFormData(prev => {
+      const newData = { ...prev, [key]: value };
+      // Trigger notification after state update
+      setTimeout(() => notifyConfigurationChange(), 0);
+      return newData;
+    });
     
     // Apply conditional logic based on selections
     if (key === 'report-type') {
@@ -39,6 +77,15 @@ const ReportTypeConfiguration = () => {
     } else if (key === 'property-type') {
       applyPropertyTypePresets(value);
     }
+  };
+
+  const handleInputChange = (key: string, value: string) => {
+    setFormData(prev => {
+      const newData = { ...prev, [key]: value };
+      // Trigger notification after state update
+      setTimeout(() => notifyConfigurationChange(), 0);
+      return newData;
+    });
   };
 
   // Preset logic for report types
@@ -288,9 +335,6 @@ const ReportTypeConfiguration = () => {
     }
   };
 
-  const handleInputChange = (key: string, value: string) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
-  };
 
   const MultiSelectDropdown = ({ 
     options, 

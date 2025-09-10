@@ -74,7 +74,12 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
     },
     {
       title: "Report Configuration",
-      component: <ReportTypeConfiguration />
+      component: <ReportTypeConfiguration 
+        onConfigurationChange={(config) => setReportData(prev => ({ 
+          ...prev, 
+          reportConfiguration: config 
+        }))}
+      />
     },
     {
       title: "Document Upload",

@@ -54,7 +54,10 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, rep
         </CardHeader>
         <CardContent>
           <FormDataSaver sectionKey="executiveSummary" reportData={reportData} onDataChange={onDataChange}>
-            <ExecutiveSummary onNavigateToSection={onNavigateToSection} />
+            <ExecutiveSummary 
+              onNavigateToSection={onNavigateToSection} 
+              reportConfiguration={reportData?.reportConfiguration}
+            />
           </FormDataSaver>
         </CardContent>
       </Card>
