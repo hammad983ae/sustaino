@@ -226,9 +226,22 @@ const PropertyDetails = () => {
             </div>
             
             {/* Photo Gallery Preview Area */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 min-h-[100px] p-4 border rounded-lg bg-background">
-              <div className="text-center text-sm text-muted-foreground col-span-full">
-                Uploaded photos will appear here with timestamps
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 min-h-[200px] p-4 border rounded-lg bg-background">
+              <div className="relative aspect-video overflow-hidden rounded border">
+                <img src="/lovable-uploads/8ebd45d3-6a11-4af2-94c8-854a558d049b.png" alt="Modern Kitchen" className="w-full h-full object-cover" />
+                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Kitchen</div>
+              </div>
+              <div className="relative aspect-video overflow-hidden rounded border">
+                <img src="/lovable-uploads/d732a468-e4b0-4cd7-a59f-a8aa55540435.png" alt="Front View" className="w-full h-full object-cover" />
+                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Front</div>
+              </div>
+              <div className="relative aspect-video overflow-hidden rounded border">
+                <img src="/lovable-uploads/f07bd0a1-c5e2-4e4c-8950-c5c9f4f9e09f.png" alt="Bathroom" className="w-full h-full object-cover" />
+                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Bathroom</div>
+              </div>
+              <div className="relative aspect-video overflow-hidden rounded border">
+                <img src="/lovable-uploads/d5e26506-59a0-4dd4-993e-03fd6678c6af.png" alt="Outdoor Area" className="w-full h-full object-cover" />
+                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Outdoor</div>
               </div>
             </div>
           </div>

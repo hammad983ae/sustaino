@@ -14,6 +14,7 @@ import LeasingEvidenceMildura from "./LeasingEvidenceMildura";
 import MarketCommentaryMildura from "./MarketCommentaryMildura";
 import ClimateRiskAssessmentMildura from "./ClimateRiskAssessmentMildura";
 import ValuationCertificate from "./ValuationCertificate";
+import PropertyPhotosSection from "./PropertyPhotosSection";
 
 const CompletedMilduraReport = () => {
   const reportConfig = {
@@ -110,8 +111,9 @@ const CompletedMilduraReport = () => {
         </div>
 
         {/* Report Sections */}
-        <Tabs defaultValue="executive" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 mb-6">
+        <Tabs defaultValue="photos" className="w-full">
+          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-11 mb-6">
+            <TabsTrigger value="photos" className="text-xs">Photos</TabsTrigger>
             <TabsTrigger value="executive" className="text-xs">Executive</TabsTrigger>
             <TabsTrigger value="location" className="text-xs">Location</TabsTrigger>
             <TabsTrigger value="legal" className="text-xs">Legal</TabsTrigger>
@@ -123,6 +125,20 @@ const CompletedMilduraReport = () => {
             <TabsTrigger value="climate" className="text-xs">Climate</TabsTrigger>
             <TabsTrigger value="certificate" className="text-xs">Certificate</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="photos">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Property Photos
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <PropertyPhotosSection />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="executive">
             <Card>

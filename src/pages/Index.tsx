@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import CompletedMilduraReport from '@/components/CompletedMilduraReport';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +20,15 @@ import { PDFUploadAnalysis } from '@/components/PDFUploadAnalysis';
 const Index = () => {
   const navigate = useNavigate();
   
+  
+  // Check if user wants to see the completed Mildura report
+  const urlParams = new URLSearchParams(window.location.search);
+  const showMilduraReport = urlParams.get('mildura') === 'true';
+
+  if (showMilduraReport) {
+    return <CompletedMilduraReport />;
+  }
+
   const handleBasicFormSubmit = (data) => {
     // Navigate to report with ESG assessment
     navigate('/report');
@@ -69,6 +79,19 @@ const Index = () => {
                 valuations with comprehensive environmental, social, and governance analytics. 
                 The future of property evaluation, powered by lightning-fast intelligence.
               </p>
+              
+              {/* Quick Access to Completed Report */}
+              <div className="mb-8">
+                <Button 
+                  onClick={() => window.location.href = '/?mildura=true'}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-lg mb-2"
+                >
+                  📋 View Completed Report: 320 Deakin Avenue, Mildura
+                </Button>
+                <p className="text-sm text-muted-foreground">
+                  See the fully completed property valuation report with photos
+                </p>
+              </div>
             </div>
 
             {/* Main CTA Card */}
