@@ -45,40 +45,124 @@ const ReportTypeConfiguration = () => {
   const applyReportTypePresets = (reportType: string) => {
     const presets: Record<string, any> = {
       'desktop-report': {
-        disabledSections: { 'detailed-inspection': true },
+        disabledSections: { 'rental-analysis': true, 'detailed-inspection': true },
         includeRental: false,
-        defaultApproaches: ['Direct Comparison']
+        includeGST: false,
+        defaultBasis: ['Market Value'],
+        defaultApproaches: ['Direct Comparison'],
+        defaultPurpose: ['Market Valuation'],
+        rentalDefaults: {}
       },
       'kerbside': {
-        disabledSections: { 'interior-analysis': true },
+        disabledSections: { 'rental-analysis': true, 'interior-analysis': true },
         includeRental: false,
-        defaultApproaches: ['Direct Comparison']
+        includeGST: false,
+        defaultBasis: ['Market Value'],
+        defaultApproaches: ['Direct Comparison'],
+        defaultPurpose: ['Market Valuation'],
+        rentalDefaults: {}
+      },
+      'short-form': {
+        disabledSections: {},
+        includeRental: false,
+        includeGST: false,
+        defaultBasis: ['Market Value'],
+        defaultApproaches: ['Direct Comparison'],
+        defaultPurpose: ['Market Valuation'],
+        rentalDefaults: {}
+      },
+      'long-form': {
+        disabledSections: {},
+        includeRental: true,
+        includeGST: true,
+        defaultBasis: ['Market Value'],
+        defaultApproaches: ['Direct Comparison', 'Capitalisation of Net Income'],
+        defaultPurpose: ['Market Valuation', 'Investment Decision'],
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'gst-treatment': 'inclusive'
+        }
+      },
+      'virtual-inspection-short-form': {
+        disabledSections: { 'detailed-inspection': true },
+        includeRental: false,
+        includeGST: false,
+        defaultBasis: ['Market Value'],
+        defaultApproaches: ['Direct Comparison'],
+        defaultPurpose: ['Market Valuation'],
+        rentalDefaults: {}
+      },
+      'virtual-inspection-(long-form)': {
+        disabledSections: { 'detailed-inspection': true },
+        includeRental: true,
+        includeGST: true,
+        defaultBasis: ['Market Value'],
+        defaultApproaches: ['Direct Comparison', 'Capitalisation of Net Income'],
+        defaultPurpose: ['Market Valuation', 'Investment Decision'],
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'gst-treatment': 'inclusive'
+        }
+      },
+      'sustaino-pro': {
+        disabledSections: {},
+        includeRental: true,
+        includeGST: true,
+        defaultBasis: ['Market Value'],
+        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
+        defaultPurpose: ['Investment Decision', 'Financial Reporting'],
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'gst-treatment': 'inclusive',
+          'incentives-treatment': 'effective-rent'
+        }
       },
       'insurance-valuation': {
         disabledSections: { 'rental-analysis': true, 'market-commentary': true },
         includeRental: false,
+        includeGST: false,
         defaultBasis: ['Insurance Value'],
-        defaultApproaches: ['Summation Approach']
+        defaultApproaches: ['Summation Approach'],
+        defaultPurpose: ['Insurance Purposes'],
+        rentalDefaults: {}
       },
-      'sustaino-pro': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison']
+      'other': {
+        disabledSections: {},
+        includeRental: false,
+        includeGST: false,
+        defaultBasis: [],
+        defaultApproaches: [],
+        defaultPurpose: [],
+        rentalDefaults: {}
       }
     };
 
     const preset = presets[reportType];
     if (preset) {
+      // Set disabled sections
       setDisabledSections(preset.disabledSections || {});
-      setIncludeRentalConfig(preset.includeRental ?? includeRentalConfig);
-      setIncludeGST(preset.includeGST ?? includeGST);
+      
+      // Set toggles
+      setIncludeRentalConfig(preset.includeRental);
+      setIncludeGST(preset.includeGST);
       
       // Apply default selections
-      if (preset.defaultBasis) {
-        setSelectedValues(prev => ({ ...prev, 'Basis of Valuation': preset.defaultBasis }));
-      }
-      if (preset.defaultApproaches) {
-        setSelectedValues(prev => ({ ...prev, 'Valuation Approaches': preset.defaultApproaches }));
+      setSelectedValues(prev => ({
+        ...prev,
+        'Basis of Valuation': preset.defaultBasis || [],
+        'Valuation Approaches': preset.defaultApproaches || [],
+        'Valuation Purpose': preset.defaultPurpose || []
+      }));
+
+      // Apply rental configuration defaults
+      if (preset.rentalDefaults && Object.keys(preset.rentalDefaults).length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          ...preset.rentalDefaults
+        }));
       }
     }
   };
@@ -86,42 +170,109 @@ const ReportTypeConfiguration = () => {
   // Preset logic for property types
   const applyPropertyTypePresets = (propertyType: string) => {
     const presets: Record<string, any> = {
-      'commercial': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison']
-      },
-      'industrial': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Direct Comparison', 'Summation Approach']
-      },
-      'retail': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison']
-      },
       'residential': {
         includeRental: false,
         includeGST: false,
         defaultApproaches: ['Direct Comparison'],
-        disabledSections: { 'commercial-analysis': true }
+        disabledSections: { 'rental-analysis': true },
+        rentalDefaults: {}
+      },
+      'build-to-rent': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
+        disabledSections: {},
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'property-classification': 'residential-multiple'
+        }
+      },
+      'commercial': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
+        disabledSections: {},
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'property-classification': 'office-building'
+        }
+      },
+      'industrial': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Direct Comparison', 'Summation Approach'],
+        disabledSections: {},
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'property-classification': 'warehouse-distribution'
+        }
+      },
+      'retail': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
+        disabledSections: {},
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'property-classification': 'retail-shop'
+        }
+      },
+      'development-land': {
+        includeRental: false,
+        includeGST: true,
+        defaultApproaches: ['Hypothetical Development', 'Direct Comparison'],
+        disabledSections: { 'rental-analysis': true },
+        rentalDefaults: {}
       },
       'agricultural': {
         includeRental: true,
         includeGST: false,
-        defaultApproaches: ['Direct Comparison', 'Summation Approach']
+        defaultApproaches: ['Direct Comparison', 'Summation Approach'],
+        disabledSections: {},
+        rentalDefaults: {
+          'rental-assessment-type': 'market-rent',
+          'rental-basis': 'market-rent',
+          'property-classification': 'agricultural-rural'
+        }
+      },
+      'other': {
+        includeRental: false,
+        includeGST: false,
+        defaultApproaches: [],
+        disabledSections: {},
+        rentalDefaults: {}
       }
     };
 
     const preset = presets[propertyType];
     if (preset) {
-      setIncludeRentalConfig(preset.includeRental ?? includeRentalConfig);
-      setIncludeGST(preset.includeGST ?? includeGST);
+      // Only update if not overridden by report type
+      if (!formData['report-type'] || formData['report-type'] === 'other') {
+        setIncludeRentalConfig(preset.includeRental);
+        setIncludeGST(preset.includeGST);
+      }
+      
+      // Merge disabled sections (don't override report type restrictions)
       setDisabledSections(prev => ({ ...prev, ...(preset.disabledSections || {}) }));
       
-      if (preset.defaultApproaches) {
-        setSelectedValues(prev => ({ ...prev, 'Valuation Approaches': preset.defaultApproaches }));
+      // Apply default approaches (add to existing, don't replace)
+      if (preset.defaultApproaches.length > 0) {
+        setSelectedValues(prev => ({
+          ...prev,
+          'Valuation Approaches': [...new Set([...(prev['Valuation Approaches'] || []), ...preset.defaultApproaches])]
+        }));
+      }
+
+      // Apply rental configuration defaults
+      if (preset.rentalDefaults && Object.keys(preset.rentalDefaults).length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          ...preset.rentalDefaults
+        }));
       }
     }
   };
@@ -543,18 +694,28 @@ const ReportTypeConfiguration = () => {
           )}
 
           {/* Configuration Summary */}
-          {(includeRentalConfig || includeGST) && (
-            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-md border">
-              <h4 className="font-medium text-sm mb-2">Configuration Summary:</h4>
-              <div className="text-xs text-muted-foreground space-y-1">
-                {includeRentalConfig && <p>✓ Rental valuation analysis will be included</p>}
-                {includeGST && <p>✓ GST will be factored into all calculations</p>}
-                {Object.keys(disabledSections).length > 0 && (
-                  <p>⚠️ Some report sections are disabled based on your selections</p>
-                )}
-              </div>
+          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-md border">
+            <h4 className="font-medium text-sm mb-2">Configuration Summary:</h4>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>✓ Report Type: <span className="font-medium">{formData['report-type']?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Not selected'}</span></p>
+              <p>✓ Property Type: <span className="font-medium">{formData['property-type']?.replace(/\b\w/g, l => l.toUpperCase()) || 'Not selected'}</span></p>
+              {(selectedValues['Valuation Purpose'] || []).length > 0 && (
+                <p>✓ Purpose: <span className="font-medium">{(selectedValues['Valuation Purpose'] || []).join(', ')}</span></p>
+              )}
+              {(selectedValues['Basis of Valuation'] || []).length > 0 && (
+                <p>✓ Basis: <span className="font-medium">{(selectedValues['Basis of Valuation'] || []).join(', ')}</span></p>
+              )}
+              {(selectedValues['Valuation Approaches'] || []).length > 0 && (
+                <p>✓ Approaches: <span className="font-medium">{(selectedValues['Valuation Approaches'] || []).join(', ')}</span></p>
+              )}
+              {includeRentalConfig && <p className="text-green-600">✓ Rental valuation analysis will be included</p>}
+              {includeGST && <p className="text-green-600">✓ GST will be factored into all calculations</p>}
+              {formData['gst-treatment'] && <p>✓ GST Treatment: <span className="font-medium">{formData['gst-treatment']?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></p>}
+              {Object.keys(disabledSections).length > 0 && (
+                <p className="text-amber-600">⚠️ Disabled sections: {Object.keys(disabledSections).join(', ').replace(/-/g, ' ')}</p>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </CardContent>
     </Card>
