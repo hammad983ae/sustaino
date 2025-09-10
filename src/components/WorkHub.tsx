@@ -27,6 +27,8 @@ import { Label } from "./ui/label";
 import PortfolioFinalReport from "./PortfolioFinalReport";
 import { EmailProcessor } from "./EmailProcessor";
 import { CostaGroupPortfolio } from "./CostaGroupPortfolio";
+import { JobFileManager } from "./JobFileManager";
+import { useJobFiles } from "@/hooks/useJobFiles";
 
 interface Valuation {
   id: string;
@@ -55,6 +57,19 @@ interface Report {
   current_section?: number;
 }
 
+interface ValuationJob {
+  id: string;
+  title: string;
+  description: string;
+  property_type: string;
+  address: string;
+  status: string;
+  priority: string;
+  assigned_to: string;
+  due_date: string;
+  created_at: string;
+}
+
 interface CostaPortfolioAnalysis {
   id: string;
   title: string;
@@ -68,6 +83,8 @@ export default function WorkHub() {
   const [valuations, setValuations] = useState<Valuation[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
   const [costaAnalyses, setCostaAnalyses] = useState<CostaPortfolioAnalysis[]>([]);
+  const [valuationJobs, setValuationJobs] = useState<ValuationJob[]>([]);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -124,9 +141,21 @@ export default function WorkHub() {
 
       if (costaError) throw costaError;
 
+      // Fetch valuation jobs
+      const { data: jobsData, error: jobsError } = await supabase
+        .from('valuation_jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (jobsError) throw jobsError;
+
+      if (jobsError) throw jobsError;
+
       setValuations(valuationsData || []);
       setReports(reportsData || []);
       setCostaAnalyses(costaData || []);
+      setValuationJobs(jobsData || []);
     } catch (error) {
       console.error('Error fetching work:', error);
       toast({
@@ -355,9 +384,10 @@ export default function WorkHub() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="valuations" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="valuations">Property Valuations ({valuations.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
+          <TabsTrigger value="jobs">Jobs & Files ({valuationJobs.length})</TabsTrigger>
           <TabsTrigger value="costa">Portfolio Assessments ({costaAnalyses.length})</TabsTrigger>
           <TabsTrigger value="global-portfolio">Global Operations</TabsTrigger>
           <TabsTrigger value="email-processor">Email Processor</TabsTrigger>
@@ -507,6 +537,100 @@ export default function WorkHub() {
                     </CardContent>
                   </Card>
                 ))}
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="jobs" className="mt-6">
+          <div className="space-y-6">
+            {/* Job Selection */}
+            {!selectedJobId ? (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Select a Job to Manage Files & Notes</h3>
+                {valuationJobs.length === 0 ? (
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <Building className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-lg font-medium mb-2">No jobs found</h3>
+                      <p className="text-muted-foreground">Create your first valuation job to manage files and notes</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid gap-4">
+                    {valuationJobs.map((job) => (
+                      <Card key={job.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setSelectedJobId(job.id)}>
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Building className="h-4 w-4 text-muted-foreground" />
+                                <h3 className="font-semibold">{job.title}</h3>
+                                <Badge className={getStatusColor(job.status)}>
+                                  {job.status}
+                                </Badge>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                  <p className="text-muted-foreground">Property</p>
+                                  <p className="font-medium">{job.address || 'Not specified'}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Type</p>
+                                  <p className="font-medium">{job.property_type}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Priority</p>
+                                  <p className="font-medium">{job.priority}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Due Date</p>
+                                  <p className="font-medium">{job.due_date ? formatDate(job.due_date) : 'Not set'}</p>
+                                </div>
+                              </div>
+                              
+                              {job.description && (
+                                <p className="text-sm text-muted-foreground mt-2">{job.description}</p>
+                              )}
+                            </div>
+                            
+                            <Button variant="outline" size="sm">
+                              <FileText className="h-4 w-4 mr-2" />
+                              Manage Files
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setSelectedJobId(null)}
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Jobs
+                  </Button>
+                  <div>
+                    <h3 className="text-lg font-semibold">
+                      {valuationJobs.find(j => j.id === selectedJobId)?.title || 'Job Files & Notes'}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {valuationJobs.find(j => j.id === selectedJobId)?.address || 'Manage files, photos, and notes for this job'}
+                    </p>
+                  </div>
+                </div>
+                
+                <JobFileManager 
+                  jobId={selectedJobId} 
+                  jobTitle={valuationJobs.find(j => j.id === selectedJobId)?.title || 'Job'}
+                />
               </div>
             )}
           </div>
