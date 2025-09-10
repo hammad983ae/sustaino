@@ -93,30 +93,12 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
         console.log('Using property analysis data:', planningDataToUse);
         console.log('Updated lot/plan data:', lotPlanData);
       } else {
-        // Fallback to mock data
-        console.log('Property analysis failed, using mock data:', error);
+        // Property analysis failed - do not use mock data for legal reasons
+        console.error('Property analysis failed, no data available:', error);
         
-        // Still populate some mock lot/plan data
-        updateAddressData({
-          lotNumber: Math.floor(Math.random() * 999 + 1).toString(),
-          planNumber: `PS${Math.floor(Math.random() * 999999 + 100000)}`
-        });
-        
-        planningDataToUse = {
-          zoning: "Commercial 1 Zone (C1Z)",
-          overlays: ["Development Contributions Plan Overlay", "Special Building Overlay"],
-          lga: "City of Melbourne",
-          heightRestriction: "15m maximum",
-          floorSpaceRatio: "0.5:1",
-          minimumLotSize: "300m²",
-          landUse: "Commercial uses, Retail premises, Office premises",
-          developmentPotential: "Medium - Subject to overlays",
-          planningScheme: "Bayside Planning Scheme",
-          planningRestrictions: ["Heritage controls apply", "Neighbourhood character overlay"],
-          permitRequired: true,
-          mapReference: "vicplan.vic.gov.au/planning/PS327856",
-          lastUpdated: new Date().toLocaleDateString()
-        };
+        setPlanningData(null);
+        console.warn('Unable to retrieve property data. Please verify the address and try again.');
+        return;
       }
       
       setPlanningData(planningDataToUse);
@@ -124,29 +106,12 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
     } catch (error) {
       console.error("Error fetching planning data:", error);
       
-      // Use fallback data on error and populate mock lot/plan
-      updateAddressData({
-        lotNumber: Math.floor(Math.random() * 999 + 1).toString(),
-        planNumber: `PS${Math.floor(Math.random() * 999999 + 100000)}`
-      });
+      // Error occurred - do not use fallback data for legal reasons
+      console.error("Error fetching planning data:", error);
       
-      const fallbackData = {
-        zoning: "Commercial 1 Zone (C1Z)",
-        overlays: ["Development Contributions Plan Overlay", "Special Building Overlay"],
-        lga: "City of Melbourne",
-        heightRestriction: "15m maximum",
-        floorSpaceRatio: "0.5:1",
-        minimumLotSize: "300m²",
-        landUse: "Commercial uses, Retail premises, Office premises",
-        developmentPotential: "Medium - Subject to overlays",
-        planningScheme: "Bayside Planning Scheme",
-        planningRestrictions: ["Heritage controls apply", "Neighbourhood character overlay"],
-        permitRequired: true,
-        mapReference: "fallback-data",
-        lastUpdated: new Date().toLocaleDateString()
-      };
-      setPlanningData(fallbackData);
-      onDataFetched?.(fallbackData);
+      setPlanningData(null);
+      console.warn('Unable to retrieve property data. Please check your internet connection and try again.');
+      onDataFetched?.(null);
     } finally {
       setIsSearching(false);
     }

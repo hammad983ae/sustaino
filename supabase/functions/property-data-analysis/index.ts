@@ -98,142 +98,20 @@ serve(async (req) => {
           };
         }
 
-        // 3. Property market analysis (simulated data - would integrate with real estate APIs)
-        analysisData.marketData = {
-          estimatedValue: {
-            min: 650000,
-            max: 850000,
-            average: 750000,
-            confidence: 'medium',
-            lastUpdated: new Date().toISOString()
-          },
-          marketTrends: {
-            priceGrowth12Months: 8.5,
-            priceGrowth3Years: 23.2,
-            daysOnMarket: 28,
-            salesVolume: 'high'
-          },
-          comparableProperties: [
-            {
-              address: 'Similar property 1',
-              soldPrice: 720000,
-              soldDate: '2024-11-15',
-              daysonMarket: 21
-            },
-            {
-              address: 'Similar property 2', 
-              soldPrice: 780000,
-              soldDate: '2024-10-28',
-              daysonMarket: 35
-            }
-          ]
-        };
-
-        // 4. Environmental and risk assessment
-        analysisData.environmentalData = {
-          climateRisk: {
-            floodRisk: 'low',
-            bushfireRisk: 'medium',
-            cycloneRisk: 'low',
-            earthquakeRisk: 'very low'
-          },
-          sustainabilityFactors: {
-            solarPotential: 'high',
-            walkability: 72,
-            publicTransportAccess: 'good',
-            airQuality: 'good'
-          },
-          environmentalRestrictions: {
-            heritageOverlay: false,
-            environmentalOverlay: false,
-            floodOverlay: false
-          }
-        };
-
-        // Extract detailed address components
-        const addressComponents = result.address_components;
-        let lga = '', postcode = '', suburb = '', stateCode = '';
+        // Note: Real property market data would require integration with actual real estate APIs
+        // This function should NOT return mock data for legal reasons
         
-        addressComponents.forEach(component => {
-          if (component.types.includes('administrative_area_level_2')) {
-            lga = component.long_name;
+        return new Response(
+          JSON.stringify({ 
+            error: 'Property valuation data unavailable', 
+            message: 'Real estate data integration required. Mock data removed to prevent legal issues.',
+            locationData: analysisData.locationData
+          }), 
+          { 
+            status: 400, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
           }
-          if (component.types.includes('postal_code')) {
-            postcode = component.long_name;
-          }
-          if (component.types.includes('locality')) {
-            suburb = component.long_name;
-          }
-          if (component.types.includes('administrative_area_level_1')) {
-            stateCode = component.short_name;
-          }
-        });
-
-        // 5. Enhanced Planning and zoning data
-        analysisData.planningData = {
-          zoning: state === 'VIC' ? 'Residential 1 Zone (R1Z)' : 'R2 Low Density Residential',
-          overlays: state === 'VIC' ? 
-            ['Heritage Overlay (HO123)', 'Neighbourhood Character Overlay (NCO1)'] :
-            ['Heritage Conservation Area', 'Flood Risk Management Overlay'],
-          lga: lga || (state === 'VIC' ? 'City of Melbourne' : 'Local Government Area'),
-          planningScheme: state === 'VIC' ? 
-            `${lga || 'Melbourne'} Planning Scheme` :
-            `${state} Planning Scheme`,
-          landUse: 'Residential',
-          developmentPotential: 'Medium - single dwelling with potential for secondary dwelling subject to controls',
-          planningRestrictions: ['Heritage controls apply', 'Neighbourhood character overlay'],
-          permitRequired: true,
-          buildingHeight: '9m maximum (2 storeys)',
-          heightRestriction: '9m maximum (2 storeys)', // Alias for compatibility
-          floorSpaceRatio: state === 'NSW' ? '0.5:1' : 'Not specified',
-          minimumLotSize: '300m²',
-          setbacks: {
-            front: '6m',
-            side: '1.5m',
-            rear: '8m'
-          },
-          futureInfrastructure: [
-            'Planned metro extension (2028)',
-            'New shopping center (2026)'
-          ]
-        };
-
-        // 5a. Lot and plan information
-        analysisData.lotPlan = {
-          lotNumber: Math.floor(Math.random() * 999) + 1,
-          planNumber: `PS${Math.floor(Math.random() * 999999) + 100000}`,
-          crownAllotment: `CA${Math.floor(Math.random() * 999) + 1}`,
-          section: Math.floor(Math.random() * 50) + 1,
-          parish: state === 'VIC' ? 'Melbourne North' : 'Local Parish',
-          county: state === 'VIC' ? 'Bourke' : 'Local County',
-          volumeFolio: `Vol ${Math.floor(Math.random() * 9999) + 1000} Fol ${Math.floor(Math.random() * 999) + 1}`,
-          titleType: 'Torrens Title',
-          landSize: `${Math.round(400 + Math.random() * 800)}m²`,
-          suburb: suburb,
-          postcode: postcode,
-          lga: lga,
-          state: stateCode
-        };
-
-        // 6. Transport and accessibility
-        analysisData.transportData = {
-          walkScore: 72,
-          transitScore: 65,
-          bikeScore: 58,
-          nearestStation: '0.8km to Central Station',
-          parking: 'Street parking available',
-          trafficFlow: 'moderate'
-        };
-
-        // 7. Demographic data
-        analysisData.demographicData = {
-          medianAge: 35,
-          medianIncome: 85000,
-          populationGrowth: 2.1,
-          householdSize: 2.3,
-          education: 'University educated: 65%',
-          employment: 'Professional services: 45%'
-        };
+        );
 
       } else {
         console.error('Geocoding failed:', geocodeData.status);

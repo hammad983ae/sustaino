@@ -85,18 +85,17 @@ startxref
     }
   };
 
-  // Mock data for demonstration
-  const mockData = {
-    address: "123 Example Street, Suburb NSW 2000",
-    location: "Premium Commercial District",
-    date: "9/9/2025",
-    valuation: "To Be Determined",
-    totalPages: 73,
-    completedSections: 18,
-    partialSections: 4
-  };
+  // Note: Mock data removed for legal compliance - all data must be real property data
 
-  const propertyData = reportData || mockData;
+  const propertyData = reportData || {
+    address: "Please enter property address to generate report",
+    location: "No location data available",
+    date: new Date().toLocaleDateString(),
+    valuation: "Data unavailable - requires property analysis",
+    totalPages: 0,
+    completedSections: 0,
+    partialSections: 0
+  };
 
   // Sections that would be in a complete report
   const sections = [
