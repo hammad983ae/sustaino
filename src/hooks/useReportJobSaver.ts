@@ -34,21 +34,47 @@ export const useReportJobSaver = ({
 
   // Save or update report job
   const saveReportJob = useCallback(async (showToast = false) => {
-    console.log('saveReportJob called:', { enabled, propertyAddress, showToast });
+    console.log('🔵 saveReportJob called:', { 
+      enabled, 
+      propertyAddress: propertyAddress ? 'YES' : 'NO', 
+      showToast,
+      dataKeys: Object.keys(reportData),
+      currentSection
+    });
     
     if (!enabled) {
-      console.log('Saving disabled');
+      console.log('❌ Saving disabled');
       return null;
     }
     
-    if (!propertyAddress) {
-      console.log('No property address provided');
-      return null;
+    if (!propertyAddress || propertyAddress.trim() === '') {
+      console.log('⚠️ No property address provided, checking if we have report data:', propertyAddress);
+      // If we have report data but no address, try to extract address from the data
+      const extractedAddress = reportData.propertyDetails?.address || 
+                              reportData.address || 
+                              reportData.propertyDetails?.propertyAddress ||
+                              reportData.propertyAddress ||
+                              reportData.propertyForm?.address ||
+                              reportData.addressForm?.address ||
+                              '';
+      
+      if (extractedAddress) {
+        console.log('✅ Found address in report data:', extractedAddress);
+        // Use the extracted address for this save
+        propertyAddress = extractedAddress;
+      } else if (Object.keys(reportData).length === 0) {
+        console.log('❌ No report data to save');
+        return null;
+      } else {
+        // Save with a generic address if we have data but no address
+        propertyAddress = `Draft Report ${Date.now()}`;
+        console.log('🔄 Using generic address for draft:', propertyAddress);
+      }
     }
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      console.log('User check result:', user ? 'authenticated' : 'not authenticated');
+      console.log('🔍 User check result:', user ? `authenticated as ${user.email}` : 'not authenticated');
       
       if (!user) {
         if (showToast) {
@@ -62,11 +88,21 @@ export const useReportJobSaver = ({
       }
 
       const dataString = JSON.stringify(reportData);
-      console.log('Data check:', { dataLength: dataString.length, hasChanged: dataString !== lastSavedDataRef.current });
+      console.log('📊 Data check:', { 
+        dataLength: dataString.length, 
+        hasChanged: dataString !== lastSavedDataRef.current,
+        reportDataKeys: Object.keys(reportData),
+        hasReportData: Object.keys(reportData).length > 0
+      });
       
-      // Only save if data has changed
+      // Only save if data has changed and we have actual data
       if (dataString === lastSavedDataRef.current) {
-        console.log('No data changes, skipping save');
+        console.log('⏭️ No data changes, skipping save');
+        return reportJobIdRef.current;
+      }
+
+      if (Object.keys(reportData).length === 0) {
+        console.log('⚠️ No report data to save');
         return reportJobIdRef.current;
       }
 

@@ -21,14 +21,14 @@ const ReportViewer = () => {
   // Use the unified report data hook
   const { reportData, setReportData, loadFromStorage, saveToStorage } = useReportData();
 
-  // Auto-save to Work Hub
+  // Auto-save to Work Hub  
   const { saveNow, loadSavedReport, markAsCompleted } = useReportJobSaver({
     reportData,
     currentSection,
     propertyAddress,
     reportType: 'Property Report',
     enabled: true,
-    autoSaveDelay: 5000
+    autoSaveDelay: 2000 // Reduced delay for more frequent saves
   });
 
   // Load saved progress on component mount
@@ -109,11 +109,25 @@ const ReportViewer = () => {
 
   // Update property address when report data changes
   useEffect(() => {
-    const address = reportData.propertyDetails?.address || reportData.address || '';
-    console.log('Property address update:', { address, currentPropertyAddress: propertyAddress });
+    // Try multiple possible locations for the address
+    const address = reportData.propertyDetails?.address || 
+                   reportData.address || 
+                   reportData.propertyDetails?.propertyAddress ||
+                   reportData.propertyAddress ||
+                   reportData.propertyForm?.address ||
+                   reportData.addressForm?.address ||
+                   '';
+    
+    console.log('🏠 Property address update:', { 
+      address, 
+      currentPropertyAddress: propertyAddress,
+      allReportDataKeys: Object.keys(reportData),
+      propertyDetailsKeys: reportData.propertyDetails ? Object.keys(reportData.propertyDetails) : []
+    });
+    
     if (address && address !== propertyAddress) {
       setPropertyAddress(address);
-      console.log('Property address updated to:', address);
+      console.log('✅ Property address updated to:', address);
     }
   }, [reportData, propertyAddress]);
 
