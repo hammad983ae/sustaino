@@ -46,17 +46,44 @@ export default function AuthPage() {
       }
     };
 
+    // Check for password recovery mode
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+
+    if (mode === 'recovery' && accessToken && refreshToken) {
+      // Handle password recovery
+      toast({
+        title: "Password Reset Ready",
+        description: "You can now update your password using the form below.",
+        className: "bg-blue-50 border-blue-200"
+      });
+    }
+
     checkUser();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
+        toast({
+          title: "Successfully logged in! 🎉",
+          description: "Your job filing system is ready to use.",
+          className: "bg-green-50 border-green-200"
+        });
         navigate('/');
+      }
+      if (event === 'PASSWORD_RECOVERY') {
+        toast({
+          title: "Update Your Password",
+          description: "Please enter your new password below.",
+          className: "bg-blue-50 border-blue-200"
+        });
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,26 +126,40 @@ export default function AuthPage() {
     setIsResetting(true);
     setError(null);
 
+    if (!resetEmail.trim()) {
+      setError('Please enter your email address.');
+      setIsResetting(false);
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/auth`,
+        redirectTo: `${window.location.origin}/auth?mode=recovery`,
       });
 
       if (error) {
-        setError(error.message);
+        console.error('Password reset error:', error);
+        if (error.message.includes('User not found')) {
+          setError('No account found with this email address.');
+        } else if (error.message.includes('Email rate limit exceeded')) {
+          setError('Too many reset attempts. Please wait before trying again.');
+        } else {
+          setError(error.message);
+        }
         return;
       }
 
       toast({
-        title: "Password reset email sent!",
-        description: "Check your email for a password reset link.",
+        title: "Password reset email sent! ✉️",
+        description: "Check your email for a password reset link. The link will expire in 1 hour.",
+        className: "bg-green-50 border-green-200"
       });
 
       setShowResetForm(false);
       setResetEmail('');
     } catch (error) {
       console.error('Password reset error:', error);
-      setError('An unexpected error occurred. Please try again.');
+      setError('Failed to send password reset email. Please check your email address and try again.');
     } finally {
       setIsResetting(false);
     }
@@ -297,30 +338,43 @@ export default function AuthPage() {
                   </div>
 
                   {showResetForm && (
-                    <Card className="p-4 bg-muted/50">
-                      <form onSubmit={handlePasswordReset} className="space-y-3">
-                        <Label htmlFor="reset-email">Reset Password</Label>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="reset-email"
-                            type="email"
-                            placeholder="Enter your email"
-                            value={resetEmail}
-                            onChange={(e) => setResetEmail(e.target.value)}
-                            className="pl-10"
-                            required
-                          />
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <form onSubmit={handlePasswordReset} className="space-y-4">
+                        <div className="text-center mb-3">
+                          <h4 className="font-semibold text-blue-800">Reset Your Password</h4>
+                          <p className="text-sm text-blue-600">Enter your email to receive a reset link</p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="reset-email" className="text-blue-800">Email Address</Label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-blue-500" />
+                            <Input
+                              id="reset-email"
+                              type="email"
+                              placeholder="Enter your email address"
+                              value={resetEmail}
+                              onChange={(e) => setResetEmail(e.target.value)}
+                              className="pl-10 border-blue-200 focus:border-blue-400"
+                              required
+                            />
+                          </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button type="submit" size="sm" disabled={isResetting}>
-                            {isResetting ? 'Sending...' : 'Send Reset Link'}
+                          <Button 
+                            type="submit" 
+                            className="bg-blue-600 hover:bg-blue-700" 
+                            disabled={isResetting || !resetEmail.trim()}
+                          >
+                            {isResetting ? 'Sending Reset Link...' : 'Send Reset Link'}
                           </Button>
                           <Button 
                             type="button" 
                             variant="outline" 
-                            size="sm"
-                            onClick={() => setShowResetForm(false)}
+                            onClick={() => {
+                              setShowResetForm(false);
+                              setResetEmail('');
+                              setError(null);
+                            }}
                           >
                             Cancel
                           </Button>
