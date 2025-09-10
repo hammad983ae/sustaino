@@ -242,53 +242,81 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
                 <div className="flex items-center gap-2 mb-4">
                   <CheckCircle className="h-5 w-5 text-emerald-600" />
                   <h4 className="font-semibold text-emerald-900">Planning Data Retrieved</h4>
+                  <Badge variant="outline" className="ml-auto text-xs">
+                    {planningData.data_source}
+                  </Badge>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label className="text-xs font-medium text-emerald-700">LGA</label>
-                    <p className="text-sm">{planningData.lga}</p>
+                    <label className="text-xs font-medium text-emerald-700">Council</label>
+                    <p className="text-sm">{planningData.council}</p>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-emerald-700">Zoning</label>
-                    <p className="text-sm">{planningData.zoning}</p>
+                    <label className="text-xs font-medium text-emerald-700">Planning Scheme</label>
+                    <p className="text-sm">{planningData.planning_scheme}</p>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-emerald-700">Height Restriction</label>
-                    <p className="text-sm">{planningData.heightRestriction}</p>
+                    <label className="text-xs font-medium text-emerald-700">Primary Zone</label>
+                    <p className="text-sm">{planningData.zone_primary}</p>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-emerald-700">Floor Space Ratio</label>
-                    <p className="text-sm">{planningData.floorSpaceRatio}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-emerald-700">Minimum Lot Size</label>
-                    <p className="text-sm">{planningData.minimumLotSize}</p>
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-emerald-700">Land Use</label>
-                    <p className="text-sm">{planningData.landUse}</p>
-                  </div>
-                  <div className="md:col-span-2 lg:col-span-3">
-                    <label className="text-xs font-medium text-emerald-700">Development Potential</label>
-                    <p className="text-sm">{planningData.developmentPotential}</p>
+                    <label className="text-xs font-medium text-emerald-700">Overlays</label>
+                    <p className="text-sm">{planningData.overlays_present ? `Yes (${planningData.overlay_count || 0})` : 'No'}</p>
                   </div>
                 </div>
-                
-                <div className="mt-4">
-                  <label className="text-xs font-medium text-emerald-700">Overlays</label>
-                  <div className="flex gap-2 mt-1">
-                    {planningData.overlays.map((overlay, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {overlay}
-                      </Badge>
-                    ))}
+
+                <div className="mb-4 p-3 bg-white rounded border">
+                  <label className="text-xs font-medium text-emerald-700">Zone Description</label>
+                  <p className="text-sm">{planningData.zone_description}</p>
+                </div>
+
+                <div className="mb-4 p-3 bg-white rounded border">
+                  <label className="text-xs font-medium text-emerald-700">Land Use</label>
+                  <p className="text-sm">{planningData.land_use}</p>
+                </div>
+
+                <div className="mb-4 p-3 bg-white rounded border">
+                  <label className="text-xs font-medium text-emerald-700">Development Potential</label>
+                  <p className="text-sm">{planningData.development_potential}</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <label className="text-xs font-medium text-emerald-700">Heritage Overlay</label>
+                    <p className="text-sm">{planningData.heritage_overlay ? 'Yes' : 'No'}</p>
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-emerald-700">Vegetation Protection</label>
+                    <p className="text-sm">{planningData.vegetation_protection ? 'Yes' : 'No'}</p>
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-emerald-700">Permit Required</label>
+                    <p className="text-sm">{planningData.permit_required ? 'Yes' : 'No'}</p>
                   </div>
                 </div>
+
+                {planningData.overlays && planningData.overlays.length > 0 && (
+                  <div className="mb-4">
+                    <label className="text-xs font-medium text-emerald-700">Active Overlays</label>
+                    <div className="mt-2 space-y-2">
+                      {planningData.overlays.map((overlay: any, index: number) => (
+                        <div key={index} className="p-2 bg-white rounded border text-xs">
+                          <span className="font-medium">{overlay.code}:</span> {overlay.description}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
-                <div className="mt-4 pt-3 border-t border-emerald-200">
+                <div className="pt-3 border-t border-emerald-200">
                   <p className="text-xs text-emerald-600">
-                    Data sourced from {planningData.planningScheme} • Last updated: {planningData.lastUpdated}
+                    Data from {planningData.data_source} • Last updated: {planningData.last_updated ? new Date(planningData.last_updated).toLocaleDateString() : 'Unknown'}
+                    {planningData.coordinates && (
+                      <span className="ml-4">
+                        Coordinates: {planningData.coordinates.latitude?.toFixed(6)}, {planningData.coordinates.longitude?.toFixed(6)}
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
