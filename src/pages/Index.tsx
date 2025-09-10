@@ -39,26 +39,43 @@ const Index = () => {
                 <span className="text-primary font-semibold">World's First AI-Powered ESG Property Platform</span>
               </div>
               
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="relative p-4 bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 rounded-2xl shadow-2xl">
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400/80 via-orange-500/80 to-amber-600/80 rounded-2xl blur-sm"></div>
-                  <Zap className="h-12 w-12 text-white relative z-10" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-                  <span className="text-2xl font-bold text-muted-foreground">Powered</span>
-                </div>
-              </div>
-              
-              <h1 className="text-5xl font-bold text-center mb-4">
-                AI Lightning
-              </h1>
-              
-              <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-8">
                 Revolutionary AI-driven ESG property assessment platform delivering instant 
                 valuations with comprehensive environmental, social, and governance analytics. 
                 The future of property evaluation, powered by lightning-fast intelligence.
               </p>
+
+              {/* Animated Lightning & Earth Logo */}
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <div className="relative">
+                  {/* Earth */}
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-blue-400 via-green-500 to-blue-600 rounded-full shadow-2xl animate-pulse">
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-400/30 to-blue-500/30 rounded-full"></div>
+                    {/* Earth continents */}
+                    <div className="absolute top-2 left-3 w-3 h-2 bg-green-600 rounded-sm"></div>
+                    <div className="absolute bottom-3 right-2 w-4 h-3 bg-green-600 rounded"></div>
+                    <div className="absolute top-4 right-1 w-2 h-1 bg-green-600 rounded"></div>
+                    
+                    {/* Lightning bolt striking */}
+                    <div className="absolute -top-8 -left-2 transform -rotate-12">
+                      <Zap className="h-8 w-8 text-yellow-400 animate-[flash_2s_ease-in-out_infinite] drop-shadow-lg" />
+                    </div>
+                    
+                    {/* Explosion effect */}
+                    <div className="absolute inset-0 opacity-0 animate-[explosion_2s_ease-in-out_infinite_1s]">
+                      <div className="absolute -top-2 -left-2 w-20 h-20 bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 rounded-full blur-md opacity-70"></div>
+                      <div className="absolute -top-1 -left-1 w-18 h-18 bg-gradient-to-r from-yellow-300 via-orange-400 to-red-400 rounded-full blur-sm opacity-50"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <span className="text-4xl font-bold bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 bg-clip-text text-transparent">
+                    Powered
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Main CTA Card */}
