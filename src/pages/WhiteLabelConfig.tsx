@@ -14,8 +14,10 @@ import {
   Eye, 
   Shield,
   Save,
-  RefreshCw
+  RefreshCw,
+  ArrowLeft
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { toast } from "@/hooks/use-toast";
@@ -108,6 +110,12 @@ const WhiteLabelConfig = () => {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Main Dashboard
+                </Link>
+              </div>
               <h1 className="text-3xl font-bold flex items-center gap-3">
                 <Settings className="h-8 w-8 text-primary" />
                 White Label Configuration

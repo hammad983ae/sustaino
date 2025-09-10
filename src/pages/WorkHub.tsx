@@ -116,6 +116,12 @@ const WorkHub = () => {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1">
+                  <ArrowRight className="h-4 w-4 rotate-180" />
+                  Back to Main Dashboard
+                </Link>
+              </div>
               <h1 className="text-3xl font-bold flex items-center gap-3">
                 <Briefcase className="h-8 w-8 text-primary" />
                 Work Hub

@@ -227,7 +227,7 @@ const EnhancedESGStrategy = () => {
             <Link to="/">
               <Button variant="outline" size="sm" className="flex items-center gap-2 mb-4">
                 <ArrowLeft className="h-4 w-4" />
-                Back to Home
+                Back to Main Dashboard
               </Button>
             </Link>
             <div className="flex items-center gap-3">
