@@ -43,15 +43,21 @@ const ExecutiveSummary = ({ onNavigateToSection, reportConfiguration, includedSe
   // Generate introduction content based on configuration
   const generateIntroductionContent = () => {
     const config = reportConfiguration || {};
-    const propertyTypeText = config.propertyType ? config.propertyType.charAt(0).toUpperCase() + config.propertyType.slice(1) : "property";
-    const reportTypeText = config.reportType ? config.reportType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : "valuation report";
+    
+    // Return empty string for professional appearance - user will fill this in
+    if (!config.instructingParty || !config.reliantParty) {
+      return "";
+    }
+
+    const propertyTypeText = config.propertyType ? config.propertyType.charAt(0).toUpperCase() + config.propertyType.slice(1) : "";
+    const reportTypeText = config.reportType ? config.reportType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : "";
     const purposeText = config.valuationPurpose && config.valuationPurpose.length > 0 
       ? config.valuationPurpose.join(', ').toLowerCase() 
-      : "market valuation purposes";
+      : "";
 
-    return `This ${reportTypeText.toLowerCase()} provides a comprehensive valuation of the ${propertyTypeText.toLowerCase()} property at 320 Deakin Avenue, Mildura VIC 3500, for ${purposeText}. The analysis incorporates recent market transactions, sector-specific data, regional economic outlook, and climate change risk assessments to support an informed understanding of the property's current market value and associated risks.
+    return `This ${reportTypeText.toLowerCase()} provides a comprehensive valuation of the ${propertyTypeText.toLowerCase()} property at 320 Deakin Avenue, Mildura VIC 3500, for ${purposeText}. The analysis incorporates recent market transactions, sector-specific data, regional economic outlook, and climate change risk assessments.
 
-The valuation has been prepared for ${config.instructingParty || "[Instructing Party]"} and may be relied upon by ${config.reliantParty || "[Reliant Party]"}. This assessment follows professional valuation standards and incorporates ESG factors to provide a forward-looking perspective on property performance and risk.`;
+The valuation has been prepared for ${config.instructingParty} and may be relied upon by ${config.reliantParty}. This assessment follows professional valuation standards and incorporates ESG factors to provide a forward-looking perspective on property performance and risk.`;
   };
 
   // Generate section-specific summaries based on included sections
@@ -194,16 +200,17 @@ Land productivity analysis, water rights evaluation, and carbon farming potentia
             </div>
             <Textarea 
               value={generateIntroductionContent()}
+              placeholder="Enter the report introduction here..."
               className="min-h-[120px] resize-none text-sm"
-              readOnly
             />
-            <div className="mt-4 p-3 bg-muted/50 rounded-md">
-              <h4 className="text-sm font-medium mb-2">Configuration Details</h4>
-              <div className="text-xs text-muted-foreground whitespace-pre-line">
-                {generateConfigurationSummary()}
+            {reportConfiguration && Object.keys(reportConfiguration).length > 0 && (
+              <div className="mt-4 p-3 bg-muted/50 rounded-md">
+                <h4 className="text-sm font-medium mb-2">Report Configuration</h4>
+                <div className="text-xs text-muted-foreground whitespace-pre-line">
+                  {generateConfigurationSummary()}
+                </div>
               </div>
-            </div>
-            <Badge variant="secondary" className="mt-2">Auto-Generated from STEP FOUR Configuration</Badge>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -217,52 +224,30 @@ Land productivity analysis, water rights evaluation, and carbon farming potentia
         <CollapsibleContent className="mt-4">
           <div className="space-y-4">
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
-              <h4 className="font-medium text-primary mb-2">STEP SIX Process</h4>
+              <h4 className="font-medium text-primary mb-2">Executive Summary Generation</h4>
               <p className="text-sm text-muted-foreground">
-                Automated analysis of all report sections to generate comprehensive executive summary with key findings, valuation conclusions, and strategic recommendations.
+                Generate a comprehensive executive summary based on completed report sections with key findings, valuation conclusions, and recommendations.
               </p>
             </div>
             <div className="flex items-center justify-between">
               <h3 className="font-medium">Executive Summary</h3>
               <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4" />
-                STEP SIX Auto-Generate
+                Generate Summary
               </Button>
             </div>
             <Textarea 
-              value={`STEP SIX Executive Summary - Auto-Generated Analysis:
-
-**Property Overview:**
-${reportConfiguration?.propertyType ? `${reportConfiguration.propertyType.charAt(0).toUpperCase() + reportConfiguration.propertyType.slice(1)} property` : "Property"} located at 320 Deakin Avenue, Mildura VIC 3500 has been comprehensively assessed using ${reportConfiguration?.valuationApproaches ? reportConfiguration.valuationApproaches.join(', ').toLowerCase() : "market"} methodology.
-
-**Valuation Configuration:**
-${generateConfigurationSummary()}
-
-**Comprehensive Section Analysis:**
-${generateSectionSummaries()}
-
-**Key Findings & Conclusions:**
-• Market analysis supports valuation conclusions under ${reportConfiguration?.basisOfValuation ? reportConfiguration.basisOfValuation.join(' and ') : "market value"} basis
-• All included report sections demonstrate consistent findings supporting assessed value range
-• Climate risk assessment integrated with 3-7% potential value impact consideration
-• ESG factors incorporated throughout assessment ensuring future-proofing perspectives
-• ${reportConfiguration?.propertyType || "Property"} sector fundamentals remain sound with appropriate risk mitigation strategies identified
-
-**Investment Recommendation:**
-Property demonstrates solid fundamentals across all assessed criteria. Comprehensive analysis of ${includedSections.length} included sections supports valuation conclusions with appropriate consideration of market risks and opportunities.
-
-**Professional Standards Compliance:**
-Valuation prepared in accordance with ANZVGP 101, IVS 2025, incorporating retrospective valuation requirements and ESG best practices across all ${includedSections.length} report sections analyzed.`}
-              className="min-h-[250px] resize-none text-sm"
-              readOnly
+              placeholder="The executive summary will be generated here based on all completed report sections..."
+              className="min-h-[200px] resize-none text-sm"
             />
-            <div className="mt-4 p-3 bg-info/10 rounded-md border border-info/20">
-              <h4 className="text-sm font-medium mb-2">Sections Analyzed ({includedSections.length})</h4>
-              <div className="text-xs text-muted-foreground">
-                {includedSections.length > 0 ? includedSections.join(" • ") : "No sections selected"}
+            {includedSections.length > 0 && (
+              <div className="mt-4 p-3 bg-info/10 rounded-md border border-info/20">
+                <h4 className="text-sm font-medium mb-2">Report Sections ({includedSections.length})</h4>
+                <div className="text-xs text-muted-foreground">
+                  {includedSections.join(" • ")}
+                </div>
               </div>
-            </div>
-            <Badge variant="secondary" className="mt-2">Auto-Generated from All {includedSections.length} Report Sections</Badge>
+            )}
           </div>
         </CollapsibleContent>
       </Collapsible>
