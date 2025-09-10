@@ -60,7 +60,7 @@ const Index = () => {
                       <BarChart3 className="h-8 w-8 text-primary" />
                     </div>
                     <CardTitle className="text-3xl font-bold">
-                      Start Your ESG Assessment
+                      Power Your Valuation and ESG Assessment
                     </CardTitle>
                   </div>
                   <p className="text-muted-foreground text-lg">
