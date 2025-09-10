@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import PropertyAddressForm from "./PropertyAddressForm";
 
 interface PropertyTypeSelectorProps {
   onSelect: (type: string) => void;
@@ -10,76 +12,66 @@ interface PropertyTypeSelectorProps {
 
 export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorProps) {
   const navigate = useNavigate();
-  const propertyTypes = [
-    {
-      id: "residential",
-      title: "Residential Property",
-      description: "Houses, units, townhouses, and residential investments",
-      icon: Home,
-      features: ["Comparable sales", "Rental yields", "Market trends", "Condition assessment"],
-      color: "bg-gradient-to-br from-card to-success/10 border-success/20"
-    },
-    {
-      id: "build-to-rent",
-      title: "Build to Rent",
-      description: "Purpose-built rental accommodation and BTR developments",
-      icon: Building2,
-      features: ["Rental income", "Build costs", "Market analysis", "Investment yields"],
-      color: "bg-gradient-to-br from-card to-info/10 border-info/20"
-    },
-    {
-      id: "commercial",
-      title: "Commercial Property",
-      description: "Office, retail, industrial, and investment properties",
-      icon: Building2,
-      features: ["Income analysis", "Tenant assessment", "Market yields", "WALE calculations"],
-      color: "bg-gradient-to-br from-card to-info/10 border-info/20"
-    },
-    {
-      id: "industrial",
-      title: "Industrial Property",
-      description: "Warehouses, manufacturing facilities, and distribution centers",
-      icon: Factory,
-      features: ["Functional obsolescence", "Operational efficiency", "Location analysis", "Specialized markets"],
-      color: "bg-gradient-to-br from-card to-primary/10 border-primary/20"
-    },
-    {
-      id: "retail",
-      title: "Retail Property",
-      description: "Shopping centers, standalone retail, and food & beverage",
-      icon: Building2,
-      features: ["Foot traffic", "Sales per sqm", "Anchor tenancy", "Trade area analysis"],
-      color: "bg-gradient-to-br from-card to-warning/10 border-warning/20"
-    },
-    {
-      id: "development-land",
-      title: "Development Land",
-      description: "Vacant land, development sites, and subdivision opportunities",
-      icon: Trees,
-      features: ["Highest & best use", "Development potential", "Planning constraints", "Feasibility analysis"],
-      color: "bg-gradient-to-br from-card to-success/10 border-success/20"
-    },
-    {
-      id: "agricultural",
-      title: "Agricultural Property",
-      description: "Farms, rural land, and agricultural enterprises",
-      icon: Trees,
-      features: ["Land productivity", "Water rights", "Carbon credits", "Commodity analysis"],
-      color: "bg-gradient-to-br from-card to-warning/10 border-warning/20"
-    },
-    {
-      id: "specialised",
-      title: "Specialised Property",
-      description: "Purpose-built assets with unique operational requirements",
-      icon: Factory,
-      features: ["Replacement cost", "Operational analysis", "Industry metrics", "Specialized comps"],
-      color: "bg-gradient-to-br from-card to-primary/10 border-primary/20"
-    }
-  ];
+  const [currentStep, setCurrentStep] = useState<'address' | 'services'>('address');
+
+  const handleAddressComplete = () => {
+    setCurrentStep('services');
+  };
+
+  const handleBackToAddress = () => {
+    setCurrentStep('address');
+  };
+
+  if (currentStep === 'address') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Progress Header */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Step 1: Property Address</h2>
+              <span className="text-sm text-muted-foreground">1 of 6</span>
+            </div>
+            <Progress value={17} className="h-2 mb-2" />
+            <p className="text-sm text-muted-foreground">17% Complete</p>
+          </div>
+
+          {/* Property Address Form */}
+          <PropertyAddressForm />
+
+          {/* Next Button */}
+          <div className="flex justify-end mt-6">
+            <Button 
+              onClick={handleAddressComplete}
+              className="bg-primary hover:bg-primary/90 text-white px-8"
+            >
+              Continue to Services
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-6">
       <div className="max-w-6xl mx-auto">
+        {/* Progress Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <Button 
+              variant="outline" 
+              onClick={handleBackToAddress}
+              className="text-sm"
+            >
+              ← Back to Address
+            </Button>
+            <h2 className="text-lg font-semibold">Step 2: Select Services</h2>
+            <span className="text-sm text-muted-foreground">2 of 6</span>
+          </div>
+          <Progress value={33} className="h-2 mb-2" />
+          <p className="text-sm text-muted-foreground">33% Complete</p>
+        </div>
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-between mb-4">
