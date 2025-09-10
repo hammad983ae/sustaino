@@ -39,10 +39,18 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
   });
 
   const nextStep = () => {
+    console.log('Next button clicked, current step:', currentStep, 'total steps:', steps.length);
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+      console.log('Moving to step:', currentStep + 1);
       // Auto-save on step change
-      saveNow();
+      try {
+        saveNow();
+      } catch (error) {
+        console.error('Error saving:', error);
+      }
+    } else {
+      console.log('Already at last step');
     }
   };
 
