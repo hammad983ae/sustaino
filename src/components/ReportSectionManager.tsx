@@ -15,6 +15,7 @@ interface ReportSectionManagerProps {
   reportType: string;
   propertyType: string;
   reportData: any;
+  propertyAddress: string;
   onSectionsChange: (sections: string[]) => void;
   onContinueToReport: () => void;
 }
@@ -36,7 +37,8 @@ interface MissingFieldsAnalysis {
 const ReportSectionManager = ({ 
   reportType, 
   propertyType, 
-  reportData, 
+  reportData,
+  propertyAddress,
   onSectionsChange,
   onContinueToReport 
 }: ReportSectionManagerProps) => {
@@ -69,11 +71,21 @@ const ReportSectionManager = ({
   const analyzeMissingFields = async () => {
     setIsAnalyzing(true);
     try {
+      // First get enhanced property analysis
+      const { data: enhancedData } = await supabase.functions.invoke('enhanced-property-analysis', {
+        body: {
+          address: propertyAddress,
+          propertyType,
+          jobNumber: `10001-${Date.now()}`
+        }
+      });
+
+      // Then analyze missing fields with the enhanced data
       const { data, error } = await supabase.functions.invoke('missing-fields', {
         body: {
           reportType,
           propertyType,
-          reportData,
+          reportData: { ...reportData, enhancedData },
           includedSections
         }
       });

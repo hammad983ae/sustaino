@@ -9,6 +9,10 @@ interface ReportJobSaverOptions {
   reportType?: string;
   enabled?: boolean;
   autoSaveDelay?: number;
+  includedSections?: string[];
+  geolocationData?: any;
+  vicplanData?: any;
+  marketAnalysis?: any;
 }
 
 export const useReportJobSaver = ({
@@ -17,7 +21,11 @@ export const useReportJobSaver = ({
   propertyAddress = '',
   reportType = 'Property Report',
   enabled = true,
-  autoSaveDelay = 5000
+  autoSaveDelay = 5000,
+  includedSections = [],
+  geolocationData = {},
+  vicplanData = {},
+  marketAnalysis = {}
 }: ReportJobSaverOptions) => {
   const { toast } = useToast();
   const timeoutRef = useRef<NodeJS.Timeout>();
@@ -48,18 +56,49 @@ export const useReportJobSaver = ({
         return reportJobIdRef.current;
       }
 
-      const progress = Math.round((currentSection / 20) * 100); // Assuming 20 sections total
+      const progress = Math.round((currentSection / 6) * 100); // Updated for 6 steps total
+      
+      // Get enhanced property analysis data
+      let enhancedData = { geolocationData, vicplanData, marketAnalysis };
+      
+      if (propertyAddress && currentSection >= 2) {
+        try {
+          const { data: analysisData } = await supabase.functions.invoke('enhanced-property-analysis', {
+            body: { 
+              address: propertyAddress, 
+              propertyType: reportType,
+              jobNumber: reportJobIdRef.current || `10001-${Date.now()}`
+            }
+          });
+          
+          if (analysisData) {
+            enhancedData = {
+              geolocationData: analysisData.geolocation || {},
+              vicplanData: analysisData.vicPlanData || {},
+              marketAnalysis: analysisData.marketData || {}
+            };
+          }
+        } catch (error) {
+          console.warn('Failed to get enhanced property analysis:', error);
+        }
+      }
+
       const jobData = {
         title: `${reportType} - ${propertyAddress}`,
         description: `Auto-saved report in progress`,
         property_type: reportType,
         address: propertyAddress,
-        status: 'in_progress' as const,
+        status: currentSection >= 6 ? 'completed' : 'in_progress' as const,
         priority: 'medium' as const,
         assigned_to: user.email || 'Self',
         due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-        notes: `Report progress: ${progress}% complete`,
-        user_id: user.id
+        notes: `Report progress: ${progress}% complete - Step ${currentSection} of 6`,
+        user_id: user.id,
+        completion_percentage: progress,
+        geolocation_data: enhancedData.geolocationData,
+        vicplan_data: enhancedData.vicplanData,
+        market_analysis: enhancedData.marketAnalysis,
+        missing_fields_analysis: reportData.missingFieldsAnalysis || {}
       };
 
       let result;
@@ -89,19 +128,25 @@ export const useReportJobSaver = ({
         reportJobIdRef.current = result.id;
       }
 
-      // Save report in reports table with progress
+      // Save report in reports table with enhanced data
       const reportPayload = {
         title: `${reportType} - ${propertyAddress}`,
         property_address: propertyAddress,
         report_type: reportType,
-        status: 'in_progress',
+        status: currentSection >= 6 ? 'completed' : 'in_progress',
         generated_date: new Date().toISOString(),
         sustainability_score: null,
         file_path: '',
         report_data: reportData,
         report_progress: progress,
         current_section: currentSection,
-        user_id: user.id
+        user_id: user.id,
+        job_number: result.job_number || `10001-${Date.now()}`,
+        included_sections: includedSections,
+        geolocation_data: enhancedData.geolocationData,
+        vicplan_data: enhancedData.vicplanData,
+        market_analysis: enhancedData.marketAnalysis,
+        aerial_image_url: enhancedData.geolocationData?.aerialImageUrl || ''
       };
 
       const { error: reportError } = await supabase
@@ -227,7 +272,7 @@ export const useReportJobSaver = ({
     }
   }, [propertyAddress]);
 
-  // Mark report as completed
+  // Mark report as completed and generate PDF
   const markAsCompleted = useCallback(async () => {
     if (!reportJobIdRef.current) return;
 
@@ -235,12 +280,31 @@ export const useReportJobSaver = ({
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Generate PDF report
+      const { data: pdfData, error: pdfError } = await supabase.functions.invoke('generate-pdf-report', {
+        body: {
+          reportData,
+          jobNumber: reportJobIdRef.current,
+          propertyAddress,
+          reportType,
+          includedSections,
+          userEmail: user.email
+        }
+      });
+
+      let pdfFilePath = '';
+      if (!pdfError && pdfData?.filePath) {
+        pdfFilePath = pdfData.filePath;
+      }
+
       // Update job status
       await supabase
         .from('valuation_jobs')
         .update({ 
           status: 'completed',
-          notes: 'Report completed successfully'
+          notes: 'Report completed successfully',
+          completion_percentage: 100,
+          pdf_file_path: pdfFilePath
         })
         .eq('id', reportJobIdRef.current)
         .eq('user_id', user.id);
@@ -251,7 +315,8 @@ export const useReportJobSaver = ({
         .update({ 
           status: 'completed',
           report_progress: 100,
-          generated_date: new Date().toISOString()
+          generated_date: new Date().toISOString(),
+          file_path: pdfFilePath
         })
         .eq('user_id', user.id)
         .eq('property_address', propertyAddress)
@@ -259,14 +324,21 @@ export const useReportJobSaver = ({
 
       toast({
         title: "Report completed",
-        description: "Your report has been marked as completed in Work Hub",
-        duration: 3000,
+        description: `Your report has been completed and saved to Work Hub${pdfData?.fileName ? ` as ${pdfData.fileName}` : ''}`,
+        duration: 5000,
       });
+
+      return pdfData;
 
     } catch (error) {
       console.error('Failed to mark report as completed:', error);
+      toast({
+        title: "Completion failed",
+        description: "Unable to complete the report. Please try again.",
+        variant: "destructive"
+      });
     }
-  }, [reportJobIdRef.current, propertyAddress, toast]);
+  }, [reportJobIdRef.current, propertyAddress, reportData, reportType, includedSections, toast]);
 
   return {
     saveNow,

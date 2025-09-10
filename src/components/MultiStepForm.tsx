@@ -4,10 +4,11 @@ import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import PropertyAddressForm from "@/components/PropertyAddressForm";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
-import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
+import PropertySearchAnalysisEnhanced from "@/components/PropertySearchAnalysisEnhanced";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
 import ReportSectionManager from "@/components/ReportSectionManager";
+import { useReportJobSaver } from "@/hooks/useReportJobSaver";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
@@ -16,8 +17,26 @@ interface MultiStepFormProps {
 
 const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [reportData, setReportData] = useState<any>({});
+  const [reportData, setReportData] = useState<any>({
+    propertyAddress: "520 Deakin Avenue Mildura VIC 3500",
+    reportType: "long-form",
+    propertyType: "commercial"
+  });
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [enhancedAnalysisData, setEnhancedAnalysisData] = useState<any>(null);
+
+  // Auto-save functionality
+  const { saveNow, markAsCompleted } = useReportJobSaver({
+    reportData: { ...reportData, enhancedAnalysisData },
+    currentSection: currentStep,
+    propertyAddress: reportData.propertyAddress,
+    reportType: reportData.reportType,
+    enabled: true,
+    includedSections: selectedSections,
+    geolocationData: enhancedAnalysisData?.geolocation,
+    vicplanData: enhancedAnalysisData?.vicPlanData,
+    marketAnalysis: enhancedAnalysisData?.marketData
+  });
 
   const steps = [
     {
@@ -29,8 +48,12 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
       component: <PlanningDataIntegration />
     },
     {
-      title: "Search & Analysis",
-      component: <PropertySearchAnalysis />
+      title: "Search & Analysis", 
+      component: <PropertySearchAnalysisEnhanced 
+        address={reportData.propertyAddress}
+        onAddressChange={(address) => setReportData(prev => ({ ...prev, propertyAddress: address }))}
+        onAnalysisComplete={setEnhancedAnalysisData}
+      />
     },
     {
       title: "Report Configuration",
@@ -46,6 +69,7 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
         reportType={reportData.reportType || "long-form"}
         propertyType={reportData.propertyType || "residential"}
         reportData={reportData}
+        propertyAddress={reportData.propertyAddress || "520 Deakin Avenue Mildura VIC 3500"}
         onSectionsChange={setSelectedSections}
         onContinueToReport={() => onContinueToReport?.()}
       />
@@ -55,12 +79,16 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+      // Auto-save on step change
+      saveNow();
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+      // Auto-save on step change
+      saveNow();
     }
   };
 
@@ -120,10 +148,13 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
 
           {currentStep === steps.length - 1 ? (
             <Button
-              onClick={() => onContinueToReport?.()}
+              onClick={async () => {
+                const pdfData = await markAsCompleted();
+                onContinueToReport?.();
+              }}
               className="flex items-center gap-2"
             >
-              <span className="hidden sm:inline">Continue to Report</span>
+              <span className="hidden sm:inline">Complete Report</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
           ) : (
