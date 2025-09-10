@@ -65,7 +65,7 @@ export default function AuthPage() {
 
     try {
       // For now, just show a message that password login is disabled
-      setError('Password authentication is currently disabled. Please contact your administrator for access.');
+      setError('Password authentication is temporarily disabled for security purposes. Alternative login methods coming soon.');
     } catch (error) {
       console.error('Auth error:', error);
       setError('An unexpected error occurred. Please try again.');
@@ -250,7 +250,7 @@ export default function AuthPage() {
                   <Alert className="bg-info/10 border-info/20">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      <strong>Account Access:</strong> Password authentication is temporarily disabled. Contact your administrator for access.
+                      <strong>Account Access:</strong> Password authentication is temporarily disabled for security. Alternative authentication methods will be available soon.
                     </AlertDescription>
                   </Alert>
 
