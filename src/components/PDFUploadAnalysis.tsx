@@ -40,8 +40,41 @@ export const PDFUploadAnalysis = () => {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showConsent, setShowConsent] = useState(false);
   const [consentNotes, setConsentNotes] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Check authentication status
+  React.useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
+        if (user) {
+          loadUploads();
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+      if (session?.user) {
+        loadUploads();
+      } else {
+        setUploads([]);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Load user's PDF uploads
   const loadUploads = async () => {
@@ -62,10 +95,6 @@ export const PDFUploadAnalysis = () => {
       });
     }
   };
-
-  React.useEffect(() => {
-    loadUploads();
-  }, []);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -111,12 +140,18 @@ export const PDFUploadAnalysis = () => {
   };
 
   const uploadFile = async (file: File) => {
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to upload PDF files",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsUploading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
-
-      // Upload to storage
+      // Use the already authenticated user
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}/${Date.now()}.${fileExt}`;
       
@@ -297,7 +332,47 @@ export const PDFUploadAnalysis = () => {
       }
     };
     
+  // Show loading state
+  if (isLoading) {
     return (
+      <Card>
+        <CardContent className="p-8 text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Show authentication required message
+  if (!user) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Upload className="h-5 w-5" />
+            PDF Upload & Analysis
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="text-center py-8">
+          <Alert className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              Please sign in to access PDF upload and analysis features.
+            </AlertDescription>
+          </Alert>
+          <Button 
+            onClick={() => window.location.href = '/auth'}
+            className="bg-primary hover:bg-primary/90"
+          >
+            Sign In to Continue
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
       <Badge variant={getVariant(status) as any}>
         {getStatusIcon(status)}
         <span className="ml-1 capitalize">{status}</span>
