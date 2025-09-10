@@ -7,13 +7,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { ChevronDown } from "lucide-react";
 import { FileText } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ReportTypeConfiguration = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
+  const [includeRentalConfig, setIncludeRentalConfig] = useState(false);
+  const [includeGST, setIncludeGST] = useState(false);
+  const [disabledSections, setDisabledSections] = useState<Record<string, boolean>>({});
 
   const handleCheckboxChange = (label: string, option: string, checked: boolean) => {
     setSelectedValues(prev => {
@@ -28,6 +32,98 @@ const ReportTypeConfiguration = () => {
 
   const handleSelectChange = (key: string, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }));
+    
+    // Apply conditional logic based on selections
+    if (key === 'report-type') {
+      applyReportTypePresets(value);
+    } else if (key === 'property-type') {
+      applyPropertyTypePresets(value);
+    }
+  };
+
+  // Preset logic for report types
+  const applyReportTypePresets = (reportType: string) => {
+    const presets: Record<string, any> = {
+      'desktop-report': {
+        disabledSections: { 'detailed-inspection': true },
+        includeRental: false,
+        defaultApproaches: ['Direct Comparison']
+      },
+      'kerbside': {
+        disabledSections: { 'interior-analysis': true },
+        includeRental: false,
+        defaultApproaches: ['Direct Comparison']
+      },
+      'insurance-valuation': {
+        disabledSections: { 'rental-analysis': true, 'market-commentary': true },
+        includeRental: false,
+        defaultBasis: ['Insurance Value'],
+        defaultApproaches: ['Summation Approach']
+      },
+      'sustaino-pro': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison']
+      }
+    };
+
+    const preset = presets[reportType];
+    if (preset) {
+      setDisabledSections(preset.disabledSections || {});
+      setIncludeRentalConfig(preset.includeRental ?? includeRentalConfig);
+      setIncludeGST(preset.includeGST ?? includeGST);
+      
+      // Apply default selections
+      if (preset.defaultBasis) {
+        setSelectedValues(prev => ({ ...prev, 'Basis of Valuation': preset.defaultBasis }));
+      }
+      if (preset.defaultApproaches) {
+        setSelectedValues(prev => ({ ...prev, 'Valuation Approaches': preset.defaultApproaches }));
+      }
+    }
+  };
+
+  // Preset logic for property types
+  const applyPropertyTypePresets = (propertyType: string) => {
+    const presets: Record<string, any> = {
+      'commercial': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison']
+      },
+      'industrial': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Direct Comparison', 'Summation Approach']
+      },
+      'retail': {
+        includeRental: true,
+        includeGST: true,
+        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison']
+      },
+      'residential': {
+        includeRental: false,
+        includeGST: false,
+        defaultApproaches: ['Direct Comparison'],
+        disabledSections: { 'commercial-analysis': true }
+      },
+      'agricultural': {
+        includeRental: true,
+        includeGST: false,
+        defaultApproaches: ['Direct Comparison', 'Summation Approach']
+      }
+    };
+
+    const preset = presets[propertyType];
+    if (preset) {
+      setIncludeRentalConfig(preset.includeRental ?? includeRentalConfig);
+      setIncludeGST(preset.includeGST ?? includeGST);
+      setDisabledSections(prev => ({ ...prev, ...(preset.disabledSections || {}) }));
+      
+      if (preset.defaultApproaches) {
+        setSelectedValues(prev => ({ ...prev, 'Valuation Approaches': preset.defaultApproaches }));
+      }
+    }
   };
 
   const handleInputChange = (key: string, value: string) => {
@@ -213,7 +309,17 @@ const ReportTypeConfiguration = () => {
 
         {/* Valuation Configuration */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">Valuation Configuration</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-lg">Valuation Configuration</h3>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-gst" className="text-sm font-medium">Include GST</Label>
+              <Switch
+                id="include-gst"
+                checked={includeGST}
+                onCheckedChange={setIncludeGST}
+              />
+            </div>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MultiSelectDropdown 
@@ -241,15 +347,42 @@ const ReportTypeConfiguration = () => {
             />
           </div>
 
-          <div className="pt-4 text-xs text-muted-foreground">
-            <p>Also extend interest valued to include: <span className="underline">Partially Leased and Leasehold Interest</span></p>
+          <div className="flex items-center justify-between pt-4">
+            <div className="text-xs text-muted-foreground">
+              <p>Also extend interest valued to include: <span className="underline">Partially Leased and Leasehold Interest</span></p>
+            </div>
+            {includeGST && (
+              <div className="text-xs text-green-600 font-medium">
+                GST will be included in all valuation calculations
+              </div>
+            )}
           </div>
         </div>
 
         {/* Rental Valuation Configuration */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">Rental Valuation Configuration</h3>
-          
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-lg">Rental Valuation Configuration</h3>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-rental" className="text-sm font-medium">Include Rental Analysis</Label>
+              <Switch
+                id="include-rental"
+                checked={includeRentalConfig}
+                onCheckedChange={setIncludeRentalConfig}
+              />
+            </div>
+          </div>
+
+          {!includeRentalConfig && (
+            <div className="p-4 bg-muted/50 rounded-md border border-dashed">
+              <p className="text-sm text-muted-foreground text-center">
+                Rental valuation configuration is disabled. Enable the toggle above to configure rental analysis options.
+              </p>
+            </div>
+          )}
+
+          {includeRentalConfig && (
+          <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="rental-assessment-type" className="text-sm font-medium">Rental Assessment Type</Label>
@@ -390,12 +523,29 @@ const ReportTypeConfiguration = () => {
               <Textarea 
                 id="custom-basis-description"
                 placeholder="Describe custom rental basis or specific requirements"
+                rows={3}
                 className="mt-1"
                 value={formData['custom-basis-description'] || ''}
                 onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
               />
             </div>
           </div>
+          </>
+          )}
+
+          {/* Configuration Summary */}
+          {(includeRentalConfig || includeGST) && (
+            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-md border">
+              <h4 className="font-medium text-sm mb-2">Configuration Summary:</h4>
+              <div className="text-xs text-muted-foreground space-y-1">
+                {includeRentalConfig && <p>✓ Rental valuation analysis will be included</p>}
+                {includeGST && <p>✓ GST will be factored into all calculations</p>}
+                {Object.keys(disabledSections).length > 0 && (
+                  <p>⚠️ Some report sections are disabled based on your selections</p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
