@@ -39,30 +39,42 @@ const DocumentPhotoUpload = () => {
     try {
       const newFiles: UploadedFile[] = [];
       
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      // Process files in smaller batches to prevent timeouts
+      const batchSize = 3;
+      const batches = [];
+      
+      for (let i = 0; i < files.length; i += batchSize) {
+        batches.push(Array.from(files).slice(i, i + batchSize));
+      }
+      
+      for (const batch of batches) {
+        const batchFiles = await Promise.all(batch.map(async (file, index) => {
+          // Validate file size (10MB limit)
+          if (file.size > 10 * 1024 * 1024) {
+            toast({
+              title: "File too large",
+              description: `${file.name} exceeds 10MB limit`,
+              variant: "destructive",
+            });
+            return null;
+          }
+          
+          // Create file URL for preview
+          const url = URL.createObjectURL(file);
+          const uploadedFile: UploadedFile = {
+            id: `${Date.now()}-${index}`,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url,
+          };
+          
+          return uploadedFile;
+        }));
         
-        // Validate file size (10MB limit)
-        if (file.size > 10 * 1024 * 1024) {
-          toast({
-            title: "File too large",
-            description: `${file.name} exceeds 10MB limit`,
-            variant: "destructive",
-          });
-          continue;
-        }
-        
-        // Create file URL for preview
-        const url = URL.createObjectURL(file);
-        const uploadedFile: UploadedFile = {
-          id: `${Date.now()}-${i}`,
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          url,
-        };
-        
-        newFiles.push(uploadedFile);
+        // Filter out null values and add to newFiles
+        const validFiles = batchFiles.filter(file => file !== null) as UploadedFile[];
+        newFiles.push(...validFiles);
       }
       
       // Update state based on type
@@ -74,10 +86,12 @@ const DocumentPhotoUpload = () => {
         setPropertyDocuments(prev => [...prev, ...newFiles]);
       }
       
-      toast({
-        title: "Upload successful",
-        description: `${newFiles.length} file(s) uploaded successfully`,
-      });
+      if (newFiles.length > 0) {
+        toast({
+          title: "Upload successful",
+          description: `${newFiles.length} file(s) uploaded successfully`,
+        });
+      }
       
     } catch (error) {
       toast({
