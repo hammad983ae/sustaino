@@ -118,7 +118,7 @@ const PropertySearchAnalysisEnhanced = ({
                 </CardContent>
               </Card>
 
-              {/* Aerial Imagery */}
+              {/* Aerial Imagery with Enhanced Debug */}
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm flex items-center gap-2">
@@ -126,22 +126,117 @@ const PropertySearchAnalysisEnhanced = ({
                     Aerial Imagery
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  {analysisData.aerialImagery?.satelliteImageUrl && (
+                <CardContent className="space-y-3">
+                  {/* Debug Information */}
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <div>Status: {analysisData.aerialImagery?.status || 'No data'}</div>
+                    <div>Source: {analysisData.aerialImagery?.source || 'N/A'}</div>
+                    {analysisData.geolocation && (
+                      <div>Coords: {analysisData.geolocation.latitude}, {analysisData.geolocation.longitude}</div>
+                    )}
+                  </div>
+
+                  {/* Satellite Image Display */}
+                  {analysisData.aerialImagery?.satelliteImageUrl ? (
                     <div className="space-y-2">
-                      <img 
-                        src={analysisData.aerialImagery.satelliteImageUrl}
-                        alt="Satellite view"
-                        className="w-full h-32 object-cover rounded-lg border"
-                      />
+                      <div className="relative">
+                        <img 
+                          src={analysisData.aerialImagery.satelliteImageUrl}
+                          alt="Satellite view"
+                          className="w-full h-32 object-cover rounded-lg border"
+                          onError={(e) => {
+                            console.error('Satellite image failed to load:', analysisData.aerialImagery.satelliteImageUrl);
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                        <div className="hidden w-full h-32 bg-muted rounded-lg border flex items-center justify-center">
+                          <div className="text-center text-muted-foreground">
+                            <Satellite className="h-6 w-6 mx-auto mb-2 opacity-50" />
+                            <p className="text-xs">Satellite image unavailable</p>
+                          </div>
+                        </div>
+                      </div>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="flex-1">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex-1"
+                          onClick={() => {
+                            if (analysisData.geolocation) {
+                              const { latitude, longitude } = analysisData.geolocation;
+                              const googleSatelliteUrl = `https://www.google.com/maps/@${latitude},${longitude},19z/data=!3m1!1e3`;
+                              window.open(googleSatelliteUrl, '_blank');
+                            }
+                          }}
+                        >
                           <Download className="h-3 w-3 mr-1" />
                           Satellite
                         </Button>
-                        <Button size="sm" variant="outline" className="flex-1">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex-1"
+                          onClick={() => {
+                            if (analysisData.geolocation) {
+                              const { latitude, longitude } = analysisData.geolocation;
+                              const googleStreetViewUrl = `https://www.google.com/maps/@${latitude},${longitude},3a,75y,h,t`;
+                              window.open(googleStreetViewUrl, '_blank');
+                            }
+                          }}
+                        >
                           <Download className="h-3 w-3 mr-1" />
                           Street View
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {/* Fallback - Generate satellite links */}
+                      <div className="w-full h-32 bg-muted rounded-lg border flex items-center justify-center">
+                        <div className="text-center text-muted-foreground">
+                          <Satellite className="h-6 w-6 mx-auto mb-2 opacity-50" />
+                          <p className="text-xs">Loading satellite imagery...</p>
+                          {analysisData.geolocation && (
+                            <p className="text-xs mt-1">
+                              Lat: {analysisData.geolocation.latitude?.toFixed(6)}, 
+                              Lng: {analysisData.geolocation.longitude?.toFixed(6)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex-1"
+                          disabled={!analysisData.geolocation}
+                          onClick={() => {
+                            if (analysisData.geolocation) {
+                              const { latitude, longitude } = analysisData.geolocation;
+                              const googleSatelliteUrl = `https://www.google.com/maps/@${latitude},${longitude},19z/data=!3m1!1e3`;
+                              window.open(googleSatelliteUrl, '_blank');
+                            }
+                          }}
+                        >
+                          <Download className="h-3 w-3 mr-1" />
+                          Open Satellite
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex-1"
+                          disabled={!analysisData.geolocation}
+                          onClick={() => {
+                            if (analysisData.geolocation) {
+                              const { latitude, longitude } = analysisData.geolocation;
+                              const googleStreetViewUrl = `https://www.google.com/maps/@${latitude},${longitude},3a,75y,h,t`;
+                              window.open(googleStreetViewUrl, '_blank');
+                            }
+                          }}
+                        >
+                          <Download className="h-3 w-3 mr-1" />
+                          Open Street View
                         </Button>
                       </div>
                     </div>

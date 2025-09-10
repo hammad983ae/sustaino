@@ -31,7 +31,16 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMapReady, setIsMapReady] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string>('');
+  
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
+
+  // Debug function
+  const addDebugInfo = (info: string) => {
+    const timestamp = new Date().toLocaleTimeString();
+    setDebugInfo(prev => `${timestamp}: ${info}\n${prev}`.substring(0, 500));
+    console.log(`GoogleMap Debug ${timestamp}: ${info}`);
+  };
 
   // Auto-populate search address from context
   useEffect(() => {
@@ -144,30 +153,41 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
       if (!mapContainerRef.current || isInitializedRef.current) return;
 
       try {
+        addDebugInfo('Starting map initialization');
         setIsLoading(true);
         setError(null);
         isInitializedRef.current = true;
 
         // Get API key from edge function
+        addDebugInfo('Fetching Google Maps API key');
         const { data: apiKeyData, error } = await supabase.functions.invoke('get-google-maps-key');
         if (error) {
+          addDebugInfo(`API key error: ${error.message}`);
           console.error('API key error:', error);
           throw new Error('Google Maps API key not available. Please configure the GOOGLE_MAPS_API_KEY secret.');
         }
         
         if (!apiKeyData?.apiKey) {
+          addDebugInfo('API key not found in response');
           throw new Error('Google Maps API key not found');
         }
 
-        if (!mapContainerRef.current) return;
+        addDebugInfo(`API key retrieved successfully (${apiKeyData.apiKey.substring(0, 10)}...)`);
+
+        if (!mapContainerRef.current) {
+          addDebugInfo('Map container not available');
+          return;
+        }
 
         // Create a child div to isolate from React's DOM management
+        addDebugInfo('Creating map container');
         const mapDiv = document.createElement('div');
         mapDiv.style.width = '100%';
         mapDiv.style.height = '100%';
         mapContainerRef.current.appendChild(mapDiv);
 
         // Load Google Maps
+        addDebugInfo('Loading Google Maps API');
         const loader = new Loader({
           apiKey: apiKeyData.apiKey,
           version: 'weekly',
@@ -175,12 +195,18 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         });
 
         await loader.load();
-        if (!mapDiv.parentElement) return;
+        addDebugInfo('Google Maps API loaded successfully');
+        
+        if (!mapDiv.parentElement) {
+          addDebugInfo('Map div removed during loading');
+          return;
+        }
 
         // Create map in the isolated div
+        addDebugInfo(`Creating map instance with type: ${mapType}`);
         mapInstanceRef.current = new google.maps.Map(mapDiv, {
-          center: { lat: -25.2744, lng: 133.7751 },
-          zoom: 6,
+          center: { lat: -34.1873, lng: 142.1601 }, // Mildura coordinates
+          zoom: 15,
           mapTypeId: mapType,
           zoomControl: true,
           streetViewControl: true,
@@ -188,12 +214,21 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
           mapTypeControl: false
         });
 
+        addDebugInfo('Map created successfully');
         setIsMapReady(true);
         setIsLoading(false);
 
+        // Search for the default address if available
+        if (addressData?.propertyAddress) {
+          addDebugInfo(`Searching for address: ${addressData.propertyAddress}`);
+          searchOnMap(addressData.propertyAddress);
+        }
+
       } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load map';
+        addDebugInfo(`Map initialization failed: ${errorMessage}`);
         console.error('Map initialization error:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load map');
+        setError(errorMessage);
         setIsLoading(false);
         isInitializedRef.current = false;
       }
@@ -303,6 +338,28 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
               <span className="text-sm font-medium">Current Location:</span>
               <span className="text-sm">{searchAddress}</span>
             </div>
+          </div>
+        )}
+        {/* Debug Information */}
+        {debugInfo && (
+          <div className="p-3 bg-muted rounded-lg">
+            <details>
+              <summary className="text-sm font-medium cursor-pointer">Debug Information</summary>
+              <pre className="text-xs mt-2 whitespace-pre-wrap text-muted-foreground max-h-32 overflow-y-auto">
+                {debugInfo}
+              </pre>
+            </details>
+          </div>
+        )}
+        {/* Debug Information */}
+        {debugInfo && (
+          <div className="p-3 bg-muted rounded-lg">
+            <details>
+              <summary className="text-sm font-medium cursor-pointer">Debug Information</summary>
+              <pre className="text-xs mt-2 whitespace-pre-wrap text-muted-foreground max-h-32 overflow-y-auto">
+                {debugInfo}
+              </pre>
+            </details>
           </div>
         )}
       </CardContent>
