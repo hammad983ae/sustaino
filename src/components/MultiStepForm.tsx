@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home } from "lucide-react";
 import PropertyAddressForm from "@/components/PropertyAddressForm";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
@@ -57,9 +58,16 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold truncate">
-            Step {currentStep + 1}: {steps[currentStep].title}
-          </h1>
+          <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Home className="h-4 w-4" />
+              <span className="hidden sm:inline">Back to Platform</span>
+            </Link>
+            <div className="h-4 w-px bg-border hidden sm:block" />
+            <h1 className="text-lg font-semibold truncate">
+              Step {currentStep + 1}: {steps[currentStep].title}
+            </h1>
+          </div>
           <div className="text-sm text-muted-foreground">
             {currentStep + 1} of {steps.length}
           </div>

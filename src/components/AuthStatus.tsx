@@ -70,8 +70,8 @@ export default function AuthStatus() {
       // Clear any session storage as well
       sessionStorage.clear();
       
-      // Force a page reload to ensure all state is cleared
-      window.location.href = '/';
+      // Note: Removed window.location.href = '/' to prevent full page reload
+      // React Router will handle the navigation properly
       
       toast({
         title: "Signed out successfully",
