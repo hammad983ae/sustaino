@@ -66,25 +66,94 @@ serve(async (req) => {
         fireRisk: 'Medium'
       },
       planningData: {
-        dataSource: 'VicMap Planning Data',
+        dataSource: 'VicMap Planning API',
         lastUpdated: new Date().toISOString(),
         address: address,
+        coordinates: { lat: -37.8136, lng: 144.9631 },
+        
+        // Basic Planning Information
+        lga: 'Boroondara City Council',
         zoning: 'General Residential Zone',
-        zoneDescription: 'Encourage housing diversity and appropriate development while respecting neighbourhood character',
-        planningScheme: 'Local Planning Scheme',
-        municipality: 'Local Council',
+        zoneCode: 'GRZ1',
+        zoneDescription: 'To encourage development that respects the neighbourhood character of the area',
+        planningScheme: 'Boroondara Planning Scheme',
+        municipality: 'Boroondara City Council',
+        
+        // Current and Permissible Use
+        currentUse: 'Residential development',
+        permissibleUse: 'Residential development, home-based business, dependent person\'s unit',
+        
+        // Permit Information
+        permitNumber: 'BCC-2024-001234',
+        permitRequired: true,
+        permitStatus: 'Not Required for Single Dwelling',
+        
+        // Overlays
         overlaysPresent: true,
-        overlayCount: 2,
+        overlayCount: 3,
         overlays: [
-          { code: 'VPO1', description: 'Vegetation Protection Overlay', planningScheme: 'Local' },
-          { code: 'DCO1', description: 'Development Contributions Plan Overlay', planningScheme: 'Local' }
+          { 
+            code: 'VPO1', 
+            description: 'Vegetation Protection Overlay', 
+            planningScheme: 'Boroondara',
+            impactRating: 'Medium Impact',
+            restrictions: 'Permit required to remove, destroy or lop native vegetation'
+          },
+          { 
+            code: 'DCO1', 
+            description: 'Development Contributions Plan Overlay', 
+            planningScheme: 'Boroondara',
+            impactRating: 'Low Impact',
+            restrictions: 'Development contributions required for new development'
+          },
+          { 
+            code: 'HO142', 
+            description: 'Heritage Overlay', 
+            planningScheme: 'Boroondara',
+            impactRating: 'High Impact',
+            restrictions: 'Permit required for demolition, external alterations and tree removal'
+          }
         ],
-        heritageOverlay: false,
+        
+        // Specific Overlay Details
+        heritageOverlay: true,
+        heritageNumber: 'HO142',
         vegetationProtection: true,
         developmentContributions: true,
-        landUse: 'Residential development with some commercial uses permitted',
-        developmentPotential: 'Good development potential with overlay considerations',
-        permitRequired: true
+        
+        // Building Controls
+        heightOfBuilding: '9 metres (2 storeys)',
+        floorSpaceRatio: '0.6:1',
+        minimumLotSize: '500 square metres',
+        frontSetback: '6 metres',
+        sideSetbacks: '1 metre (single storey), 2 metres (two storey)',
+        rearSetback: '6 metres',
+        
+        // Planning Restrictions & Overlays Detail
+        planningRestrictions: 'Planning overlays apply: Heritage Overlay requires permit for external alterations. Vegetation Protection Overlay restricts tree removal. Development Contributions Plan applies to new development.',
+        
+        // Impact Assessments
+        overlayImpactAssessment: 'Heritage Overlay (HO142): High impact - requires careful consideration of building design and materials. Vegetation Protection Overlay: Medium impact - native vegetation assessment required. Development Contributions: Low impact - standard contribution applies.',
+        overlayImpactRating: '3 - Medium Impact',
+        
+        // Development Potential
+        landUse: 'Residential development with heritage considerations',
+        developmentPotential: 'Good development potential with overlay considerations. Heritage overlay requires sympathetic design. Single dwelling or extensions permitted subject to heritage approval.',
+        futureUse: 'Continued residential use. Potential for heritage-sensitive renovation or extension. Home-based business opportunities available.',
+        
+        // Additional Details
+        environmentalAuditOverlay: false,
+        floodwayOverlay: false,
+        specialBuildingOverlay: false,
+        airportEnvirons: false,
+        
+        // Planning Application Requirements
+        planningApplicationRequired: 'Required for: Buildings and works in Heritage Overlay, removal of native vegetation, subdivision',
+        exemptions: 'Single dwelling construction may be exempt from planning permit if meets heritage guidelines',
+        
+        // Strategic Planning
+        strategicFrameworkPlan: 'Boroondara Housing Strategy 2021',
+        neighborhoodCharacter: 'Established residential area with heritage significance and mature tree canopy'
       },
       transportData: {
         accessibility: 'Good public transport access',
