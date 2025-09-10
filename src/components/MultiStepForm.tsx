@@ -66,7 +66,8 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     } else {
-      navigate(-1); // Navigate back to previous page when on first step
+      // Navigate back to home page when on first step
+      navigate('/', { replace: true });
     }
   };
 
