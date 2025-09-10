@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useProperty } from "@/contexts/PropertyContext";
+import AuthStatus from "@/components/AuthStatus";
 
 interface PropertyTypeSelectorProps {
   onSelect: (type: string) => void;
@@ -63,7 +64,9 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                 Sustaino Pro Valuation Platform
               </h1>
             </div>
-            <div></div>
+            <div>
+              <AuthStatus />
+            </div>
           </div>
           <p className="text-xl text-muted-foreground mb-2">
             Automated Property Valuations with ESG Intelligence
