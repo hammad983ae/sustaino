@@ -21,34 +21,34 @@ export default function ValuationAnalysisResidential() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label>Land Area (sqm)</Label>
-                <Input placeholder="650" />
+                <Input value="850" />
               </div>
               <div className="space-y-2">
                 <Label>Land Rate per sqm</Label>
-                <Input placeholder="$1,200" />
+                <Input value="$200" />
               </div>
               <div className="space-y-2">
                 <Label>Land Value</Label>
-                <Input placeholder="$780,000" />
+                <Input value="$170,000" />
               </div>
               <div className="space-y-2">
                 <Label>Improvement Value</Label>
-                <Input placeholder="$520,000" />
+                <Input value="$105,000" />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Total Market Value</Label>
-                <Input placeholder="$1,300,000" className="font-semibold text-lg" />
+                <Input value="$275,000" className="font-semibold text-lg" />
               </div>
               <div className="space-y-2">
                 <Label>Rate per sqm (Total)</Label>
-                <Input placeholder="$2,000" />
+                <Input value="$324" />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Market Evidence Supporting Rates</Label>
-              <Textarea placeholder="Comparable sales evidence indicates land rates of between $1,000 to $1,400 per sqm and improvement rates of $800 to $1,000 per sqm, after consideration of location, size, quality of improvements, and market conditions..." />
+              <Textarea value="Comparable sales evidence from recent transactions in the Deakin Avenue area indicates land rates of between $180 to $220 per sqm for established residential allotments. The subject property's land rate of $200/sqm reflects the good location, regular shape, and established nature of the precinct. Improvement rates of $875/sqm are consistent with renovated 1960s brick veneer dwellings after consideration of location, condition, and market demand." />
             </div>
           </div>
 
@@ -58,20 +58,20 @@ export default function ValuationAnalysisResidential() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Annual Rental Income</Label>
-                <Input placeholder="$33,800" />
+                <Input value="$15,600" />
               </div>
               <div className="space-y-2">
                 <Label>Gross Yield</Label>
-                <Input placeholder="2.60%" />
+                <Input value="5.67%" />
               </div>
               <div className="space-y-2">
                 <Label>Capitalised Value</Label>
-                <Input placeholder="$1,300,000" />
+                <Input value="$275,000" />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Yield Evidence</Label>
-              <Textarea placeholder="Comparable rental yields in the area range from 2.4% to 2.8% gross, after consideration of property type, location, and lease terms..." />
+              <Textarea value="Comparable rental yields in the Mildura residential market range from 5.2% to 6.1% gross, with 3-bedroom properties in established areas achieving $300-$320 per week. The assessed rental of $300/week reflects the property's condition, location proximity to CBD, and recent improvements to kitchen and bathroom facilities." />
             </div>
           </div>
         </CardContent>
@@ -133,30 +133,30 @@ export default function ValuationAnalysisResidential() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Bedrooms</Label>
-              <Input placeholder="3" />
+              <Input value="3" />
             </div>
             <div className="space-y-2">
               <Label>Bathrooms</Label>
-              <Input placeholder="2" />
+              <Input value="1" />
             </div>
             <div className="space-y-2">
               <Label>Car Spaces</Label>
-              <Input placeholder="2" />
+              <Input value="2" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Building Area (sqm)</Label>
-              <Input placeholder="180" />
+              <Input value="120" />
             </div>
             <div className="space-y-2">
               <Label>Year Built</Label>
-              <Input placeholder="1995" />
+              <Input value="1965" />
             </div>
           </div>
           <div className="space-y-2">
             <Label>Special Features</Label>
-            <Textarea placeholder="Swimming pool, outdoor entertaining area, renovated kitchen, solar panels..." />
+            <Textarea value="Recently renovated kitchen with stone benchtops and stainless steel appliances, updated bathroom with modern fixtures, established gardens with mature fruit trees, secure fencing, concrete driveway, separate laundry, ducted evaporative cooling, ceiling fans throughout." />
           </div>
         </CardContent>
       </Card>
@@ -183,13 +183,13 @@ export default function ValuationAnalysisResidential() {
             </div>
             <div className="space-y-2">
               <Label>Market Value</Label>
-              <Input placeholder="$1,300,000" className="text-lg font-bold" />
+              <Input value="$275,000" className="text-lg font-bold" />
             </div>
           </div>
           <div className="space-y-2">
             <Label>Valuation Rationale</Label>
             <Textarea 
-              placeholder="The market value assessment is primarily based on the direct comparison method, with the income approach providing supportive evidence. The property demonstrates typical characteristics for the area with appropriate adjustments made for location, condition, size and quality differences..."
+              value="The market value assessment of $275,000 is primarily based on the direct comparison method using recent sales of similar properties in the immediate area. Recent sales include 522 Deakin Avenue ($295,000), 518 Deakin Avenue ($275,000), and 516 Deakin Avenue ($265,000). The income approach provides supportive evidence with a rental assessment of $300/week producing a 5.67% gross yield, consistent with investor expectations for established residential properties in Mildura. The property demonstrates good characteristics for the area with recent improvements enhancing its marketability."
               rows={4}
             />
           </div>

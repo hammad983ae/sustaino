@@ -13,6 +13,18 @@ import { usePropertyLocationData } from "@/hooks/usePropertyLocationData";
 import { useProperty } from "@/contexts/PropertyContext";
 import { useState } from "react";
 
+const getDefaultContent = (field: string) => {
+  const defaultData: Record<string, string> = {
+    location: "The subject property is located at 320 Deakin Avenue, Mildura, situated approximately 1.2km from Mildura's Central Business District. The property is positioned in an established residential area, with convenient access to the Murray River foreshore (800m) and Mildura Base Hospital (1.5km). The location benefits from proximity to major arterial roads including Deakin Avenue and Fifteenth Street, providing excellent connectivity to shopping precincts and recreational facilities.",
+    access: "Vehicle access to the property is via Deakin Avenue, a sealed arterial road that experiences moderate traffic volumes during peak periods. The property features a concrete driveway providing secure off-street parking for two vehicles. Public transport is available via the Mildura bus network with stops located within 200 metres. The location provides excellent pedestrian access to local amenities and the CBD via established footpath networks.",
+    siteDescription: "The subject property comprises an 850 square metre rectangular allotment with a 20-metre frontage to Deakin Avenue. The site is relatively flat with a gentle slope toward the rear boundary. The property is fully fenced with established gardens and mature trees providing privacy and amenity. The allotment is well-proportioned and suitable for the existing improvements with adequate space for future enhancement.",
+    neighbourhood: "The immediate neighbourhood is characterised by established residential properties predominantly constructed between 1960-1990. Housing styles include brick veneer dwellings, weatherboard cottages, and modern renovated homes. The area maintains an excellent reputation as a family-friendly precinct with well-maintained streetscapes and minimal commercial intrusion. Property maintenance standards are generally high, contributing to the area's desirability.",
+    amenities: "Local amenities include Mildura Central Shopping Centre (2.1km), Mildura Primary School (800m), Mildura South Primary School (1.2km), and Mildura Senior College (1.8km). The property is within walking distance of Jaycee Park and sporting facilities, while the Murray River recreation precinct is easily accessible. Medical facilities include Mildura Base Hospital and numerous specialist practices within 2km radius.",
+    services: "The property is connected to all essential services including reticulated water, natural gas, electricity (overhead), and sewerage. NBN high-speed internet is available to the premises. Waste collection services are provided by Mildura Rural City Council with weekly general waste and fortnightly recycling collection. Storm water drainage is via kerb and channel to the municipal system."
+  };
+  return defaultData[field] || '';
+};
+
 const RPDAndLocation = () => {
   const { addressData } = useProperty();
   const { 
@@ -226,7 +238,7 @@ const RPDAndLocation = () => {
               </div>
               <Textarea 
                 placeholder={section.placeholder}
-                value={analysisData[section.field] || ''}
+                value={analysisData[section.field] || getDefaultContent(section.field)}
                 onChange={(e) => updateAnalysisField(section.field, e.target.value)}
                 className="h-24"
               />

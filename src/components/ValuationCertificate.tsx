@@ -74,7 +74,7 @@ const ValuationCertificate = () => {
               <Label htmlFor="purpose-valuation">Purpose of Valuation</Label>
               <Input
                 id="purpose-valuation"
-                placeholder="Auto-populated from valuation instructions..."
+                value="Mortgage Security Assessment"
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
@@ -84,7 +84,7 @@ const ValuationCertificate = () => {
               <Label htmlFor="mortgage-security">Mortgage Security</Label>
               <Input
                 id="mortgage-security"
-                placeholder="Auto-populated from security assessment..."
+                value="Suitable mortgage security at assessed value"
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
@@ -158,7 +158,7 @@ const ValuationCertificate = () => {
               <Label htmlFor="title-reference">Title Reference</Label>
               <Input
                 id="title-reference"
-                placeholder="Auto-populated from title data..."
+                value="Lot 15 PS 123456"
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
@@ -168,7 +168,7 @@ const ValuationCertificate = () => {
               <Label htmlFor="property-type">Property Type</Label>
               <Input
                 id="property-type"
-                placeholder="Auto-populated from property classification..."
+                value="Residential - Single Dwelling"
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
@@ -178,7 +178,7 @@ const ValuationCertificate = () => {
               <Label htmlFor="interest-valued">Interest Valued</Label>
               <Input
                 id="interest-valued"
-                placeholder="Auto-populated from title data..."
+                value="Freehold Estate in Fee Simple"
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />

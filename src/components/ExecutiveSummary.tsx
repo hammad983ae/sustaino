@@ -199,7 +199,7 @@ Land productivity analysis, water rights evaluation, and carbon farming potentia
               </Button>
             </div>
             <Textarea 
-              value={generateIntroductionContent()}
+              value={generateIntroductionContent() || "We have been instructed to undertake a comprehensive property valuation of the subject property located at 320 Deakin Avenue, Mildura VIC 3500. This assessment has been conducted in accordance with Australian Property Institute (API) professional standards and the International Valuation Standards Council (IVSC) guidelines."}
               placeholder="Enter the report introduction here..."
               className="min-h-[120px] resize-none text-sm"
             />
@@ -237,6 +237,7 @@ Land productivity analysis, water rights evaluation, and carbon farming potentia
               </Button>
             </div>
             <Textarea 
+              value="Based on our comprehensive analysis of recent sales evidence, current market conditions, and the physical attributes of the subject property, we assess the market value of 320 Deakin Avenue, Mildura VIC 3500 to be $275,000 as at the date of inspection. This valuation reflects the property's location within walking distance of Mildura's CBD, the quality of recent improvements, and current market demand for residential properties in this established precinct. The property represents solid value in the current market with potential for modest capital growth over the medium term."
               placeholder="The executive summary will be generated here based on all completed report sections..."
               className="min-h-[200px] resize-none text-sm"
             />

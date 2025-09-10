@@ -10,19 +10,19 @@ import PlanningDataIntegration from "./PlanningDataIntegration";
 
 const LegalAndPlanning = () => {
   const [planningData, setPlanningData] = useState({
-    lga: "",
-    zoning: "",
-    currentUse: "",
-    permissibleUse: "",
-    permitNumber: "",
-    overlays: "",
-    overlayImpactAssessment: "",
-    overlayImpactRating: "",
-    heightOfBuilding: "",
-    floorSpaceRatio: "",
-    minimumLotSize: "",
-    planningRestrictions: "",
-    developmentPotential: ""
+    lga: "Mildura Rural City Council",
+    zoning: "General Residential Zone (GRZ)",
+    currentUse: "Single Dwelling",
+    permissibleUse: "Dwelling, Home Based Business, Residential Aged Care Facility",
+    permitNumber: "Not Required",
+    overlays: "No overlays apply",
+    overlayImpactAssessment: "The property is not subject to any planning overlays that would restrict development or impact marketability. The General Residential Zone provides for a range of residential uses with minimal planning constraints.",
+    overlayImpactRating: "1",
+    heightOfBuilding: "9 metres maximum",
+    floorSpaceRatio: "Not applicable",
+    minimumLotSize: "300 square metres",
+    planningRestrictions: "Standard ResCode requirements apply including building setbacks, site coverage limitations, and privacy requirements. The General Residential Zone encourages development that respects neighbourhood character. Maximum two dwellings permitted on the allotment subject to planning approval.",
+    developmentPotential: "The property has potential for subdivision subject to meeting minimum lot size requirements and council approval. The existing dwelling could be extended or renovated under current planning provisions. The zoning supports diverse housing types including dual occupancy development, making it attractive to investors and developers seeking future development opportunities."
   });
 
   const handlePlanningDataFetched = (data: any) => {

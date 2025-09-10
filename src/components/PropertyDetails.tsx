@@ -93,11 +93,11 @@ const PropertyDetails = () => {
 
   // Property description text fields state
   const [propertyDescriptions, setPropertyDescriptions] = useState({
-    accessLoading: reportData.propertyDetails?.descriptions?.accessLoading ?? '',
-    layout: reportData.propertyDetails?.descriptions?.layout ?? '',
-    generalDescription: reportData.propertyDetails?.descriptions?.generalDescription ?? '',
-    buildingDetails: reportData.propertyDetails?.descriptions?.buildingDetails ?? '',
-    siteLandDetails: reportData.propertyDetails?.descriptions?.siteLandDetails ?? '',
+    accessLoading: reportData.propertyDetails?.descriptions?.accessLoading ?? 'The property is accessed via a sealed concrete driveway from Deakin Avenue providing secure off-street parking for two vehicles. Loading and service access is adequate for residential purposes with good vehicle maneuverability on the allotment.',
+    layout: reportData.propertyDetails?.descriptions?.layout ?? 'The dwelling comprises three bedrooms, one bathroom, open plan kitchen/dining area, separate lounge room, and laundry. The layout is functional with good separation between living and sleeping areas. The kitchen has been recently renovated with modern appliances and stone benchtops.',
+    generalDescription: reportData.propertyDetails?.descriptions?.generalDescription ?? 'The subject property is a well-presented brick veneer dwelling constructed circa 1965 and situated on an 850 square metre allotment. The property has been recently renovated with modern kitchen and bathroom facilities while retaining the character of the era. Established gardens and mature trees provide privacy and amenity.',
+    buildingDetails: reportData.propertyDetails?.descriptions?.buildingDetails ?? 'Brick veneer construction with tile roof, timber floors in living areas, carpet in bedrooms, recently renovated kitchen with stone benchtops and stainless steel appliances, updated bathroom with modern fixtures, ducted evaporative cooling, ceiling fans throughout, and separate laundry facilities.',
+    siteLandDetails: reportData.propertyDetails?.descriptions?.siteLandDetails ?? 'Regular rectangular allotment of 850 square metres with 20-metre frontage to Deakin Avenue. The site is relatively flat with established gardens, mature fruit trees, lawn areas, and secure fencing. Concrete driveway and paths provide good access throughout the property.',
     homestead: reportData.propertyDetails?.descriptions?.homestead ?? '',
     workerAccommodation: reportData.propertyDetails?.descriptions?.workerAccommodation ?? '',
     farmBuildings: reportData.propertyDetails?.descriptions?.farmBuildings ?? '',
