@@ -115,7 +115,8 @@ const LegalAndPlanning = () => {
               <div>
                 <Label htmlFor="lga-legal" className="text-emerald-700 font-medium">LGA</Label>
                 <Input 
-                  id="lga-legal" 
+                  id="lga-legal"
+                  name="lga"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.lga}
                   onChange={(e) => handleInputChange('lga', e.target.value)}
@@ -125,6 +126,7 @@ const LegalAndPlanning = () => {
                 <Label htmlFor="zoning-legal" className="text-emerald-700 font-medium">Zoning</Label>
                 <Input 
                   id="zoning-legal" 
+                  name="zoning"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.zoning}
                   onChange={(e) => handleInputChange('zoning', e.target.value)}
@@ -134,6 +136,7 @@ const LegalAndPlanning = () => {
                 <Label htmlFor="current-use-legal" className="text-emerald-700 font-medium">Current Use</Label>
                 <Input 
                   id="current-use-legal" 
+                  name="currentUse"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.currentUse}
                   onChange={(e) => handleInputChange('currentUse', e.target.value)}
@@ -143,6 +146,7 @@ const LegalAndPlanning = () => {
                 <Label htmlFor="permissible-use" className="text-emerald-700 font-medium">Permissible Use</Label>
                 <Input 
                   id="permissible-use" 
+                  name="permissibleUse"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.permissibleUse}
                   onChange={(e) => handleInputChange('permissibleUse', e.target.value)}
@@ -156,6 +160,7 @@ const LegalAndPlanning = () => {
                 <Label htmlFor="permit-number" className="text-emerald-700 font-medium">Permit Number</Label>
                 <Input 
                   id="permit-number" 
+                  name="permitNumber"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.permitNumber}
                   onChange={(e) => handleInputChange('permitNumber', e.target.value)}
@@ -184,6 +189,7 @@ const LegalAndPlanning = () => {
               <Label htmlFor="overlay-impact" className="text-emerald-700 font-medium">Overlay Impact Assessment</Label>
               <Textarea 
                 id="overlay-impact" 
+                name="overlayImpactAssessment"
                 rows={3}
                 className="mt-1 bg-white border-emerald-200" 
                 value={planningData.overlayImpactAssessment}
@@ -195,7 +201,7 @@ const LegalAndPlanning = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
                 <Label htmlFor="impact-rating" className="text-emerald-700 font-medium">Overlay Impact Rating</Label>
-                <Select value={planningData.overlayImpactRating} onValueChange={(value) => handleInputChange('overlayImpactRating', value)}>
+                <Select name="overlayImpactRating" value={planningData.overlayImpactRating} onValueChange={(value) => handleInputChange('overlayImpactRating', value)}>
                   <SelectTrigger className="mt-1 bg-white border-emerald-200">
                     <SelectValue />
                   </SelectTrigger>
@@ -212,6 +218,7 @@ const LegalAndPlanning = () => {
                 <Label htmlFor="height-building" className="text-emerald-700 font-medium">Height of Building</Label>
                 <Input 
                   id="height-building" 
+                  name="heightOfBuilding"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.heightOfBuilding}
                   onChange={(e) => handleInputChange('heightOfBuilding', e.target.value)}
@@ -221,6 +228,7 @@ const LegalAndPlanning = () => {
                 <Label htmlFor="floor-space-ratio" className="text-emerald-700 font-medium">Floor Space Ratio</Label>
                 <Input 
                   id="floor-space-ratio" 
+                  name="floorSpaceRatio"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.floorSpaceRatio}
                   onChange={(e) => handleInputChange('floorSpaceRatio', e.target.value)}
@@ -230,6 +238,7 @@ const LegalAndPlanning = () => {
                 <Label htmlFor="minimum-lot-size" className="text-emerald-700 font-medium">Minimum Lot Size</Label>
                 <Input 
                   id="minimum-lot-size" 
+                  name="minimumLotSize"
                   className="mt-1 bg-white border-emerald-200" 
                   value={planningData.minimumLotSize}
                   onChange={(e) => handleInputChange('minimumLotSize', e.target.value)}
@@ -242,6 +251,7 @@ const LegalAndPlanning = () => {
               <Label htmlFor="planning-restrictions" className="text-emerald-700 font-medium">Planning Restrictions & Overlays</Label>
               <Textarea 
                 id="planning-restrictions" 
+                name="planningRestrictions"
                 rows={3}
                 className="mt-1 bg-white border-emerald-200" 
                 value={planningData.planningRestrictions}
@@ -254,6 +264,7 @@ const LegalAndPlanning = () => {
               <Label htmlFor="development-potential" className="text-emerald-700 font-medium">Development Potential & Future Use</Label>
               <Textarea 
                 id="development-potential" 
+                name="developmentPotential"
                 rows={3}
                 className="mt-1 bg-white border-emerald-200" 
                 value={planningData.developmentPotential}

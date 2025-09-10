@@ -76,19 +76,44 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
         }
         
         planningDataToUse = {
-          zoning: propertyPlanningData.zoning,
+          // Basic information
+          council: propertyPlanningData.lga || propertyPlanningData.municipality,
+          planning_scheme: propertyPlanningData.planningScheme,
+          zone_primary: propertyPlanningData.zoning,
+          zone_description: propertyPlanningData.zoneDescription,
+          
+          // Overlays
+          overlays_present: propertyPlanningData.overlaysPresent,
+          overlay_count: propertyPlanningData.overlayCount,
           overlays: propertyPlanningData.overlays,
+          
+          // Heritage and environmental
+          heritage_overlay: propertyPlanningData.heritageOverlay,
+          vegetation_protection: propertyPlanningData.vegetationProtection,
+          
+          // Development details
+          land_use: propertyPlanningData.landUse,
+          development_potential: propertyPlanningData.developmentPotential,
+          permit_required: propertyPlanningData.permitRequired,
+          
+          // Building controls
+          height_restriction: propertyPlanningData.heightOfBuilding,
+          floor_space_ratio: propertyPlanningData.floorSpaceRatio,
+          minimum_lot_size: propertyPlanningData.minimumLotSize,
+          
+          // Planning details
+          planning_restrictions: propertyPlanningData.planningRestrictions,
+          
+          // Metadata
+          data_source: propertyPlanningData.dataSource,
+          last_updated: propertyPlanningData.lastUpdated,
+          coordinates: propertyPlanningData.coordinates,
+          
+          // For backward compatibility
+          zoning: propertyPlanningData.zoning,
           lga: propertyPlanningData.lga,
-          heightRestriction: propertyPlanningData.heightRestriction || propertyPlanningData.buildingHeight,
-          floorSpaceRatio: propertyPlanningData.floorSpaceRatio,
-          minimumLotSize: propertyPlanningData.minimumLotSize,
-          landUse: propertyPlanningData.landUse,
-          developmentPotential: propertyPlanningData.developmentPotential,
           planningScheme: propertyPlanningData.planningScheme,
-          planningRestrictions: propertyPlanningData.planningRestrictions,
-          permitRequired: propertyPlanningData.permitRequired,
-          mapReference: "property-analysis-service",
-          lastUpdated: new Date().toLocaleDateString()
+          mapReference: "property-analysis-service"
         };
         console.log('Using property analysis data:', planningDataToUse);
         console.log('Updated lot/plan data:', lotPlanData);
