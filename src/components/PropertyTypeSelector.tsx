@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useProperty } from "@/contexts/PropertyContext";
 
 interface PropertyTypeSelectorProps {
   onSelect: (type: string) => void;
@@ -10,6 +11,7 @@ interface PropertyTypeSelectorProps {
 
 export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorProps) {
   const navigate = useNavigate();
+  const { updatePropertyTypeData } = useProperty();
   const propertyTypes = [
     {
       id: "commercial",
@@ -180,7 +182,10 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                 <Card 
                   key={type.id} 
                   className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${type.color}`}
-                  onClick={() => onSelect(type.id)}
+                  onClick={() => {
+                    updatePropertyTypeData({ selectedType: type.id });
+                    onSelect(type.id);
+                  }}
                 >
                   <CardHeader className="pb-4">
                     <div className="flex items-center space-x-3">

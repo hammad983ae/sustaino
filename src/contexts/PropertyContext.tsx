@@ -14,11 +14,25 @@ export interface PropertyAddressData {
   suburb?: string;
 }
 
+export interface PropertyTypeData {
+  selectedType: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  parkingSpaces?: number;
+  landSize?: string;
+  buildingSize?: string;
+  yearBuilt?: string;
+  additionalFeatures?: string;
+}
+
 interface PropertyContextType {
   addressData: PropertyAddressData;
+  propertyTypeData: PropertyTypeData;
   updateAddressData: (data: Partial<PropertyAddressData>) => void;
+  updatePropertyTypeData: (data: Partial<PropertyTypeData>) => void;
   getFormattedAddress: () => string;
   clearAddressData: () => void;
+  clearPropertyTypeData: () => void;
 }
 
 const defaultAddressData: PropertyAddressData = {
@@ -34,6 +48,17 @@ const defaultAddressData: PropertyAddressData = {
   country: 'Australia',
 };
 
+const defaultPropertyTypeData: PropertyTypeData = {
+  selectedType: '',
+  bedrooms: 3,
+  bathrooms: 2,
+  parkingSpaces: 2,
+  landSize: '',
+  buildingSize: '',
+  yearBuilt: '',
+  additionalFeatures: ''
+};
+
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
 
 export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -43,13 +68,27 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return saved ? JSON.parse(saved) : defaultAddressData;
   });
 
-  // Save to localStorage whenever addressData changes
+  const [propertyTypeData, setPropertyTypeData] = useState<PropertyTypeData>(() => {
+    // Load from localStorage on init
+    const saved = localStorage.getItem('propertyTypeData');
+    return saved ? JSON.parse(saved) : defaultPropertyTypeData;
+  });
+
+  // Save to localStorage whenever data changes
   useEffect(() => {
     localStorage.setItem('propertyAddressData', JSON.stringify(addressData));
   }, [addressData]);
 
+  useEffect(() => {
+    localStorage.setItem('propertyTypeData', JSON.stringify(propertyTypeData));
+  }, [propertyTypeData]);
+
   const updateAddressData = (data: Partial<PropertyAddressData>) => {
     setAddressData(prev => ({ ...prev, ...data }));
+  };
+
+  const updatePropertyTypeData = (data: Partial<PropertyTypeData>) => {
+    setPropertyTypeData(prev => ({ ...prev, ...data }));
   };
 
   const getFormattedAddress = () => {
@@ -72,12 +111,20 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.removeItem('propertyAddressData');
   };
 
+  const clearPropertyTypeData = () => {
+    setPropertyTypeData(defaultPropertyTypeData);
+    localStorage.removeItem('propertyTypeData');
+  };
+
   return (
     <PropertyContext.Provider value={{
       addressData,
+      propertyTypeData,
       updateAddressData,
+      updatePropertyTypeData,
       getFormattedAddress,
-      clearAddressData
+      clearAddressData,
+      clearPropertyTypeData
     }}>
       {children}
     </PropertyContext.Provider>
