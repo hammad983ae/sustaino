@@ -40,7 +40,7 @@ const LegalAndPlanning = () => {
       developmentPotential: data.developmentPotential || "",
       planningRestrictions: Array.isArray(data.overlays) && data.overlays.length > 0 
         ? `Planning overlays apply: ${data.overlays.join(", ")}` 
-        : (data.planningRestrictions?.join(", ") || ""),
+        : (Array.isArray(data.planningRestrictions) ? data.planningRestrictions.join(", ") : (data.planningRestrictions || "")),
       overlayImpactRating: data.overlays && Array.isArray(data.overlays) && data.overlays.length > 0 ? "3" : "1"
     }));
   };
