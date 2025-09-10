@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
@@ -27,151 +26,30 @@ export default function AuthPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        navigate('/');
-      }
-    };
-
-    checkUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        navigate('/');
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: loginEmail,
-        password: loginPassword,
-      });
-
-      if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          setError('Invalid email or password. Please check your credentials and try again.');
-        } else if (error.message.includes('Email not confirmed')) {
-          setError('Please check your email and click the confirmation link before logging in.');
-        } else {
-          setError(error.message);
-        }
-        return;
-      }
-
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      });
-
-      navigate('/');
-    } catch (error) {
-      console.error('Login error:', error);
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleForgotPassword = async () => {
-    if (!loginEmail.trim()) {
-      setError('Please enter your email address first.');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(loginEmail, {
-        redirectTo: `${window.location.origin}/auth?reset=true`,
-      });
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      toast({
-        title: "Password reset email sent",
-        description: "Check your email for a password reset link.",
-      });
-    } catch (error) {
-      console.error('Password reset error:', error);
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    // Authentication removed - form submission disabled
+    toast({
+      title: "Login disabled",
+      description: "Authentication functionality has been temporarily removed.",
+    });
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError(null);
+    // Authentication removed - form submission disabled
+    toast({
+      title: "Signup disabled", 
+      description: "Authentication functionality has been temporarily removed.",
+    });
+  };
 
-    // Validation
-    if (signupPassword !== confirmPassword) {
-      setError('Passwords do not match.');
-      setIsLoading(false);
-      return;
-    }
-
-    if (signupPassword.length < 6) {
-      setError('Password must be at least 6 characters long.');
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signUp({
-        email: signupEmail,
-        password: signupPassword,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            display_name: displayName || signupEmail
-          }
-        }
-      });
-
-      if (error) {
-        if (error.message.includes('already registered')) {
-          setError('An account with this email already exists. Please try logging in instead.');
-        } else {
-          setError(error.message);
-        }
-        return;
-      }
-
-      toast({
-        title: "Account created successfully!",
-        description: "Please check your email for a confirmation link.",
-      });
-
-      // Clear form
-      setSignupEmail('');
-      setSignupPassword('');
-      setConfirmPassword('');
-      setDisplayName('');
-    } catch (error) {
-      console.error('Signup error:', error);
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+  const handleForgotPassword = async () => {
+    // Authentication removed - forgot password disabled
+    toast({
+      title: "Password reset disabled",
+      description: "Authentication functionality has been temporarily removed.",
+    });
   };
 
   return (
@@ -219,22 +97,11 @@ export default function AuthPage() {
 
               <TabsContent value="login" className="mt-6">
                 <div className="space-y-4">
-                  {/* Quick Test Login */}
+                  {/* Note about disabled functionality */}
                   <Alert className="bg-info/10 border-info/20">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      <strong>Test Account:</strong> test@example.com / password123
-                      <Button 
-                        variant="link" 
-                        size="sm"
-                        onClick={() => {
-                          setLoginEmail('test@example.com');
-                          setLoginPassword('password123');
-                        }}
-                        className="ml-2 h-auto p-0 text-info"
-                      >
-                        Use Test Account
-                      </Button>
+                      <strong>Note:</strong> Authentication functionality is temporarily disabled. This is a demo form only.
                     </AlertDescription>
                   </Alert>
 
