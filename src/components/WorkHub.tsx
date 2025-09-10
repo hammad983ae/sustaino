@@ -68,6 +68,7 @@ interface ValuationJob {
   assigned_to: string;
   due_date: string;
   created_at: string;
+  job_number?: number;
 }
 
 interface CostaPortfolioAnalysis {

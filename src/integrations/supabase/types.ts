@@ -831,6 +831,7 @@ export type Database = {
           due_date: string | null
           estimated_value: number | null
           id: string
+          job_number: number
           notes: string | null
           plant_equipment: Json | null
           priority: string
@@ -853,6 +854,7 @@ export type Database = {
           due_date?: string | null
           estimated_value?: number | null
           id?: string
+          job_number?: number
           notes?: string | null
           plant_equipment?: Json | null
           priority?: string
@@ -875,6 +877,7 @@ export type Database = {
           due_date?: string | null
           estimated_value?: number | null
           id?: string
+          job_number?: number
           notes?: string | null
           plant_equipment?: Json | null
           priority?: string

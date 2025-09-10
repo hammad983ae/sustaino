@@ -28,8 +28,10 @@ export interface PropertyTypeData {
 interface PropertyContextType {
   addressData: PropertyAddressData;
   propertyTypeData: PropertyTypeData;
+  jobNumber: string | null;
   updateAddressData: (data: Partial<PropertyAddressData>) => void;
   updatePropertyTypeData: (data: Partial<PropertyTypeData>) => void;
+  setJobNumber: (jobNumber: string) => void;
   getFormattedAddress: () => string;
   clearAddressData: () => void;
   clearPropertyTypeData: () => void;
@@ -74,6 +76,12 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return saved ? JSON.parse(saved) : defaultPropertyTypeData;
   });
 
+  const [jobNumber, setJobNumberState] = useState<string | null>(() => {
+    // Load from localStorage on init
+    const saved = localStorage.getItem('propertyJobNumber');
+    return saved || null;
+  });
+
   // Save to localStorage whenever data changes
   useEffect(() => {
     localStorage.setItem('propertyAddressData', JSON.stringify(addressData));
@@ -82,6 +90,14 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     localStorage.setItem('propertyTypeData', JSON.stringify(propertyTypeData));
   }, [propertyTypeData]);
+
+  useEffect(() => {
+    if (jobNumber) {
+      localStorage.setItem('propertyJobNumber', jobNumber);
+    } else {
+      localStorage.removeItem('propertyJobNumber');
+    }
+  }, [jobNumber]);
 
   const updateAddressData = (data: Partial<PropertyAddressData>) => {
     setAddressData(prev => ({ ...prev, ...data }));
@@ -116,12 +132,18 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.removeItem('propertyTypeData');
   };
 
+  const setJobNumber = (newJobNumber: string) => {
+    setJobNumberState(newJobNumber);
+  };
+
   return (
     <PropertyContext.Provider value={{
       addressData,
       propertyTypeData,
+      jobNumber,
       updateAddressData,
       updatePropertyTypeData,
+      setJobNumber,
       getFormattedAddress,
       clearAddressData,
       clearPropertyTypeData

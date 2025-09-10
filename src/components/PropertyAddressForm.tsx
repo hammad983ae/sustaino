@@ -5,14 +5,83 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useProperty } from "@/contexts/PropertyContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const PropertyAddressForm = () => {
-  const { addressData, updateAddressData, getFormattedAddress } = useProperty();
+  const { addressData, updateAddressData, getFormattedAddress, setJobNumber } = useProperty();
+  const { toast } = useToast();
+  const [isCreatingJob, setIsCreatingJob] = useState(false);
 
-  const handleGenerateAddress = () => {
+  const handleGenerateAddress = async () => {
     const formatted = getFormattedAddress();
     updateAddressData({ propertyAddress: formatted });
+    
+    // Auto-create job file
+    await createJobFile(formatted);
+  };
+
+  const createJobFile = async (propertyAddress: string) => {
+    if (!propertyAddress.trim()) {
+      toast({
+        title: "Address Required",
+        description: "Please enter a property address before creating a job file",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsCreatingJob(true);
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Authentication Required", 
+          description: "Please log in to create a job file",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('valuation_jobs')
+        .insert([{
+          title: `Property Valuation - ${propertyAddress}`,
+          description: `Valuation job for property at ${propertyAddress}`,
+          property_type: 'residential',
+          address: propertyAddress,
+          user_id: user.id,
+          status: 'pending',
+          priority: 'medium',
+          notes: 'Auto-created from property address form'
+        }])
+        .select('job_number, id')
+        .single();
+
+      if (error) throw error;
+
+      // Save job number to context
+      setJobNumber(data.job_number.toString());
+
+      toast({
+        title: "Job File Created Successfully! 📋",
+        description: `Job #${data.job_number} has been created and saved to your Work Hub for ${propertyAddress}`,
+        className: "bg-green-50 border-green-200"
+      });
+
+    } catch (error) {
+      console.error('Error creating job:', error);
+      toast({
+        title: "Failed to Create Job File",
+        description: "There was an error creating your job file. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsCreatingJob(false);
+    }
   };
 
   return (
@@ -164,8 +233,9 @@ const PropertyAddressForm = () => {
             <Button 
               className="bg-emerald-500 hover:bg-emerald-600 text-white px-6"
               onClick={handleGenerateAddress}
+              disabled={isCreatingJob}
             >
-              Generate Address
+              {isCreatingJob ? "Creating Job File..." : "Generate Address & Create Job"}
             </Button>
           </div>
         </div>
