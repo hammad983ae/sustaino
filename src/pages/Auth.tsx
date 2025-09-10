@@ -14,29 +14,46 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if user is already logged in
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
+    // Check for password reset token in URL
+    const checkPasswordReset = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (data?.session?.user && !isResettingPassword) {
         navigate('/');
+        return;
+      }
+
+      // Check for recovery/reset token in URL hash
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
+      const type = hashParams.get('type');
+
+      if (type === 'recovery' && accessToken && refreshToken) {
+        setIsResettingPassword(true);
+        return;
       }
     };
 
-    checkUser();
+    checkPasswordReset();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsResettingPassword(true);
+      } else if (session?.user && !isResettingPassword) {
         navigate('/');
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, isResettingPassword]);
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('john@delorenzopropertygroup.com');
@@ -103,7 +120,7 @@ export default function AuthPage() {
     }
 
     try {
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = window.location.href.replace(/\/auth.*$/, '/auth');
       
       const { error } = await supabase.auth.signUp({
         email: signupEmail,
@@ -178,6 +195,53 @@ export default function AuthPage() {
     }
   };
 
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    if (newPassword !== confirmNewPassword) {
+      setError('Passwords do not match.');
+      setIsLoading(false);
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      toast({
+        title: "Password updated successfully!",
+        description: "You can now sign in with your new password.",
+      });
+
+      setIsResettingPassword(false);
+      setNewPassword('');
+      setConfirmNewPassword('');
+      
+      // Clear the URL hash
+      window.history.replaceState(null, '', window.location.pathname);
+      
+    } catch (error) {
+      console.error('Password update error:', error);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -199,67 +263,63 @@ export default function AuthPage() {
               </div>
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h1>
-          <p className="text-muted-foreground">Sign in to access your property management platform</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            {isResettingPassword ? 'Reset Your Password' : 'Welcome Back'}
+          </h1>
+          <p className="text-muted-foreground">
+            {isResettingPassword ? 'Enter your new password below' : 'Sign in to access your property management platform'}
+          </p>
         </div>
 
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-center">Authentication</CardTitle>
+            <CardTitle className="text-center">
+              {isResettingPassword ? 'Update Password' : 'Authentication'}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
-              </TabsList>
-
-              {error && (
-                <Alert variant="destructive" className="mt-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-
-              <TabsContent value="login" className="mt-6">
+            <>
+              {isResettingPassword ? (
+                // Password Reset Form
                 <div className="space-y-4">
-                  {/* Quick Account Info */}
-                  <Alert className="bg-info/10 border-info/20">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      <strong>Your Account:</strong> john@delorenzopropertygroup.com - Set your password using Sign Up tab if first time
-                    </AlertDescription>
-                  </Alert>
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
 
-                  <form onSubmit={handleLogin} className="space-y-4">
+                  <form onSubmit={handlePasswordUpdate} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="login-email">Email</Label>
+                      <Label htmlFor="new-password">New Password</Label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          id="login-email"
-                          type="email"
-                          placeholder="Enter your email"
-                          value={loginEmail}
-                          onChange={(e) => setLoginEmail(e.target.value)}
+                          id="new-password"
+                          type={showPassword ? 'text' : 'password'}
+                          placeholder="Enter your new password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
                           className="pl-10"
                           required
+                          minLength={6}
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="login-password">Password</Label>
+                      <Label htmlFor="confirm-new-password">Confirm New Password</Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          id="login-password"
+                          id="confirm-new-password"
                           type={showPassword ? 'text' : 'password'}
-                          placeholder="Enter your password"
-                          value={loginPassword}
-                          onChange={(e) => setLoginPassword(e.target.value)}
+                          placeholder="Confirm your new password"
+                          value={confirmNewPassword}
+                          onChange={(e) => setConfirmNewPassword(e.target.value)}
                           className="pl-10 pr-10"
                           required
+                          minLength={6}
                         />
                         <Button
                           type="button"
@@ -277,108 +337,202 @@ export default function AuthPage() {
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-center">
-                      <Button
-                        type="button"
-                        variant="link"
-                        size="sm"
-                        onClick={handleForgotPassword}
-                        className="text-sm text-muted-foreground hover:text-foreground p-0"
-                      >
-                        Forgot Password?
-                      </Button>
-                    </div>
-
                     <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? 'Signing in...' : 'Sign In'}
+                      {isLoading ? 'Updating password...' : 'Update Password'}
                     </Button>
                   </form>
+
+                  <div className="text-center">
+                    <Button
+                      variant="link"
+                      onClick={() => {
+                        setIsResettingPassword(false);
+                        setError(null);
+                        window.history.replaceState(null, '', window.location.pathname);
+                      }}
+                      className="text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      ← Back to Login
+                    </Button>
+                  </div>
                 </div>
-              </TabsContent>
+              ) : (
+                // Regular Login/Signup Forms
+                <div>
+                  <Tabs defaultValue="login" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="login">Login</TabsTrigger>
+                      <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                    </TabsList>
 
-              <TabsContent value="signup" className="mt-6">
-                <form onSubmit={handleSignup} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="display-name">Display Name (Optional)</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="display-name"
-                        type="text"
-                        placeholder="Enter your display name"
-                        value={displayName}
-                        onChange={(e) => setDisplayName(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
+                    {error && (
+                      <Alert variant="destructive" className="mt-4">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>{error}</AlertDescription>
+                      </Alert>
+                    )}
+
+                    <TabsContent value="login" className="mt-6">
+                      <div className="space-y-4">
+                        {/* Quick Account Info */}
+                        <Alert className="bg-info/10 border-info/20">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertDescription>
+                            <strong>Your Account:</strong> john@delorenzopropertygroup.com - Set your password using Sign Up tab if first time
+                          </AlertDescription>
+                        </Alert>
+
+                        <form onSubmit={handleLogin} className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="login-email">Email</Label>
+                            <div className="relative">
+                              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="login-email"
+                                type="email"
+                                placeholder="Enter your email"
+                                value={loginEmail}
+                                onChange={(e) => setLoginEmail(e.target.value)}
+                                className="pl-10"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="login-password">Password</Label>
+                            <div className="relative">
+                              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="login-password"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Enter your password"
+                                value={loginPassword}
+                                onChange={(e) => setLoginPassword(e.target.value)}
+                                className="pl-10 pr-10"
+                                required
+                              />
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                {showPassword ? (
+                                  <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                ) : (
+                                  <Eye className="h-4 w-4 text-muted-foreground" />
+                                )}
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-between items-center">
+                            <Button
+                              type="button"
+                              variant="link"
+                              size="sm"
+                              onClick={handleForgotPassword}
+                              className="text-sm text-muted-foreground hover:text-foreground p-0"
+                            >
+                              Forgot Password?
+                            </Button>
+                          </div>
+
+                          <Button type="submit" className="w-full" disabled={isLoading}>
+                            {isLoading ? 'Signing in...' : 'Sign In'}
+                          </Button>
+                        </form>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="signup" className="mt-6">
+                      <form onSubmit={handleSignup} className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="display-name">Display Name (Optional)</Label>
+                          <div className="relative">
+                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              id="display-name"
+                              type="text"
+                              placeholder="Enter your display name"
+                              value={displayName}
+                              onChange={(e) => setDisplayName(e.target.value)}
+                              className="pl-10"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="signup-email">Email</Label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              id="signup-email"
+                              type="email"
+                              placeholder="Enter your email"
+                              value={signupEmail}
+                              onChange={(e) => setSignupEmail(e.target.value)}
+                              className="pl-10"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="signup-password">Password</Label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              id="signup-password"
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="Enter your password"
+                              value={signupPassword}
+                              onChange={(e) => setSignupPassword(e.target.value)}
+                              className="pl-10"
+                              required
+                              minLength={6}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="confirm-password">Confirm Password</Label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              id="confirm-password"
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="Confirm your password"
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              className="pl-10"
+                              required
+                              minLength={6}
+                            />
+                          </div>
+                        </div>
+
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                          {isLoading ? 'Creating account...' : 'Create Account'}
+                        </Button>
+                      </form>
+                    </TabsContent>
+                  </Tabs>
+
+                  <div className="mt-6 text-center">
+                    <Button
+                      variant="link"
+                      onClick={() => navigate('/')}
+                      className="text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      ← Back to Home
+                    </Button>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={signupEmail}
-                        onChange={(e) => setSignupEmail(e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="signup-password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Enter your password"
-                        value={signupPassword}
-                        onChange={(e) => setSignupPassword(e.target.value)}
-                        className="pl-10"
-                        required
-                        minLength={6}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="confirm-password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Confirm your password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="pl-10"
-                        required
-                        minLength={6}
-                      />
-                    </div>
-                  </div>
-
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Creating account...' : 'Create Account'}
-                  </Button>
-                </form>
-              </TabsContent>
-            </Tabs>
-
-            <div className="mt-6 text-center">
-              <Button
-                variant="link"
-                onClick={() => navigate('/')}
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                ← Back to Home
-              </Button>
-            </div>
+                </div>
+              )}
+            </>
           </CardContent>
         </Card>
       </div>
