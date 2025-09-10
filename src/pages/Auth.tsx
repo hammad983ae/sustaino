@@ -95,45 +95,22 @@ export default function AuthPage() {
     
     // Quick bypass for testing - use test@test.com / test123 to skip auth
     if (loginEmail === 'test@test.com' && loginPassword === 'test123') {
-      // Create a real test user account in Supabase
-      try {
-        const { data, error } = await supabase.auth.signUp({
+      // Create a mock session by setting test mode
+      setTestMode(true);
+      localStorage.setItem('test_user_session', JSON.stringify({
+        user: {
+          id: 'test-user-123',
           email: 'test@test.com',
-          password: 'test123',
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-            data: {
-              display_name: 'Test User'
-            }
-          }
-        });
-        
-        if (error && error.message.includes('User already registered')) {
-          // User exists, try to sign in
-          const { error: signInError } = await supabase.auth.signInWithPassword({
-            email: 'test@test.com',
-            password: 'test123',
-          });
-          
-          if (!signInError) {
-            toast({
-              title: "Welcome back! (Test Account)",
-              description: "Logged in with test credentials",
-            });
-            navigate('/');
-            return;
-          }
-        } else if (!error) {
-          toast({
-            title: "Test account created!",
-            description: "You can now test job functionality",
-          });
-          navigate('/');
-          return;
+          user_metadata: { display_name: 'Test User' }
         }
-      } catch (err) {
-        console.error('Test account creation failed:', err);
-      }
+      }));
+      
+      toast({
+        title: "Logged in successfully (Test Mode)",
+        description: "You can now test job creation and saving",
+      });
+      navigate('/');
+      return;
     }
 
     setIsLoading(true);

@@ -21,9 +21,17 @@ export default function AuthStatus() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { isTestMode, testUser } = useTestAuth();
+  const { isTestMode, testUser, setTestMode } = useTestAuth();
 
   useEffect(() => {
+    // Check for test mode session first
+    const testSession = localStorage.getItem('test_user_session');
+    if (testSession) {
+      setTestMode(true);
+      setLoading(false);
+      return;
+    }
+
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
@@ -43,6 +51,17 @@ export default function AuthStatus() {
 
   const handleSignOut = async () => {
     try {
+      // Clear test mode
+      if (isTestMode) {
+        localStorage.removeItem('test_user_session');
+        setTestMode(false);
+        toast({
+          title: "Signed out successfully",
+          description: "Test session ended.",
+        });
+        return;
+      }
+
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
