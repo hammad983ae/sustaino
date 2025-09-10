@@ -13,14 +13,11 @@ serve(async (req) => {
   }
 
   try {
-    // Get Google Maps API key from Supabase secrets - try multiple possible secret names
-    let googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY') || 
-                          Deno.env.get('Geolocation') || 
-                          Deno.env.get('GOOGLE_MAPS_API_KE');
+    // Get Google Maps API key from Supabase secrets
+    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
     
-    console.log('Available env vars:', Object.keys(Deno.env.toObject()).filter(key => key.toLowerCase().includes('google') || key.toLowerCase().includes('map') || key.toLowerCase().includes('geo')));
+    console.log('Available env vars:', Object.keys(Deno.env.toObject()).filter(key => key.toLowerCase().includes('google') || key.toLowerCase().includes('map')));
     console.log('Google Maps API key found:', !!googleMapsApiKey);
-    console.log('Key source:', googleMapsApiKey ? (Deno.env.get('GOOGLE_MAPS_API_KEY') ? 'GOOGLE_MAPS_API_KEY' : Deno.env.get('Geolocation') ? 'Geolocation' : 'GOOGLE_MAPS_API_KE') : 'none');
     
     if (!googleMapsApiKey) {
       console.error('Google Maps API key not found in environment variables');

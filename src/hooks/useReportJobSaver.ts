@@ -140,7 +140,7 @@ export const useReportJobSaver = ({
     }
   }, [reportData, currentSection, propertyAddress, reportType, enabled, toast]);
 
-  // Auto-save with debouncing and timeout protection
+  // Auto-save with debouncing
   useEffect(() => {
     if (!enabled || !propertyAddress) return;
 
@@ -149,20 +149,10 @@ export const useReportJobSaver = ({
       clearTimeout(timeoutRef.current);
     }
 
-    // Set new timeout for auto-save with longer delay to prevent timeouts
+    // Set new timeout for auto-save
     timeoutRef.current = setTimeout(() => {
-      // Add timeout protection
-      const saveWithTimeout = Promise.race([
-        saveReportJob(false),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Save timeout')), 15000)
-        )
-      ]);
-      
-      saveWithTimeout.catch(error => {
-        console.warn('Auto-save skipped due to timeout:', error);
-      });
-    }, Math.max(autoSaveDelay, 10000)); // Minimum 10 second delay
+      saveReportJob(false);
+    }, autoSaveDelay);
 
     return () => {
       if (timeoutRef.current) {

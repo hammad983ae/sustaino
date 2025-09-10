@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -8,8 +7,6 @@ import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
-import { useProperty } from "@/contexts/PropertyContext";
-import { useReportJobSaver } from "@/hooks/useReportJobSaver";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
@@ -17,19 +14,6 @@ interface MultiStepFormProps {
 
 const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [stepData, setStepData] = useState({});
-  const navigate = useNavigate();
-  const { addressData, getFormattedAddress, currentJobNumber } = useProperty();
-
-  // Auto-save functionality using the job saver hook
-  const { saveNow } = useReportJobSaver({
-    reportData: stepData,
-    currentSection: currentStep,
-    propertyAddress: getFormattedAddress(),
-    reportType: 'Property Assessment',
-    enabled: !!getFormattedAddress(),
-    autoSaveDelay: 3000
-  });
 
   const steps = [
     {
@@ -54,10 +38,8 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
     }
   ];
 
-  const nextStep = async () => {
+  const nextStep = () => {
     if (currentStep < steps.length - 1) {
-      // Save current step data before moving to next
-      await saveNow();
       setCurrentStep(currentStep + 1);
     }
   };
@@ -65,22 +47,8 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-    } else {
-      // Navigate back to home page when on first step
-      navigate('/', { replace: true });
     }
   };
-
-  // Auto-save when step data changes
-  useEffect(() => {
-    if (getFormattedAddress() && Object.keys(stepData).length > 0) {
-      const timeoutId = setTimeout(() => {
-        saveNow();
-      }, 2000);
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, [stepData, saveNow, getFormattedAddress]);
 
   const progress = ((currentStep + 1) / steps.length) * 100;
 
@@ -89,14 +57,9 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-semibold truncate">
-              Step {currentStep + 1}: {steps[currentStep].title}
-            </h1>
-            {currentJobNumber && (
-              <p className="text-xs text-muted-foreground">Job #{currentJobNumber}</p>
-            )}
-          </div>
+          <h1 className="text-lg font-semibold truncate">
+            Step {currentStep + 1}: {steps[currentStep].title}
+          </h1>
           <div className="text-sm text-muted-foreground">
             {currentStep + 1} of {steps.length}
           </div>
@@ -117,6 +80,7 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
           <Button
             variant="outline"
             onClick={prevStep}
+            disabled={currentStep === 0}
             className="flex items-center gap-2"
           >
             <ChevronLeft className="h-4 w-4" />

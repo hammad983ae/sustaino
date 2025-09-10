@@ -276,72 +276,6 @@ export type Database = {
           },
         ]
       }
-      leasing_evidence: {
-        Row: {
-          bathrooms: number | null
-          bedrooms: number | null
-          building_area: number | null
-          car_spaces: number | null
-          comparison_notes: string | null
-          created_at: string
-          id: string
-          is_comparable: boolean | null
-          land_area: number | null
-          lease_duration_months: number | null
-          lease_end_date: string | null
-          lease_start_date: string
-          lease_status: string
-          property_address: string
-          property_features: Json | null
-          property_type: string
-          rent_amount: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          lease_duration_months?: number | null
-          lease_end_date?: string | null
-          lease_start_date: string
-          lease_status?: string
-          property_address: string
-          property_features?: Json | null
-          property_type: string
-          rent_amount: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          lease_duration_months?: number | null
-          lease_end_date?: string | null
-          lease_start_date?: string
-          lease_status?: string
-          property_address?: string
-          property_features?: Json | null
-          property_type?: string
-          rent_amount?: number
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       marketplace_inquiries: {
         Row: {
           created_at: string
@@ -886,66 +820,6 @@ export type Database = {
         }
         Relationships: []
       }
-      sales_evidence: {
-        Row: {
-          bathrooms: number | null
-          bedrooms: number | null
-          building_area: number | null
-          car_spaces: number | null
-          comparison_notes: string | null
-          created_at: string
-          id: string
-          is_comparable: boolean | null
-          land_area: number | null
-          property_address: string
-          property_features: Json | null
-          property_type: string
-          sale_date: string
-          sale_price: number
-          sale_status: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          property_address: string
-          property_features?: Json | null
-          property_type: string
-          sale_date: string
-          sale_price: number
-          sale_status?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          bathrooms?: number | null
-          bedrooms?: number | null
-          building_area?: number | null
-          car_spaces?: number | null
-          comparison_notes?: string | null
-          created_at?: string
-          id?: string
-          is_comparable?: boolean | null
-          land_area?: number | null
-          property_address?: string
-          property_features?: Json | null
-          property_type?: string
-          sale_date?: string
-          sale_price?: number
-          sale_status?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       valuation_jobs: {
         Row: {
           address: string | null
@@ -957,7 +831,6 @@ export type Database = {
           due_date: string | null
           estimated_value: number | null
           id: string
-          job_number: number
           notes: string | null
           plant_equipment: Json | null
           priority: string
@@ -980,7 +853,6 @@ export type Database = {
           due_date?: string | null
           estimated_value?: number | null
           id?: string
-          job_number?: number
           notes?: string | null
           plant_equipment?: Json | null
           priority?: string
@@ -1003,7 +875,6 @@ export type Database = {
           due_date?: string | null
           estimated_value?: number | null
           id?: string
-          job_number?: number
           notes?: string | null
           plant_equipment?: Json | null
           priority?: string
@@ -1203,10 +1074,6 @@ export type Database = {
       }
       is_marketplace_admin: {
         Args: { user_uuid?: string }
-        Returns: boolean
-      }
-      is_partner_admin_for_partner: {
-        Args: { target_partner_id: string }
         Returns: boolean
       }
     }

@@ -7,7 +7,6 @@ interface StandardReportCoverProps {
   propertyPhoto?: string;
   preparedFor?: string;
   referenceNumber?: string;
-  jobNumber?: string;
   date?: string;
 }
 
@@ -17,7 +16,6 @@ export default function StandardReportCover({
   propertyPhoto = "/lovable-uploads/5589536a-07bd-4bc8-9b46-483992b7b7cc.png",
   preparedFor = "XXX",
   referenceNumber = "DPG-2024-001",
-  jobNumber,
   date = "27/05/2024"
 }: StandardReportCoverProps) {
   return (
@@ -72,11 +70,6 @@ export default function StandardReportCover({
         <p className="text-lg">
           <span style={{ color: '#7cb342' }}>Reference:</span> {referenceNumber}
         </p>
-        {jobNumber && (
-          <p className="text-lg">
-            <span style={{ color: '#7cb342' }}>Job Number:</span> #{jobNumber}
-          </p>
-        )}
         <p className="text-lg">
           <span style={{ color: '#7cb342' }}>Date:</span> {date}
         </p>

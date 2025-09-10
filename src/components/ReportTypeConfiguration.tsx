@@ -488,30 +488,16 @@ const ReportTypeConfiguration = () => {
             />
 
             <div>
-              <Label htmlFor="value-gst-treatment" className="text-sm font-medium">Value GST Treatment</Label>
-              <Select value={formData['value-gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('value-gst-treatment', value)}>
-                <SelectTrigger id="value-gst-treatment" className="mt-2">
-                  <SelectValue placeholder="Select Value GST approach" />
+              <Label htmlFor="gst-treatment" className="text-sm font-medium">GST Treatment</Label>
+              <Select value={formData['gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('gst-treatment', value)}>
+                <SelectTrigger id="gst-treatment" className="mt-2">
+                  <SelectValue placeholder="Select GST approach" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border border-border z-50">
                   <SelectItem value="inclusive">GST Inclusive</SelectItem>
                   <SelectItem value="exclusive">GST Exclusive</SelectItem>
                   <SelectItem value="going-concern">Going Concern (GST Inclusive)</SelectItem>
                   <SelectItem value="vacant-possession">Vacant Possession (GST Free)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="rental-gst-treatment" className="text-sm font-medium">Rental GST Treatment</Label>
-              <Select value={formData['rental-gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('rental-gst-treatment', value)}>
-                <SelectTrigger id="rental-gst-treatment" className="mt-2">
-                  <SelectValue placeholder="Select Rental GST approach" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="inclusive">Inclusive of GST</SelectItem>
-                  <SelectItem value="exclusive">Exclusive of GST</SelectItem>
-                  <SelectItem value="as-specified">As specified in lease</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -671,16 +657,15 @@ const ReportTypeConfiguration = () => {
             </div>
 
             <div>
-              <Label htmlFor="rental-gst-treatment-market" className="text-sm font-medium">Rental GST Treatment</Label>
-              <Select value={formData['rental-gst-treatment-market'] || ''} onValueChange={(value) => handleSelectChange('rental-gst-treatment-market', value)}>
-                <SelectTrigger id="rental-gst-treatment-market" className="mt-1">
-                  <SelectValue placeholder="Select Rental GST approach" />
+              <Label htmlFor="gst-treatment" className="text-sm font-medium">GST Treatment</Label>
+              <Select value={formData['gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('gst-treatment', value)}>
+                <SelectTrigger id="gst-treatment" className="mt-1">
+                  <SelectValue placeholder="Select GST approach" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border border-border z-50">
                   <SelectItem value="inclusive">Inclusive of GST</SelectItem>
                   <SelectItem value="exclusive">Exclusive of GST</SelectItem>
                   <SelectItem value="market-standard">Market Standard Practice</SelectItem>
-                  <SelectItem value="as-specified">As specified in lease</SelectItem>
                 </SelectContent>
               </Select>
             </div>

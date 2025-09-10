@@ -353,45 +353,15 @@ export default function RentDetermination() {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="rental-gst-treatment">Rental GST Treatment</Label>
+                      <Label htmlFor="gst-treatment">GST Treatment</Label>
                       <Select>
                         <SelectTrigger>
-                          <SelectValue placeholder="Rental GST treatment" />
+                          <SelectValue placeholder="GST treatment" />
                         </SelectTrigger>
                         <SelectContent className="bg-background border border-border z-50">
                           <SelectItem value="inclusive">Inclusive of GST</SelectItem>
                           <SelectItem value="exclusive">Exclusive of GST</SelectItem>
                           <SelectItem value="as-specified">As specified in lease</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <Label htmlFor="value-gst-treatment">Value GST Treatment</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Value GST treatment" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border border-border z-50">
-                          <SelectItem value="inclusive">GST Inclusive</SelectItem>
-                          <SelectItem value="exclusive">GST Exclusive</SelectItem>
-                          <SelectItem value="going-concern">Going Concern (GST Inclusive)</SelectItem>
-                          <SelectItem value="vacant-possession">Vacant Possession (GST Free)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="special-conditions">Special Conditions</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select conditions" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border border-border z-50">
-                          <SelectItem value="none">None</SelectItem>
-                          <SelectItem value="sale-leaseback">Sale & Leaseback</SelectItem>
-                          <SelectItem value="forced-sale">Forced Sale</SelectItem>
-                          <SelectItem value="bulk-discount">Bulk Discount</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

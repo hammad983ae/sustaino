@@ -3,8 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useProperty } from "@/contexts/PropertyContext";
-import AuthStatus from "@/components/AuthStatus";
 
 interface PropertyTypeSelectorProps {
   onSelect: (type: string) => void;
@@ -12,7 +10,6 @@ interface PropertyTypeSelectorProps {
 
 export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorProps) {
   const navigate = useNavigate();
-  const { updatePropertyTypeData } = useProperty();
   const propertyTypes = [
     {
       id: "commercial",
@@ -64,9 +61,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                 Sustaino Pro Valuation Platform
               </h1>
             </div>
-            <div>
-              <AuthStatus />
-            </div>
+            <div></div>
           </div>
           <p className="text-xl text-muted-foreground mb-2">
             Automated Property Valuations with ESG Intelligence
@@ -185,10 +180,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
                 <Card 
                   key={type.id} 
                   className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${type.color}`}
-                  onClick={() => {
-                    updatePropertyTypeData({ selectedType: type.id });
-                    onSelect(type.id);
-                  }}
+                  onClick={() => onSelect(type.id)}
                 >
                   <CardHeader className="pb-4">
                     <div className="flex items-center space-x-3">

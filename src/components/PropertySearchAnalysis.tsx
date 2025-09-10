@@ -228,7 +228,7 @@ const PropertySearchAnalysis = () => {
                 <p className="text-xs text-muted-foreground mt-1">
                   Property values, market trends, comparables
                 </p>
-                {analysisData.marketData?.estimatedValue?.average && (
+                {analysisData.marketData?.estimatedValue && (
                   <p className="text-xs mt-1 font-medium">
                     Est. Value: ${analysisData.marketData.estimatedValue.average.toLocaleString()}
                   </p>
@@ -281,7 +281,7 @@ const PropertySearchAnalysis = () => {
                 <p className="text-xs text-muted-foreground mt-1">
                   Population, income, education stats
                 </p>
-                {analysisData.demographicData?.medianIncome && typeof analysisData.demographicData.medianIncome === 'number' && (
+                {analysisData.demographicData?.medianIncome && (
                   <p className="text-xs mt-1">
                     Median Income: ${analysisData.demographicData.medianIncome.toLocaleString()}
                   </p>
@@ -290,7 +290,7 @@ const PropertySearchAnalysis = () => {
             </div>
 
             <div className="text-xs text-muted-foreground italic">
-              Analysis completed at {analysisData.timestamp ? new Date(analysisData.timestamp).toLocaleString() : 'Unknown time'}. 
+              Analysis completed at {new Date(analysisData.timestamp).toLocaleString()}. 
               This data will be used to automatically populate relevant sections in your reports.
             </div>
           </div>

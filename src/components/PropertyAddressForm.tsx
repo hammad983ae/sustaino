@@ -5,103 +5,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useProperty } from "@/contexts/PropertyContext";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useTestAuth } from "@/contexts/TestAuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 const PropertyAddressForm = () => {
-  const { addressData, updateAddressData, getFormattedAddress, setJobNumber } = useProperty();
-  const { toast } = useToast();
-  const { isTestMode, testUser } = useTestAuth();
-  const [isCreatingJob, setIsCreatingJob] = useState(false);
+  const { addressData, updateAddressData, getFormattedAddress } = useProperty();
 
-  const handleGenerateAddress = async () => {
+  const handleGenerateAddress = () => {
     const formatted = getFormattedAddress();
     updateAddressData({ propertyAddress: formatted });
-    
-    // Auto-create job file
-    await createJobFile(formatted);
-  };
-
-  const createJobFile = async (propertyAddress: string) => {
-    if (!propertyAddress.trim()) {
-      toast({
-        title: "Address Required",
-        description: "Please enter a property address before creating a job file",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsCreatingJob(true);
-    
-    try {
-      let user;
-      
-      // Check test mode first
-      if (isTestMode && testUser) {
-        user = testUser;
-        console.log('Using test user:', testUser);
-      } else {
-        const { data: { user: authUser } } = await supabase.auth.getUser();
-        user = authUser;
-        console.log('Using auth user:', authUser);
-      }
-      
-      if (!user) {
-        console.error('No user found - authentication required');
-        toast({
-          title: "Authentication Required", 
-          description: "Please log in to create a job file",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      console.log('Creating job for user:', user.id, 'address:', propertyAddress);
-
-      const { data, error } = await supabase
-        .from('valuation_jobs')
-        .insert([{
-          title: `Property Valuation - ${propertyAddress}`,
-          description: `Valuation job for property at ${propertyAddress}`,
-          property_type: 'residential',
-          address: propertyAddress,
-          user_id: user.id,
-          status: 'pending',
-          priority: 'medium',
-          notes: 'Auto-created from property address form'
-        }])
-        .select('job_number, id')
-        .single();
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      console.log('Job created successfully:', data);
-
-      // Save job number to context
-      setJobNumber(data.job_number.toString());
-
-      toast({
-        title: "Job File Created Successfully! 📋",
-        description: `Job #${data.job_number} has been created and saved to your Work Hub for ${propertyAddress}`,
-        className: "bg-green-50 border-green-200"
-      });
-
-    } catch (error) {
-      console.error('Error creating job:', error);
-      toast({
-        title: "Failed to Create Job File",
-        description: `There was an error creating your job file. Please try again. Error: ${error.message}`,
-        variant: "destructive"
-      });
-    } finally {
-      setIsCreatingJob(false);
-    }
   };
 
   return (
@@ -207,18 +118,8 @@ const PropertyAddressForm = () => {
             </div>
           </div>
 
-          {/* Third Row - Suburb, State, Postcode, Country */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <Label htmlFor="suburb" className="text-sm">Suburb</Label>
-              <Input 
-                id="suburb"
-                placeholder="Suburb"
-                className="mt-1"
-                value={addressData.suburb || ''}
-                onChange={(e) => updateAddressData({ suburb: e.target.value })}
-              />
-            </div>
+          {/* Third Row - State, Postcode, Country */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="state" className="text-sm">State</Label>
             <Select value={addressData.state} onValueChange={(value) => updateAddressData({ state: value })}>
@@ -263,9 +164,8 @@ const PropertyAddressForm = () => {
             <Button 
               className="bg-emerald-500 hover:bg-emerald-600 text-white px-6"
               onClick={handleGenerateAddress}
-              disabled={isCreatingJob}
             >
-              {isCreatingJob ? "Creating Job File..." : "Generate Address & Create Job"}
+              Generate Address
             </Button>
           </div>
         </div>

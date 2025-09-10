@@ -7,8 +7,6 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  console.log('Property data analysis function called');
-  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -16,10 +14,8 @@ serve(async (req) => {
 
   try {
     const { address, state } = await req.json();
-    console.log('Processing address:', address, 'State:', state);
     
     if (!address) {
-      console.log('No address provided');
       return new Response(
         JSON.stringify({ error: 'Address is required' }), 
         { 
@@ -29,241 +25,110 @@ serve(async (req) => {
       );
     }
 
-    // Determine correct planning data based on address
-    const isMilduraProperty = address.toLowerCase().includes('mildura');
-    const coordinates = isMilduraProperty ? { lat: -34.1873, lng: 142.1614 } : { lat: -37.8136, lng: 144.9631 };
-    
+    console.log('Analyzing property:', address, state);
+
+    // Get Google Maps API key
+    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
+    if (!googleMapsApiKey) {
+      console.error('Google Maps API key not found');
+      return new Response(
+        JSON.stringify({ error: 'Google Maps API key not configured' }), 
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     const analysisData = {
       address,
-      state: state || 'VIC',
+      state,
       timestamp: new Date().toISOString(),
-      locationData: {
-        formattedAddress: address,
-        coordinates: coordinates,
-        note: 'Location data processed successfully'
-      },
-      propertyDetails: {
-        nearbyAmenities: {
-          total: 15,
-          schools: ['Local Primary School', 'Community High School'],
-          hospitals: ['Local Medical Centre'],
-          shopping: ['Shopping Centre', 'Local Shops'],
-          transport: ['Train Station', 'Bus Stop'],
-          restaurants: ['Local Cafe', 'Restaurant']
-        }
-      },
-      marketData: {
-        estimatedValue: isMilduraProperty ? 420000 : 750000,
-        marketTrends: 'Stable market conditions',
-        comparables: isMilduraProperty ? 'Similar properties selling between $380k-$460k' : 'Similar properties selling between $700k-$800k',
-        pricePerSqm: isMilduraProperty ? 2100 : 3200,
-        confidence: 'High'
-      },
-      environmentalData: {
-        climateRisk: 'Low',
-        sustainabilityFactors: 'Medium environmental rating',
-        floodRisk: 'Low',
-        fireRisk: 'Medium'
-      },
-      planningData: isMilduraProperty ? {
-        dataSource: 'VicMap Planning API',
-        lastUpdated: new Date().toISOString(),
-        address: address,
-        coordinates: coordinates,
-        
-        // Basic Planning Information
-        lga: 'Mildura Rural City Council',
-        zoning: 'Commercial 1 Zone',
-        zoneCode: 'C1Z',
-        zoneDescription: 'To provide for a range of commercial uses which complement the mixed-use commercial core and provide for community needs.',
-        planningScheme: 'Mildura Planning Scheme',
-        municipality: 'Mildura Rural City Council',
-        
-        // Current and Permissible Use
-        currentUse: 'Commercial development',
-        permissibleUse: 'Office, retail, accommodation, food and drink premises',
-        
-        // Permit Information
-        permitNumber: 'MRC-2024-001567',
-        permitRequired: true,
-        permitStatus: 'Required for Commercial Development',
-        
-        // Overlays - Based on official planning reports
-        overlaysPresent: true,
-        overlayCount: 3,
-        overlays: [
-          { 
-            code: 'DDO', 
-            description: 'Design and Development Overlay', 
-            planningScheme: 'Mildura',
-            impactRating: 'Medium Impact',
-            restrictions: 'Buildings and works must comply with design requirements. Permit required for some buildings and works.'
-          },
-          { 
-            code: 'SCO', 
-            description: 'Specific Controls Overlay', 
-            planningScheme: 'Mildura',
-            impactRating: 'Medium Impact',
-            restrictions: 'Special development controls apply. Permit may be required for buildings and works.'
-          },
-          { 
-            code: 'HO', 
-            description: 'Heritage Overlay', 
-            planningScheme: 'Mildura',
-            impactRating: 'High Impact',
-            restrictions: 'Permit required for demolition, external alterations and tree removal'
-          }
-        ],
-        
-        // Specific Overlay Details
-        heritageOverlay: true,
-        heritageNumber: 'HO',
-        vegetationProtection: false,
-        developmentContributions: false,
-        
-        // Building Controls
-        heightOfBuilding: '11 metres (3 storeys)',
-        floorSpaceRatio: '1.0:1',
-        minimumLotSize: '300 square metres',
-        frontSetback: '3 metres',
-        sideSetbacks: '0 metres (commercial frontage)',
-        rearSetback: '3 metres',
-        
-        // Planning Restrictions & Overlays Detail
-        planningRestrictions: 'Planning overlays apply: Heritage Overlay requires permit for external alterations. Design and Development Overlay requires compliance with design requirements. Specific Controls Overlay may require permits.',
-        
-        // Impact Assessments
-        overlayImpactAssessment: 'Heritage Overlay: High impact - requires careful consideration of building design and materials. Design and Development Overlay: Medium impact - design requirements must be met. Specific Controls Overlay: Medium impact - special development controls apply.',
-        overlayImpactRating: '3 - Medium to High Impact',
-        
-        // Development Potential
-        landUse: 'Commercial development with heritage considerations',
-        developmentPotential: 'Good commercial development potential with overlay considerations. Heritage overlay requires sympathetic design. Commercial uses permitted subject to design and heritage approval.',
-        futureUse: 'Continued commercial use. Potential for heritage-sensitive commercial development. Office and retail opportunities available.',
-        
-        // Additional Details
-        environmentalAuditOverlay: false,
-        floodwayOverlay: false,
-        specialBuildingOverlay: false,
-        airportEnvirons: false,
-        
-        // Planning Application Requirements
-        planningApplicationRequired: 'Required for: Buildings and works in Heritage Overlay, commercial development exceeding specified thresholds, subdivision',
-        exemptions: 'Minor works may be exempt from planning permit if meets heritage and design guidelines',
-        
-        // Strategic Planning
-        strategicFrameworkPlan: 'Mildura 2030 Strategic Plan',
-        neighborhoodCharacter: 'Commercial precinct with heritage significance and established streetscape'
-      } : {
-        dataSource: 'VicMap Planning API',
-        lastUpdated: new Date().toISOString(),
-        address: address,
-        coordinates: coordinates,
-        
-        // Basic Planning Information
-        lga: 'Boroondara City Council',
-        zoning: 'General Residential Zone',
-        zoneCode: 'GRZ1',
-        zoneDescription: 'To encourage development that respects the neighbourhood character of the area',
-        planningScheme: 'Boroondara Planning Scheme',
-        municipality: 'Boroondara City Council',
-        
-        // Current and Permissible Use
-        currentUse: 'Residential development',
-        permissibleUse: 'Residential development, home-based business, dependent person\'s unit',
-        
-        // Permit Information
-        permitNumber: 'BCC-2024-001234',
-        permitRequired: true,
-        permitStatus: 'Not Required for Single Dwelling',
-        
-        // Overlays
-        overlaysPresent: true,
-        overlayCount: 3,
-        overlays: [
-          { 
-            code: 'VPO1', 
-            description: 'Vegetation Protection Overlay', 
-            planningScheme: 'Boroondara',
-            impactRating: 'Medium Impact',
-            restrictions: 'Permit required to remove, destroy or lop native vegetation'
-          },
-          { 
-            code: 'DCO1', 
-            description: 'Development Contributions Plan Overlay', 
-            planningScheme: 'Boroondara',
-            impactRating: 'Low Impact',
-            restrictions: 'Development contributions required for new development'
-          },
-          { 
-            code: 'HO142', 
-            description: 'Heritage Overlay', 
-            planningScheme: 'Boroondara',
-            impactRating: 'High Impact',
-            restrictions: 'Permit required for demolition, external alterations and tree removal'
-          }
-        ],
-        
-        // Specific Overlay Details
-        heritageOverlay: true,
-        heritageNumber: 'HO142',
-        vegetationProtection: true,
-        developmentContributions: true,
-        
-        // Building Controls
-        heightOfBuilding: '9 metres (2 storeys)',
-        floorSpaceRatio: '0.6:1',
-        minimumLotSize: '500 square metres',
-        frontSetback: '6 metres',
-        sideSetbacks: '1 metre (single storey), 2 metres (two storey)',
-        rearSetback: '6 metres',
-        
-        // Planning Restrictions & Overlays Detail
-        planningRestrictions: 'Planning overlays apply: Heritage Overlay requires permit for external alterations. Vegetation Protection Overlay restricts tree removal. Development Contributions Plan applies to new development.',
-        
-        // Impact Assessments
-        overlayImpactAssessment: 'Heritage Overlay (HO142): High impact - requires careful consideration of building design and materials. Vegetation Protection Overlay: Medium impact - native vegetation assessment required. Development Contributions: Low impact - standard contribution applies.',
-        overlayImpactRating: '3 - Medium Impact',
-        
-        // Development Potential
-        landUse: 'Residential development with heritage considerations',
-        developmentPotential: 'Good development potential with overlay considerations. Heritage overlay requires sympathetic design. Single dwelling or extensions permitted subject to heritage approval.',
-        futureUse: 'Continued residential use. Potential for heritage-sensitive renovation or extension. Home-based business opportunities available.',
-        
-        // Additional Details
-        environmentalAuditOverlay: false,
-        floodwayOverlay: false,
-        specialBuildingOverlay: false,
-        airportEnvirons: false,
-        
-        // Planning Application Requirements
-        planningApplicationRequired: 'Required for: Buildings and works in Heritage Overlay, removal of native vegetation, subdivision',
-        exemptions: 'Single dwelling construction may be exempt from planning permit if meets heritage guidelines',
-        
-        // Strategic Planning
-        strategicFrameworkPlan: 'Boroondara Housing Strategy 2021',
-        neighborhoodCharacter: 'Established residential area with heritage significance and mature tree canopy'
-      },
-      transportData: {
-        accessibility: 'Good public transport access',
-        walkability: 'High walkability score',
-        transitScore: '72/100'
-      },
-      demographicData: {
-        population: 'Growing demographic area',
-        income: 'Above average income levels',
-        educationStats: 'Good education facilities nearby',
-        medianIncome: 85000
-      },
-      lotPlan: {
-        available: true,
-        lotSize: '650 sqm',
-        frontage: '15m',
-        depth: '43m'
-      }
+      locationData: {},
+      propertyDetails: {},
+      marketData: {},
+      environmentalData: {},
+      planningData: {},
+      transportData: {},
+      demographicData: {},
+      lotPlan: {}
     };
 
-    console.log('Analysis completed successfully');
+    // 1. Geocoding and basic location data
+    try {
+      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address + ', ' + state)}&key=${googleMapsApiKey}`;
+      const geocodeResponse = await fetch(geocodeUrl);
+      const geocodeData = await geocodeResponse.json();
+      
+      if (geocodeData.status === 'OK' && geocodeData.results[0]) {
+        const result = geocodeData.results[0];
+        analysisData.locationData = {
+          formattedAddress: result.formatted_address,
+          coordinates: {
+            lat: result.geometry.location.lat,
+            lng: result.geometry.location.lng
+          },
+          placeId: result.place_id,
+          addressComponents: result.address_components,
+          locationType: result.geometry.location_type,
+          viewport: result.geometry.viewport
+        };
+
+        // 2. Places API for nearby amenities and POIs
+        const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${result.geometry.location.lat},${result.geometry.location.lng}&radius=2000&key=${googleMapsApiKey}`;
+        const placesResponse = await fetch(placesUrl);
+        const placesData = await placesResponse.json();
+        
+        if (placesData.status === 'OK') {
+          const amenities = placesData.results.map(place => ({
+            name: place.name,
+            type: place.types[0],
+            rating: place.rating,
+            distance: place.vicinity,
+            priceLevel: place.price_level
+          }));
+
+          analysisData.propertyDetails.nearbyAmenities = {
+            total: amenities.length,
+            schools: amenities.filter(a => a.type?.includes('school')),
+            hospitals: amenities.filter(a => a.type?.includes('hospital')),
+            shopping: amenities.filter(a => a.type?.includes('shopping') || a.type?.includes('store')),
+            transport: amenities.filter(a => a.type?.includes('transit') || a.type?.includes('bus')),
+            restaurants: amenities.filter(a => a.type?.includes('restaurant') || a.type?.includes('food'))
+          };
+        }
+
+        // Note: Real property market data would require integration with actual real estate APIs
+        // This function should NOT return mock data for legal reasons
+        
+        return new Response(
+          JSON.stringify({ 
+            error: 'Property valuation data unavailable', 
+            message: 'Real estate data integration required. Mock data removed to prevent legal issues.',
+            locationData: analysisData.locationData
+          }), 
+          { 
+            status: 400, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        );
+
+      } else {
+        console.error('Geocoding failed:', geocodeData.status);
+        return new Response(
+          JSON.stringify({ error: 'Could not geocode address' }), 
+          { 
+            status: 400, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        );
+      }
+    } catch (error) {
+      console.error('Error fetching location data:', error);
+      // Continue with partial data
+    }
+
+    console.log('Property analysis completed successfully');
     
     return new Response(
       JSON.stringify({ 
@@ -276,8 +141,7 @@ serve(async (req) => {
           planningAnalysis: true,
           transportAnalysis: true,
           demographicProfile: true
-        },
-        message: 'Property analysis completed successfully'
+        }
       }), 
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -286,40 +150,10 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Error in property-data-analysis function:', error);
-    
-    // Always return a success response with fallback data
     return new Response(
-      JSON.stringify({ 
-        success: true,
-        data: {
-          address: 'Unknown Address',
-          state: 'VIC',
-          timestamp: new Date().toISOString(),
-          locationData: { note: 'Basic analysis completed' },
-          propertyDetails: { note: 'Property details processed' },
-          marketData: { estimatedValue: 500000, note: 'Market estimate' },
-          environmentalData: { climateRisk: 'Low', note: 'Environmental assessment' },
-          planningData: { 
-            zoning: 'Residential Zone', 
-            landUse: 'Residential development',
-            dataSource: 'Fallback Planning Data',
-            overlaysPresent: false,
-            overlayCount: 0
-          },
-          transportData: { accessibility: 'Good', note: 'Transport analysis' },
-          demographicData: { population: 'Stable', note: 'Demographic data' }
-        },
-        sections: {
-          locationAnalysis: true,
-          marketValuation: true,
-          environmentalAssessment: true,
-          planningAnalysis: true,
-          transportAnalysis: true,
-          demographicProfile: true
-        },
-        message: 'Analysis completed with fallback data'
-      }), 
+      JSON.stringify({ error: 'Internal server error', details: error.message }), 
       { 
+        status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       }
     );

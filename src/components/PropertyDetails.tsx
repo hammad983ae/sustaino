@@ -7,7 +7,7 @@
  * proprietary IP. Commercial licensing required for use.
  * ============================================================================
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -17,11 +17,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock, Printer, Plus, Minus, Upload, Image, Download } from "lucide-react";
 import { useReportData } from "@/hooks/useReportData";
-import { useProperty } from "@/contexts/PropertyContext";
 
 const PropertyDetails = () => {
   const { reportData, updateSection } = useReportData();
-  const { propertyTypeData, updatePropertyTypeData } = useProperty();
   
   // Smart property type detection from URL or context
   const getInitialPropertyTypes = () => {
@@ -59,20 +57,6 @@ const PropertyDetails = () => {
 
   const [includeSection, setIncludeSection] = useState(reportData.propertyDetails?.includeSection ?? true);
   const [propertyTypes, setPropertyTypes] = useState(getInitialPropertyTypes);
-
-  // Sync property types when PropertyContext changes
-  useEffect(() => {
-    if (propertyTypeData.selectedType) {
-      setPropertyTypes({
-        commercial: propertyTypeData.selectedType === 'commercial',
-        residential: propertyTypeData.selectedType === 'residential',
-        buildToRent: propertyTypeData.selectedType === 'buildToRent',
-        agriculture: propertyTypeData.selectedType === 'agriculture',
-        developmentLand: propertyTypeData.selectedType === 'developmentLand',
-        specialized: propertyTypeData.selectedType === 'specialized'
-      });
-    }
-  }, [propertyTypeData.selectedType]);
   const [certifications, setCertifications] = useState({
     include: reportData.propertyDetails?.certifications?.include ?? false,
     bulkData: reportData.propertyDetails?.certifications?.bulkData ?? false,
@@ -658,58 +642,27 @@ const PropertyDetails = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="bedrooms">Bedrooms</Label>
-                    <Input 
-                      id="bedrooms" 
-                      placeholder="Number of bedrooms" 
-                      value={propertyTypeData.bedrooms || 3}
-                      onChange={(e) => updatePropertyTypeData({ bedrooms: parseInt(e.target.value) || 0 })}
-                    />
+                    <Input id="bedrooms" placeholder="Number of bedrooms" />
                   </div>
                   <div>
                     <Label htmlFor="bathrooms">Bathrooms</Label>
-                    <Input 
-                      id="bathrooms" 
-                      placeholder="Number of bathrooms" 
-                      value={propertyTypeData.bathrooms || 2}
-                      onChange={(e) => updatePropertyTypeData({ bathrooms: parseInt(e.target.value) || 0 })}
-                    />
                     <Input id="bathrooms" placeholder="Number of bathrooms" />
                   </div>
                   <div>
                     <Label htmlFor="parking-spaces">Parking Spaces</Label>
-                    <Input 
-                      id="parking-spaces" 
-                      placeholder="Number of parking spaces" 
-                      value={propertyTypeData.parkingSpaces || 2}
-                      onChange={(e) => updatePropertyTypeData({ parkingSpaces: parseInt(e.target.value) || 0 })}
-                    />
+                    <Input id="parking-spaces" placeholder="Number of parking spaces" />
                   </div>
                   <div>
                     <Label htmlFor="land-size">Land Size (sqm)</Label>
-                    <Input 
-                      id="land-size" 
-                      placeholder="Land size in sqm" 
-                      value={propertyTypeData.landSize || ''}
-                      onChange={(e) => updatePropertyTypeData({ landSize: e.target.value })}
-                    />
+                    <Input id="land-size" placeholder="Land size in sqm" />
                   </div>
                   <div>
                     <Label htmlFor="building-size">Building Size (sqm)</Label>
-                    <Input 
-                      id="building-size" 
-                      placeholder="Building size in sqm" 
-                      value={propertyTypeData.buildingSize || ''}
-                      onChange={(e) => updatePropertyTypeData({ buildingSize: e.target.value })}
-                    />
+                    <Input id="building-size" placeholder="Building size in sqm" />
                   </div>
                   <div>
                     <Label htmlFor="year-built-res">Year Built</Label>
-                    <Input 
-                      id="year-built-res" 
-                      placeholder="Construction year" 
-                      value={propertyTypeData.yearBuilt || ''}
-                      onChange={(e) => updatePropertyTypeData({ yearBuilt: e.target.value })}
-                    />
+                    <Input id="year-built-res" placeholder="Construction year" />
                   </div>
                 </div>
                 <div>
@@ -718,8 +671,6 @@ const PropertyDetails = () => {
                     id="additional-features-res"
                     placeholder="Describe additional residential features, amenities, and characteristics..."
                     className="min-h-[100px]"
-                    value={propertyTypeData.additionalFeatures || ''}
-                    onChange={(e) => updatePropertyTypeData({ additionalFeatures: e.target.value })}
                   />
                 </div>
 
