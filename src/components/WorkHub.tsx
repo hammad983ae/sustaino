@@ -304,7 +304,7 @@ export default function WorkHub() {
             Log In
           </Button>
           <p className="text-xs text-muted-foreground">
-            Test account: test@example.com / password123
+            Use your email: john@delorenzopropertygroup.com
           </p>
         </div>
       </div>
