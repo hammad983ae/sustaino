@@ -47,6 +47,7 @@ export const PropertyPROReport: React.FC<PropertyPROReportProps> = ({
             <PropertyPRORiskAnalysis 
               data={reportData.riskAnalysis} 
               onUpdate={(data) => handleSectionUpdate('riskAnalysis', data)}
+              propertyData={reportData}
             />
             <PropertyPROValuationSummary 
               data={reportData.valuationSummary} 
@@ -107,6 +108,7 @@ export const PropertyPROReport: React.FC<PropertyPROReportProps> = ({
             <PropertyPRORiskAnalysis 
               data={reportData.riskAnalysis} 
               onUpdate={(data) => handleSectionUpdate('riskAnalysis', data)}
+              propertyData={reportData}
             />
             <PropertyPROValuationSummary 
               data={reportData.valuationSummary} 
