@@ -11,6 +11,7 @@ import { AutofillAddressFields } from "@/components/AutofillAddressFields";
 import GoogleMapComponent from "@/components/GoogleMapComponent";
 import { usePropertyLocationData } from "@/hooks/usePropertyLocationData";
 import { useProperty } from "@/contexts/PropertyContext";
+import { useState } from "react";
 
 const RPDAndLocation = () => {
   const { addressData } = useProperty();
@@ -20,6 +21,25 @@ const RPDAndLocation = () => {
     generateLocationAnalysis, 
     updateAnalysisField 
   } = usePropertyLocationData();
+
+  // Property Identification Methods state
+  const [includeIdentificationMethods, setIncludeIdentificationMethods] = useState(true);
+  const [identificationMethods, setIdentificationMethods] = useState({
+    physicalInspection: true,  // Pre-selected
+    cadastralMap: true,       // Pre-selected  
+    aerialMapping: true,      // Pre-selected
+    surveyorPeg: false,
+    plan: false,
+    certificateTitle: false,
+    other: false
+  });
+
+  const handleIdentificationMethodChange = (method: string, checked: boolean) => {
+    setIdentificationMethods(prev => ({
+      ...prev,
+      [method]: checked
+    }));
+  };
 
   const handleGenerateAnalysis = async () => {
     await generateLocationAnalysis();
@@ -79,42 +99,81 @@ const RPDAndLocation = () => {
           <div>
             <h4 className="font-semibold mb-3 flex items-center gap-2">
               Property Identified By
-              <Switch />
+              <Switch 
+                checked={includeIdentificationMethods}
+                onCheckedChange={setIncludeIdentificationMethods}
+              />
               <span className="text-sm text-muted-foreground">Include</span>
             </h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="physical-inspection" />
-                <Label htmlFor="physical-inspection" className="text-sm">Physical Inspection</Label>
+            
+            {includeIdentificationMethods && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="physical-inspection" 
+                      checked={identificationMethods.physicalInspection}
+                      onCheckedChange={(checked) => handleIdentificationMethodChange('physicalInspection', !!checked)}
+                    />
+                    <Label htmlFor="physical-inspection" className="text-sm">Physical Inspection</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="surveyor-peg" 
+                      checked={identificationMethods.surveyorPeg}
+                      onCheckedChange={(checked) => handleIdentificationMethodChange('surveyorPeg', !!checked)}
+                    />
+                    <Label htmlFor="surveyor-peg" className="text-sm">Surveyor Peg</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="plan" 
+                      checked={identificationMethods.plan}
+                      onCheckedChange={(checked) => handleIdentificationMethodChange('plan', !!checked)}
+                    />
+                    <Label htmlFor="plan" className="text-sm">Plan</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="cadastral-map" 
+                      checked={identificationMethods.cadastralMap}
+                      onCheckedChange={(checked) => handleIdentificationMethodChange('cadastralMap', !!checked)}
+                    />
+                    <Label htmlFor="cadastral-map" className="text-sm">Cadastral Map</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="certificate-title" 
+                      checked={identificationMethods.certificateTitle}
+                      onCheckedChange={(checked) => handleIdentificationMethodChange('certificateTitle', !!checked)}
+                    />
+                    <Label htmlFor="certificate-title" className="text-sm">Certificate of Title</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="aerial-mapping" 
+                      checked={identificationMethods.aerialMapping}
+                      onCheckedChange={(checked) => handleIdentificationMethodChange('aerialMapping', !!checked)}
+                    />
+                    <Label htmlFor="aerial-mapping" className="text-sm">Aerial Mapping</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="other" 
+                      checked={identificationMethods.other}
+                      onCheckedChange={(checked) => handleIdentificationMethodChange('other', !!checked)}
+                    />
+                    <Label htmlFor="other" className="text-sm">Other (Please specify)</Label>
+                  </div>
+                </div>
+                
+                {identificationMethods.other && (
+                  <div className="mt-2">
+                    <Textarea placeholder="Please specify other identification method..." className="h-20" />
+                  </div>
+                )}
               </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="surveyor-peg" />
-                <Label htmlFor="surveyor-peg" className="text-sm">Surveyor Peg</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="plan" />
-                <Label htmlFor="plan" className="text-sm">Plan</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="cadastral-map" />
-                <Label htmlFor="cadastral-map" className="text-sm">Cadastral Map</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="certificate-title" />
-                <Label htmlFor="certificate-title" className="text-sm">Certificate of Title</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="aerial-mapping" />
-                <Label htmlFor="aerial-mapping" className="text-sm">Aerial Mapping</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="other" />
-                <Label htmlFor="other" className="text-sm">Other (Please specify)</Label>
-              </div>
-            </div>
-            <div className="mt-2">
-              <Textarea placeholder="Please specify other identification method..." className="h-20" />
-            </div>
+            )}
           </div>
         </CardContent>
       </Card>
