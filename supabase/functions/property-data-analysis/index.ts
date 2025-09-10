@@ -78,26 +78,57 @@ serve(async (req) => {
         };
 
         // 2. Places API for nearby amenities and POIs
-        const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${result.geometry.location.lat},${result.geometry.location.lng}&radius=2000&key=${googleMapsApiKey}`;
-        const placesResponse = await fetch(placesUrl);
-        const placesData = await placesResponse.json();
-        
-        if (placesData.status === 'OK') {
-          const amenities = placesData.results.map(place => ({
-            name: place.name,
-            type: place.types[0],
-            rating: place.rating,
-            distance: place.vicinity,
-            priceLevel: place.price_level
-          }));
+        try {
+          const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${result.geometry.location.lat},${result.geometry.location.lng}&radius=2000&key=${googleMapsApiKey}`;
+          console.log('Places API URL:', placesUrl);
+          
+          const placesResponse = await fetch(placesUrl);
+          const placesData = await placesResponse.json();
+          
+          console.log('Places API status:', placesData.status);
+          console.log('Places API response:', placesData);
+          
+          if (placesData.status === 'OK' && placesData.results) {
+            const amenities = placesData.results.map(place => ({
+              name: place.name,
+              type: place.types?.[0] || 'unknown',
+              rating: place.rating,
+              distance: place.vicinity,
+              priceLevel: place.price_level
+            }));
 
+            analysisData.propertyDetails.nearbyAmenities = {
+              total: amenities.length,
+              schools: amenities.filter(a => a.type?.includes('school')),
+              hospitals: amenities.filter(a => a.type?.includes('hospital')),
+              shopping: amenities.filter(a => a.type?.includes('shopping') || a.type?.includes('store')),
+              transport: amenities.filter(a => a.type?.includes('transit') || a.type?.includes('bus')),
+              restaurants: amenities.filter(a => a.type?.includes('restaurant') || a.type?.includes('food'))
+            };
+          } else {
+            console.warn('Places API failed:', placesData.status, placesData.error_message);
+            // Set fallback amenities data
+            analysisData.propertyDetails.nearbyAmenities = {
+              total: 0,
+              schools: [],
+              hospitals: [],
+              shopping: [],
+              transport: [],
+              restaurants: [],
+              note: 'Amenities data unavailable'
+            };
+          }
+        } catch (placesError) {
+          console.error('Places API error:', placesError);
+          // Set fallback amenities data
           analysisData.propertyDetails.nearbyAmenities = {
-            total: amenities.length,
-            schools: amenities.filter(a => a.type?.includes('school')),
-            hospitals: amenities.filter(a => a.type?.includes('hospital')),
-            shopping: amenities.filter(a => a.type?.includes('shopping') || a.type?.includes('store')),
-            transport: amenities.filter(a => a.type?.includes('transit') || a.type?.includes('bus')),
-            restaurants: amenities.filter(a => a.type?.includes('restaurant') || a.type?.includes('food'))
+            total: 0,
+            schools: [],
+            hospitals: [],
+            shopping: [],
+            transport: [],
+            restaurants: [],
+            note: 'Amenities data unavailable due to API error'
           };
         }
 
@@ -171,9 +202,13 @@ serve(async (req) => {
         };
 
       } else {
-        console.error('Geocoding failed:', geocodeData.status);
+        console.error('Geocoding failed:', geocodeData.status, geocodeData.error_message);
         return new Response(
-          JSON.stringify({ error: 'Could not geocode address' }), 
+          JSON.stringify({ 
+            error: 'Could not geocode address', 
+            details: `Geocoding failed with status: ${geocodeData.status}`,
+            geocodeResponse: geocodeData
+          }), 
           { 
             status: 400, 
             headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -182,7 +217,38 @@ serve(async (req) => {
       }
     } catch (error) {
       console.error('Error fetching location data:', error);
-      // Continue with partial data
+      // Return minimal analysis data as fallback
+      const fallbackData = {
+        address,
+        state,
+        timestamp: new Date().toISOString(),
+        locationData: { note: 'Location data unavailable' },
+        propertyDetails: { nearbyAmenities: { total: 0, note: 'Amenities data unavailable' } },
+        marketData: { estimatedValue: 500000, note: 'Market data estimated' },
+        environmentalData: { climateRisk: 'Unknown', note: 'Environmental data unavailable' },
+        planningData: { zoning: 'Unknown', note: 'Planning data unavailable' },
+        transportData: { accessibility: 'Unknown', note: 'Transport data unavailable' },
+        demographicData: { population: 'Unknown', note: 'Demographic data unavailable' }
+      };
+      
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: fallbackData,
+          sections: {
+            locationAnalysis: false,
+            marketValuation: true,
+            environmentalAssessment: false,
+            planningAnalysis: false,
+            transportAnalysis: false,
+            demographicProfile: false
+          },
+          note: 'Analysis completed with limited data due to API limitations'
+        }), 
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
     }
 
     console.log('Property analysis completed successfully');
