@@ -20,7 +20,7 @@ export const TestAuthProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [isTestMode, setTestMode] = useState(false);
   
   const testUser = {
-    id: 'test-user-123',
+    id: '00000000-0000-0000-0000-000000000001',
     email: 'test@test.com',
     user_metadata: {
       display_name: 'Test User'
