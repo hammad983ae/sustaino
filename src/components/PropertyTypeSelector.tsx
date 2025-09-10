@@ -197,57 +197,6 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           </Card>
         </div>
 
-        {/* Property Type Selection */}
-        <div className="mb-8">
-          <div className="text-center mb-6">
-            <h3 className="text-2xl font-semibold mb-2">Property Type Valuations</h3>
-            <p className="text-muted-foreground">
-              Select your specific property type for targeted valuation analysis
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {propertyTypes.map((type) => {
-              const IconComponent = type.icon;
-              return (
-                <Card 
-                  key={type.id} 
-                  className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${type.color}`}
-                  onClick={() => onSelect(type.id)}
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-lg bg-white shadow-sm">
-                        <IconComponent className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{type.title}</CardTitle>
-                        <CardDescription className="text-sm">
-                          {type.description}
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-2 mb-4">
-                      <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
-                      <ul className="text-sm space-y-1">
-                        {type.features.map((feature, index) => (
-                          <li key={index} className="flex items-center text-muted-foreground">
-                            <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <Button className="w-full" variant="outline">
-                      Start {type.title} Valuation
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
 
         {/* Additional Services */}
         <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
