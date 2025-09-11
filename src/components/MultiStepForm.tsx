@@ -7,7 +7,7 @@ import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysisEnhanced from "@/components/PropertySearchAnalysisEnhanced";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
-// Removed useReportJobSaver import
+import ReportSectionManager from "@/components/ReportSectionManager";
 // Removed useReportJobSaver import
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -94,24 +94,28 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
       />
     },
     {
-      title: "AI Enhanced Report Configuration",
-      component: <div className="space-y-6">
-        <ReportTypeConfiguration 
-          onConfigurationChange={(config) => setReportData(prev => ({ 
-            ...prev, 
-            reportConfiguration: config 
-          }))}
-        />
-        <PropertySearchAnalysisEnhanced 
-          address={reportData.propertyAddress}
-          onAddressChange={(address) => setReportData(prev => ({ ...prev, propertyAddress: address }))}
-          onAnalysisComplete={setEnhancedAnalysisData}
-        />
-      </div>
+      title: "Report Configuration",
+      component: <ReportTypeConfiguration 
+        onConfigurationChange={(config) => setReportData(prev => ({ 
+          ...prev, 
+          reportConfiguration: config 
+        }))}
+      />
     },
     {
       title: "Document Upload",
       component: <DocumentPhotoUpload />
+    },
+    {
+      title: "Report Sections",
+      component: <ReportSectionManager 
+        reportType={reportData.reportType || "long-form"}
+        propertyType={reportData.propertyType || "residential"}
+        reportData={reportData}
+        propertyAddress={reportData.propertyAddress || "520 Deakin Avenue Mildura VIC 3500"}
+        onSectionsChange={setSelectedSections}
+        onContinueToReport={() => onContinueToReport?.()}
+      />
     }
   ];
 

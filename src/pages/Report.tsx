@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight, Home, Save, Eye, FileText, Play } from "lucide-react";
@@ -86,45 +86,55 @@ const ReportViewer = () => {
     localStorage.setItem('report_current_section', currentSection.toString());
   }, [currentSection]);
 
-  // Optimize auto-save with debounced effect and dependency optimization
+  // Auto-save report data when it changes
   useEffect(() => {
+    console.log('📊 Report data changed:', { 
+      sectionsCount: Object.keys(reportData).length,
+      sections: Object.keys(reportData),
+      propertyAddress: propertyAddress || 'NO ADDRESS'
+    });
+    
     if (Object.keys(reportData).length > 0) {
-      console.log('📊 Report data changed, scheduling auto-save...');
+      console.log('⏰ Setting up auto-save timeout');
       const timeoutId = setTimeout(() => {
-        console.log('💾 Auto-saving report data...');
+        console.log('💾 Executing localStorage save');
         saveToStorage();
+        console.log('🔄 Also attempting Supabase save regardless of address');
         saveNow();
       }, 2000);
       
       return () => {
-        console.log('🚫 Cancelling previous auto-save...');
+        console.log('🧹 Clearing auto-save timeout');
         clearTimeout(timeoutId);
       };
     }
-  }, [reportData, saveToStorage]); // Removed saveNow from deps to prevent unnecessary saves
+  }, [reportData, saveToStorage, propertyAddress, saveNow]);
 
-  // Memoize property address extraction to prevent unnecessary re-calculations
-  const extractedPropertyAddress = useMemo(() => {
-    console.log('🏠 Extracting property address from report data...');
-    return reportData.propertyDetails?.address || 
-           reportData.address || 
-           reportData.propertyDetails?.propertyAddress ||
-           reportData.propertyAddress ||
-           reportData.propertyForm?.address ||
-           reportData.addressForm?.address ||
-           '';
-  }, [reportData]);
-
-  // Update property address when extracted address changes
+  // Update property address when report data changes
   useEffect(() => {
-    if (extractedPropertyAddress && extractedPropertyAddress !== propertyAddress) {
-      console.log('📍 Property address updated:', extractedPropertyAddress);
-      setPropertyAddress(extractedPropertyAddress);
+    // Try multiple possible locations for the address
+    const address = reportData.propertyDetails?.address || 
+                   reportData.address || 
+                   reportData.propertyDetails?.propertyAddress ||
+                   reportData.propertyAddress ||
+                   reportData.propertyForm?.address ||
+                   reportData.addressForm?.address ||
+                   '';
+    
+    console.log('🏠 Property address update:', { 
+      address, 
+      currentPropertyAddress: propertyAddress,
+      allReportDataKeys: Object.keys(reportData),
+      propertyDetailsKeys: reportData.propertyDetails ? Object.keys(reportData.propertyDetails) : []
+    });
+    
+    if (address && address !== propertyAddress) {
+      setPropertyAddress(address);
+      console.log('✅ Property address updated to:', address);
     }
-  }, [extractedPropertyAddress, propertyAddress]);
+  }, [reportData, propertyAddress]);
 
-  // Memoize the sections array to prevent unnecessary re-renders
-  const sections = useMemo(() => [
+  const sections = [
     { title: "Executive Summary and Contents" },
     { title: "RPD and Location" },
     { title: "Legal and Planning" },
@@ -148,42 +158,39 @@ const ReportViewer = () => {
     { title: "Qualifications, Disclaimers, Terms and Conditions" },
     { title: "Annexures" },
     { title: "Security and Certificates" }
-  ], []);
+  ];
 
-  // Memoize navigation callbacks to prevent unnecessary re-renders
-  const navigateToSection = useCallback((sectionIndex: number) => {
+  const navigateToSection = (sectionIndex: number) => {
     setCurrentSection(sectionIndex);
-  }, []);
+  };
 
-  const nextSection = useCallback(() => {
+  const nextSection = () => {
     if (currentSection < sections.length - 1) {
       setCurrentSection(currentSection + 1);
     }
-  }, [currentSection, sections.length]);
+  };
 
-  const prevSection = useCallback(() => {
+  const prevSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
     }
-  }, [currentSection]);
+  };
 
-  // Memoize progress calculation
-  const progress = useMemo(() => ((currentSection + 1) / sections.length) * 100, [currentSection, sections.length]);
+  const progress = ((currentSection + 1) / sections.length) * 100;
 
-  // Memoize view mode handlers
-  const handleShowPreview = useCallback(() => {
+  const handleShowPreview = () => {
     setViewMode('preview');
-  }, []);
+  };
 
-  const handleShowPresentation = useCallback(() => {
+  const handleShowPresentation = () => {
     setViewMode('presentation');
-  }, []);
+  };
 
-  const handleBackToEdit = useCallback(() => {
+  const handleBackToEdit = () => {
     setViewMode('edit');
-  }, []);
+  };
 
-  const handleGenerateReport = useCallback(async () => {
+  const handleGenerateReport = async () => {
     // Mark report as completed in Work Hub
     await markAsCompleted();
     // Report generation logic here
@@ -192,16 +199,16 @@ const ReportViewer = () => {
       description: "Your comprehensive property report is ready for download",
       duration: 5000,
     });
-  }, [markAsCompleted, toast]);
+  };
 
-  const handlePresentationComplete = useCallback(() => {
+  const handlePresentationComplete = () => {
     setViewMode('edit');
     toast({
       title: "AI Analysis Complete",
       description: "Presentation finished. You can now continue with the detailed report.",
       duration: 3000,
     });
-  }, [toast]);
+  };
 
   // Show AI Presentation
   if (viewMode === 'presentation') {
@@ -249,9 +256,11 @@ const ReportViewer = () => {
         <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors">
-                <Home className="h-4 w-4" />
-                Back to Original Platform
+              <Link to="/">
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Home className="h-4 w-4" />
+                  <span className="hidden sm:inline">Main Dashboard</span>
+                </Button>
               </Link>
               <h1 className="text-lg font-semibold truncate">
                 Section {currentSection + 1}: {sections[currentSection].title}
@@ -296,7 +305,7 @@ const ReportViewer = () => {
           <Progress value={progress} className="w-full" />
         </div>
 
-        {/* Report content with optimized rendering */}
+        {/* Report content */}
         <div className="p-4 pb-24">
           <div className="max-w-4xl mx-auto">
             <ReportSection 

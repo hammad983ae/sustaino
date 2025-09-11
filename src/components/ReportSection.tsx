@@ -1,4 +1,3 @@
-import React, { memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ReportSectionProps {
@@ -10,16 +9,7 @@ interface ReportSectionProps {
   onDataChange?: (data: any) => void;
 }
 
-const ReportSection = memo(({ 
-  title, 
-  subtitle, 
-  sectionIndex, 
-  onNavigateToSection, 
-  reportData = {}, 
-  onDataChange = () => {} 
-}: ReportSectionProps) => {
-  console.log(`🔄 ReportSection render: ${title} (Section ${sectionIndex + 1})`);
-  
+const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection, reportData = {}, onDataChange = () => {} }: ReportSectionProps) => {
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       <Card>
@@ -38,8 +28,6 @@ const ReportSection = memo(({
       </Card>
     </div>
   );
-});
-
-ReportSection.displayName = 'ReportSection';
+};
 
 export default ReportSection;
