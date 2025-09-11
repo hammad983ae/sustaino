@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { handleApiResponse, handleSingleApiResponse } from './base';
+import type { User } from '@/types';
 
 export interface Profile {
   id: string;

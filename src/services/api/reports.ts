@@ -1,28 +1,11 @@
 import { handleApiResponse, handleFunctionResponse } from './base';
 import { supabase } from '@/integrations/supabase/client';
-
-export interface Report {
-  id: string;
-  user_id: string;
-  property_id: string;
-  valuation_id?: string;
-  esg_assessment_id?: string;
-  title: string;
-  report_type: string;
-  status: string;
-  sections_data?: any;
-  progress: number;
-  current_section?: string;
-  pdf_file_path?: string;
-  created_at: string;
-  updated_at: string;
-  completed_at?: string;
-}
+import type { Report } from '@/types';
 
 export interface ReportGenerationRequest {
   propertyId: string;
   reportType: string;
-  sectionsData: any;
+  sectionsData: Record<string, unknown>;
   title: string;
 }
 

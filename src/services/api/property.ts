@@ -1,39 +1,6 @@
 import { handleApiResponse, handleSingleApiResponse, handleFunctionResponse } from './base';
 import { supabase } from '@/integrations/supabase/client';
-
-export interface Property {
-  id: string;
-  user_id: string;
-  address_line_1: string;
-  address_line_2?: string;
-  suburb: string;
-  state: string;
-  postcode: string;
-  country?: string;
-  property_type: string;
-  latitude?: number;
-  longitude?: number;
-  land_area?: number;
-  building_area?: number;
-  year_built?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  car_spaces?: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface PropertySearchParams {
-  address: string;
-  propertyType?: string;
-}
-
-export interface PropertyAnalysisResult {
-  property: Property;
-  marketData?: any;
-  comparables?: any[];
-  riskAssessment?: any;
-}
+import type { Property, PropertyDetails, PropertyAnalysisResult, PropertySearchParams } from '@/types';
 
 class PropertyService {
   async getProperties(): Promise<Property[]> {
@@ -42,7 +9,11 @@ class PropertyService {
       .select('*')
       .order('created_at', { ascending: false });
     
-    return handleApiResponse(response);
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+    
+    return response.data as Property[];
   }
 
   async getProperty(id: string): Promise<Property> {
