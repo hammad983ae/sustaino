@@ -235,11 +235,9 @@ const ReportViewer = () => {
         <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Link to="/">
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
-                  <Home className="h-4 w-4" />
-                  <span className="hidden sm:inline">Main Dashboard</span>
-                </Button>
+              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors">
+                <Home className="h-4 w-4" />
+                Back to Original Platform
               </Link>
               <h1 className="text-lg font-semibold truncate">
                 Section {currentSection + 1}: {sections[currentSection].title}
