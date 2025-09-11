@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { Job, JobStatus, JobPriority } from '@/types';
 
 // Mock data - in real app this would come from API
@@ -60,23 +60,25 @@ export const useJobs = (options: UseJobsOptions = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Simulate API call
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        setLoading(true);
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setJobs(mockJobs);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch jobs');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchJobs();
+  // Fetch jobs function - declared outside useEffect for reuse
+  const fetchJobs = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setJobs(mockJobs);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch jobs');
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
   // Filter jobs based on options
   const filteredJobs = jobs.filter(job => {
@@ -129,9 +131,6 @@ export const useJobs = (options: UseJobsOptions = {}) => {
     stats,
     updateJobProgress,
     updateJobStatus,
-    refetch: () => {
-      setLoading(true);
-      // Trigger re-fetch logic here
-    }
+    refetch: fetchJobs
   };
 };
