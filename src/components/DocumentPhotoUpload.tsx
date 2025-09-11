@@ -5,7 +5,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Upload, Image, FileText, Sparkles, ArrowLeft, X, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -20,6 +20,7 @@ interface UploadedFile {
 }
 
 const DocumentPhotoUpload = () => {
+  const navigate = useNavigate();
   const [ocrProcessing, setOcrProcessing] = useState("all");
   const [customPages, setCustomPages] = useState("10");
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedFile[]>([]);
@@ -32,6 +33,11 @@ const DocumentPhotoUpload = () => {
   const documentInputRef = useRef<HTMLInputElement>(null);
   const propertyDocInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  const handleBackToDetails = () => {
+    // Navigate back to the previous step or main configuration
+    navigate(-1); // Goes back to previous page
+  };
 
   const handleFileUpload = useCallback(async (files: FileList, type: 'photos' | 'documents' | 'property') => {
     setIsUploading(true);
@@ -383,7 +389,11 @@ const DocumentPhotoUpload = () => {
 
         {/* Navigation */}
         <div className="flex justify-center pt-6 border-t">
-          <Button variant="outline" className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-2"
+            onClick={handleBackToDetails}
+          >
             <ArrowLeft className="h-4 w-4" />
             Back to Details
           </Button>
