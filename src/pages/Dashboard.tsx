@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,39 +17,34 @@ import {
   FileText,
   Users
 } from 'lucide-react';
-import { supabase } from "@/integrations/supabase/client";
-import { User as SupabaseUser } from "@supabase/supabase-js";
 import { toast } from "@/hooks/use-toast";
 import AdvancedIPProtection from "@/components/AdvancedIPProtection";
 import IntellectualPropertyProtection from "@/components/IntellectualPropertyProtection";
+import { useAuthStore } from '@/stores/authStore';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const { user, isAuthenticated, signOut, initialize } = useAuthStore();
   
-  // Check authentication status
+  // Initialize auth store
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      if (event === 'SIGNED_OUT') {
-        toast({
-          title: "Signed out successfully",
-          description: "You have been signed out of your account.",
-        });
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+    initialize();
+  }, [initialize]);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account.",
+      });
+    } catch (error) {
+      toast({
+        title: "Sign out failed",
+        description: "There was an error signing out. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleNavigate = (path: string) => {
@@ -68,7 +63,7 @@ const Dashboard = () => {
                 Property Valuation and ESG Assessment
               </h1>
             </div>
-            {user ? (
+            {isAuthenticated ? (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <User className="h-4 w-4" />
@@ -231,7 +226,7 @@ const Dashboard = () => {
           </div>
 
           {/* Quick Stats */}
-          {user && (
+          {isAuthenticated && (
             <div className="bg-card rounded-lg p-6 border border-border max-w-4xl mx-auto">
               <h3 className="text-lg font-semibold mb-4">Platform Overview</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -8,9 +8,8 @@ import PropertySearchAnalysisEnhanced from "@/components/PropertySearchAnalysisE
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
 import ReportSectionManager from "@/components/ReportSectionManager";
-// Removed useReportJobSaver import
-import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { useFormStore } from '@/stores/formStore';
+import { useAuthStore } from '@/stores/authStore';
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
@@ -18,33 +17,31 @@ interface MultiStepFormProps {
 }
 
 const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [user, setUser] = useState<User | null>(null);
-  const [reportData, setReportData] = useState<any>({
-    propertyAddress: "520 Deakin Avenue Mildura VIC 3500",
-    reportType: "long-form",
-    propertyType: "commercial"
-  });
-  const [selectedSections, setSelectedSections] = useState<string[]>([]);
-  const [enhancedAnalysisData, setEnhancedAnalysisData] = useState<any>(null);
+  const { 
+    currentStep, 
+    setCurrentStep, 
+    propertyData, 
+    updatePropertyData, 
+    reportData, 
+    updateReportData,
+    selectedSections, 
+    setSelectedSections, 
+    enhancedAnalysisData, 
+    setEnhancedAnalysisData 
+  } = useFormStore();
+  
+  const { isAuthenticated, initialize } = useAuthStore();
 
-  // Check authentication status
+  // Initialize auth store
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
+    initialize();
+  }, [initialize]);
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  // Removed auto-save functionality
-  const saveNow = () => console.log('Save functionality removed');
+  const saveNow = () => {
+    // Auto-save is handled by the Zustand persist middleware
+    console.log('Form data auto-saved');
+  };
+  
   const markAsCompleted = () => Promise.resolve();
 
   const nextStep = () => {
@@ -53,7 +50,7 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
       setCurrentStep(currentStep + 1);
       console.log('Moving to step:', currentStep + 1);
       // Auto-save on step change only if authenticated
-      if (user) {
+      if (isAuthenticated) {
         try {
           saveNow();
         } catch (error) {
@@ -69,7 +66,7 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
       // Auto-save on step change only if authenticated
-      if (user) {
+      if (isAuthenticated) {
         saveNow();
       }
     }
@@ -88,18 +85,15 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
     {
       title: "Search & Analysis", 
       component: <PropertySearchAnalysisEnhanced 
-        address={reportData.propertyAddress}
-        onAddressChange={(address) => setReportData(prev => ({ ...prev, propertyAddress: address }))}
+        address={propertyData.address || "520 Deakin Avenue Mildura VIC 3500"}
+        onAddressChange={(address) => updatePropertyData({ address })}
         onAnalysisComplete={setEnhancedAnalysisData}
       />
     },
     {
       title: "Report Configuration",
       component: <ReportTypeConfiguration 
-        onConfigurationChange={(config) => setReportData(prev => ({ 
-          ...prev, 
-          reportConfiguration: config 
-        }))}
+        onConfigurationChange={(config) => updateReportData({ reportConfiguration: config })}
       />
     },
     {
@@ -109,10 +103,10 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
     {
       title: "Report Sections",
       component: <ReportSectionManager 
-        reportType={reportData.reportType || "long-form"}
-        propertyType={reportData.propertyType || "residential"}
+        reportType={propertyData.reportType || "long-form"}
+        propertyType={propertyData.propertyType || "residential"}
         reportData={reportData}
-        propertyAddress={reportData.propertyAddress || "520 Deakin Avenue Mildura VIC 3500"}
+        propertyAddress={propertyData.address || "520 Deakin Avenue Mildura VIC 3500"}
         onSectionsChange={setSelectedSections}
         onContinueToReport={() => onContinueToReport?.()}
       />
@@ -169,7 +163,7 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
                 key={index}
                 onClick={() => {
                   setCurrentStep(index);
-                  if (user) {
+                  if (isAuthenticated) {
                     saveNow();
                   }
                 }}
