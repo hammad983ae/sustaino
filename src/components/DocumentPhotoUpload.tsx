@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Upload, Image, FileText, Sparkles, ArrowLeft, X, CheckCircle } from "lucide-react";
+import { Upload, Image, FileText, Sparkles, ArrowLeft, ArrowRight, X, CheckCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -37,6 +37,16 @@ const DocumentPhotoUpload = () => {
   const handleBackToDetails = () => {
     // Navigate back to the previous step or main configuration
     navigate(-1); // Goes back to previous page
+  };
+
+  const handleContinue = () => {
+    // Save uploaded files and continue to next step
+    toast({
+      title: "Files Saved",
+      description: "Your documents have been uploaded successfully. Continuing to next step...",
+    });
+    // Navigate to next step in the process
+    navigate('/report');
   };
 
   const handleFileUpload = useCallback(async (files: FileList, type: 'photos' | 'documents' | 'property') => {
@@ -388,14 +398,22 @@ const DocumentPhotoUpload = () => {
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-center pt-6 border-t">
+        <div className="flex justify-between items-center pt-6 border-t">
           <Button 
             variant="outline" 
             className="flex items-center gap-2"
             onClick={handleBackToDetails}
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Details
+            Back
+          </Button>
+          
+          <Button 
+            className="flex items-center gap-2 bg-primary hover:bg-primary/90"
+            onClick={handleContinue}
+          >
+            Continue to Report
+            <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
       </CardContent>
