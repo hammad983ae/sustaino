@@ -82,7 +82,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
             <div className="flex items-center justify-center">
               <Leaf className="h-8 w-8 text-primary mr-3" />
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Property Valuation and (ESG Assessment)
+                Property Valuation and ESG Assessment
               </h1>
             </div>
             <div></div>

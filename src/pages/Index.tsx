@@ -123,7 +123,7 @@ const Index = () => {
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Zap className="h-8 w-8 text-success" />
                 <h1 className="text-4xl font-bold text-success">
-                  Property Valuation and (ESG Assessment)
+                  Property Valuation and ESG Assessment
                 </h1>
               </div>
               <p className="text-xl text-muted-foreground">
