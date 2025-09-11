@@ -104,10 +104,12 @@ const Index = () => {
                 >
                   🌡️ Climate Risk Assessment
                 </Button>
-                <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
-                  <TrendingUp className="w-5 h-5" />
-                  Valuation Analysis
-                </Button>
+                <Link to="/automated-valuation">
+                  <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
+                    <TrendingUp className="w-5 h-5" />
+                    Start Property Valuation
+                  </Button>
+                </Link>
                 <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
                   <ArrowUpDown className="w-5 h-5" />
                   Rent Revision

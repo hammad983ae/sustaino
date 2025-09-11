@@ -19,7 +19,7 @@ interface AutomatedPropertyDetailsProps {
 }
 
 export default function AutomatedPropertyDetails({ propertyType, onNext, onBack }: AutomatedPropertyDetailsProps) {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState("320 Deakin Avenue Mildura VIC 3500");
   const [valuationDate, setValuationDate] = useState<Date>();
   const [valuationPurpose, setValuationPurpose] = useState("");
   const [clientDetails, setClientDetails] = useState("");
