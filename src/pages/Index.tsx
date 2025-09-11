@@ -135,6 +135,48 @@ const Index = () => {
 
             {/* Assessment Cards */}
             <div className="max-w-4xl mx-auto space-y-6">
+              {/* Main Property Valuation */}
+              <Card className="border border-primary/30 bg-primary/5">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <Calculator className="h-6 w-6 text-primary" />
+                    <div>
+                      <CardTitle className="text-xl font-semibold">Property Valuation Platform</CardTitle>
+                      <p className="text-sm text-muted-foreground">Comprehensive property assessment and valuation</p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="font-medium mb-2">Automated Analysis Includes:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        Market comparable analysis
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        Property condition assessment
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        Risk analysis & market indicators
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        Professional valuation report
+                      </li>
+                    </ul>
+                  </div>
+                  <Button 
+                    className="w-full bg-primary hover:bg-primary/90 text-white"
+                    onClick={() => navigate('/property-valuations')}
+                  >
+                    Start Property Valuation
+                  </Button>
+                </CardContent>
+              </Card>
+
               {/* ESG Assessment */}
               <Card className="border border-border bg-card">
                 <CardHeader>
