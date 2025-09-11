@@ -10,7 +10,7 @@ import { useBranding } from "@/contexts/BrandingContext";
 
 interface CompletedWork {
   id: string;
-  type: 'valuation' | 'report' | 'costa';
+  type: 'valuation' | 'report' | 'esg_assessment';
   title: string;
   created_at: string;
   isArchived: boolean;
@@ -32,10 +32,14 @@ export default function DashboardCompletedWork() {
       if (!user) return;
 
       // Fetch all completed work from different tables
-      const [valuationsResponse, reportsResponse, costaResponse] = await Promise.all([
+      const [valuationsResponse, reportsResponse, esgResponse] = await Promise.all([
         supabase
           .from('valuations')
-          .select('id, property_address, created_at')
+          .select(`
+            id, 
+            created_at,
+            properties!inner(address_line_1, suburb, state, postcode)
+          `)
           .eq('user_id', user.id)
           .eq('status', 'completed'),
         
@@ -46,8 +50,8 @@ export default function DashboardCompletedWork() {
           .eq('status', 'completed'),
         
         supabase
-          .from('costa_portfolio_analyses')
-          .select('id, title, created_at')
+          .from('esg_assessments')
+          .select('id, property_id, created_at')
           .eq('user_id', user.id)
       ]);
 
@@ -55,7 +59,7 @@ export default function DashboardCompletedWork() {
         ...(valuationsResponse.data || []).map(item => ({
           id: item.id,
           type: 'valuation' as const,
-          title: item.property_address,
+          title: item.properties ? `${item.properties.address_line_1}, ${item.properties.suburb} ${item.properties.state}` : 'Unknown Property',
           created_at: item.created_at,
           isArchived: false
         })),
@@ -66,10 +70,10 @@ export default function DashboardCompletedWork() {
           created_at: item.created_at,
           isArchived: false
         })),
-        ...(costaResponse.data || []).map(item => ({
+        ...(esgResponse.data || []).map(item => ({
           id: item.id,
-          type: 'costa' as const,
-          title: item.title,
+          type: 'esg_assessment' as const,
+          title: `ESG Assessment - ${item.property_id}`,
           created_at: item.created_at,
           isArchived: false
         }))
@@ -109,7 +113,7 @@ export default function DashboardCompletedWork() {
     switch (type) {
       case 'valuation': return <TrendingUp className="h-4 w-4" />;
       case 'report': return <FileText className="h-4 w-4" />;
-      case 'costa': return <TrendingUp className="h-4 w-4" />;
+      case 'esg_assessment': return <TrendingUp className="h-4 w-4" />;
       default: return <FileText className="h-4 w-4" />;
     }
   };
@@ -118,7 +122,7 @@ export default function DashboardCompletedWork() {
     switch (type) {
       case 'valuation': return 'Property Valuation';
       case 'report': return 'Analysis Report';
-      case 'costa': return 'Portfolio Analysis';
+      case 'esg_assessment': return 'ESG Assessment';
       default: return 'Analysis';
     }
   };

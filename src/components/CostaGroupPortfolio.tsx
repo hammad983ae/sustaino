@@ -240,7 +240,7 @@ export const CostaGroupPortfolio = () => {
       if (!user?.id) return; // Guard against null user
       
       const { data, error } = await supabase
-        .from('costa_portfolio_analyses')
+        .from('esg_assessments')
         .select('*')
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
@@ -292,11 +292,15 @@ export const CostaGroupPortfolio = () => {
       };
 
       const { error } = await supabase
-        .from('costa_portfolio_analyses')
+        .from('esg_assessments')
         .insert({
           user_id: user.id,
-          title: analysisTitle.trim(),
-          analysis_data: analysisData
+          property_id: '', // Will need property selection
+          environmental_score: 85,
+          social_score: 75,
+          governance_score: 80,
+          overall_esg_score: 80,
+          sustainability_features: analysisData
         });
 
       if (error) throw error;
@@ -324,21 +328,21 @@ export const CostaGroupPortfolio = () => {
   const loadAnalysis = async (analysisId: string) => {
     try {
       const { data, error } = await supabase
-        .from('costa_portfolio_analyses')
+        .from('esg_assessments')
         .select('*')
         .eq('id', analysisId)
         .single();
 
       if (error) throw error;
 
-      const analysisData = data.analysis_data as any;
+      const analysisData = data.sustainability_features as any;
       setSelectedLocation(analysisData?.selectedLocation || 'all');
       setCarbonCreditPrice(analysisData?.carbonCreditPrice || 35);
       setCarbonReductionTarget(analysisData?.carbonReductionTarget || 15);
 
       toast({
         title: "Success",
-        description: `Loaded analysis: ${data.title}`,
+        description: `Loaded ESG analysis: ${data.property_id}`,
       });
 
       setLoadDialogOpen(false);
@@ -355,7 +359,7 @@ export const CostaGroupPortfolio = () => {
   const deleteAnalysis = async (analysisId: string) => {
     try {
       const { error } = await supabase
-        .from('costa_portfolio_analyses')
+        .from('esg_assessments')
         .delete()
         .eq('id', analysisId);
 

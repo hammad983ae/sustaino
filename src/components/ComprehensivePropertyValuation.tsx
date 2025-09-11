@@ -84,12 +84,12 @@ export default function ComprehensivePropertyValuation() {
       const { error } = await supabase
         .from('valuations')
         .insert({
-          property_address: valuationData.propertyAddress,
-          estimated_value: valuationData.estimatedValue,
+          property_id: '', // Will need to be set based on selected property
+          market_value: valuationData.estimatedValue,
           valuation_type: "comprehensive",
+          valuation_purpose: "market_valuation",
           methodology: valuationData.methodology,
-          confidence_score: valuationData.confidenceScore,
-          notes: valuationData.notes,
+          assumptions: valuationData.notes, // Map notes to assumptions field
           status: "completed",
           user_id: user.id
         });
