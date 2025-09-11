@@ -78,12 +78,6 @@ const Index = () => {
       <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="space-y-8">
-            {/* Progress Bar */}
-            <div className="w-full bg-muted rounded-full h-2">
-              <div className="bg-success h-2 rounded-full" style={{ width: '33%' }}></div>
-            </div>
-            <div className="text-sm text-muted-foreground">33% Complete</div>
-
             {/* Navigation */}
             <div className="flex justify-between items-center mb-8">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
