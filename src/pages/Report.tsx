@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight, Home, Save, Eye, FileText, Play } from "lucide-react";
@@ -86,34 +86,45 @@ const ReportViewer = () => {
     localStorage.setItem('report_current_section', currentSection.toString());
   }, [currentSection]);
 
-  // Auto-save report data when it changes
+  // Optimize auto-save with debounced effect and dependency optimization
   useEffect(() => {
     if (Object.keys(reportData).length > 0) {
+      console.log('📊 Report data changed, scheduling auto-save...');
       const timeoutId = setTimeout(() => {
+        console.log('💾 Auto-saving report data...');
         saveToStorage();
         saveNow();
       }, 2000);
       
-      return () => clearTimeout(timeoutId);
+      return () => {
+        console.log('🚫 Cancelling previous auto-save...');
+        clearTimeout(timeoutId);
+      };
     }
-  }, [reportData, saveToStorage, saveNow]);
+  }, [reportData, saveToStorage]); // Removed saveNow from deps to prevent unnecessary saves
 
-  // Update property address when report data changes
-  useEffect(() => {
-    const address = reportData.propertyDetails?.address || 
-                   reportData.address || 
-                   reportData.propertyDetails?.propertyAddress ||
-                   reportData.propertyAddress ||
-                   reportData.propertyForm?.address ||
-                   reportData.addressForm?.address ||
-                   '';
-    
-    if (address && address !== propertyAddress) {
-      setPropertyAddress(address);
-    }
+  // Memoize property address extraction to prevent unnecessary re-calculations
+  const extractedPropertyAddress = useMemo(() => {
+    console.log('🏠 Extracting property address from report data...');
+    return reportData.propertyDetails?.address || 
+           reportData.address || 
+           reportData.propertyDetails?.propertyAddress ||
+           reportData.propertyAddress ||
+           reportData.propertyForm?.address ||
+           reportData.addressForm?.address ||
+           '';
   }, [reportData]);
 
-  const sections = [
+  // Update property address when extracted address changes
+  useEffect(() => {
+    if (extractedPropertyAddress && extractedPropertyAddress !== propertyAddress) {
+      console.log('📍 Property address updated:', extractedPropertyAddress);
+      setPropertyAddress(extractedPropertyAddress);
+    }
+  }, [extractedPropertyAddress, propertyAddress]);
+
+  // Memoize the sections array to prevent unnecessary re-renders
+  const sections = useMemo(() => [
     { title: "Executive Summary and Contents" },
     { title: "RPD and Location" },
     { title: "Legal and Planning" },
@@ -137,39 +148,42 @@ const ReportViewer = () => {
     { title: "Qualifications, Disclaimers, Terms and Conditions" },
     { title: "Annexures" },
     { title: "Security and Certificates" }
-  ];
+  ], []);
 
-  const navigateToSection = (sectionIndex: number) => {
+  // Memoize navigation callbacks to prevent unnecessary re-renders
+  const navigateToSection = useCallback((sectionIndex: number) => {
     setCurrentSection(sectionIndex);
-  };
+  }, []);
 
-  const nextSection = () => {
+  const nextSection = useCallback(() => {
     if (currentSection < sections.length - 1) {
       setCurrentSection(currentSection + 1);
     }
-  };
+  }, [currentSection, sections.length]);
 
-  const prevSection = () => {
+  const prevSection = useCallback(() => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
     }
-  };
+  }, [currentSection]);
 
-  const progress = ((currentSection + 1) / sections.length) * 100;
+  // Memoize progress calculation
+  const progress = useMemo(() => ((currentSection + 1) / sections.length) * 100, [currentSection, sections.length]);
 
-  const handleShowPreview = () => {
+  // Memoize view mode handlers
+  const handleShowPreview = useCallback(() => {
     setViewMode('preview');
-  };
+  }, []);
 
-  const handleShowPresentation = () => {
+  const handleShowPresentation = useCallback(() => {
     setViewMode('presentation');
-  };
+  }, []);
 
-  const handleBackToEdit = () => {
+  const handleBackToEdit = useCallback(() => {
     setViewMode('edit');
-  };
+  }, []);
 
-  const handleGenerateReport = async () => {
+  const handleGenerateReport = useCallback(async () => {
     // Mark report as completed in Work Hub
     await markAsCompleted();
     // Report generation logic here
@@ -178,16 +192,16 @@ const ReportViewer = () => {
       description: "Your comprehensive property report is ready for download",
       duration: 5000,
     });
-  };
+  }, [markAsCompleted, toast]);
 
-  const handlePresentationComplete = () => {
+  const handlePresentationComplete = useCallback(() => {
     setViewMode('edit');
     toast({
       title: "AI Analysis Complete",
       description: "Presentation finished. You can now continue with the detailed report.",
       duration: 3000,
     });
-  };
+  }, [toast]);
 
   // Show AI Presentation
   if (viewMode === 'presentation') {
@@ -282,7 +296,7 @@ const ReportViewer = () => {
           <Progress value={progress} className="w-full" />
         </div>
 
-        {/* Report content */}
+        {/* Report content with optimized rendering */}
         <div className="p-4 pb-24">
           <div className="max-w-4xl mx-auto">
             <ReportSection 
