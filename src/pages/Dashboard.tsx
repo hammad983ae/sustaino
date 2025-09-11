@@ -65,7 +65,7 @@ const Dashboard = () => {
             <div className="flex items-center gap-3">
               <Zap className="h-8 w-8 text-success" />
               <h1 className="text-3xl font-bold text-success">
-                Sustaino Pro Platform
+                Property Valuation and Sustainable Assessment Platform - First in the World
               </h1>
             </div>
             {user ? (
