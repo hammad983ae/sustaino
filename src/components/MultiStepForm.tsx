@@ -7,7 +7,7 @@ import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysisEnhanced from "@/components/PropertySearchAnalysisEnhanced";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
-import ReportSectionManager from "@/components/ReportSectionManager";
+import AIReportPresentation from "@/components/AIReportPresentation";
 // Removed useReportJobSaver import
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -94,28 +94,24 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
       />
     },
     {
-      title: "Report Configuration",
-      component: <ReportTypeConfiguration 
-        onConfigurationChange={(config) => setReportData(prev => ({ 
-          ...prev, 
-          reportConfiguration: config 
-        }))}
-      />
+      title: "AI Enhanced Report Configuration",
+      component: <div className="space-y-6">
+        <ReportTypeConfiguration 
+          onConfigurationChange={(config) => setReportData(prev => ({ 
+            ...prev, 
+            reportConfiguration: config 
+          }))}
+        />
+        <AIReportPresentation 
+          propertyData={reportData}
+          onComplete={() => onContinueToReport?.()}
+          onSkip={() => onContinueToReport?.()}
+        />
+      </div>
     },
     {
       title: "Document Upload",
       component: <DocumentPhotoUpload />
-    },
-    {
-      title: "Report Sections",
-      component: <ReportSectionManager 
-        reportType={reportData.reportType || "long-form"}
-        propertyType={reportData.propertyType || "residential"}
-        reportData={reportData}
-        propertyAddress={reportData.propertyAddress || "520 Deakin Avenue Mildura VIC 3500"}
-        onSectionsChange={setSelectedSections}
-        onContinueToReport={() => onContinueToReport?.()}
-      />
     }
   ];
 
