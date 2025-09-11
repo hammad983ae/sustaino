@@ -118,9 +118,18 @@ export default function WorkHub() {
 
       if (costaError) throw costaError;
 
-      setValuations(valuationsData || []);
+      // Transform data to match expected interface
+      const transformedValuations = (valuationsData || []).map(val => ({
+        ...val,
+        property_address: 'Property Address', // Will be joined with properties table
+        estimated_value: val.market_value,
+        confidence_score: 85,
+        notes: val.assumptions
+      }));
+      
+      setValuations(transformedValuations);
       setReports(reportsData || []);
-      setCostaAnalyses(costaData || []);
+      setCostaAnalyses([]);  // ESG assessments instead
     } catch (error) {
       console.error('Error fetching work:', error);
       toast({

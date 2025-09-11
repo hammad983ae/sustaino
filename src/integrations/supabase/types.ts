@@ -534,20 +534,25 @@ export type Database = {
       valuation_jobs: {
         Row: {
           actual_hours: number | null
+          assigned_to: string | null
           client_email: string | null
           client_name: string
           client_phone: string | null
           created_at: string
           due_date: string | null
           estimated_hours: number | null
+          estimated_value: number | null
           fee_charged: number | null
           fee_quoted: number | null
           id: string
           instruction_date: string
+          job_description: string | null
           job_number: string
+          job_title: string | null
           job_type: string
           notes: string | null
           priority: string | null
+          property_address: string | null
           property_id: string
           status: string
           updated_at: string
@@ -555,20 +560,25 @@ export type Database = {
         }
         Insert: {
           actual_hours?: number | null
+          assigned_to?: string | null
           client_email?: string | null
           client_name: string
           client_phone?: string | null
           created_at?: string
           due_date?: string | null
           estimated_hours?: number | null
+          estimated_value?: number | null
           fee_charged?: number | null
           fee_quoted?: number | null
           id?: string
           instruction_date?: string
+          job_description?: string | null
           job_number: string
+          job_title?: string | null
           job_type: string
           notes?: string | null
           priority?: string | null
+          property_address?: string | null
           property_id: string
           status?: string
           updated_at?: string
@@ -576,20 +586,25 @@ export type Database = {
         }
         Update: {
           actual_hours?: number | null
+          assigned_to?: string | null
           client_email?: string | null
           client_name?: string
           client_phone?: string | null
           created_at?: string
           due_date?: string | null
           estimated_hours?: number | null
+          estimated_value?: number | null
           fee_charged?: number | null
           fee_quoted?: number | null
           id?: string
           instruction_date?: string
+          job_description?: string | null
           job_number?: string
+          job_title?: string | null
           job_type?: string
           notes?: string | null
           priority?: string | null
+          property_address?: string | null
           property_id?: string
           status?: string
           updated_at?: string
@@ -678,6 +693,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_sales_evidence: {
+        Args: { comparable_sales: Json[]; subject_property: Json }
+        Returns: Json
+      }
+      calculate_esg_score: {
+        Args: {
+          environmental_factors: Json
+          governance_factors: Json
+          social_factors: Json
+        }
+        Returns: Json
+      }
+      calculate_property_valuation: {
+        Args: {
+          comparable_sales?: Json
+          market_data: Json
+          property_data: Json
+        }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
