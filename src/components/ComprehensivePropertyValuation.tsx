@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, Circle, FileText, Calculator, TrendingUp, Home } from "lucide-react";
+import { CheckCircle, Circle, FileText, Calculator, TrendingUp, Home, ArrowLeft } from "lucide-react";
 import PropertyDetails from "./PropertyDetails";
 import ValuationAnalysis from "./ValuationAnalysis";
 import SalesEvidence from "./SalesEvidence";
@@ -30,6 +31,7 @@ interface CompletedSections {
 }
 
 export default function ComprehensivePropertyValuation() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState("property");
   const [completedSections, setCompletedSections] = useState<CompletedSections>({
     property: false,
@@ -113,6 +115,18 @@ export default function ComprehensivePropertyValuation() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 max-w-7xl">
+        {/* Back to Dashboard */}
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Comprehensive Property Valuation</h1>
