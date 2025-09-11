@@ -245,15 +245,19 @@ export const CostaGroupPortfolio = () => {
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error loading analyses:', error);
+        // If it's a permission error, just show empty state instead of error
+        if (error.code === '42501') {
+          setSavedAnalyses([]);
+          return;
+        }
+        throw error;
+      }
       setSavedAnalyses(data || []);
     } catch (error) {
       console.error('Error loading analyses:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load saved analyses",
-        variant: "destructive",
-      });
+      setSavedAnalyses([]);
     }
   };
 

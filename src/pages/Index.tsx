@@ -20,6 +20,7 @@ import {
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
+import { APITestComponent } from '@/components/APITestComponent';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
@@ -195,6 +196,13 @@ const Index = () => {
                 <div className="bg-card p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold mb-4">Property Assessment Form</h3>
                   <MultiStepForm onSubmit={handleBasicFormSubmit} />
+                </div>
+                
+                {/* API Testing Component */}
+                <div className="bg-card p-6 rounded-lg border">
+                  <h3 className="text-lg font-semibold mb-4">API Testing Dashboard</h3>
+                  <p className="text-muted-foreground mb-4">Test all property valuation APIs to ensure they work for real jobs.</p>
+                  <APITestComponent />
                 </div>
               </TabsContent>
 
