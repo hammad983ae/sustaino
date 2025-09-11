@@ -111,7 +111,7 @@ export default function WorkHub() {
 
       // Fetch Costa portfolio analyses
       const { data: costaData, error: costaError } = await supabase
-        .from('costa_portfolio_analyses')
+        .from('esg_assessments')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
