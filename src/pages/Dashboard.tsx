@@ -439,6 +439,16 @@ const Dashboard = () => {
                 </Card>
               </Link>
 
+               <Link to="/costa-group-valuations">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <Leaf className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Costa Group Portfolio</h3>
+                    <p className="text-sm text-muted-foreground">Agricultural property valuations</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
               <Link to="/property-valuations">
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                   <CardContent className="p-6 text-center">

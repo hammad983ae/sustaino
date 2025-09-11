@@ -15,6 +15,7 @@ import ComprehensivePropertyValuation from "./components/ComprehensivePropertyVa
 import CryptoTradingDashboard from "./pages/CryptoTradingDashboard";
 import Dashboard from "./pages/Dashboard";
 import AutomaticFolderManager from "./components/AutomaticFolderManager";
+import CostaGroupValuationsPage from "./pages/CostaGroupValuations";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
               <Route path="/crypto-trading" element={<CryptoTradingDashboard />} />
+              <Route path="/costa-group-valuations" element={<CostaGroupValuationsPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/folder-manager" element={<AutomaticFolderManager />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
