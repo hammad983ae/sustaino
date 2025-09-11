@@ -218,7 +218,6 @@ export default function SalesEvidenceSpecialised() {
                   <SelectItem value="pub">Pub</SelectItem>
                   <SelectItem value="club">Club</SelectItem>
                   <SelectItem value="gaming-venue">Gaming Venue</SelectItem>
-                  <SelectItem value="workers-accommodation">Workers Accommodation</SelectItem>
                   <SelectItem value="childcare">Childcare</SelectItem>
                   <SelectItem value="healthcare">Healthcare</SelectItem>
                   <SelectItem value="sports-stadium">Sports Stadium</SelectItem>
@@ -247,24 +246,24 @@ export default function SalesEvidenceSpecialised() {
               <Input placeholder="Rooms/keys comparison..." className="text-sm" />
             </div>
 
-            {/* Contracting Fee */}
+            {/* Seating Capacity */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>Contracting Fee</Label>
+              <Label>Seating Capacity</Label>
               <div className="flex justify-center">
                 <Switch checked={true} />
               </div>
-              <Input placeholder="$250,000" className="text-sm" />
-              <Input placeholder="Contracting fee comparison..." className="text-sm" />
+              <Input placeholder="250 seats" className="text-sm" />
+              <Input placeholder="Seating capacity comparison..." className="text-sm" />
             </div>
 
-            {/* EBITDA */}
+            {/* LDC Placements */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>EBITDA</Label>
+              <Label>LDC Placements</Label>
               <div className="flex justify-center">
                 <Switch checked={true} />
               </div>
-              <Input placeholder="$1,500,000" className="text-sm" />
-              <Input placeholder="EBITDA comparison..." className="text-sm" />
+              <Input placeholder="75 licensed placements" className="text-sm" />
+              <Input placeholder="LDC placements comparison..." className="text-sm" />
             </div>
 
             {/* Bed Capacity */}

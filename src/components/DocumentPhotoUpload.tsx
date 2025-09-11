@@ -381,12 +381,35 @@ const DocumentPhotoUpload = () => {
           <FileList files={propertyDocuments} type="property" />
         </div>
 
-        {/* Navigation */}
-        <div className="flex justify-center pt-6 border-t">
+        {/* Action Buttons */}
+        <div className="flex items-center justify-between pt-6 border-t">
           <Button variant="outline" className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
             Back to Details
           </Button>
+          
+          <div className="flex gap-3">
+            <Link to="/report">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+                Perform Comprehensive Valuation
+              </Button>
+            </Link>
+            <Button variant="outline" size="lg" className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4" />
+              Enhance with AI
+            </Button>
+          </div>
+        </div>
+
+        {/* AI Enhancement Section */}
+        <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-5 w-5 text-blue-600" />
+            <h4 className="font-medium">Enhance Your Report with AI</h4>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Generate professional content, market analytics, and sustainability insights instantly
+          </p>
         </div>
       </CardContent>
     </Card>

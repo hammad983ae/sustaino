@@ -7,7 +7,7 @@
  * proprietary IP. Commercial licensing required for use.
  * ============================================================================
  */
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -16,124 +16,36 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock, Printer, Plus, Minus, Upload, Image, Download } from "lucide-react";
-import { useReportData } from "@/hooks/useReportData";
 
 const PropertyDetails = () => {
-  const { reportData, updateSection } = useReportData();
-  
-  // Smart property type detection from URL or context
-  const getInitialPropertyTypes = () => {
-    const saved = reportData.propertyDetails?.propertyTypes;
-    if (saved && Object.values(saved).some(Boolean)) {
-      return saved;
-    }
-    
-    // Check URL for property type hints
-    const currentPath = window.location.pathname;
-    const urlParams = new URLSearchParams(window.location.search);
-    const propertyType = urlParams.get('propertyType');
-    
-    // Default based on context or make residential default instead of commercial
-    if (propertyType) {
-      return {
-        commercial: propertyType === 'commercial',
-        residential: propertyType === 'residential',
-        buildToRent: propertyType === 'buildToRent',
-        agriculture: propertyType === 'agriculture',
-        developmentLand: propertyType === 'developmentLand',
-        specialized: propertyType === 'specialized'
-      };
-    }
-    
-    return {
-      commercial: false,
-      residential: true, // Default to residential instead of commercial
-      buildToRent: false,
-      agriculture: false,
-      developmentLand: false,
-      specialized: false
-    };
-  };
-
-  const [includeSection, setIncludeSection] = useState(reportData.propertyDetails?.includeSection ?? true);
-  const [propertyTypes, setPropertyTypes] = useState(getInitialPropertyTypes);
+  const [includeSection, setIncludeSection] = useState(true);
+  const [propertyTypes, setPropertyTypes] = useState({
+    commercial: true,
+    residential: false,
+    buildToRent: false,
+    agriculture: false,
+    developmentLand: false,
+    specialized: false
+  });
   const [certifications, setCertifications] = useState({
-    include: reportData.propertyDetails?.certifications?.include ?? false,
-    bulkData: reportData.propertyDetails?.certifications?.bulkData ?? false,
-    professionalDates: reportData.propertyDetails?.certifications?.professionalDates ?? false,
-    valuerCredentials: reportData.propertyDetails?.certifications?.valuerCredentials ?? false,
-    complianceStatement: reportData.propertyDetails?.certifications?.complianceStatement ?? false,
-    greenBuilding: reportData.propertyDetails?.certifications?.greenBuilding ?? false,
-    sustainability: reportData.propertyDetails?.certifications?.sustainability ?? false,
-    improvements: reportData.propertyDetails?.certifications?.improvements ?? false
+    include: false,
+    bulkData: false,
+    professionalDates: false,
+    valuerCredentials: false,
+    complianceStatement: false,
+    greenBuilding: false,
+    sustainability: false,
+    improvements: false
   });
-  const [propertyCount, setPropertyCount] = useState(reportData.propertyDetails?.propertyCount ?? 1);
+  const [propertyCount, setPropertyCount] = useState(1);
   const [tbeToggles, setTbeToggles] = useState({
-    commercial: reportData.propertyDetails?.tbeToggles?.commercial ?? false,
-    residential: reportData.propertyDetails?.tbeToggles?.residential ?? false,
-    buildToRent: reportData.propertyDetails?.tbeToggles?.buildToRent ?? false,
-    agriculture: reportData.propertyDetails?.tbeToggles?.agriculture ?? false,
-    developmentLand: reportData.propertyDetails?.tbeToggles?.developmentLand ?? false,
-    specialized: reportData.propertyDetails?.tbeToggles?.specialized ?? false
+    commercial: false,
+    residential: false,
+    buildToRent: false,
+    agriculture: false,
+    developmentLand: false,
+    specialized: false
   });
-
-  // Property Condition Summary state
-  const [propertyCondition, setPropertyCondition] = useState({
-    include: reportData.propertyDetails?.propertyCondition?.include ?? false,
-    overallCondition: reportData.propertyDetails?.propertyCondition?.overallCondition ?? 'good',
-    internalCondition: reportData.propertyDetails?.propertyCondition?.internalCondition ?? 'good',
-    externalCondition: reportData.propertyDetails?.propertyCondition?.externalCondition ?? 'good',
-    maintenanceLevel: reportData.propertyDetails?.propertyCondition?.maintenanceLevel ?? 'well-maintained',
-    yearBuilt: reportData.propertyDetails?.propertyCondition?.yearBuilt ?? '',
-    expectedLifespan: reportData.propertyDetails?.propertyCondition?.expectedLifespan ?? 50,
-    depreciationRate: reportData.propertyDetails?.propertyCondition?.depreciationRate ?? 2.5,
-    remainingUsefulLife: reportData.propertyDetails?.propertyCondition?.remainingUsefulLife ?? 0,
-    valuationImpact: reportData.propertyDetails?.propertyCondition?.valuationImpact ?? ''
-  });
-
-  // Property description text fields state
-  const [propertyDescriptions, setPropertyDescriptions] = useState({
-    accessLoading: reportData.propertyDetails?.descriptions?.accessLoading ?? '**ACCESS & PARKING FACILITIES:**\n\nThe property is accessed via a sealed concrete driveway from Deakin Avenue providing secure off-street parking for two vehicles. The driveway is in good condition with adequate width for vehicle maneuverability.\n\n**KEY ACCESS FEATURES:**\n• Direct street frontage to Deakin Avenue\n• Sealed concrete driveway in good condition\n• Secure off-street parking for 2 vehicles\n• Pedestrian access via front garden pathway\n• Side gate access to rear yard\n• Good vehicle turning circle on property\n\n**LOADING & SERVICE ACCESS:**\nService access is adequate for residential purposes with good vehicle access for deliveries, maintenance, and emergency services. The property layout provides practical access to all areas of the dwelling and yard.',
-    layout: reportData.propertyDetails?.descriptions?.layout ?? 'The dwelling comprises three bedrooms, one bathroom, open plan kitchen/dining area, separate lounge room, and laundry. The layout is functional with good separation between living and sleeping areas. The kitchen has been recently renovated with modern appliances and stone benchtops.',
-    generalDescription: reportData.propertyDetails?.descriptions?.generalDescription ?? '**PROPERTY OVERVIEW:**\n\nThe subject property comprises a well-presented single-storey brick veneer dwelling constructed circa 1965, situated on an 850 square metre regular rectangular allotment within the established Deakin Avenue residential precinct.\n\n**CONSTRUCTION & CONDITION:**\n• Solid brick veneer construction with concrete foundations\n• Tile roof in good condition with adequate guttering\n• Recent comprehensive renovation program completed\n• Modern kitchen and bathroom facilities installed\n• Structural integrity excellent with no significant defects noted\n• Overall condition assessed as good to very good\n\n**SITE CHARACTERISTICS:**\n• 850sqm regular rectangular allotment (20m x 42.5m approx.)\n• Excellent street presentation with established frontage\n• Mature gardens providing privacy and amenity\n• Level topography with good drainage\n• Secure boundary fencing in good condition\n\n**LOCATION ADVANTAGES:**\n• Established residential area with good amenity\n• Walking distance to Mildura CBD (1.2km)\n• Close proximity to schools, parks, and shopping\n• Quiet residential street with minimal through traffic',
-    buildingDetails: reportData.propertyDetails?.descriptions?.buildingDetails ?? 'Brick veneer construction with tile roof, timber floors in living areas, carpet in bedrooms, recently renovated kitchen with stone benchtops and stainless steel appliances, updated bathroom with modern fixtures, ducted evaporative cooling, ceiling fans throughout, and separate laundry facilities.',
-    siteLandDetails: reportData.propertyDetails?.descriptions?.siteLandDetails ?? 'Regular rectangular allotment of 850 square metres with 20-metre frontage to Deakin Avenue. The site is relatively flat with established gardens, mature fruit trees, lawn areas, and secure fencing. Concrete driveway and paths provide good access throughout the property.',
-    homestead: reportData.propertyDetails?.descriptions?.homestead ?? '',
-    workerAccommodation: reportData.propertyDetails?.descriptions?.workerAccommodation ?? '',
-    farmBuildings: reportData.propertyDetails?.descriptions?.farmBuildings ?? '',
-    machineryEquipment: reportData.propertyDetails?.descriptions?.machineryEquipment ?? '',
-    zoningDescription: reportData.propertyDetails?.descriptions?.zoningDescription ?? '',
-    developmentDetails: reportData.propertyDetails?.descriptions?.developmentDetails ?? '',
-    specializedDescription: reportData.propertyDetails?.descriptions?.specializedDescription ?? '',
-    btrUnitMix: reportData.propertyDetails?.descriptions?.btrUnitMix ?? '',
-    btrSharedAmenities: reportData.propertyDetails?.descriptions?.btrSharedAmenities ?? '',
-    btrAffordableHousing: reportData.propertyDetails?.descriptions?.btrAffordableHousing ?? '',
-    btrMarketAbsorption: reportData.propertyDetails?.descriptions?.btrMarketAbsorption ?? ''
-  });
-
-  const handleDescriptionChange = (field: keyof typeof propertyDescriptions, value: string) => {
-    setPropertyDescriptions(prev => ({ ...prev, [field]: value }));
-  };
-
-  // Auto-save function with immediate execution
-  const savePropertyData = () => {
-    const dataToSave = {
-      includeSection,
-      propertyTypes,
-      certifications,
-      propertyCount,
-      tbeToggles,
-      propertyCondition,
-      descriptions: propertyDescriptions
-    };
-    updateSection('propertyDetails', dataToSave);
-    console.log('Saved property data:', dataToSave);
-  };
-
-  // Save data immediately when component mounts and whenever state changes
-  React.useEffect(() => {
-    savePropertyData();
-  }, [includeSection, propertyTypes, certifications, propertyCount, tbeToggles, propertyCondition, propertyDescriptions]);
 
   const addPropertySection = () => {
     setPropertyCount(prev => prev + 1);
@@ -226,22 +138,9 @@ const PropertyDetails = () => {
             </div>
             
             {/* Photo Gallery Preview Area */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 min-h-[200px] p-4 border rounded-lg bg-background">
-              <div className="relative aspect-video overflow-hidden rounded border">
-                <img src="/lovable-uploads/8ebd45d3-6a11-4af2-94c8-854a558d049b.png" alt="Modern Kitchen" className="w-full h-full object-cover" />
-                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Kitchen</div>
-              </div>
-              <div className="relative aspect-video overflow-hidden rounded border">
-                <img src="/lovable-uploads/d732a468-e4b0-4cd7-a59f-a8aa55540435.png" alt="Front View" className="w-full h-full object-cover" />
-                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Front</div>
-              </div>
-              <div className="relative aspect-video overflow-hidden rounded border">
-                <img src="/lovable-uploads/f07bd0a1-c5e2-4e4c-8950-c5c9f4f9e09f.png" alt="Bathroom" className="w-full h-full object-cover" />
-                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Bathroom</div>
-              </div>
-              <div className="relative aspect-video overflow-hidden rounded border">
-                <img src="/lovable-uploads/d5e26506-59a0-4dd4-993e-03fd6678c6af.png" alt="Outdoor Area" className="w-full h-full object-cover" />
-                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 rounded">Outdoor</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 min-h-[100px] p-4 border rounded-lg bg-background">
+              <div className="text-center text-sm text-muted-foreground col-span-full">
+                Uploaded photos will appear here with timestamps
               </div>
             </div>
           </div>
@@ -393,18 +292,6 @@ const PropertyDetails = () => {
                     <Label htmlFor="car-parking">Car Parking Spaces</Label>
                     <Input id="car-parking" placeholder="Number of spaces" />
                   </div>
-                  <div>
-                    <Label htmlFor="floor-plan">Floor Plan</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select floor plan status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="functional">Functional</SelectItem>
-                        <SelectItem value="non-functional">Non Functional</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
 
                   <div>
                     <Label htmlFor="building-condition">Building Condition</Label>
@@ -425,19 +312,10 @@ const PropertyDetails = () => {
                     <Label htmlFor="year-built">Year Built</Label>
                     <Input id="year-built" placeholder="Construction year" />
                   </div>
-                  <div>
-                    <Label htmlFor="year-renovated">Year Renovated</Label>
-                    <Input id="year-renovated" placeholder="Year of renovation" />
-                  </div>
 
                   <div>
                     <Label htmlFor="access-loading">Access & Loading</Label>
-                    <Textarea 
-                      id="access-loading" 
-                      placeholder="Describe access facilities"
-                      value={propertyDescriptions.accessLoading}
-                      onChange={(e) => handleDescriptionChange('accessLoading', e.target.value)}
-                    />
+                    <Textarea id="access-loading" placeholder="Describe access facilities" />
                   </div>
                 </div>
 
@@ -733,19 +611,7 @@ const PropertyDetails = () => {
                               <SelectItem value="review">Under Review</SelectItem>
                             </SelectContent>
                           </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="floor-plan-res">Floor Plan</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select floor plan status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="functional">Functional</SelectItem>
-                          <SelectItem value="non-functional">Non Functional</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                        </div>
                         <div>
                           <Label htmlFor="completion-status-residential">Will Project Be Complete on Completion</Label>
                           <Select>
@@ -810,14 +676,10 @@ const PropertyDetails = () => {
                     <Label htmlFor="building-size">Building Size (sqm)</Label>
                     <Input id="building-size" placeholder="Building size in sqm" />
                   </div>
-                    <div>
-                      <Label htmlFor="year-built-res">Year Built</Label>
-                      <Input id="year-built-res" placeholder="Construction year" />
-                    </div>
-                    <div>
-                      <Label htmlFor="year-renovated-res">Year Renovated</Label>
-                      <Input id="year-renovated-res" placeholder="Year of renovation" />
-                    </div>
+                  <div>
+                    <Label htmlFor="year-built-res">Year Built</Label>
+                    <Input id="year-built-res" placeholder="Construction year" />
+                  </div>
                 </div>
                 <div>
                   <Label htmlFor="additional-features-res">Additional Features</Label>
@@ -905,18 +767,6 @@ const PropertyDetails = () => {
                           <SelectItem value="hilly">Hilly</SelectItem>
                           <SelectItem value="mountainous">Mountainous</SelectItem>
                           <SelectItem value="rolling">Rolling</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="floor-plan-btr">Floor Plan</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select floor plan status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="functional">Functional</SelectItem>
-                          <SelectItem value="non-functional">Non Functional</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -1076,18 +926,6 @@ const PropertyDetails = () => {
                     <div>
                       <Label htmlFor="vat-capacity">Vat Capacity (L)</Label>
                       <Input id="vat-capacity" placeholder="Milk vat capacity" />
-                    </div>
-                    <div>
-                      <Label htmlFor="floor-plan-agri">Floor Plan</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select floor plan status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="functional">Functional</SelectItem>
-                          <SelectItem value="non-functional">Non Functional</SelectItem>
-                        </SelectContent>
-                      </Select>
                     </div>
                   </div>
                 </div>
@@ -1559,7 +1397,6 @@ const PropertyDetails = () => {
                       <SelectItem value="pub">Pub</SelectItem>
                       <SelectItem value="club">Club</SelectItem>
                       <SelectItem value="gaming-venue">Gaming Venue</SelectItem>
-                      <SelectItem value="workers-accommodation">Workers Accommodation</SelectItem>
                       <SelectItem value="childcare">Childcare</SelectItem>
                       <SelectItem value="healthcare">Healthcare</SelectItem>
                       <SelectItem value="sports-stadium">Sports Stadium</SelectItem>
@@ -1575,19 +1412,7 @@ const PropertyDetails = () => {
                       <SelectItem value="data-center">Data Center</SelectItem>
                     </SelectContent>
                   </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="floor-plan-spec">Floor Plan</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select floor plan status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="functional">Functional</SelectItem>
-                        <SelectItem value="non-functional">Non Functional</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                </div>
 
                 {/* Basic Property Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1609,10 +1434,6 @@ const PropertyDetails = () => {
                     <Label htmlFor="year-built-spec">Year Built</Label>
                     <Input id="year-built-spec" placeholder="Construction year" />
                   </div>
-                  <div>
-                    <Label htmlFor="year-renovated-spec">Year Renovated</Label>
-                    <Input id="year-renovated-spec" placeholder="Year of renovation" />
-                  </div>
                 </div>
 
                 {/* Specialized Measurements */}
@@ -1625,12 +1446,12 @@ const PropertyDetails = () => {
                       <Input id="rooms-keys" placeholder="Number of rooms/keys" />
                     </div>
                     <div>
-                      <Label htmlFor="contracting-fee">Contracting Fee</Label>
-                      <Input id="contracting-fee" placeholder="Total contracting fee" />
+                      <Label htmlFor="seating-capacity">Seating Capacity</Label>
+                      <Input id="seating-capacity" placeholder="Total seating capacity" />
                     </div>
                     <div>
-                      <Label htmlFor="ebitda">EBITDA</Label>
-                      <Input id="ebitda" placeholder="EBITDA value" />
+                      <Label htmlFor="ldc-placements">LDC Placements (Licensed Day Care)</Label>
+                      <Input id="ldc-placements" placeholder="Licensed placement capacity" />
                     </div>
                     <div>
                       <Label htmlFor="bed-capacity">Bed Capacity</Label>
@@ -1749,261 +1570,6 @@ const PropertyDetails = () => {
               </CardContent>
             </Card>
           )}
-
-          {/* Property Condition Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center justify-between">
-                Property Condition Summary
-                <Switch
-                  checked={propertyCondition.include}
-                  onCheckedChange={(checked) => 
-                    setPropertyCondition(prev => ({ ...prev, include: checked }))
-                  }
-                />
-              </CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Assess property condition and calculate depreciation rates for valuation impact.
-              </p>
-            </CardHeader>
-            {propertyCondition.include && (
-              <CardContent className="space-y-6">
-                {/* Condition Assessment */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="overall-condition">Overall Property Condition</Label>
-                    <Select 
-                      value={propertyCondition.overallCondition}
-                      onValueChange={(value) => 
-                        setPropertyCondition(prev => ({ ...prev, overallCondition: value }))
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select condition" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="excellent">Excellent</SelectItem>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="average">Average</SelectItem>
-                        <SelectItem value="below-average">Below Average</SelectItem>
-                        <SelectItem value="poor">Poor</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="maintenance-level">Maintenance Level</Label>
-                    <Select 
-                      value={propertyCondition.maintenanceLevel}
-                      onValueChange={(value) => 
-                        setPropertyCondition(prev => ({ ...prev, maintenanceLevel: value }))
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select maintenance level" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="well-maintained">Well Maintained</SelectItem>
-                        <SelectItem value="adequately-maintained">Adequately Maintained</SelectItem>
-                        <SelectItem value="poorly-maintained">Poorly Maintained</SelectItem>
-                        <SelectItem value="deferred-maintenance">Deferred Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="internal-condition">Internal Condition</Label>
-                    <Select 
-                      value={propertyCondition.internalCondition}
-                      onValueChange={(value) => 
-                        setPropertyCondition(prev => ({ ...prev, internalCondition: value }))
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select internal condition" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="excellent">Excellent</SelectItem>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="average">Average</SelectItem>
-                        <SelectItem value="below-average">Below Average</SelectItem>
-                        <SelectItem value="poor">Poor</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="external-condition">External Condition</Label>
-                    <Select 
-                      value={propertyCondition.externalCondition}
-                      onValueChange={(value) => 
-                        setPropertyCondition(prev => ({ ...prev, externalCondition: value }))
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select external condition" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="excellent">Excellent</SelectItem>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="average">Average</SelectItem>
-                        <SelectItem value="below-average">Below Average</SelectItem>
-                        <SelectItem value="poor">Poor</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {/* Depreciation Calculations */}
-                <div className="space-y-4">
-                  <h4 className="font-medium">Depreciation Analysis</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label htmlFor="year-built-depreciation">Year Built</Label>
-                      <Input 
-                        id="year-built-depreciation"
-                        type="number"
-                        placeholder="e.g., 1985"
-                        value={propertyCondition.yearBuilt}
-                        onChange={(e) => {
-                          const yearBuilt = e.target.value;
-                          const currentYear = new Date().getFullYear();
-                          const age = yearBuilt ? currentYear - parseInt(yearBuilt) : 0;
-                          const remainingLife = Math.max(0, propertyCondition.expectedLifespan - age);
-                          
-                          setPropertyCondition(prev => ({ 
-                            ...prev, 
-                            yearBuilt,
-                            remainingUsefulLife: remainingLife
-                          }));
-                        }}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="expected-lifespan">Expected Lifespan (Years)</Label>
-                      <Input 
-                        id="expected-lifespan"
-                        type="number"
-                        placeholder="e.g., 50"
-                        value={propertyCondition.expectedLifespan}
-                        onChange={(e) => {
-                          const expectedLifespan = parseInt(e.target.value) || 50;
-                          const currentYear = new Date().getFullYear();
-                          const age = propertyCondition.yearBuilt ? currentYear - parseInt(propertyCondition.yearBuilt) : 0;
-                          const remainingLife = Math.max(0, expectedLifespan - age);
-                          const depreciationRate = expectedLifespan > 0 ? (100 / expectedLifespan) : 2.5;
-                          
-                          setPropertyCondition(prev => ({ 
-                            ...prev, 
-                            expectedLifespan,
-                            remainingUsefulLife: remainingLife,
-                            depreciationRate: parseFloat(depreciationRate.toFixed(2))
-                          }));
-                        }}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="remaining-useful-life">Remaining Useful Life (Years)</Label>
-                      <Input 
-                        id="remaining-useful-life"
-                        type="number"
-                        placeholder="Calculated automatically"
-                        value={propertyCondition.remainingUsefulLife}
-                        onChange={(e) => 
-                          setPropertyCondition(prev => ({ 
-                            ...prev, 
-                            remainingUsefulLife: parseInt(e.target.value) || 0 
-                          }))
-                        }
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Formula: Expected Lifespan - Current Age
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="depreciation-rate">Estimated Depreciation Rate (%)</Label>
-                    <Input 
-                      id="depreciation-rate"
-                      type="number"
-                      step="0.1"
-                      placeholder="Annual depreciation percentage"
-                      value={propertyCondition.depreciationRate}
-                      onChange={(e) => 
-                        setPropertyCondition(prev => ({ 
-                          ...prev, 
-                          depreciationRate: parseFloat(e.target.value) || 2.5 
-                        }))
-                      }
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Formula: 100 ÷ Expected Lifespan (or manual override based on condition)
-                    </p>
-                  </div>
-                </div>
-
-                {/* Impact Assessment */}
-                <div>
-                  <Label htmlFor="valuation-impact">Impact on Property Valuation</Label>
-                  <Textarea
-                    id="valuation-impact"
-                    placeholder="Explain how the repair requirements (or lack thereof) impact the property valuation, marketability, and investment potential..."
-                    value={propertyCondition.valuationImpact}
-                    onChange={(e) => 
-                      setPropertyCondition(prev => ({ ...prev, valuationImpact: e.target.value }))
-                    }
-                    className="min-h-[100px]"
-                  />
-                </div>
-
-                {/* Condition Summary Display */}
-                <div className="p-4 border rounded-lg bg-muted/50">
-                  <h4 className="font-medium mb-2">Condition Analysis Summary</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium">Overall:</span>
-                      <p className="text-muted-foreground capitalize">{propertyCondition.overallCondition}</p>
-                    </div>
-                    <div>
-                      <span className="font-medium">Internal:</span>
-                      <p className="text-muted-foreground capitalize">{propertyCondition.internalCondition}</p>
-                    </div>
-                    <div>
-                      <span className="font-medium">External:</span>
-                      <p className="text-muted-foreground capitalize">{propertyCondition.externalCondition}</p>
-                    </div>
-                    <div>
-                      <span className="font-medium">Maintenance:</span>
-                      <p className="text-muted-foreground capitalize">{propertyCondition.maintenanceLevel.replace('-', ' ')}</p>
-                    </div>
-                  </div>
-                  {propertyCondition.yearBuilt && (
-                    <div className="mt-3 pt-3 border-t">
-                      <div className="grid grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <span className="font-medium">Property Age:</span>
-                          <p className="text-muted-foreground">
-                            {new Date().getFullYear() - parseInt(propertyCondition.yearBuilt)} years
-                          </p>
-                        </div>
-                        <div>
-                          <span className="font-medium">Depreciation Rate:</span>
-                          <p className="text-muted-foreground">{propertyCondition.depreciationRate}% per annum</p>
-                        </div>
-                        <div>
-                          <span className="font-medium">Remaining Life:</span>
-                          <p className="text-muted-foreground">{propertyCondition.remainingUsefulLife} years</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            )}
-          </Card>
 
           {/* Certifications & Compliance */}
           <Card>

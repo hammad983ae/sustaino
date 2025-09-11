@@ -6,7 +6,6 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Upload, MapPin } from "lucide-react";
-import RPDataSearch from "./RPDataSearch";
 
 export default function LeasingEvidenceResidential() {
   const [commencementDate, setCommencementDate] = useState(true);
@@ -21,45 +20,9 @@ export default function LeasingEvidenceResidential() {
   const [carParking, setCarParking] = useState(true);
   const [propertyType, setPropertyType] = useState(true);
   const [landArea, setLandArea] = useState(true);
-  
-  // RP Data populated fields
-  const [propertyData, setPropertyData] = useState({
-    address: "",
-    weeklyRent: "",
-    leaseDate: "",
-    leaseDuration: "",
-    bedrooms: "",
-    bathrooms: "",
-    carSpaces: "",
-    landSize: "",
-    buildingArea: "",
-    propertyType: ""
-  });
-
-  const handleRPDataSelection = (data: any) => {
-    console.log('Selected RP Data:', data);
-    setPropertyData({
-      address: data.address || "",
-      weeklyRent: data.weeklyRent?.toString() || "",
-      leaseDate: data.leaseDate || "",
-      leaseDuration: data.leaseDuration?.toString() || "",
-      bedrooms: data.bedrooms?.toString() || "",
-      bathrooms: data.bathrooms?.toString() || "",
-      carSpaces: data.carSpaces?.toString() || "",
-      landSize: data.landSize?.toString() || "",
-      buildingArea: data.buildingArea?.toString() || "",
-      propertyType: data.propertyType || ""
-    });
-  };
 
   return (
     <div className="space-y-6">
-      {/* RP Data Search Integration */}
-      <RPDataSearch 
-        onDataSelected={handleRPDataSelection}
-        searchType="rentals"
-      />
-      
       <Card>
         <CardContent className="p-6">
           <h3 className="text-lg font-semibold mb-4">Residential Leasing Evidence</h3>
@@ -70,8 +33,6 @@ export default function LeasingEvidenceResidential() {
               <Input 
                 placeholder="Property Address: Eg. 45 Smith Street Richmond VIC 3121"
                 className="border-0 bg-transparent text-sm font-medium placeholder:text-muted-foreground/60"
-                value={propertyData.address}
-                onChange={(e) => setPropertyData(prev => ({ ...prev, address: e.target.value }))}
               />
             </div>
           </div>

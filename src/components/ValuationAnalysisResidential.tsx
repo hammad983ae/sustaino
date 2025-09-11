@@ -21,34 +21,34 @@ export default function ValuationAnalysisResidential() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label>Land Area (sqm)</Label>
-                <Input value="850" />
+                <Input placeholder="650" />
               </div>
               <div className="space-y-2">
                 <Label>Land Rate per sqm</Label>
-                <Input value="$200" />
+                <Input placeholder="$1,200" />
               </div>
               <div className="space-y-2">
                 <Label>Land Value</Label>
-                <Input value="$170,000" />
+                <Input placeholder="$780,000" />
               </div>
               <div className="space-y-2">
                 <Label>Improvement Value</Label>
-                <Input value="$105,000" />
+                <Input placeholder="$520,000" />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Total Market Value</Label>
-                <Input value="$275,000" className="font-semibold text-lg" />
+                <Input placeholder="$1,300,000" className="font-semibold text-lg" />
               </div>
               <div className="space-y-2">
                 <Label>Rate per sqm (Total)</Label>
-                <Input value="$324" />
+                <Input placeholder="$2,000" />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Market Evidence Supporting Rates</Label>
-              <Textarea value="**DIRECT COMPARISON ANALYSIS:**\n\nComparable sales evidence from recent transactions in the Deakin Avenue area indicates land rates of between $180 to $220 per sqm for established residential allotments. The subject property's land rate of $200/sqm reflects:\n\n• Good location within established residential precinct\n• Regular rectangular allotment configuration\n• Proximity to CBD (1.2km) and amenities\n• Established infrastructure and services\n• Mature neighbourhood character\n\n**IMPROVEMENT VALUATION:**\nImprovement rates of $875/sqm are consistent with renovated 1960s brick veneer dwellings considering:\n\n• Recent kitchen renovation with stone benchtops\n• Updated bathroom with modern fixtures\n• Well-maintained structure with good remaining life\n• Functional layout suitable for modern living\n• Quality of construction and materials\n\n**MARKET POSITIONING:**\nThe assessed rates reflect current market conditions where buyers are paying premiums for renovated properties in established locations. The combination of location, condition, and improvements supports the land and improvement rates adopted." rows={8} />
+              <Textarea placeholder="Comparable sales evidence indicates land rates of between $1,000 to $1,400 per sqm and improvement rates of $800 to $1,000 per sqm, after consideration of location, size, quality of improvements, and market conditions..." />
             </div>
           </div>
 
@@ -58,20 +58,20 @@ export default function ValuationAnalysisResidential() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Annual Rental Income</Label>
-                <Input value="$15,600" />
+                <Input placeholder="$33,800" />
               </div>
               <div className="space-y-2">
                 <Label>Gross Yield</Label>
-                <Input value="5.67%" />
+                <Input placeholder="2.60%" />
               </div>
               <div className="space-y-2">
                 <Label>Capitalised Value</Label>
-                <Input value="$275,000" />
+                <Input placeholder="$1,300,000" />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Yield Evidence</Label>
-              <Textarea value="Comparable rental yields in the Mildura residential market range from 5.2% to 6.1% gross, with 3-bedroom properties in established areas achieving $300-$320 per week. The assessed rental of $300/week reflects the property's condition, location proximity to CBD, and recent improvements to kitchen and bathroom facilities." />
+              <Textarea placeholder="Comparable rental yields in the area range from 2.4% to 2.8% gross, after consideration of property type, location, and lease terms..." />
             </div>
           </div>
         </CardContent>
@@ -133,30 +133,30 @@ export default function ValuationAnalysisResidential() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Bedrooms</Label>
-              <Input value="3" />
+              <Input placeholder="3" />
             </div>
             <div className="space-y-2">
               <Label>Bathrooms</Label>
-              <Input value="1" />
+              <Input placeholder="2" />
             </div>
             <div className="space-y-2">
               <Label>Car Spaces</Label>
-              <Input value="2" />
+              <Input placeholder="2" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Building Area (sqm)</Label>
-              <Input value="120" />
+              <Input placeholder="180" />
             </div>
             <div className="space-y-2">
               <Label>Year Built</Label>
-              <Input value="1965" />
+              <Input placeholder="1995" />
             </div>
           </div>
           <div className="space-y-2">
             <Label>Special Features</Label>
-            <Textarea value="Recently renovated kitchen with stone benchtops and stainless steel appliances, updated bathroom with modern fixtures, established gardens with mature fruit trees, secure fencing, concrete driveway, separate laundry, ducted evaporative cooling, ceiling fans throughout." />
+            <Textarea placeholder="Swimming pool, outdoor entertaining area, renovated kitchen, solar panels..." />
           </div>
         </CardContent>
       </Card>
@@ -183,14 +183,14 @@ export default function ValuationAnalysisResidential() {
             </div>
             <div className="space-y-2">
               <Label>Market Value</Label>
-              <Input value="$275,000" className="text-lg font-bold" />
+              <Input placeholder="$1,300,000" className="text-lg font-bold" />
             </div>
           </div>
           <div className="space-y-2">
             <Label>Valuation Rationale</Label>
             <Textarea 
-              value="**VALUATION METHODOLOGY & CONCLUSION:**\n\nThe market value assessment of **$275,000** is primarily based on the direct comparison method, considered most reliable for residential properties in established markets.\n\n**PRIMARY EVIDENCE - DIRECT COMPARISON:**\n• 522 Deakin Avenue: $295,000 (Sep 2024) - Superior presentation\n• 518 Deakin Avenue: $275,000 (Aug 2024) - Comparable condition\n• 516 Deakin Avenue: $265,000 (Jul 2024) - Requires renovation\n• 498 Deakin Avenue: $289,000 (Oct 2024) - Similar attributes\n\n**SUPPORTING EVIDENCE - INCOME APPROACH:**\nRental assessment of $300/week ($15,600 annually) produces 5.67% gross yield, consistent with:\n• Local investor expectations (5.2% - 6.1% range)\n• Regional residential investment fundamentals\n• Current rental market evidence\n\n**VALUATION RELIABILITY:**\nStrong market evidence provides high confidence in assessed value. The property's renovated condition, established location, and market positioning support the conclusion that $275,000 represents fair market value as at inspection date.\n\n**MARKET OUTLOOK:**\nCurrent market conditions suggest stable demand with potential for moderate capital growth over medium term, supported by Mildura's economic fundamentals and population growth projections."
-              rows={8}
+              placeholder="The market value assessment is primarily based on the direct comparison method, with the income approach providing supportive evidence. The property demonstrates typical characteristics for the area with appropriate adjustments made for location, condition, size and quality differences..."
+              rows={4}
             />
           </div>
         </CardContent>

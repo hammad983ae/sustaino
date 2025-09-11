@@ -5,14 +5,10 @@ import LeasingEvidenceCommercial from "./LeasingEvidenceCommercial";
 import LeasingEvidenceResidential from "./LeasingEvidenceResidential";
 import LeasingEvidenceAgricultural from "./LeasingEvidenceAgricultural";
 import LeasingEvidenceSpecialised from "./LeasingEvidenceSpecialised";
-import LeasingEvidenceMildura from "./LeasingEvidenceMildura";
 
 export default function LeasingEvidence() {
   return (
     <div className="space-y-6">
-      {/* Mildura Specific Leasing Evidence - Pre-populated */}
-      <LeasingEvidenceMildura />
-      
       <Tabs defaultValue="residential" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="commercial">Commercial</TabsTrigger>

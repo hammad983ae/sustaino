@@ -14,109 +14,129 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isResettingPassword, setIsResettingPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Login form state
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
+  // Signup form state
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
+
   useEffect(() => {
-    // Check for password reset token in URL
-    const checkPasswordReset = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (data?.session?.user && !isResettingPassword) {
+    // Check if user is already logged in
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
         navigate('/');
-        return;
-      }
-
-      // Check for recovery/reset token in URL hash
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const accessToken = hashParams.get('access_token');
-      const refreshToken = hashParams.get('refresh_token');
-      const type = hashParams.get('type');
-
-      if (type === 'recovery' && accessToken && refreshToken) {
-        setIsResettingPassword(true);
-        return;
       }
     };
 
-    checkPasswordReset();
+    checkUser();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setIsResettingPassword(true);
-      } else if (session?.user && !isResettingPassword) {
+      if (session?.user) {
         navigate('/');
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate, isResettingPassword]);
+  }, [navigate]);
 
-  // Email form state
-  const [email, setEmail] = useState('john@delorenzopropertygroup.com');
-
-  const handleEmailSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
     try {
-      // For now, just show a message that password login is disabled
-      setError('Password authentication is temporarily disabled for security purposes. Alternative login methods coming soon.');
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+
+      if (error) {
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please check your credentials and try again.');
+        } else if (error.message.includes('Email not confirmed')) {
+          setError('Please check your email and click the confirmation link before logging in.');
+        } else {
+          setError(error.message);
+        }
+        return;
+      }
+
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully logged in.",
+      });
+
+      navigate('/');
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error('Login error:', error);
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-
-
-  const handlePasswordUpdate = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
-    if (newPassword !== confirmNewPassword) {
+    // Validation
+    if (signupPassword !== confirmPassword) {
       setError('Passwords do not match.');
       setIsLoading(false);
       return;
     }
 
-    if (newPassword.length < 6) {
+    if (signupPassword.length < 6) {
       setError('Password must be at least 6 characters long.');
       setIsLoading(false);
       return;
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
+        email: signupEmail,
+        password: signupPassword,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            display_name: displayName || signupEmail
+          }
+        }
       });
 
       if (error) {
-        setError(error.message);
+        if (error.message.includes('already registered')) {
+          setError('An account with this email already exists. Please try logging in instead.');
+        } else {
+          setError(error.message);
+        }
         return;
       }
 
       toast({
-        title: "Password updated successfully!",
-        description: "You can now sign in with your new password.",
+        title: "Account created successfully!",
+        description: "Please check your email for a confirmation link.",
       });
 
-      setIsResettingPassword(false);
-      setNewPassword('');
-      setConfirmNewPassword('');
-      
-      // Clear the URL hash
-      window.history.replaceState(null, '', window.location.pathname);
-      
+      // Clear form
+      setSignupEmail('');
+      setSignupPassword('');
+      setConfirmPassword('');
+      setDisplayName('');
     } catch (error) {
-      console.error('Password update error:', error);
+      console.error('Signup error:', error);
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -144,150 +164,119 @@ export default function AuthPage() {
               </div>
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            {isResettingPassword ? 'Reset Your Password' : 'Welcome Back'}
-          </h1>
-          <p className="text-muted-foreground">
-            {isResettingPassword ? 'Enter your new password below' : 'Sign in to access your property management platform'}
-          </p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h1>
+          <p className="text-muted-foreground">Sign in to access your property management platform</p>
         </div>
 
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-center">
-              {isResettingPassword ? 'Update Password' : 'Authentication'}
-            </CardTitle>
+            <CardTitle className="text-center">Authentication</CardTitle>
           </CardHeader>
           <CardContent>
-            <>
-              {isResettingPassword ? (
-                // Password Reset Form
-                <div className="space-y-4">
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
+            <Tabs defaultValue="login" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="login">Login</TabsTrigger>
+                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              </TabsList>
 
-                  <form onSubmit={handlePasswordUpdate} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="new-password">New Password</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="new-password"
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder="Enter your new password"
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          className="pl-10"
-                          required
-                          minLength={6}
-                        />
-                      </div>
+              {error && (
+                <Alert variant="destructive" className="mt-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <TabsContent value="login" className="mt-6">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="login-email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="login-email"
+                        type="email"
+                        placeholder="Enter your email"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="confirm-new-password">Confirm New Password</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="confirm-new-password"
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder="Confirm your new password"
-                          value={confirmNewPassword}
-                          onChange={(e) => setConfirmNewPassword(e.target.value)}
-                          className="pl-10 pr-10"
-                          required
-                          minLength={6}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? (
-                            <EyeOff className="h-4 w-4 text-muted-foreground" />
-                          ) : (
-                            <Eye className="h-4 w-4 text-muted-foreground" />
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-
-                    <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? 'Updating password...' : 'Update Password'}
-                    </Button>
-                  </form>
-
-                  <div className="text-center">
-                    <Button
-                      variant="link"
-                      onClick={() => {
-                        setIsResettingPassword(false);
-                        setError(null);
-                        window.history.replaceState(null, '', window.location.pathname);
-                      }}
-                      className="text-sm text-muted-foreground hover:text-foreground"
-                    >
-                      ← Back to Login
-                    </Button>
                   </div>
-                </div>
-              ) : (
-                 // Email Entry Form
-                <div className="space-y-4">
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
 
-                  <Alert className="bg-info/10 border-info/20">
+                  <div className="space-y-2">
+                    <Label htmlFor="login-password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="login-password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Signing in...' : 'Sign In'}
+                  </Button>
+                </form>
+              </TabsContent>
+
+              <TabsContent value="signup" className="mt-6">
+                <div className="space-y-4">
+                  <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      <strong>Account Access:</strong> Password authentication is temporarily disabled for security. Alternative authentication methods will be available soon.
+                      New registrations are currently disabled. Please contact an administrator if you need access.
                     </AlertDescription>
                   </Alert>
-
-                  <form onSubmit={handleEmailSubmit} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="john@delorenzopropertygroup.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="pl-10"
-                          required
-                        />
-                      </div>
+                  
+                  <div className="text-center p-8">
+                    <div className="text-muted-foreground mb-4">
+                      Account creation is temporarily unavailable
                     </div>
-
-                    <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? 'Processing...' : 'Request Access'}
-                    </Button>
-                  </form>
-
-                  <div className="mt-6 text-center">
-                    <Button
-                      variant="link"
-                      onClick={() => navigate('/')}
-                      className="text-sm text-muted-foreground hover:text-foreground"
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        // Switch to login tab
+                        const loginTab = document.querySelector('[value="login"]') as HTMLElement;
+                        loginTab?.click();
+                      }}
+                      className="w-full"
                     >
-                      ← Back to Home
+                      Switch to Login
                     </Button>
                   </div>
                 </div>
-              )}
-            </>
+              </TabsContent>
+            </Tabs>
+
+            <div className="mt-6 text-center">
+              <Button
+                variant="link"
+                onClick={() => navigate('/')}
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                ← Back to Home
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>

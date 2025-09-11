@@ -31,7 +31,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
 import ESGMethodologyProtection from "./ESGMethodologyProtection";
-import ClimateRiskAssessmentMildura from "./ClimateRiskAssessmentMildura";
 
 const ESGAssessment = () => {
   const [includeSection, setIncludeSection] = useState(true);
@@ -45,36 +44,6 @@ const ESGAssessment = () => {
     epaAudits: false,
     sustainabilityClimate: false
   });
-  
-  // NABERS calculation state
-  const [nabersScores, setNabersScores] = useState({
-    energyScore: 0,
-    waterScore: 0,
-    wasteScore: 0,
-    ieqScore: 0
-  });
-
-  // Calculate overall NABERS score using the formula
-  const calculateNABERSScore = (): number => {
-    const { energyScore, waterScore, wasteScore, ieqScore } = nabersScores;
-    return (energyScore * 0.4) + (waterScore * 0.3) + (wasteScore * 0.2) + (ieqScore * 0.1);
-  };
-
-  const getNABERSStarRating = (score: number): string => {
-    if (score >= 90) return "6 Stars";
-    if (score >= 75) return "5 Stars";
-    if (score >= 60) return "4 Stars";
-    if (score >= 45) return "3 Stars";
-    if (score >= 30) return "2 Stars";
-    if (score >= 15) return "1 Star";
-    return "Below 1 Star";
-  };
-
-  const handleNabersScoreChange = (field: keyof typeof nabersScores, value: string) => {
-    const numValue = parseFloat(value) || 0;
-    setNabersScores(prev => ({ ...prev, [field]: numValue }));
-  };
-
   const [socialSubsections, setSocialSubsections] = useState({
     socioEconomic: false,
     accessibility: false,
@@ -110,9 +79,6 @@ const ESGAssessment = () => {
 
       {includeSection && (
         <div className="space-y-6">
-          {/* Pre-populated Climate Risk Assessment for Mildura */}
-          <ClimateRiskAssessmentMildura />
-          
           {/* IP Protection Notice */}
           <ESGMethodologyProtection />
           
@@ -690,52 +656,8 @@ const ESGAssessment = () => {
                           </Select>
                         </div>
                         <div>
-                          <Label htmlFor="energy-score">NABERS Energy Score (0-100)</Label>
-                          <Input 
-                            id="energy-score"
-                            type="number"
-                            min="0"
-                            max="100"
-                            value={nabersScores.energyScore}
-                            onChange={(e) => handleNabersScoreChange('energyScore', e.target.value)}
-                            placeholder="Enter energy efficiency score" 
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="water-score">NABERS Water Efficiency Score (0-100)</Label>
-                          <Input 
-                            id="water-score"
-                            type="number"
-                            min="0"
-                            max="100"
-                            value={nabersScores.waterScore}
-                            onChange={(e) => handleNabersScoreChange('waterScore', e.target.value)}
-                            placeholder="Enter water efficiency score" 
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="waste-score">NABERS Waste Management Score (0-100)</Label>
-                          <Input 
-                            id="waste-score"
-                            type="number"
-                            min="0"
-                            max="100"
-                            value={nabersScores.wasteScore}
-                            onChange={(e) => handleNabersScoreChange('wasteScore', e.target.value)}
-                            placeholder="Percentage diverted from landfill" 
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="ieq-score">NABERS IEQ Score (0-100)</Label>
-                          <Input 
-                            id="ieq-score"
-                            type="number"
-                            min="0"
-                            max="100"
-                            value={nabersScores.ieqScore}
-                            onChange={(e) => handleNabersScoreChange('ieqScore', e.target.value)}
-                            placeholder="Indoor environment quality score" 
-                          />
+                          <Label htmlFor="nabers-rating">NABERS Rating</Label>
+                          <Input id="nabers-rating" placeholder="NABERS energy rating" />
                         </div>
                         <div>
                           <Label htmlFor="green-star">Green Star (0 to 6)</Label>
@@ -744,20 +666,6 @@ const ESGAssessment = () => {
                         <div>
                           <Label htmlFor="nathers-rating">NatHERS Rating (0 to 10)</Label>
                           <Input id="nathers-rating" placeholder="NatHERS rating (0-10)" />
-                        </div>
-                      </div>
-                      
-                      {/* NABERS Overall Score Display */}
-                      <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium">Overall NABERS Score</h4>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-primary">{calculateNABERSScore().toFixed(1)}</div>
-                            <div className="text-sm text-muted-foreground">{getNABERSStarRating(calculateNABERSScore())}</div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Formula: (Energy × 0.4) + (Water × 0.3) + (Waste × 0.2) + (IEQ × 0.1)
                         </div>
                       </div>
                       <div>

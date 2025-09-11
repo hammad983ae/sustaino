@@ -141,8 +141,8 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
               </button>
             ) : (
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
+                <Home className="h-4 w-4" />
+                Back to Dashboard
               </Link>
             )}
             <h1 className="text-2xl font-bold">{getPropertyTypeTitle()}</h1>

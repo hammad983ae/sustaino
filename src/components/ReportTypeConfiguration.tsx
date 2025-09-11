@@ -7,334 +7,32 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { ChevronDown } from "lucide-react";
 import { FileText } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-interface ReportTypeConfigurationProps {
-  onConfigurationChange?: (config: any) => void;
-}
-
-const ReportTypeConfiguration = ({ onConfigurationChange }: ReportTypeConfigurationProps = {}) => {
+const ReportTypeConfiguration = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
-  const [includeRentalConfig, setIncludeRentalConfig] = useState(false);
-  const [includeGST, setIncludeGST] = useState(false);
-  const [disabledSections, setDisabledSections] = useState<Record<string, boolean>>({});
 
-  // Notify parent component of configuration changes
-  const notifyConfigurationChange = () => {
-    const config = {
-      reportType: formData['report-type'],
-      propertyType: formData['property-type'],
-      valuationPurpose: selectedValues['Valuation Purpose'] || [],
-      instructingParty: formData['instructing-party'],
-      reliantParty: formData['reliant-party'],
-      basisOfValuation: selectedValues['Basis of Valuation'] || [],
-      valuationApproaches: selectedValues['Valuation Approaches'] || [],
-      valueComponent: selectedValues['Value Component'] || [],
-      interestValues: selectedValues['Interest Values'] || [],
-      gstTreatment: formData['gst-treatment'],
-      basisOfAssessment: formData['basis-of-assessment'],
-      customBasisDescription: formData['custom-basis-description'],
-      includeRentalConfig,
-      includeGST,
-      disabledSections
-    };
-    onConfigurationChange?.(config);
-  };
-
-  // Update notification calls
   const handleCheckboxChange = (label: string, option: string, checked: boolean) => {
     setSelectedValues(prev => {
       const current = prev[label] || [];
       if (checked) {
-        const newValues = { ...prev, [label]: [...current, option] };
-        // Trigger notification after state update
-        setTimeout(() => notifyConfigurationChange(), 0);
-        return newValues;
+        return { ...prev, [label]: [...current, option] };
       } else {
-        const newValues = { ...prev, [label]: current.filter(item => item !== option) };
-        // Trigger notification after state update
-        setTimeout(() => notifyConfigurationChange(), 0);
-        return newValues;
+        return { ...prev, [label]: current.filter(item => item !== option) };
       }
     });
   };
 
   const handleSelectChange = (key: string, value: string) => {
-    setFormData(prev => {
-      const newData = { ...prev, [key]: value };
-      // Trigger notification after state update
-      setTimeout(() => notifyConfigurationChange(), 0);
-      return newData;
-    });
-    
-    // Apply conditional logic based on selections
-    if (key === 'report-type') {
-      applyReportTypePresets(value);
-    } else if (key === 'property-type') {
-      applyPropertyTypePresets(value);
-    }
+    setFormData(prev => ({ ...prev, [key]: value }));
   };
 
   const handleInputChange = (key: string, value: string) => {
-    setFormData(prev => {
-      const newData = { ...prev, [key]: value };
-      // Trigger notification after state update
-      setTimeout(() => notifyConfigurationChange(), 0);
-      return newData;
-    });
+    setFormData(prev => ({ ...prev, [key]: value }));
   };
-
-  // Preset logic for report types
-  const applyReportTypePresets = (reportType: string) => {
-    const presets: Record<string, any> = {
-      'desktop-report': {
-        disabledSections: { 'rental-analysis': true, 'detailed-inspection': true },
-        includeRental: false,
-        includeGST: false,
-        defaultBasis: ['Market Value'],
-        defaultApproaches: ['Direct Comparison'],
-        defaultPurpose: ['Market Valuation'],
-        rentalDefaults: {}
-      },
-      'kerbside': {
-        disabledSections: { 'rental-analysis': true, 'interior-analysis': true },
-        includeRental: false,
-        includeGST: false,
-        defaultBasis: ['Market Value'],
-        defaultApproaches: ['Direct Comparison'],
-        defaultPurpose: ['Market Valuation'],
-        rentalDefaults: {}
-      },
-      'short-form': {
-        disabledSections: {},
-        includeRental: false,
-        includeGST: false,
-        defaultBasis: ['Market Value'],
-        defaultApproaches: ['Direct Comparison'],
-        defaultPurpose: ['Market Valuation'],
-        rentalDefaults: {}
-      },
-      'long-form': {
-        disabledSections: {},
-        includeRental: true,
-        includeGST: true,
-        defaultBasis: ['Market Value'],
-        defaultApproaches: ['Direct Comparison', 'Capitalisation of Net Income'],
-        defaultPurpose: ['Market Valuation', 'Investment Decision'],
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'gst-treatment': 'inclusive'
-        }
-      },
-      'virtual-inspection-short-form': {
-        disabledSections: { 'detailed-inspection': true },
-        includeRental: false,
-        includeGST: false,
-        defaultBasis: ['Market Value'],
-        defaultApproaches: ['Direct Comparison'],
-        defaultPurpose: ['Market Valuation'],
-        rentalDefaults: {}
-      },
-      'virtual-inspection-(long-form)': {
-        disabledSections: { 'detailed-inspection': true },
-        includeRental: true,
-        includeGST: true,
-        defaultBasis: ['Market Value'],
-        defaultApproaches: ['Direct Comparison', 'Capitalisation of Net Income'],
-        defaultPurpose: ['Market Valuation', 'Investment Decision'],
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'gst-treatment': 'inclusive'
-        }
-      },
-      'sustaino-pro': {
-        disabledSections: {},
-        includeRental: true,
-        includeGST: true,
-        defaultBasis: ['Market Value'],
-        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
-        defaultPurpose: ['Investment Decision', 'Financial Reporting'],
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'gst-treatment': 'inclusive',
-          'incentives-treatment': 'effective-rent'
-        }
-      },
-      'insurance-valuation': {
-        disabledSections: { 'rental-analysis': true, 'market-commentary': true },
-        includeRental: false,
-        includeGST: false,
-        defaultBasis: ['Insurance Value'],
-        defaultApproaches: ['Summation Approach'],
-        defaultPurpose: ['Insurance Purposes'],
-        rentalDefaults: {}
-      },
-      'other': {
-        disabledSections: {},
-        includeRental: false,
-        includeGST: false,
-        defaultBasis: [],
-        defaultApproaches: [],
-        defaultPurpose: [],
-        rentalDefaults: {}
-      }
-    };
-
-    const preset = presets[reportType];
-    if (preset) {
-      // Set disabled sections
-      setDisabledSections(preset.disabledSections || {});
-      
-      // Set toggles
-      setIncludeRentalConfig(preset.includeRental);
-      setIncludeGST(preset.includeGST);
-      
-      // Apply default selections
-      setSelectedValues(prev => ({
-        ...prev,
-        'Basis of Valuation': preset.defaultBasis || [],
-        'Valuation Approaches': preset.defaultApproaches || [],
-        'Valuation Purpose': preset.defaultPurpose || []
-      }));
-
-      // Apply rental configuration defaults
-      if (preset.rentalDefaults && Object.keys(preset.rentalDefaults).length > 0) {
-        setFormData(prev => ({
-          ...prev,
-          ...preset.rentalDefaults
-        }));
-      }
-    }
-  };
-
-  // Preset logic for property types
-  const applyPropertyTypePresets = (propertyType: string) => {
-    const presets: Record<string, any> = {
-      'residential': {
-        includeRental: false,
-        includeGST: false,
-        defaultApproaches: ['Direct Comparison'],
-        disabledSections: { 'rental-analysis': true },
-        rentalDefaults: {}
-      },
-      'build-to-rent': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
-        disabledSections: {},
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'property-classification': 'residential-multiple'
-        }
-      },
-      'commercial': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
-        disabledSections: {},
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'property-classification': 'office-building'
-        }
-      },
-      'industrial': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Direct Comparison', 'Summation Approach'],
-        disabledSections: {},
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'property-classification': 'warehouse-distribution'
-        }
-      },
-      'retail': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Capitalisation of Net Income', 'Direct Comparison'],
-        disabledSections: {},
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'property-classification': 'retail-shop'
-        }
-      },
-      'development-land': {
-        includeRental: false,
-        includeGST: true,
-        defaultApproaches: ['Hypothetical Development', 'Direct Comparison'],
-        disabledSections: { 'rental-analysis': true },
-        rentalDefaults: {}
-      },
-      'agricultural': {
-        includeRental: true,
-        includeGST: false,
-        defaultApproaches: ['Direct Comparison', 'Summation Approach'],
-        disabledSections: {},
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'property-classification': 'agricultural-rural'
-        }
-      },
-      'specialised': {
-        includeRental: true,
-        includeGST: true,
-        defaultApproaches: ['Summation Approach', 'Direct Comparison'],
-        disabledSections: {},
-        rentalDefaults: {
-          'rental-assessment-type': 'market-rent',
-          'rental-basis': 'market-rent',
-          'property-classification': 'specialised'
-        }
-      },
-      'other': {
-        includeRental: false,
-        includeGST: false,
-        defaultApproaches: [],
-        disabledSections: {},
-        rentalDefaults: {}
-      }
-    };
-
-    const preset = presets[propertyType];
-    if (preset) {
-      // Only update if not overridden by report type
-      if (!formData['report-type'] || formData['report-type'] === 'other') {
-        setIncludeRentalConfig(preset.includeRental);
-        setIncludeGST(preset.includeGST);
-      }
-      
-      // Merge disabled sections (don't override report type restrictions)
-      setDisabledSections(prev => ({ ...prev, ...(preset.disabledSections || {}) }));
-      
-      // Apply default approaches (add to existing, don't replace)
-      if (preset.defaultApproaches.length > 0) {
-        setSelectedValues(prev => ({
-          ...prev,
-          'Valuation Approaches': [...new Set([...(prev['Valuation Approaches'] || []), ...preset.defaultApproaches])]
-        }));
-      }
-
-      // Apply rental configuration defaults
-      if (preset.rentalDefaults && Object.keys(preset.rentalDefaults).length > 0) {
-        setFormData(prev => ({
-          ...prev,
-          ...preset.rentalDefaults
-        }));
-      }
-    }
-  };
-
 
   const MultiSelectDropdown = ({ 
     options, 
@@ -392,7 +90,7 @@ const ReportTypeConfiguration = ({ onConfigurationChange }: ReportTypeConfigurat
 
   const propertyTypes = [
     "Residential", "Build to Rent", "Commercial", "Industrial", "Retail", 
-    "Development Land", "Agricultural", "Specialised", "Other"
+    "Development Land", "Agricultural", "Other"
   ];
 
   const valuationPurposes = [
@@ -517,7 +215,7 @@ const ReportTypeConfiguration = ({ onConfigurationChange }: ReportTypeConfigurat
         <div className="space-y-4">
           <h3 className="font-semibold text-lg">Valuation Configuration</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MultiSelectDropdown 
               options={basisOfValuation}
               placeholder="Select basis of valuation"
@@ -541,80 +239,17 @@ const ReportTypeConfiguration = ({ onConfigurationChange }: ReportTypeConfigurat
               placeholder="Select interest values"
               label="Interest Values"
             />
-
-            <div>
-              <Label htmlFor="gst-treatment" className="text-sm font-medium">GST Treatment</Label>
-              <Select value={formData['gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('gst-treatment', value)}>
-                <SelectTrigger id="gst-treatment" className="mt-2">
-                  <SelectValue placeholder="Select GST approach" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="inclusive">GST Inclusive</SelectItem>
-                  <SelectItem value="exclusive">GST Exclusive</SelectItem>
-                  <SelectItem value="going-concern">Going Concern (GST Inclusive)</SelectItem>
-                  <SelectItem value="vacant-possession">Vacant Possession (GST Free)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="basis-of-assessment" className="text-sm font-medium">Basis of Assessment</Label>
-              <Select value={formData['basis-of-assessment'] || ''} onValueChange={(value) => handleSelectChange('basis-of-assessment', value)}>
-                <SelectTrigger id="basis-of-assessment" className="mt-2">
-                  <SelectValue placeholder="Select basis of assessment" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="market-value">Market Value</SelectItem>
-                  <SelectItem value="fair-value">Fair Value</SelectItem>
-                  <SelectItem value="insurable-value">Insurable Value</SelectItem>
-                  <SelectItem value="replacement-cost">Replacement Cost</SelectItem>
-                  <SelectItem value="going-concern">Going Concern Value</SelectItem>
-                  <SelectItem value="special-value">Special Value</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="custom-basis-description" className="text-sm font-medium">Custom Basis Description (if applicable)</Label>
-              <Textarea 
-                id="custom-basis-description"
-                placeholder="Describe custom rental basis or specific requirements"
-                className="mt-2"
-                value={formData['custom-basis-description'] || ''}
-                onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
-              />
-            </div>
           </div>
 
-          <div className="text-xs text-muted-foreground pt-2">
+          <div className="pt-4 text-xs text-muted-foreground">
             <p>Also extend interest valued to include: <span className="underline">Partially Leased and Leasehold Interest</span></p>
           </div>
         </div>
 
         {/* Rental Valuation Configuration */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-lg">Rental Valuation Configuration</h3>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="include-rental" className="text-sm font-medium">Include Rental Analysis</Label>
-              <Switch
-                id="include-rental"
-                checked={includeRentalConfig}
-                onCheckedChange={setIncludeRentalConfig}
-              />
-            </div>
-          </div>
-
-          {!includeRentalConfig && (
-            <div className="p-4 bg-muted/50 rounded-md border border-dashed">
-              <p className="text-sm text-muted-foreground text-center">
-                Rental valuation configuration is disabled. Enable the toggle above to configure rental analysis options.
-              </p>
-            </div>
-          )}
-
-          {includeRentalConfig && (
-          <>
+          <h3 className="font-semibold text-lg">Rental Valuation Configuration</h3>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="rental-assessment-type" className="text-sm font-medium">Rental Assessment Type</Label>
@@ -745,7 +380,7 @@ const ReportTypeConfiguration = ({ onConfigurationChange }: ReportTypeConfigurat
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <MultiSelectDropdown 
-              options={['Rent-free periods', 'Fitout contributions', 'Cash incentives', 'Previous lease payout', 'Reduced rent periods', 'Other inducements', 'Not applicable']}
+              options={['Rent-free periods', 'Fitout contributions', 'Cash incentives', 'Previous lease payout', 'Reduced rent periods', 'Other inducements']}
               placeholder="Select incentive types to consider"
               label="Incentive Types"
             />
@@ -755,37 +390,10 @@ const ReportTypeConfiguration = ({ onConfigurationChange }: ReportTypeConfigurat
               <Textarea 
                 id="custom-basis-description"
                 placeholder="Describe custom rental basis or specific requirements"
-                rows={3}
                 className="mt-1"
                 value={formData['custom-basis-description'] || ''}
                 onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
               />
-            </div>
-          </div>
-          </>
-          )}
-
-          {/* Configuration Summary */}
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-md border">
-            <h4 className="font-medium text-sm mb-2">Configuration Summary:</h4>
-            <div className="text-xs text-muted-foreground space-y-1">
-              <p>✓ Report Type: <span className="font-medium">{formData['report-type']?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Not selected'}</span></p>
-              <p>✓ Property Type: <span className="font-medium">{formData['property-type']?.replace(/\b\w/g, l => l.toUpperCase()) || 'Not selected'}</span></p>
-              {(selectedValues['Valuation Purpose'] || []).length > 0 && (
-                <p>✓ Purpose: <span className="font-medium">{(selectedValues['Valuation Purpose'] || []).join(', ')}</span></p>
-              )}
-              {(selectedValues['Basis of Valuation'] || []).length > 0 && (
-                <p>✓ Basis: <span className="font-medium">{(selectedValues['Basis of Valuation'] || []).join(', ')}</span></p>
-              )}
-              {(selectedValues['Valuation Approaches'] || []).length > 0 && (
-                <p>✓ Approaches: <span className="font-medium">{(selectedValues['Valuation Approaches'] || []).join(', ')}</span></p>
-              )}
-              {includeRentalConfig && <p className="text-green-600">✓ Rental valuation analysis will be included</p>}
-              {includeGST && <p className="text-green-600">✓ GST will be factored into all calculations</p>}
-              {formData['gst-treatment'] && <p>✓ GST Treatment: <span className="font-medium">{formData['gst-treatment']?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></p>}
-              {Object.keys(disabledSections).length > 0 && (
-                <p className="text-amber-600">⚠️ Disabled sections: {Object.keys(disabledSections).join(', ').replace(/-/g, ' ')}</p>
-              )}
             </div>
           </div>
         </div>

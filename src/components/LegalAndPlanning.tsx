@@ -10,38 +10,30 @@ import PlanningDataIntegration from "./PlanningDataIntegration";
 
 const LegalAndPlanning = () => {
   const [planningData, setPlanningData] = useState({
-    lga: "Mildura Rural City Council",
-    zoning: "General Residential Zone (GRZ)",
-    currentUse: "Single Dwelling",
-    permissibleUse: "Dwelling, Home Based Business, Residential Aged Care Facility",
-    permitNumber: "Not Required",
-    overlays: "No overlays apply",
-    overlayImpactAssessment: "The property is not subject to any planning overlays that would restrict development or impact marketability. The General Residential Zone provides for a range of residential uses with minimal planning constraints.",
-    overlayImpactRating: "1",
-    heightOfBuilding: "9 metres maximum",
-    floorSpaceRatio: "Not applicable",
-    minimumLotSize: "300 square metres",
-    planningRestrictions: "Standard ResCode requirements apply including building setbacks, site coverage limitations, and privacy requirements. The General Residential Zone encourages development that respects neighbourhood character. Maximum two dwellings permitted on the allotment subject to planning approval.",
-    developmentPotential: "The property has potential for subdivision subject to meeting minimum lot size requirements and council approval. The existing dwelling could be extended or renovated under current planning provisions. The zoning supports diverse housing types including dual occupancy development, making it attractive to investors and developers seeking future development opportunities."
+    lga: "",
+    zoning: "",
+    currentUse: "",
+    permissibleUse: "",
+    permitNumber: "",
+    overlays: "",
+    overlayImpactAssessment: "",
+    overlayImpactRating: "",
+    heightOfBuilding: "",
+    floorSpaceRatio: "",
+    minimumLotSize: "",
+    planningRestrictions: "",
+    developmentPotential: ""
   });
 
   const handlePlanningDataFetched = (data: any) => {
-    console.log('Planning data received:', data);
-    
     setPlanningData(prev => ({
       ...prev,
-      lga: data.lga || data.planningScheme?.replace(' Planning Scheme', '') || "",
       zoning: data.zoning || "",
-      overlays: Array.isArray(data.overlays) ? data.overlays.join(", ") : (data.overlays || ""),
-      heightOfBuilding: data.heightRestriction || data.buildingHeight || "",
-      floorSpaceRatio: data.floorSpaceRatio || "",
-      minimumLotSize: data.minimumLotSize || "",
+      overlays: data.overlays?.join(", ") || "",
+      heightOfBuilding: data.heightRestriction || "",
       permissibleUse: data.landUse || "",
       developmentPotential: data.developmentPotential || "",
-      planningRestrictions: Array.isArray(data.overlays) && data.overlays.length > 0 
-        ? `Planning overlays apply: ${data.overlays.join(", ")}` 
-        : (Array.isArray(data.planningRestrictions) ? data.planningRestrictions.join(", ") : (data.planningRestrictions || "")),
-      overlayImpactRating: data.overlays && Array.isArray(data.overlays) && data.overlays.length > 0 ? "3" : "1"
+      planningRestrictions: data.overlays?.length > 0 ? `Planning overlays apply: ${data.overlays.join(", ")}` : ""
     }));
   };
 
@@ -184,11 +176,10 @@ const LegalAndPlanning = () => {
                 <SelectValue placeholder="Select impact rating" />
               </SelectTrigger>
               <SelectContent className="bg-background border shadow-lg z-50">
-                <SelectItem value="1">1 - Very Low Impact</SelectItem>
-                <SelectItem value="2">2 - Low Impact</SelectItem>
-                <SelectItem value="3">3 - Medium Impact</SelectItem>
-                <SelectItem value="4">4 - High Impact</SelectItem>
-                <SelectItem value="5">5 - Very High Impact</SelectItem>
+                <SelectItem value="low">Low Impact</SelectItem>
+                <SelectItem value="medium">Medium Impact</SelectItem>
+                <SelectItem value="high">High Impact</SelectItem>
+                <SelectItem value="very-high">Very High Impact</SelectItem>
               </SelectContent>
             </Select>
           </div>

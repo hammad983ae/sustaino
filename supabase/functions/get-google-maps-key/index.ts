@@ -13,8 +13,10 @@ serve(async (req) => {
   }
 
   try {
-    // Get Google Maps API key from Supabase secrets
-    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
+    // Try multiple possible secret names for Google Maps API key
+    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY') || 
+                             Deno.env.get('Google Maps') || 
+                             Deno.env.get('GM');
     
     console.log('Available env vars:', Object.keys(Deno.env.toObject()).filter(key => key.toLowerCase().includes('google') || key.toLowerCase().includes('map')));
     console.log('Google Maps API key found:', !!googleMapsApiKey);

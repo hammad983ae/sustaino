@@ -31,11 +31,24 @@ const RiskAssessmentMarketIndicators = () => {
   const [riskRatings, setRiskRatings] = useState<{[key: string]: number}>({});
   const [riskSummaries, setRiskSummaries] = useState<{[key: string]: string}>({});
 
-  // SWOT text areas state
-  const [swotStrengths, setSwotStrengths] = useState("• Purpose-built accommodation for 18 residents with high occupancy potential (~80%)\n• Located on a main road within a Commercial 1 zone, facilitating accessibility and visibility\n• Solar energy reduces operating costs\n• Low-maintenance gardens and fencing minimize ongoing expenses\n• Stable gross revenue (~$120,000)");
-  const [swotWeaknesses, setSwotWeaknesses] = useState("• Dependence on local economic conditions and demand for worker housing\n• High depreciation and amortization costs ($20,000 combined)\n• No additional income streams\n• Limited diversification of property income");
-  const [swotOpportunities, setSwotOpportunities] = useState("• Potential to increase occupancy or rental rates\n• Energy savings through solar and efficiency upgrades\n• Expansion or renovation to modernize facilities\n• Leveraging location for increased demand (e.g., nearby industries)");
-  const [swotThreats, setSwotThreats] = useState("• Regulatory changes affecting student or worker accommodation use\n• Market competition from other housing providers\n• Economic downturn affecting occupancy\n• Maintenance or operational issues impacting occupancy and revenue");
+  const [strengths, setStrengths] = useState(["Strength 1"]);
+  const [weaknesses, setWeaknesses] = useState(["Weakness 1"]);
+  const [opportunities, setOpportunities] = useState(["Opportunity 1"]);
+  const [threats, setThreats] = useState(["Threat 1"]);
+
+  const addItem = (list: string[], setList: (items: string[]) => void, defaultText: string) => {
+    setList([...list, defaultText]);
+  };
+
+  const removeItem = (list: string[], setList: (items: string[]) => void, index: number) => {
+    setList(list.filter((_, i) => i !== index));
+  };
+
+  const updateItem = (list: string[], setList: (items: string[]) => void, index: number, value: string) => {
+    const updated = [...list];
+    updated[index] = value;
+    setList(updated);
+  };
 
   const setRating = (category: string, rating: number) => {
     setRiskRatings(prev => ({ ...prev, [category]: rating }));
@@ -433,59 +446,49 @@ const RiskAssessmentMarketIndicators = () => {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Political</h4>
-                  <Textarea 
-                    placeholder="Political factors affecting the property..."
-                    defaultValue="Local government policies may influence zoning regulations and development approvals. State policies on housing, accommodation, and infrastructure investment can impact property viability. Potential impact of immigration and employment policies affecting demand for worker accommodation."
-                    className="min-h-[100px]"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Economic</h4>
-                  <Textarea 
-                    placeholder="Economic factors affecting the property..."
-                    defaultValue="Stable rental income generating approximately $120,000 annually. Low maintenance costs and high solar efficiency reduce expenses. Market fluctuations in rental rates or occupancy levels could influence profitability. Economic conditions affecting employment in Mildura (agriculture, tourism, etc.) may impact demand."
-                    className="min-h-[100px]"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Social</h4>
-                  <Textarea 
-                    placeholder="Social factors affecting the property..."
-                    defaultValue="Demand for affordable worker accommodation in industrial or commercial zones. Community perception of boarding houses or worker housing. Workforce stability and turnover rates."
-                    className="min-h-[100px]"
-                  />
-                </div>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Political Factors</Label>
+                <Textarea 
+                  placeholder="Government policies, regulations, political stability, tax policies..."
+                  className="min-h-[100px]"
+                />
               </div>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Technological</h4>
-                  <Textarea 
-                    placeholder="Technological factors affecting the property..."
-                    defaultValue="Solar power (13.2 kW) enhances energy efficiency and reduces operational costs. Use of automated or digital management systems for occupancy and maintenance. Potential upgrades in security or amenities."
-                    className="min-h-[100px]"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Environmental</h4>
-                  <Textarea 
-                    placeholder="Environmental factors affecting the property..."
-                    defaultValue="Solar energy contributes to sustainable practices. Low-maintenance gardens and aquostic fencing reduce water and upkeep needs. Environmental policies favoring renewable energy and eco-friendly developments."
-                    className="min-h-[100px]"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Legal</h4>
-                  <Textarea 
-                    placeholder="Legal factors affecting the property..."
-                    defaultValue="Compliance with zoning laws (Commercial 1 zone). Regulations regarding boarding and worker accommodation standards. Landlord and tenant legislation impacting operational aspects."
-                    className="min-h-[100px]"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label>Technological Factors</Label>
+                <Textarea 
+                  placeholder="Automation, digitalization, innovation, technology adoption..."
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Economic Factors</Label>
+                <Textarea 
+                  placeholder="Interest rates, inflation, economic growth, unemployment..."
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Environmental Factors</Label>
+                <Textarea 
+                  placeholder="Climate change, environmental regulations, sustainability requirements..."
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Social Factors</Label>
+                <Textarea 
+                  placeholder="Demographics, lifestyle changes, population growth, cultural trends..."
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Legal Factors</Label>
+                <Textarea 
+                  placeholder="Building codes, zoning laws, safety regulations, compliance requirements..."
+                  className="min-h-[100px]"
+                />
               </div>
             </div>
           </CardContent>
@@ -528,47 +531,153 @@ const RiskAssessmentMarketIndicators = () => {
                 />
               </div>
             </div>
+            <p className="text-sm text-muted-foreground">
+              Analyze Strengths, Weaknesses, Opportunities, and Threats for comprehensive assessment
+            </p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-green-600 mb-2">Strengths</h4>
-                  <Textarea 
-                    placeholder="List property strengths..."
-                    className="min-h-[120px]"
-                    value={swotStrengths}
-                    onChange={(e) => setSwotStrengths(e.target.value)}
-                  />
+              {/* Strengths */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">💪</span>
+                  <Label className="text-base font-medium">Strengths</Label>
                 </div>
-                <div>
-                  <h4 className="font-semibold text-blue-600 mb-2">Opportunities</h4>
-                  <Textarea 
-                    placeholder="List property opportunities..."
-                    className="min-h-[120px]"
-                    value={swotOpportunities}
-                    onChange={(e) => setSwotOpportunities(e.target.value)}
-                  />
+                <div className="space-y-2">
+                  {strengths.map((strength, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={strength}
+                        onChange={(e) => updateItem(strengths, setStrengths, index, e.target.value)}
+                        placeholder="Enter strength..."
+                      />
+                      {strengths.length > 1 && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => removeItem(strengths, setStrengths, index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    onClick={() => addItem(strengths, setStrengths, `Strength ${strengths.length + 1}`)}
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Strength
+                  </Button>
                 </div>
               </div>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-yellow-600 mb-2">Weaknesses</h4>
-                  <Textarea 
-                    placeholder="List property weaknesses..."
-                    className="min-h-[120px]"
-                    value={swotWeaknesses}
-                    onChange={(e) => setSwotWeaknesses(e.target.value)}
-                  />
+
+              {/* Weaknesses */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">⚠️</span>
+                  <Label className="text-base font-medium">Weaknesses</Label>
                 </div>
-                <div>
-                  <h4 className="font-semibold text-red-600 mb-2">Threats</h4>
-                  <Textarea 
-                    placeholder="List property threats..."
-                    className="min-h-[120px]"
-                    value={swotThreats}
-                    onChange={(e) => setSwotThreats(e.target.value)}
-                  />
+                <div className="space-y-2">
+                  {weaknesses.map((weakness, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={weakness}
+                        onChange={(e) => updateItem(weaknesses, setWeaknesses, index, e.target.value)}
+                        placeholder="Enter weakness..."
+                      />
+                      {weaknesses.length > 1 && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => removeItem(weaknesses, setWeaknesses, index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    onClick={() => addItem(weaknesses, setWeaknesses, `Weakness ${weaknesses.length + 1}`)}
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Weakness
+                  </Button>
+                </div>
+              </div>
+
+              {/* Opportunities */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🚀</span>
+                  <Label className="text-base font-medium">Opportunities</Label>
+                </div>
+                <div className="space-y-2">
+                  {opportunities.map((opportunity, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={opportunity}
+                        onChange={(e) => updateItem(opportunities, setOpportunities, index, e.target.value)}
+                        placeholder="Enter opportunity..."
+                      />
+                      {opportunities.length > 1 && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => removeItem(opportunities, setOpportunities, index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    onClick={() => addItem(opportunities, setOpportunities, `Opportunity ${opportunities.length + 1}`)}
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Opportunity
+                  </Button>
+                </div>
+              </div>
+
+              {/* Threats */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">⚡</span>
+                  <Label className="text-base font-medium">Threats</Label>
+                </div>
+                <div className="space-y-2">
+                  {threats.map((threat, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={threat}
+                        onChange={(e) => updateItem(threats, setThreats, index, e.target.value)}
+                        placeholder="Enter threat..."
+                      />
+                      {threats.length > 1 && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => removeItem(threats, setThreats, index)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    onClick={() => addItem(threats, setThreats, `Threat ${threats.length + 1}`)}
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Threat
+                  </Button>
                 </div>
               </div>
             </div>
@@ -602,7 +711,9 @@ const RiskAssessmentMarketIndicators = () => {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>TOWS Analysis Matrix</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                🎯 TOWS Analysis
+              </CardTitle>
               <div className="flex items-center gap-2">
                 <Label htmlFor="include-tows">Include</Label>
                 <Switch
@@ -612,54 +723,52 @@ const RiskAssessmentMarketIndicators = () => {
                 />
               </div>
             </div>
+            <p className="text-sm text-muted-foreground">
+              Analyze Threats, Opportunities, Weaknesses, and Strengths for strategic insights
+            </p>
           </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full border border-border">
-                <thead>
-                  <tr className="bg-muted">
-                    <th className="border border-border p-3 text-left font-semibold">Strategy</th>
-                    <th className="border border-border p-3 text-left font-semibold">Strengths/Opportunities</th>
-                    <th className="border border-border p-3 text-left font-semibold">Weaknesses/Opportunities</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border border-border p-3 font-medium bg-green-50">Leverage & Grow</td>
-                    <td className="border border-border p-3">
-                      <Textarea 
-                        placeholder="How to leverage strengths for opportunities..."
-                        defaultValue="Market to nearby industries and workers, promoting occupancy. Promote eco-friendly attributes to reduce costs and appeal to tenants."
-                        className="min-h-[80px] border-0 resize-none bg-transparent"
-                      />
-                    </td>
-                    <td className="border border-border p-3">
-                      <Textarea 
-                        placeholder="How to overcome weaknesses using opportunities..."
-                        defaultValue="Develop ancillary income (e.g., laundry, parking fees). Maximize occupancy and rental rate potential."
-                        className="min-h-[80px] border-0 resize-none bg-transparent"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-border p-3 font-medium bg-blue-50">Defense & Counteract</td>
-                    <td className="border border-border p-3">
-                      <Textarea 
-                        placeholder="How to use strengths to counter threats..."
-                        defaultValue="Maintain property standards & regular updates. Stay ahead of regulatory changes with proactive compliance."
-                        className="min-h-[80px] border-0 resize-none bg-transparent"
-                      />
-                    </td>
-                    <td className="border border-border p-3">
-                      <Textarea 
-                        placeholder="How to minimize weaknesses and avoid threats..."
-                        defaultValue="Diversify tenant base or consider adaptable uses. Avoid over-leverage or major investments without clear demand."
-                        className="min-h-[80px] border-0 resize-none bg-transparent"
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">💪</span>
+                  <Label className="font-medium">SO Strategies (Strengths + Opportunities)</Label>
+                </div>
+                <Textarea 
+                  placeholder="How to use strengths to take advantage of opportunities..."
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">⚠️</span>
+                  <Label className="font-medium">WO Strategies (Weaknesses + Opportunities)</Label>
+                </div>
+                <Textarea 
+                  placeholder="How to overcome weaknesses and avoid threats..."
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🛡️</span>
+                  <Label className="font-medium">ST Strategies (Strengths + Threats)</Label>
+                </div>
+                <Textarea 
+                  placeholder="How to use strengths to avoid threats..."
+                  className="min-h-[100px]"
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🔺</span>
+                  <Label className="font-medium">WT Strategies (Weaknesses + Threats)</Label>
+                </div>
+                <Textarea 
+                  placeholder="How to minimize weaknesses and avoid threats..."
+                  className="min-h-[100px]"
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -669,7 +778,9 @@ const RiskAssessmentMarketIndicators = () => {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>TOWS Analysis Matrix</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                🎯 TOWS Analysis
+              </CardTitle>
               <div className="flex items-center gap-2">
                 <Label htmlFor="include-tows">Include</Label>
                 <Switch

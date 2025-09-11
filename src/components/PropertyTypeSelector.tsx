@@ -1,77 +1,52 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import PropertyAddressForm from "./PropertyAddressForm";
+import { Link } from "react-router-dom";
 
 interface PropertyTypeSelectorProps {
   onSelect: (type: string) => void;
 }
 
 export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorProps) {
-  const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState<'address' | 'services'>('address');
-
-  const handleAddressComplete = () => {
-    setCurrentStep('services');
-  };
-
-  const handleBackToAddress = () => {
-    setCurrentStep('address');
-  };
-
-  if (currentStep === 'address') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-6">
-        <div className="max-w-4xl mx-auto">
-          {/* Progress Header */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Step 1: Property Address</h2>
-              <span className="text-sm text-muted-foreground">1 of 6</span>
-            </div>
-            <Progress value={17} className="h-2 mb-2" />
-            <p className="text-sm text-muted-foreground">17% Complete</p>
-          </div>
-
-          {/* Property Address Form */}
-          <PropertyAddressForm />
-
-          {/* Next Button */}
-          <div className="flex justify-end mt-6">
-            <Button 
-              onClick={handleAddressComplete}
-              className="bg-primary hover:bg-primary/90 text-white px-8"
-            >
-              Continue to Services
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const propertyTypes = [
+    {
+      id: "commercial",
+      title: "Commercial Property",
+      description: "Office, retail, industrial, and investment properties",
+      icon: Building2,
+      features: ["Income analysis", "Tenant assessment", "Market yields", "WALE calculations"],
+      color: "bg-gradient-to-br from-card to-info/10 border-info/20"
+    },
+    {
+      id: "residential",
+      title: "Residential Property",
+      description: "Houses, units, townhouses, and residential investments",
+      icon: Home,
+      features: ["Comparable sales", "Rental yields", "Market trends", "Condition assessment"],
+      color: "bg-gradient-to-br from-card to-success/10 border-success/20"
+    },
+    {
+      id: "agricultural",
+      title: "Agricultural Property",
+      description: "Farms, rural land, and agricultural enterprises",
+      icon: Trees,
+      features: ["Land productivity", "Water rights", "Carbon credits", "Commodity analysis"],
+      color: "bg-gradient-to-br from-card to-warning/10 border-warning/20"
+    },
+    {
+      id: "specialised",
+      title: "Specialised Property",
+      description: "Purpose-built assets with unique operational requirements",
+      icon: Factory,
+      features: ["Replacement cost", "Operational analysis", "Industry metrics", "Specialized comps"],
+      color: "bg-gradient-to-br from-card to-primary/10 border-primary/20"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Progress Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <Button 
-              variant="outline" 
-              onClick={handleBackToAddress}
-              className="text-sm"
-            >
-              ← Back to Address
-            </Button>
-            <h2 className="text-lg font-semibold">Step 2: Select Services</h2>
-            <span className="text-sm text-muted-foreground">2 of 6</span>
-          </div>
-          <Progress value={33} className="h-2 mb-2" />
-          <p className="text-sm text-muted-foreground">33% Complete</p>
-        </div>
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-between mb-4">
@@ -82,7 +57,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
             <div className="flex items-center justify-center">
               <Leaf className="h-8 w-8 text-primary mr-3" />
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Property Valuation and ESG Assessment
+                Sustaino Pro Valuation Platform
               </h1>
             </div>
             <div></div>
@@ -96,191 +71,48 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           </p>
         </div>
 
-        {/* Core Business Services - ESG */}
-        <div className="grid grid-cols-1 gap-6 mb-8">
-          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-success/10 border-success/20">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-white shadow-sm">
-                  <Leaf className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">ESG Assessment</CardTitle>
-                  <CardDescription className="text-sm">
-                    Environmental, social, and governance analysis
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-2 mb-4">
-                <h4 className="text-sm font-medium text-muted-foreground">ESG Intelligence Includes:</h4>
-                <ul className="text-sm space-y-1">
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    ESG scoring & sustainability metrics
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Carbon footprint analysis
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Climate risk assessment
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Value premium identification
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full bg-success hover:bg-success/90 text-white"
-                onClick={() => navigate('/esg-strategy')}
+        {/* Property Type Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {propertyTypes.map((type) => {
+            const IconComponent = type.icon;
+            return (
+              <Card 
+                key={type.id} 
+                className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${type.color}`}
+                onClick={() => onSelect(type.id)}
               >
-                Start ESG Assessment
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-
-        {/* Additional Services */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
-          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-secondary/10 border-secondary/20">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-white shadow-sm">
-                  <Calculator className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg">Portfolio Valuations</CardTitle>
-                  <CardDescription className="text-sm">
-                    Comprehensive portfolio assessment and valuation
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-2 mb-4">
-                <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
-                <ul className="text-sm space-y-1">
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Portfolio aggregation
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Risk assessment
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Market analysis
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Performance metrics
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full bg-success hover:bg-success/90 text-white"
-                onClick={() => navigate('/work-hub')}
-              >
-                Start Portfolio Valuation
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-success/10 border-success/20">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-white shadow-sm">
-                  <Leaf className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg">ESG Portfolio</CardTitle>
-                  <CardDescription className="text-sm">
-                    Environmental, social, and governance portfolio analysis
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-2 mb-4">
-                <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
-                <ul className="text-sm space-y-1">
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    ESG scoring
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Sustainability metrics
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Carbon footprint
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Climate risk assessment
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full bg-success hover:bg-success/90 text-white"
-                onClick={() => navigate('/esg-strategy')}
-              >
-                Start ESG Portfolio
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-card to-warning/10 border-warning/20">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-white shadow-sm">
-                  <FileText className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg">Health Check</CardTitle>
-                  <CardDescription className="text-sm">
-                    Comprehensive property health and condition assessment
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-2 mb-4">
-                <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
-                <ul className="text-sm space-y-1">
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Condition assessment
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Maintenance planning
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Risk identification
-                  </li>
-                  <li className="flex items-center text-muted-foreground">
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                    Compliance review
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full bg-success hover:bg-success/90 text-white"
-                onClick={() => navigate('/comprehensive-valuation')}
-              >
-                Start Health Check
-              </Button>
-            </CardContent>
-          </Card>
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 rounded-lg bg-white shadow-sm">
+                      <IconComponent className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg">{type.title}</CardTitle>
+                      <CardDescription className="text-sm">
+                        {type.description}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-2 mb-4">
+                    <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
+                    <ul className="text-sm space-y-1">
+                      {type.features.map((feature, index) => (
+                        <li key={index} className="flex items-center text-muted-foreground">
+                          <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button className="w-full" variant="default">
+                    Start {type.title} Valuation
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         {/* Features Banner */}

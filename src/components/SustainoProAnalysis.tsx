@@ -22,7 +22,6 @@ import {
   BarChart3,
   Zap
 } from "lucide-react";
-import SustainabilityRatingCalculator from "./SustainabilityRatingCalculator";
 
 export default function SustainoProAnalysis() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -106,7 +105,7 @@ export default function SustainoProAnalysis() {
 
           {/* ESG Analysis Tabs */}
           <Tabs defaultValue="environmental" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="environmental" className="flex items-center">
                 <Leaf className="w-4 h-4 mr-2" />
                 Environmental
@@ -118,10 +117,6 @@ export default function SustainoProAnalysis() {
               <TabsTrigger value="market" className="flex items-center">
                 <TrendingUp className="w-4 h-4 mr-2" />
                 Market Impact
-              </TabsTrigger>
-              <TabsTrigger value="ratings" className="flex items-center">
-                <Calculator className="w-4 h-4 mr-2" />
-                Rating Calculator
               </TabsTrigger>
             </TabsList>
 
@@ -336,11 +331,6 @@ export default function SustainoProAnalysis() {
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
-
-            {/* Rating Calculator Tab */}
-            <TabsContent value="ratings" className="space-y-6">
-              <SustainabilityRatingCalculator />
             </TabsContent>
           </Tabs>
         </CardContent>

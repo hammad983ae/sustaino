@@ -6,14 +6,10 @@ import SalesEvidenceResidential from "./SalesEvidenceResidential";
 import SalesEvidenceAgricultural from "./SalesEvidenceAgricultural";
 import SalesEvidenceDevelopment from "./SalesEvidenceDevelopment";
 import SalesEvidenceSpecialised from "./SalesEvidenceSpecialised";
-import SalesEvidenceMildura from "./SalesEvidenceMildura";
 
 export default function SalesEvidence() {
   return (
     <div className="space-y-6">
-      {/* Mildura Specific Sales Evidence - Pre-populated */}
-      <SalesEvidenceMildura />
-      
       <Tabs defaultValue="residential" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="commercial">Commercial</TabsTrigger>
