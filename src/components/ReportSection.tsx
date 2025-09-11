@@ -29,7 +29,7 @@ import SustainoProAnalysis from "./SustainoProAnalysis";
 import ValuationCertificate from "./ValuationCertificate";
 import TermsAndConditions from "./TermsAndConditions";
 import SecurityAndCertificates from "./SecurityAndCertificates";
-import RetrospectiveValuations from "./RetrospectiveValuations";
+
 
 interface ReportSectionProps {
   title: string;
@@ -64,21 +64,6 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
         </CardHeader>
         <CardContent>
           <RPDAndLocation />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Special handling for Retrospective Valuations section
-  if (sectionIndex === 2) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
-        </CardHeader>
-        <CardContent>
-          <RetrospectiveValuations />
         </CardContent>
       </Card>
     );
