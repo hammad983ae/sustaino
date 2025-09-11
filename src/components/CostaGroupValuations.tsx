@@ -3,9 +3,35 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
-import { MapPin, Leaf, TrendingUp, Calculator, FileText } from 'lucide-react';
+import { MapPin, Leaf, TrendingUp, Calculator, FileText, Droplets, CloudRain, Calendar, BarChart3 } from 'lucide-react';
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
+
+interface WaterRights {
+  allocation: number; // ML per year
+  securityLevel: 'high' | 'medium' | 'low';
+  tradableValue: number; // $/ML
+  annualUsage: number; // ML
+  carryoverCapacity: number; // ML
+}
+
+interface CropForecast {
+  currentSeason: {
+    expectedYield: number;
+    qualityGrade: 'premium' | 'standard' | 'processing';
+    harvestWindow: { start: string; end: string };
+    marketPrice: number; // $/tonne
+  };
+  nextSeason: {
+    plantedArea: number;
+    expectedYield: number;
+    projectedRevenue: number;
+  };
+  risks: string[];
+  opportunities: string[];
+}
 
 interface CostaProperty {
   id: string;
@@ -16,9 +42,12 @@ interface CostaProperty {
   landArea: number;
   operationalStatus: 'owned' | 'leased' | 'joint-venture';
   annualProduction: string;
+  waterRights?: WaterRights;
+  cropForecast?: CropForecast;
   marketValue?: number;
   rentalValue?: number;
   leaseholdValue?: number;
+  waterValue?: number;
   coordinates?: { lat: number; lng: number };
 }
 
@@ -33,7 +62,29 @@ const costaProperties: CostaProperty[] = [
     landArea: 15.5,
     operationalStatus: 'owned',
     annualProduction: '2.8M kg mushrooms',
-    coordinates: { lat: -37.7136, lng: 145.0549 }
+    coordinates: { lat: -37.7136, lng: 145.0549 },
+    waterRights: {
+      allocation: 45,
+      securityLevel: 'high',
+      tradableValue: 2800,
+      annualUsage: 42,
+      carryoverCapacity: 15
+    },
+    cropForecast: {
+      currentSeason: {
+        expectedYield: 2850000,
+        qualityGrade: 'premium',
+        harvestWindow: { start: '2024-01-01', end: '2024-12-31' },
+        marketPrice: 8.50
+      },
+      nextSeason: {
+        plantedArea: 15.5,
+        expectedYield: 2950000,
+        projectedRevenue: 25075000
+      },
+      risks: ['Supply chain disruption', 'Labor shortage'],
+      opportunities: ['Premium market expansion', 'Organic certification']
+    }
   },
   {
     id: 'costa-mushroom-somerville',
@@ -44,7 +95,29 @@ const costaProperties: CostaProperty[] = [
     landArea: 28.3,
     operationalStatus: 'owned',
     annualProduction: '4.2M kg mushrooms',
-    coordinates: { lat: -38.2167, lng: 145.1833 }
+    coordinates: { lat: -38.2167, lng: 145.1833 },
+    waterRights: {
+      allocation: 68,
+      securityLevel: 'high',
+      tradableValue: 2750,
+      annualUsage: 65,
+      carryoverCapacity: 20
+    },
+    cropForecast: {
+      currentSeason: {
+        expectedYield: 4350000,
+        qualityGrade: 'premium',
+        harvestWindow: { start: '2024-01-01', end: '2024-12-31' },
+        marketPrice: 8.20
+      },
+      nextSeason: {
+        plantedArea: 28.3,
+        expectedYield: 4500000,
+        projectedRevenue: 36900000
+      },
+      risks: ['Energy cost increases', 'Substrate supply'],
+      opportunities: ['Export market growth', 'Value-added products']
+    }
   },
   {
     id: 'costa-citrus-robinvale',
@@ -55,7 +128,29 @@ const costaProperties: CostaProperty[] = [
     landArea: 420.8,
     operationalStatus: 'owned',
     annualProduction: '12,500 tonnes citrus',
-    coordinates: { lat: -34.5833, lng: 142.7833 }
+    coordinates: { lat: -34.5833, lng: 142.7833 },
+    waterRights: {
+      allocation: 2850,
+      securityLevel: 'medium',
+      tradableValue: 1950,
+      annualUsage: 2750,
+      carryoverCapacity: 570
+    },
+    cropForecast: {
+      currentSeason: {
+        expectedYield: 12800,
+        qualityGrade: 'premium',
+        harvestWindow: { start: '2024-05-01', end: '2024-09-30' },
+        marketPrice: 2850
+      },
+      nextSeason: {
+        plantedArea: 420.8,
+        expectedYield: 13200,
+        projectedRevenue: 37620000
+      },
+      risks: ['Climate variability', 'Water allocation cuts'],
+      opportunities: ['Premium export markets', 'Juice processing expansion']
+    }
   },
   {
     id: 'costa-grape-mildura',
@@ -66,7 +161,29 @@ const costaProperties: CostaProperty[] = [
     landArea: 185.2,
     operationalStatus: 'leased',
     annualProduction: '3,200 tonnes grapes',
-    coordinates: { lat: -34.2017, lng: 142.1478 }
+    coordinates: { lat: -34.2017, lng: 142.1478 },
+    waterRights: {
+      allocation: 1250,
+      securityLevel: 'medium',
+      tradableValue: 2100,
+      annualUsage: 1180,
+      carryoverCapacity: 250
+    },
+    cropForecast: {
+      currentSeason: {
+        expectedYield: 3350,
+        qualityGrade: 'premium',
+        harvestWindow: { start: '2024-01-15', end: '2024-03-31' },
+        marketPrice: 4200
+      },
+      nextSeason: {
+        plantedArea: 185.2,
+        expectedYield: 3450,
+        projectedRevenue: 14490000
+      },
+      risks: ['Hail damage', 'Labor costs'],
+      opportunities: ['Asian export growth', 'Premium varietals']
+    }
   },
 
   // South Australian Properties
@@ -210,7 +327,7 @@ const costaProperties: CostaProperty[] = [
   }
 ];
 
-// Valuation calculations based on property type and Australian agricultural benchmarks
+// Enhanced valuation calculations including water rights
 const calculatePropertyValuation = (property: CostaProperty) => {
   const baseRates = {
     mushroom: { landRate: 180000, buildingRate: 3200, rentYield: 6.5 },
@@ -226,10 +343,14 @@ const calculatePropertyValuation = (property: CostaProperty) => {
   const marketValue = (property.landArea * rates.landRate) + (property.landArea * rates.buildingRate);
   const rentalValue = marketValue * (rates.rentYield / 100);
   
+  // Water rights valuation
+  const waterValue = property.waterRights ? 
+    property.waterRights.allocation * property.waterRights.tradableValue : 0;
+  
   // Leasehold value calculation (60-75% of freehold depending on lease terms)
   const leaseholdValue = property.operationalStatus === 'leased' ? marketValue * 0.68 : 0;
 
-  return { marketValue, rentalValue, leaseholdValue };
+  return { marketValue, rentalValue, leaseholdValue, waterValue };
 };
 
 export default function CostaGroupValuations() {
@@ -313,6 +434,25 @@ export default function CostaGroupValuations() {
   const totalPortfolioValue = Object.values(valuationsData).reduce((sum, val) => sum + val.marketValue, 0);
   const totalRentalValue = Object.values(valuationsData).reduce((sum, val) => sum + val.rentalValue, 0);
   const totalLeaseholdValue = Object.values(valuationsData).reduce((sum, val) => sum + val.leaseholdValue, 0);
+  const totalWaterValue = Object.values(valuationsData).reduce((sum, val) => sum + val.waterValue, 0);
+
+  // Generate forecast data for charts
+  const forecastData = [
+    { month: 'Jan 2024', production: 95, revenue: 8.2, waterUsage: 85 },
+    { month: 'Feb 2024', production: 98, revenue: 8.5, waterUsage: 88 },
+    { month: 'Mar 2024', production: 102, revenue: 8.8, waterUsage: 92 },
+    { month: 'Apr 2024', production: 105, revenue: 9.1, waterUsage: 95 },
+    { month: 'May 2024', production: 108, revenue: 9.4, waterUsage: 98 },
+    { month: 'Jun 2024', production: 112, revenue: 9.8, waterUsage: 102 }
+  ];
+
+  const cropYieldData = [
+    { crop: 'Citrus', current: 12500, forecast: 13200, variance: 5.6 },
+    { crop: 'Berries', current: 8150, forecast: 8650, variance: 6.1 },
+    { crop: 'Mushrooms', current: 7200, forecast: 7450, variance: 3.5 },
+    { crop: 'Avocados', current: 4730, forecast: 4950, variance: 4.6 },
+    { crop: 'Grapes', current: 3200, forecast: 3450, variance: 7.8 }
+  ];
 
   const propertyTypeColors = {
     mushroom: 'bg-amber-100 text-amber-800',
@@ -335,7 +475,7 @@ export default function CostaGroupValuations() {
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold text-primary">Costa Group Holdings Limited</h1>
         <p className="text-xl text-muted-foreground">Comprehensive Property Portfolio Valuation Analysis</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
           <Card>
             <CardContent className="p-4 text-center">
               <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
@@ -356,6 +496,15 @@ export default function CostaGroupValuations() {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
+              <Droplets className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+              <div className="text-2xl font-bold text-blue-600">
+                ${(totalWaterValue / 1000000).toFixed(1)}M
+              </div>
+              <div className="text-sm text-muted-foreground">Water Rights Value</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
               <Leaf className="h-8 w-8 mx-auto mb-2 text-orange-600" />
               <div className="text-2xl font-bold text-orange-600">
                 ${(totalLeaseholdValue / 1000000).toFixed(1)}M
@@ -367,8 +516,10 @@ export default function CostaGroupValuations() {
       </div>
 
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="forecasting">Crop Forecasting</TabsTrigger>
+          <TabsTrigger value="water">Water Analysis</TabsTrigger>
           <TabsTrigger value="VIC">Victoria</TabsTrigger>
           <TabsTrigger value="SA">South Australia</TabsTrigger>
           <TabsTrigger value="WA">Western Australia</TabsTrigger>
@@ -405,6 +556,11 @@ export default function CostaGroupValuations() {
                       <div className="col-span-2">
                         <span className="font-semibold">Production:</span> {property.annualProduction}
                       </div>
+                      {property.waterRights && (
+                        <div className="col-span-2">
+                          <span className="font-semibold">Water Allocation:</span> {property.waterRights.allocation} ML
+                        </div>
+                      )}
                     </div>
                     
                     {valuation && (
@@ -421,6 +577,14 @@ export default function CostaGroupValuations() {
                             ${(valuation.rentalValue / 1000).toFixed(0)}K
                           </span>
                         </div>
+                        {valuation.waterValue > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-sm font-medium">Water Rights:</span>
+                            <span className="text-sm font-bold text-blue-600">
+                              ${(valuation.waterValue / 1000000).toFixed(2)}M
+                            </span>
+                          </div>
+                        )}
                         {valuation.leaseholdValue > 0 && (
                           <div className="flex justify-between">
                             <span className="text-sm font-medium">Leasehold Value:</span>
@@ -444,6 +608,252 @@ export default function CostaGroupValuations() {
                 </Card>
               );
             })}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="forecasting" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Crop Yield Forecasting
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={cropYieldData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="crop" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="current" fill="#8884d8" name="Current (tonnes)" />
+                    <Bar dataKey="forecast" fill="#82ca9d" name="Forecast (tonnes)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Production & Revenue Trends
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={forecastData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="production" stroke="#8884d8" name="Production %" />
+                    <Line type="monotone" dataKey="revenue" stroke="#82ca9d" name="Revenue ($M)" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {costaProperties.filter(p => p.cropForecast).slice(0, 3).map((property) => (
+              <Card key={property.id}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">{property.name}</CardTitle>
+                  <Badge className={propertyTypeColors[property.propertyType]}>
+                    {property.propertyType}
+                  </Badge>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {property.cropForecast && (
+                    <>
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-sm">Current Season</h4>
+                        <div className="text-xs space-y-1">
+                          <div className="flex justify-between">
+                            <span>Expected Yield:</span>
+                            <span>{(property.cropForecast.currentSeason.expectedYield / 1000).toFixed(0)}K units</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Quality Grade:</span>
+                            <Badge variant="secondary">{property.cropForecast.currentSeason.qualityGrade}</Badge>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Market Price:</span>
+                            <span>${property.cropForecast.currentSeason.marketPrice}/tonne</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-sm">Next Season Forecast</h4>
+                        <div className="text-xs space-y-1">
+                          <div className="flex justify-between">
+                            <span>Projected Revenue:</span>
+                            <span className="font-bold text-green-600">
+                              ${(property.cropForecast.nextSeason.projectedRevenue / 1000000).toFixed(1)}M
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Yield Growth:</span>
+                            <span className="text-blue-600">
+                              +{(((property.cropForecast.nextSeason.expectedYield - property.cropForecast.currentSeason.expectedYield) / property.cropForecast.currentSeason.expectedYield) * 100).toFixed(1)}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-2">
+                        <h5 className="font-semibold text-xs mb-2">Key Risks:</h5>
+                        <div className="space-y-1">
+                          {property.cropForecast.risks.map((risk, idx) => (
+                            <Badge key={idx} variant="destructive" className="text-xs mr-1 mb-1">
+                              {risk}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="pt-2">
+                        <h5 className="font-semibold text-xs mb-2">Opportunities:</h5>
+                        <div className="space-y-1">
+                          {property.cropForecast.opportunities.map((opp, idx) => (
+                            <Badge key={idx} className="bg-green-100 text-green-800 text-xs mr-1 mb-1">
+                              {opp}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="water" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Droplets className="h-5 w-5" />
+                  Water Usage vs Allocation
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={forecastData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="waterUsage" stroke="#2563eb" fill="#3b82f6" fillOpacity={0.6} name="Water Usage %" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Water Rights Portfolio Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-center p-6 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">
+                      ${(totalWaterValue / 1000000).toFixed(1)}M
+                    </div>
+                    <div className="text-sm text-muted-foreground">Total Water Rights Value</div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center p-3 border rounded-lg">
+                      <span>High Security Water</span>
+                      <Badge className="bg-blue-600 text-white">
+                        {costaProperties.filter(p => p.waterRights?.securityLevel === 'high').reduce((sum, p) => sum + (p.waterRights?.allocation || 0), 0)} ML
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center p-3 border rounded-lg">
+                      <span>Medium Security Water</span>
+                      <Badge className="bg-orange-600 text-white">
+                        {costaProperties.filter(p => p.waterRights?.securityLevel === 'medium').reduce((sum, p) => sum + (p.waterRights?.allocation || 0), 0)} ML
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center p-3 border rounded-lg">
+                      <span>Average Trading Price</span>
+                      <Badge variant="secondary">
+                        ${Math.round(costaProperties.filter(p => p.waterRights).reduce((sum, p, _, arr) => sum + (p.waterRights?.tradableValue || 0), 0) / costaProperties.filter(p => p.waterRights).length)}/ML
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {costaProperties.filter(p => p.waterRights).map((property) => (
+              <Card key={property.id}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center justify-between">
+                    {property.name}
+                    <Badge 
+                      className={
+                        property.waterRights?.securityLevel === 'high' ? 'bg-blue-100 text-blue-800' :
+                        property.waterRights?.securityLevel === 'medium' ? 'bg-orange-100 text-orange-800' :
+                        'bg-red-100 text-red-800'
+                      }
+                    >
+                      {property.waterRights?.securityLevel} security
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <span className="font-semibold">Allocation:</span><br />
+                      {property.waterRights?.allocation} ML/year
+                    </div>
+                    <div>
+                      <span className="font-semibold">Usage:</span><br />
+                      {property.waterRights?.annualUsage} ML/year
+                    </div>
+                    <div>
+                      <span className="font-semibold">Trading Value:</span><br />
+                      ${property.waterRights?.tradableValue}/ML
+                    </div>
+                    <div>
+                      <span className="font-semibold">Carryover:</span><br />
+                      {property.waterRights?.carryoverCapacity} ML
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium">Utilization Rate</span>
+                      <span className="text-sm">
+                        {property.waterRights ? Math.round((property.waterRights.annualUsage / property.waterRights.allocation) * 100) : 0}%
+                      </span>
+                    </div>
+                    <Progress 
+                      value={property.waterRights ? (property.waterRights.annualUsage / property.waterRights.allocation) * 100 : 0}
+                      className="h-2"
+                    />
+                  </div>
+
+                  <div className="border-t pt-3">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Water Rights Value:</span>
+                      <span className="font-bold text-blue-600">
+                        ${property.waterRights ? ((property.waterRights.allocation * property.waterRights.tradableValue) / 1000000).toFixed(2) : 0}M
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </TabsContent>
 
