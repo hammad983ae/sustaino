@@ -13,7 +13,11 @@ import {
   ArrowRight,
   Shield,
   User,
-  LogOut
+  LogOut,
+  Upload,
+  FileText,
+  Download,
+  Eye
 } from 'lucide-react';
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
@@ -294,6 +298,115 @@ const Index = () => {
                   >
                     Start ESG Portfolio Analysis
                   </Button>
+                </CardContent>
+              </Card>
+
+              {/* Document Upload & Analysis */}
+              <Card className="border border-primary/30 bg-primary/5">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <Upload className="h-6 w-6 text-primary" />
+                    <div>
+                      <CardTitle className="text-xl font-semibold">Document Upload & Analysis</CardTitle>
+                      <p className="text-sm text-muted-foreground">Upload and analyze property documents with AI</p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="font-medium mb-2">Supported File Types:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        PDFs, Images, Spreadsheets
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        Max file size: 10MB
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        AI-powered document analysis
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        Automated data extraction
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2">
+                    <input
+                      type="file"
+                      multiple
+                      accept=".pdf,.png,.jpg,.jpeg,.xlsx,.xls,.csv"
+                      className="hidden"
+                      id="file-upload"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          // Handle file upload
+                          console.log('Files selected:', Array.from(e.target.files));
+                        }
+                      }}
+                    />
+                    <label htmlFor="file-upload" className="cursor-pointer">
+                      <Button 
+                        className="w-full bg-primary hover:bg-primary/90 text-white"
+                        type="button"
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Files
+                      </Button>
+                    </label>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card className="border border-border bg-card">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <FileText className="h-6 w-6 text-success" />
+                    <div>
+                      <CardTitle className="text-xl font-semibold">Quick Actions</CardTitle>
+                      <p className="text-sm text-muted-foreground">Fast access to common functions</p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Button 
+                      variant="outline" 
+                      className="justify-start"
+                      onClick={() => navigate('/report?preview=true')}
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      Preview Sample Report
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="justify-start"
+                      onClick={() => navigate('/work-hub')}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Templates
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="justify-start"
+                      onClick={() => navigate('/dashboard')}
+                    >
+                      <BarChart3 className="h-4 w-4 mr-2" />
+                      View Analytics
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="justify-start"
+                      onClick={() => navigate('/auth')}
+                    >
+                      <User className="h-4 w-4 mr-2" />
+                      Account Settings
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
 
