@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -141,37 +141,5 @@ export function renderWithProviders(
   });
 }
 
-// Common test scenarios
-export const testAccessibility = (component: React.ReactElement) => {
-  it('should be accessible', async () => {
-    renderWithProviders(component);
-    // Basic accessibility checks
-    expect(screen.getByRole('main') || screen.getByRole('document')).toBeInTheDocument();
-  });
-};
-
-export const testLoadingState = (component: React.ReactElement) => {
-  it('should handle loading state', async () => {
-    renderWithProviders(component);
-    // Test loading indicators
-    const loadingElement = screen.queryByText(/loading/i) || screen.queryByRole('progressbar');
-    if (loadingElement) {
-      expect(loadingElement).toBeInTheDocument();
-    }
-  });
-};
-
-export const testErrorState = (component: React.ReactElement) => {
-  it('should handle error state', async () => {
-    // Mock error state
-    vi.spyOn(console, 'error').mockImplementation(() => {});
-    
-    renderWithProviders(component);
-    
-    // Test error handling
-    const errorElement = screen.queryByText(/error/i) || screen.queryByText(/something went wrong/i);
-    if (errorElement) {
-      expect(errorElement).toBeInTheDocument();
-    }
-  });
-};
+// Export commonly used testing utilities
+export { userEvent, vi, describe, it, expect, beforeEach };

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi, beforeAll, afterAll } from 'vitest';
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -31,7 +31,6 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
 }));
 
 // Suppress console warnings in tests
-import { vi, beforeAll, afterAll } from 'vitest';
 
 const originalError = console.error;
 beforeAll(() => {

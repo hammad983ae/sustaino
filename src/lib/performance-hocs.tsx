@@ -1,8 +1,8 @@
-import React, { memo, lazy, Suspense, ErrorBoundary } from 'react';
+import React, { memo, lazy, Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
-import type { BaseComponentProps } from '@/types';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Loading Component
 const LoadingFallback: React.FC<{ height?: string; count?: number }> = ({ 
@@ -39,7 +39,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError }) => (
 );
 
 // Lazy Loading HOC
-export function withLazyLoading<T extends BaseComponentProps>(
+export function withLazyLoading<T = {}>(
   importFunc: () => Promise<{ default: React.ComponentType<T> }>,
   fallback?: React.ReactNode
 ) {
@@ -47,19 +47,19 @@ export function withLazyLoading<T extends BaseComponentProps>(
   
   return memo((props: T) => (
     <Suspense fallback={fallback || <LoadingFallback />}>
-      <LazyComponent {...props} />
+      <LazyComponent {...(props as any)} />
     </Suspense>
   ));
 }
 
 // Error Boundary HOC
-export function withErrorBoundary<T extends BaseComponentProps>(
+export function withErrorBoundary<T extends Record<string, any> = {}>(
   Component: React.ComponentType<T>,
   fallback?: React.ComponentType<ErrorFallbackProps>
 ) {
   return memo((props: T) => (
     <ErrorBoundary
-      fallback={fallback || ErrorFallback}
+      fallback={fallback ? (error, errorInfo, retry) => React.createElement(fallback, { error, resetError: retry }) : undefined}
       onError={(error, errorInfo) => {
         console.error('Component Error:', error, errorInfo);
         // Here you could also send to error reporting service
@@ -71,7 +71,7 @@ export function withErrorBoundary<T extends BaseComponentProps>(
 }
 
 // Performance HOC with memoization
-export function withMemoization<T extends BaseComponentProps>(
+export function withMemoization<T extends Record<string, any> = {}>(
   Component: React.ComponentType<T>,
   propsAreEqual?: (prevProps: T, nextProps: T) => boolean
 ) {
@@ -79,7 +79,7 @@ export function withMemoization<T extends BaseComponentProps>(
 }
 
 // Combined Performance HOC
-export function withPerformanceOptimizations<T extends BaseComponentProps>(
+export function withPerformanceOptimizations<T = {}>(
   importFunc: () => Promise<{ default: React.ComponentType<T> }>,
   options?: {
     fallback?: React.ReactNode;
@@ -91,18 +91,19 @@ export function withPerformanceOptimizations<T extends BaseComponentProps>(
   
   const OptimizedComponent = memo((props: T) => (
     <ErrorBoundary
-      fallback={options?.errorFallback || ErrorFallback}
+      fallback={options?.errorFallback ? (error, errorInfo, retry) => 
+        React.createElement(options.errorFallback, { error, resetError: retry }) : undefined}
       onError={(error, errorInfo) => {
         console.error('Component Error:', error, errorInfo);
       }}
     >
       <Suspense fallback={options?.fallback || <LoadingFallback />}>
-        <LazyComponent {...props} />
+        <LazyComponent {...(props as any)} />
       </Suspense>
     </ErrorBoundary>
   ), options?.propsAreEqual);
 
-  OptimizedComponent.displayName = `OptimizedComponent(${LazyComponent.displayName || 'Component'})`;
+  OptimizedComponent.displayName = `OptimizedComponent(Component)`;
   
   return OptimizedComponent;
 }
