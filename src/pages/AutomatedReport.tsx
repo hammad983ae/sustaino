@@ -25,29 +25,32 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
   const sections = getPropertyTypeReportSections(propertyType);
 
   useEffect(() => {
-    // Simulate automated analysis process
-    const startAutomatedAnalysis = async () => {
-      for (let i = 0; i < sections.length; i++) {
-        if (sections[i].automated) {
-          // Start processing this section
-          setProcessingSections(prev => new Set([...prev, i]));
-          
-          // Simulate processing time (2-4 seconds per section)
-          await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 2000));
-          
-          // Mark as completed
-          setProcessingSections(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(i);
-            return newSet;
-          });
-          setCompletedSections(prev => new Set([...prev, i]));
+    // Prevent infinite loop by only running once
+    if (completedSections.size === 0 && processingSections.size === 0) {
+      // Simulate automated analysis process
+      const startAutomatedAnalysis = async () => {
+        for (let i = 0; i < sections.length; i++) {
+          if (sections[i].automated) {
+            // Start processing this section
+            setProcessingSections(prev => new Set([...prev, i]));
+            
+            // Simulate processing time (2-4 seconds per section)
+            await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 2000));
+            
+            // Mark as completed
+            setProcessingSections(prev => {
+              const newSet = new Set(prev);
+              newSet.delete(i);
+              return newSet;
+            });
+            setCompletedSections(prev => new Set([...prev, i]));
+          }
         }
-      }
-    };
+      };
 
-    startAutomatedAnalysis();
-  }, [sections]);
+      startAutomatedAnalysis();
+    }
+  }, [propertyType]); // Only depend on propertyType, not sections
 
   const navigateToSection = (sectionIndex: number) => {
     setCurrentStep(sectionIndex);
