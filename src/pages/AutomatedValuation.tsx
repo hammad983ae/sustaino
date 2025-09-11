@@ -13,7 +13,7 @@ import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
 import BrandedHeader from "@/components/BrandedHeader";
-import DashboardCompletedWork from "@/components/DashboardCompletedWork";
+
 import AIAssistantToggle from "@/components/AIAssistantToggle";
 
 export default function AutomatedValuation() {
@@ -82,7 +82,6 @@ export default function AutomatedValuation() {
         {/* Secondary Features - Moved to bottom */}
         <div className="container mx-auto px-4 pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            <DashboardCompletedWork />
             <CostaGroupPortfolio />
           </div>
           
