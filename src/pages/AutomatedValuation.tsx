@@ -37,15 +37,41 @@ export default function AutomatedValuation() {
     }
   };
 
-  // Show IP protection on main screen
+  // Show property valuation as primary feature
   if (currentStep === "propertyType") {
     return (
-      <div className="space-y-8">
-        <DashboardCompletedWork />
-        <CostaGroupPortfolio />
-        <ComprehensiveIPProtection />
-        <SecurityCertificatesGrid />
-        <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
+      <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-secondary/10">
+        <BrandedHeader />
+        
+        {/* Hero Section - Property Valuation */}
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
+              Professional Property Valuations
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Get accurate, AI-powered property valuations with comprehensive reports in minutes
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
+          </div>
+        </div>
+
+        {/* Secondary Features - Moved to bottom */}
+        <div className="container mx-auto px-4 pb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <DashboardCompletedWork />
+            <CostaGroupPortfolio />
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <ComprehensiveIPProtection />
+            <SecurityCertificatesGrid />
+          </div>
+        </div>
+        
         <AIAssistantToggle context="Property Type Selection" />
       </div>
     );
