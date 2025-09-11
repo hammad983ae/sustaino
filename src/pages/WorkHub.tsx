@@ -1,113 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { 
   Briefcase, 
-  Calendar, 
   MapPin, 
-  Clock, 
   FileText, 
   Plus,
   Search,
-  Filter,
   MoreHorizontal,
   Play,
-  Pause,
   CheckCircle,
-  AlertCircle,
   DollarSign,
   User,
-  Building,
   ArrowRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useJobs } from '@/hooks/useJobs';
+import { getStatusColor, getPriorityColor, getStatusDisplayName, getPriorityDisplayName } from '@/lib/status-helpers';
+import { formatDate, formatWorkHours } from '@/lib/formatting';
+import type { JobStatus } from '@/types';
 
 const WorkHub = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState<JobStatus | 'all'>('all');
 
-  // Mock data for demonstration
-  const jobs = [
-    {
-      id: 'VAL-2025-0001',
-      propertyAddress: '320 Deakin Avenue, Mildura VIC 3500',
-      clientName: 'ABC Property Group',
-      clientEmail: 'contact@abcproperty.com.au',
-      jobType: 'Commercial Valuation',
-      status: 'in-progress',
-      priority: 'high',
-      dueDate: '2025-01-15',
-      progress: 65,
-      estimatedHours: 8,
-      actualHours: 5.2,
-      feeQuoted: 2500,
-      lastUpdated: '2025-01-10'
-    },
-    {
-      id: 'VAL-2025-0002',
-      propertyAddress: '45 Main Street, Melbourne VIC 3000',
-      clientName: 'XYZ Development',
-      clientEmail: 'info@xyzdev.com.au',
-      jobType: 'Residential Portfolio',
-      status: 'pending',
-      priority: 'medium',
-      dueDate: '2025-01-20',
-      progress: 0,
-      estimatedHours: 12,
-      actualHours: 0,
-      feeQuoted: 4200,
-      lastUpdated: '2025-01-08'
-    },
-    {
-      id: 'VAL-2025-0003',
-      propertyAddress: '120 Collins Street, Melbourne VIC 3000',
-      clientName: 'Premium Investments',
-      clientEmail: 'team@premiuminvest.com.au',
-      jobType: 'ESG Assessment',
-      status: 'completed',
-      priority: 'low',
-      dueDate: '2025-01-05',
-      progress: 100,
-      estimatedHours: 6,
-      actualHours: 5.8,
-      feeQuoted: 1800,
-      lastUpdated: '2025-01-05'
-    }
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'in-progress': return 'bg-blue-100 text-blue-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'overdue': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const filteredJobs = jobs.filter(job => {
-    const matchesSearch = job.propertyAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || job.status === filterStatus;
-    return matchesSearch && matchesFilter;
+  // Use custom hook for data fetching
+  const { jobs, loading, error, stats } = useJobs({
+    searchTerm,
+    statusFilter: filterStatus
   });
-
-  const totalValue = jobs.reduce((sum, job) => sum + job.feeQuoted, 0);
-  const completedJobs = jobs.filter(job => job.status === 'completed').length;
-  const activeJobs = jobs.filter(job => job.status === 'in-progress').length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
@@ -145,7 +68,7 @@ const WorkHub = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Total Jobs</p>
-                    <p className="text-2xl font-bold">{jobs.length}</p>
+                    <p className="text-2xl font-bold">{stats.total}</p>
                   </div>
                   <Briefcase className="h-8 w-8 text-muted-foreground" />
                 </div>
@@ -156,9 +79,9 @@ const WorkHub = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Active Jobs</p>
-                    <p className="text-2xl font-bold text-blue-600">{activeJobs}</p>
+                    <p className="text-2xl font-bold text-primary">{stats.active}</p>
                   </div>
-                  <Play className="h-8 w-8 text-blue-600" />
+                  <Play className="h-8 w-8 text-primary" />
                 </div>
               </CardContent>
             </Card>
@@ -167,9 +90,9 @@ const WorkHub = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                    <p className="text-2xl font-bold text-green-600">{completedJobs}</p>
+                    <p className="text-2xl font-bold text-success">{stats.completed}</p>
                   </div>
-                  <CheckCircle className="h-8 w-8 text-green-600" />
+                  <CheckCircle className="h-8 w-8 text-success" />
                 </div>
               </CardContent>
             </Card>
@@ -178,7 +101,7 @@ const WorkHub = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Total Value</p>
-                    <p className="text-2xl font-bold text-primary">${totalValue.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-primary">${stats.totalValue.toLocaleString()}</p>
                   </div>
                   <DollarSign className="h-8 w-8 text-primary" />
                 </div>
@@ -202,7 +125,7 @@ const WorkHub = () => {
                 <div className="flex gap-2">
                   <select
                     value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
+                    onChange={(e) => setFilterStatus(e.target.value as JobStatus | 'all')}
                     className="border border-input bg-background px-3 py-2 text-sm rounded-md"
                   >
                     <option value="all">All Status</option>
@@ -216,8 +139,24 @@ const WorkHub = () => {
           </Card>
 
           {/* Jobs List */}
+          {loading && (
+            <Card>
+              <CardContent className="pt-12 pb-12 text-center">
+                <div className="text-muted-foreground">Loading jobs...</div>
+              </CardContent>
+            </Card>
+          )}
+          
+          {error && (
+            <Card>
+              <CardContent className="pt-12 pb-12 text-center">
+                <div className="text-destructive">Error: {error}</div>
+              </CardContent>
+            </Card>
+          )}
+          
           <div className="space-y-4">
-            {filteredJobs.map((job) => (
+            {jobs.map((job) => (
               <Card key={job.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="pt-6">
                   <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
@@ -237,10 +176,10 @@ const WorkHub = () => {
                         </div>
                         <div className="flex gap-2">
                           <Badge className={getPriorityColor(job.priority)}>
-                            {job.priority}
+                            {getPriorityDisplayName(job.priority)}
                           </Badge>
                           <Badge className={getStatusColor(job.status)}>
-                            {job.status.replace('-', ' ')}
+                            {getStatusDisplayName(job.status)}
                           </Badge>
                         </div>
                       </div>
@@ -259,8 +198,8 @@ const WorkHub = () => {
                         />
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        <p>Due: {new Date(job.dueDate).toLocaleDateString()}</p>
-                        <p>Hours: {job.actualHours}/{job.estimatedHours}</p>
+                        <p>Due: {formatDate(job.dueDate)}</p>
+                        <p>Hours: {formatWorkHours(job.actualHours)}/{formatWorkHours(job.estimatedHours)}</p>
                         <p>Fee: ${job.feeQuoted.toLocaleString()}</p>
                       </div>
                     </div>
@@ -300,7 +239,7 @@ const WorkHub = () => {
             ))}
           </div>
 
-          {filteredJobs.length === 0 && (
+          {!loading && !error && jobs.length === 0 && (
             <Card>
               <CardContent className="pt-12 pb-12 text-center">
                 <Briefcase className="h-12 w-12 text-muted-foreground mx-auto mb-4" />

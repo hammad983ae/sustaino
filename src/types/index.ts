@@ -179,8 +179,26 @@ export type ReportType = 'short-form' | 'long-form' | 'statutory' | 'insurance' 
 export type ReportStatus = 'draft' | 'in_progress' | 'completed' | 'reviewed' | 'archived';
 export type ValuationType = 'market' | 'rental' | 'insurance' | 'mortgage' | 'statutory';
 export type ValuationStatus = 'draft' | 'in_progress' | 'completed' | 'reviewed';
-export type JobStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'on_hold';
+export type JobStatus = 'pending' | 'in-progress' | 'completed' | 'cancelled' | 'on-hold' | 'overdue';
 export type Priority = 'low' | 'medium' | 'high' | 'urgent';
+export type JobPriority = 'low' | 'medium' | 'high';
+
+// Job interface for Work Hub
+export interface Job {
+  id: string;
+  propertyAddress: string;
+  clientName: string;
+  clientEmail: string;
+  jobType: string;
+  status: JobStatus;
+  priority: JobPriority;
+  dueDate: string;
+  progress: number;
+  estimatedHours: number;
+  actualHours: number;
+  feeQuoted: number;
+  lastUpdated: string;
+}
 export type RentalPeriod = 'weekly' | 'monthly' | 'annually';
 export type ESGComplianceStatus = 'pending' | 'compliant' | 'non_compliant' | 'needs_review';
 
