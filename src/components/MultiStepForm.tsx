@@ -7,7 +7,7 @@ import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysisEnhanced from "@/components/PropertySearchAnalysisEnhanced";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
-import AIReportPresentation from "@/components/AIReportPresentation";
+// Removed useReportJobSaver import
 // Removed useReportJobSaver import
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -102,10 +102,10 @@ const MultiStepForm = ({ onSubmit, onContinueToReport }: MultiStepFormProps = {}
             reportConfiguration: config 
           }))}
         />
-        <AIReportPresentation 
-          propertyData={reportData}
-          onComplete={() => onContinueToReport?.()}
-          onSkip={() => onContinueToReport?.()}
+        <PropertySearchAnalysisEnhanced 
+          address={reportData.propertyAddress}
+          onAddressChange={(address) => setReportData(prev => ({ ...prev, propertyAddress: address }))}
+          onAnalysisComplete={setEnhancedAnalysisData}
         />
       </div>
     },
