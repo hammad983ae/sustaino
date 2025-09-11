@@ -199,9 +199,9 @@ Land productivity analysis, water rights evaluation, and carbon farming potentia
               </Button>
             </div>
             <Textarea 
-              value={generateIntroductionContent() || "We have been instructed to undertake a comprehensive property valuation of the subject property located at 320 Deakin Avenue, Mildura VIC 3500. This assessment has been conducted in accordance with Australian Property Institute (API) professional standards and the International Valuation Standards Council (IVSC) guidelines."}
+              value={generateIntroductionContent() || "We have been instructed to undertake a comprehensive property valuation of the subject property located at 320 Deakin Avenue, Mildura VIC 3500. This assessment has been conducted in accordance with Australian Property Institute (API) professional standards, International Valuation Standards Council (IVSC) guidelines, and RICS Red Book valuation standards.\n\nThe purpose of this valuation is to provide an accurate assessment of market value as at the date of inspection for lending security, acquisition, or investment analysis purposes. Our methodology incorporates comprehensive market analysis, direct comparison with recent sales evidence, income capitalization approach where applicable, and replacement cost assessment.\n\nThis report provides detailed analysis of the property's physical characteristics, location advantages, market positioning, and investment fundamentals to support the valuation conclusion. All assumptions, limitations, and basis of assessment are clearly disclosed in accordance with professional valuation standards."}
               placeholder="Enter the report introduction here..."
-              className="min-h-[120px] resize-none text-sm"
+              className="min-h-[180px] resize-none text-sm"
             />
             {reportConfiguration && Object.keys(reportConfiguration).length > 0 && (
               <div className="mt-4 p-3 bg-muted/50 rounded-md">
@@ -237,9 +237,9 @@ Land productivity analysis, water rights evaluation, and carbon farming potentia
               </Button>
             </div>
             <Textarea 
-              value="Based on our comprehensive analysis of recent sales evidence, current market conditions, and the physical attributes of the subject property, we assess the market value of 320 Deakin Avenue, Mildura VIC 3500 to be $275,000 as at the date of inspection. This valuation reflects the property's location within walking distance of Mildura's CBD, the quality of recent improvements, and current market demand for residential properties in this established precinct. The property represents solid value in the current market with potential for modest capital growth over the medium term."
+              value="**EXECUTIVE SUMMARY**\n\nFollowing comprehensive market analysis and physical inspection, we assess the market value of 320 Deakin Avenue, Mildura VIC 3500 to be **$275,000** as at the date of inspection.\n\n**KEY VALUATION FACTORS:**\n• Strategic location within 1.2km of Mildura CBD providing excellent accessibility\n• Well-maintained brick veneer dwelling (circa 1965) with recent renovations\n• 850sqm regular allotment with established gardens and secure fencing\n• Recent kitchen and bathroom upgrades enhancing marketability\n• Strong sales evidence supporting assessed rate of $324/sqm\n• Rental potential of $300/week providing 5.67% gross yield\n\n**MARKET ANALYSIS:**\nComparable sales analysis of recent transactions including 522 Deakin Avenue ($295,000), 518 Deakin Avenue ($275,000), and 516 Deakin Avenue ($265,000) strongly support the assessed value. The Mildura residential market demonstrates stable demand with moderate price growth, supported by regional economic fundamentals and population growth.\n\n**INVESTMENT PERSPECTIVE:**\nThe property offers solid investment fundamentals with rental yields above regional averages and potential for capital appreciation. Location proximity to employment centres, schools, and retail amenities supports long-term value retention.\n\n**RISK ASSESSMENT:**\nModerate risk profile with primary risks being general market volatility and regional economic conditions. Climate risk assessment indicates manageable exposure with appropriate adaptation strategies available."
               placeholder="The executive summary will be generated here based on all completed report sections..."
-              className="min-h-[200px] resize-none text-sm"
+              className="min-h-[280px] resize-none text-sm"
             />
             {includedSections.length > 0 && (
               <div className="mt-4 p-3 bg-info/10 rounded-md border border-info/20">
