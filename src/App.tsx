@@ -13,6 +13,7 @@ import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import AuthPage from "./pages/Auth";
 import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
 import CryptoTradingDashboard from "./pages/CryptoTradingDashboard";
+import Dashboard from "./pages/Dashboard";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
               <Route path="/crypto-trading" element={<CryptoTradingDashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

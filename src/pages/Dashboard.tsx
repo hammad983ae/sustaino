@@ -1,0 +1,477 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
+import {
+  Home,
+  Calculator,
+  Leaf,
+  TrendingUp,
+  FileText,
+  Users,
+  DollarSign,
+  Award,
+  Settings,
+  BarChart3,
+  PieChart as PieChartIcon,
+  Zap,
+  Globe,
+  ShieldCheck,
+  Target,
+  ArrowRight,
+  Building,
+  MapPin
+} from 'lucide-react';
+import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
+
+const Dashboard = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  // Sample data for charts
+  const portfolioData = [
+    { name: 'Jan', traditional: 8.5, esg: 10.2, greenium: 1.7 },
+    { name: 'Feb', traditional: 9.1, esg: 11.0, greenium: 1.9 },
+    { name: 'Mar', traditional: 8.8, esg: 10.8, greenium: 2.0 },
+    { name: 'Apr', traditional: 9.3, esg: 11.5, greenium: 2.2 },
+    { name: 'May', traditional: 9.0, esg: 11.2, greenium: 2.2 },
+    { name: 'Jun', traditional: 9.5, esg: 11.8, greenium: 2.3 }
+  ];
+
+  const propertyTypeData = [
+    { name: 'Residential', value: 45, color: '#22c55e' },
+    { name: 'Commercial', value: 30, color: '#3b82f6' },
+    { name: 'Industrial', value: 15, color: '#f59e0b' },
+    { name: 'Agricultural', value: 10, color: '#8b5cf6' }
+  ];
+
+  const esgScoreData = [
+    { name: 'Energy Efficient', score: 85, properties: 124 },
+    { name: 'Carbon Neutral', score: 92, properties: 89 },
+    { name: 'Water Conservation', score: 78, properties: 156 },
+    { name: 'Sustainable Materials', score: 71, properties: 98 },
+    { name: 'Green Transport', score: 83, properties: 67 }
+  ];
+
+  const recentActivities = [
+    { id: 1, type: 'valuation', property: '123 Green Street, Sydney', value: '$2.1M', greenium: '+2.3%', time: '2 hours ago' },
+    { id: 2, type: 'esg', property: '456 Sustainable Ave, Melbourne', value: '$1.8M', greenium: '+1.9%', time: '4 hours ago' },
+    { id: 3, type: 'analysis', property: '789 Eco Lane, Brisbane', value: '$1.5M', greenium: '+2.1%', time: '6 hours ago' },
+    { id: 4, type: 'report', property: '321 Carbon Way, Perth', value: '$2.5M', greenium: '+2.8%', time: '1 day ago' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b bg-card/50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+                <Home className="h-4 w-4" />
+                Back to Main Platform
+              </Link>
+              <div className="h-6 w-px bg-border" />
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600">
+                  <BarChart3 className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-foreground">Property Analytics Dashboard</h1>
+                  <p className="text-sm text-muted-foreground">ESG-Enhanced Property Valuation Platform</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="px-3 py-1">
+                <Leaf className="h-3 w-3 mr-1" />
+                Greenium Active
+              </Badge>
+              <Badge variant="secondary" className="px-3 py-1">
+                <Award className="h-3 w-3 mr-1" />
+                Sustaino Coins: 2,450
+              </Badge>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="esg-calculator" className="flex items-center gap-2">
+              <Calculator className="h-4 w-4" />
+              ESG Calculator
+            </TabsTrigger>
+            <TabsTrigger value="portfolio" className="flex items-center gap-2">
+              <PieChartIcon className="h-4 w-4" />
+              Portfolio
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="tools" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Tools
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6 mt-6">
+            {/* Key Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Total Portfolio Value</p>
+                      <p className="text-2xl font-bold">$487.2M</p>
+                      <p className="text-xs text-green-600">+12.3% from last month</p>
+                    </div>
+                    <DollarSign className="h-8 w-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Active Properties</p>
+                      <p className="text-2xl font-bold">1,247</p>
+                      <p className="text-xs text-blue-600">+8.7% ESG Properties</p>
+                    </div>
+                    <Building className="h-8 w-8 text-blue-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Average Greenium</p>
+                      <p className="text-2xl font-bold">+2.1%</p>
+                      <p className="text-xs text-emerald-600">Premium over traditional</p>
+                    </div>
+                    <Leaf className="h-8 w-8 text-emerald-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">ESG Score</p>
+                      <p className="text-2xl font-bold">84.7</p>
+                      <p className="text-xs text-purple-600">Excellent rating</p>
+                    </div>
+                    <Globe className="h-8 w-8 text-purple-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5" />
+                    Portfolio Performance vs Greenium
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={portfolioData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="traditional" stroke="#6b7280" name="Traditional %" />
+                      <Line type="monotone" dataKey="esg" stroke="#22c55e" name="ESG-Enhanced %" />
+                      <Line type="monotone" dataKey="greenium" stroke="#059669" name="Greenium Premium %" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <PieChartIcon className="h-5 w-5" />
+                    Property Type Distribution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={propertyTypeData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, value }) => `${name}: ${value}%`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {propertyTypeData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Recent Activity */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    Recent Activity
+                  </span>
+                  <Button variant="outline" size="sm">View All</Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentActivities.map((activity) => (
+                    <div key={activity.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/20">
+                          {activity.type === 'valuation' && <Calculator className="h-4 w-4 text-green-600" />}
+                          {activity.type === 'esg' && <Leaf className="h-4 w-4 text-green-600" />}
+                          {activity.type === 'analysis' && <BarChart3 className="h-4 w-4 text-green-600" />}
+                          {activity.type === 'report' && <FileText className="h-4 w-4 text-green-600" />}
+                        </div>
+                        <div>
+                          <p className="font-medium">{activity.property}</p>
+                          <p className="text-sm text-muted-foreground">{activity.time}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold">{activity.value}</p>
+                        <Badge variant="secondary" className="text-green-600">{activity.greenium}</Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="esg-calculator" className="mt-6">
+            <ESGRiskAdjustedCalculator />
+          </TabsContent>
+
+          <TabsContent value="portfolio" className="space-y-6 mt-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>ESG Performance by Category</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={esgScoreData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="score" fill="#22c55e" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Sustaino Coin Earnings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="text-center p-6 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/20 dark:to-green-950/20 rounded-lg">
+                    <div className="text-3xl font-bold text-emerald-600 mb-2">2,450</div>
+                    <div className="text-sm text-muted-foreground">Total Sustaino Coins</div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center p-3 border rounded-lg">
+                      <span>ESG Assessments</span>
+                      <Badge className="bg-emerald-600 text-white">+150 coins</Badge>
+                    </div>
+                    <div className="flex justify-between items-center p-3 border rounded-lg">
+                      <span>Carbon Reports</span>
+                      <Badge className="bg-emerald-600 text-white">+200 coins</Badge>
+                    </div>
+                    <div className="flex justify-between items-center p-3 border rounded-lg">
+                      <span>Efficiency Improvements</span>
+                      <Badge className="bg-emerald-600 text-white">+300 coins</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Risk Assessment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>Market Risk</span>
+                      <Badge variant="secondary">Low</Badge>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>ESG Risk</span>
+                      <Badge variant="secondary">Very Low</Badge>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Regulatory Risk</span>
+                      <Badge variant="secondary">Low</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Market Trends</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>ESG Demand</span>
+                      <span className="text-green-600 font-medium">↗ +15%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Green Financing</span>
+                      <span className="text-green-600 font-medium">↗ +23%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Carbon Pricing</span>
+                      <span className="text-blue-600 font-medium">↗ +8%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Predictions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>Next Quarter</span>
+                      <span className="text-green-600 font-medium">+2.1%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Greenium Growth</span>
+                      <span className="text-emerald-600 font-medium">+0.3%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>ESG Adoption</span>
+                      <span className="text-blue-600 font-medium">+18%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="tools" className="space-y-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Link to="/automated-valuation">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <Calculator className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Automated Valuation</h3>
+                    <p className="text-sm text-muted-foreground">Quick property assessments</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/comprehensive-property-valuation">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <FileText className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Comprehensive Reports</h3>
+                    <p className="text-sm text-muted-foreground">Detailed valuation reports</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/esg-strategy-analysis">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <Leaf className="h-12 w-12 text-emerald-600 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">ESG Strategy</h3>
+                    <p className="text-sm text-muted-foreground">Sustainability analysis</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/property-valuations">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <Building className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Property Management</h3>
+                    <p className="text-sm text-muted-foreground">Manage your portfolio</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/work-hub">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <Users className="h-12 w-12 text-orange-600 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Work Hub</h3>
+                    <p className="text-sm text-muted-foreground">Collaboration tools</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="p-6 text-center">
+                  <Award className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
+                  <h3 className="font-semibold mb-2">Sustaino Marketplace</h3>
+                  <p className="text-sm text-muted-foreground">Trade sustainability tokens</p>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

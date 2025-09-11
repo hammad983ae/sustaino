@@ -43,8 +43,28 @@ export default function AutomatedValuation() {
       <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-secondary/10">
         <BrandedHeader />
         
+        {/* Navigation Links */}
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <a 
+                href="/dashboard" 
+                className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors text-primary font-medium"
+              >
+                📊 Analytics Dashboard
+              </a>
+              <a 
+                href="/index" 
+                className="flex items-center gap-2 px-4 py-2 bg-secondary/10 hover:bg-secondary/20 rounded-lg transition-colors text-secondary font-medium"
+              >
+                🌍 ESG Platform
+              </a>
+            </div>
+          </div>
+        </div>
+        
         {/* Hero Section - Property Valuation */}
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 py-8">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
               Professional Property Valuations
