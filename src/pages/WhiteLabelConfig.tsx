@@ -45,7 +45,14 @@ export default function WhiteLabelConfig() {
         .eq('user_id', user.id)
         .single();
       
-      setIsAuthorized(profile?.role === 'admin');
+      // Check user roles table instead since profiles doesn't have role
+      const { data: userRole } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .single();
+      
+      setIsAuthorized(userRole?.role === 'admin');
     }
   };
 
@@ -61,8 +68,9 @@ export default function WhiteLabelConfig() {
 
     setIsLoading(true);
     try {
+      // Since there's no partners table, update profiles instead
       const { error } = await supabase
-        .from('partners')
+        .from('profiles')
         .update({
           company_name: companyName,
           logo_url: logoUrl || null,

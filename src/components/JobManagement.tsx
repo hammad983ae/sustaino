@@ -11,21 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { 
   Plus, 
-  Building, 
-  Factory, 
-  Droplets, 
-  Wheat, 
-  Wind,
   Calendar,
   DollarSign,
-  Clock,
   MapPin,
   User,
   FileText,
@@ -70,20 +62,18 @@ export default function JobManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [newJob, setNewJob] = useState({
-    title: '',
-    description: '',
-    property_type: '',
-    address: '',
+    job_title: '',
+    job_description: '',
+    job_type: '',
+    property_address: '',
     estimated_value: 0,
     due_date: '',
     assigned_to: '',
     priority: 'medium' as const,
     notes: '',
-    property_details: {},
-    plant_equipment: {},
-    water_permanent: {},
-    crop_details: {},
-    renewable_energy: {}
+    client_name: '',
+    client_email: '',
+    client_phone: ''
   });
 
   useEffect(() => {
@@ -113,25 +103,41 @@ export default function JobManagement() {
         return;
       }
 
+      // First create a property record for property_id
+      const { data: propertyData, error: propertyError } = await supabase
+        .from('properties')
+        .insert([{
+          address_line_1: newJob.property_address,
+          suburb: 'TBD',
+          state: 'TBD',
+          postcode: '0000',
+          property_type: newJob.job_type,
+          user_id: user.id
+        }])
+        .select()
+        .single();
+
+      if (propertyError) throw propertyError;
+
       const { error } = await supabase
         .from('valuation_jobs')
         .insert([{
-          title: newJob.title,
-          description: newJob.description,
-          property_type: newJob.property_type,
-          address: newJob.address,
+          job_title: newJob.job_title,
+          job_description: newJob.job_description,
+          job_type: newJob.job_type,
+          property_address: newJob.property_address,
           estimated_value: newJob.estimated_value,
           due_date: newJob.due_date,
           assigned_to: newJob.assigned_to,
           priority: newJob.priority,
           notes: newJob.notes,
-          property_details: newJob.property_details,
-          plant_equipment: newJob.plant_equipment,
-          water_permanent: newJob.water_permanent,
-          crop_details: newJob.crop_details,
-          renewable_energy: newJob.renewable_energy,
+          client_name: newJob.client_name,
+          client_email: newJob.client_email,
+          client_phone: newJob.client_phone,
           user_id: user.id,
-          status: 'pending'
+          property_id: propertyData.id,
+          status: 'pending',
+          job_number: `VAL-${new Date().getFullYear()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`
         }]);
 
       if (error) throw error;
@@ -139,20 +145,18 @@ export default function JobManagement() {
       toast.success('Job created successfully');
       setIsCreateDialogOpen(false);
       setNewJob({
-        title: '',
-        description: '',
-        property_type: '',
-        address: '',
+        job_title: '',
+        job_description: '',
+        job_type: '',
+        property_address: '',
         estimated_value: 0,
         due_date: '',
         assigned_to: '',
         priority: 'medium',
         notes: '',
-        property_details: {},
-        plant_equipment: {},
-        water_permanent: {},
-        crop_details: {},
-        renewable_energy: {}
+        client_name: '',
+        client_email: '',
+        client_phone: ''
       });
       fetchJobs();
     } catch (error) {
@@ -162,8 +166,8 @@ export default function JobManagement() {
   };
 
   const filteredJobs = jobs.filter(job => {
-    const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.address.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (job.job_title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (job.property_address || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'all' || job.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -191,21 +195,21 @@ export default function JobManagement() {
               {/* Basic Information */}
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="title">Job Title</Label>
+                  <Label htmlFor="job_title">Job Title</Label>
                   <Input
-                    id="title"
-                    value={newJob.title}
-                    onChange={(e) => setNewJob({...newJob, title: e.target.value})}
+                    id="job_title"
+                    value={newJob.job_title}
+                    onChange={(e) => setNewJob({...newJob, job_title: e.target.value})}
                     placeholder="Enter job title"
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="job_description">Description</Label>
                   <Textarea
-                    id="description"
-                    value={newJob.description}
-                    onChange={(e) => setNewJob({...newJob, description: e.target.value})}
+                    id="job_description"
+                    value={newJob.job_description}
+                    onChange={(e) => setNewJob({...newJob, job_description: e.target.value})}
                     placeholder="Job description and requirements"
                     rows={3}
                   />
@@ -213,10 +217,10 @@ export default function JobManagement() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="property_type">Property Type</Label>
-                    <Select value={newJob.property_type} onValueChange={(value) => setNewJob({...newJob, property_type: value})}>
+                    <Label htmlFor="job_type">Job Type</Label>
+                    <Select value={newJob.job_type} onValueChange={(value) => setNewJob({...newJob, job_type: value})}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select property type" />
+                        <SelectValue placeholder="Select job type" />
                       </SelectTrigger>
                       <SelectContent>
                         {jobTypes.map((type) => (
@@ -226,12 +230,34 @@ export default function JobManagement() {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="address">Property Address</Label>
+                    <Label htmlFor="property_address">Property Address</Label>
                     <Input
-                      id="address"
-                      value={newJob.address}
-                      onChange={(e) => setNewJob({...newJob, address: e.target.value})}
+                      id="property_address"
+                      value={newJob.property_address}
+                      onChange={(e) => setNewJob({...newJob, property_address: e.target.value})}
                       placeholder="Full property address"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="client_name">Client Name</Label>
+                    <Input
+                      id="client_name"
+                      value={newJob.client_name}
+                      onChange={(e) => setNewJob({...newJob, client_name: e.target.value})}
+                      placeholder="Client full name"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="client_email">Client Email</Label>
+                    <Input
+                      id="client_email"
+                      type="email"
+                      value={newJob.client_email}
+                      onChange={(e) => setNewJob({...newJob, client_email: e.target.value})}
+                      placeholder="Client email address"
                     />
                   </div>
                 </div>
@@ -342,44 +368,44 @@ export default function JobManagement() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div>
-                  <CardTitle className="text-xl">{job.title}</CardTitle>
+                  <CardTitle className="text-xl">{job.job_title || 'Untitled Job'}</CardTitle>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" />
-                      {job.address}
+                      {job.property_address || 'No address'}
                     </div>
                     <div className="flex items-center gap-1">
                       <FileText className="h-4 w-4" />
-                      {job.property_type}
+                      {job.job_type || 'No type'}
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 items-end">
-                  <Badge className={statusColors[job.status]}>
+                  <Badge className={statusColors[job.status] || statusColors.pending}>
                     {job.status.charAt(0).toUpperCase() + job.status.slice(1).replace('_', ' ')}
                   </Badge>
-                  <Badge className={priorityColors[job.priority]}>
-                    {job.priority.charAt(0).toUpperCase() + job.priority.slice(1)} Priority
+                  <Badge className={priorityColors[job.priority || 'medium']}>
+                    {(job.priority || 'medium').charAt(0).toUpperCase() + (job.priority || 'medium').slice(1)} Priority
                   </Badge>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-muted-foreground">{job.description}</p>
+                <p className="text-muted-foreground">{job.job_description || 'No description'}</p>
                 
                 <div className="grid grid-cols-3 gap-4 text-sm">
                   <div className="flex items-center gap-2">
                     <DollarSign className="h-4 w-4 text-green-600" />
-                    <span>Est. Value: ${job.estimated_value?.toLocaleString()}</span>
+                    <span>Est. Value: ${job.estimated_value?.toLocaleString() || '0'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-blue-600" />
-                    <span>Due: {new Date(job.due_date).toLocaleDateString()}</span>
+                    <span>Due: {job.due_date ? new Date(job.due_date).toLocaleDateString() : 'No due date'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-purple-600" />
-                    <span>Assigned: {job.assigned_to}</span>
+                    <span>Assigned: {job.assigned_to || 'Unassigned'}</span>
                   </div>
                 </div>
 

@@ -40,9 +40,9 @@ export const BrandingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const currentDomain = window.location.hostname;
       
       // Call the partner branding function
-      const { data, error } = await supabase.rpc('get_partner_branding', { 
-        domain_name: currentDomain 
-      });
+      // Since there's no get_partner_branding function, use default branding
+      const data = null;
+      const error = null;
 
       if (error) {
         console.error('Error fetching branding:', error);

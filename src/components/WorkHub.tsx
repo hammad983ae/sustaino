@@ -128,7 +128,13 @@ export default function WorkHub() {
       }));
       
       setValuations(transformedValuations);
-      setReports(reportsData || []);
+      setReports((reportsData || []).map(r => ({
+        ...r,
+        property_address: 'TBD',
+        generated_date: r.created_at,
+        sustainability_score: 0,
+        file_path: r.pdf_file_path || ''
+      })));
       setCostaAnalyses([]);  // ESG assessments instead
     } catch (error) {
       console.error('Error fetching work:', error);
