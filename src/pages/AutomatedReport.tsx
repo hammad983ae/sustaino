@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import AutomatedAnalysisSection from "@/components/AutomatedAnalysisSection";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
+import PropertyPhotos from "@/components/PropertyPhotos";
 import { getPropertyTypeReportSections, getAutomatedAnalysisDescription } from "@/components/PropertyTypeReportConfig";
 
 interface AutomatedReportProps {
@@ -96,9 +97,24 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
     if (section.component === "PlanningDataIntegration") {
       return (
         <PlanningDataIntegration 
-          propertyAddress="Sample Property Address"
+          propertyAddress="320 Deakin Avenue Mildura VIC 3500"
           onDataFetched={(data) => console.log("Planning data:", data)}
         />
+      );
+    }
+    
+    // Show property photos in Property Details section
+    if (section.title === "Property Details" || section.title === "Property Description") {
+      return (
+        <div className="space-y-6">
+          <PropertyPhotos propertyAddress="320 Deakin Avenue Mildura VIC 3500" />
+          <ReportSection 
+            title={section.title}
+            subtitle={section.subtitle}
+            sectionIndex={currentStep}
+            onNavigateToSection={navigateToSection}
+          />
+        </div>
       );
     }
     
