@@ -18,6 +18,8 @@ import {
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
+import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
+import ESGMethodologyProtection from "@/components/ESGMethodologyProtection";
 
 import { supabase } from "@/integrations/supabase/client";
 import { User as SupabaseUser } from "@supabase/supabase-js";
@@ -279,6 +281,15 @@ const Index = () => {
               </Card>
             </div>
 
+            {/* Comprehensive IP Protection */}
+            <div className="max-w-6xl mx-auto">
+              <ComprehensiveIPProtection />
+            </div>
+
+            {/* ESG Methodology Protection */}
+            <div className="max-w-4xl mx-auto">
+              <ESGMethodologyProtection />
+            </div>
 
             {/* Footer - IP Protection */}
             <div className="text-center space-y-4 pt-8 border-t border-border/50">

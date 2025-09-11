@@ -20,6 +20,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { toast } from "@/hooks/use-toast";
+import AdvancedIPProtection from "@/components/AdvancedIPProtection";
+import IntellectualPropertyProtection from "@/components/IntellectualPropertyProtection";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -252,6 +254,15 @@ const Dashboard = () => {
               </div>
             </div>
           )}
+
+          {/* Intellectual Property Protection */}
+          <div className="max-w-6xl mx-auto">
+            <AdvancedIPProtection />
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <IntellectualPropertyProtection />
+          </div>
 
           {/* Footer */}
           <div className="text-center space-y-4 pt-8 border-t border-border/50">

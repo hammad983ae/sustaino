@@ -9,6 +9,8 @@ import PDFReportPreview from "@/components/PDFReportPreview";
 import AIReportPresentation from "@/components/AIReportPresentation";
 import WhiteLabelHeader from "@/components/WhiteLabelHeader";
 import { useReportData } from "@/hooks/useReportData";
+import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
+import SecurityComplianceCertifications from "@/components/SecurityComplianceCertifications";
 // Removed useReportJobSaver import
 import { useToast } from "@/hooks/use-toast";
 
@@ -317,6 +319,14 @@ const ReportViewer = () => {
               onDataChange={setReportData}
             />
           </div>
+
+          {/* IP Protection for Security Section */}
+          {currentSection === sections.length - 1 && (
+            <div className="max-w-4xl mx-auto mt-8 space-y-6">
+              <SecurityCertificatesGrid />
+              <SecurityComplianceCertifications />
+            </div>
+          )}
         </div>
 
         {/* Mobile-friendly navigation footer */}
