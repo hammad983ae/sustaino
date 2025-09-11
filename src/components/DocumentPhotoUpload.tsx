@@ -398,16 +398,7 @@ const DocumentPhotoUpload = () => {
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center pt-6 border-t">
-          <Button 
-            variant="outline" 
-            className="flex items-center gap-2"
-            onClick={handleBackToDetails}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-          
+        <div className="flex justify-center pt-6 border-t">
           <Button 
             className="flex items-center gap-2 bg-primary hover:bg-primary/90"
             onClick={handleContinue}
