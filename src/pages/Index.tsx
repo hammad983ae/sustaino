@@ -63,7 +63,7 @@ const Index = () => {
     );
   }
 
-  const handleBasicFormSubmit = (data) => {
+  const handleBasicFormSubmit = (data: any) => {
     // Navigate to report with ESG assessment
     navigate('/report');
   };
