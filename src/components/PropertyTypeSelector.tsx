@@ -50,9 +50,10 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-between mb-4">
-            <Link to="/index" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
-              <Home className="h-4 w-4" />
-              Back to Original Platform
+            <Link to="/index" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card/50 hover:bg-card border border-border/50 hover:border-primary/30 transition-all duration-200 text-sm md:text-base font-medium text-muted-foreground hover:text-foreground shadow-sm">
+              <Home className="h-4 w-4 md:h-5 md:w-5" />
+              <span className="hidden sm:inline">Back to Original Platform</span>
+              <span className="sm:hidden">Back</span>
             </Link>
             <div className="flex items-center justify-center">
               <Leaf className="h-8 w-8 text-primary mr-3" />
