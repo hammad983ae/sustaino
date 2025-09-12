@@ -86,6 +86,33 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
     bushfire: false,
     aerial: false
   });
+
+  // Save data to localStorage whenever mappingData changes
+  useEffect(() => {
+    if (mappingData) {
+      localStorage.setItem('vicplan-mapping-data', JSON.stringify({
+        ...mappingData,
+        savedAt: new Date().toISOString(),
+        propertyAddress: getFormattedAddress(),
+        activeState: selectedState
+      }));
+    }
+  }, [mappingData, getFormattedAddress, selectedState]);
+
+  // Load saved data on component mount
+  useEffect(() => {
+    const savedData = localStorage.getItem('vicplan-mapping-data');
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        if (parsed.propertyAddress === getFormattedAddress()) {
+          setMappingData(parsed);
+        }
+      } catch (error) {
+        console.error('Error loading saved mapping data:', error);
+      }
+    }
+  }, [getFormattedAddress]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   // Auto-populate state from context
@@ -347,9 +374,16 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
               
               {selectedPortal && getFormattedAddress() && (
                 <div className="text-xs text-blue-600 space-y-1">
-                  <p>📍 Property: {getFormattedAddress()}</p>
-                  <p>🗺️ Data Source: {selectedPortal.name}</p>
-                  <p>🔄 Active Layers: {Object.entries(mapLayers).filter(([_, enabled]) => enabled).map(([layer]) => layer).join(', ')}</p>
+                  <p className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3 text-red-500" />
+                    Property: {getFormattedAddress()}
+                  </p>
+                  <p className="flex items-center gap-1">
+                    🗺️ Data Source: {selectedPortal.name}
+                  </p>
+                  <p className="flex items-center gap-1">
+                    🔄 Active Layers: {Object.entries(mapLayers).filter(([_, enabled]) => enabled).map(([layer]) => layer).join(', ')}
+                  </p>
                 </div>
               )}
             </div>
@@ -359,11 +393,16 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
         {/* Planning Data Results */}
         {mappingData && (
           <div className="p-6 border rounded-lg bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200">
-            <div className="flex items-center gap-2 mb-4">
-              <MapPin className="h-5 w-5 text-emerald-600" />
-              <h4 className="font-semibold text-emerald-900">Planning Data Retrieved</h4>
-              <Badge variant="outline" className="text-xs border-emerald-300 text-emerald-700">
-                {selectedPortal?.name}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-emerald-600" />
+                <h4 className="font-semibold text-emerald-900">Planning Data Retrieved & Saved</h4>
+                <Badge variant="outline" className="text-xs border-emerald-300 text-emerald-700">
+                  {selectedPortal?.name}
+                </Badge>
+              </div>
+              <Badge variant="secondary" className="text-xs">
+                Saved: {mappingData.savedAt ? new Date(mappingData.savedAt).toLocaleDateString() : 'Now'}
               </Badge>
             </div>
             
