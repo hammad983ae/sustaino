@@ -1,12 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Save } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
+import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
+import { Badge } from "@/components/ui/badge";
 
 const ReportViewer = () => {
   const [currentSection, setCurrentSection] = useState(0);
+  const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, 22);
+  const [lastSavedSection, setLastSavedSection] = useState<number | null>(null);
+
+  // Load saved progress on component mount
+  useEffect(() => {
+    const savedData = loadReport();
+    if (savedData) {
+      setCurrentSection(savedData.currentSection);
+      setLastSavedSection(savedData.currentSection);
+    }
+  }, [loadReport]);
 
   const sections = [
     { title: "Executive Summary and Contents" },
@@ -39,13 +52,35 @@ const ReportViewer = () => {
 
   const nextSection = () => {
     if (currentSection < sections.length - 1) {
-      setCurrentSection(currentSection + 1);
+      const newSection = currentSection + 1;
+      setCurrentSection(newSection);
+      
+      // Auto-save progress every 5 sections
+      if ((newSection + 1) % 5 === 0) {
+        setLastSavedSection(newSection);
+      }
     }
   };
 
   const prevSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
+    }
+  };
+
+  const manualSave = async () => {
+    try {
+      await saveReport({
+        currentSection,
+        completedSections: Array.from({ length: currentSection + 1 }, (_, i) => i),
+        reportData: {
+          manualSaveAt: new Date().toISOString(),
+          sectionCount: currentSection + 1
+        }
+      });
+      setLastSavedSection(currentSection);
+    } catch (error) {
+      console.error('Manual save failed:', error);
     }
   };
 
@@ -66,8 +101,19 @@ const ReportViewer = () => {
               Section {currentSection + 1}: {sections[currentSection].title}
             </h1>
           </div>
-          <div className="text-sm text-muted-foreground">
-            {currentSection + 1} of {sections.length}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={manualSave}>
+              <Save className="h-4 w-4 mr-1" />
+              Save
+            </Button>
+            {lastSavedSection !== null && (
+              <Badge variant="secondary" className="text-xs">
+                Saved: Section {lastSavedSection + 1}
+              </Badge>
+            )}
+            <div className="text-sm text-muted-foreground">
+              {currentSection + 1} of {sections.length}
+            </div>
           </div>
         </div>
         <Progress value={progress} className="w-full" />
