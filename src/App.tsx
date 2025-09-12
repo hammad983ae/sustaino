@@ -16,6 +16,7 @@ import CryptoTradingDashboard from "./pages/CryptoTradingDashboard";
 import Dashboard from "./pages/Dashboard";
 import AutomaticFolderManager from "./components/AutomaticFolderManager";
 import CostaGroupValuationsPage from "./pages/CostaGroupValuations";
+import ComprehensiveValuationAnalysis from "./pages/ComprehensiveValuationAnalysis";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/white-label" element={<WhiteLabelConfig />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
+              <Route path="/comprehensive-valuation-analysis" element={<ComprehensiveValuationAnalysis />} />
               <Route path="/crypto-trading" element={<CryptoTradingDashboard />} />
               <Route path="/costa-group-valuations" element={<CostaGroupValuationsPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
