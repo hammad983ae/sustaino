@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, FileText, MapPin, Search, ExternalLink, Loader2, Map } from "lucide-react";
 import { useProperty } from "@/contexts/PropertyContext";
+import StateBasedMappingIntegration from "./StateBasedMappingIntegration";
 
 interface PlanningDataIntegrationProps {
   propertyAddress?: string;
@@ -77,14 +78,19 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <CheckCircle className="h-5 w-5 text-emerald-500" />
-          <CardTitle className="text-xl font-semibold">Enhanced Planning Data Integration</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <div className="space-y-6">
+      {/* State-Based Mapping Integration */}
+      <StateBasedMappingIntegration onPlanningDataUpdate={onDataFetched} />
+      
+      {/* Legacy Planning Data Integration */}
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <CheckCircle className="h-5 w-5 text-emerald-500" />
+            <CardTitle className="text-xl font-semibold">Legacy Planning Data Integration</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
         {/* Step 1: Planning Data Integration */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
@@ -259,6 +265,7 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 };
 
