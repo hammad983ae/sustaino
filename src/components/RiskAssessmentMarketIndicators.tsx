@@ -124,6 +124,7 @@ const RiskAssessmentMarketIndicators = () => {
     "Environmental",
     "Improvements",
     "Market Activity",
+    "Market Direction",
     "Economy Impact",
     "Market Segment",
     "Cashflow",
