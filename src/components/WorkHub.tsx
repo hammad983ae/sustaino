@@ -590,12 +590,12 @@ export default function WorkHub() {
 
         <TabsContent value="costa" className="mt-6">
           <div className="space-y-6">
-            {/* Global Operations Portfolio Section */}
+            {/* Global Operations Portfolio Section - Now properly secured under Costa's Operations */}
             <Card className="border-2 border-primary/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Building className="h-5 w-5 text-primary" />
-                  Global Operations Portfolio
+                  <Building className="h-5 w-5 text-primary flash-text" />
+                  <span className="flash-text">Global Operations Portfolio</span>
                   <Badge variant="outline" className="ml-auto">Restricted Access</Badge>
                 </CardTitle>
                 <p className="text-muted-foreground">
@@ -631,19 +631,19 @@ export default function WorkHub() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div className="text-center p-3 bg-muted/50 rounded">
                     <p className="text-muted-foreground">Total Locations</p>
-                    <p className="text-2xl font-bold text-primary">25+</p>
+                    <p className="text-2xl font-bold text-primary flash-text">25+</p>
                   </div>
                   <div className="text-center p-3 bg-muted/50 rounded">
                     <p className="text-muted-foreground">Portfolio Value</p>
-                    <p className="text-2xl font-bold text-primary">$2.8B</p>
+                    <p className="text-2xl font-bold text-primary flash-text">$2.8B</p>
                   </div>
                   <div className="text-center p-3 bg-muted/50 rounded">
                     <p className="text-muted-foreground">Annual Production</p>
-                    <p className="text-2xl font-bold text-primary">125K</p>
+                    <p className="text-2xl font-bold text-primary flash-text">125K</p>
                   </div>
                   <div className="text-center p-3 bg-muted/50 rounded">
                     <p className="text-muted-foreground">Water Usage</p>
-                    <p className="text-2xl font-bold text-primary">890ML</p>
+                    <p className="text-2xl font-bold text-primary flash-text">890ML</p>
                   </div>
                 </div>
               </CardContent>

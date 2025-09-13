@@ -51,11 +51,11 @@ All colors MUST be HSL.
     --shadow-3d-strong: 0 12px 40px hsl(158 50% 65% / 0.6);
     --shadow-3d-glow: 0 0 30px hsl(158 64% 52% / 0.3);
     
-    /* Green Tinge Gradients - Reduced for perfect white-green blend */
-    --gradient-green-subtle: linear-gradient(135deg, hsl(0 0% 99%) 0%, hsl(158 12% 97%) 100%);
-    --gradient-green-medium: linear-gradient(135deg, hsl(158 15% 97%) 0%, hsl(158 20% 95%) 100%);
-    --gradient-green-strong: linear-gradient(135deg, hsl(158 18% 95%) 0%, hsl(158 25% 92%) 100%);
-    --gradient-green-glow: linear-gradient(135deg, hsl(158 22% 93%) 0%, hsl(158 30% 90%) 100%);
+    /* Green Tinge Gradients - With Sandy Brown Tinge */
+    --gradient-green-subtle: linear-gradient(135deg, hsl(0 0% 99%) 0%, hsl(38 25% 97%) 5%, hsl(158 8% 96%) 100%);
+    --gradient-green-medium: linear-gradient(135deg, hsl(38 18% 96%) 0%, hsl(158 12% 95%) 50%, hsl(158 15% 94%) 100%);
+    --gradient-green-strong: linear-gradient(135deg, hsl(38 22% 94%) 0%, hsl(158 15% 93%) 40%, hsl(158 20% 92%) 100%);
+    --gradient-green-glow: linear-gradient(135deg, hsl(38 25% 92%) 0%, hsl(158 18% 91%) 30%, hsl(158 25% 90%) 100%);
 
     /* ESG Enhancement Colors - Enhanced */
     --success: 142 76% 36%;
@@ -126,11 +126,11 @@ All colors MUST be HSL.
     --shadow-3d-strong: 0 12px 40px hsl(158 50% 10% / 0.8);
     --shadow-3d-glow: 0 0 30px hsl(158 64% 52% / 0.4);
     
-    /* Green Tinge Gradients - Dark Mode */
-    --gradient-green-subtle: linear-gradient(135deg, hsl(158 25% 8%) 0%, hsl(158 20% 12%) 100%);
-    --gradient-green-medium: linear-gradient(135deg, hsl(158 20% 10%) 0%, hsl(158 25% 15%) 100%);
-    --gradient-green-strong: linear-gradient(135deg, hsl(158 25% 12%) 0%, hsl(158 30% 18%) 100%);
-    --gradient-green-glow: linear-gradient(135deg, hsl(158 30% 15%) 0%, hsl(158 35% 22%) 100%);
+    /* Green Tinge Gradients - Dark Mode with Sandy Brown */
+    --gradient-green-subtle: linear-gradient(135deg, hsl(158 25% 8%) 0%, hsl(38 15% 10%) 10%, hsl(158 20% 12%) 100%);
+    --gradient-green-medium: linear-gradient(135deg, hsl(38 20% 9%) 0%, hsl(158 20% 12%) 50%, hsl(158 25% 15%) 100%);
+    --gradient-green-strong: linear-gradient(135deg, hsl(38 25% 10%) 0%, hsl(158 25% 14%) 40%, hsl(158 30% 18%) 100%);
+    --gradient-green-glow: linear-gradient(135deg, hsl(38 30% 12%) 0%, hsl(158 30% 17%) 30%, hsl(158 35% 22%) 100%);
     
     --sidebar-background: 158 20% 12%;
     --sidebar-foreground: 120 25% 90%;
@@ -240,5 +240,19 @@ All colors MUST be HSL.
   
   .green-tinge-strong {
     background: var(--gradient-green-strong);
+  }
+  
+  /* Flashing Text Animation */
+  .flash-text {
+    animation: flash 2s infinite;
+  }
+  
+  @keyframes flash {
+    0%, 50%, 100% {
+      opacity: 1;
+    }
+    25%, 75% {
+      opacity: 0.3;
+    }
   }
 }
