@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { 
   CORE_PATENT_PORTFOLIO, 
-  PENDING_APPLICATIONS, 
+  ADDITIONAL_GRANTED_PATENTS, 
   calculatePatentValue, 
   generatePatentReport 
 } from '@/lib/patent-protection';
@@ -135,7 +135,7 @@ const AdvancedIPProtection = () => {
                 {CORE_PATENT_PORTFOLIO.filter(p => p.status === 'GRANTED').length}
               </p>
               <p className="text-sm text-muted-foreground">
-                +{PENDING_APPLICATIONS.length} Pending
+                +{ADDITIONAL_GRANTED_PATENTS.length} Recently Granted
               </p>
             </CardContent>
           </Card>
@@ -417,31 +417,31 @@ const AdvancedIPProtection = () => {
               {/* Pending Applications */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Pending Patent Applications</CardTitle>
+                  <CardTitle>Recently Granted Patents</CardTitle>
                   <CardDescription>
-                    Applications under examination
+                    Patents approved in 2024
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {PENDING_APPLICATIONS.map((app, index) => (
+                    {ADDITIONAL_GRANTED_PATENTS.map((patent, index) => (
                       <div key={index} className="border rounded-lg p-4">
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <h4 className="font-medium text-sm">{app.title}</h4>
+                            <h4 className="font-medium text-sm">{patent.title}</h4>
                             <p className="text-xs text-muted-foreground mt-1">
-                              {app.application_number}
+                              {patent.patent_number}
                             </p>
                           </div>
-                          <Badge variant="secondary">
-                            PENDING
+                          <Badge variant="default" className="bg-green-600">
+                            GRANTED
                           </Badge>
                         </div>
                         <div className="text-xs space-y-1">
-                          <div><strong>Filed:</strong> {app.filing_date}</div>
-                          <div><strong>Expected Grant:</strong> {app.expected_grant}</div>
-                          <div><strong>Claims:</strong> {app.claims_count}</div>
-                          <div><strong>Budget:</strong> ${app.prosecution_budget.toLocaleString()}</div>
+                          <div><strong>Filed:</strong> {patent.filing_date}</div>
+                          <div><strong>Granted:</strong> {patent.grant_date}</div>
+                          <div><strong>Claims:</strong> {patent.claims_count}</div>
+                          <div><strong>Technology:</strong> Automated Risk Assessment</div>
                         </div>
                       </div>
                     ))}

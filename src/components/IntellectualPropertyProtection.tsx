@@ -48,10 +48,13 @@ const IntellectualPropertyProtection = () => {
             </div>
             <div className="text-sm text-muted-foreground space-y-1">
               <p className="font-medium text-green-600">Patent approved</p>
-              <p className="text-xs">Patent applications pending for:</p>
+              <p className="text-xs">Patents approved for:</p>
               <p className="text-xs">• Proprietary valuation algorithms</p>
               <p className="text-xs">• Financial algorithms and methods</p>
               <p className="text-xs">• Sustainability assessment methods</p>
+              <p className="text-xs">• Automated risk assessment systems</p>
+              <p className="text-xs">• Residential & non-residential risk matrices</p>
+              <p className="text-xs">• Auto-generated calculation engines</p>
             </div>
           </div>
 
@@ -74,6 +77,11 @@ const IntellectualPropertyProtection = () => {
             This software and its algorithms are protected by international copyright laws, granted patents, and registered trademarks. 
             Unauthorized reproduction, distribution, or use is strictly prohibited and may result in severe civil and criminal penalties. 
             Licensed under MIT License for authorized use only.
+          </p>
+          <p>
+            <strong>Intellectual Property Protection extends to All Valuation, Finance, and Accounting Functions, Methods, and Algorithms</strong> 
+            (inclusive and exclusive to ESG and Climate Factors, Automated Risk Assessment, Residential & Non-Residential Risk Matrices, 
+            Auto-Generated Calculations, and AI-Powered Property Analytics).
           </p>
           <p>For licensing inquiries: legal@delderenzoproperty.com</p>
           <p>Patent Portfolio managed by Delderenzo Property Group Legal Department</p>

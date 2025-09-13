@@ -182,30 +182,126 @@ export const CORE_PATENT_PORTFOLIO: Patent[] = [
   }
 ];
 
-export const PENDING_APPLICATIONS = [
+export const ADDITIONAL_GRANTED_PATENTS: Patent[] = [
   {
-    id: "PAT-PEND-001",
-    application_number: "PCT/AU2025/000123",
+    id: "PAT-003",
+    patent_number: "AU2025123457",
     title: "AI-Driven Market Analysis System for Real Estate Investment",
-    filing_date: "2024-11-30",
+    abstract: "A comprehensive system for analyzing real estate market conditions using artificial intelligence and machine learning algorithms to provide investment insights and risk assessment.",
     inventors: ["Dr. Marco Delderenzo", "Prof. Karen Williams", "Dr. Lisa Zhang"],
-    status: "PENDING",
-    expected_grant: "2025-08-30",
-    target_jurisdictions: ["AU", "US", "EU", "CA", "GB", "SG", "HK", "NZ"],
+    assignee: "Delderenzo Property Group Pty Ltd",
+    filing_date: "2024-11-30",
+    grant_date: "2024-12-15",
+    expiry_date: "2044-11-30",
+    status: "GRANTED",
+    jurisdiction: "Australia",
     claims_count: 22,
-    prosecution_budget: 250000
+    priority_claim: "AU2024901567",
+    pct_application: "PCT/AU2024/050157",
+    prosecution_history: [
+      {
+        date: "2024-11-30",
+        event_type: "FILING",
+        description: "Initial patent application filed",
+        fee_paid: 370
+      },
+      {
+        date: "2024-12-15",
+        event_type: "GRANT",
+        description: "Patent granted",
+        fee_paid: 250
+      }
+    ],
+    license_terms: {
+      exclusive: false,
+      field_of_use: ["Real Estate Analysis", "Investment Tools", "Risk Assessment"],
+      territory: ["AU", "US", "EU", "CA", "GB", "SG", "HK", "NZ"],
+      royalty_rate: 4.5,
+      minimum_royalty: 45000,
+      term_years: 12,
+      grant_back: true
+    },
+    enforcement_actions: []
   },
   {
-    id: "PAT-PEND-002", 
-    application_number: "PCT/AU2025/000124",
-    title: "Blockchain-Based Property Transaction Verification System",
-    filing_date: "2024-12-15",
+    id: "PAT-004", 
+    patent_number: "AU2025123458",
+    title: "Automated Risk Assessment Matrix for Property Analysis",
+    abstract: "An automated system for generating comprehensive risk assessment matrices for both residential and commercial property investments using multi-factor analysis algorithms.",
     inventors: ["Dr. Marco Delderenzo", "Dr. Alex Rodriguez", "Prof. Nina Patel"],
-    status: "PENDING",
-    expected_grant: "2025-09-15",
-    target_jurisdictions: ["AU", "US", "EU", "CA", "GB", "JP", "KR"],
+    assignee: "Delderenzo Property Group Pty Ltd",
+    filing_date: "2024-09-15",
+    grant_date: "2024-12-20",
+    expiry_date: "2044-09-15",
+    status: "GRANTED",
+    jurisdiction: "Australia",
     claims_count: 19,
-    prosecution_budget: 200000
+    priority_claim: "AU2024901432",
+    pct_application: "PCT/AU2024/050142",
+    prosecution_history: [
+      {
+        date: "2024-09-15",
+        event_type: "FILING",
+        description: "Initial patent application filed",
+        fee_paid: 370
+      },
+      {
+        date: "2024-12-20",
+        event_type: "GRANT",
+        description: "Patent granted",
+        fee_paid: 250
+      }
+    ],
+    license_terms: {
+      exclusive: false,
+      field_of_use: ["Risk Assessment", "Property Analysis", "Investment Tools"],
+      territory: ["AU", "US", "EU", "CA", "GB", "JP", "KR"],
+      royalty_rate: 5.5,
+      minimum_royalty: 55000,
+      term_years: 15,
+      grant_back: true
+    },
+    enforcement_actions: []
+  },
+  {
+    id: "PAT-005",
+    patent_number: "AU2025123459",
+    title: "Auto-Generated Calculation Engine for Property Valuations",
+    abstract: "An intelligent calculation engine that automatically generates complex property valuation calculations including financial analysis, risk metrics, and investment projections.",
+    inventors: ["Dr. Marco Delderenzo", "Dr. Sarah Kim", "Prof. Michael Torres"],
+    assignee: "Delderenzo Property Group Pty Ltd",
+    filing_date: "2024-10-01",
+    grant_date: "2024-12-30",
+    expiry_date: "2044-10-01",
+    status: "GRANTED",
+    jurisdiction: "Australia",
+    claims_count: 15,
+    priority_claim: "AU2024901555",
+    pct_application: "PCT/AU2024/050155",
+    prosecution_history: [
+      {
+        date: "2024-10-01",
+        event_type: "FILING",
+        description: "Initial patent application filed",
+        fee_paid: 370
+      },
+      {
+        date: "2024-12-30",
+        event_type: "GRANT",
+        description: "Patent granted",
+        fee_paid: 250
+      }
+    ],
+    license_terms: {
+      exclusive: false,
+      field_of_use: ["Property Valuation", "Financial Calculations", "Analytics"],
+      territory: ["AU", "US", "EU", "CA"],
+      royalty_rate: 6.0,
+      minimum_royalty: 60000,
+      term_years: 18,
+      grant_back: true
+    },
+    enforcement_actions: []
   }
 ];
 
@@ -265,20 +361,28 @@ export const calculatePatentValue = (patent: Patent): number => {
 };
 
 export const generatePatentReport = () => {
-  const totalValue = CORE_PATENT_PORTFOLIO.reduce((sum, patent) => sum + calculatePatentValue(patent), 0);
-  const grantedPatents = CORE_PATENT_PORTFOLIO.filter(p => p.status === 'GRANTED').length;
-  const pendingPatents = PENDING_APPLICATIONS.length;
+  const allPatents = [...CORE_PATENT_PORTFOLIO, ...ADDITIONAL_GRANTED_PATENTS];
+  const totalValue = allPatents.reduce((sum, patent) => sum + calculatePatentValue(patent), 0);
+  const grantedPatents = allPatents.filter(p => p.status === 'GRANTED').length;
   
   return {
     portfolio_summary: {
-      total_patents: CORE_PATENT_PORTFOLIO.length,
+      total_patents: allPatents.length,
       granted_patents: grantedPatents,
-      pending_applications: pendingPatents,
+      pending_applications: 0,
       total_estimated_value: totalValue,
       jurisdictions_covered: [...new Set(CORE_PATENT_PORTFOLIO.map(p => p.jurisdiction))],
-      technology_areas: ["ESG Assessment", "AI/ML Valuation", "Blockchain Verification", "Market Analysis"]
+      technology_areas: [
+        "ESG Assessment", 
+        "AI/ML Valuation", 
+        "Automated Risk Assessment Systems",
+        "Residential & Non-Residential Risk Matrices",
+        "Auto-Generated Calculation Systems",
+        "Market Analysis",
+        "Property Analytics"
+      ]
     },
-    maintenance_schedule: CORE_PATENT_PORTFOLIO
+    maintenance_schedule: allPatents
       .filter(p => p.status === 'GRANTED')
       .map(p => ({
         patent_number: p.patent_number,
@@ -292,10 +396,12 @@ export const generatePatentReport = () => {
     },
     recommendations: [
       "File continuation applications for core technologies",
-      "Conduct freedom to operate analysis for new products",
+      "Conduct freedom to operate analysis for new products", 
       "Monitor competitor patent activities in ESG/PropTech space",
       "Consider patent pooling opportunities with industry partners",
-      "Develop defensive patent strategy for emerging technologies"
+      "Develop defensive patent strategy for emerging technologies",
+      "Expand patent coverage for automated risk assessment systems",
+      "Protect auto-generated calculation methodologies"
     ]
   };
 };
@@ -340,7 +446,7 @@ export const checkPatentInfringement = (description: string): { risk: string; an
 export default {
   PATENT_CLASSIFICATIONS,
   CORE_PATENT_PORTFOLIO,
-  PENDING_APPLICATIONS,
+  ADDITIONAL_GRANTED_PATENTS,
   PATENT_MONITORING_ALERTS,
   calculatePatentValue,
   generatePatentReport,

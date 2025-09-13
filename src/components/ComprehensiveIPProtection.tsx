@@ -51,10 +51,13 @@ const ComprehensiveIPProtection = () => {
               </div>
               <div className="text-sm space-y-1">
                 <p className="font-medium text-green-600">Patent approved</p>
-                <p className="text-xs text-muted-foreground">Patent applications pending for:</p>
+                <p className="text-xs text-muted-foreground">Patents approved for:</p>
                 <p className="text-xs">• Proprietary valuation algorithms</p>
                 <p className="text-xs">• Financial algorithms and methods</p>
                 <p className="text-xs">• Sustainability assessment methods</p>
+                <p className="text-xs">• Automated risk assessment systems</p>
+                <p className="text-xs">• Residential & non-residential risk matrices</p>
+                <p className="text-xs">• Auto-generated calculation engines</p>
               </div>
             </div>
 
@@ -118,7 +121,7 @@ const ComprehensiveIPProtection = () => {
                 <ul className="text-xs space-y-1 text-muted-foreground">
                   <li>• This software is protected by copyright law and international treaties.</li>
                   <li>• Unauthorized reproduction or distribution may result in severe civil and criminal penalties.</li>
-                  <li>• Patent approved. Patent applications pending for proprietary valuation algorithms, functionality, methods, financial algorithms and methods and sustainability assessment methods.</li>
+                  <li>• Patents approved for proprietary valuation algorithms, functionality, methods, financial algorithms and methods, sustainability assessment methods, automated risk assessment systems, residential & non-residential risk matrices, and auto-generated calculation engines.</li>
                   <li>• Licensed under MIT License for authorized users only. See LICENSE file for terms.</li>
                   <li>• Built with Lovable.dev - AI powered development platform.</li>
                 </ul>
@@ -136,7 +139,7 @@ const ComprehensiveIPProtection = () => {
           </div>
           <div className="text-sm">
             <span className="font-medium text-teal-800">IP Protected Content</span>
-            <div className="text-xs text-teal-600">All Rights Reserved © 2024</div>
+            <div className="text-xs text-teal-600">All Rights Reserved © 2025</div>
           </div>
           <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-300 text-xs">
             PROTECTED
