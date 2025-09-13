@@ -418,15 +418,21 @@ Additional processing may be available for specific document types. Contact supp
         
         // Auto-process OCR if enabled and file is suitable - PERMANENT FEATURE
         if (enableOCR && (file.type.startsWith('image/') || file.type.includes('pdf'))) {
-          // Process OCR automatically for supported files
-          setTimeout(() => {
-            console.log(`Auto-processing OCR for ${document.name}`);
-            performOCR(document);
-          }, 2000); // Allow upload to complete first
+          console.log(`Auto-processing OCR for ${document.name}`);
+          // Process OCR immediately without delay
+          performOCR(document);
         }
       }
       
       setUploadedDocuments(prev => [...prev, ...newDocuments]);
+      
+      // Process OCR for each uploaded document that supports it
+      newDocuments.forEach(document => {
+        if (enableOCR && (document.type.startsWith('image/') || document.type.includes('pdf'))) {
+          console.log(`Processing OCR for ${document.name}`);
+          setTimeout(() => performOCR(document), 500);
+        }
+      });
       
       toast({
         title: "Upload successful",
