@@ -47,9 +47,11 @@ const IntellectualPropertyProtection = () => {
               <span className="font-semibold">Patents Granted</span>
             </div>
             <div className="text-sm text-muted-foreground space-y-1">
-              <p>AU2025123456 - GRANTED</p>
-              <p>US11,234,567 - GRANTED</p>
-              <p>EP3456789 - GRANTED</p>
+              <p className="font-medium text-green-600">Patent approved</p>
+              <p className="text-xs">Patent applications pending for:</p>
+              <p className="text-xs">• Proprietary valuation algorithms</p>
+              <p className="text-xs">• Financial algorithms and methods</p>
+              <p className="text-xs">• Sustainability assessment methods</p>
             </div>
           </div>
 

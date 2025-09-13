@@ -50,9 +50,11 @@ const ComprehensiveIPProtection = () => {
                 <span className="font-semibold text-lg">Patents Granted</span>
               </div>
               <div className="text-sm space-y-1">
-                <p>AU2025123456 - <span className="text-green-600 font-medium">GRANTED</span></p>
-                <p>US11,234,567 - <span className="text-green-600 font-medium">GRANTED</span></p>
-                <p>EP3456789 - <span className="text-green-600 font-medium">GRANTED</span></p>
+                <p className="font-medium text-green-600">Patent approved</p>
+                <p className="text-xs text-muted-foreground">Patent applications pending for:</p>
+                <p className="text-xs">• Proprietary valuation algorithms</p>
+                <p className="text-xs">• Financial algorithms and methods</p>
+                <p className="text-xs">• Sustainability assessment methods</p>
               </div>
             </div>
 
@@ -116,7 +118,7 @@ const ComprehensiveIPProtection = () => {
                 <ul className="text-xs space-y-1 text-muted-foreground">
                   <li>• This software is protected by copyright law and international treaties.</li>
                   <li>• Unauthorized reproduction or distribution may result in severe civil and criminal penalties.</li>
-                  <li>• Patent applications pending for proprietary valuation algorithms and sustainability assessment methods.</li>
+                  <li>• Patent approved. Patent applications pending for proprietary valuation algorithms, functionality, methods, financial algorithms and methods and sustainability assessment methods.</li>
                   <li>• Licensed under MIT License for authorized users only. See LICENSE file for terms.</li>
                   <li>• Built with Lovable.dev - AI powered development platform.</li>
                 </ul>
