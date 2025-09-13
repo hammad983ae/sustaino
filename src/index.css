@@ -51,11 +51,11 @@ All colors MUST be HSL.
     --shadow-3d-strong: 0 12px 40px hsl(158 50% 65% / 0.6);
     --shadow-3d-glow: 0 0 30px hsl(158 64% 52% / 0.3);
     
-    /* Green Tinge Gradients */
-    --gradient-green-subtle: linear-gradient(135deg, hsl(120 25% 98%) 0%, hsl(158 20% 96%) 100%);
-    --gradient-green-medium: linear-gradient(135deg, hsl(158 25% 95%) 0%, hsl(158 35% 92%) 100%);
-    --gradient-green-strong: linear-gradient(135deg, hsl(158 30% 92%) 0%, hsl(158 45% 88%) 100%);
-    --gradient-green-glow: linear-gradient(135deg, hsl(158 40% 90%) 0%, hsl(158 55% 85%) 100%);
+    /* Green Tinge Gradients - Reduced for perfect white-green blend */
+    --gradient-green-subtle: linear-gradient(135deg, hsl(0 0% 99%) 0%, hsl(158 12% 97%) 100%);
+    --gradient-green-medium: linear-gradient(135deg, hsl(158 15% 97%) 0%, hsl(158 20% 95%) 100%);
+    --gradient-green-strong: linear-gradient(135deg, hsl(158 18% 95%) 0%, hsl(158 25% 92%) 100%);
+    --gradient-green-glow: linear-gradient(135deg, hsl(158 22% 93%) 0%, hsl(158 30% 90%) 100%);
 
     /* ESG Enhancement Colors - Enhanced */
     --success: 142 76% 36%;

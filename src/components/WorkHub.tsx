@@ -386,7 +386,7 @@ export default function WorkHub() {
           <TabsTrigger value="valuations">Property Valuations ({valuations.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
           <TabsTrigger value="jobs">Jobs ({jobs.length})</TabsTrigger>
-          <TabsTrigger value="costa">Costa Portfolio ({costaAnalyses.length})</TabsTrigger>
+          <TabsTrigger value="costa">Costa's Operations ({costaAnalyses.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="valuations" className="mt-6">
@@ -589,69 +589,132 @@ export default function WorkHub() {
         </TabsContent>
 
         <TabsContent value="costa" className="mt-6">
-          <div className="space-y-4">
-            {filteredCostaAnalyses.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-12">
-                  <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-medium mb-2">No Costa analyses found</h3>
-                  <p className="text-muted-foreground">Create your first Costa Group portfolio analysis</p>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-4">
-                {filteredCostaAnalyses.map((analysis) => (
-                  <Card key={analysis.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                            <h3 className="font-semibold">{analysis.title}</h3>
+          <div className="space-y-6">
+            {/* Global Operations Portfolio Section */}
+            <Card className="border-2 border-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Building className="h-5 w-5 text-primary" />
+                  Global Operations Portfolio
+                  <Badge variant="outline" className="ml-auto">Restricted Access</Badge>
+                </CardTitle>
+                <p className="text-muted-foreground">
+                  Comprehensive portfolio overview with profit information and operational metrics
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <Button 
+                    onClick={() => navigate('/costa-group-portfolio')}
+                    className="flex items-center gap-2"
+                  >
+                    <TrendingUp className="h-4 w-4" />
+                    Portfolio Analysis
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => navigate('/costa-group-valuations')}
+                    className="flex items-center gap-2"
+                  >
+                    <DollarSign className="h-4 w-4" />
+                    Valuations
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => navigate('/costa-group-reports')}
+                    className="flex items-center gap-2"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Reports
+                  </Button>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div className="text-center p-3 bg-muted/50 rounded">
+                    <p className="text-muted-foreground">Total Locations</p>
+                    <p className="text-2xl font-bold text-primary">25+</p>
+                  </div>
+                  <div className="text-center p-3 bg-muted/50 rounded">
+                    <p className="text-muted-foreground">Portfolio Value</p>
+                    <p className="text-2xl font-bold text-primary">$2.8B</p>
+                  </div>
+                  <div className="text-center p-3 bg-muted/50 rounded">
+                    <p className="text-muted-foreground">Annual Production</p>
+                    <p className="text-2xl font-bold text-primary">125K</p>
+                  </div>
+                  <div className="text-center p-3 bg-muted/50 rounded">
+                    <p className="text-muted-foreground">Water Usage</p>
+                    <p className="text-2xl font-bold text-primary">890ML</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Existing Costa Analyses Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Saved Analyses</h3>
+              {filteredCostaAnalyses.length === 0 ? (
+                <Card>
+                  <CardContent className="text-center py-12">
+                    <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-lg font-medium mb-2">No Costa analyses found</h3>
+                    <p className="text-muted-foreground">Create your first Costa Group portfolio analysis</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid gap-4">
+                  {filteredCostaAnalyses.map((analysis) => (
+                    <Card key={analysis.id} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                              <h3 className="font-semibold">{analysis.title}</h3>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                              <div>
+                                <p className="text-muted-foreground">Created</p>
+                                <p className="font-medium">{formatDate(analysis.created_at)}</p>
+                              </div>
+                              <div>
+                                <p className="text-muted-foreground">Last Updated</p>
+                                <p className="font-medium">{formatDate(analysis.updated_at)}</p>
+                              </div>
+                              <div>
+                                <p className="text-muted-foreground">Analysis Data</p>
+                                <p className="font-medium">
+                                  {analysis.analysis_data?.locationCount || 0} locations
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                            <div>
-                              <p className="text-muted-foreground">Created</p>
-                              <p className="font-medium">{formatDate(analysis.created_at)}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Last Updated</p>
-                              <p className="font-medium">{formatDate(analysis.updated_at)}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Analysis Data</p>
-                              <p className="font-medium">
-                                {analysis.analysis_data?.locationCount || 0} locations
-                              </p>
-                            </div>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleEmailAction(analysis, 'view', 'costa')}
+                            >
+                              <Eye className="h-4 w-4 mr-2" />
+                              View
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleEmailAction(analysis, 'export', 'costa')}
+                            >
+                              <Download className="h-4 w-4 mr-2" />
+                              Export
+                            </Button>
                           </div>
                         </div>
-                        
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEmailAction(analysis, 'view', 'costa')}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEmailAction(analysis, 'export', 'costa')}
-                          >
-                            <Download className="h-4 w-4 mr-2" />
-                            Export
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </TabsContent>
       </Tabs>
