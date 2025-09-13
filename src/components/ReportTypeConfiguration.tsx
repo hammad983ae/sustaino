@@ -18,7 +18,7 @@ const ReportTypeConfiguration = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [includeRentalValuation, setIncludeRentalValuation] = useState(false);
-  const { selectedPropertyType, isPropertyTypeLocked, lockPropertyType } = usePropertyTypeLock();
+  const { selectedPropertyType, isPropertyTypeLocked, lockPropertyType, unlockPropertyType } = usePropertyTypeLock();
   const { addressData } = useProperty();
 
   const handleCheckboxChange = (label: string, option: string, checked: boolean) => {
@@ -191,14 +191,27 @@ const ReportTypeConfiguration = () => {
               </div>
 
               <div>
-                <Label htmlFor="property-type" className="text-sm font-medium">
-                  Property Type
-                  {isPropertyTypeLocked && <span className="ml-2 text-xs text-green-600">(Locked)</span>}
-                </Label>
+                <div className="flex items-center justify-between mb-1">
+                  <Label htmlFor="property-type" className="text-sm font-medium">
+                    Property Type
+                    {isPropertyTypeLocked && <span className="ml-2 text-xs text-green-600">(Locked)</span>}
+                  </Label>
+                  {isPropertyTypeLocked && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={unlockPropertyType}
+                      className="text-xs h-auto px-2 py-1 text-muted-foreground hover:text-foreground"
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
                 <Select 
                   value={formData['property-type'] || selectedPropertyType || ''} 
                   onValueChange={(value) => handleSelectChange('property-type', value)}
-                  disabled={isPropertyTypeLocked}
+                  disabled={false}
                 >
                   <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Select property type" />
@@ -213,7 +226,7 @@ const ReportTypeConfiguration = () => {
                 </Select>
                 {isPropertyTypeLocked && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    Property type locked after address confirmation. Selected: {selectedPropertyType}
+                    Property type locked after address confirmation. Click "Edit" to modify.
                   </p>
                 )}
               </div>
