@@ -14,6 +14,7 @@ import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
+import ThunderboltIcon from "@/components/ThunderboltIcon";
 import AIAssistantToggle from "@/components/AIAssistantToggle";
 
 export default function AutomatedValuation() {
@@ -79,12 +80,16 @@ export default function AutomatedValuation() {
           <div className="container mx-auto px-4 py-8">
             <div className="text-center mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent mb-6 animate-scale-in">
-                Professional Property Valuations
+                Professional Property Valuations and ESG Assessments
               </h1>
-              <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
-                Get accurate, AI-powered property valuations with comprehensive reports 
-                <span className="block mt-2 text-emerald-600 font-semibold">in minutes</span>
-              </p>
+              <div className="flex items-center justify-center gap-3 text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <ThunderboltIcon className="w-8 h-8 md:w-10 md:h-10 animate-pulse" />
+                <span className="font-semibold bg-gradient-to-r from-yellow-500 via-purple-500 to-emerald-500 bg-clip-text text-transparent">
+                  Powered
+                </span>
+                <span>- Instant Property Valuations and ESG Assessment Powered By</span>
+                <span className="font-bold text-emerald-600">Sustaino-Pro</span>
+              </div>
             </div>
             
             <div className="max-w-5xl mx-auto animate-scale-in" style={{ animationDelay: '0.6s' }}>
