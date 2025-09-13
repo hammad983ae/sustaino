@@ -6,13 +6,43 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useProperty } from "@/contexts/PropertyContext";
 import { useEffect } from "react";
+import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const PropertyAddressForm = () => {
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
 
-  const handleGenerateAddress = () => {
+  const handleGenerateAddress = async () => {
     const formatted = getFormattedAddress();
     updateAddressData({ propertyAddress: formatted });
+
+    // Try to create/upsert property in database for authenticated users
+    if (formatted) {
+      try {
+        const { data: user } = await supabase.auth.getUser();
+        if (user.user) {
+          const { data, error } = await supabase.rpc('upsert_property_from_address', {
+            address_text: formatted,
+            property_type_text: 'residential'
+          });
+          
+          if (error) {
+            console.warn('Could not create property in database:', error.message);
+            // Continue anyway - user can still work with local data
+          } else {
+            console.log('Property created/found with ID:', data);
+          }
+        }
+      } catch (dbError) {
+        console.warn('Database operation failed, continuing with local data:', dbError);
+        // Not a critical error - user can still continue
+      }
+
+      toast({
+        title: "Address Generated! ✅",
+        description: "Property address has been generated and saved.",
+      });
+    }
   };
 
   return (

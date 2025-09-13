@@ -39,6 +39,7 @@ import {
   MapPin
 } from 'lucide-react';
 import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
+import DashboardQuickSearch from '@/components/DashboardQuickSearch';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -408,6 +409,11 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="tools" className="space-y-6 mt-6">
+            {/* Quick Property Search Tool */}
+            <div className="mb-6">
+              <DashboardQuickSearch />
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <Link to="/automated-valuation">
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer">

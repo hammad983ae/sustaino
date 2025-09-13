@@ -130,10 +130,6 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Quick Property Search - Featured prominently */}
-            <div className="mt-12 mb-8">
-              <QuickPropertySearch />
-            </div>
 
             {/* Assessment Type Tabs */}
             <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
