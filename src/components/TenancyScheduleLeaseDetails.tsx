@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FileText, Upload, Users, Eye, FileImage } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import TenancyCalculationForm from "./TenancyCalculationForm";
 
 const TenancyScheduleLeaseDetails = () => {
   const [extractedText, setExtractedText] = useState<string>("");
@@ -289,19 +290,25 @@ const TenancyScheduleLeaseDetails = () => {
             )}
           </div>
 
-          {/* Tenant Lease Details */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Tenant Lease Details</h3>
+          {/* Professional Tenant Lease Details Form */}
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Tenant Lease Details</h3>
+              <div className="text-xs text-muted-foreground bg-blue-50 px-2 py-1 rounded">
+                Professional Format - All calculations automated
+              </div>
+            </div>
+            
             <div className="space-y-4">
               {/* Lessor/Lessee Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="lessor">Lessor</Label>
-                  <Input id="lessor" placeholder="" className="mt-1" />
+                  <Input id="lessor" placeholder="Enter lessor name" className="mt-1" />
                 </div>
                 <div>
                   <Label htmlFor="lessee">Lessee</Label>
-                  <Input id="lessee" placeholder="" className="mt-1" />
+                  <Input id="lessee" placeholder="Enter lessee name" className="mt-1" />
                 </div>
               </div>
 
@@ -309,19 +316,19 @@ const TenancyScheduleLeaseDetails = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="commencement-date">Commencement Date</Label>
-                  <Input id="commencement-date" placeholder="" className="mt-1" />
+                  <Input id="commencement-date" type="date" className="mt-1" />
                 </div>
                 <div>
                   <Label htmlFor="expiry-date">Expiry Date</Label>
-                  <Input id="expiry-date" placeholder="" className="mt-1" />
+                  <Input id="expiry-date" type="date" className="mt-1" />
                 </div>
                 <div>
                   <Label htmlFor="options-terms">Options/Further Terms</Label>
-                  <Input id="options-terms" placeholder="" className="mt-1" />
+                  <Input id="options-terms" placeholder="e.g., 5+5 years" className="mt-1" />
                 </div>
                 <div>
                   <Label htmlFor="review-date">Review Date</Label>
-                  <Input id="review-date" placeholder="" className="mt-1" />
+                  <Input id="review-date" type="date" className="mt-1" />
                 </div>
               </div>
 
@@ -329,85 +336,43 @@ const TenancyScheduleLeaseDetails = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="tenant-review-method">Review Method</Label>
-                  <Input id="tenant-review-method" placeholder="" className="mt-1" />
+                  <Select>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select method" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cpi">CPI</SelectItem>
+                      <SelectItem value="market">Market Review</SelectItem>
+                      <SelectItem value="fixed">Fixed %</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <Label htmlFor="outgoings">Outgoings</Label>
-                  <Input id="outgoings" placeholder="" className="mt-1" />
+                  <Input id="outgoings" placeholder="$0.00" className="mt-1" />
                 </div>
                 <div>
                   <Label htmlFor="commencement-rent">Commencement Rent</Label>
-                  <Input id="commencement-rent" placeholder="" className="mt-1" />
+                  <Input id="commencement-rent" placeholder="$0.00" className="mt-1" />
                 </div>
                 <div>
                   <Label htmlFor="incentives">Incentives</Label>
-                  <Input id="incentives" placeholder="" className="mt-1" />
-                </div>
-              </div>
-
-              {/* Additional Lease Details */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="net-lettable-area">Net Lettable Area</Label>
-                  <Input id="net-lettable-area" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="outgoings-per-sqm">Outgoings per sqm</Label>
-                  <Input id="outgoings-per-sqm" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="gross-passing-rent">Gross Passing Rent</Label>
-                  <Input id="gross-passing-rent" placeholder="" className="mt-1" />
+                  <Input id="incentives" placeholder="$0.00" className="mt-1" />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="net-passing-rent">Net Passing Rent</Label>
-                  <Input id="net-passing-rent" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="tenant-review-mechanism">Review Mechanism</Label>
-                  <Input id="tenant-review-mechanism" placeholder="" className="mt-1" />
-                </div>
                 <div>
                   <Label htmlFor="repairs-maintenance">Repairs and Maintenance</Label>
-                  <Textarea id="repairs-maintenance" placeholder="" className="mt-1 h-20" />
-                </div>
-              </div>
-
-              {/* Financial Details */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                  <Label htmlFor="noi">NOI (Net Operating Income)</Label>
-                  <Input id="noi" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="net-passing-rent-placement">Net Passing Rent Per Placement</Label>
-                  <Input id="net-passing-rent-placement" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="market-rent-sqm">Market rent per/sqm</Label>
-                  <Input id="market-rent-sqm" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="market-rent">Market rent</Label>
-                  <Input id="market-rent" placeholder="" className="mt-1" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="letting-allowance">Letting up allowance</Label>
-                  <Input id="letting-allowance" placeholder="" className="mt-1" />
-                </div>
-                <div>
-                  <Label htmlFor="wale">WALE</Label>
-                  <Input id="wale" placeholder="" className="mt-1" />
+                  <Textarea id="repairs-maintenance" placeholder="Describe responsibility allocation" className="mt-1 h-20" />
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Import Automated Calculation Component */}
+          <TenancyCalculationForm />
         </CardContent>
       </Card>
     </div>
