@@ -45,132 +45,113 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-between mb-4">
-            <Link to="/index" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card/50 hover:bg-card border border-border/50 hover:border-primary/30 transition-all duration-200 text-sm md:text-base font-medium text-muted-foreground hover:text-foreground shadow-sm">
-              <Home className="h-4 w-4 md:h-5 md:w-5" />
-              <span className="hidden sm:inline">Back to Original Platform</span>
-              <span className="sm:hidden">Back</span>
-            </Link>
-            <div className="flex items-center justify-center">
-              <Leaf className="h-8 w-8 text-primary mr-3" />
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Sustaino Pro Valuation Platform
-              </h1>
-            </div>
-            <div></div>
-          </div>
-          <p className="text-xl text-muted-foreground mb-2">
-            Automated Property Valuations with ESG Intelligence
-          </p>
-          <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            Select your property type to begin an automated valuation powered by AI market analysis, 
-            comparable sales data, and comprehensive ESG assessment.
-          </p>
-        </div>
-
-        {/* Property Type Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {propertyTypes.map((type) => {
-            const IconComponent = type.icon;
-            return (
-              <Card 
-                key={type.id} 
-                className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${type.color}`}
-                onClick={() => onSelect(type.id)}
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-lg bg-white shadow-sm">
-                      <IconComponent className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">{type.title}</CardTitle>
-                      <CardDescription className="text-sm">
-                        {type.description}
-                      </CardDescription>
-                    </div>
+    <div className="w-full">
+      {/* Property Type Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {propertyTypes.map((type, index) => {
+          const IconComponent = type.icon;
+          return (
+            <Card 
+              key={type.id} 
+              className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => onSelect(type.id)}
+            >
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="h-8 w-8 text-white" />
                   </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="space-y-2 mb-4">
-                    <h4 className="text-sm font-medium text-muted-foreground">Automated Analysis Includes:</h4>
-                    <ul className="text-sm space-y-1">
-                      {type.features.map((feature, index) => (
-                        <li key={index} className="flex items-center text-muted-foreground">
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary mr-2" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+                  <div>
+                    <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-emerald-700 transition-colors">
+                      {type.title}
+                    </CardTitle>
+                    <CardDescription className="text-gray-600 mt-1">
+                      {type.description}
+                    </CardDescription>
                   </div>
-                  <Button className="w-full" variant="default">
-                    Start {type.title} Valuation
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {/* Features Banner */}
-        <Card className="bg-gradient-to-r from-primary/5 to-secondary/10 border-primary/20">
-          <CardContent className="p-6">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2 flex items-center justify-center">
-                <Leaf className="h-5 w-5 text-primary mr-2" />
-                Sustaino Pro ESG Advantage
-              </h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Every valuation includes comprehensive Environmental, Social & Governance analysis 
-                to identify value premiums, risks, and future-proofing opportunities.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
-                <span>• Carbon Footprint Analysis</span>
-                <span>• Energy Efficiency Ratings</span>
-                <span>• Climate Risk Assessment</span>
-                <span>• Social Impact Metrics</span>
-                <span>• Governance Compliance</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Quick Navigation */}
-        <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/20">
-          <CardHeader>
-            <CardTitle className="text-center">Quick Navigation</CardTitle>
-            <CardDescription className="text-center">
-              Access additional property valuation tools and features
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button variant="outline" asChild className="flex-1 min-w-[180px]">
-                <Link to="/property-valuations">
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Property Valuations
-                </Link>
-              </Button>
-              <Button variant="outline" asChild className="flex-1 min-w-[180px]">
-                <Link to="/comprehensive-valuation">
-                  <Building2 className="mr-2 h-4 w-4" />
-                  Complete Valuation
-                </Link>
-              </Button>
-              <Button variant="outline" asChild className="flex-1 min-w-[180px]">
-                <Link to="/work-hub">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Work Hub
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-3 mb-6">
+                  <h4 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">
+                    Automated Analysis Includes:
+                  </h4>
+                  <ul className="text-sm space-y-2">
+                    {type.features.map((feature, index) => (
+                      <li key={index} className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
+                        <div className="h-2 w-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mr-3 group-hover:scale-125 transition-transform duration-200" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Button 
+                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group-hover:scale-105"
+                  variant="default"
+                >
+                  Start {type.title} Valuation
+                </Button>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
+
+      {/* Features Banner */}
+      <Card className="bg-gradient-to-r from-emerald-50/90 to-teal-50/90 border-emerald-200/60 backdrop-blur-sm animate-fade-in mb-8" style={{ animationDelay: '0.6s' }}>
+        <CardContent className="p-8">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-4 flex items-center justify-center text-emerald-700">
+              <Leaf className="h-6 w-6 text-emerald-600 mr-3" />
+              Sustaino Pro ESG Advantage
+            </h3>
+            <p className="text-gray-600 mb-6 text-lg leading-relaxed max-w-3xl mx-auto">
+              Every valuation includes comprehensive Environmental, Social & Governance analysis 
+              to identify value premiums, risks, and future-proofing opportunities.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-emerald-700 font-medium">
+              <span className="px-3 py-1 bg-emerald-100 rounded-full">• Carbon Footprint Analysis</span>
+              <span className="px-3 py-1 bg-emerald-100 rounded-full">• Energy Efficiency Ratings</span>
+              <span className="px-3 py-1 bg-emerald-100 rounded-full">• Climate Risk Assessment</span>
+              <span className="px-3 py-1 bg-emerald-100 rounded-full">• Social Impact Metrics</span>
+              <span className="px-3 py-1 bg-emerald-100 rounded-full">• Governance Compliance</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Quick Navigation */}
+      <Card className="bg-gradient-to-br from-white/90 to-emerald-50/80 border-emerald-200/50 backdrop-blur-sm animate-fade-in" style={{ animationDelay: '0.8s' }}>
+        <CardHeader>
+          <CardTitle className="text-center text-2xl font-bold text-emerald-700">Quick Navigation</CardTitle>
+          <CardDescription className="text-center text-gray-600">
+            Access additional property valuation tools and features
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button variant="outline" asChild className="flex-1 min-w-[180px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/property-valuations">
+                <Calculator className="mr-2 h-4 w-4" />
+                Property Valuations
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[180px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/comprehensive-valuation">
+                <Building2 className="mr-2 h-4 w-4" />
+                Complete Valuation
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[180px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/work-hub">
+                <FileText className="mr-2 h-4 w-4" />
+                Work Hub
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
