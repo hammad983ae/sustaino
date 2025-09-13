@@ -138,7 +138,7 @@ export default function FullScreenDemo() {
               
               <div className="flex items-center justify-center gap-3 text-2xl md:text-3xl lg:text-4xl text-gray-600 max-w-6xl mx-auto leading-relaxed animate-fade-in flex-wrap mb-8" style={{ animationDelay: '0.4s' }}>
                 <ThunderboltIcon className="w-12 h-12 md:w-16 md:h-16 animate-pulse" />
-                <span className="font-semibold bg-gradient-to-r from-yellow-500 via-purple-500 to-emerald-500 bg-clip-text text-transparent">
+                <span className="font-semibold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
                   Powered
                 </span>
                 <span>- Instant Property Valuations and ESG Assessment Powered By</span>

@@ -113,7 +113,7 @@ export default function AutomatedValuation() {
             
               <div className="flex items-center justify-center gap-2 text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fade-in flex-wrap" style={{ animationDelay: '0.4s' }}>
                 <ThunderboltIcon className="w-8 h-8 md:w-10 md:h-10 animate-pulse" />
-                <span className="font-semibold bg-gradient-to-r from-yellow-500 via-purple-500 to-emerald-500 bg-clip-text text-transparent">
+                <span className="font-semibold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
                   Powered
                 </span>
                 <span>- Instant Property Valuations and ESG Assessment Powered By</span>
