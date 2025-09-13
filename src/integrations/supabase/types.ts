@@ -869,6 +869,10 @@ export type Database = {
         }
         Returns: Json
       }
+      create_report: {
+        Args: { report_data: Json }
+        Returns: string
+      }
       create_valuation_job: {
         Args: { job_data: Json }
         Returns: string

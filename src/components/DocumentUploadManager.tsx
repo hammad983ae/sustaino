@@ -488,28 +488,26 @@ const DocumentUploadManager = () => {
         throw new Error('Failed to get job ID');
       }
 
-      // Create a report entry linked to the job
-      const { data: reportData, error: reportError } = await supabase
-        .from('reports')
-        .insert({
-          user_id: user.id,
-          property_id: propertyId,
-          title: `${jobDetails.title} - Report`,
-          report_type: jobDetails.jobType,
-          status: 'in_progress',
-          current_section: 'document_upload',
-          progress: 10,
-          sections_data: {
-            documents: uploadedDocuments.map(doc => ({
-              name: doc.name,
-              url: doc.url,
-              category: doc.category,
-              uploadedAt: doc.uploadedAt.toISOString()
-            }))
+      // Create a report entry linked to the job using secure function
+      const { data: reportId, error: reportError } = await supabase
+        .rpc('create_report', {
+          report_data: {
+            property_id: propertyId,
+            title: `${jobDetails.title} - Report`,
+            report_type: jobDetails.jobType,
+            status: 'in_progress',
+            current_section: 'document_upload',
+            progress: 10,
+            sections_data: {
+              documents: uploadedDocuments.map(doc => ({
+                name: doc.name,
+                url: doc.url,
+                category: doc.category,
+                uploadedAt: doc.uploadedAt.toISOString()
+              }))
+            }
           }
-        })
-        .select()
-        .single();
+        });
 
       if (reportError) throw reportError;
 
