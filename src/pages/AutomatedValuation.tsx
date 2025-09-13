@@ -17,6 +17,8 @@ import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
 import ThunderboltIcon from "@/components/ThunderboltIcon";
 import AIAssistantToggle from "@/components/AIAssistantToggle";
+import AuthStatus from "@/components/AuthStatus";
+import PropertyUpdateFeed from "@/components/PropertyUpdateFeed";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
@@ -76,6 +78,9 @@ export default function AutomatedValuation() {
                 >
                   🌍 ESG Platform
                 </a>
+              </div>
+              <div className="flex items-center gap-4">
+                <AuthStatus />
               </div>
             </div>
           </div>
@@ -146,6 +151,9 @@ export default function AutomatedValuation() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
               <div className="animate-fade-in" style={{ animationDelay: '1s' }}>
                 <CostaGroupPortfolio />
+              </div>
+              <div className="animate-fade-in" style={{ animationDelay: '1.1s' }}>
+                <PropertyUpdateFeed />
               </div>
             </div>
             
