@@ -78,23 +78,10 @@ export default function AutomatedValuation() {
           
           {/* Hero Section - Enhanced with animations */}
           <div className="container mx-auto px-4 py-8">
-            <div className="text-center mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="flex items-center justify-between mb-4">
-                <a 
-                  href="/index" 
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card/50 hover:bg-card border border-border/50 hover:border-primary/30 transition-all duration-200 text-sm md:text-base font-medium text-muted-foreground hover:text-foreground shadow-sm"
-                >
-                  <svg className="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                  <span className="hidden sm:inline">Back to Original Platform</span>
-                  <span className="sm:hidden">Back</span>
-                </a>
-                <div></div>
-              </div>
-              <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent mb-6 animate-scale-in">
-                Professional Property Valuations and ESG Assessments
-              </h1>
+          <div className="text-center mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent mb-6 animate-scale-in">
+              Professional Property Valuations and ESG Assessments
+            </h1>
               <div className="flex items-center justify-center gap-2 text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fade-in flex-wrap" style={{ animationDelay: '0.4s' }}>
                 <ThunderboltIcon className="w-8 h-8 md:w-10 md:h-10 animate-pulse" />
                 <span className="font-semibold bg-gradient-to-r from-yellow-500 via-purple-500 to-emerald-500 bg-clip-text text-transparent">
@@ -113,12 +100,28 @@ export default function AutomatedValuation() {
           {/* Subtitle Section */}
           <div className="container mx-auto px-4 py-8">
             <div className="text-center mb-16 animate-fade-in" style={{ animationDelay: '0.8s' }}>
-              <div className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500/10 rounded-full border border-emerald-200/50 backdrop-blur-sm">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                <h2 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                  Sustaino Pro Valuation Platform
-                </h2>
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500/10 rounded-full border border-emerald-200/50 backdrop-blur-sm">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+              <h2 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Sustaino Pro Valuation Platform
+              </h2>
+            </div>
+            
+            {/* Back to Home Button - positioned 2mm below red line */}
+            <div className="flex justify-center mt-2 relative">
+              <div className="absolute left-1/2 transform -translate-x-1/2 translate-x-24">
+                <a 
+                  href="/index" 
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent/20 transition-all duration-200 text-sm md:text-base font-bold text-foreground hover:text-primary"
+                >
+                  <svg className="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  <span className="hidden sm:inline">Back to Original Platform</span>
+                  <span className="sm:hidden">Back</span>
+                </a>
               </div>
+            </div>
               <p className="text-lg text-gray-600 mt-4 max-w-4xl mx-auto">
                 Automated Property Valuations with ESG Intelligence
               </p>
