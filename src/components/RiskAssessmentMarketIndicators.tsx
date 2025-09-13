@@ -119,6 +119,13 @@ const RiskAssessmentMarketIndicators = () => {
   };
 
   const riskCategories = [
+    "Location Neighbourhood",
+    "Land Planning",
+    "Environmental",
+    "Improvements",
+    "Market Activity",
+    "Economy Impact",
+    "Market Segment",
     "Cashflow",
     "Management/Tenancy",
     "ESG"
