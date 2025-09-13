@@ -7,8 +7,11 @@ import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentUploadManager from "@/components/DocumentUploadManager";
+import GroundLeaseDetails from "@/components/GroundLeaseDetails";
+import ProfessionalDeclarations from "@/components/ProfessionalDeclarations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useValuation } from "@/contexts/ValuationContext";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
@@ -16,8 +19,9 @@ interface MultiStepFormProps {
 
 const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   const [currentGroup, setCurrentGroup] = useState(0);
+  const { isLeaseholdValuation } = useValuation();
 
-  // Group steps: 1-3 together, 4-5 together
+  // Group steps: 1-3 together, 4-5 together, then professional declarations
   const stepGroups = [
     {
       title: "Property Information & Analysis",
@@ -45,12 +49,31 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
         {
           title: "Report Configuration",
           icon: <Settings2 className="h-5 w-5" />,
-          component: <ReportTypeConfiguration />
+          component: (
+            <div className="space-y-6">
+              <ReportTypeConfiguration />
+              <GroundLeaseDetails 
+                isVisible={isLeaseholdValuation}
+                data={{}}
+                onChange={() => {}}
+              />
+            </div>
+          )
         },
         {
           title: "Document Upload",
           icon: <Upload className="h-5 w-5" />,
           component: <DocumentUploadManager />
+        }
+      ]
+    },
+    {
+      title: "Professional Declarations",
+      steps: [
+        {
+          title: "Professional Compliance",
+          icon: <Settings2 className="h-5 w-5" />,
+          component: <ProfessionalDeclarations onComplete={(data) => console.log('Declarations completed:', data)} />
         }
       ]
     }
@@ -64,6 +87,7 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
     if (currentGroup < stepGroups.length - 1) {
       setCurrentGroup(currentGroup + 1);
     } else if (onSubmit) {
+      // Final completion - redirect to WorkHub
       onSubmit({ completed: true });
     }
   };
@@ -109,7 +133,7 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
           className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
         >
           <span className="hidden sm:inline">
-            {currentGroup === stepGroups.length - 1 ? "Complete" : "Next"}
+            {currentGroup === stepGroups.length - 1 ? "Complete Assessment" : "Next"}
           </span>
           <ChevronRight className="h-4 w-4" />
         </Button>

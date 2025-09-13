@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { useState, useEffect } from "react";
 import { usePropertyTypeLock } from "@/components/PropertyTypeLockProvider";
 import { useProperty } from "@/contexts/PropertyContext";
+import { useValuation } from "@/contexts/ValuationContext";
 
 const ReportTypeConfiguration = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
@@ -20,20 +21,40 @@ const ReportTypeConfiguration = () => {
   const [includeRentalValuation, setIncludeRentalValuation] = useState(false);
   const { selectedPropertyType, isPropertyTypeLocked, lockPropertyType, unlockPropertyType } = usePropertyTypeLock();
   const { addressData } = useProperty();
+  const { setValuationType } = useValuation();
 
   const handleCheckboxChange = (label: string, option: string, checked: boolean) => {
     setSelectedValues(prev => {
       const current = prev[label] || [];
       if (checked) {
-        return { ...prev, [label]: [...current, option] };
+        const updated = { ...prev, [label]: [...current, option] };
+        
+        // Update valuation type context to trigger Ground Lease display
+        if (label === 'Interest Values' && option === 'Leasehold Interest' && checked) {
+          setValuationType('Leasehold Interest');
+        }
+        
+        return updated;
       } else {
-        return { ...prev, [label]: current.filter(item => item !== option) };
+        const updated = { ...prev, [label]: current.filter(item => item !== option) };
+        
+        // Remove valuation type if leasehold interest is unchecked
+        if (label === 'Interest Values' && option === 'Leasehold Interest' && !checked) {
+          setValuationType('');
+        }
+        
+        return updated;
       }
     });
   };
 
   const handleSelectChange = (key: string, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }));
+    
+    // Update valuation type context to trigger Ground Lease display
+    if (key === 'valuation-type') {
+      setValuationType(value);
+    }
     
     // Lock property type once address is confirmed and property type is selected
     if (key === 'property-type' && value && addressData.propertyAddress && !isPropertyTypeLocked) {

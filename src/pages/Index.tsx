@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
+import { ValuationProvider } from '@/contexts/ValuationContext';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
 import InformationBrochure from '@/components/InformationBrochure';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
@@ -56,6 +57,7 @@ const Index = () => {
 
   return (
     <PropertyProvider>
+      <ValuationProvider>
       <div className="min-h-screen relative">
         {/* 3D Background */}
         <PropertyValuation3DBackground />
@@ -373,6 +375,7 @@ const Index = () => {
           )}
         </div>
       </div>
+      </ValuationProvider>
     </PropertyProvider>
   );
 };
