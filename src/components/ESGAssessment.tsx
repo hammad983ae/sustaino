@@ -35,7 +35,7 @@ import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
 
 const ESGAssessment = () => {
-  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('ESGAssessment');
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('ESGAssessment', { showToast: false });
   const { toast } = useToast();
   const [includeSection, setIncludeSection] = useState(true);
   const [esgSections, setEsgSections] = useState({

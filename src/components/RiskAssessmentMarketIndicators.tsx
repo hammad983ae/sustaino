@@ -21,7 +21,10 @@ import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
 
 const RiskAssessmentMarketIndicators = () => {
-  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('RiskAssessmentMarketIndicators');
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('RiskAssessmentMarketIndicators', { 
+    showToast: false, // Disable automatic toast notifications
+    autoSave: true 
+  });
   const { toast } = useToast();
   
   const [includeSection, setIncludeSection] = useState(true);

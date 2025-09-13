@@ -17,7 +17,7 @@ const EnhancedPropertyDetails = () => {
   const { selectedPropertyType, isPropertyTypeLocked } = usePropertyTypeLock();
   const { reportData, updateReportData } = useReportData();
   const { addressData } = useProperty();
-  const { saveData, isSaving, lastSaved } = useUniversalSave('PropertyDetails');
+  const { saveData, isSaving, lastSaved } = useUniversalSave('PropertyDetails', { showToast: false });
   const { toast } = useToast();
 
   // Helper function to check if a property type is specialized

@@ -11,7 +11,7 @@ import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
 
 const EssentialRepairs = () => {
-  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('EssentialRepairs');
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('EssentialRepairs', { showToast: false });
   const { toast } = useToast();
   
   const [includeSection, setIncludeSection] = useState(true);

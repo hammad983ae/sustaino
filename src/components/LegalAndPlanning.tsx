@@ -11,7 +11,7 @@ import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
 
 const LegalAndPlanning = () => {
-  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('LegalAndPlanning');
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('LegalAndPlanning', { showToast: false });
   const { toast } = useToast();
   const [planningData, setPlanningData] = useState({
     lga: "",

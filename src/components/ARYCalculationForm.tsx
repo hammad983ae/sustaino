@@ -24,7 +24,7 @@ interface ARYCalculationFormProps {
 }
 
 const ARYCalculationForm = ({ onSubmit }: ARYCalculationFormProps) => {
-  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('ARYCalculationForm');
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('ARYCalculationForm', { showToast: false });
   const { toast } = useToast();
   
   const [inputs, setInputs] = useState<ARYInputs>({
