@@ -19,6 +19,7 @@ import CostaGroupValuationsPage from "./pages/CostaGroupValuations";
 import ComprehensiveValuationAnalysis from "./pages/ComprehensiveValuationAnalysis";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
+import { PropertyTypeLockProvider } from "./components/PropertyTypeLockProvider";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrandingProvider>
       <PropertyProvider>
-        <TooltipProvider>
+        <PropertyTypeLockProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -49,9 +51,10 @@ const App = () => (
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
-      </PropertyProvider>
-    </BrandingProvider>
-  </QueryClientProvider>
+      </PropertyTypeLockProvider>
+    </PropertyProvider>
+  </BrandingProvider>
+</QueryClientProvider>
 );
 
 export default App;

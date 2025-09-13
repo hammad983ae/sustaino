@@ -16,9 +16,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock, Printer, Plus, Minus, Upload, Image, Download } from "lucide-react";
+import { PropertyTypeSpecificPrompt } from "@/components/PropertyTypeSpecificPrompt";
+import { usePropertyTypeLock } from "@/components/PropertyTypeLockProvider";
 
 const PropertyDetails = () => {
   const [includeSection, setIncludeSection] = useState(true);
+  const [propertyDescription, setPropertyDescription] = useState('');
+  const { selectedPropertyType, isPropertyTypeLocked } = usePropertyTypeLock();
   const [propertyTypes, setPropertyTypes] = useState({
     commercial: true,
     residential: false,
@@ -46,6 +50,21 @@ const PropertyDetails = () => {
     developmentLand: false,
     specialized: false
   });
+
+  // Helper function to check if a property type is specialized
+  const isSpecializedPropertyType = (propertyType: string | null): boolean => {
+    if (!propertyType) return false;
+    const specializedTypes = [
+      'childcare-centre', 'hotel-motel', 'carpark', 'cinema', 'service-station',
+      'licensed-venue', 'healthcare-facility', 'workers-accommodation', 
+      'petrol-station', 'fast-food-restaurant', 'medical-centre', 'aged-care',
+      'student-accommodation', 'data-centre', 'self-storage', 'funeral-home',
+      'veterinary-clinic', 'drive-through', 'car-wash', 'bowling-alley',
+      'gymnasiums-fitness', 'telecommunications-tower', 'cold-storage',
+      'warehouse-distribution', 'manufacturing', 'research-facility'
+    ];
+    return specializedTypes.includes(propertyType);
+  };
 
   const addPropertySection = () => {
     setPropertyCount(prev => prev + 1);

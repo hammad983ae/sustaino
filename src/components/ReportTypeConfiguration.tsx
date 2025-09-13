@@ -10,10 +10,14 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { FileText } from "lucide-react";
 import { useState } from "react";
+import { usePropertyTypeLock } from "@/components/PropertyTypeLockProvider";
+import { useProperty } from "@/contexts/PropertyContext";
 
 const ReportTypeConfiguration = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
+  const { selectedPropertyType, isPropertyTypeLocked, lockPropertyType } = usePropertyTypeLock();
+  const { addressData } = useProperty();
 
   const handleCheckboxChange = (label: string, option: string, checked: boolean) => {
     setSelectedValues(prev => {
@@ -28,6 +32,11 @@ const ReportTypeConfiguration = () => {
 
   const handleSelectChange = (key: string, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }));
+    
+    // Lock property type once address is confirmed and property type is selected
+    if (key === 'property-type' && value && addressData.propertyAddress && !isPropertyTypeLocked) {
+      lockPropertyType(value);
+    }
   };
 
   const handleInputChange = (key: string, value: string) => {
@@ -90,7 +99,15 @@ const ReportTypeConfiguration = () => {
 
   const propertyTypes = [
     "Residential", "Build to Rent", "Commercial", "Industrial", "Retail", 
-    "Development Land", "Agricultural", "Other"
+    "Development Land", "Agricultural", "Specialized",
+    // Specialized Property Sub-types
+    "Childcare Centre", "Hotel/Motel", "Carpark", "Cinema", "Service Station", 
+    "Licensed Venue", "Healthcare Facility", "Workers Accommodation", 
+    "Petrol Station", "Fast Food Restaurant", "Medical Centre", "Aged Care", 
+    "Student Accommodation", "Data Centre", "Self Storage", "Funeral Home",
+    "Veterinary Clinic", "Drive-Through", "Car Wash", "Bowling Alley",
+    "Gymnasiums/Fitness", "Telecommunications Tower", "Cold Storage",
+    "Warehouse Distribution", "Manufacturing", "Research Facility", "Other"
   ];
 
   const valuationPurposes = [
@@ -145,19 +162,31 @@ const ReportTypeConfiguration = () => {
               </div>
 
               <div>
-                <Label htmlFor="property-type" className="text-sm font-medium">Property Type</Label>
-                <Select value={formData['property-type'] || ''} onValueChange={(value) => handleSelectChange('property-type', value)}>
+                <Label htmlFor="property-type" className="text-sm font-medium">
+                  Property Type
+                  {isPropertyTypeLocked && <span className="ml-2 text-xs text-green-600">(Locked)</span>}
+                </Label>
+                <Select 
+                  value={formData['property-type'] || selectedPropertyType || ''} 
+                  onValueChange={(value) => handleSelectChange('property-type', value)}
+                  disabled={isPropertyTypeLocked}
+                >
                   <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Residential" />
+                    <SelectValue placeholder="Select property type" />
                   </SelectTrigger>
                   <SelectContent>
                     {propertyTypes.map((type) => (
-                      <SelectItem key={type} value={type.toLowerCase()}>
+                      <SelectItem key={type} value={type.toLowerCase().replace(/\s+/g, '-')}>
                         {type}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                {isPropertyTypeLocked && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Property type locked after address confirmation. Selected: {selectedPropertyType}
+                  </p>
+                )}
               </div>
 
               <div>
