@@ -9,6 +9,7 @@ import { useProperty } from "@/contexts/PropertyContext";
 import StateBasedMappingIntegration from "./StateBasedMappingIntegration";
 import AddressConfirmation from "./planning/AddressConfirmation";
 import StatePlanningPortalLinks from "./planning/StatePlanningPortalLinks";
+import VicPlanReportExporter from "./planning/VicPlanReportExporter";
 
 interface PlanningDataIntegrationProps {
   propertyAddress?: string;
@@ -89,6 +90,14 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
         }}
         onAddressChange={(address) => {
           console.log('Address updated:', address);
+        }}
+      />
+      
+      {/* VicPlan Report Exporter */}
+      <VicPlanReportExporter 
+        onReportDownloaded={(reportData) => {
+          console.log('VicPlan report downloaded:', reportData);
+          onDataFetched?.(reportData);
         }}
       />
       
