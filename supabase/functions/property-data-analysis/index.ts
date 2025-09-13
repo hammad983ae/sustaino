@@ -27,12 +27,9 @@ serve(async (req) => {
 
     console.log('Analyzing property:', address, state);
 
-    // Get Google Maps API key (try multiple secret names)
-    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY2') ||
-                             Deno.env.get('GOOGLE_MAPS_API_KEY') ||
-                             Deno.env.get('GOOGLE_AERIAL_PHOTOS_API_KEY') ||
-                             Deno.env.get('Google Maps') ||
-                             Deno.env.get('GM');
+    // Get API keys from environment
+    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
+    const rpDataApiKey = Deno.env.get('RP_DATA_API_KEY');
 
     console.log('Available env vars:', Object.keys(Deno.env.toObject()).filter(key => key.toLowerCase().includes('google') || key.toLowerCase().includes('map') || key.toLowerCase().includes('gm')));
     console.log('Google Maps API key resolved:', !!googleMapsApiKey);
