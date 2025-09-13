@@ -19,6 +19,9 @@ import { Plus, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
+import { AutomaticRiskAssessment, type PropertyData } from "@/lib/automaticRiskAssessment";
+import { useReportData } from "@/contexts/ReportDataContext";
+import { useProperty } from "@/contexts/PropertyContext";
 
 const RiskAssessmentMarketIndicators = () => {
   const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('RiskAssessmentMarketIndicators', { 
@@ -26,6 +29,8 @@ const RiskAssessmentMarketIndicators = () => {
     autoSave: true 
   });
   const { toast } = useToast();
+  const { reportData } = useReportData();
+  const { addressData } = useProperty();
   
   const [includeSection, setIncludeSection] = useState(true);
   const [includePropertyRiskRatings, setIncludePropertyRiskRatings] = useState(true);
@@ -116,6 +121,71 @@ const RiskAssessmentMarketIndicators = () => {
 
   const setSummary = (category: string, summary: string) => {
     setRiskSummaries(prev => ({ ...prev, [category]: summary }));
+  };
+
+  // Auto-evaluate risk assessment based on property data
+  const runAutomaticAssessment = () => {
+    try {
+      // Construct property data from available sources
+      const propertyData: PropertyData = {
+        address: addressData.propertyAddress || reportData.propertySearchData?.address,
+        suburb: addressData.suburb,
+        state: addressData.state,
+        postcode: addressData.postcode,
+        propertyType: reportData.reportConfig?.propertyType || reportData.propertySearchData?.propertyType || 'residential',
+        zoning: reportData.planningData?.zoning,
+        // Property details from report data
+        landArea: reportData.propertySearchData?.landArea ? Number(reportData.propertySearchData.landArea) : undefined,
+        buildingArea: reportData.propertySearchData?.buildingArea ? Number(reportData.propertySearchData.buildingArea) : undefined,
+        // Planning and environmental data
+        planningRestrictions: reportData.planningData?.overlays || [],
+        floodZone: reportData.planningData?.overlays?.includes('flood') || false,
+        bushfireZone: reportData.planningData?.overlays?.includes('bushfire') || false,
+        coastalLocation: addressData.suburb?.toLowerCase().includes('beach') || 
+                        addressData.suburb?.toLowerCase().includes('coast') || false,
+        // Estimate market conditions based on available data
+        marketConditions: {
+          priceMovement: 'stable' as const, // Default assumption
+          salesActivity: 'moderate' as const, // Default assumption
+        }
+      };
+
+      // Run automatic assessment for residential properties only
+      if (propertyData.propertyType?.toLowerCase() === 'residential') {
+        const assessment = AutomaticRiskAssessment.evaluateResidentialProperty(propertyData);
+        
+        // Update risk ratings and summaries with automatic assessment
+        const newRatings: {[key: string]: number} = {};
+        const newSummaries: {[key: string]: string} = {};
+        
+        assessment.assessments.forEach(item => {
+          newRatings[item.category] = item.rating;
+          newSummaries[item.category] = item.summary;
+        });
+        
+        setRiskRatings(prev => ({ ...prev, ...newRatings }));
+        setRiskSummaries(prev => ({ ...prev, ...newSummaries }));
+        
+        toast({
+          title: "Automatic Assessment Complete",
+          description: `Risk assessment completed for ${assessment.assessments.length} categories. Overall risk: ${assessment.overallRiskProfile}`,
+          duration: 5000
+        });
+      } else {
+        toast({
+          title: "Automatic Assessment Unavailable", 
+          description: "Automatic assessment is currently only available for residential properties",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error running automatic assessment:', error);
+      toast({
+        title: "Assessment Error",
+        description: "Failed to run automatic assessment. Please check property data completeness.",
+        variant: "destructive"
+      });
+    }
   };
 
   const riskCategories = [
@@ -371,14 +441,30 @@ const RiskAssessmentMarketIndicators = () => {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Risk Categories</CardTitle>
-              <div className="flex items-center gap-2">
-                <Label htmlFor="include-risk-categories">Include</Label>
-                <Switch
-                  id="include-risk-categories"
-                  checked={includeRiskCategories}
-                  onCheckedChange={setIncludeRiskCategories}
-                />
+              <div>
+                <CardTitle>Risk Categories</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Evaluate property risk factors (excludes Cashflow, Management/Tenancy, ESG which are assessed separately)
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <Button
+                  onClick={runAutomaticAssessment}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2"
+                  disabled={!addressData.propertyAddress && !reportData.propertySearchData?.confirmedAddress}
+                >
+                  🤖 Auto-Assess
+                </Button>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="include-risk-categories">Include</Label>
+                  <Switch
+                    id="include-risk-categories"
+                    checked={includeRiskCategories}
+                    onCheckedChange={setIncludeRiskCategories}
+                  />
+                </div>
               </div>
             </div>
           </CardHeader>
