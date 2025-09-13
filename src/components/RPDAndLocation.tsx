@@ -18,9 +18,12 @@ const RPDAndLocation = () => {
   const { saveData, loadData, isSaving, lastSaved } = useSaveSystem('RPD_and_Location');
   
   const [propertyIdentification, setPropertyIdentification] = useState({
-    physicalInspection: false,
-    cadastralMap: false,
-    aerialMapping: false,
+    physicalInspection: true,
+    surveyorPeg: false,
+    plan: false,
+    cadastralMap: true,
+    certificateTitle: false,
+    aerialMapping: true,
     includeInReport: true,
     other: '',
     otherChecked: false
@@ -121,7 +124,7 @@ const RPDAndLocation = () => {
               />
               <span className="text-sm text-muted-foreground">Include in report</span>
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               <div className="flex items-center space-x-2">
                 <Checkbox 
                   id="physical-inspection" 
@@ -134,6 +137,26 @@ const RPDAndLocation = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox 
+                  id="surveyor-peg" 
+                  checked={propertyIdentification.surveyorPeg}
+                  onCheckedChange={(checked) => 
+                    setPropertyIdentification(prev => ({...prev, surveyorPeg: !!checked}))
+                  }
+                />
+                <Label htmlFor="surveyor-peg" className="text-sm">Surveyor Peg</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="plan" 
+                  checked={propertyIdentification.plan}
+                  onCheckedChange={(checked) => 
+                    setPropertyIdentification(prev => ({...prev, plan: !!checked}))
+                  }
+                />
+                <Label htmlFor="plan" className="text-sm">Plan</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
                   id="cadastral-map" 
                   checked={propertyIdentification.cadastralMap}
                   onCheckedChange={(checked) => 
@@ -141,6 +164,16 @@ const RPDAndLocation = () => {
                   }
                 />
                 <Label htmlFor="cadastral-map" className="text-sm">Cadastral Map</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="certificate-title" 
+                  checked={propertyIdentification.certificateTitle}
+                  onCheckedChange={(checked) => 
+                    setPropertyIdentification(prev => ({...prev, certificateTitle: !!checked}))
+                  }
+                />
+                <Label htmlFor="certificate-title" className="text-sm">Certificate of Title</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox 
