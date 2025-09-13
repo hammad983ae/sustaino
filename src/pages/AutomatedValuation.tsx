@@ -83,11 +83,8 @@ export default function AutomatedValuation() {
               Professional Property Valuations and ESG Assessments
             </h1>
             
-            {/* Red line underneath the title */}
-            <div className="w-24 h-1 bg-red-500 mx-auto mb-4"></div>
-            
-            {/* Back to Home Button - positioned below red line */}
-            <div className="flex justify-start mb-6">
+            {/* Back to Home Button - positioned at bottom of E in ESG */}
+            <div className="flex justify-end mb-6 pr-4">
               <a 
                 href="/index" 
                 className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent/20 transition-all duration-200 text-sm md:text-base font-bold text-foreground hover:text-primary"
