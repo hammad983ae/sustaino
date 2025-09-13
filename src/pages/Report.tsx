@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 
 const ReportViewer = () => {
   const [currentSection, setCurrentSection] = useState(0);
-  const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, 21);
+  const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, 22);
   const [lastSavedSection, setLastSavedSection] = useState<number | null>(null);
 
   // Load saved progress on component mount
@@ -35,6 +35,7 @@ const ReportViewer = () => {
     { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural" },
     { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },
     { title: "ESG Assessment Summary" },
+    { title: "Climate Risk Assessment" },
     { title: "Valuation Analysis and Rationale" },
     { title: "Environmental Audit" },
     { title: "Marketability and Mortgage Security" },
@@ -86,9 +87,18 @@ const ReportViewer = () => {
   const progress = ((currentSection + 1) / sections.length) * 100;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
+         style={{ 
+           background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 70%, hsl(var(--primary) / 0.05) 100%)',
+           transform: 'perspective(1000px) rotateX(1deg)',
+           transformStyle: 'preserve-3d'
+         }}>
       {/* Mobile-friendly header with progress */}
-      <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
+      <div className="sticky top-0 z-10 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm"
+           style={{ 
+             background: 'linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--background)) 80%, hsl(var(--primary) / 0.1) 100%)',
+             backdropFilter: 'blur(8px)'
+           }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/">
@@ -131,7 +141,11 @@ const ReportViewer = () => {
       </div>
 
       {/* Mobile-friendly navigation footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4">
+      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-background via-background to-primary/10 border-t border-primary/20 p-4 shadow-lg backdrop-blur-sm"
+           style={{ 
+             background: 'linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--background)) 80%, hsl(var(--primary) / 0.1) 100%)',
+             backdropFilter: 'blur(8px)'
+           }}>
         <div className="flex justify-between items-center max-w-4xl mx-auto">
           <Button
             variant="outline"

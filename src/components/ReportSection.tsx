@@ -22,6 +22,7 @@ import PreviousSalesHistoryAndCurrentSale from "./PreviousSalesHistoryAndCurrent
 import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
 import ESGAssessmentSummary from "./ESGAssessmentSummary";
+import ClimateRiskAssessment from "./ClimateRiskAssessment";
 import ValuationAnalysis from "./ValuationAnalysis";
 import EnvironmentalAudit from "./EnvironmentalAudit";
 import SustainoProAnalysis from "./SustainoProAnalysis";
@@ -232,8 +233,15 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Valuation Analysis section
+  // Special handling for Climate Risk Assessment section
   if (sectionIndex === 13) {
+    return (
+      <ClimateRiskAssessment />
+    );
+  }
+
+  // Special handling for Valuation Analysis section
+  if (sectionIndex === 14) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -248,7 +256,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Environmental Audit section
-  if (sectionIndex === 14) {
+  if (sectionIndex === 15) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -263,7 +271,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Marketability and Mortgage Security section
-  if (sectionIndex === 15) {
+  if (sectionIndex === 16) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -278,7 +286,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Sustaino Pro Additional Analysis and Features section
-  if (sectionIndex === 16) {
+  if (sectionIndex === 17) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -293,7 +301,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Valuation Certificate section
-  if (sectionIndex === 17) {
+  if (sectionIndex === 18) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -308,7 +316,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Terms and Conditions section
-  if (sectionIndex === 18) {
+  if (sectionIndex === 19) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -323,7 +331,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Annexures section
-  if (sectionIndex === 19) {
+  if (sectionIndex === 20) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -340,7 +348,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Certification and Security section
-  if (sectionIndex === 20) {
+  if (sectionIndex === 21) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
