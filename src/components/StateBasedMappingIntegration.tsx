@@ -81,10 +81,10 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
   const [mapLayers, setMapLayers] = useState({
     zoning: true,
     overlays: true,
-    heritage: false,
-    flood: false,
-    bushfire: false,
-    aerial: false
+    heritage: true,
+    flood: true,
+    bushfire: true,
+    aerial: true
   });
 
   // Save data to localStorage whenever mappingData changes
@@ -161,7 +161,8 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
     const baseData = {
       lastUpdated: new Date().toLocaleDateString(),
       coordinates: { lat: -37.8136, lng: 144.9631 }, // Melbourne as default
-      address: getFormattedAddress()
+      address: getFormattedAddress(),
+      planningImage: '/src/assets/planning-zones-example.png' // Add planning image
     };
 
     switch (stateId) {
@@ -178,7 +179,8 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
           heritage: "Non-contributory building in Heritage Overlay",
           floodRisk: "Not in flood prone area",
           bushfireRisk: "BAL-LOW",
-          mapReference: "vicplan.vic.gov.au/planning/PS327856"
+          mapReference: "vicplan.vic.gov.au/planning/PS327856",
+          planningImage: '/src/assets/planning-zones-example.png'
         };
       case "nsw":
         return {
@@ -327,6 +329,7 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4 bg-secondary/20 rounded-lg">
+              <p className="col-span-full text-xs text-muted-foreground mb-2">All layers enabled by default - toggle to exclude:</p>
               {Object.entries(mapLayers).map(([layer, enabled]) => (
                 <div key={layer} className="flex items-center space-x-2">
                   <Switch
@@ -334,13 +337,15 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
                     checked={enabled}
                     onCheckedChange={() => toggleMapLayer(layer as keyof typeof mapLayers)}
                   />
-                  <Label htmlFor={`layer-${layer}`} className="text-sm capitalize">
+                  <Label htmlFor={`layer-${layer}`} className="text-sm capitalize flex items-center gap-1">
                     {layer === 'aerial' ? (
-                      <div className="flex items-center gap-1">
+                      <>
                         <Satellite className="h-3 w-3" />
-                        Aerial
-                      </div>
-                    ) : layer}
+                        Aerial View
+                      </>
+                    ) : (
+                      `${layer.charAt(0).toUpperCase() + layer.slice(1)} ${enabled ? '✓' : '✗'}`
+                    )}
                   </Label>
                 </div>
               ))}
@@ -357,36 +362,71 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
           
           <div 
             ref={mapContainerRef}
-            className="bg-gradient-to-br from-blue-100 to-green-100 rounded-lg p-8 text-center min-h-[400px] border-2 border-dashed border-blue-300 relative overflow-hidden"
+            className="bg-gradient-to-br from-blue-100 to-green-100 rounded-lg overflow-hidden min-h-[400px] border-2 border-dashed border-blue-300 relative"
           >
-            <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-            <div className="relative z-10">
-              <Map className="h-16 w-16 text-blue-500 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-blue-700 mb-2">
-                {selectedPortal ? `${selectedPortal.name} Interactive Map` : 'State Planning Map'}
-              </h3>
-              <p className="text-sm text-blue-600 mb-4 max-w-md mx-auto">
-                {selectedPortal 
-                  ? `Interactive mapping showing zoning, overlays, and planning controls for ${selectedPortal.id.toUpperCase()}`
-                  : 'Select a state portal to view interactive planning maps'
-                }
-              </p>
-              
-              {selectedPortal && getFormattedAddress() && (
-                <div className="text-xs text-blue-600 space-y-1">
-                  <p className="flex items-center gap-1">
-                    <MapPin className="h-3 w-3 text-red-500" />
-                    Property: {getFormattedAddress()}
-                  </p>
-                  <p className="flex items-center gap-1">
-                    🗺️ Data Source: {selectedPortal.name}
-                  </p>
-                  <p className="flex items-center gap-1">
-                    🔄 Active Layers: {Object.entries(mapLayers).filter(([_, enabled]) => enabled).map(([layer]) => layer).join(', ')}
+            {mappingData && mappingData.planningImage ? (
+              <div className="relative h-full">
+                <img 
+                  src={mappingData.planningImage} 
+                  alt="Planning zones map" 
+                  className="w-full h-full object-contain bg-white"
+                  style={{ minHeight: '400px' }}
+                />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-lg max-w-xs">
+                  <h4 className="font-semibold text-blue-900 mb-2">Live Planning Data</h4>
+                  <div className="text-xs space-y-1">
+                    <p><strong>Property:</strong> {mappingData.address}</p>
+                    <p><strong>Zoning:</strong> {mappingData.zoning}</p>
+                    <p><strong>Source:</strong> {selectedPortal?.name}</p>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {Object.entries(mapLayers)
+                        .filter(([_, enabled]) => enabled)
+                        .map(([layer]) => (
+                          <span key={layer} className="px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">
+                            {layer}
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg">
+                  <p className="text-xs text-gray-600">
+                    Updated: {mappingData.lastUpdated}
                   </p>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="p-8 text-center h-full flex flex-col justify-center">
+                <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+                <div className="relative z-10">
+                  <Map className="h-16 w-16 text-blue-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-blue-700 mb-2">
+                    {selectedPortal ? `${selectedPortal.name} Interactive Map` : 'State Planning Map'}
+                  </h3>
+                  <p className="text-sm text-blue-600 mb-4 max-w-md mx-auto">
+                    {selectedPortal 
+                      ? `Click "Search Planning Data" to load interactive planning zones and overlay data for ${selectedPortal.id.toUpperCase()}`
+                      : 'Select a state portal to view interactive planning maps'
+                    }
+                  </p>
+                  
+                  {selectedPortal && getFormattedAddress() && (
+                    <div className="text-xs text-blue-600 space-y-1">
+                      <p className="flex items-center justify-center gap-1">
+                        <MapPin className="h-3 w-3 text-red-500" />
+                        Ready to search: {getFormattedAddress()}
+                      </p>
+                      <p className="flex items-center justify-center gap-1">
+                        🗺️ Data Source: {selectedPortal.name}
+                      </p>
+                      <p className="flex items-center justify-center gap-1">
+                        🔄 All Layers Active: {Object.entries(mapLayers).filter(([_, enabled]) => enabled).length} of {Object.keys(mapLayers).length}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
