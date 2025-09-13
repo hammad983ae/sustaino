@@ -1,41 +1,91 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MapPin, Sparkles, Building, FileText, RefreshCw } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { MapPin, Sparkles, Building, RefreshCw, Save, CheckCircle } from "lucide-react";
 import { AutofillAddressFields } from "@/components/AutofillAddressFields";
 import GoogleMapComponent from "@/components/GoogleMapComponent";
 import { usePropertyLocationData } from "@/hooks/usePropertyLocationData";
 import { useProperty } from "@/contexts/PropertyContext";
+import { useSaveSystem } from "@/hooks/useSaveSystem";
+import { useState, useEffect } from "react";
 
 const RPDAndLocation = () => {
   const { addressData } = useProperty();
   const { analysisData, isGenerating, generateLocationAnalysis, updateAnalysisField } = usePropertyLocationData();
+  const { saveData, loadData, isSaving, lastSaved } = useSaveSystem('RPD_and_Location');
+  
+  const [propertyIdentification, setPropertyIdentification] = useState({
+    physicalInspection: false,
+    cadastralMap: false,
+    aerialMapping: false,
+    includeInReport: true,
+    other: '',
+    otherChecked: false
+  });
+
+  // Load saved data on component mount
+  useEffect(() => {
+    const savedData = loadData();
+    if (savedData?.propertyIdentification) {
+      setPropertyIdentification(savedData.propertyIdentification);
+    }
+  }, [loadData]);
+
+  const handleSave = async () => {
+    await saveData({
+      addressData,
+      analysisData,
+      propertyIdentification,
+      timestamp: new Date().toISOString()
+    });
+  };
   
   return (
     <div className="space-y-6">
-      {/* Auto Generate Button */}
-      <div className="flex justify-center gap-3">
-        <Button 
-          onClick={generateLocationAnalysis}
-          disabled={isGenerating || !addressData?.propertyAddress}
-          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white"
-        >
-          {isGenerating ? (
-            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-          ) : (
-            <Sparkles className="h-4 w-4 mr-2" />
+      {/* Header with Save and Auto Generate */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-semibold">RPD and Location</h2>
+          {lastSaved && (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              Saved {new Date(lastSaved).toLocaleTimeString()}
+            </div>
           )}
-          {isGenerating ? 'Generating...' : 'Auto-Generate Location Data'}
-        </Button>
+        </div>
+        <div className="flex gap-3">
+          <Button 
+            onClick={generateLocationAnalysis}
+            disabled={isGenerating || !addressData?.propertyAddress}
+            variant="outline"
+            className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-none"
+          >
+            {isGenerating ? (
+              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Sparkles className="h-4 w-4 mr-2" />
+            )}
+            {isGenerating ? 'Generating...' : 'Auto-Generate'}
+          </Button>
+          <Button 
+            onClick={handleSave}
+            disabled={isSaving}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            {isSaving ? (
+              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
+            {isSaving ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
       </div>
 
-      {/* 1. Street Address/Lot/Plan */}
+      {/* 1. Street Address with Lot/Plan */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -44,108 +94,90 @@ const RPDAndLocation = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="street-address" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="street-address" className="flex items-center gap-2">
-                <Building className="h-4 w-4" />
-                Street Address
-              </TabsTrigger>
-              <TabsTrigger value="lot-plan" className="flex items-center gap-2">
-                <FileText className="h-4 w-4" />
-                Lot/Plan
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="street-address" className="space-y-4 mt-4">
-              <AutofillAddressFields showUnit={true} showSuburb={true} />
-            </TabsContent>
-
-            <TabsContent value="lot-plan" className="space-y-4 mt-4">
-              <AutofillAddressFields showLotPlan={true} showSuburb={true} />
-            </TabsContent>
-          </Tabs>
+          <AutofillAddressFields showUnit={true} showSuburb={true} showLotPlan={true} />
         </CardContent>
       </Card>
 
-      {/* 2. LGA, Zoning, Current Use */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">LGA, Zoning & Current Use</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="lga">LGA</Label>
-              <Input id="lga" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="zoning">Zoning</Label>
-              <Input id="zoning" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="current-use">Current Use</Label>
-              <Input id="current-use" placeholder="" className="mt-1" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 3. Google Maps Integration */}
+      {/* 2. Google Maps Integration */}
       <GoogleMapComponent height="400px" />
 
-      {/* 4. Property Identification */}
+      {/* 3. Property Identification */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <MapPin className="h-5 w-5 text-green-500" />
-            <CardTitle className="text-lg">Property Identification Methods</CardTitle>
+            <CardTitle className="text-lg">Property Identification</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <div>
             <h4 className="font-semibold mb-3 flex items-center gap-2">
               Property Identified By
-              <Switch />
-              <span className="text-sm text-muted-foreground">Include</span>
+              <Switch 
+                checked={propertyIdentification.includeInReport}
+                onCheckedChange={(checked) => 
+                  setPropertyIdentification(prev => ({...prev, includeInReport: checked}))
+                }
+              />
+              <span className="text-sm text-muted-foreground">Include in report</span>
             </h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="flex items-center space-x-2">
-                <Checkbox id="physical-inspection" />
+                <Checkbox 
+                  id="physical-inspection" 
+                  checked={propertyIdentification.physicalInspection}
+                  onCheckedChange={(checked) => 
+                    setPropertyIdentification(prev => ({...prev, physicalInspection: !!checked}))
+                  }
+                />
                 <Label htmlFor="physical-inspection" className="text-sm">Physical Inspection</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox id="surveyor-peg" />
-                <Label htmlFor="surveyor-peg" className="text-sm">Surveyor Peg</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="plan" />
-                <Label htmlFor="plan" className="text-sm">Plan</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="cadastral-map" />
+                <Checkbox 
+                  id="cadastral-map" 
+                  checked={propertyIdentification.cadastralMap}
+                  onCheckedChange={(checked) => 
+                    setPropertyIdentification(prev => ({...prev, cadastralMap: !!checked}))
+                  }
+                />
                 <Label htmlFor="cadastral-map" className="text-sm">Cadastral Map</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox id="certificate-title" />
-                <Label htmlFor="certificate-title" className="text-sm">Certificate of Title</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="aerial-mapping" />
+                <Checkbox 
+                  id="aerial-mapping" 
+                  checked={propertyIdentification.aerialMapping}
+                  onCheckedChange={(checked) => 
+                    setPropertyIdentification(prev => ({...prev, aerialMapping: !!checked}))
+                  }
+                />
                 <Label htmlFor="aerial-mapping" className="text-sm">Aerial Mapping</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox id="other" />
+                <Checkbox 
+                  id="other" 
+                  checked={propertyIdentification.otherChecked}
+                  onCheckedChange={(checked) => 
+                    setPropertyIdentification(prev => ({...prev, otherChecked: !!checked}))
+                  }
+                />
                 <Label htmlFor="other" className="text-sm">Other (Please specify)</Label>
               </div>
             </div>
-            <div className="mt-2">
-              <Textarea placeholder="Please specify other identification method..." className="h-20" />
-            </div>
+            {propertyIdentification.otherChecked && (
+              <div className="mt-3">
+                <Textarea 
+                  placeholder="Please specify other identification method..." 
+                  className="h-20"
+                  value={propertyIdentification.other}
+                  onChange={(e) => setPropertyIdentification(prev => ({...prev, other: e.target.value}))}
+                />
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
 
-      {/* 5. Property Location and Site Analysis */}
+      {/* 4. Property Location and Site Analysis */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Property Location & Site Analysis</CardTitle>

@@ -41,7 +41,7 @@ export const AutofillAddressFields = ({
             <Label htmlFor="auto-lot-number" className="text-sm">Lot Number</Label>
             <Input 
               id="auto-lot-number"
-              value={addressData.lotNumber}
+              value={addressData.lotNumber || ''}
               onChange={(e) => !readonly && updateAddressData({ lotNumber: e.target.value })}
               readOnly={readonly}
               className="mt-1"
@@ -51,7 +51,7 @@ export const AutofillAddressFields = ({
             <Label htmlFor="auto-plan-number" className="text-sm">Plan Number</Label>
             <Input 
               id="auto-plan-number"
-              value={addressData.planNumber}
+              value={addressData.planNumber || ''}
               onChange={(e) => !readonly && updateAddressData({ planNumber: e.target.value })}
               readOnly={readonly}
               className="mt-1"
@@ -67,7 +67,7 @@ export const AutofillAddressFields = ({
             <Label htmlFor="auto-unit-number" className="text-sm">Unit Number</Label>
             <Input 
               id="auto-unit-number"
-              value={addressData.unitNumber}
+              value={addressData.unitNumber || ''}
               onChange={(e) => !readonly && updateAddressData({ unitNumber: e.target.value })}
               readOnly={readonly}
               className="mt-1"
@@ -78,7 +78,7 @@ export const AutofillAddressFields = ({
           <Label htmlFor="auto-street-number" className="text-sm">Street Number</Label>
           <Input 
             id="auto-street-number"
-            value={addressData.streetNumber}
+            value={addressData.streetNumber || ''}
             onChange={(e) => !readonly && updateAddressData({ streetNumber: e.target.value })}
             readOnly={readonly}
             className="mt-1"
@@ -88,7 +88,7 @@ export const AutofillAddressFields = ({
           <Label htmlFor="auto-street-name" className="text-sm">Street Name</Label>
           <Input 
             id="auto-street-name"
-            value={addressData.streetName}
+            value={addressData.streetName || ''}
             onChange={(e) => !readonly && updateAddressData({ streetName: e.target.value })}
             readOnly={readonly}
             className="mt-1"
@@ -97,7 +97,7 @@ export const AutofillAddressFields = ({
         <div>
           <Label htmlFor="auto-street-type" className="text-sm">Street Type</Label>
           <Select 
-            value={addressData.streetType} 
+            value={addressData.streetType || ''} 
             onValueChange={(value) => !readonly && updateAddressData({ streetType: value })}
             disabled={readonly}
           >
@@ -134,7 +134,7 @@ export const AutofillAddressFields = ({
         <div>
           <Label htmlFor="auto-state" className="text-sm">State</Label>
           <Select 
-            value={addressData.state} 
+            value={addressData.state || ''} 
             onValueChange={(value) => !readonly && updateAddressData({ state: value })}
             disabled={readonly}
           >
@@ -157,7 +157,7 @@ export const AutofillAddressFields = ({
           <Label htmlFor="auto-postcode" className="text-sm">Postcode</Label>
           <Input 
             id="auto-postcode"
-            value={addressData.postcode}
+            value={addressData.postcode || ''}
             onChange={(e) => !readonly && updateAddressData({ postcode: e.target.value })}
             readOnly={readonly}
             className="mt-1"
@@ -167,7 +167,7 @@ export const AutofillAddressFields = ({
           <Label htmlFor="auto-country" className="text-sm">Country</Label>
           <Input 
             id="auto-country"
-            value={addressData.country}
+            value={addressData.country || ''}
             onChange={(e) => !readonly && updateAddressData({ country: e.target.value })}
             readOnly={readonly}
             className="mt-1"
