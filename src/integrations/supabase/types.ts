@@ -970,6 +970,30 @@ export type Database = {
         Args: { job_data: Json }
         Returns: string
       }
+      get_construction_cost_index: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          asset_class: string
+          base_price_per_sqm: number
+          cost_index: number
+          created_at: string
+          id: string
+          month: string
+          percentage_movement: number
+          year: number
+        }[]
+      }
+      get_cpi_index: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          cpi_value: number
+          created_at: string
+          id: string
+          month: string
+          percentage_change: number
+          year: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
