@@ -28,7 +28,7 @@ serve(async (req) => {
     console.log('Analyzing property:', address, state);
 
     // Get Google Maps API key
-    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
+    const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY2');
     if (!googleMapsApiKey) {
       console.error('Google Maps API key not found');
       return new Response(
