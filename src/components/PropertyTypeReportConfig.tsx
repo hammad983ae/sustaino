@@ -10,8 +10,9 @@ export interface ReportSectionConfig {
 export const getPropertyTypeReportSections = (propertyType: string): ReportSectionConfig[] => {
   const baseSections: ReportSectionConfig[] = [
     { title: "Executive Summary and Contents", automated: true, description: "AI-generated summary based on analysis" },
-    { title: "Property Details", automated: true, description: "Auto-populated from address analysis" },
-    
+    { title: "RPD and Location", automated: true, description: "Property identification and location details" },
+    { title: "Legal and Planning", component: "PlanningDataIntegration", description: "Zoning, permits, and compliance analysis" },
+    { title: "Property Details", component: "PropertyDetails", description: "Detailed property characteristics and features" },
   ];
 
   const commonEndSections: ReportSectionConfig[] = [
@@ -27,8 +28,9 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
     case "commercial":
       return [
         ...baseSections,
-        { title: "Legal and Planning", component: "PlanningDataIntegration", description: "Zoning, permits, and compliance analysis with VicPlan integration" },
         { title: "Tenancy Schedule/Lease Details", component: "TenancyScheduleLeaseDetails" },
+        { title: "Statutory Assessment", automated: true, description: "Compliance and regulatory assessment" },
+        { title: "Market Commentary", automated: true, description: "Current market conditions and trends" },
         { title: "Commercial Market Commentary", automated: true, description: "Local commercial market trends and analysis" },
         { title: "Commercial Sales Evidence", component: "SalesEvidenceCommercial" },
         { title: "Commercial Leasing Evidence", component: "LeasingEvidenceCommercial" },
@@ -42,7 +44,7 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
     case "residential":
       return [
         ...baseSections,
-        { title: "Legal and Planning", automated: true, description: "Zoning and development potential" },
+        { title: "Statutory Assessment", automated: true, description: "Development potential and restrictions" },
         { title: "Residential Market Commentary", automated: true, description: "Local residential market trends" },
         { title: "Comparable Sales Analysis", automated: true, description: "Recent sales comparisons and adjustments" },
         { title: "Residential Sales Evidence", component: "SalesEvidenceResidential" },
@@ -71,7 +73,7 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
     case "specialised":
       return [
         ...baseSections,
-        { title: "Legal and Planning", automated: true, description: "Specialized use permits and compliance" },
+        { title: "Statutory Assessment", automated: true, description: "Specialized use permits and compliance" },
         { title: "Specialised Market Commentary", automated: true, description: "Industry-specific market analysis" },
         { title: "Operational Performance Analysis", automated: true, description: "Revenue, occupancy, and efficiency metrics" },
         { title: "Specialised Sales Evidence", component: "SalesEvidenceSpecialised" },

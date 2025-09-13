@@ -76,8 +76,8 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
       
       if (showToast) {
         toast.success(`${sectionName} saved successfully`, {
-          duration: 2000,
-          description: 'Data saved to local storage and working hub'
+          duration: 3000,
+          description: `✅ Data saved to local storage and working hub - ${new Date().toLocaleTimeString()}`
         });
       }
       

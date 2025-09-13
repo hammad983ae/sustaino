@@ -12,6 +12,7 @@ import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import AuthPage from "./pages/Auth";
+import AutomatedReport from "./pages/AutomatedReport";
 import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
 import CryptoTradingDashboard from "./pages/CryptoTradingDashboard";
 import Dashboard from "./pages/Dashboard";
@@ -40,7 +41,8 @@ const App = () => (
                 <Route path="/" element={<AutomatedValuation />} />
                 <Route path="/index" element={<Index />} />
                 <Route path="/report" element={<Report />} />
-                <Route path="/property-assessment" element={<PropertyAssessment />} />
+        <Route path="/property-assessment" element={<PropertyAssessment />} />
+        <Route path="/automated-report" element={<AutomatedReport propertyType="commercial" />} />
                 <Route path="/property-valuations" element={<PropertyValuations />} />
                 <Route path="/work-hub" element={<WorkHubPage />} />
                 <Route path="/white-label" element={<WhiteLabelConfig />} />

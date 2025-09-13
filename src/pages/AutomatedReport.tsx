@@ -5,10 +5,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronLeft, ChevronRight, Home, ArrowLeft, Sparkles, Zap, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import React, { Suspense } from "react";
 import ReportSection from "@/components/ReportSection";
 import AutomatedAnalysisSection from "@/components/AutomatedAnalysisSection";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertyPhotos from "@/components/PropertyPhotos";
+import PropertyDataIntegration from "@/components/PropertyDataIntegration";
 import { getPropertyTypeReportSections, getAutomatedAnalysisDescription } from "@/components/PropertyTypeReportConfig";
 
 interface AutomatedReportProps {
@@ -22,7 +24,7 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
   const [isAIEnhancing, setIsAIEnhancing] = useState(false);
 
-  // Get property-type specific sections
+  // Get property-type specific sections - ensure it starts from section 1
   const sections = getPropertyTypeReportSections(propertyType);
 
   useEffect(() => {
@@ -103,17 +105,14 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
       );
     }
     
-    // Show property photos in Property Details section
+    // Show enhanced property details with data integration
     if (section.title === "Property Details" || section.title === "Property Description") {
+      const PropertyDetails = React.lazy(() => import('@/components/PropertyDetails'));
       return (
         <div className="space-y-6">
-          <PropertyPhotos propertyAddress="320 Deakin Avenue Mildura VIC 3500" />
-          <ReportSection 
-            title={section.title}
-            subtitle={section.subtitle}
-            sectionIndex={currentStep}
-            onNavigateToSection={navigateToSection}
-          />
+          <Suspense fallback={<div className="p-4 text-center">Loading property details...</div>}>
+            <PropertyDetails />
+          </Suspense>
         </div>
       );
     }
@@ -149,6 +148,12 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
 
   return (
     <div className="w-full bg-background">
+      {/* Data Integration Component */}
+      <PropertyDataIntegration 
+        propertyType={propertyType}
+        onDataLoaded={(data) => console.log("Integrated data:", data)}
+      />
+      
       {/* Sticky Header with Backdrop Blur */}
       <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
         <div className="px-6 py-4">
