@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, FileText, MapPin, Search, ExternalLink, Loader2, Map } from "lucide-react";
 import { useProperty } from "@/contexts/PropertyContext";
 import StateBasedMappingIntegration from "./StateBasedMappingIntegration";
+import AddressConfirmation from "./planning/AddressConfirmation";
 
 interface PlanningDataIntegrationProps {
   propertyAddress?: string;
@@ -79,6 +80,17 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
 
   return (
     <div className="space-y-6">
+      {/* Address Confirmation */}
+      <AddressConfirmation 
+        onAddressConfirmed={(address) => {
+          console.log('Address confirmed for planning search:', address);
+          // This could trigger the planning data search
+        }}
+        onAddressChange={(address) => {
+          console.log('Address updated:', address);
+        }}
+      />
+      
       {/* State-Based Mapping Integration */}
       <StateBasedMappingIntegration onPlanningDataUpdate={onDataFetched} />
     </div>
