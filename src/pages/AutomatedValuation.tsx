@@ -6,6 +6,7 @@
  * ============================================================================
  */
 import React, { useState } from "react";
+import { Zap, Sparkles } from "lucide-react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
@@ -41,17 +42,20 @@ export default function AutomatedValuation() {
   // Show property valuation as primary feature
   if (currentStep === "propertyType") {
     return (
-      <div className="min-h-screen relative overflow-hidden">
-        {/* 3D Background */}
-        <PropertyValuation3DBackground />
+      <div className="min-h-screen hero-green-background relative overflow-hidden">
+        {/* Enhanced 3D Background Effect */}
+        <div className="absolute inset-0 green-glow-effect opacity-40"></div>
+        <div className="absolute inset-0">
+          <PropertyValuation3DBackground />
+        </div>
         
-        {/* Enhanced gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/90 via-white/95 to-teal-50/90 backdrop-blur-sm" />
+        {/* Enhanced green gradient background */}
+        <div className="absolute inset-0 hero-green-background backdrop-blur-sm" />
         
-        {/* Floating orbs for extra ambiance */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-48 h-48 bg-gradient-to-r from-teal-400/15 to-emerald-400/15 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-r from-emerald-300/25 to-teal-300/25 rounded-full blur-lg animate-pulse" style={{ animationDelay: '4s' }} />
+        {/* Floating orbs for extra ambiance with green tinge */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-emerald-400/30 to-teal-400/30 rounded-full blur-xl animate-green-pulse" />
+        <div className="absolute bottom-20 right-10 w-48 h-48 bg-gradient-to-r from-teal-400/25 to-emerald-400/25 rounded-full blur-2xl animate-green-glow" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-r from-emerald-300/35 to-teal-300/35 rounded-full blur-lg animate-float-3d" style={{ animationDelay: '4s' }} />
         
         <div className="relative z-10">
           <BrandedHeader />
@@ -62,13 +66,13 @@ export default function AutomatedValuation() {
               <div className="flex items-center gap-4">
                 <a 
                   href="/dashboard" 
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 rounded-lg transition-all duration-300 text-emerald-700 font-medium hover-scale backdrop-blur-sm border border-emerald-200/50 hover:border-emerald-300/70"
+                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-glow backdrop-blur-sm border border-green-300/70"
                 >
                   📊 Analytics Dashboard
                 </a>
                 <a 
                   href="/index" 
-                  className="flex items-center gap-2 px-4 py-2 bg-teal-500/10 hover:bg-teal-500/20 rounded-lg transition-all duration-300 text-teal-700 font-medium hover-scale backdrop-blur-sm border border-teal-200/50 hover:border-teal-300/70"
+                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   🌍 ESG Platform
                 </a>
@@ -76,14 +80,20 @@ export default function AutomatedValuation() {
             </div>
           </div>
           
-          {/* Hero Section - Enhanced with animations */}
+          {/* Hero Section - Enhanced with Strong Green 3D Effect */}
           <div className="container mx-auto px-4 py-8">
-          <div className="text-center mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent mb-6 animate-scale-in">
+          <div className="text-center mb-12 animate-fade-in relative z-10" style={{ animationDelay: '0.2s' }}>
+            <div className="flex items-center justify-center gap-3 mb-6 animate-float-3d">
+              <div className="green-glow-effect">
+                <Zap className="h-10 w-10 text-primary animate-green-glow" />
+              </div>
+              <Sparkles className="h-8 w-8 text-secondary animate-green-pulse" />
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent mb-6 animate-scale-in animate-green-glow">
               Professional Property Valuations and ESG Assessments
             </h1>
             
-            {/* Back to Home Button - positioned at bottom of E in ESG */}
+            {/* Back to Home Button - Enhanced with 3D effect */}
             <div className="flex justify-end mb-6 pr-4">
               <a 
                 href="/index" 

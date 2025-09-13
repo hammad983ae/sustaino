@@ -8,13 +8,13 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 120 20% 98%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
+    --card: 120 30% 97%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 100%;
+    --popover: 120 25% 98%;
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 158 64% 52%;
@@ -23,22 +23,41 @@ All colors MUST be HSL.
     --secondary: 166 76% 37%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 120 20% 95%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 158 50% 90%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 120 25% 88%;
+    --input: 120 25% 94%;
+    --ring: 158 64% 52%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* ESG Enhancement Colors - Added from your platform */
+    /* Enhanced Green 3D System */
+    --green-glow: 158 64% 52%;
+    --green-light: 158 45% 75%;
+    --green-medium: 158 55% 65%;
+    --green-dark: 158 70% 35%;
+    --green-shadow: 158 80% 25%;
+    
+    /* 3D Effect Variables */
+    --shadow-3d-light: 0 4px 12px hsl(158 30% 85% / 0.4);
+    --shadow-3d-medium: 0 8px 25px hsl(158 40% 75% / 0.5);
+    --shadow-3d-strong: 0 12px 40px hsl(158 50% 65% / 0.6);
+    --shadow-3d-glow: 0 0 30px hsl(158 64% 52% / 0.3);
+    
+    /* Green Tinge Gradients */
+    --gradient-green-subtle: linear-gradient(135deg, hsl(120 25% 98%) 0%, hsl(158 20% 96%) 100%);
+    --gradient-green-medium: linear-gradient(135deg, hsl(158 25% 95%) 0%, hsl(158 35% 92%) 100%);
+    --gradient-green-strong: linear-gradient(135deg, hsl(158 30% 92%) 0%, hsl(158 45% 88%) 100%);
+    --gradient-green-glow: linear-gradient(135deg, hsl(158 40% 90%) 0%, hsl(158 55% 85%) 100%);
+
+    /* ESG Enhancement Colors - Enhanced */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
     --warning: 43 96% 56%;
@@ -51,21 +70,14 @@ All colors MUST be HSL.
     --risk-moderate: 43 96% 56%;
     --risk-high: 0 84% 60%;
 
-    --sidebar-background: 0 0% 98%;
-
+    --sidebar-background: 120 25% 97%;
     --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-primary: 158 64% 52%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
+    --sidebar-accent: 120 20% 94%;
     --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 120 25% 88%;
+    --sidebar-ring: 158 64% 52%;
     
     /* White label theme variables */
     --partner-primary: var(--primary);
@@ -73,14 +85,14 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 158 25% 8%;
+    --foreground: 120 25% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 158 20% 10%;
+    --card-foreground: 120 25% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 158 20% 10%;
+    --popover-foreground: 120 25% 95%;
 
     --primary: 158 64% 52%;
     --primary-foreground: 0 0% 98%;
@@ -88,26 +100,46 @@ All colors MUST be HSL.
     --secondary: 166 76% 37%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 158 15% 15%;
+    --muted-foreground: 120 15% 70%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 158 20% 15%;
+    --accent-foreground: 120 25% 95%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 158 20% 20%;
+    --input: 158 20% 18%;
+    --ring: 158 64% 52%;
+    
+    /* Enhanced Green 3D System - Dark Mode */
+    --green-glow: 158 64% 52%;
+    --green-light: 158 45% 65%;
+    --green-medium: 158 55% 45%;
+    --green-dark: 158 70% 25%;
+    --green-shadow: 158 80% 15%;
+    
+    /* 3D Effect Variables - Dark Mode */
+    --shadow-3d-light: 0 4px 12px hsl(158 30% 15% / 0.6);
+    --shadow-3d-medium: 0 8px 25px hsl(158 40% 12% / 0.7);
+    --shadow-3d-strong: 0 12px 40px hsl(158 50% 10% / 0.8);
+    --shadow-3d-glow: 0 0 30px hsl(158 64% 52% / 0.4);
+    
+    /* Green Tinge Gradients - Dark Mode */
+    --gradient-green-subtle: linear-gradient(135deg, hsl(158 25% 8%) 0%, hsl(158 20% 12%) 100%);
+    --gradient-green-medium: linear-gradient(135deg, hsl(158 20% 10%) 0%, hsl(158 25% 15%) 100%);
+    --gradient-green-strong: linear-gradient(135deg, hsl(158 25% 12%) 0%, hsl(158 30% 18%) 100%);
+    --gradient-green-glow: linear-gradient(135deg, hsl(158 30% 15%) 0%, hsl(158 35% 22%) 100%);
+    
+    --sidebar-background: 158 20% 12%;
+    --sidebar-foreground: 120 25% 90%;
+    --sidebar-primary: 158 64% 52%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 158 15% 18%;
+    --sidebar-accent-foreground: 120 25% 90%;
+    --sidebar-border: 158 20% 20%;
+    --sidebar-ring: 158 64% 52%;
   }
 }
 
@@ -118,5 +150,95 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--gradient-green-subtle);
+    min-height: 100vh;
+  }
+  
+  /* Enhanced 3D Green Effects */
+  .green-3d-card {
+    background: var(--gradient-green-medium);
+    box-shadow: var(--shadow-3d-medium), var(--shadow-3d-glow);
+    transform: translateZ(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .green-3d-card:hover {
+    transform: translateY(-4px) translateZ(0);
+    box-shadow: var(--shadow-3d-strong), var(--shadow-3d-glow);
+  }
+  
+  .green-3d-button {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    box-shadow: var(--shadow-3d-light), inset 0 1px 0 hsl(var(--green-light) / 0.3);
+    transform: translateZ(0);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .green-3d-button:hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: var(--shadow-3d-medium), inset 0 1px 0 hsl(var(--green-light) / 0.3);
+  }
+  
+  .green-3d-button:active {
+    transform: translateY(0) translateZ(0);
+    box-shadow: var(--shadow-3d-light), inset 0 1px 0 hsl(var(--green-light) / 0.3);
+  }
+  
+  .green-glow-effect {
+    position: relative;
+  }
+  
+  .green-glow-effect::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--gradient-green-glow);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.7;
+    filter: blur(8px);
+  }
+  
+  .hero-green-background {
+    background: var(--gradient-green-strong);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero-green-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, hsl(158 40% 85% / 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, hsl(158 50% 80% / 0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  
+  .property-card-3d {
+    background: var(--gradient-green-medium);
+    border: 1px solid hsl(var(--green-light) / 0.3);
+    box-shadow: var(--shadow-3d-light), 0 0 0 1px hsl(var(--green-glow) / 0.1);
+    transform: translateZ(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .property-card-3d:hover {
+    transform: translateY(-6px) scale(1.02) translateZ(0);
+    box-shadow: var(--shadow-3d-strong), var(--shadow-3d-glow);
+    border-color: hsl(var(--green-glow) / 0.4);
+  }
+}
+
+@layer components {
+  .green-tinge-page {
+    background: var(--gradient-green-subtle);
+    min-height: 100vh;
+  }
+  
+  .green-tinge-strong {
+    background: var(--gradient-green-strong);
   }
 }
