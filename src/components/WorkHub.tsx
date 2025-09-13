@@ -141,14 +141,14 @@ export default function WorkHub() {
 
       if (jobsError) throw jobsError;
 
-      // Transform data to match expected interface
-      const transformedValuations = (valuationsData || []).map(val => ({
-        ...val,
-        property_address: 'Property Address', // Will be joined with properties table
-        estimated_value: val.market_value,
-        confidence_score: 85,
-        notes: val.assumptions
-      }));
+  // Transform data to match expected interface  
+  const transformedValuations = (valuationsData || []).map(val => ({
+    ...val,
+    property_address: 'Property Address (ID: ' + val.property_id + ')', // Display property ID until joined
+    estimated_value: val.market_value || 0,
+    confidence_score: 85,
+    notes: val.assumptions || ''
+  }));
       
       setValuations(transformedValuations);
       setReports((reportsData || []).map(r => ({
