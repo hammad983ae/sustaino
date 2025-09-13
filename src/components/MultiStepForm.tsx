@@ -1,119 +1,170 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileText, Search, Upload, MapPin, Settings2 } from "lucide-react";
 import PropertyAddressForm from "@/components/PropertyAddressForm";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
 import DocumentUploadManager from "@/components/DocumentUploadManager";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
 }
 
 const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentGroup, setCurrentGroup] = useState(0);
 
-  const steps = [
+  // Group steps: 1-3 together, 4-5 together
+  const stepGroups = [
     {
-      title: "Property Address",
-      component: <PropertyAddressForm />
+      title: "Property Information & Analysis",
+      steps: [
+        {
+          title: "Property Address",
+          icon: <MapPin className="h-5 w-5" />,
+          component: <PropertyAddressForm />
+        },
+        {
+          title: "Planning Data",
+          icon: <FileText className="h-5 w-5" />,
+          component: <PlanningDataIntegration />
+        },
+        {
+          title: "Search & Analysis",
+          icon: <Search className="h-5 w-5" />,
+          component: <PropertySearchAnalysis />
+        }
+      ]
     },
     {
-      title: "Planning Data",
-      component: <PlanningDataIntegration />
-    },
-    {
-      title: "Search & Analysis",
-      component: <PropertySearchAnalysis />
-    },
-    {
-      title: "Report Configuration",
-      component: <ReportTypeConfiguration />
-    },
-    {
-      title: "Document Upload",
-      component: <DocumentUploadManager />
+      title: "Configuration & Upload",
+      steps: [
+        {
+          title: "Report Configuration",
+          icon: <Settings2 className="h-5 w-5" />,
+          component: <ReportTypeConfiguration />
+        },
+        {
+          title: "Document Upload",
+          icon: <Upload className="h-5 w-5" />,
+          component: <DocumentUploadManager />
+        }
+      ]
     }
   ];
 
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+  const totalSteps = stepGroups.reduce((acc, group) => acc + group.steps.length, 0);
+  const currentStepNumber = stepGroups.slice(0, currentGroup).reduce((acc, group) => acc + group.steps.length, 0) + 1;
+  const progress = (currentStepNumber / totalSteps) * 100;
+
+  const nextGroup = () => {
+    if (currentGroup < stepGroups.length - 1) {
+      setCurrentGroup(currentGroup + 1);
+    } else if (onSubmit) {
+      onSubmit({ completed: true });
     }
   };
 
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+  const prevGroup = () => {
+    if (currentGroup > 0) {
+      setCurrentGroup(currentGroup - 1);
     }
   };
 
-  const progress = ((currentStep + 1) / steps.length) * 100;
+  const currentGroupData = stepGroups[currentGroup];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Mobile-friendly header with progress */}
-      <div className="sticky top-0 z-10 bg-background border-b p-4 space-y-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold truncate">
-            Step {currentStep + 1}: {steps[currentStep].title}
-          </h1>
-          <div className="text-sm text-muted-foreground">
-            {currentStep + 1} of {steps.length}
+    <div className="space-y-6">
+      {/* Top Navigation */}
+      <div className="flex items-center justify-between p-4 bg-amber-50/50 rounded-lg border border-amber-200/50">
+        <Button
+          variant="outline"
+          onClick={prevGroup}
+          disabled={currentGroup === 0}
+          className="flex items-center gap-2 text-amber-700 border-amber-300 hover:bg-amber-100"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          <span className="hidden sm:inline">Back</span>
+        </Button>
+
+        <div className="flex items-center gap-4">
+          <div className="text-center">
+            <div className="text-sm font-medium text-amber-800">
+              Group {currentGroup + 1} of {stepGroups.length}
+            </div>
+            <div className="text-xs text-amber-600">
+              {currentGroupData.title}
+            </div>
+          </div>
+          <div className="w-32">
+            <Progress value={progress} className="h-2" />
           </div>
         </div>
-        <Progress value={progress} className="w-full" />
+
+        <Button
+          onClick={nextGroup}
+          className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white"
+        >
+          <span className="hidden sm:inline">
+            {currentGroup === stepGroups.length - 1 ? "Complete" : "Next"}
+          </span>
+          <ChevronRight className="h-4 w-4" />
+        </Button>
       </div>
 
-      {/* Form content */}
-      <div className="p-4 pb-24">
-        <div className="max-w-4xl mx-auto">
-          {steps[currentStep].component}
+      {/* Current Group Content */}
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-amber-800 mb-2">
+            {currentGroupData.title}
+          </h2>
+          <p className="text-amber-600">
+            Complete all steps in this section to continue
+          </p>
+        </div>
+
+        {/* Steps in Current Group */}
+        <div className="grid gap-6">
+          {currentGroupData.steps.map((step, index) => (
+            <Card key={index} className="bg-white/90 backdrop-blur-sm border border-amber-200/50">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-3 text-lg text-amber-800">
+                  <div className="p-2 bg-amber-100 rounded-lg text-amber-700">
+                    {step.icon}
+                  </div>
+                  Step {currentStepNumber + index}: {step.title}
+                </CardTitle>
+              </CardHeader>
+              <Separator className="bg-amber-200/50" />
+              <CardContent className="pt-6">
+                {step.component}
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
 
-      {/* Mobile-friendly navigation footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4">
-        <div className="flex justify-between items-center max-w-4xl mx-auto">
-          <Button
-            variant="outline"
-            onClick={prevStep}
-            disabled={currentStep === 0}
-            className="flex items-center gap-2"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            <span className="hidden sm:inline">Back</span>
-          </Button>
-
-          <div className="flex gap-2">
-            {steps.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentStep(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentStep
-                    ? "bg-primary"
-                    : index < currentStep
-                    ? "bg-primary/60"
-                    : "bg-muted"
-                }`}
-                aria-label={`Go to step ${index + 1}`}
-              />
-            ))}
-          </div>
-
-          <Button
-            onClick={nextStep}
-            disabled={currentStep === steps.length - 1}
-            className="flex items-center gap-2"
-          >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+      {/* Group Progress Indicators */}
+      <div className="flex justify-center gap-3 pt-4">
+        {stepGroups.map((_, index) => (
+          <div
+            key={index}
+            className={`h-3 w-12 rounded-full transition-colors ${
+              index === currentGroup
+                ? "bg-amber-500"
+                : index < currentGroup
+                ? "bg-amber-300"
+                : "bg-amber-100"
+            }`}
+          />
+        ))}
       </div>
+
+      {/* Mobile-optimized spacing */}
+      <div className="pb-8 sm:pb-4" />
     </div>
   );
 };

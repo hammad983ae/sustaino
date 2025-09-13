@@ -51,8 +51,14 @@ const Index = () => {
 
   return (
     <PropertyProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40">
-        <div className="container mx-auto px-4 py-12">
+      <div className="min-h-screen relative">
+        {/* 3D Background */}
+        <PropertyValuation3DBackground />
+        
+        {/* Sandy brown tinge background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/80 via-orange-50/60 to-yellow-50/70" />
+        
+        <div className="relative z-10 container mx-auto px-4 py-12">
           {currentStep === 'form' ? (
             <div className="space-y-12">
               {/* Clean Header */}
@@ -98,30 +104,32 @@ const Index = () => {
                   </TabsList>
 
                   <TabsContent value="assessment" className="mt-8">
-                    <Card className="bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200/50">
-                      <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-blue-50/30">
-                        <CardTitle className="text-2xl flex items-center gap-3 text-slate-700">
-                          <Building className="h-6 w-6 text-blue-600" />
-                          Property Assessment Form
-                        </CardTitle>
-                        <p className="text-slate-600">
-                          Complete all steps to generate your comprehensive property report
-                        </p>
-                      </CardHeader>
-                      <CardContent className="p-8">
-                        <MultiStepForm onSubmit={handleFormSubmit} />
-                      </CardContent>
-                    </Card>
+                    <div className="max-w-6xl mx-auto">
+                      <Card className="bg-white/95 backdrop-blur-sm shadow-lg border border-amber-200/50">
+                        <CardHeader className="border-b border-amber-100 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
+                          <CardTitle className="text-2xl flex items-center gap-3 text-amber-800">
+                            <Building className="h-6 w-6 text-amber-700" />
+                            Property Assessment Form
+                          </CardTitle>
+                          <p className="text-amber-700">
+                            Complete all steps to generate your comprehensive property report
+                          </p>
+                        </CardHeader>
+                        <CardContent className="p-8">
+                          <MultiStepForm onSubmit={handleFormSubmit} />
+                        </CardContent>
+                      </Card>
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="tools" className="mt-8">
-                    <Card className="bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200/50">
-                      <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-blue-50/30">
-                        <CardTitle className="text-2xl flex items-center gap-3 text-slate-700">
-                          <Settings className="h-6 w-6 text-blue-600" />
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-lg border border-amber-200/50">
+                      <CardHeader className="border-b border-amber-100 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-amber-800">
+                          <Settings className="h-6 w-6 text-amber-700" />
                           Additional Tools
                         </CardTitle>
-                        <p className="text-slate-600">
+                        <p className="text-amber-700">
                           Access specialized valuation and assessment tools
                         </p>
                       </CardHeader>
@@ -260,13 +268,13 @@ const Index = () => {
                   </TabsContent>
 
                   <TabsContent value="info" className="mt-8">
-                    <Card className="bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200/50">
-                      <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-blue-50/30">
-                        <CardTitle className="text-2xl flex items-center gap-3 text-slate-700">
-                          <Info className="h-6 w-6 text-blue-600" />
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-lg border border-amber-200/50">
+                      <CardHeader className="border-b border-amber-100 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-amber-800">
+                          <Info className="h-6 w-6 text-amber-700" />
                           Product Information
                         </CardTitle>
-                        <p className="text-slate-600">
+                        <p className="text-amber-700">
                           Download comprehensive information about our platform
                         </p>
                       </CardHeader>
