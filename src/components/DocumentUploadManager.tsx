@@ -746,6 +746,16 @@ const DocumentUploadManager = () => {
                   <span className="text-muted-foreground">Type:</span> {jobDetails.jobType}
                 </div>
                 <div>
+                  <span className="text-muted-foreground">Client Type:</span> 
+                  <span className={`ml-1 px-2 py-1 rounded text-xs ${
+                    jobDetails.clientType === 'long-term' 
+                      ? 'text-blue-700 bg-blue-100' 
+                      : 'text-green-700 bg-green-100'
+                  }`}>
+                    {jobDetails.clientType === 'long-term' ? 'Long-term' : 'One-time'}
+                  </span>
+                </div>
+                <div>
                   <span className="text-muted-foreground">Est. Hours:</span> {jobDetails.estimatedHours}h
                 </div>
               </div>
