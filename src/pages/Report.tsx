@@ -98,7 +98,7 @@ const ReportViewer = () => {
            transformStyle: 'preserve-3d'
          }}>
       {/* Mobile-friendly header with progress */}
-      <div className="sticky top-0 z-10 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm"
+      <div className="sticky top-0 z-20 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm"
            style={{ 
              background: 'linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--background)) 80%, hsl(var(--primary) / 0.1) 100%)',
              backdropFilter: 'blur(8px)'
@@ -132,20 +132,8 @@ const ReportViewer = () => {
         <Progress value={progress} className="w-full" />
       </div>
 
-      {/* Report content */}
-      <div className="p-4 pb-24">
-        <div className="max-w-4xl mx-auto">
-          <ReportSection 
-            title={sections[currentSection].title}
-            subtitle={sections[currentSection].subtitle}
-            sectionIndex={currentSection}
-            onNavigateToSection={navigateToSection}
-          />
-        </div>
-      </div>
-
-      {/* Mobile-friendly navigation footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-background via-background to-primary/10 border-t border-primary/20 p-4 shadow-lg backdrop-blur-sm"
+      {/* Fixed Navigation Bar below header */}
+      <div className="sticky top-[120px] z-10 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-3 shadow-sm backdrop-blur-sm"
            style={{ 
              background: 'linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--background)) 80%, hsl(var(--primary) / 0.1) 100%)',
              backdropFilter: 'blur(8px)'
@@ -186,6 +174,33 @@ const ReportViewer = () => {
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
+        </div>
+      </div>
+
+      {/* Report content */}
+      <div className="p-4 pb-4">
+        <div className="max-w-4xl mx-auto">
+          <ReportSection 
+            title={sections[currentSection].title}
+            subtitle={sections[currentSection].subtitle}
+            sectionIndex={currentSection}
+            onNavigateToSection={navigateToSection}
+          />
+        </div>
+      </div>
+
+      {/* Footer with back to setup navigation */}
+      <div className="border-t border-primary/20 p-4 bg-gradient-to-r from-background via-background to-primary/5">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          <Link to="/automated-report">
+            <Button variant="ghost" className="flex items-center gap-2">
+              <ChevronLeft className="h-4 w-4" />
+              Back to Setup
+            </Button>
+          </Link>
+          <div className="text-sm text-muted-foreground">
+            Report Generation Complete
+          </div>
         </div>
       </div>
     </div>
