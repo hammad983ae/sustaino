@@ -1,13 +1,17 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useReportData } from '@/contexts/ReportDataContext';
 
 interface PropertyPhotosProps {
   propertyAddress: string;
 }
 
 const PropertyPhotos = ({ propertyAddress }: PropertyPhotosProps) => {
-  const photos = [
+  const { reportData } = useReportData();
+  
+  // Default photos if no uploaded photos
+  const defaultPhotos = [
     {
       src: "/lovable-uploads/b8e317ec-d54a-4985-971b-2286c4ba16b8.png",
       alt: "Front exterior view of 320 Deakin Avenue",
@@ -63,6 +67,17 @@ const PropertyPhotos = ({ propertyAddress }: PropertyPhotosProps) => {
       description: "Modern bathroom with quality fixtures and finishes"
     }
   ];
+
+  // Use uploaded photos from report data if available, otherwise use defaults
+  const uploadedPhotos = reportData.fileAttachments?.propertyPhotos || [];
+  const photos = uploadedPhotos.length > 0 
+    ? uploadedPhotos.map(photo => ({
+        src: photo.url,
+        alt: photo.description || photo.name,
+        title: photo.name.split('.')[0].replace(/[_-]/g, ' '),
+        description: photo.description || 'Property photo'
+      }))
+    : defaultPhotos;
 
   return (
     <Card className="w-full">

@@ -60,6 +60,35 @@ export interface ReportData {
     [key: string]: any;
   };
   
+  // File Attachments
+  fileAttachments?: {
+    propertyPhotos?: Array<{
+      id: string;
+      name: string;
+      url: string;
+      description?: string;
+    }>;
+    propertyDocuments?: Array<{
+      id: string;
+      name: string;
+      url: string;
+      description?: string;
+    }>;
+    planningDocuments?: Array<{
+      id: string;
+      name: string;
+      url: string;
+      description?: string;
+    }>;
+    marketEvidence?: Array<{
+      id: string;
+      name: string;
+      url: string;
+      description?: string;
+    }>;
+    [key: string]: any;
+  };
+  
   lastUpdated?: string;
 }
 
