@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useReportData } from '@/contexts/ReportDataContext';
+import { useUniversalSave } from '@/hooks/useUniversalSave';
+import { Camera, Upload, Save } from 'lucide-react';
 
 interface PropertyPhotosProps {
   propertyAddress: string;
 }
 
 const PropertyPhotos = ({ propertyAddress }: PropertyPhotosProps) => {
-  const { reportData } = useReportData();
+  const { reportData, updateReportData } = useReportData();
+  const { saveData, loadData, isSaving } = useUniversalSave('PropertyPhotos');
+  const [localPhotos, setLocalPhotos] = useState<any[]>([]);
   
   // Default photos if no uploaded photos
   const defaultPhotos = [
@@ -68,23 +73,71 @@ const PropertyPhotos = ({ propertyAddress }: PropertyPhotosProps) => {
     }
   ];
 
+  useEffect(() => {
+    // Load saved photos on mount
+    loadData().then(savedData => {
+      if (savedData?.photos) {
+        setLocalPhotos(savedData.photos);
+      }
+    });
+  }, [loadData]);
+
   // Use uploaded photos from report data if available, otherwise use defaults
   const uploadedPhotos = reportData.fileAttachments?.propertyPhotos || [];
-  const photos = uploadedPhotos.length > 0 
-    ? uploadedPhotos.map(photo => ({
-        src: photo.url,
-        alt: photo.description || photo.name,
-        title: photo.name.split('.')[0].replace(/[_-]/g, ' '),
+  const savedPhotos = localPhotos.length > 0 ? localPhotos : uploadedPhotos;
+  const photos = savedPhotos.length > 0 
+    ? savedPhotos.map(photo => ({
+        src: photo.url || photo.src,
+        alt: photo.description || photo.alt || photo.name,
+        title: photo.title || (photo.name ? photo.name.split('.')[0].replace(/[_-]/g, ' ') : 'Property Photo'),
         description: photo.description || 'Property photo'
       }))
     : defaultPhotos;
+
+  const handleSavePhotos = async () => {
+    const photoData = {
+      photos: photos,
+      propertyAddress,
+      savedAt: new Date().toISOString(),
+      photoCount: photos.length
+    };
+    
+    const result = await saveData(photoData);
+    if (result.success) {
+      // Also update report data
+      updateReportData('fileAttachments', {
+        ...reportData.fileAttachments,
+        propertyPhotos: photos.map(photo => ({
+          url: photo.src,
+          name: photo.title,
+          description: photo.description,
+          uploadedAt: new Date().toISOString()
+        }))
+      });
+    }
+  };
 
   return (
     <Card className="w-full">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-semibold">Property Photos</CardTitle>
-          <Badge variant="secondary">{photos.length} Photos</Badge>
+          <div className="flex items-center gap-2">
+            <Camera className="h-5 w-5 text-primary" />
+            <CardTitle className="text-xl font-semibold">Property Photos</CardTitle>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">{photos.length} Photos</Badge>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleSavePhotos}
+              disabled={isSaving}
+              className="flex items-center gap-1"
+            >
+              <Save className="h-3 w-3" />
+              {isSaving ? "Saving..." : "Save"}
+            </Button>
+          </div>
         </div>
         <p className="text-sm text-muted-foreground">{propertyAddress}</p>
       </CardHeader>

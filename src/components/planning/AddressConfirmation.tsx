@@ -13,7 +13,9 @@ import {
   RefreshCw 
 } from 'lucide-react';
 import { useProperty } from '@/contexts/PropertyContext';
+import { useReportData } from '@/contexts/ReportDataContext';
 import { toast } from '@/hooks/use-toast';
+import LotPlanExtraction from '@/components/LotPlanExtraction';
 
 interface AddressConfirmationProps {
   onAddressConfirmed?: (address: string) => void;
@@ -27,6 +29,7 @@ export const AddressConfirmation: React.FC<AddressConfirmationProps> = ({
   showAutoGenerate = true
 }) => {
   const { addressData, updateAddressData, getFormattedAddress } = useProperty();
+  const { reportData, updateReportData } = useReportData();
   const [isEditing, setIsEditing] = useState(false);
   const [tempAddress, setTempAddress] = useState('');
   const [currentAddress, setCurrentAddress] = useState('');
@@ -59,11 +62,38 @@ export const AddressConfirmation: React.FC<AddressConfirmationProps> = ({
   };
 
   const handleConfirm = () => {
+    // Update report data with confirmed address
+    updateReportData('propertySearchData', {
+      confirmedAddress: currentAddress,
+      addressComponents: addressData,
+      confirmationDate: new Date().toISOString()
+    });
+    
     onAddressConfirmed?.(currentAddress);
     
     toast({
       title: "Address Confirmed ✅",
       description: "Proceeding with planning data search for this address.",
+    });
+  };
+
+  const handleLotPlanExtracted = (data: any) => {
+    // Update address data with extracted lot/plan
+    updateAddressData({
+      lotNumber: data.lotNumber,
+      planNumber: data.planNumber
+    });
+    
+    // Update report data
+    updateReportData('planningData', {
+      extractedLotPlan: data,
+      extractionSource: data.source,
+      extractionDate: new Date().toISOString()
+    });
+    
+    toast({
+      title: "Lot/Plan Extracted",
+      description: `Lot: ${data.lotNumber}, Plan: ${data.planNumber} from ${data.source}`,
     });
   };
 
@@ -228,6 +258,16 @@ export const AddressConfirmation: React.FC<AddressConfirmationProps> = ({
             Please ensure you have a valid address before proceeding with planning data search
           </p>
         )}
+
+        <Separator />
+
+        {/* Lot/Plan Extraction Section */}
+        <div className="space-y-4">
+          <LotPlanExtraction 
+            onDataExtracted={handleLotPlanExtracted}
+            propertyAddress={currentAddress}
+          />
+        </div>
       </CardContent>
     </Card>
   );

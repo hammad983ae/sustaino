@@ -8,6 +8,7 @@ import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
 import PropertyValuations from "./pages/PropertyValuations";
+import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import AuthPage from "./pages/Auth";
@@ -39,6 +40,7 @@ const App = () => (
                 <Route path="/" element={<AutomatedValuation />} />
                 <Route path="/index" element={<Index />} />
                 <Route path="/report" element={<Report />} />
+                <Route path="/property-assessment" element={<PropertyAssessment />} />
                 <Route path="/property-valuations" element={<PropertyValuations />} />
                 <Route path="/work-hub" element={<WorkHubPage />} />
                 <Route path="/white-label" element={<WhiteLabelConfig />} />

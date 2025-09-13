@@ -32,24 +32,56 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
 
       // Save to localStorage for immediate persistence
       const storageKey = `report_${sectionName}_${user.id}`;
-      localStorage.setItem(storageKey, JSON.stringify({
+      const saveObject = {
         ...data,
         savedAt: new Date().toISOString(),
-        section: sectionName
-      }));
+        section: sectionName,
+        userId: user.id
+      };
+      
+      localStorage.setItem(storageKey, JSON.stringify(saveObject));
 
-      // For now, we'll use localStorage as primary storage
-      // Future enhancement: Save to Supabase database when schema is ready
+      // Also save to global report tracking
+      const globalReportKey = `global_report_tracking_${user.id}`;
+      const existingTracking = JSON.parse(localStorage.getItem(globalReportKey) || '{}');
+      existingTracking[sectionName] = {
+        lastSaved: saveObject.savedAt,
+        hasData: true,
+        dataSize: JSON.stringify(data).length
+      };
+      localStorage.setItem(globalReportKey, JSON.stringify(existingTracking));
+
+      // Create working hub file entry for saved sections
+      const workingHubFiles = JSON.parse(localStorage.getItem('workingHubFiles') || '[]');
+      const existingFileIndex = workingHubFiles.findIndex((file: any) => file.name === sectionName);
+      
+      const fileEntry = {
+        name: sectionName,
+        type: 'Report Section',
+        lastModified: saveObject.savedAt,
+        size: JSON.stringify(data).length,
+        status: 'Saved',
+        section: sectionName
+      };
+      
+      if (existingFileIndex >= 0) {
+        workingHubFiles[existingFileIndex] = fileEntry;
+      } else {
+        workingHubFiles.push(fileEntry);
+      }
+      
+      localStorage.setItem('workingHubFiles', JSON.stringify(workingHubFiles));
       
       setLastSaved(new Date());
       
       if (showToast) {
         toast.success(`${sectionName} saved successfully`, {
           duration: 2000,
+          description: 'Data saved to local storage and working hub'
         });
       }
       
-      return { success: true };
+      return { success: true, data: saveObject };
     } catch (error) {
       console.error(`Failed to save ${sectionName}:`, error);
       
