@@ -126,12 +126,12 @@ export default function FullScreenDemo() {
               <div className="flex items-center justify-center gap-3 text-2xl md:text-3xl lg:text-4xl text-gray-600 max-w-6xl mx-auto leading-relaxed animate-fade-in flex-wrap mb-8 relative" style={{ animationDelay: '0.4s' }}>
                 <a 
                   href="/index" 
-                  className="absolute -top-20 -left-40 transform -rotate-45 flex items-center gap-3 hover:scale-105 transition-all duration-300 text-lg font-bold text-foreground hover:text-primary z-10"
+                  className="absolute -top-16 left-12 flex items-center gap-3 hover:scale-105 transition-all duration-300 z-10"
                 >
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
-                  <span>Back to Original Platform</span>
+                  <span className="transform rotate-[-45deg] text-lg font-bold text-foreground hover:text-primary whitespace-nowrap">Back to Original Platform</span>
                 </a>
                 <ThunderboltIcon className="w-12 h-12 md:w-16 md:h-16 animate-pulse" />
                 <span className="font-semibold bg-gradient-to-r from-yellow-500 via-purple-500 to-emerald-500 bg-clip-text text-transparent">
