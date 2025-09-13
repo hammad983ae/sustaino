@@ -19,6 +19,7 @@ import CostaGroupValuationsPage from "./pages/CostaGroupValuations";
 import ComprehensiveValuationAnalysis from "./pages/ComprehensiveValuationAnalysis";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
+import { ReportDataProvider } from "./contexts/ReportDataContext";
 import { PropertyTypeLockProvider } from "./components/PropertyTypeLockProvider";
 
 const queryClient = new QueryClient();
@@ -27,31 +28,33 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrandingProvider>
       <PropertyProvider>
-        <PropertyTypeLockProvider>
-          <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<AutomatedValuation />} />
-              <Route path="/index" element={<Index />} />
-              <Route path="/report" element={<Report />} />
-              <Route path="/property-valuations" element={<PropertyValuations />} />
-              <Route path="/work-hub" element={<WorkHubPage />} />
-              <Route path="/white-label" element={<WhiteLabelConfig />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
-              <Route path="/comprehensive-valuation-analysis" element={<ComprehensiveValuationAnalysis />} />
-              <Route path="/crypto-trading" element={<CryptoTradingDashboard />} />
-              <Route path="/costa-group-valuations" element={<CostaGroupValuationsPage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/folder-manager" element={<AutomaticFolderManager />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </PropertyTypeLockProvider>
+        <ReportDataProvider>
+          <PropertyTypeLockProvider>
+            <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<AutomatedValuation />} />
+                <Route path="/index" element={<Index />} />
+                <Route path="/report" element={<Report />} />
+                <Route path="/property-valuations" element={<PropertyValuations />} />
+                <Route path="/work-hub" element={<WorkHubPage />} />
+                <Route path="/white-label" element={<WhiteLabelConfig />} />
+                <Route path="/auth" element={<AuthPage />} />
+                <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
+                <Route path="/comprehensive-valuation-analysis" element={<ComprehensiveValuationAnalysis />} />
+                <Route path="/crypto-trading" element={<CryptoTradingDashboard />} />
+                <Route path="/costa-group-valuations" element={<CostaGroupValuationsPage />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/folder-manager" element={<AutomaticFolderManager />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </PropertyTypeLockProvider>
+      </ReportDataProvider>
     </PropertyProvider>
   </BrandingProvider>
 </QueryClientProvider>

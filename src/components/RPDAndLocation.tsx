@@ -9,6 +9,7 @@ import { AutofillAddressFields } from "@/components/AutofillAddressFields";
 import GoogleMapComponent from "@/components/GoogleMapComponent";
 import { usePropertyLocationData } from "@/hooks/usePropertyLocationData";
 import { useProperty } from "@/contexts/PropertyContext";
+import { useReportData } from "@/contexts/ReportDataContext";
 import { useSaveSystem } from "@/hooks/useSaveSystem";
 import { useState, useEffect } from "react";
 
@@ -16,6 +17,7 @@ const RPDAndLocation = () => {
   const { addressData } = useProperty();
   const { analysisData, isGenerating, generateLocationAnalysis, updateAnalysisField } = usePropertyLocationData();
   const { saveData, loadData, isSaving, lastSaved } = useSaveSystem('RPD_and_Location');
+  const { reportData, updateReportData, getIntegratedData } = useReportData();
   
   const [propertyIdentification, setPropertyIdentification] = useState({
     physicalInspection: true,
@@ -29,8 +31,11 @@ const RPDAndLocation = () => {
     otherChecked: false
   });
 
-  // Load saved data on component mount
+  // Load saved data on component mount and integrate from planning
   useEffect(() => {
+    const integratedData = getIntegratedData();
+    
+    // Load from local save first
     const savedData = loadData();
     if (savedData?.propertyIdentification) {
       setPropertyIdentification(savedData.propertyIdentification);
@@ -43,29 +48,49 @@ const RPDAndLocation = () => {
         }
       });
     }
-  }, [loadData, updateAnalysisField]);
+    
+    // Override with integrated planning data if available
+    if (integratedData.planningData) {
+      if (integratedData.propertyIdentification) {
+        setPropertyIdentification(prev => ({
+          ...prev,
+          ...integratedData.propertyIdentification
+        }));
+      }
+    }
+  }, [loadData, updateAnalysisField, getIntegratedData]);
 
   const handleSave = async () => {
-    await saveData({
+    const dataToSave = {
       addressData,
       analysisData,
       propertyIdentification,
       timestamp: new Date().toISOString()
-    });
+    };
+    
+    await saveData(dataToSave);
+    
+    // Also update global report data
+    updateReportData('locationData', analysisData);
+    updateReportData('propertyIdentification', propertyIdentification);
   };
   
   // Auto-save when data changes (debounced)
   useEffect(() => {
     const id = window.setTimeout(() => {
-      saveData({
+      const dataToSave = {
         addressData,
         analysisData,
         propertyIdentification,
         timestamp: new Date().toISOString()
-      });
+      };
+      
+      saveData(dataToSave);
+      updateReportData('locationData', analysisData);
+      updateReportData('propertyIdentification', propertyIdentification);
     }, 800);
     return () => window.clearTimeout(id);
-  }, [addressData, analysisData, propertyIdentification, saveData]);
+  }, [addressData, analysisData, propertyIdentification, saveData, updateReportData]);
   
   return (
     <div className="space-y-6">
