@@ -61,6 +61,12 @@ export default function AutomatedValuation() {
             <div className="flex items-center justify-between mb-8 animate-fade-in">
               <div className="flex items-center gap-4">
                 <a 
+                  href="/index" 
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-all duration-300 text-blue-700 font-medium hover-scale backdrop-blur-sm border border-blue-200/50 hover:border-blue-300/70"
+                >
+                  🏠 Back to Original Platform
+                </a>
+                <a 
                   href="/dashboard" 
                   className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 rounded-lg transition-all duration-300 text-emerald-700 font-medium hover-scale backdrop-blur-sm border border-emerald-200/50 hover:border-emerald-300/70"
                 >
@@ -82,7 +88,7 @@ export default function AutomatedValuation() {
               <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent mb-6 animate-scale-in">
                 Professional Property Valuations and ESG Assessments
               </h1>
-              <div className="flex items-center justify-center gap-3 text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <div className="flex items-center justify-center gap-2 text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fade-in flex-wrap" style={{ animationDelay: '0.4s' }}>
                 <ThunderboltIcon className="w-8 h-8 md:w-10 md:h-10 animate-pulse" />
                 <span className="font-semibold bg-gradient-to-r from-yellow-500 via-purple-500 to-emerald-500 bg-clip-text text-transparent">
                   Powered
