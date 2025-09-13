@@ -15,29 +15,22 @@ import {
   Activity,
   Sprout,
   CloudRain,
-  ArrowLeft
+  ArrowLeft,
+  Settings
 } from 'lucide-react';
-import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
-import QuickPropertySearch from '@/components/QuickPropertySearch';
 import { PropertyProvider } from '@/contexts/PropertyContext';
-import { APITestComponent } from '@/components/APITestComponent';
+import ThunderboltIcon from '@/components/ThunderboltIcon';
+import InformationBrochure from '@/components/InformationBrochure';
+import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
-  const [activeTab, setActiveTab] = useState('basic');
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeTab, setActiveTab] = useState('assessment');
   const [propertyData, setPropertyData] = useState(null);
   const [esgScores, setEsgScores] = useState(null);
-  const [beforeAfterData, setBeforeAfterData] = useState(null);
-  const [advancedPropertyData, setAdvancedPropertyData] = useState(null);
-  const [advancedResults, setAdvancedResults] = useState(null);
 
-  const handleSearchSelection = (method) => {
-    console.log('Search method selected:', method);
-  };
-
-  const handleBasicFormSubmit = (data) => {
+  const handleFormSubmit = (data) => {
     setPropertyData(data);
     setEsgScores({
       environmental: 75,
@@ -48,425 +41,250 @@ const Index = () => {
     setCurrentStep('results');
   };
 
-  const handleBeforeAfterFormSubmit = (data) => {
-    setBeforeAfterData(data);
-    setCurrentStep('results');
-  };
-
-  const handleAdvancedFormSubmit = (data) => {
-    setAdvancedPropertyData(data);
-    setAdvancedResults({
-      riskScore: 0.35,
-      adjustedValue: 850000,
-      recommendations: ['Climate mitigation', 'Energy efficiency']
-    });
-    setCurrentStep('results');
-  };
-
   const handleBackToForm = () => {
     setCurrentStep('form');
-    setActiveSection(null);
   };
 
   return (
     <PropertyProvider>
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent/20 to-background">
-      <div className="container mx-auto px-4 py-8">
-        {currentStep === 'form' ? (
-          <div className="space-y-8">
-            {/* Header */}
-            <div className="text-center">
-              <div className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
-                🌍 First in the World ESG Property Assessment Platform
-              </div>
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <Building className="h-12 w-12 text-primary" />
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
-                  ESG Property Assessment Platform
-                </h1>
-              </div>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
-                The world's first comprehensive ESG-integrated property valuation system.
-                Professional sustainability and risk evaluation platform for real estate properties. 
-                Choose between basic ESG assessment or advanced automated calculations with comprehensive risk analysis.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button 
-                  size="lg" 
-                  className="flex items-center gap-2 touch-manipulation min-h-[44px]"
-                  onClick={() => setActiveSection('esg-analysis')}
-                >
-                  📊 ESG Automated Analysis
-                </Button>
-                <Button 
-                  size="lg" 
-                  className="flex items-center gap-2 touch-manipulation min-h-[44px]"
-                  onClick={() => setActiveSection('climate-risk')}
-                >
-                  🌡️ Climate Risk Assessment
-                </Button>
-                <Link to="/automated-valuation">
-                  <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
-                    <TrendingUp className="w-5 h-5" />
-                    Start Property Valuation
-                  </Button>
-                </Link>
-                <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
-                  <ArrowUpDown className="w-5 h-5" />
-                  Rent Revision
-                </Button>
-                <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
-                  <Sprout className="w-5 h-5" />
-                  Agricultural Hub
-                </Button>
-                <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
-                  <Building2 className="w-5 h-5" />
-                  Property Hub
-                </Button>
-                <Button variant="outline" size="lg" className="flex items-center gap-2 touch-manipulation min-h-[44px]">
-                  <Activity className="w-5 h-5" />
-                  Economic Activity
-                </Button>
-              </div>
-            </div>
-            
-
-            {/* Assessment Type Tabs */}
-            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 max-w-2xl mx-auto">
-                <TabsTrigger value="basic" className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4" />
-                  Basic Assessment
-                </TabsTrigger>
-                <TabsTrigger value="before-after" className="flex items-center gap-2">
-                  <ArrowUpDown className="h-4 w-4" />
-                  Before & After
-                </TabsTrigger>
-                <TabsTrigger value="advanced" className="flex items-center gap-2">
-                  <Target className="h-4 w-4" />
-                  Advanced Calculations
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="basic" className="space-y-6">
-                {/* Basic Features Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <Card className="bg-gradient-to-br from-card to-success/10 border-success/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-success">
-                        <Calculator className="h-5 w-5" />
-                        ESG Scoring
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Comprehensive Environmental, Social, and Governance assessment 
-                        with industry-standard scoring methodology.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-card to-info/10 border-info/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-info">
-                        <BarChart3 className="h-5 w-5" />
-                        Risk Analysis
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Property risk rating incorporating sustainability factors, 
-                        property age, and certification status.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-card to-warning/10 border-warning/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-warning">
-                        <Building className="h-5 w-5" />
-                        Export Tools
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Export results to CSV, JSON, and Excel templates 
-                        for integration with valuation workflows.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="bg-card p-6 rounded-lg border">
-                  <h3 className="text-lg font-semibold mb-4">Property Assessment Form</h3>
-                  <MultiStepForm onSubmit={handleBasicFormSubmit} />
+      <div className="min-h-screen relative">
+        {/* 3D Background */}
+        <PropertyValuation3DBackground />
+        
+        {/* Enhanced gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-orange-50/30 to-emerald-50/40" />
+        
+        <div className="relative z-10 container mx-auto px-4 py-8">
+          {currentStep === 'form' ? (
+            <div className="space-y-8">
+              {/* Enhanced Header */}
+              <div className="text-center">
+                <div className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6 animate-fade-in">
+                  🌍 Professional Property Assessment Platform
                 </div>
                 
-                {/* API Testing Component */}
-                <div className="bg-card p-6 rounded-lg border">
-                  <h3 className="text-lg font-semibold mb-4">API Testing Dashboard</h3>
-                  <p className="text-muted-foreground mb-4">Test all property valuation APIs to ensure they work for real jobs.</p>
-                  <APITestComponent />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="before-after" className="space-y-6">
-                {/* Before & After Features Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <Card className="bg-gradient-to-br from-card to-primary/10 border-primary/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-primary">
-                        <ArrowUpDown className="h-5 w-5" />
-                        Value Analysis
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Compare property values before and after changes, improvements, 
-                        or market conditions with detailed impact analysis.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-card to-warning/10 border-warning/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-warning">
-                        <Calculator className="h-5 w-5" />
-                        Change Impact
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Quantify the financial impact of property improvements, 
-                        deterioration, or market adjustments with percentage calculations.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-card to-success/10 border-success/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-success">
-                        <TrendingUp className="h-5 w-5" />
-                        Professional Reports
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Generate comprehensive before/after reports with detailed 
-                        reasoning and supporting documentation for valuations.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="bg-card p-6 rounded-lg border">
-                  <h3 className="text-lg font-semibold mb-4">Before & After Valuation Form</h3>
-                  <Button onClick={() => handleBeforeAfterFormSubmit({})}>
-                    Submit Sample Before/After Data
-                  </Button>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="advanced" className="space-y-6">
-                {/* Advanced Features Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <Card className="bg-gradient-to-br from-card to-primary/10 border-primary/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-primary">
-                        <Target className="h-5 w-5" />
-                        Automated Formulas
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Advanced calculations using weighted averages, climate risk thresholds, 
-                        and normalized scoring systems with Excel-compatible formulas.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-card to-warning/10 border-warning/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-warning">
-                        <Calculator className="h-5 w-5" />
-                        Climate Risk Assessment
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Comprehensive climate risk evaluation including flood, bushfire, 
-                        cyclone, heatwave, and drought risk with customizable thresholds.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-card to-success/10 border-success/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-success">
-                        <BarChart3 className="h-5 w-5" />
-                        Financial Integration
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        SEIFA socioeconomic scoring, financial risk factors, 
-                        and overall 1-5 risk rating for insurance and lending decisions.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="bg-card p-6 rounded-lg border">
-                  <h3 className="text-lg font-semibold mb-4">Advanced Calculations Form</h3>
-                  <Button onClick={() => handleAdvancedFormSubmit({})}>
-                    Submit Sample Advanced Data
-                  </Button>
-                </div>
-              </TabsContent>
-            </Tabs>
-
-            {/* ESG Analysis Section */}
-            {activeSection === 'esg-analysis' && (
-              <Card className="shadow-xl">
-                <CardHeader className="border-b">
-                  <CardTitle className="text-2xl flex items-center gap-3">
-                    <Target className="h-6 w-6 text-primary" />
-                    ESG Automated Analysis
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <div className="space-y-6">
-                    <p className="text-muted-foreground">
-                      ESG Automated Analysis section will be implemented with comprehensive 
-                      environmental, social, and governance assessment tools.
+                {/* Powered Branding */}
+                <div className="flex items-center justify-center gap-3 mb-6 animate-scale-in">
+                  <ThunderboltIcon className="h-12 w-12" />
+                  <div>
+                    <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                      Powered
+                    </h1>
+                    <p className="text-lg text-muted-foreground font-medium">
+                      A Sustaino Pro Product
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-success">85%</div>
-                          <p className="text-sm text-muted-foreground">Environmental Score</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-info">72%</div>
-                          <p className="text-sm text-muted-foreground">Social Score</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-warning">91%</div>
-                          <p className="text-sm text-muted-foreground">Governance Score</p>
-                        </CardContent>
-                      </Card>
-                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Climate Risk Section */}
-            {activeSection === 'climate-risk' && (
-              <Card className="shadow-xl">
-                <CardHeader className="border-b">
-                  <CardTitle className="text-2xl flex items-center gap-3">
-                    <CloudRain className="h-6 w-6 text-primary" />
-                    Climate Risk Assessment
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <ClimateRiskAssessment />
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        ) : (
-          /* Results View */
-          <div className="space-y-8">
-            {/* Results Header */}
-            <div className="text-center">
-              <Button 
-                onClick={handleBackToForm}
-                variant="outline" 
-                className="mb-6"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Form
-              </Button>
-              <h1 className="text-3xl font-bold mb-4">Assessment Results</h1>
-            </div>
-
-            {/* Results Content Based on Active Tab */}
-            {activeTab === 'basic' && propertyData && esgScores && (
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>ESG Assessment Results</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="text-center p-4 border rounded-lg">
-                        <div className="text-2xl font-bold text-success">{esgScores.environmental}%</div>
-                        <p className="text-sm text-muted-foreground">Environmental</p>
-                      </div>
-                      <div className="text-center p-4 border rounded-lg">
-                        <div className="text-2xl font-bold text-info">{esgScores.social}%</div>
-                        <p className="text-sm text-muted-foreground">Social</p>
-                      </div>
-                      <div className="text-center p-4 border rounded-lg">
-                        <div className="text-2xl font-bold text-warning">{esgScores.governance}%</div>
-                        <p className="text-sm text-muted-foreground">Governance</p>
-                      </div>
-                      <div className="text-center p-4 border rounded-lg">
-                        <div className="text-2xl font-bold text-primary">{esgScores.overall}%</div>
-                        <p className="text-sm text-muted-foreground">Overall Score</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                </div>
+                
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                  Complete your property assessment form to receive a comprehensive ESG-integrated valuation report.
+                </p>
               </div>
-            )}
 
-            {activeTab === 'before-after' && beforeAfterData && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Before & After Analysis Results</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Before and after valuation comparison results would be displayed here.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
+              {/* Simplified Tabs */}
+              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full animate-fade-in" style={{ animationDelay: '0.5s' }}>
+                <TabsList className="grid w-full grid-cols-2 max-w-lg mx-auto">
+                  <TabsTrigger value="assessment" className="flex items-center gap-2">
+                    <Building className="h-4 w-4" />
+                    Property Assessment
+                  </TabsTrigger>
+                  <TabsTrigger value="tools" className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Additional Tools
+                  </TabsTrigger>
+                </TabsList>
 
-            {activeTab === 'advanced' && advancedPropertyData && advancedResults && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Advanced Analysis Results</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-2xl font-bold">{(advancedResults.riskScore * 100).toFixed(1)}%</div>
-                      <p className="text-sm text-muted-foreground">Risk Score</p>
+                <TabsContent value="assessment" className="space-y-8">
+                  {/* Main Assessment Form */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2">
+                      <Card className="bg-card/80 backdrop-blur-sm shadow-xl border-primary/20">
+                        <CardHeader className="border-b border-primary/10">
+                          <CardTitle className="text-2xl flex items-center gap-3">
+                            <Building className="h-6 w-6 text-primary" />
+                            Property Assessment Form
+                          </CardTitle>
+                          <p className="text-muted-foreground">
+                            Complete all steps to generate your comprehensive property report
+                          </p>
+                        </CardHeader>
+                        <CardContent className="p-6">
+                          <MultiStepForm onSubmit={handleFormSubmit} />
+                        </CardContent>
+                      </Card>
                     </div>
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-2xl font-bold">${advancedResults.adjustedValue.toLocaleString()}</div>
-                      <p className="text-sm text-muted-foreground">Adjusted Value</p>
-                    </div>
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-lg font-bold">{advancedResults.recommendations.length}</div>
-                      <p className="text-sm text-muted-foreground">Recommendations</p>
+                    
+                    {/* Information Brochure */}
+                    <div className="space-y-6">
+                      <InformationBrochure />
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        )}
+                </TabsContent>
+
+                <TabsContent value="tools" className="space-y-6">
+                  {/* Additional Tools Section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <Link to="/automated-valuation">
+                      <Card className="bg-gradient-to-br from-card to-primary/10 border-primary/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-primary">
+                            <TrendingUp className="h-5 w-5" />
+                            Property Valuation
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground">
+                            Access comprehensive property valuation tools and market analysis
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </Link>
+
+                    <Card className="bg-gradient-to-br from-card to-info/10 border-info/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-info">
+                          <ArrowUpDown className="h-5 w-5" />
+                          Rent Revision
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                          Calculate and review rental valuations with market comparisons
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-card to-success/10 border-success/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-success">
+                          <Sprout className="h-5 w-5" />
+                          Agricultural Hub
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                          Specialized tools for agricultural property assessment and valuation
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-card to-warning/10 border-warning/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-warning">
+                          <Building2 className="h-5 w-5" />
+                          Property Hub
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                          Central hub for all property management and analysis tools
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-card to-purple-500/10 border-purple-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-purple-600">
+                          <Activity className="h-5 w-5" />
+                          Economic Activity
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                          Analyze economic indicators and market trends affecting property values
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-card to-emerald-500/10 border-emerald-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-emerald-600">
+                          <CloudRain className="h-5 w-5" />
+                          Climate Risk
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                          Comprehensive climate risk assessment and environmental analysis
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          ) : (
+            /* Results View */
+            <div className="space-y-8">
+              {/* Results Header */}
+              <div className="text-center">
+                <Button 
+                  onClick={handleBackToForm}
+                  variant="outline" 
+                  className="mb-6"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Form
+                </Button>
+
+                {/* Results Content */}
+                {propertyData && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <Card className="bg-card/80 backdrop-blur-sm">
+                      <CardHeader>
+                        <CardTitle>Property Information</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          <p><strong>Address:</strong> {propertyData.address}</p>
+                          <p><strong>Type:</strong> {propertyData.type}</p>
+                          <p><strong>Value:</strong> ${propertyData.value?.toLocaleString()}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {esgScores && (
+                      <Card className="bg-card/80 backdrop-blur-sm">
+                        <CardHeader>
+                          <CardTitle>ESG Scores</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <span>Environmental</span>
+                              <Badge variant="outline" className="text-success border-success">
+                                {esgScores.environmental}%
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span>Social</span>
+                              <Badge variant="outline" className="text-info border-info">
+                                {esgScores.social}%
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span>Governance</span>
+                              <Badge variant="outline" className="text-warning border-warning">
+                                {esgScores.governance}%
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center font-bold">
+                              <span>Overall ESG Score</span>
+                              <Badge className="bg-primary text-primary-foreground">
+                                {esgScores.overall}%
+                              </Badge>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </PropertyProvider>
   );
 };
