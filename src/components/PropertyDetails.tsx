@@ -219,7 +219,7 @@ const EnhancedPropertyDetails = () => {
               <h4 className="font-medium text-blue-900 mb-2">✅ Pre-filled from Property Assessment</h4>
               <p className="text-sm text-blue-700">
                 Property type "Workers Accommodation" has been automatically selected based on your property assessment form.
-                Property photos and planning data have been integrated into this section.
+                Property photos and planning data has been integrated into this section.
               </p>
             </div>
           )}
