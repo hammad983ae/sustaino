@@ -395,11 +395,83 @@ const DocumentUploadManager = () => {
         return;
       }
 
+      // Validate required fields
+      if (!jobDetails.title.trim()) {
+        toast({
+          title: "Missing job title",
+          description: "Please enter a job title",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (!jobDetails.clientName.trim()) {
+        toast({
+          title: "Missing client name",
+          description: "Please enter a client name",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (!jobDetails.clientEmail.trim()) {
+        toast({
+          title: "Missing client email",
+          description: "Please enter a client email",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (!jobDetails.propertyAddress.trim()) {
+        toast({
+          title: "Missing property address",
+          description: "Please enter a property address",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (jobDetails.estimatedHours < 0.5 || jobDetails.estimatedHours > 500) {
+        toast({
+          title: "Invalid estimated hours",
+          description: "Estimated hours must be between 0.5 and 500",
+          variant: "destructive"
+        });
+        return;
+      }
+
       // Use the generated reference number
       const jobNumber = jobDetails.referenceNumber || await generateReferenceNumber();
       
-      // First create/find a property record
+      // First create/find a property record with proper address parsing
       let propertyId: string;
+      
+      // Parse the address properly to extract required fields
+      const addressParts = jobDetails.propertyAddress.split(/[,\s]+/).filter(part => part.trim());
+      let suburb = 'Unknown';
+      let state = 'Unknown';
+      let postcode = '0000';
+      
+      // Try to extract suburb, state, postcode from address
+      if (addressParts.length >= 3) {
+        // Look for postcode (4 digits)
+        const postcodeMatch = addressParts.find(part => /^\d{4}$/.test(part));
+        if (postcodeMatch) {
+          postcode = postcodeMatch;
+          const postcodeIndex = addressParts.indexOf(postcodeMatch);
+          
+          // State is usually before postcode
+          if (postcodeIndex > 0) {
+            state = addressParts[postcodeIndex - 1];
+          }
+          
+          // Suburb is usually before state
+          if (postcodeIndex > 1) {
+            suburb = addressParts[postcodeIndex - 2];
+          }
+        }
+      }
       
       // Try to find existing property by address
       const { data: existingProperty } = await supabase
@@ -407,28 +479,30 @@ const DocumentUploadManager = () => {
         .select('id')
         .eq('address_line_1', jobDetails.propertyAddress)
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (existingProperty) {
         propertyId = existingProperty.id;
       } else {
-        // Create new property record
-        const addressParts = jobDetails.propertyAddress.split(',').map(part => part.trim());
+        // Create new property record with proper required fields
         const { data: newProperty, error: propertyError } = await supabase
           .from('properties')
           .insert({
             user_id: user.id,
-            address_line_1: addressParts[0] || jobDetails.propertyAddress,
-            suburb: addressParts[1] || 'Unknown',
-            state: addressParts[2] || 'Unknown',
-            postcode: addressParts[3] || '0000',
+            address_line_1: jobDetails.propertyAddress,
+            suburb: suburb,
+            state: state,
+            postcode: postcode,
             property_type: jobDetails.jobType === 'valuation' ? 'residential' : 'commercial',
             country: 'Australia'
           })
           .select('id')
           .single();
 
-        if (propertyError) throw propertyError;
+        if (propertyError) {
+          console.error('Property creation error:', propertyError);
+          throw new Error(`Failed to create property: ${propertyError.message}`);
+        }
         propertyId = newProperty.id;
       }
       
@@ -448,7 +522,7 @@ const DocumentUploadManager = () => {
           property_address: jobDetails.propertyAddress,
           priority: jobDetails.priority,
           job_type: jobDetails.jobType,
-          due_date: jobDetails.dueDate,
+          due_date: jobDetails.dueDate || null,
           estimated_hours: jobDetails.estimatedHours,
           status: 'pending',
           instruction_date: new Date().toISOString().split('T')[0],
@@ -457,7 +531,10 @@ const DocumentUploadManager = () => {
         .select()
         .single();
 
-      if (jobError) throw jobError;
+      if (jobError) {
+        console.error('Job creation error:', jobError);
+        throw new Error(`Failed to create job: ${jobError.message}`);
+      }
 
       // Create a report entry linked to the job
       const { data: reportData, error: reportError } = await supabase
@@ -506,10 +583,19 @@ const DocumentUploadManager = () => {
       setUploadedDocuments([]);
 
     } catch (error) {
-      console.error('Error creating job:', error);
+      console.error('Job creation error:', error);
+      
+      let errorMessage = "There was an error creating the job";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null && 'message' in error) {
+        errorMessage = String(error.message);
+      }
+      
       toast({
         title: "Job creation failed",
-        description: "There was an error creating the job",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -967,9 +1053,16 @@ const DocumentUploadManager = () => {
                   id="estimated-hours"
                   type="number"
                   min="0.5"
+                  max="500"
                   step="0.5"
                   value={jobDetails.estimatedHours}
-                  onChange={(e) => setJobDetails(prev => ({ ...prev, estimatedHours: parseFloat(e.target.value) || 0 }))}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value) && value >= 0.5 && value <= 500) {
+                      setJobDetails(prev => ({ ...prev, estimatedHours: value }));
+                    }
+                  }}
+                  placeholder="2"
                 />
               </div>
             </div>
