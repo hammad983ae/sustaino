@@ -495,7 +495,7 @@ const DocumentUploadManager = () => {
             property_id: propertyId,
             title: `${jobDetails.title} - Report`,
             report_type: jobDetails.jobType,
-            status: 'in_progress',
+            status: 'generating',
             current_section: 'document_upload',
             progress: 10,
             sections_data: {
