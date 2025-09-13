@@ -18,7 +18,9 @@ import {
   ArrowLeft,
   Settings,
   Wrench,
-  Scale
+  Scale,
+  Shield,
+  Info
 } from 'lucide-react';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
@@ -49,199 +51,232 @@ const Index = () => {
 
   return (
     <PropertyProvider>
-      <div className="min-h-screen relative">
-        {/* 3D Background */}
-        <PropertyValuation3DBackground />
-        
-        {/* Enhanced gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-orange-50/30 to-emerald-50/40" />
-        
-        <div className="relative z-10 container mx-auto px-4 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40">
+        <div className="container mx-auto px-4 py-12">
           {currentStep === 'form' ? (
-            <div className="space-y-8">
-              {/* Enhanced Header */}
-              <div className="text-center">
-                <div className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6 animate-fade-in">
+            <div className="space-y-12">
+              {/* Clean Header */}
+              <div className="text-center space-y-6">
+                <div className="inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-slate-600 rounded-full text-sm font-medium shadow-sm border border-slate-200/50">
                   🌍 Professional Property Assessment Platform
                 </div>
                 
                 {/* Powered Branding */}
-                <div className="flex items-center justify-center gap-3 mb-6 animate-scale-in">
-                  <ThunderboltIcon className="h-12 w-12" />
-                  <div>
-                    <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <div className="flex items-center justify-center gap-4">
+                  <ThunderboltIcon className="h-16 w-16" />
+                  <div className="text-left">
+                    <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                       Powered
                     </h1>
-                    <p className="text-lg text-muted-foreground font-medium">
+                    <p className="text-xl text-slate-600 font-medium">
                       A Sustaino Pro Product
                     </p>
                   </div>
                 </div>
                 
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
                   Complete your property assessment form to receive a comprehensive ESG-integrated valuation report.
                 </p>
               </div>
 
-              {/* Simplified Tabs */}
-              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full animate-fade-in" style={{ animationDelay: '0.5s' }}>
-                <TabsList className="grid w-full grid-cols-2 max-w-lg mx-auto">
-                  <TabsTrigger value="assessment" className="flex items-center gap-2">
-                    <Building className="h-4 w-4" />
-                    Property Assessment
-                  </TabsTrigger>
-                  <TabsTrigger value="tools" className="flex items-center gap-2">
-                    <Settings className="h-4 w-4" />
-                    Additional Tools
-                  </TabsTrigger>
-                </TabsList>
+              {/* Clean Tabs */}
+              <div className="max-w-4xl mx-auto">
+                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
+                  <TabsList className="grid w-full grid-cols-3 bg-white/80 backdrop-blur-sm shadow-sm border border-slate-200/50 rounded-xl p-1">
+                    <TabsTrigger value="assessment" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                      <Building className="h-4 w-4" />
+                      Property Assessment
+                    </TabsTrigger>
+                    <TabsTrigger value="tools" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                      <Settings className="h-4 w-4" />
+                      Additional Tools
+                    </TabsTrigger>
+                    <TabsTrigger value="info" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                      <Info className="h-4 w-4" />
+                      Product Information
+                    </TabsTrigger>
+                  </TabsList>
 
-                <TabsContent value="assessment" className="space-y-8">
-                  {/* Main Assessment Form */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2">
-                      <Card className="bg-card/80 backdrop-blur-sm shadow-xl border-primary/20">
-                        <CardHeader className="border-b border-primary/10">
-                          <CardTitle className="text-2xl flex items-center gap-3">
-                            <Building className="h-6 w-6 text-primary" />
-                            Property Assessment Form
-                          </CardTitle>
-                          <p className="text-muted-foreground">
-                            Complete all steps to generate your comprehensive property report
-                          </p>
-                        </CardHeader>
-                        <CardContent className="p-6">
-                          <MultiStepForm onSubmit={handleFormSubmit} />
-                        </CardContent>
-                      </Card>
-                    </div>
-                    
-                    {/* Information Brochure */}
-                    <div className="space-y-6">
-                      <InformationBrochure />
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="tools" className="space-y-6">
-                  {/* Additional Tools Section */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Link to="/automated-valuation">
-                      <Card className="bg-gradient-to-br from-card to-primary/10 border-primary/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2 text-primary">
-                            <TrendingUp className="h-5 w-5" />
-                            Property Valuation
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-sm text-muted-foreground">
-                            Access comprehensive property valuation tools and market analysis
-                          </p>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Card className="bg-gradient-to-br from-card to-info/10 border-info/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-info">
-                          <ArrowUpDown className="h-5 w-5" />
-                          Rent Revision
+                  <TabsContent value="assessment" className="mt-8">
+                    <Card className="bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200/50">
+                      <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-slate-700">
+                          <Building className="h-6 w-6 text-blue-600" />
+                          Property Assessment Form
                         </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Calculate and review rental valuations with market comparisons
+                        <p className="text-slate-600">
+                          Complete all steps to generate your comprehensive property report
                         </p>
+                      </CardHeader>
+                      <CardContent className="p-8">
+                        <MultiStepForm onSubmit={handleFormSubmit} />
                       </CardContent>
                     </Card>
+                  </TabsContent>
 
-                    <Card className="bg-gradient-to-br from-card to-orange-500/10 border-orange-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-orange-600">
-                          <Scale className="h-5 w-5" />
-                          Rent Determination
+                  <TabsContent value="tools" className="mt-8">
+                    <Card className="bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200/50">
+                      <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-slate-700">
+                          <Settings className="h-6 w-6 text-blue-600" />
+                          Additional Tools
                         </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Professional rent determination and arbitration services
+                        <p className="text-slate-600">
+                          Access specialized valuation and assessment tools
                         </p>
+                      </CardHeader>
+                      <CardContent className="p-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          <Link to="/automated-valuation">
+                            <Card className="bg-gradient-to-br from-white to-blue-50/50 border border-blue-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-blue-700">
+                                  <TrendingUp className="h-5 w-5" />
+                                  Property Valuation
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Access comprehensive property valuation tools and market analysis
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
+                          <Card className="bg-gradient-to-br from-white to-indigo-50/50 border border-indigo-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-indigo-700">
+                                <ArrowUpDown className="h-5 w-5" />
+                                Rent Revision
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Calculate and review rental valuations with market comparisons
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-gradient-to-br from-white to-orange-50/50 border border-orange-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-orange-700">
+                                <Scale className="h-5 w-5" />
+                                Rent Determination
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Professional rent determination and arbitration services
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-slate-700">
+                                <Wrench className="h-5 w-5" />
+                                Plant & Equipment
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Specialized valuation for plant, equipment and machinery assets
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-gradient-to-br from-white to-purple-50/50 border border-purple-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-purple-700">
+                                <Shield className="h-5 w-5" />
+                                Insurance Valuations
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Professional insurance valuations and replacement cost assessments
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-gradient-to-br from-white to-green-50/50 border border-green-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-green-700">
+                                <Sprout className="h-5 w-5" />
+                                Agricultural Hub
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Specialized tools for agricultural property assessment and valuation
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-gradient-to-br from-white to-amber-50/50 border border-amber-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-amber-700">
+                                <Building2 className="h-5 w-5" />
+                                Property Hub
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Central hub for all property management and analysis tools
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-gradient-to-br from-white to-violet-50/50 border border-violet-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-violet-700">
+                                <Activity className="h-5 w-5" />
+                                Economic Activity
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Analyze economic indicators and market trends affecting property values
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-gradient-to-br from-white to-teal-50/50 border border-teal-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-teal-700">
+                                <CloudRain className="h-5 w-5" />
+                                Climate Risk
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600">
+                                Comprehensive climate risk assessment and environmental analysis
+                              </p>
+                            </CardContent>
+                          </Card>
+                        </div>
                       </CardContent>
                     </Card>
+                  </TabsContent>
 
-                    <Card className="bg-gradient-to-br from-card to-slate-500/10 border-slate-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-slate-600">
-                          <Wrench className="h-5 w-5" />
-                          Plant & Equipment
+                  <TabsContent value="info" className="mt-8">
+                    <Card className="bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200/50">
+                      <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-slate-700">
+                          <Info className="h-6 w-6 text-blue-600" />
+                          Product Information
                         </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Specialized valuation for plant, equipment and machinery assets
+                        <p className="text-slate-600">
+                          Download comprehensive information about our platform
                         </p>
+                      </CardHeader>
+                      <CardContent className="p-8">
+                        <InformationBrochure />
                       </CardContent>
                     </Card>
-
-                    <Card className="bg-gradient-to-br from-card to-success/10 border-success/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-success">
-                          <Sprout className="h-5 w-5" />
-                          Agricultural Hub
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Specialized tools for agricultural property assessment and valuation
-                        </p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-gradient-to-br from-card to-warning/10 border-warning/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-warning">
-                          <Building2 className="h-5 w-5" />
-                          Property Hub
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Central hub for all property management and analysis tools
-                        </p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-gradient-to-br from-card to-purple-500/10 border-purple-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-purple-600">
-                          <Activity className="h-5 w-5" />
-                          Economic Activity
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Analyze economic indicators and market trends affecting property values
-                        </p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-gradient-to-br from-card to-emerald-500/10 border-emerald-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-emerald-600">
-                          <CloudRain className="h-5 w-5" />
-                          Climate Risk
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Comprehensive climate risk assessment and environmental analysis
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-              </Tabs>
+                  </TabsContent>
+                </Tabs>
+              </div>
             </div>
           ) : (
             /* Results View */
