@@ -17,6 +17,7 @@ import Dashboard from "./pages/Dashboard";
 import AutomaticFolderManager from "./components/AutomaticFolderManager";
 import CostaGroupValuationsPage from "./pages/CostaGroupValuations";
 import ComprehensiveValuationAnalysis from "./pages/ComprehensiveValuationAnalysis";
+import FullScreenDemo from "./pages/FullScreenDemo";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -48,6 +49,7 @@ const App = () => (
                 <Route path="/costa-group-valuations" element={<CostaGroupValuationsPage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/folder-manager" element={<AutomaticFolderManager />} />
+                <Route path="/fullscreen-demo" element={<FullScreenDemo />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
