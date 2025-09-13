@@ -55,15 +55,25 @@ const Index = () => {
         {/* 3D Background */}
         <PropertyValuation3DBackground />
         
-        {/* Sandy brown tinge background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/80 via-orange-50/60 to-yellow-50/70" />
+        {/* Blue/purple glowing background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-purple-50/60 to-indigo-50/70" />
         
         <div className="relative z-10 container mx-auto px-4 py-12">
           {currentStep === 'form' ? (
             <div className="space-y-12">
+              {/* Back to Dashboard Button */}
+              <div className="flex justify-start">
+                <Link to="/automated-valuation">
+                  <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-purple-200 text-purple-700 hover:bg-purple-50">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Back to Main Dashboard
+                  </Button>
+                </Link>
+              </div>
+              
               {/* Clean Header */}
               <div className="text-center space-y-6">
-                <div className="inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-slate-600 rounded-full text-sm font-medium shadow-sm border border-slate-200/50">
+                <div className="inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-purple-600 rounded-full text-sm font-medium shadow-sm border border-purple-200/50">
                   🌍 Professional Property Assessment Platform
                 </div>
                 
@@ -80,15 +90,15 @@ const Index = () => {
                   </div>
                 </div>
                 
-                <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-lg text-purple-600 max-w-2xl mx-auto leading-relaxed">
                   Complete your property assessment form to receive a comprehensive ESG-integrated valuation report.
                 </p>
               </div>
 
               {/* Clean Tabs */}
-              <div className="max-w-4xl mx-auto">
+              <div className="max-w-7xl mx-auto">
                 <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 bg-white/80 backdrop-blur-sm shadow-sm border border-slate-200/50 rounded-xl p-1">
+                  <TabsList className="grid w-full grid-cols-3 bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                     <TabsTrigger value="assessment" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                       <Building className="h-4 w-4" />
                       Property Assessment
@@ -104,14 +114,14 @@ const Index = () => {
                   </TabsList>
 
                   <TabsContent value="assessment" className="mt-8">
-                    <div className="max-w-6xl mx-auto">
-                      <Card className="bg-white/95 backdrop-blur-sm shadow-lg border border-amber-200/50">
-                        <CardHeader className="border-b border-amber-100 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
-                          <CardTitle className="text-2xl flex items-center gap-3 text-amber-800">
-                            <Building className="h-6 w-6 text-amber-700" />
+                    <div className="max-w-7xl mx-auto">
+                      <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                        <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                          <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                            <Building className="h-6 w-6 text-purple-700" />
                             Property Assessment Form
                           </CardTitle>
-                          <p className="text-amber-700">
+                          <p className="text-purple-700">
                             Complete all steps to generate your comprehensive property report
                           </p>
                         </CardHeader>
@@ -123,13 +133,13 @@ const Index = () => {
                   </TabsContent>
 
                   <TabsContent value="tools" className="mt-8">
-                    <Card className="bg-white/95 backdrop-blur-sm shadow-lg border border-amber-200/50">
-                      <CardHeader className="border-b border-amber-100 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
-                        <CardTitle className="text-2xl flex items-center gap-3 text-amber-800">
-                          <Settings className="h-6 w-6 text-amber-700" />
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <Settings className="h-6 w-6 text-purple-700" />
                           Additional Tools
                         </CardTitle>
-                        <p className="text-amber-700">
+                        <p className="text-purple-700">
                           Access specialized valuation and assessment tools
                         </p>
                       </CardHeader>
@@ -268,13 +278,13 @@ const Index = () => {
                   </TabsContent>
 
                   <TabsContent value="info" className="mt-8">
-                    <Card className="bg-white/95 backdrop-blur-sm shadow-lg border border-amber-200/50">
-                      <CardHeader className="border-b border-amber-100 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
-                        <CardTitle className="text-2xl flex items-center gap-3 text-amber-800">
-                          <Info className="h-6 w-6 text-amber-700" />
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <Info className="h-6 w-6 text-purple-700" />
                           Product Information
                         </CardTitle>
-                        <p className="text-amber-700">
+                        <p className="text-purple-700">
                           Download comprehensive information about our platform
                         </p>
                       </CardHeader>

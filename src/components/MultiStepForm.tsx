@@ -79,12 +79,12 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
   return (
     <div className="space-y-6">
       {/* Top Navigation */}
-      <div className="flex items-center justify-between p-4 bg-amber-50/50 rounded-lg border border-amber-200/50">
+      <div className="flex items-center justify-between p-4 bg-purple-50/50 rounded-lg border border-purple-200/50">
         <Button
           variant="outline"
           onClick={prevGroup}
           disabled={currentGroup === 0}
-          className="flex items-center gap-2 text-amber-700 border-amber-300 hover:bg-amber-100"
+          className="flex items-center gap-2 text-purple-700 border-purple-300 hover:bg-purple-100"
         >
           <ChevronLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Back</span>
@@ -92,10 +92,10 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
 
         <div className="flex items-center gap-4">
           <div className="text-center">
-            <div className="text-sm font-medium text-amber-800">
+            <div className="text-sm font-medium text-purple-800">
               Group {currentGroup + 1} of {stepGroups.length}
             </div>
-            <div className="text-xs text-amber-600">
+            <div className="text-xs text-purple-600">
               {currentGroupData.title}
             </div>
           </div>
@@ -106,7 +106,7 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
 
         <Button
           onClick={nextGroup}
-          className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white"
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
         >
           <span className="hidden sm:inline">
             {currentGroup === stepGroups.length - 1 ? "Complete" : "Next"}
@@ -118,10 +118,10 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
       {/* Current Group Content */}
       <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-amber-800 mb-2">
+          <h2 className="text-2xl font-semibold text-purple-800 mb-2">
             {currentGroupData.title}
           </h2>
-          <p className="text-amber-600">
+          <p className="text-purple-600">
             Complete all steps in this section to continue
           </p>
         </div>
@@ -129,16 +129,16 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
         {/* Steps in Current Group */}
         <div className="grid gap-6">
           {currentGroupData.steps.map((step, index) => (
-            <Card key={index} className="bg-white/90 backdrop-blur-sm border border-amber-200/50">
+            <Card key={index} className="bg-white/90 backdrop-blur-sm border border-purple-200/50">
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-3 text-lg text-amber-800">
-                  <div className="p-2 bg-amber-100 rounded-lg text-amber-700">
+                <CardTitle className="flex items-center gap-3 text-lg text-purple-800">
+                  <div className="p-2 bg-purple-100 rounded-lg text-purple-700">
                     {step.icon}
                   </div>
                   Step {currentStepNumber + index}: {step.title}
                 </CardTitle>
               </CardHeader>
-              <Separator className="bg-amber-200/50" />
+              <Separator className="bg-purple-200/50" />
               <CardContent className="pt-6">
                 {step.component}
               </CardContent>
@@ -154,10 +154,10 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
             key={index}
             className={`h-3 w-12 rounded-full transition-colors ${
               index === currentGroup
-                ? "bg-amber-500"
+                ? "bg-purple-500"
                 : index < currentGroup
-                ? "bg-amber-300"
-                : "bg-amber-100"
+                ? "bg-purple-300"
+                : "bg-purple-100"
             }`}
           />
         ))}
