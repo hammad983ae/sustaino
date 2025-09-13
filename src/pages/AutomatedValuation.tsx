@@ -147,6 +147,24 @@ export default function AutomatedValuation() {
             </div>
           </div>
           
+          {/* Copyright and IP Protection Footer */}
+          <div className="container mx-auto px-4 py-8 border-t border-emerald-200/30">
+            <div className="text-center space-y-2 animate-fade-in" style={{ animationDelay: '1.6s' }}>
+              <p className="text-sm font-medium text-gray-700">
+                © 2024 Delderenzo Property Group Pty Ltd
+              </p>
+              <p className="text-sm text-gray-600">
+                Intellectual Property Protection extends to All Valuation, Financial and Accounting
+              </p>
+              <p className="text-sm text-gray-600">
+                All valuation algorithms and methodologies
+              </p>
+              <p className="text-xs text-gray-500 mt-3">
+                Licensed under MIT License for authorized users
+              </p>
+            </div>
+          </div>
+          
           <AIAssistantToggle context="Property Type Selection" />
         </div>
       </div>
