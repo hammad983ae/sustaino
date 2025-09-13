@@ -16,7 +16,9 @@ import {
   Sprout,
   CloudRain,
   ArrowLeft,
-  Settings
+  Settings,
+  Wrench,
+  Scale
 } from 'lucide-react';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
@@ -150,6 +152,34 @@ const Index = () => {
                       <CardContent>
                         <p className="text-sm text-muted-foreground">
                           Calculate and review rental valuations with market comparisons
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-card to-orange-500/10 border-orange-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-orange-600">
+                          <Scale className="h-5 w-5" />
+                          Rent Determination
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                          Professional rent determination and arbitration services
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-card to-slate-500/10 border-slate-500/20 hover:shadow-lg transition-all duration-300 cursor-pointer hover-scale">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-slate-600">
+                          <Wrench className="h-5 w-5" />
+                          Plant & Equipment
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                          Specialized valuation for plant, equipment and machinery assets
                         </p>
                       </CardContent>
                     </Card>
