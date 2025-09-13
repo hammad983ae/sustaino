@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import ClimateRiskAssessment from '@/components/ClimateRiskAssessment';
 import MultiStepForm from '@/components/MultiStepForm';
+import QuickPropertySearch from '@/components/QuickPropertySearch';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 import { APITestComponent } from '@/components/APITestComponent';
 
@@ -127,6 +128,11 @@ const Index = () => {
                   Economic Activity
                 </Button>
               </div>
+            </div>
+            
+            {/* Quick Property Search - Featured prominently */}
+            <div className="mt-12 mb-8">
+              <QuickPropertySearch />
             </div>
 
             {/* Assessment Type Tabs */}

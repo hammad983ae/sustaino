@@ -54,6 +54,8 @@ const PropertySearchAnalysis = () => {
     setIsLoading(true);
     
     try {
+      console.log('Starting property analysis for:', propertyAddress, selectedState);
+      
       // Call the property data analysis edge function
       const { data, error } = await supabase.functions.invoke('property-data-analysis', {
         body: {
@@ -62,9 +64,14 @@ const PropertySearchAnalysis = () => {
         }
       });
 
-      if (error) throw error;
+      console.log('Edge function response:', { data, error });
 
-      if (data.success) {
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(`Search failed: ${error.message || 'Unknown error'}`);
+      }
+
+      if (data && data.success) {
         // Update property context with the address data
         updateAddressData({
           propertyAddress: propertyAddress,
@@ -75,16 +82,25 @@ const PropertySearchAnalysis = () => {
         setAnalysisData(data.data);
 
         toast({
-          title: "Success",
-          description: `Property analysis completed! Found ${Object.keys(data.sections).length} automated sections.`,
+          title: "Success! 🎉",
+          description: `Property analysis completed! Found ${Object.keys(data.sections || {}).length} automated sections.`,
         });
       } else {
-        throw new Error(data.error || 'Analysis failed');
+        console.error('Analysis failed:', data);
+        throw new Error(data?.error || 'Property analysis failed');
       }
     } catch (error) {
       console.error('Property analysis error:', error);
-      setErrorMessage(error.message || "Failed to analyze property");
+      const errorMsg = error.message || "Failed to analyze property";
+      setErrorMessage(`Search failed: ${errorMsg}. Would you like to continue with sample data?`);
       setShowErrorDialog(true);
+      
+      // Also show a toast with more details
+      toast({
+        title: "Search Failed",
+        description: "The property search encountered an issue. You can continue with sample data.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
