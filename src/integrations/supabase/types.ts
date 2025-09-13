@@ -1001,6 +1001,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      trigger_monthly_cost_update: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       upsert_property_for_job: {
         Args: { address_text: string; property_type_text?: string }
         Returns: string
