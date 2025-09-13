@@ -9,13 +9,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { FileText } from "lucide-react";
-import { useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import { useState, useEffect } from "react";
 import { usePropertyTypeLock } from "@/components/PropertyTypeLockProvider";
 import { useProperty } from "@/contexts/PropertyContext";
 
 const ReportTypeConfiguration = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
+  const [includeRentalValuation, setIncludeRentalValuation] = useState(false);
   const { selectedPropertyType, isPropertyTypeLocked, lockPropertyType } = usePropertyTypeLock();
   const { addressData } = useProperty();
 
@@ -43,7 +45,34 @@ const ReportTypeConfiguration = () => {
     setFormData(prev => ({ ...prev, [key]: value }));
   };
 
-  const MultiSelectDropdown = ({ 
+  // Auto-generate custom basis text from selected values
+  const generateCustomBasisText = () => {
+    const basisValues = selectedValues['Basis of Valuation'] || [];
+    const approaches = selectedValues['Valuation Approaches'] || [];
+    const components = selectedValues['Value Component'] || [];
+    const interests = selectedValues['Interest Values'] || [];
+
+    if (basisValues.length === 0 && approaches.length === 0 && components.length === 0 && interests.length === 0) {
+      return '';
+    }
+
+    const parts = [];
+    if (basisValues.length > 0) parts.push(`Basis: ${basisValues.join(', ')}`);
+    if (approaches.length > 0) parts.push(`Approaches: ${approaches.join(', ')}`);
+    if (components.length > 0) parts.push(`Component: ${components.join(', ')}`);
+    if (interests.length > 0) parts.push(`Interest: ${interests.join(', ')}`);
+
+    return `${parts.join('; ')}. Valuation assumes a reasonable selling period.`;
+  };
+
+  useEffect(() => {
+    const customBasis = generateCustomBasisText();
+    if (customBasis && customBasis !== formData['custom-basis-description']) {
+      setFormData(prev => ({ ...prev, 'custom-basis-description': customBasis }));
+    }
+  }, [selectedValues]);
+
+  const MultiSelectDropdown = ({
     options, 
     placeholder, 
     label 
@@ -270,15 +299,44 @@ const ReportTypeConfiguration = () => {
             />
           </div>
 
-          <div className="pt-4 text-xs text-muted-foreground">
-            <p>Also extend interest valued to include: <span className="underline">Partially Leased and Leasehold Interest</span></p>
+          <div className="pt-4 space-y-4">
+            <div>
+              <Label htmlFor="custom-basis-auto" className="text-sm font-medium">Custom Basis (Auto-Generated)</Label>
+              <Textarea 
+                id="custom-basis-auto"
+                placeholder="Custom basis will be auto-generated from your selections above"
+                className="mt-1"
+                value={formData['custom-basis-description'] || ''}
+                onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
+                rows={3}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                This field auto-generates based on your valuation configuration selections above
+              </p>
+            </div>
+
+            <div className="text-xs text-muted-foreground">
+              <p>Also extend interest valued to include: <span className="underline">Partially Leased and Leasehold Interest</span></p>
+            </div>
           </div>
         </div>
 
         {/* Rental Valuation Configuration */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">Rental Valuation Configuration</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-lg">Rental Valuation Configuration</h3>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="include-rental-toggle" className="text-sm">Include Rental Valuation</Label>
+              <Switch
+                id="include-rental-toggle"
+                checked={includeRentalValuation}
+                onCheckedChange={setIncludeRentalValuation}
+              />
+            </div>
+          </div>
           
+          {includeRentalValuation && (
+          <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="rental-assessment-type" className="text-sm font-medium">Rental Assessment Type</Label>
@@ -415,16 +473,18 @@ const ReportTypeConfiguration = () => {
             />
 
             <div>
-              <Label htmlFor="custom-basis-description" className="text-sm font-medium">Custom Basis Description (if applicable)</Label>
+              <Label htmlFor="rental-custom-basis-description" className="text-sm font-medium">Rental Custom Basis Description (if applicable)</Label>
               <Textarea 
-                id="custom-basis-description"
+                id="rental-custom-basis-description"
                 placeholder="Describe custom rental basis or specific requirements"
                 className="mt-1"
-                value={formData['custom-basis-description'] || ''}
-                onChange={(e) => handleInputChange('custom-basis-description', e.target.value)}
+                value={formData['rental-custom-basis-description'] || ''}
+                onChange={(e) => handleInputChange('rental-custom-basis-description', e.target.value)}
               />
             </div>
           </div>
+          </>
+          )}
         </div>
       </CardContent>
     </Card>
