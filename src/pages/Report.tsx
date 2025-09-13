@@ -12,12 +12,16 @@ const ReportViewer = () => {
   const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, 22);
   const [lastSavedSection, setLastSavedSection] = useState<number | null>(null);
 
-  // Load saved progress on component mount
+  // Load saved progress on component mount, but ensure it starts from section 0
   useEffect(() => {
     const savedData = loadReport();
-    if (savedData) {
-      setCurrentSection(savedData.currentSection);
+    if (savedData && savedData.currentSection >= 0) {
+      // Allow loading saved progress only if it's valid
+      setCurrentSection(Math.max(0, savedData.currentSection));
       setLastSavedSection(savedData.currentSection);
+    } else {
+      // Always start from section 0 if no valid saved data
+      setCurrentSection(0);
     }
   }, [loadReport]);
 
