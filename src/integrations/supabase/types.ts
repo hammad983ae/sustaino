@@ -510,6 +510,72 @@ export type Database = {
           },
         ]
       }
+      test_results: {
+        Row: {
+          calculated_at: string | null
+          category: string
+          confidence_score: number | null
+          created_at: string
+          id: number
+          market_value: number | null
+          methodology: string | null
+          property_id: string | null
+          result: Json
+          success: boolean
+          test_name: string
+          updated_at: string
+          user_id: string
+          valuation_id: string | null
+        }
+        Insert: {
+          calculated_at?: string | null
+          category: string
+          confidence_score?: number | null
+          created_at?: string
+          id?: never
+          market_value?: number | null
+          methodology?: string | null
+          property_id?: string | null
+          result: Json
+          success?: boolean
+          test_name: string
+          updated_at?: string
+          user_id: string
+          valuation_id?: string | null
+        }
+        Update: {
+          calculated_at?: string | null
+          category?: string
+          confidence_score?: number | null
+          created_at?: string
+          id?: never
+          market_value?: number | null
+          methodology?: string | null
+          property_id?: string | null
+          result?: Json
+          success?: boolean
+          test_name?: string
+          updated_at?: string
+          user_id?: string
+          valuation_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_results_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_results_valuation_id_fkey"
+            columns: ["valuation_id"]
+            isOneToOne: false
+            referencedRelation: "valuations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -719,6 +785,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      upsert_property_from_address: {
+        Args: { address_text: string; property_type_text?: string }
+        Returns: string
       }
     }
     Enums: {
