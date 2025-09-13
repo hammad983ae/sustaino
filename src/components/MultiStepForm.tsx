@@ -6,7 +6,7 @@ import PropertyAddressForm from "@/components/PropertyAddressForm";
 import PlanningDataIntegration from "@/components/PlanningDataIntegration";
 import PropertySearchAnalysis from "@/components/PropertySearchAnalysis";
 import ReportTypeConfiguration from "@/components/ReportTypeConfiguration";
-import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
+import DocumentUploadManager from "@/components/DocumentUploadManager";
 
 interface MultiStepFormProps {
   onSubmit?: (data: any) => void;
@@ -34,7 +34,7 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
     },
     {
       title: "Document Upload",
-      component: <DocumentPhotoUpload />
+      component: <DocumentUploadManager />
     }
   ];
 

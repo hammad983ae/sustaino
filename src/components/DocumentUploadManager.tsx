@@ -80,11 +80,22 @@ const DocumentUploadManager = () => {
           continue;
         }
         
-        // Upload to Supabase Storage
+        // Upload to Supabase Storage (scoped to user folder for RLS)
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          toast({
+            title: "Login required",
+            description: "Please sign in to upload files",
+            variant: "destructive",
+          });
+          break;
+        }
+
         const fileName = `${Date.now()}_${file.name}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const storagePath = `${user.id}/${fileName}`;
+        const { error: uploadError } = await supabase.storage
           .from('documents')
-          .upload(fileName, file);
+          .upload(storagePath, file);
         
         if (uploadError) {
           console.error('Upload error:', uploadError);
@@ -96,10 +107,10 @@ const DocumentUploadManager = () => {
           continue;
         }
         
-        // Get public URL
+        // Get public URL (signed URL would be better if private; using public URL for simplicity)
         const { data: urlData } = supabase.storage
           .from('documents')
-          .getPublicUrl(fileName);
+          .getPublicUrl(storagePath);
         
         const document: UploadedDocument = {
           id: `${Date.now()}_${i}`,

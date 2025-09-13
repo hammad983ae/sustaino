@@ -57,11 +57,25 @@ interface CostaPortfolioAnalysis {
   updated_at: string;
 }
 
+interface Job {
+  id: string;
+  job_number: string;
+  job_title: string;
+  job_description?: string;
+  property_address?: string;
+  priority?: string;
+  status: string;
+  job_type: string;
+  due_date?: string;
+  created_at: string;
+}
+
 export default function WorkHub() {
   const [searchTerm, setSearchTerm] = useState("");
   const [valuations, setValuations] = useState<Valuation[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
   const [costaAnalyses, setCostaAnalyses] = useState<CostaPortfolioAnalysis[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -118,6 +132,15 @@ export default function WorkHub() {
 
       if (costaError) throw costaError;
 
+      // Fetch jobs
+      const { data: jobsData, error: jobsError } = await supabase
+        .from('valuation_jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (jobsError) throw jobsError;
+
       // Transform data to match expected interface
       const transformedValuations = (valuationsData || []).map(val => ({
         ...val,
@@ -135,7 +158,8 @@ export default function WorkHub() {
         sustainability_score: 0,
         file_path: r.pdf_file_path || ''
       })));
-      setCostaAnalyses([]);  // ESG assessments instead
+      setCostaAnalyses((costaData || []) as any);
+      setJobs((jobsData || []) as any);
     } catch (error) {
       console.error('Error fetching work:', error);
       toast({
@@ -239,6 +263,12 @@ export default function WorkHub() {
 
   const filteredCostaAnalyses = costaAnalyses.filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredJobs = jobs.filter(item =>
+    (item.job_title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (item.job_number || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (item.property_address || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -352,9 +382,10 @@ export default function WorkHub() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="valuations" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="valuations">Property Valuations ({valuations.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
+          <TabsTrigger value="jobs">Jobs ({jobs.length})</TabsTrigger>
           <TabsTrigger value="costa">Costa Portfolio ({costaAnalyses.length})</TabsTrigger>
         </TabsList>
 
@@ -492,6 +523,61 @@ export default function WorkHub() {
                             <Download className="h-4 w-4 mr-2" />
                             Download
                           </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="jobs" className="mt-6">
+          <div className="space-y-4">
+            {filteredJobs.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-12">
+                  <Building className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-lg font-medium mb-2">No jobs found</h3>
+                  <p className="text-muted-foreground">Create a job from the Document Upload step</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-4">
+                {filteredJobs.map((job) => (
+                  <Card key={job.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <FileText className="h-4 w-4 text-muted-foreground" />
+                            <h3 className="font-semibold">{job.job_title}</h3>
+                            <Badge className={getStatusColor(job.status)}>
+                              {job.status}
+                            </Badge>
+                          </div>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                              <p className="text-muted-foreground">Job Number</p>
+                              <p className="font-medium">{job.job_number}</p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Type</p>
+                              <p className="font-medium">{job.job_type}</p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Due</p>
+                              <p className="font-medium">{job.due_date ? formatDate(job.due_date) : '—'}</p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Created</p>
+                              <p className="font-medium">{formatDate(job.created_at)}</p>
+                            </div>
+                          </div>
+                          <p className="text-sm text-muted-foreground mt-2">
+                            {job.property_address || ''}
+                          </p>
                         </div>
                       </div>
                     </CardContent>

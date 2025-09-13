@@ -81,6 +81,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "esg_assessments_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "esg_assessments_valuation_id_fkey"
             columns: ["valuation_id"]
             isOneToOne: false
@@ -172,6 +179,7 @@ export type Database = {
       }
       properties: {
         Row: {
+          address: string | null
           address_line_1: string
           address_line_2: string | null
           bathrooms: number | null
@@ -201,6 +209,7 @@ export type Database = {
           zoning: string | null
         }
         Insert: {
+          address?: string | null
           address_line_1: string
           address_line_2?: string | null
           bathrooms?: number | null
@@ -230,6 +239,7 @@ export type Database = {
           zoning?: string | null
         }
         Update: {
+          address?: string | null
           address_line_1?: string
           address_line_2?: string | null
           bathrooms?: number | null
@@ -342,6 +352,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "rental_evidence_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "rental_evidence_valuation_id_fkey"
             columns: ["valuation_id"]
             isOneToOne: false
@@ -415,6 +432,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
             referencedColumns: ["id"]
           },
           {
@@ -502,6 +526,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "sales_evidence_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "sales_evidence_valuation_id_fkey"
             columns: ["valuation_id"]
             isOneToOne: false
@@ -565,6 +596,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_results_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
             referencedColumns: ["id"]
           },
           {
@@ -684,6 +722,13 @@ export type Database = {
             referencedRelation: "properties"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "valuation_jobs_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
+            referencedColumns: ["id"]
+          },
         ]
       }
       valuations: {
@@ -752,11 +797,53 @@ export type Database = {
             referencedRelation: "properties"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "valuations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      property_addresses: {
+        Row: {
+          full_address: string | null
+          id: string | null
+          postcode: string | null
+          state: string | null
+          street_name: string | null
+          street_number: string | null
+          street_type: string | null
+          suburb: string | null
+          unit_number: string | null
+        }
+        Insert: {
+          full_address?: never
+          id?: string | null
+          postcode?: never
+          state?: never
+          street_name?: never
+          street_number?: never
+          street_type?: never
+          suburb?: never
+          unit_number?: never
+        }
+        Update: {
+          full_address?: never
+          id?: string | null
+          postcode?: never
+          state?: never
+          street_name?: never
+          street_number?: never
+          street_type?: never
+          suburb?: never
+          unit_number?: never
+        }
+        Relationships: []
+      }
     }
     Functions: {
       analyze_sales_evidence: {
