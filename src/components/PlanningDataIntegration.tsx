@@ -8,6 +8,7 @@ import { CheckCircle, FileText, MapPin, Search, ExternalLink, Loader2, Map } fro
 import { useProperty } from "@/contexts/PropertyContext";
 import StateBasedMappingIntegration from "./StateBasedMappingIntegration";
 import AddressConfirmation from "./planning/AddressConfirmation";
+import StatePlanningPortalLinks from "./planning/StatePlanningPortalLinks";
 
 interface PlanningDataIntegrationProps {
   propertyAddress?: string;
@@ -89,6 +90,12 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
         onAddressChange={(address) => {
           console.log('Address updated:', address);
         }}
+      />
+      
+      {/* State Planning Portal Links */}
+      <StatePlanningPortalLinks 
+        selectedState={addressData.state} 
+        className="mb-6"
       />
       
       {/* State-Based Mapping Integration */}
