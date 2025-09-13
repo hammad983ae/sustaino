@@ -460,34 +460,32 @@ const DocumentUploadManager = () => {
         throw new Error('Failed to get property ID');
       }
       
-      // Create job in valuation_jobs table
-      const { data: jobData, error: jobError } = await supabase
-        .from('valuation_jobs')
-        .insert({
-          user_id: user.id,
-          property_id: propertyId,
-          job_number: jobNumber,
-          job_title: jobDetails.title,
-          job_description: jobDetails.description,
-          client_name: jobDetails.clientName,
-          client_email: jobDetails.clientEmail,
-          client_phone: jobDetails.clientPhone,
-          client_type: jobDetails.clientType,
-          property_address: jobDetails.propertyAddress,
-          priority: jobDetails.priority,
-          job_type: jobDetails.jobType,
-          due_date: jobDetails.dueDate || null,
-          estimated_hours: jobDetails.estimatedHours,
-          status: 'pending',
-          instruction_date: new Date().toISOString().split('T')[0],
-          notes: `Created with ${uploadedDocuments.length} attached documents`
-        })
-        .select()
-        .single();
+      // Create job in valuation_jobs table using secure function
+      const { data: jobId, error: jobError } = await supabase
+        .rpc('create_valuation_job', {
+          job_data: {
+            job_title: jobDetails.title,
+            client_name: jobDetails.clientName,
+            client_email: jobDetails.clientEmail,
+            client_phone: jobDetails.clientPhone,
+            job_type: jobDetails.jobType,
+            property_address: jobDetails.propertyAddress,
+            property_id: propertyId,
+            priority: jobDetails.priority,
+            estimated_hours: jobDetails.estimatedHours,
+            due_date: jobDetails.dueDate || null,
+            client_type: jobDetails.clientType,
+            notes: `Created with ${uploadedDocuments.length} attached documents`
+          }
+        });
 
       if (jobError) {
         console.error('Job creation error:', jobError);
         throw new Error(`Failed to create job: ${jobError.message}`);
+      }
+
+      if (!jobId) {
+        throw new Error('Failed to get job ID');
       }
 
       // Create a report entry linked to the job

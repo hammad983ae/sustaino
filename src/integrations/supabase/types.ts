@@ -869,6 +869,10 @@ export type Database = {
         }
         Returns: Json
       }
+      create_valuation_job: {
+        Args: { job_data: Json }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
