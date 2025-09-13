@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useProperty } from '@/contexts/PropertyContext';
 import { useReportData } from '@/contexts/ReportDataContext';
 
@@ -10,59 +10,70 @@ interface PropertyDataIntegrationProps {
 export const PropertyDataIntegration = ({ propertyType, onDataLoaded }: PropertyDataIntegrationProps) => {
   const { addressData } = useProperty();
   const { reportData, updateReportData } = useReportData();
+  const hasInitialized = useRef(false);
+
+  const memoizedOnDataLoaded = useCallback((data: any) => {
+    onDataLoaded?.(data);
+  }, [onDataLoaded]);
 
   useEffect(() => {
-    // Pre-populate report data from Property Assessment Form
-    if (addressData && reportData) {
-      // Extract lot and plan numbers from planning data or OCR
-      const lotPlanData = extractLotPlanFromSources();
-      
-      // Pre-populate RPD and Location
-      updateReportData('locationData', {
-        address: addressData.propertyAddress || `${addressData.streetNumber} ${addressData.streetName} ${addressData.streetType}, ${addressData.suburb} ${addressData.state} ${addressData.postcode}`,
-        lotNumber: lotPlanData.lotNumber || addressData.lotNumber,
-        planNumber: lotPlanData.planNumber || addressData.planNumber,
-        ...reportData.locationData
-      });
+    // Prevent infinite loops by only running once per component lifecycle
+    if (hasInitialized.current || !addressData || !reportData) {
+      return;
+    }
 
-      // Pre-populate Property Configuration based on selected property type
-      if (propertyType === 'workers-accommodation' || propertyType === 'specialised') {
-        updateReportData('reportConfig', {
-          ...reportData.reportConfig,
-          propertyType: 'specialised',
-          specializedType: 'workers-accommodation'
-        });
-      }
+    hasInitialized.current = true;
 
-      // Integrate photos from Property Assessment Form
-      if (reportData.fileAttachments?.propertyPhotos) {
-        updateReportData('fileAttachments', {
-          ...reportData.fileAttachments,
-          propertyPhotos: reportData.fileAttachments.propertyPhotos.map(photo => ({
-            ...photo,
-            extractedData: extractDataFromPhotos([photo])
-          }))
-        });
-      }
+    // Extract lot and plan numbers from planning data or OCR
+    const lotPlanData = extractLotPlanFromSources();
+    
+    // Pre-populate RPD and Location
+    updateReportData('locationData', {
+      address: addressData.propertyAddress || `${addressData.streetNumber} ${addressData.streetName} ${addressData.streetType}, ${addressData.suburb} ${addressData.state} ${addressData.postcode}`,
+      lotNumber: lotPlanData.lotNumber || addressData.lotNumber,
+      planNumber: lotPlanData.planNumber || addressData.planNumber,
+      ...reportData.locationData
+    });
 
-      // Extract planning information from uploaded documents
-      if (reportData.fileAttachments?.planningDocuments) {
-        const planningData = extractPlanningFromDocuments(reportData.fileAttachments.planningDocuments);
-        updateReportData('planningData', {
-          ...reportData.planningData,
-          ...planningData
-        });
-      }
-
-      onDataLoaded?.({
-        address: addressData,
-        propertyType,
-        lotPlan: lotPlanData,
-        photos: reportData.fileAttachments?.propertyPhotos || [],
-        planning: reportData.planningData
+    // Pre-populate Property Configuration based on selected property type
+    if (propertyType === 'workers-accommodation' || propertyType === 'specialised') {
+      updateReportData('reportConfig', {
+        ...reportData.reportConfig,
+        propertyType: 'specialised',
+        specializedType: 'workers-accommodation'
       });
     }
-  }, [addressData, reportData, propertyType, updateReportData, onDataLoaded]);
+
+    // Integrate photos from Property Assessment Form
+    if (reportData.fileAttachments?.propertyPhotos) {
+      updateReportData('fileAttachments', {
+        ...reportData.fileAttachments,
+        propertyPhotos: reportData.fileAttachments.propertyPhotos.map(photo => ({
+          ...photo,
+          extractedData: extractDataFromPhotos([photo])
+        }))
+      });
+    }
+
+    // Extract planning information from uploaded documents
+    if (reportData.fileAttachments?.planningDocuments) {
+      const planningData = extractPlanningFromDocuments(reportData.fileAttachments.planningDocuments);
+      updateReportData('planningData', {
+        ...reportData.planningData,
+        ...planningData
+      });
+    }
+
+    memoizedOnDataLoaded({
+      address: addressData,
+      propertyType,
+      lotPlan: lotPlanData,
+      photos: reportData.fileAttachments?.propertyPhotos || [],
+      planning: reportData.planningData
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addressData, reportData, propertyType]);
 
   const extractLotPlanFromSources = () => {
     // Try to extract from multiple sources in order of preference
