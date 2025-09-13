@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChevronLeft, ChevronRight, Home, ArrowLeft, Sparkles, Zap, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Save } from "lucide-react";
 import { Link } from "react-router-dom";
-import React, { Suspense } from "react";
 import ReportSection from "@/components/ReportSection";
-import AutomatedAnalysisSection from "@/components/AutomatedAnalysisSection";
-import PlanningDataIntegration from "@/components/PlanningDataIntegration";
-import PropertyPhotos from "@/components/PropertyPhotos";
-import PropertyDataIntegration from "@/components/PropertyDataIntegration";
-import { getPropertyTypeReportSections, getAutomatedAnalysisDescription } from "@/components/PropertyTypeReportConfig";
+import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
+import { Badge } from "@/components/ui/badge";
 
 interface AutomatedReportProps {
   propertyType: string;
@@ -19,60 +13,87 @@ interface AutomatedReportProps {
 }
 
 const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [processingSections, setProcessingSections] = useState<Set<number>>(new Set());
-  const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
-  const [isAIEnhancing, setIsAIEnhancing] = useState(false);
+  const sections = [
+    { title: "Executive Summary and Contents" },
+    { title: "RPD and Location" },
+    { title: "Legal and Planning" },
+    { title: "Tenancy Schedule/Lease Details" },
+    { title: "Statutory Assessment" },
+    { title: "Market Commentary" },
+    { title: "Property Details" },
+    { title: "Essential Repairs" },
+    { title: "Risk Assessment & Market Indicators" },
+    { title: "Previous Sales History and Current Sale" },
+    { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural" },
+    { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },
+    { title: "ESG Assessment Summary" },
+    { title: "Climate Risk Assessment" },
+    { title: "Valuation Analysis and Rationale" },
+    { title: "Environmental Audit" },
+    { title: "Marketability and Mortgage Security" },
+    { title: "Sustaino Pro Additional Analysis and Features" },
+    { title: "Valuation Certificate" },
+    { title: "Qualifications, Disclaimers, Terms and Conditions" },
+    { title: "Annexures" },
+    { title: "Certification and Security" }
+  ];
 
-  // Get property-type specific sections - ensure it starts from section 1
-  const sections = getPropertyTypeReportSections(propertyType);
+  const [currentSection, setCurrentSection] = useState(0);
+  const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, sections.length);
+  const [lastSavedSection, setLastSavedSection] = useState<number | null>(null);
 
+  // Load saved progress on component mount, but ensure it starts from section 0
   useEffect(() => {
-    // Prevent infinite loop by only running once
-    if (completedSections.size === 0 && processingSections.size === 0) {
-      // Simulate automated analysis process
-      const startAutomatedAnalysis = async () => {
-        for (let i = 0; i < sections.length; i++) {
-          if (sections[i].automated) {
-            // Start processing this section
-            setProcessingSections(prev => new Set([...prev, i]));
-            
-            // Simulate processing time (2-4 seconds per section)
-            await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 2000));
-            
-            // Mark as completed
-            setProcessingSections(prev => {
-              const newSet = new Set(prev);
-              newSet.delete(i);
-              return newSet;
-            });
-            setCompletedSections(prev => new Set([...prev, i]));
-          }
-        }
-      };
-
-      startAutomatedAnalysis();
+    const savedData = loadReport();
+    if (savedData && savedData.currentSection >= 0) {
+      // Allow loading saved progress only if it's valid
+      setCurrentSection(Math.max(0, savedData.currentSection));
+      setLastSavedSection(savedData.currentSection);
+    } else {
+      // Always start from section 0 if no valid saved data
+      setCurrentSection(0);
     }
-  }, [propertyType]); // Only depend on propertyType, not sections
+  }, [loadReport]);
 
   const navigateToSection = (sectionIndex: number) => {
-    setCurrentStep(sectionIndex);
+    setCurrentSection(sectionIndex);
   };
 
   const nextSection = () => {
-    if (currentStep < sections.length - 1) {
-      setCurrentStep(currentStep + 1);
+    if (currentSection < sections.length - 1) {
+      const newSection = currentSection + 1;
+      setCurrentSection(newSection);
+      
+      // Auto-save progress every 5 sections
+      if ((newSection + 1) % 5 === 0) {
+        setLastSavedSection(newSection);
+      }
     }
   };
 
   const prevSection = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+    if (currentSection > 0) {
+      setCurrentSection(currentSection - 1);
     }
   };
 
-  const progress = ((currentStep + 1) / sections.length) * 100;
-  const completionProgress = (completedSections.size / sections.filter(s => s.automated).length) * 100;
+  const manualSave = async () => {
+    try {
+      await saveReport({
+        currentSection,
+        completedSections: Array.from({ length: currentSection + 1 }, (_, i) => i),
+        reportData: {
+          manualSaveAt: new Date().toISOString(),
+          sectionCount: currentSection + 1
+        }
+      });
+      setLastSavedSection(currentSection);
+    } catch (error) {
+      console.error('Manual save failed:', error);
+    }
+  };
+
+  const progress = ((currentSection + 1) / sections.length) * 100;
 
   const getPropertyTypeTitle = () => {
     switch (propertyType) {
@@ -84,233 +105,131 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
     }
   };
 
-  const handleAIEnhance = () => {
-    setIsAIEnhancing(true);
-    // Simulate AI enhancement
-    setTimeout(() => {
-      setIsAIEnhancing(false);
-    }, 3000);
-  };
-
-  const renderSectionContent = () => {
-    const section = sections[currentStep];
-    
-    // Check for specific component overrides
-    if (section.component === "PlanningDataIntegration") {
-      return (
-        <PlanningDataIntegration 
-          propertyAddress="320 Deakin Avenue Mildura VIC 3500"
-          onDataFetched={(data) => console.log("Planning data:", data)}
-        />
-      );
-    }
-    
-    // Show enhanced property details with data integration
-    if (section.title === "Property Details" || section.title === "Property Description") {
-      const PropertyDetails = React.lazy(() => import('@/components/PropertyDetails'));
-      return (
-        <div className="space-y-6">
-          <Suspense fallback={<div className="p-4 text-center">Loading property details...</div>}>
-            <PropertyDetails />
-          </Suspense>
-        </div>
-      );
-    }
-    
-    // Check if this is an automated section
-    if (section.automated) {
-      return (
-        <AutomatedAnalysisSection
-          title={section.title}
-          description={section.description || getAutomatedAnalysisDescription(propertyType)}
-          isCompleted={completedSections.has(currentStep)}
-          isProcessing={processingSections.has(currentStep)}
-          data={{
-            keyFinding: "Market analysis complete",
-            confidence: "High (95%)",
-            sources: "12 sources",
-            summary: `Automated analysis of ${section.title.toLowerCase()} has been completed using AI-powered market data analysis, comparable sales research, and predictive modeling.`
-          }}
-        />
-      );
-    }
-
-    // Use existing ReportSection for manual/complex sections
-    return (
-      <ReportSection 
-        title={section.title}
-        subtitle={section.subtitle}
-        sectionIndex={currentStep}
-        onNavigateToSection={navigateToSection}
-      />
-    );
-  };
 
   return (
-    <div className="w-full bg-background">
-      {/* Data Integration Component */}
-      <PropertyDataIntegration 
-        propertyType={propertyType}
-        onDataLoaded={(data) => console.log("Integrated data:", data)}
-      />
-      
-      {/* Sticky Header with Backdrop Blur */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
+         style={{ 
+           background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 70%, hsl(var(--primary) / 0.05) 100%)',
+           transform: 'perspective(1000px) rotateX(1deg)',
+           transformStyle: 'preserve-3d'
+         }}>
+      {/* Mobile-friendly header with progress */}
+      <div className="sticky top-0 z-20 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm"
+           style={{ 
+             background: 'linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--background)) 80%, hsl(var(--primary) / 0.1) 100%)',
+             backdropFilter: 'blur(8px)'
+           }}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
             {onBack ? (
-              <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Property Setup
-              </button>
-            ) : (
-              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={onBack}>
                 <Home className="h-4 w-4" />
-                Back to Dashboard
+              </Button>
+            ) : (
+              <Link to="/">
+                <Button variant="ghost" size="sm">
+                  <Home className="h-4 w-4" />
+                </Button>
               </Link>
             )}
-            <h1 className="text-2xl font-bold">{getPropertyTypeTitle()}</h1>
-            <div className="text-sm text-muted-foreground text-right">
-              <div>Section {currentStep + 1} of {sections.length}</div>
-              <div className="text-xs">AI: {Math.round(completionProgress)}% complete</div>
+            <h1 className="text-lg font-semibold truncate">
+              {getPropertyTypeTitle()} - Section {currentSection + 1}: {sections[currentSection].title}
+            </h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={manualSave}>
+              <Save className="h-4 w-4 mr-1" />
+              Save
+            </Button>
+            {lastSavedSection !== null && (
+              <Badge variant="secondary" className="text-xs">
+                Saved: Section {lastSavedSection + 1}
+              </Badge>
+            )}
+            <div className="text-sm text-muted-foreground">
+              {currentSection + 1} of {sections.length}
             </div>
           </div>
         </div>
+        <Progress value={progress} className="w-full" />
       </div>
 
-      {/* Main Content - Full Width */}
-      <main className="w-full">
-        <div className="px-6 py-8">
-          {/* Full Width Progress Bar */}
-          <div className="mb-8">
-            <div className="w-full bg-muted rounded-full h-2">
-              <div 
-                className="bg-primary h-2 rounded-full transition-all duration-300" 
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            
-            {/* Progress Details */}
-            <div className="flex justify-between items-center mt-4">
-              <div className="text-sm text-muted-foreground">
-                {sections[currentStep]?.title}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {currentStep + 1} / {sections.length} sections
-              </div>
-            </div>
-          </div>
-
-          {/* AI Enhancement Section */}
-          {completionProgress >= 100 && (
-            <Card className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-              <CardContent className="p-8 text-center">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <Sparkles className="h-8 w-8 text-blue-600" />
-                  <h2 className="text-2xl font-bold text-blue-900">Enhance with AI</h2>
-                </div>
-                <p className="text-blue-700 mb-6 max-w-2xl mx-auto">
-                  Automated analysis complete! Enhance your {propertyType} property report with advanced AI insights 
-                  for market analysis, risk assessment, sustainability evaluation, and location analysis.
-                </p>
-                <Button 
-                  onClick={handleAIEnhance}
-                  disabled={isAIEnhancing}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
-                >
-                  {isAIEnhancing ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Enhancing Report...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="mr-2 h-5 w-5" />
-                      Enhance Report with AI
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Main Report Content */}
-          <div className="w-full">
-            {renderSectionContent()}
-          </div>
-
-          {/* Section Navigation Tabs */}
-          <div className="mt-8">
-            <Tabs value={currentStep.toString()} onValueChange={(value) => setCurrentStep(parseInt(value))} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 md:grid-cols-6 lg:grid-cols-8 mb-6">
-                {sections.slice(0, 8).map((section, index) => (
-                  <TabsTrigger 
-                    key={index} 
-                    value={index.toString()}
-                    className="text-xs relative"
-                  >
-                    {section.title.split(' ')[0]}
-                    {/* Show automation status */}
-                    {section.automated && completedSections.has(index) && (
-                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full border border-white" />
-                    )}
-                    {section.automated && processingSections.has(index) && (
-                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border border-white animate-pulse" />
-                    )}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-        </div>
-      </main>
-
-      {/* Mobile Navigation Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-4">
+      {/* Fixed Navigation Bar below header */}
+      <div className="sticky top-[120px] z-10 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-3 shadow-sm backdrop-blur-sm"
+           style={{ 
+             background: 'linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--background)) 80%, hsl(var(--primary) / 0.1) 100%)',
+             backdropFilter: 'blur(8px)'
+           }}>
         <div className="flex justify-between items-center max-w-4xl mx-auto">
           <Button
             variant="outline"
             onClick={prevSection}
-            disabled={currentStep === 0}
+            disabled={currentSection === 0}
             className="flex items-center gap-2"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="hidden sm:inline">Previous</span>
+            <span className="hidden sm:inline">Back</span>
           </Button>
 
           <div className="flex gap-1 overflow-x-auto max-w-[200px] sm:max-w-none">
-            {sections.map((section, index) => (
+            {sections.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentStep(index)}
-                className={`w-2 h-2 rounded-full transition-colors flex-shrink-0 relative ${
-                  index === currentStep
+                onClick={() => setCurrentSection(index)}
+                className={`w-2 h-2 rounded-full transition-colors flex-shrink-0 ${
+                  index === currentSection
                     ? "bg-primary"
-                    : index < currentStep
+                    : index < currentSection
                     ? "bg-primary/60"
                     : "bg-muted"
                 }`}
-                aria-label={`Go to section ${index + 1}: ${section.title}`}
-              >
-                {/* Show automation status */}
-                {section.automated && completedSections.has(index) && (
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full border border-white" />
-                )}
-                {section.automated && processingSections.has(index) && (
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border border-white animate-pulse" />
-                )}
-              </button>
+                aria-label={`Go to section ${index + 1}`}
+              />
             ))}
           </div>
 
           <Button
             onClick={nextSection}
-            disabled={currentStep === sections.length - 1}
+            disabled={currentSection === sections.length - 1}
             className="flex items-center gap-2"
           >
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
+        </div>
+      </div>
+
+      {/* Report content */}
+      <div className="p-4 pb-4">
+        <div className="max-w-4xl mx-auto">
+          <ReportSection 
+            title={sections[currentSection].title}
+            subtitle={sections[currentSection].subtitle}
+            sectionIndex={currentSection}
+            onNavigateToSection={navigateToSection}
+          />
+        </div>
+      </div>
+
+      {/* Footer with back to setup navigation */}
+      <div className="border-t border-primary/20 p-4 bg-gradient-to-r from-background via-background to-primary/5">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          {onBack ? (
+            <Button variant="ghost" className="flex items-center gap-2" onClick={onBack}>
+              <ChevronLeft className="h-4 w-4" />
+              Back to Setup
+            </Button>
+          ) : (
+            <Link to="/">
+              <Button variant="ghost" className="flex items-center gap-2">
+                <ChevronLeft className="h-4 w-4" />
+                Back to Setup
+              </Button>
+            </Link>
+          )}
+          <div className="text-sm text-muted-foreground">
+            Report Generation Complete
+          </div>
         </div>
       </div>
     </div>
