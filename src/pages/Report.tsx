@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
 import { Badge } from "@/components/ui/badge";
+import ReportDataPrePopulation from "@/components/ReportDataPrePopulation";
 
 const ReportViewer = () => {
   const sections = [
@@ -98,6 +99,8 @@ const ReportViewer = () => {
            transform: 'perspective(1000px) rotateX(1deg)',
            transformStyle: 'preserve-3d'
          }}>
+      {/* Data Pre-population Component */}
+      <ReportDataPrePopulation />
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-20 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm"
            style={{ 

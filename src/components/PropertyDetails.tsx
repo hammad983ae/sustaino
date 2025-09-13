@@ -223,25 +223,44 @@ const EnhancedPropertyDetails = () => {
             </div>
           )}
 
-          {/* Basic Property Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="property-address">Property Address</Label>
-              <Input 
-                id="property-address" 
-                value={addressData.propertyAddress || `${addressData.streetNumber} ${addressData.streetName} ${addressData.streetType}, ${addressData.suburb} ${addressData.state} ${addressData.postcode}`}
-                readOnly
-                className="bg-muted"
-              />
+          {/* Building Attributes and Compliance */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="building-area">Building Area (m²)</Label>
+                <Input id="building-area" placeholder="Enter building area" />
+              </div>
+              <div>
+                <Label htmlFor="building-height">Building Height (m)</Label>
+                <Input id="building-height" placeholder="Enter building height" />
+              </div>
             </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="construction-type">Construction Type</Label>
+                <Input id="construction-type" placeholder="e.g., Brick veneer, Steel frame" />
+              </div>
+              <div>
+                <Label htmlFor="year-built">Year Built</Label>
+                <Input id="year-built" placeholder="Enter construction year" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="building-condition">Building Condition</Label>
+                <Input id="building-condition" placeholder="e.g., Good, Fair, Poor" />
+              </div>
+              <div>
+                <Label htmlFor="compliance-status">Compliance Status</Label>
+                <Input id="compliance-status" placeholder="e.g., Compliant, Non-compliant" />
+              </div>
+            </div>
+
             <div>
-              <Label htmlFor="lot-plan">Lot & Plan</Label>
-              <Input 
-                id="lot-plan" 
-                value={`Lot ${addressData.lotNumber || 'N/A'} Plan ${addressData.planNumber || 'N/A'}`}
-                readOnly
-                className="bg-muted"
-              />
+              <Label htmlFor="building-description">Building Description</Label>
+              <Input id="building-description" placeholder="Detailed description of building attributes" className="h-24" />
             </div>
           </div>
         </CardContent>
@@ -256,7 +275,6 @@ const EnhancedPropertyDetails = () => {
               propertyTypes,
               specializedType,
               selectedPropertyType,
-              addressData,
               reportConfig: reportData.reportConfig,
               photos: reportData.fileAttachments?.propertyPhotos || []
             };
@@ -269,7 +287,7 @@ const EnhancedPropertyDetails = () => {
           disabled={isSaving}
           className="flex items-center gap-2"
         >
-          {isSaving ? "Saving..." : "Save Property Details"}
+          {isSaving ? "✓ Saved" : "Save Property Details"}
         </Button>
       </div>
     </div>

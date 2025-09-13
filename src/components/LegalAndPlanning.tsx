@@ -7,12 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { MapPin, FileText } from "lucide-react";
 import PlanningDataIntegration from "./PlanningDataIntegration";
+import { useReportData } from "@/contexts/ReportDataContext";
 import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
 
 const LegalAndPlanning = () => {
   const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('LegalAndPlanning', { showToast: false });
   const { toast } = useToast();
+  const { reportData } = useReportData();
   const [planningData, setPlanningData] = useState({
     lga: "",
     zoning: "",
@@ -28,6 +30,16 @@ const LegalAndPlanning = () => {
     planningRestrictions: "",
     developmentPotential: ""
   });
+
+  // Pre-populate from report data to remove duplicates
+  useEffect(() => {
+    if (reportData.legalAndPlanning) {
+      setPlanningData(prev => ({
+        ...prev,
+        ...reportData.legalAndPlanning
+      }));
+    }
+  }, [reportData.legalAndPlanning]);
 
   const handlePlanningDataFetched = (data: any) => {
     setPlanningData(prev => ({

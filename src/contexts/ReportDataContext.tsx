@@ -89,6 +89,33 @@ export interface ReportData {
     [key: string]: any;
   };
   
+  // Additional report sections
+  legalAndPlanning?: {
+    lga?: string;
+    zoning?: string;
+    currentUse?: string;
+    [key: string]: any;
+  };
+
+  valuationCertificate?: {
+    valueComponent?: string;
+    valuationBasis?: string;
+    interestValues?: string;
+    [key: string]: any;
+  };
+
+  valuationAnalysis?: {
+    activeApproaches?: string[];
+    selectedApproaches?: string[];
+    [key: string]: any;
+  };
+
+  propertyDetails?: {
+    propertyType?: string;
+    reportType?: string;
+    [key: string]: any;
+  };
+
   lastUpdated?: string;
 }
 

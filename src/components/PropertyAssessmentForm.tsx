@@ -298,11 +298,20 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             </Button>
 
             <Button
-              onClick={nextStep}
-              disabled={!canProceed || (isLastStep && !onComplete)}
+              onClick={() => {
+                if (isLastStep) {
+                  // Navigate to executive summary/table of contents instead of WorkHub
+                  if (onNavigateToReport) {
+                    onNavigateToReport();
+                  }
+                } else {
+                  nextStep();
+                }
+              }}
+              disabled={!canProceed}
               className="flex items-center gap-2"
             >
-              {isLastStep ? "Complete Assessment" : "Next"}
+              {isLastStep ? "Create Work Hub Job & View Report" : "Next"}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

@@ -7,9 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { MapPin, FileText, User, AlertTriangle, Info } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useReportData } from "@/contexts/ReportDataContext";
 
 const ValuationCertificate = () => {
+  const { reportData } = useReportData();
   const [includePropertyId, setIncludePropertyId] = useState(true);
   const [includeValuationDetails, setIncludeValuationDetails] = useState(true);
   const [includeProfessionalCert, setIncludeProfessionalCert] = useState(true);
@@ -18,6 +20,26 @@ const ValuationCertificate = () => {
   const [includeLimitations, setIncludeLimitations] = useState(true);
   const [includeDisclaimers, setIncludeDisclaimers] = useState(true);
   const [includePurposeOfValuation, setIncludePurposeOfValuation] = useState(true);
+  
+  // Pre-populated data from Property Assessment Form
+  const [prePopulatedData, setPrePopulatedData] = useState({
+    valueComponent: '',
+    valuationBasis: '',
+    interestValues: '',
+    propertyType: ''
+  });
+
+  // Update pre-populated data when report config changes
+  useEffect(() => {
+    if (reportData.reportConfig) {
+      setPrePopulatedData({
+        valueComponent: reportData.reportConfig.valueComponent || '',
+        valuationBasis: reportData.reportConfig.valuationBasis || '',
+        interestValues: reportData.reportConfig.interestValues || '',
+        propertyType: reportData.reportConfig.propertyType || ''
+      });
+    }
+  }, [reportData.reportConfig]);
   
   // Individual valuation summary items
   const [summaryItems, setSummaryItems] = useState({
@@ -74,11 +96,11 @@ const ValuationCertificate = () => {
               <Label htmlFor="purpose-valuation">Purpose of Valuation</Label>
               <Input
                 id="purpose-valuation"
-                placeholder="Auto-populated from valuation instructions..."
+                value={prePopulatedData.valuationBasis || "Auto-populated from valuation instructions..."}
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
-              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from valuation instructions</p>
+              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="mortgage-security">Mortgage Security</Label>
@@ -168,21 +190,21 @@ const ValuationCertificate = () => {
               <Label htmlFor="property-type">Property Type</Label>
               <Input
                 id="property-type"
-                placeholder="Auto-populated from property classification..."
+                value={prePopulatedData.propertyType || "Auto-populated from property classification..."}
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
-              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from property data</p>
+              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="interest-valued">Interest Valued</Label>
               <Input
                 id="interest-valued"
-                placeholder="Auto-populated from title data..."
+                value={prePopulatedData.interestValues || "Auto-populated from title data..."}
                 className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
-              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from title data</p>
+              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
             </div>
           </div>
         </CardContent>
