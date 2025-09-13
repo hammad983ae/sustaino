@@ -35,7 +35,15 @@ const RPDAndLocation = () => {
     if (savedData?.propertyIdentification) {
       setPropertyIdentification(savedData.propertyIdentification);
     }
-  }, [loadData]);
+    if (savedData?.analysisData) {
+      const fields = ['location','access','siteDescription','neighbourhood','amenities','services'] as const;
+      fields.forEach((f) => {
+        if (savedData.analysisData[f]) {
+          updateAnalysisField(f, savedData.analysisData[f]);
+        }
+      });
+    }
+  }, [loadData, updateAnalysisField]);
 
   const handleSave = async () => {
     await saveData({
@@ -45,6 +53,19 @@ const RPDAndLocation = () => {
       timestamp: new Date().toISOString()
     });
   };
+  
+  // Auto-save when data changes (debounced)
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      saveData({
+        addressData,
+        analysisData,
+        propertyIdentification,
+        timestamp: new Date().toISOString()
+      });
+    }, 800);
+    return () => window.clearTimeout(id);
+  }, [addressData, analysisData, propertyIdentification, saveData]);
   
   return (
     <div className="space-y-6">
