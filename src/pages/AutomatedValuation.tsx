@@ -12,7 +12,7 @@ import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
-import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
+
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
 import ThunderboltIcon from "@/components/ThunderboltIcon";
@@ -148,10 +148,7 @@ export default function AutomatedValuation() {
 
           {/* Secondary Features - Enhanced with staggered animations */}
           <div className="container mx-auto px-4 pb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-              <div className="animate-fade-in" style={{ animationDelay: '1s' }}>
-                <CostaGroupPortfolio />
-              </div>
+            <div className="grid grid-cols-1 gap-8 mb-12">
               <div className="animate-fade-in" style={{ animationDelay: '1.1s' }}>
                 <PropertyUpdateFeed />
               </div>

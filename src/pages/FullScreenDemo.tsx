@@ -4,7 +4,7 @@ import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
-import { CostaGroupPortfolio } from "@/components/CostaGroupPortfolio";
+
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
 import ThunderboltIcon from "@/components/ThunderboltIcon";
@@ -172,10 +172,8 @@ export default function FullScreenDemo() {
 
           {/* Secondary Features - Enhanced with larger spacing for full screen */}
           <div className="container mx-auto px-6 pb-20">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-              <div className="animate-fade-in" style={{ animationDelay: '1s' }}>
-                <CostaGroupPortfolio />
-              </div>
+            <div className="grid grid-cols-1 gap-12 mb-16">
+              {/* Global Operations Portfolio removed from landing page - now only accessible via Costa's Operations in WorkHub */}
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
