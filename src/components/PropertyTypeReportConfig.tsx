@@ -21,7 +21,8 @@ export const getPropertyTypeReportSections = (propertyType: string): ReportSecti
     { title: "Marketability and Mortgage Security", automated: true },
     { title: "Valuation Certificate", component: "ValuationCertificate" },
     { title: "Professional Compliance", component: "ProfessionalCompliance" },
-    { title: "Terms and Conditions", component: "TermsAndConditions" }
+    { title: "Terms and Conditions", component: "TermsAndConditions" },
+    { title: "Construction Cost Index & CPI", component: "ConstructionCostIndex", description: "Current construction costs and consumer price index data" }
   ];
 
   switch (propertyType) {

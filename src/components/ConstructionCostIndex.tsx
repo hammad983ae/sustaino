@@ -30,10 +30,7 @@ const ConstructionCostIndex: React.FC = () => {
     queryKey: ['construction-cost-index'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('construction_cost_index')
-        .select('*')
-        .order('year', { ascending: false })
-        .order('month', { ascending: false });
+        .rpc('get_construction_cost_index');
       
       if (error) throw error;
       return data as ConstructionCostData[];
@@ -44,11 +41,7 @@ const ConstructionCostIndex: React.FC = () => {
     queryKey: ['cpi-index'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('cpi_index')
-        .select('*')
-        .order('year', { ascending: false })
-        .order('month', { ascending: false })
-        .limit(12);
+        .rpc('get_cpi_index');
       
       if (error) throw error;
       return data as CPIData[];

@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      construction_cost_index: {
+        Row: {
+          asset_class: string
+          base_price_per_sqm: number
+          cost_index: number
+          created_at: string
+          id: string
+          month: string
+          percentage_movement: number
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          asset_class: string
+          base_price_per_sqm: number
+          cost_index: number
+          created_at?: string
+          id?: string
+          month: string
+          percentage_movement: number
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          asset_class?: string
+          base_price_per_sqm?: number
+          cost_index?: number
+          created_at?: string
+          id?: string
+          month?: string
+          percentage_movement?: number
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      cpi_index: {
+        Row: {
+          cpi_value: number
+          created_at: string
+          id: string
+          month: string
+          percentage_change: number
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          cpi_value: number
+          created_at?: string
+          id?: string
+          month: string
+          percentage_change: number
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          cpi_value?: number
+          created_at?: string
+          id?: string
+          month?: string
+          percentage_change?: number
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
       esg_assessments: {
         Row: {
           carbon_footprint: number | null
@@ -138,6 +204,33 @@ export type Database = {
           regional_analysis?: Json | null
           rental_yields?: Json | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      monthly_update_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          notification_date: string
+          notification_type: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notification_date: string
+          notification_type: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notification_date?: string
+          notification_type?: string
+          sent_at?: string | null
+          status?: string
         }
         Relationships: []
       }
