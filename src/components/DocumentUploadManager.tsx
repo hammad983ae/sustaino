@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import {
   Upload,
   FileText,
@@ -73,6 +74,7 @@ const DocumentUploadManager = () => {
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [showJobForm, setShowJobForm] = useState(false);
+  const navigate = useNavigate();
   const [ocrProcessingFiles, setOcrProcessingFiles] = useState<Set<string>>(new Set());
   const [enableOCR, setEnableOCR] = useState(true);
   const [jobDetails, setJobDetails] = useState<JobDetails>({
@@ -515,6 +517,9 @@ const DocumentUploadManager = () => {
         title: "Job created successfully",
         description: `Job ${jobNumber} has been created and added to Work Hub`,
       });
+
+      // Navigate to the report page
+      navigate('/report');
 
       // Reset form
       setShowJobForm(false);
