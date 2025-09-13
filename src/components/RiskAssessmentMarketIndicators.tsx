@@ -7,7 +7,7 @@
  * intellectual property protected by patents and trade secrets.
  * ============================================================================
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,8 +17,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useUniversalSave } from "@/hooks/useUniversalSave";
+import { useToast } from "@/hooks/use-toast";
 
 const RiskAssessmentMarketIndicators = () => {
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('RiskAssessmentMarketIndicators');
+  const { toast } = useToast();
+  
   const [includeSection, setIncludeSection] = useState(true);
   const [includePropertyRiskRatings, setIncludePropertyRiskRatings] = useState(true);
   const [includeRiskCategories, setIncludeRiskCategories] = useState(true);
@@ -35,6 +40,58 @@ const RiskAssessmentMarketIndicators = () => {
   const [weaknesses, setWeaknesses] = useState(["Weakness 1"]);
   const [opportunities, setOpportunities] = useState(["Opportunity 1"]);
   const [threats, setThreats] = useState(["Threat 1"]);
+
+  
+  // Load saved data on component mount
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedData = await loadData();
+      if (savedData) {
+        setIncludeSection(savedData.includeSection ?? true);
+        setIncludePropertyRiskRatings(savedData.includePropertyRiskRatings ?? true);
+        setIncludeRiskCategories(savedData.includeRiskCategories ?? true);
+        setIncludeMarketIndicators(savedData.includeMarketIndicators ?? true);
+        setIncludePestelAnalysis(savedData.includePestelAnalysis ?? true);
+        setIncludeSwotAnalysis(savedData.includeSwotAnalysis ?? true);
+        setIncludeTowsAnalysis(savedData.includeTowsAnalysis ?? true);
+        setRiskRatings(savedData.riskRatings ?? {});
+        setRiskSummaries(savedData.riskSummaries ?? {});
+        setStrengths(savedData.strengths ?? ["Strength 1"]);
+        setWeaknesses(savedData.weaknesses ?? ["Weakness 1"]);
+        setOpportunities(savedData.opportunities ?? ["Opportunity 1"]);
+        setThreats(savedData.threats ?? ["Threat 1"]);
+      }
+    };
+    loadSavedData();
+  }, [loadData]);
+
+  // Auto-save functionality
+  useEffect(() => {
+    const saveCurrentData = async () => {
+      const dataToSave = {
+        includeSection,
+        includePropertyRiskRatings,
+        includeRiskCategories,
+        includeMarketIndicators,
+        includePestelAnalysis,
+        includeSwotAnalysis,
+        includeTowsAnalysis,
+        riskRatings,
+        riskSummaries,
+        strengths,
+        weaknesses,
+        opportunities,
+        threats
+      };
+      
+      await saveData(dataToSave);
+    };
+
+    const debounceTimer = setTimeout(saveCurrentData, 1000);
+    return () => clearTimeout(debounceTimer);
+  }, [includeSection, includePropertyRiskRatings, includeRiskCategories, includeMarketIndicators, 
+      includePestelAnalysis, includeSwotAnalysis, includeTowsAnalysis, riskRatings, riskSummaries, 
+      strengths, weaknesses, opportunities, threats, saveData]);
 
   const addItem = (list: string[], setList: (items: string[]) => void, defaultText: string) => {
     setList([...list, defaultText]);
@@ -104,13 +161,18 @@ const RiskAssessmentMarketIndicators = () => {
                 Assess property risk factors and market indicators to provide comprehensive risk analysis
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <Label htmlFor="include-section">Include</Label>
-              <Switch
-                id="include-section"
-                checked={includeSection}
-                onCheckedChange={setIncludeSection}
-              />
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-muted-foreground">
+                {isSaving ? "Saving..." : lastSaved ? "✅ Saved" : "Unsaved"}
+              </div>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="include-section">Include</Label>
+                <Switch
+                  id="include-section"
+                  checked={includeSection}
+                  onCheckedChange={setIncludeSection}
+                />
+              </div>
             </div>
           </div>
         </CardHeader>
