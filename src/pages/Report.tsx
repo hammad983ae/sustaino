@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 
 const ReportViewer = () => {
   const [currentSection, setCurrentSection] = useState(0);
-  const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, 22);
+  const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, 21);
   const [lastSavedSection, setLastSavedSection] = useState<number | null>(null);
 
   // Load saved progress on component mount
@@ -29,21 +29,20 @@ const ReportViewer = () => {
     { title: "Statutory Assessment" },
     { title: "Market Commentary" },
     { title: "Property Details" },
-    { title: "Plant and Equipment" },
-    { title: "Rent Determination" },
-    { title: "ESG Assessment and Audit" },
     { title: "Essential Repairs" },
     { title: "Risk Assessment & Market Indicators" },
     { title: "Previous Sales History and Current Sale" },
     { title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural" },
     { title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural" },
+    { title: "ESG Assessment Summary" },
     { title: "Valuation Analysis and Rationale" },
+    { title: "Environmental Audit" },
     { title: "Marketability and Mortgage Security" },
     { title: "Sustaino Pro Additional Analysis and Features" },
     { title: "Valuation Certificate" },
     { title: "Qualifications, Disclaimers, Terms and Conditions" },
     { title: "Annexures" },
-    { title: "Security and Certificates" }
+    { title: "Certification and Security" }
   ];
 
   const navigateToSection = (sectionIndex: number) => {
