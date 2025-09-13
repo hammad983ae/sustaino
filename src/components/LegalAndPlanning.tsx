@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,8 +7,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { MapPin, FileText } from "lucide-react";
 import PlanningDataIntegration from "./PlanningDataIntegration";
+import { useUniversalSave } from "@/hooks/useUniversalSave";
+import { useToast } from "@/hooks/use-toast";
 
 const LegalAndPlanning = () => {
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('LegalAndPlanning');
+  const { toast } = useToast();
   const [planningData, setPlanningData] = useState({
     lga: "",
     zoning: "",

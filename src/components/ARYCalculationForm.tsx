@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Target, Calculator, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useUniversalSave } from "@/hooks/useUniversalSave";
+import { useToast } from "@/hooks/use-toast";
 
 interface ARYInputs {
   propertyValue: number;
@@ -22,6 +24,9 @@ interface ARYCalculationFormProps {
 }
 
 const ARYCalculationForm = ({ onSubmit }: ARYCalculationFormProps) => {
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('ARYCalculationForm');
+  const { toast } = useToast();
+  
   const [inputs, setInputs] = useState<ARYInputs>({
     propertyValue: 0,
     annualRent: 0,

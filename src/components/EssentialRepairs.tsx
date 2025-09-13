@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -7,11 +7,44 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
+import { useUniversalSave } from "@/hooks/useUniversalSave";
+import { useToast } from "@/hooks/use-toast";
 
 const EssentialRepairs = () => {
+  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('EssentialRepairs');
+  const { toast } = useToast();
+  
   const [includeSection, setIncludeSection] = useState(true);
   const [requiresRepairs, setRequiresRepairs] = useState("");
   const [suitableForRent, setSuitableForRent] = useState("");
+
+  // Load saved data on component mount
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedData = await loadData();
+      if (savedData) {
+        setIncludeSection(savedData.includeSection ?? true);
+        setRequiresRepairs(savedData.requiresRepairs ?? "");
+        setSuitableForRent(savedData.suitableForRent ?? "");
+      }
+    };
+    loadSavedData();
+  }, [loadData]);
+
+  // Auto-save functionality
+  useEffect(() => {
+    const saveCurrentData = async () => {
+      const dataToSave = {
+        includeSection,
+        requiresRepairs,
+        suitableForRent
+      };
+      await saveData(dataToSave);
+    };
+
+    const debounceTimer = setTimeout(saveCurrentData, 1000);
+    return () => clearTimeout(debounceTimer);
+  }, [includeSection, requiresRepairs, suitableForRent, saveData]);
 
   return (
     <div className="space-y-6">
@@ -19,6 +52,9 @@ const EssentialRepairs = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Essential Repairs</h2>
         <div className="flex items-center gap-4">
+          <div className="text-sm text-muted-foreground">
+            {isSaving ? "Saving..." : lastSaved ? "✅ Saved" : "Unsaved"}
+          </div>
           <div className="flex items-center gap-2">
             <Label htmlFor="include-essential-repairs">Include</Label>
             <Switch
