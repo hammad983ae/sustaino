@@ -27,14 +27,17 @@ import { PropertyProvider } from '@/contexts/PropertyContext';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
 import InformationBrochure from '@/components/InformationBrochure';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
   const [activeTab, setActiveTab] = useState('assessment');
   const [propertyData, setPropertyData] = useState(null);
   const [esgScores, setEsgScores] = useState(null);
+  const navigate = useNavigate();
 
   const handleFormSubmit = (data) => {
+    // Save the form data if needed
     setPropertyData(data);
     setEsgScores({
       environmental: 75,
@@ -42,7 +45,9 @@ const Index = () => {
       governance: 82,
       overall: 75
     });
-    setCurrentStep('results');
+    
+    // Redirect to WorkHub (Contents page) after form completion
+    navigate('/work-hub');
   };
 
   const handleBackToForm = () => {
