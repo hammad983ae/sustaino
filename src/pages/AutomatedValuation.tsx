@@ -108,19 +108,16 @@ export default function AutomatedValuation() {
             </div>
             
             {/* Back to Home Button - positioned 2mm below red line */}
-            <div className="flex justify-center mt-2 relative">
-              <div className="absolute left-1/2 transform -translate-x-1/2 translate-x-24">
-                <a 
-                  href="/index" 
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent/20 transition-all duration-200 text-sm md:text-base font-bold text-foreground hover:text-primary"
-                >
-                  <svg className="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                  <span className="hidden sm:inline">Back to Original Platform</span>
-                  <span className="sm:hidden">Back</span>
-                </a>
-              </div>
+            <div className="flex justify-start mt-2 pl-4">
+              <a 
+                href="/index" 
+                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent/20 transition-all duration-200 text-sm md:text-base font-bold text-foreground hover:text-primary"
+              >
+                <svg className="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span className="sm:inline">Back to Original Platform</span>
+              </a>
             </div>
               <p className="text-lg text-gray-600 mt-4 max-w-4xl mx-auto">
                 Automated Property Valuations with ESG Intelligence
