@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,10 +17,15 @@ import {
   AlertCircle,
   Eye,
   FileTextIcon,
-  Zap
+  Zap,
+  Search,
+  UserPlus,
+  Users
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface UploadedDocument {
   id: string;
@@ -38,17 +43,30 @@ interface UploadedDocument {
   };
 }
 
+interface Client {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  type: 'long-term' | 'one-time';
+  totalJobs?: number;
+}
+
 interface JobDetails {
   title: string;
   description: string;
   clientName: string;
   clientEmail: string;
+  clientPhone?: string;
+  clientCompany?: string;
   clientType: 'long-term' | 'one-time';
   priority: 'low' | 'medium' | 'high' | 'urgent';
   jobType: 'valuation' | 'inspection' | 'analysis' | 'report';
   dueDate: string;
   estimatedHours: number;
   propertyAddress: string;
+  referenceNumber?: string;
 }
 
 const DocumentUploadManager = () => {
@@ -62,17 +80,127 @@ const DocumentUploadManager = () => {
     description: '',
     clientName: '',
     clientEmail: '',
+    clientPhone: '',
+    clientCompany: '',
     clientType: 'long-term',
     priority: 'medium',
     jobType: 'valuation',
     dueDate: '',
     estimatedHours: 2,
-    propertyAddress: ''
+    propertyAddress: '',
+    referenceNumber: ''
   });
   const [creatingJob, setCreatingJob] = useState(false);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [clientSearchTerm, setClientSearchTerm] = useState('');
+  const [showClientSearch, setShowClientSearch] = useState(false);
+  const [isNewClient, setIsNewClient] = useState(true);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Generate next reference number
+  const generateReferenceNumber = async (): Promise<string> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return '';
+
+      // Get the highest existing reference number for this user
+      const { data: existingJobs } = await supabase
+        .from('valuation_jobs')
+        .select('job_number')
+        .eq('user_id', user.id)
+        .like('job_number', 'REF-%')
+        .order('job_number', { ascending: false })
+        .limit(1);
+
+      let nextNumber = 10001; // Starting number
+      
+      if (existingJobs && existingJobs.length > 0) {
+        const lastJobNumber = existingJobs[0].job_number;
+        const lastNumber = parseInt(lastJobNumber.replace('REF-', ''));
+        if (!isNaN(lastNumber)) {
+          nextNumber = lastNumber + 1;
+        }
+      }
+
+      return `REF-${nextNumber}`;
+    } catch (error) {
+      console.error('Error generating reference number:', error);
+      return `REF-${10001 + Math.floor(Math.random() * 1000)}`;
+    }
+  };
+
+  // Search existing clients
+  const searchClients = async (searchTerm: string) => {
+    if (!searchTerm.trim()) {
+      setClients([]);
+      return;
+    }
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Search for existing clients in valuation_jobs
+      const { data: jobsData } = await supabase
+        .from('valuation_jobs')
+        .select('client_name, client_email, client_phone, client_type')
+        .eq('user_id', user.id)
+        .or(`client_name.ilike.%${searchTerm}%, client_email.ilike.%${searchTerm}%`)
+        .limit(10);
+
+      if (jobsData) {
+        // Group by client and count jobs
+        const clientMap = new Map<string, Client>();
+        
+        jobsData.forEach(job => {
+          const key = `${job.client_name}-${job.client_email}`;
+          if (clientMap.has(key)) {
+            const existing = clientMap.get(key)!;
+            existing.totalJobs = (existing.totalJobs || 0) + 1;
+          } else {
+            clientMap.set(key, {
+              id: `${job.client_name}-${job.client_email}`,
+              name: job.client_name || '',
+              email: job.client_email || '',
+              phone: job.client_phone || '',
+              type: job.client_type as 'long-term' | 'one-time' || 'long-term',
+              totalJobs: 1
+            });
+          }
+        });
+
+        setClients(Array.from(clientMap.values()));
+      }
+    } catch (error) {
+      console.error('Error searching clients:', error);
+    }
+  };
+
+  // Select existing client
+  const selectClient = (client: Client) => {
+    setJobDetails(prev => ({
+      ...prev,
+      clientName: client.name,
+      clientEmail: client.email,
+      clientPhone: client.phone || '',
+      clientCompany: client.company || '',
+      clientType: client.type
+    }));
+    setIsNewClient(false);
+    setShowClientSearch(false);
+    setClientSearchTerm(client.name);
+  };
+
+  // Initialize reference number when job form is opened
+  useEffect(() => {
+    if (showJobForm && !jobDetails.referenceNumber) {
+      generateReferenceNumber().then(refNum => {
+        setJobDetails(prev => ({ ...prev, referenceNumber: refNum }));
+      });
+    }
+  }, [showJobForm]);
 
   // OCR Processing Function
   const performOCR = useCallback(async (document: UploadedDocument) => {
@@ -267,8 +395,8 @@ const DocumentUploadManager = () => {
         return;
       }
 
-      // Generate job number
-      const jobNumber = `JOB-${Date.now().toString().slice(-6)}`;
+      // Use the generated reference number
+      const jobNumber = jobDetails.referenceNumber || await generateReferenceNumber();
       
       // First create/find a property record
       let propertyId: string;
@@ -315,6 +443,7 @@ const DocumentUploadManager = () => {
           job_description: jobDetails.description,
           client_name: jobDetails.clientName,
           client_email: jobDetails.clientEmail,
+          client_phone: jobDetails.clientPhone,
           client_type: jobDetails.clientType,
           property_address: jobDetails.propertyAddress,
           priority: jobDetails.priority,
@@ -614,26 +743,155 @@ const DocumentUploadManager = () => {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="client-name">Client Name</Label>
-                <Input
-                  id="client-name"
-                  placeholder="John Smith"
-                  value={jobDetails.clientName}
-                  onChange={(e) => setJobDetails(prev => ({ ...prev, clientName: e.target.value }))}
-                />
+            {/* Reference Number Display */}
+            <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
+              <div className="flex items-center gap-2 mb-2">
+                <FileText className="h-4 w-4 text-primary" />
+                <Label className="text-sm font-medium">Reference Number</Label>
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="client-email">Client Email</Label>
-                <Input
-                  id="client-email"
-                  type="email"
-                  placeholder="john@example.com"
-                  value={jobDetails.clientEmail}
-                  onChange={(e) => setJobDetails(prev => ({ ...prev, clientEmail: e.target.value }))}
-                />
+              <div className="text-lg font-mono font-bold text-primary">
+                {jobDetails.referenceNumber || 'Generating...'}
+              </div>
+            </div>
+
+            {/* Client Selection */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Client Information</Label>
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant={isNewClient ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => {
+                      setIsNewClient(true);
+                      setJobDetails(prev => ({
+                        ...prev,
+                        clientName: '',
+                        clientEmail: '',
+                        clientPhone: '',
+                        clientCompany: ''
+                      }));
+                      setClientSearchTerm('');
+                    }}
+                  >
+                    <UserPlus className="h-4 w-4 mr-1" />
+                    New Client
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={!isNewClient ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setIsNewClient(false)}
+                  >
+                    <Users className="h-4 w-4 mr-1" />
+                    Existing Client
+                  </Button>
+                </div>
+              </div>
+
+              {!isNewClient && (
+                <div className="space-y-2">
+                  <Label htmlFor="client-search">Search Existing Clients</Label>
+                  <Popover open={showClientSearch} onOpenChange={setShowClientSearch}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={showClientSearch}
+                        className="w-full justify-between"
+                      >
+                        {clientSearchTerm || "Search clients..."}
+                        <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search clients..."
+                          value={clientSearchTerm}
+                          onValueChange={(value) => {
+                            setClientSearchTerm(value);
+                            searchClients(value);
+                          }}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No clients found.</CommandEmpty>
+                          <CommandGroup>
+                            {clients.map((client) => (
+                              <CommandItem
+                                key={client.id}
+                                value={client.name}
+                                onSelect={() => selectClient(client)}
+                              >
+                                <div className="flex flex-col w-full">
+                                  <div className="flex items-center justify-between">
+                                    <span className="font-medium">{client.name}</span>
+                                    <span className="text-xs text-muted-foreground">
+                                      {client.totalJobs} jobs
+                                    </span>
+                                  </div>
+                                  <span className="text-sm text-muted-foreground">{client.email}</span>
+                                  {client.phone && (
+                                    <span className="text-xs text-muted-foreground">{client.phone}</span>
+                                  )}
+                                </div>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              )}
+
+              {/* Client Details Form */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="client-name">Client Name *</Label>
+                  <Input
+                    id="client-name"
+                    placeholder="John Smith"
+                    value={jobDetails.clientName}
+                    onChange={(e) => setJobDetails(prev => ({ ...prev, clientName: e.target.value }))}
+                    disabled={!isNewClient && !!jobDetails.clientName}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="client-email">Client Email *</Label>
+                  <Input
+                    id="client-email"
+                    type="email"
+                    placeholder="john@example.com"
+                    value={jobDetails.clientEmail}
+                    onChange={(e) => setJobDetails(prev => ({ ...prev, clientEmail: e.target.value }))}
+                    disabled={!isNewClient && !!jobDetails.clientEmail}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="client-phone">Client Phone</Label>
+                  <Input
+                    id="client-phone"
+                    placeholder="+61 400 000 000"
+                    value={jobDetails.clientPhone}
+                    onChange={(e) => setJobDetails(prev => ({ ...prev, clientPhone: e.target.value }))}
+                    disabled={!isNewClient && !!jobDetails.clientPhone}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="client-company">Company (Optional)</Label>
+                  <Input
+                    id="client-company"
+                    placeholder="ABC Properties"
+                    value={jobDetails.clientCompany}
+                    onChange={(e) => setJobDetails(prev => ({ ...prev, clientCompany: e.target.value }))}
+                    disabled={!isNewClient && !!jobDetails.clientCompany}
+                  />
+                </div>
               </div>
             </div>
 
