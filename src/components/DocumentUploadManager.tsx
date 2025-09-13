@@ -441,69 +441,23 @@ const DocumentUploadManager = () => {
         return;
       }
 
-      // Use the generated reference number
+      // Generate reference number
       const jobNumber = jobDetails.referenceNumber || await generateReferenceNumber();
-      
-      // First create/find a property record with proper address parsing
-      let propertyId: string;
-      
-      // Parse the address properly to extract required fields
-      const addressParts = jobDetails.propertyAddress.split(/[,\s]+/).filter(part => part.trim());
-      let suburb = 'Unknown';
-      let state = 'Unknown';
-      let postcode = '0000';
-      
-      // Try to extract suburb, state, postcode from address
-      if (addressParts.length >= 3) {
-        // Look for postcode (4 digits)
-        const postcodeMatch = addressParts.find(part => /^\d{4}$/.test(part));
-        if (postcodeMatch) {
-          postcode = postcodeMatch;
-          const postcodeIndex = addressParts.indexOf(postcodeMatch);
-          
-          // State is usually before postcode
-          if (postcodeIndex > 0) {
-            state = addressParts[postcodeIndex - 1];
-          }
-          
-          // Suburb is usually before state
-          if (postcodeIndex > 1) {
-            suburb = addressParts[postcodeIndex - 2];
-          }
-        }
+
+      // Use the database function to safely create/find property
+      const { data: propertyId, error: propertyError } = await supabase
+        .rpc('upsert_property_for_job', {
+          address_text: jobDetails.propertyAddress,
+          property_type_text: jobDetails.jobType === 'valuation' ? 'residential' : 'commercial'
+        });
+
+      if (propertyError) {
+        console.error('Property creation error:', propertyError);
+        throw new Error(`Failed to create property: ${propertyError.message}`);
       }
-      
-      // Try to find existing property by address
-      const { data: existingProperty } = await supabase
-        .from('properties')
-        .select('id')
-        .eq('address_line_1', jobDetails.propertyAddress)
-        .eq('user_id', user.id)
-        .maybeSingle();
 
-      if (existingProperty) {
-        propertyId = existingProperty.id;
-      } else {
-        // Create new property record with proper required fields
-        const { data: newProperty, error: propertyError } = await supabase
-          .from('properties')
-          .insert({
-            user_id: user.id,
-            address_line_1: jobDetails.propertyAddress,
-            suburb: suburb,
-            state: state,
-            postcode: postcode,
-            property_type: jobDetails.jobType === 'valuation' ? 'residential' : 'commercial',
-            country: 'Australia'
-          })
-          .select('id')
-          .single();
-
-        if (propertyError) {
-          console.error('Property creation error:', propertyError);
-          throw new Error(`Failed to create property: ${propertyError.message}`);
-        }
-        propertyId = newProperty.id;
+      if (!propertyId) {
+        throw new Error('Failed to get property ID');
       }
       
       // Create job in valuation_jobs table

@@ -876,6 +876,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      upsert_property_for_job: {
+        Args: { address_text: string; property_type_text?: string }
+        Returns: string
+      }
       upsert_property_from_address: {
         Args: { address_text: string; property_type_text?: string }
         Returns: string
