@@ -14,8 +14,13 @@ import {
   X,
   Briefcase,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Eye,
+  FileTextIcon,
+  Zap
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface UploadedDocument {
   id: string;
@@ -25,6 +30,12 @@ interface UploadedDocument {
   url: string;
   category: string;
   uploadedAt: Date;
+  ocrProcessed?: boolean;
+  ocrData?: {
+    text: string;
+    confidence: number;
+    language?: string;
+  };
 }
 
 interface JobDetails {
@@ -32,6 +43,7 @@ interface JobDetails {
   description: string;
   clientName: string;
   clientEmail: string;
+  clientType: 'long-term' | 'one-time';
   priority: 'low' | 'medium' | 'high' | 'urgent';
   jobType: 'valuation' | 'inspection' | 'analysis' | 'report';
   dueDate: string;
@@ -43,11 +55,14 @@ const DocumentUploadManager = () => {
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [showJobForm, setShowJobForm] = useState(false);
+  const [ocrProcessingFiles, setOcrProcessingFiles] = useState<Set<string>>(new Set());
+  const [enableOCR, setEnableOCR] = useState(true);
   const [jobDetails, setJobDetails] = useState<JobDetails>({
     title: '',
     description: '',
     clientName: '',
     clientEmail: '',
+    clientType: 'long-term',
     priority: 'medium',
     jobType: 'valuation',
     dueDate: '',
@@ -58,6 +73,69 @@ const DocumentUploadManager = () => {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // OCR Processing Function
+  const performOCR = useCallback(async (document: UploadedDocument) => {
+    if (!document.type.startsWith('image/') && !document.type.includes('pdf')) {
+      toast({
+        title: "OCR Not Supported",
+        description: "OCR is only available for images and PDF files",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setOcrProcessingFiles(prev => new Set([...prev, document.id]));
+    
+    try {
+      // Create OCR pipeline using Hugging Face Transformers
+      const { pipeline } = await import('@huggingface/transformers');
+      const ocr = await pipeline('image-to-text', 'Xenova/trocr-base-printed', {
+        device: 'webgpu',
+        dtype: 'fp32',
+      });
+
+      // Process the document
+      const result = await ocr(document.url) as any;
+      const extractedText = Array.isArray(result) ? result[0]?.generated_text : result.generated_text;
+      
+      // Update document with OCR data
+      setUploadedDocuments(prev => 
+        prev.map(doc => 
+          doc.id === document.id 
+            ? { 
+                ...doc, 
+                ocrProcessed: true, 
+                ocrData: { 
+                  text: extractedText || "No text detected", 
+                  confidence: 0.85,
+                  language: "en"
+                } 
+              }
+            : doc
+        )
+      );
+
+      toast({
+        title: "OCR Processing Complete",
+        description: `Text extracted from ${document.name}`,
+      });
+
+    } catch (error) {
+      console.error('OCR Error:', error);
+      toast({
+        title: "OCR Processing Failed", 
+        description: `Failed to extract text from ${document.name}`,
+        variant: "destructive",
+      });
+    } finally {
+      setOcrProcessingFiles(prev => {
+        const updated = new Set(prev);
+        updated.delete(document.id);
+        return updated;
+      });
+    }
+  }, [toast]);
 
   const handleFileUpload = useCallback(async (files: FileList) => {
     if (!files.length) return;
@@ -119,10 +197,16 @@ const DocumentUploadManager = () => {
           type: file.type,
           url: urlData.publicUrl,
           category: getFileCategory(file.type),
-          uploadedAt: new Date()
+          uploadedAt: new Date(),
+          ocrProcessed: false
         };
         
         newDocuments.push(document);
+        
+        // Auto-process OCR if enabled and file is suitable
+        if (enableOCR && (file.type.startsWith('image/') || file.type.includes('pdf'))) {
+          setTimeout(() => performOCR(document), 1000); // Small delay to allow state update
+        }
       }
       
       setUploadedDocuments(prev => [...prev, ...newDocuments]);
@@ -231,6 +315,7 @@ const DocumentUploadManager = () => {
           job_description: jobDetails.description,
           client_name: jobDetails.clientName,
           client_email: jobDetails.clientEmail,
+          client_type: jobDetails.clientType,
           property_address: jobDetails.propertyAddress,
           priority: jobDetails.priority,
           job_type: jobDetails.jobType,
@@ -282,6 +367,7 @@ const DocumentUploadManager = () => {
         description: '',
         clientName: '',
         clientEmail: '',
+        clientType: 'long-term',
         priority: 'medium',
         jobType: 'valuation',
         dueDate: '',
@@ -339,6 +425,21 @@ const DocumentUploadManager = () => {
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* OCR Settings */}
+          <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+            <div className="flex items-center gap-3">
+              <Zap className="h-5 w-5 text-primary" />
+              <div>
+                <p className="font-medium">OCR Text Extraction</p>
+                <p className="text-sm text-muted-foreground">Automatically extract text from images and PDFs</p>
+              </div>
+            </div>
+            <Switch
+              checked={enableOCR}
+              onCheckedChange={setEnableOCR}
+            />
+          </div>
+
           {/* Upload Zone */}
           <div 
             className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center hover:border-muted-foreground/50 transition-colors"
@@ -354,6 +455,7 @@ const DocumentUploadManager = () => {
             </h4>
             <p className="text-sm text-muted-foreground mb-4">
               Supports files such as PDFs, images, spreadsheets. Max single file size 20MB
+              {enableOCR && <span className="block text-primary">✨ OCR enabled for images and PDFs</span>}
             </p>
             <Button
               onClick={() => fileInputRef.current?.click()}
@@ -397,7 +499,46 @@ const DocumentUploadManager = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
+                        {doc.ocrProcessed && (
+                          <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded-md text-xs">
+                            <FileTextIcon className="h-3 w-3" />
+                            OCR Complete
+                          </div>
+                        )}
+                        {ocrProcessingFiles.has(doc.id) && (
+                          <div className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-xs">
+                            <Clock className="h-3 w-3 animate-spin" />
+                            Processing...
+                          </div>
+                        )}
                         <CheckCircle className="h-4 w-4 text-green-600" />
+                        {!doc.ocrProcessed && !ocrProcessingFiles.has(doc.id) && (doc.type.startsWith('image/') || doc.type.includes('pdf')) && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => performOCR(doc)}
+                            className="text-xs"
+                          >
+                            <Zap className="h-3 w-3 mr-1" />
+                            Extract Text
+                          </Button>
+                        )}
+                        {doc.ocrProcessed && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              toast({
+                                title: "OCR Text",
+                                description: doc.ocrData?.text || "No text extracted",
+                              });
+                            }}
+                            className="text-xs"
+                          >
+                            <Eye className="h-3 w-3 mr-1" />
+                            View Text
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="ghost"
@@ -494,6 +635,35 @@ const DocumentUploadManager = () => {
                   onChange={(e) => setJobDetails(prev => ({ ...prev, clientEmail: e.target.value }))}
                 />
               </div>
+            </div>
+
+            {/* Client Type Selection */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Client Type</Label>
+              <RadioGroup
+                value={jobDetails.clientType}
+                onValueChange={(value: 'long-term' | 'one-time') => 
+                  setJobDetails(prev => ({ ...prev, clientType: value }))
+                }
+                className="flex gap-6"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="long-term" id="long-term" />
+                  <Label htmlFor="long-term" className="flex items-center gap-2 cursor-pointer">
+                    <Briefcase className="h-4 w-4 text-blue-600" />
+                    Long-term Client
+                    <span className="text-xs text-muted-foreground">(Ongoing relationship)</span>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="one-time" id="one-time" />
+                  <Label htmlFor="one-time" className="flex items-center gap-2 cursor-pointer">
+                    <Clock className="h-4 w-4 text-green-600" />
+                    One-time Client
+                    <span className="text-xs text-muted-foreground">(Single project)</span>
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
