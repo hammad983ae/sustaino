@@ -22,7 +22,7 @@ import {
   Shield,
   Info
 } from 'lucide-react';
-import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
+import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 import { ValuationProvider } from '@/contexts/ValuationContext';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
@@ -138,7 +138,7 @@ const Index = () => {
                           </p>
                         </CardHeader>
                         <CardContent className="p-8">
-                          <PropertyAssessmentForm onComplete={handleFormSubmit} />
+                          <MultiStepForm onSubmit={handleFormSubmit} />
                         </CardContent>
                       </Card>
                     </div>
