@@ -12,6 +12,7 @@ import { useProperty } from '@/contexts/PropertyContext';
 import { supabase } from '@/integrations/supabase/client';
 
 // Step Components
+import PropertyAddressForm from '@/components/PropertyAddressForm';
 import { AutofillAddressFields } from '@/components/AutofillAddressFields';
 import AddressConfirmation from '@/components/planning/AddressConfirmation';
 import RentalConfiguration from '@/components/RentalConfiguration';
@@ -74,7 +75,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     {
       title: "Property Address",
       subtitle: "Find and configure address to begin your valuation report",
-      component: <AutofillAddressFields showUnit={true} showSuburb={true} />,
+      component: <PropertyAddressForm />,
       validation: () => !!(addressData.propertyAddress || addressData.streetNumber)
     },
     {
