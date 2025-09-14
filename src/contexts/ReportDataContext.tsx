@@ -116,6 +116,17 @@ export interface ReportData {
     [key: string]: any;
   };
 
+  // Professional Declarations
+  professionalDeclarations?: {
+    conflictOfInterest?: string;
+    inScopeItems?: string[];
+    outOfScopeItems?: string[];
+    professionalIndemnity?: boolean;
+    cpvCompliance?: boolean;
+    declarations?: string[];
+    [key: string]: any;
+  };
+
   lastUpdated?: string;
 }
 

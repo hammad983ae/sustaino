@@ -11,8 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, FileText, Sparkles } from "lucide-react";
+import { ChevronDown, FileText, Sparkles, Shield, User, ScrollText } from "lucide-react";
 import { useState } from "react";
+import { useReportData } from "@/contexts/ReportDataContext";
 
 interface ExecutiveSummaryProps {
   onNavigateToSection: (sectionIndex: number) => void;
@@ -20,6 +21,8 @@ interface ExecutiveSummaryProps {
 
 const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [isProfessionalOpen, setIsProfessionalOpen] = useState(false);
+  const { reportData } = useReportData();
 
   const tableOfContents = [
     { title: "Executive Summary", page: 1 },
@@ -66,6 +69,58 @@ const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
               className="min-h-[120px] resize-none"
             />
           </div>
+        </CollapsibleContent>
+      </Collapsible>
+
+      {/* Professional Declarations Summary */}
+      <Collapsible open={isProfessionalOpen} onOpenChange={setIsProfessionalOpen}>
+        <CollapsibleTrigger className="flex items-center gap-2 w-full text-left">
+          <ChevronDown className={`h-4 w-4 transition-transform ${isProfessionalOpen ? 'transform rotate-180' : ''}`} />
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Professional Declarations Summary
+          </h2>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="mt-4">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="grid gap-4">
+                {reportData?.professionalDeclarations?.conflictOfInterest && (
+                  <div className="flex items-start gap-3">
+                    <User className="h-4 w-4 mt-1 text-primary" />
+                    <div>
+                      <h4 className="font-medium">Conflict of Interest</h4>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {reportData.professionalDeclarations.conflictOfInterest}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                {reportData?.professionalDeclarations?.inScopeItems && (
+                  <div className="flex items-start gap-3">
+                    <ScrollText className="h-4 w-4 mt-1 text-primary" />
+                    <div>
+                      <h4 className="font-medium">Scope of Work</h4>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Professional declarations and scope limitations have been documented and are available in the detailed report sections.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-start gap-3">
+                  <Shield className="h-4 w-4 mt-1 text-primary" />
+                  <div>
+                    <h4 className="font-medium">Professional Compliance</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      All professional standards, indemnity requirements, and regulatory compliance measures have been verified and documented.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </CollapsibleContent>
       </Collapsible>
 
