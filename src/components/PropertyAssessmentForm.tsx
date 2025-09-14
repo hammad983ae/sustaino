@@ -12,7 +12,7 @@ import { useProperty } from '@/contexts/PropertyContext';
 // Step Components
 import { AutofillAddressFields } from '@/components/AutofillAddressFields';
 import AddressConfirmation from '@/components/planning/AddressConfirmation';
-import PlanningDataDisplay from '@/components/planning/PlanningDataDisplay';
+import PlanningDataIntegration from '@/components/PlanningDataIntegration';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
@@ -44,14 +44,17 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       title: "Planning Data", 
       subtitle: "Please confirm the property address before proceeding with planning data search",
       component: (
-        <div className="space-y-6">
-          <AddressConfirmation 
-            onAddressConfirmed={handleAddressConfirmed}
-            onAddressChange={handleAddressChange}
-            showAutoGenerate={true}
-          />
-          <PlanningDataDisplay />
-        </div>
+        <PlanningDataIntegration 
+          propertyAddress={reportData.propertySearchData?.confirmedAddress}
+          onDataFetched={(data) => {
+            console.log('Planning data fetched:', data);
+            // Update report data with planning information
+            updateReportData('legalAndPlanning', {
+              ...reportData.legalAndPlanning,
+              ...data
+            });
+          }}
+        />
       ),
       validation: () => reportData.propertySearchData?.confirmedAddress
     },
