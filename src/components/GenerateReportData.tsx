@@ -217,6 +217,15 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
           </div>
 
           <div className="flex gap-2">
+            {onNavigateToReport && (
+              <Button 
+                onClick={onNavigateToReport} 
+                className="flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                View Contents Page
+              </Button>
+            )}
             <Button 
               variant="outline" 
               onClick={() => window.open(`/work-hub`, '_blank')}
@@ -225,16 +234,6 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
               <ExternalLink className="h-4 w-4" />
               View in Work Hub
             </Button>
-            {onNavigateToReport && (
-              <Button 
-                variant="outline"
-                onClick={onNavigateToReport} 
-                className="flex items-center gap-2"
-              >
-                <FileText className="h-4 w-4" />
-                View Full Report
-              </Button>
-            )}
           </div>
         </CardContent>
       </Card>
