@@ -1,3 +1,4 @@
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, Building2 } from "lucide-react";
 import { useState } from "react";
 
-const RentalConfiguration = () => {
+const RentalConfiguration: React.FC = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
 
