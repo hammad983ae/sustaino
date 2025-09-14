@@ -37,7 +37,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     {
       title: "Property Address",
       subtitle: "Find and configure address to begin your valuation report",
-      component: <AutofillAddressFields showLotPlan={true} showUnit={true} showSuburb={true} />,
+      component: <AutofillAddressFields showUnit={true} showSuburb={true} />,
       validation: () => addressData.propertyAddress || addressData.streetNumber
     },
     {
