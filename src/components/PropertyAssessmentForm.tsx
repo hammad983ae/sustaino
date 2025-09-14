@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { ChevronLeft, ChevronRight, Save, CheckCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
@@ -81,8 +81,45 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             currentStep,
             completedSteps
           }}
-          onNavigateToReport={onNavigateToReport}
+          onNavigateToReport={undefined} // Don't auto-navigate
         />
+      ),
+      validation: () => true
+    },
+    {
+      title: "Assessment Complete",
+      subtitle: "Your property assessment has been completed successfully",
+      component: (
+        <div className="text-center space-y-6 py-8">
+          <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+            <CheckCircle className="w-8 h-8 text-green-600" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-green-800 mb-2">Property Assessment Complete!</h3>
+            <p className="text-muted-foreground">
+              Your Work Hub job has been created successfully. You can now view your report or continue with other assessments.
+            </p>
+          </div>
+          <div className="flex gap-4 justify-center">
+            <Button
+              variant="outline"
+              onClick={() => window.open('/work-hub', '_blank')}
+              className="flex items-center gap-2"
+            >
+              <ExternalLink className="h-4 w-4" />
+              View Work Hub
+            </Button>
+            {onNavigateToReport && (
+              <Button
+                onClick={onNavigateToReport}
+                className="flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                View Full Report
+              </Button>
+            )}
+          </div>
+        </div>
       ),
       validation: () => true
     }
@@ -273,10 +310,9 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             <Button
               onClick={() => {
                 if (isLastStep) {
-                  // Navigate to executive summary/table of contents instead of WorkHub
-                  if (onNavigateToReport) {
-                    onNavigateToReport();
-                  }
+                  // Just move to the next step to complete the form
+                  // Don't automatically navigate to report
+                  nextStep();
                 } else {
                   nextStep();
                 }
@@ -284,7 +320,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
               disabled={!canProceed}
               className="flex items-center gap-2"
             >
-              {isLastStep ? "Create Work Hub Job & View Report" : "Next"}
+              {isLastStep ? "Create Work Hub Job" : "Next"}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
