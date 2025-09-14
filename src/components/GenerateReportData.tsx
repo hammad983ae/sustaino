@@ -187,14 +187,14 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
         <CardHeader>
           <div className="flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-green-500" />
-            <CardTitle className="text-green-700 dark:text-green-400">Report Generated Successfully</CardTitle>
+            <CardTitle className="text-green-700 dark:text-green-400">Work Hub Job Created Successfully</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-            <h4 className="font-medium text-green-800 dark:text-green-400 mb-2">Generation Complete</h4>
+            <h4 className="font-medium text-green-800 dark:text-green-400 mb-2">Work Hub Job Created Successfully</h4>
             <p className="text-sm text-green-700 dark:text-green-300 mb-3">
-              Your property assessment has been successfully converted to a comprehensive report with all sections pre-populated.
+              Your property assessment has been successfully saved as a Work Hub job. You can continue with the remaining steps in this form or view the full report later.
             </p>
             <div className="space-y-2 text-xs text-green-600 dark:text-green-400">
               <div>• Property ID: {generatedReport.propertyId}</div>
@@ -204,20 +204,24 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
           </div>
 
           <div className="flex gap-2">
-            {onNavigateToReport && (
-              <Button onClick={onNavigateToReport} className="flex-1">
-                <FileText className="h-4 w-4 mr-2" />
-                Open Full Report
-              </Button>
-            )}
             <Button 
               variant="outline" 
               onClick={() => window.open(`/work-hub`, '_blank')}
               className="flex items-center gap-2"
             >
               <ExternalLink className="h-4 w-4" />
-              Work Hub
+              View in Work Hub
             </Button>
+            {onNavigateToReport && (
+              <Button 
+                variant="outline"
+                onClick={onNavigateToReport} 
+                className="flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                View Full Report
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
