@@ -187,9 +187,9 @@ function validateDataForInclusion(assessmentData: any) {
     hasReportConfig: !!(reportConfig.propertyType && reportConfig.reportType),
     isLeasehold: reportConfig.interestValues?.includes('Leasehold Interest') || 
                 reportConfig.interestValues?.includes('Ground Lease'),
-    hasPhotos: !!(fileAttachments?.propertyPhotos?.length > 0),
-    hasDocuments: !!(fileAttachments?.propertyDocuments?.length > 0 ||
-                    fileAttachments?.planningDocuments?.length > 0),
+    hasPhotos: !!(reportData?.fileAttachments?.propertyPhotos?.length > 0),
+    hasDocuments: !!(reportData?.fileAttachments?.propertyDocuments?.length > 0 ||
+                    reportData?.fileAttachments?.planningDocuments?.length > 0),
     hasValuationApproaches: !!(reportConfig.valuationApproaches?.length > 0),
     includeRental: reportConfig.includeRentalValuation === true
   };
@@ -259,22 +259,23 @@ function generateReportSections(assessmentData: any) {
 
   console.log('Data validation results:', dataValidation);
 
-  return {
-    // RPD and Location - Only include if address data is available
-    ...(dataValidation.hasAddress && {
-      rpdAndLocation: {
-        propertyAddress,
-        lotNumber: addressData?.lotNumber || planningData?.lotNumber || '',
-        planNumber: addressData?.planNumber || planningData?.planNumber || '',
-        unitNumber: addressData?.unitNumber || '',
-        streetNumber: addressData?.streetNumber || '',
-        streetName: addressData?.streetName || '',
-        streetType: addressData?.streetType || '',
-        suburb: addressData?.suburb || '',
-        state: addressData?.state || '',
-        postcode: addressData?.postcode || '',
-        country: addressData?.country || 'Australia',
-      
+  const reportSections = {};
+
+  // RPD and Location - Only include if address data is available
+  if (dataValidation.hasAddress) {
+    reportSections.rpdAndLocation = {
+      propertyAddress,
+      lotNumber: addressData?.lotNumber || planningData?.lotNumber || '',
+      planNumber: addressData?.planNumber || planningData?.planNumber || '',
+      unitNumber: addressData?.unitNumber || '',
+      streetNumber: addressData?.streetNumber || '',
+      streetName: addressData?.streetName || '',
+      streetType: addressData?.streetType || '',
+      suburb: addressData?.suburb || '',
+      state: addressData?.state || '',
+      postcode: addressData?.postcode || '',
+      country: addressData?.country || 'Australia',
+    
       // Property identification methods
       propertyIdentification: {
         physicalInspection: propertyIdentification.physicalInspection ?? true,
@@ -297,209 +298,211 @@ function generateReportSections(assessmentData: any) {
         amenities: locationData.amenities || 'Amenities assessment to be completed',
         services: locationData.services || 'Services availability to be completed'
       }
-    }),
+    };
+  }
 
-    // Legal and Planning - Only include if planning data is available
-    ...(dataValidation.hasPlanning && {
-      legalAndPlanning: {
-        zoneName: planningData.zoneName || planningData.zoning || 'Zoning to be determined',
-        zoneDescription: planningData.zoneDescription || 'Zone description to be researched',
-        overlays: planningData.overlays || [],
-        landUse: planningData.landUse || planningData.currentUse || 'Current use to be verified',
-        developmentPotential: planningData.developmentPotential || 'To be assessed',
-        permitRequired: planningData.permitRequired ?? true,
-        heightRestriction: planningData.heightRestriction || 'To be confirmed',
-        planningScheme: planningData.planningScheme || 'Planning scheme to be identified',
-        mapReference: planningData.mapReference || 'Map reference to be obtained',
-        riskAssessment: {
-          heritage: planningData.heritage || planningData.riskAssessment?.heritage || 'Heritage assessment required',
-          flooding: planningData.floodRisk || planningData.riskAssessment?.flooding || 'Flood risk to be assessed',
-          bushfire: planningData.bushfireRisk || planningData.riskAssessment?.bushfire || 'Bushfire risk to be assessed',
-          contamination: planningData.riskAssessment?.contamination || 'Contamination assessment required'
-        },
-        coreDetails: planningData.coreDetails || {
-          commercial: planningData.zoneName || 'Zone to be confirmed',
-          landUse: planningData.landUse || 'Current use to be verified',
-          development: planningData.developmentPotential || 'Development potential to be assessed',
-          planningScheme: planningData.planningScheme || 'Planning scheme to be identified'
-        },
-        coordinates: planningData.coordinates,
-        address: propertyAddress,
-        planningImage: planningData.planningImage
-      }
-    }),
-
-    // Tenancy Schedule/Lease Details - Only include for leasehold properties
-    ...(dataValidation.isLeasehold && {
-      tenancyScheduleLeaseDetails: {
-        groundLease: {
-          include: reportConfig.interestValues?.includes('Leasehold Interest') || false,
-          leaseType: '',
-          leaseTerm: '',
-          annualGroundRent: '',
-          reviewPeriod: '',
-          commencementDate: '',
-          expiryDate: '',
-          nextReviewDate: '',
-          reviewMethod: 'cpi',
-          permittedUse: '',
-          restrictions: '',
-          impact: '',
-          leaseOptions: {
-            optionToRenew: false,
-            optionToPurchase: false,
-            surrenderClause: false,
-            breakClause: false
-          }
-        },
-        tenantSummary: {
-          include: true,
-          lessor: '',
-          lessee: '',
-          commencementDate: '',
-          expiryDate: '',
-          optionsTerms: '',
-          reviewDate: '',
-          reviewMethod: 'cpi',
-          outgoings: '',
-          commencementRent: '',
-          incentives: '',
-          repairsMaintenance: ''
-        }
-      }
-    }),
-
-    // Risk Assessment - PESTEL & SWOT Analysis pre-configured
-    riskAssessmentMarketIndicators: {
-      includePestelAnalysis: true,
-      includeSwotAnalysis: true,
-      includeTowsAnalysis: true,
-      pestelFactors: {
-        political: 'Government policies, regulations, political stability, tax policies...',
-        economic: 'Interest rates, inflation, economic growth, unemployment...',
-        social: 'Demographics, lifestyle changes, population growth, cultural trends...',
-        technological: 'Automation, digitalization, innovation, technology adoption...',
-        environmental: 'Climate change, environmental regulations, sustainability requirements...',
-        legal: 'Building codes, zoning laws, safety regulations, compliance requirements...'
+  // Legal and Planning - Only include if planning data is available
+  if (dataValidation.hasPlanning) {
+    reportSections.legalAndPlanning = {
+      zoneName: planningData.zoneName || planningData.zoning || 'Zoning to be determined',
+      zoneDescription: planningData.zoneDescription || 'Zone description to be researched',
+      overlays: planningData.overlays || [],
+      landUse: planningData.landUse || planningData.currentUse || 'Current use to be verified',
+      developmentPotential: planningData.developmentPotential || 'To be assessed',
+      permitRequired: planningData.permitRequired ?? true,
+      heightRestriction: planningData.heightRestriction || 'To be confirmed',
+      planningScheme: planningData.planningScheme || 'Planning scheme to be identified',
+      mapReference: planningData.mapReference || 'Map reference to be obtained',
+      riskAssessment: {
+        heritage: planningData.heritage || planningData.riskAssessment?.heritage || 'Heritage assessment required',
+        flooding: planningData.floodRisk || planningData.riskAssessment?.flooding || 'Flood risk to be assessed',
+        bushfire: planningData.bushfireRisk || planningData.riskAssessment?.bushfire || 'Bushfire risk to be assessed',
+        contamination: planningData.riskAssessment?.contamination || 'Contamination assessment required'
       },
-      swotAnalysis: {
-        strengths: ['Prime location', 'Strong infrastructure'],
-        weaknesses: ['Age of building', 'Maintenance requirements'],
-        opportunities: ['Market growth potential', 'Development opportunities'],
-        threats: ['Market volatility', 'Regulatory changes']
+      coreDetails: planningData.coreDetails || {
+        commercial: planningData.zoneName || 'Zone to be confirmed',
+        landUse: planningData.landUse || 'Current use to be verified',
+        development: planningData.developmentPotential || 'Development potential to be assessed',
+        planningScheme: planningData.planningScheme || 'Planning scheme to be identified'
       },
-      towsStrategies: {
-        soStrategies: 'How to use strengths to take advantage of opportunities...',
-        woStrategies: 'How to overcome weaknesses and avoid threats...',
-        stStrategies: 'How to use strengths to avoid threats...',
-        wtStrategies: 'How to minimize weaknesses and avoid threats...'
-      }
-    },
-
-    // Previous Sales History - Ready for completion
-    previousSalesHistoryAndCurrentSale: {
-      includePreviousSales: true,
-      includeCurrentSale: false,
-      lastSaleDate: '',
-      lastSalePrice: '',
-      saleMethod: '',
-      saleHistoryNotes: 'Additional information about previous sales...',
-      supportingDocuments: [],
-      transactionAnalysis: {
-        dateOfTransaction: '',
-        dateOfValuation: '',
-        marketTrends: 'Analysis of market trends between sales...',
-        priceVariation: 'Analysis of price changes and factors...',
-        transactionReliability: '',
-        valuationImpact: '',
-        overallComments: 'Summary of sales history analysis and impact on valuation...'
-      }
-    },
-
-    // Valuation Certificate - Pre-populated from report config
-    valuationCertificate: {
-      propertyAddress,
-      titleReference: `${addressData?.lotNumber || 'LOT'} ${addressData?.planNumber || 'PLAN'}`,
-      propertyType: reportConfig.propertyType || 'To be confirmed',
-      interestValued: reportConfig.interestValues || 'Fee Simple',
-      purposeOfValuation: reportConfig.valuationPurpose || 'Market Valuation',
-      valueComponent: reportConfig.valueComponent || 'Land and Buildings',
-      mortgageSecurity: reportConfig.mortgageSecurity || 'To be assessed',
-      dateOfValuation: new Date().toISOString().split('T')[0],
-      dateOfInspection: new Date().toISOString().split('T')[0],
-      certificateDetails: {
-        marketValue: 0,
-        highestAndBestUse: 'Current use',
-        caveats: 'Subject to detailed market analysis',
-        gstTreatment: 'GST inclusive',
-        currency: 'AUD'
-      },
-      professionalCertification: {
-        valuersName: '',
-        professionalQualification: '',
-        registrationNumber: '',
-        valuationFirm: ''
-      }
-    },
-
-    // Valuation Analysis - Only selected approaches
-    valuationAnalysis: {
-      activeApproaches: reportConfig.valuationApproaches || ['Direct Comparison'],
-      selectedApproaches: reportConfig.valuationApproaches || ['Direct Comparison'],
-      enabledSections: reportConfig.valuationApproaches || ['Direct Comparison']
-    },
-
-    // Property Details - From assessment
-    propertyDetails: {
-      propertyType: reportConfig.propertyType || 'Residential',
-      reportType: reportConfig.reportType || 'Desktop Report',
+      coordinates: planningData.coordinates,
       address: propertyAddress,
-      lotPlan: `${addressData?.lotNumber || ''} ${addressData?.planNumber || ''}`.trim(),
-      unit: addressData?.unitNumber,
-      suburb: addressData?.suburb,
-      state: addressData?.state,
-      postcode: addressData?.postcode
+      planningImage: planningData.planningImage
+    };
+  }
+
+  // Tenancy Schedule/Lease Details - Only include for leasehold properties
+  if (dataValidation.isLeasehold) {
+    reportSections.tenancyScheduleLeaseDetails = {
+      groundLease: {
+        include: reportConfig.interestValues?.includes('Leasehold Interest') || false,
+        leaseType: '',
+        leaseTerm: '',
+        annualGroundRent: '',
+        reviewPeriod: '',
+        commencementDate: '',
+        expiryDate: '',
+        nextReviewDate: '',
+        reviewMethod: 'cpi',
+        permittedUse: '',
+        restrictions: '',
+        impact: '',
+        leaseOptions: {
+          optionToRenew: false,
+          optionToPurchase: false,
+          surrenderClause: false,
+          breakClause: false
+        }
+      },
+      tenantSummary: {
+        include: true,
+        lessor: '',
+        lessee: '',
+        commencementDate: '',
+        expiryDate: '',
+        optionsTerms: '',
+        reviewDate: '',
+        reviewMethod: 'cpi',
+        outgoings: '',
+        commencementRent: '',
+        incentives: '',
+        repairsMaintenance: ''
+      }
+    };
+  }
+
+  // Risk Assessment - PESTEL & SWOT Analysis pre-configured
+  reportSections.riskAssessmentMarketIndicators = {
+    includePestelAnalysis: true,
+    includeSwotAnalysis: true,
+    includeTowsAnalysis: true,
+    pestelFactors: {
+      political: 'Government policies, regulations, political stability, tax policies...',
+      economic: 'Interest rates, inflation, economic growth, unemployment...',
+      social: 'Demographics, lifestyle changes, population growth, cultural trends...',
+      technological: 'Automation, digitalization, innovation, technology adoption...',
+      environmental: 'Climate change, environmental regulations, sustainability requirements...',
+      legal: 'Building codes, zoning laws, safety regulations, compliance requirements...'
     },
-
-    // File Attachments - Only include if files exist
-    ...((dataValidation.hasPhotos || dataValidation.hasDocuments) && {
-      documentAttachments: {
-        propertyPhotos: fileAttachments.propertyPhotos || [],
-        documents: fileAttachments.documents || [],
-        planningDocuments: fileAttachments.planningDocuments || [],
-        marketEvidence: fileAttachments.marketEvidence || []
-      }
-    }),
-
-    // Rental Valuation - Only include if specifically requested
-    ...(dataValidation.includeRental && {
-      rentalValuation: {
-        enabled: true,
-        assessmentType: reportConfig.rentalAssessmentType || 'Current Market Rent',
-        rentalBasis: reportConfig.rentalBasis || 'Market Rent',
-        customRentalBasis: reportConfig.customRentalBasis || ''
-      }
-    }),
-
-    // Metadata
-    metadata: {
-      generatedFromAssessment: true,
-      assessmentCompletedAt: new Date().toISOString(),
-      assessmentSteps: assessmentData.completedSteps || [],
-      sourceAssessmentData: reportData,
-      generatedSections: [
-        'rpdAndLocation',
-        'legalAndPlanning', 
-        'tenancyScheduleLeaseDetails',
-        'riskAssessmentMarketIndicators',
-        'previousSalesHistoryAndCurrentSale',
-        'valuationCertificate',
-        'valuationAnalysis',
-        'propertyDetails'
-      ],
-      lastUpdated: new Date().toISOString()
+    swotAnalysis: {
+      strengths: ['Prime location', 'Strong infrastructure'],
+      weaknesses: ['Age of building', 'Maintenance requirements'],
+      opportunities: ['Market growth potential', 'Development opportunities'],
+      threats: ['Market volatility', 'Regulatory changes']
+    },
+    towsStrategies: {
+      soStrategies: 'How to use strengths to take advantage of opportunities...',
+      woStrategies: 'How to overcome weaknesses and avoid threats...',
+      stStrategies: 'How to use strengths to avoid threats...',
+      wtStrategies: 'How to minimize weaknesses and avoid threats...'
     }
   };
+
+  // Previous Sales History - Ready for completion
+  reportSections.previousSalesHistoryAndCurrentSale = {
+    includePreviousSales: true,
+    includeCurrentSale: false,
+    lastSaleDate: '',
+    lastSalePrice: '',
+    saleMethod: '',
+    saleHistoryNotes: 'Additional information about previous sales...',
+    supportingDocuments: [],
+    transactionAnalysis: {
+      dateOfTransaction: '',
+      dateOfValuation: '',
+      marketTrends: 'Analysis of market trends between sales...',
+      priceVariation: 'Analysis of price changes and factors...',
+      transactionReliability: '',
+      valuationImpact: '',
+      overallComments: 'Summary of sales history analysis and impact on valuation...'
+    }
+  };
+
+  // Valuation Certificate - Pre-populated from report config
+  reportSections.valuationCertificate = {
+    propertyAddress,
+    titleReference: `${addressData?.lotNumber || 'LOT'} ${addressData?.planNumber || 'PLAN'}`,
+    propertyType: reportConfig.propertyType || 'To be confirmed',
+    interestValued: reportConfig.interestValues || 'Fee Simple',
+    purposeOfValuation: reportConfig.valuationPurpose || 'Market Valuation',
+    valueComponent: reportConfig.valueComponent || 'Land and Buildings',
+    mortgageSecurity: reportConfig.mortgageSecurity || 'To be assessed',
+    dateOfValuation: new Date().toISOString().split('T')[0],
+    dateOfInspection: new Date().toISOString().split('T')[0],
+    certificateDetails: {
+      marketValue: 0,
+      highestAndBestUse: 'Current use',
+      caveats: 'Subject to detailed market analysis',
+      gstTreatment: 'GST inclusive',
+      currency: 'AUD'
+    },
+    professionalCertification: {
+      valuersName: '',
+      professionalQualification: '',
+      registrationNumber: '',
+      valuationFirm: ''
+    }
+  };
+
+  // Valuation Analysis - Only selected approaches
+  reportSections.valuationAnalysis = {
+    activeApproaches: reportConfig.valuationApproaches || ['Direct Comparison'],
+    selectedApproaches: reportConfig.valuationApproaches || ['Direct Comparison'],
+    enabledSections: reportConfig.valuationApproaches || ['Direct Comparison']
+  };
+
+  // Property Details - From assessment
+  reportSections.propertyDetails = {
+    propertyType: reportConfig.propertyType || 'Residential',
+    reportType: reportConfig.reportType || 'Desktop Report',
+    address: propertyAddress,
+    lotPlan: `${addressData?.lotNumber || ''} ${addressData?.planNumber || ''}`.trim(),
+    unit: addressData?.unitNumber,
+    suburb: addressData?.suburb,
+    state: addressData?.state,
+    postcode: addressData?.postcode
+  };
+
+  // File Attachments - Only include if files exist
+  if (dataValidation.hasPhotos || dataValidation.hasDocuments) {
+    reportSections.documentAttachments = {
+      propertyPhotos: fileAttachments.propertyPhotos || [],
+      documents: fileAttachments.documents || [],
+      planningDocuments: fileAttachments.planningDocuments || [],
+      marketEvidence: fileAttachments.marketEvidence || []
+    };
+  }
+
+  // Rental Valuation - Only include if specifically requested
+  if (dataValidation.includeRental) {
+    reportSections.rentalValuation = {
+      enabled: true,
+      assessmentType: reportConfig.rentalAssessmentType || 'Current Market Rent',
+      rentalBasis: reportConfig.rentalBasis || 'Market Rent',
+      customRentalBasis: reportConfig.customRentalBasis || ''
+    };
+  }
+
+  // Metadata
+  reportSections.metadata = {
+    generatedFromAssessment: true,
+    assessmentCompletedAt: new Date().toISOString(),
+    assessmentSteps: assessmentData.completedSteps || [],
+    sourceAssessmentData: reportData,
+    generatedSections: [
+      'rpdAndLocation',
+      'legalAndPlanning', 
+      'tenancyScheduleLeaseDetails',
+      'riskAssessmentMarketIndicators',
+      'previousSalesHistoryAndCurrentSale',
+      'valuationCertificate',
+      'valuationAnalysis',
+      'propertyDetails'
+    ],
+    lastUpdated: new Date().toISOString()
+  };
+
+  return reportSections;
 }
 
 async function createReportEntry(supabase: any, data: any) {
