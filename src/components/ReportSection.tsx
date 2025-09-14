@@ -29,7 +29,7 @@ import SustainoProAnalysis from "./SustainoProAnalysis";
 import ValuationCertificate from "./ValuationCertificate";
 import TermsAndConditions from "./TermsAndConditions";
 import CertificationAndSecurity from "./CertificationAndSecurity";
-import ConstructionCostIndex from "./ConstructionCostIndex";
+
 import MarketTransactionAnalysis from "./MarketTransactionAnalysis";
 
 interface ReportSectionProps {
@@ -340,23 +340,8 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Construction Cost Index & CPI section
-  if (sectionIndex === 20) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
-        </CardHeader>
-        <CardContent>
-          <ConstructionCostIndex />
-        </CardContent>
-      </Card>
-    );
-  }
-
   // Special handling for Annexures section  
-  if (sectionIndex === 21) {
+  if (sectionIndex === 20) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -373,7 +358,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Market Transaction Analysis section
-  if (sectionIndex === 22) {
+  if (sectionIndex === 21) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -388,7 +373,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Certification and Security section
-  if (sectionIndex === 23) {
+  if (sectionIndex === 22) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>

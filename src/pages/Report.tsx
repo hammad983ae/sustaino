@@ -31,7 +31,7 @@ const ReportViewer = () => {
     { title: "Sustaino Pro Additional Analysis and Features" },
     { title: "Valuation Certificate" },
     { title: "Qualifications, Disclaimers, Terms and Conditions" },
-    { title: "Construction Cost Index & CPI", subtitle: "Monthly Construction Costs and Consumer Price Index" },
+    
     { title: "Market Transaction Analysis", subtitle: "Detailed analysis during uncertain market conditions" },
     { title: "Annexures" },
     { title: "Certification and Security" }

@@ -19,6 +19,8 @@ import ThunderboltIcon from "@/components/ThunderboltIcon";
 import AIAssistantToggle from "@/components/AIAssistantToggle";
 import AuthStatus from "@/components/AuthStatus";
 import PropertyUpdateFeed from "@/components/PropertyUpdateFeed";
+import ConstructionCostIndex from "@/components/ConstructionCostIndex";
+import DevelopmentCalculator from "@/components/DevelopmentCalculator";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
@@ -152,13 +154,22 @@ export default function AutomatedValuation() {
               <div className="animate-fade-in" style={{ animationDelay: '1.1s' }}>
                 <PropertyUpdateFeed />
               </div>
+              
+              {/* Construction Cost Index and Development Calculator */}
+              <div className="animate-fade-in" style={{ animationDelay: '1.2s' }}>
+                <ConstructionCostIndex />
+              </div>
+              
+              <div className="animate-fade-in" style={{ animationDelay: '1.3s' }}>
+                <DevelopmentCalculator />
+              </div>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="animate-fade-in" style={{ animationDelay: '1.2s' }}>
+              <div className="animate-fade-in" style={{ animationDelay: '1.4s' }}>
                 <ComprehensiveIPProtection />
               </div>
-              <div className="animate-fade-in" style={{ animationDelay: '1.4s' }}>
+              <div className="animate-fade-in" style={{ animationDelay: '1.5s' }}>
                 <SecurityCertificatesGrid />
               </div>
             </div>
