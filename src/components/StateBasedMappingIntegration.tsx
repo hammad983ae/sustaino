@@ -215,13 +215,19 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
   };
 
   const handleStateSearch = async (portal: StatePortal) => {
-    if (!portal) return;
+    if (!portal) {
+      console.error('No portal provided for search');
+      return;
+    }
     
     const currentAddress = getFormattedAddress();
     if (!currentAddress) {
       console.warn('No address available for planning search');
+      alert('Please enter a property address before searching for planning data.');
       return;
     }
+    
+    console.log('Starting planning search for:', currentAddress, 'using portal:', portal.name);
     
     // Clear old data before starting new search
     setMappingData(null);
@@ -232,14 +238,24 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
     try {
       // Simulate API call to state planning portal
       console.log('Searching planning data for:', currentAddress, 'using portal:', portal.name);
+      
+      // Show immediate feedback
+      console.log('Planning search initiated...');
+      
+      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 2500));
       
       const mockMappingData = generateMockDataForState(portal.id);
+      console.log('Mock planning data generated:', mockMappingData);
+      
       setMappingData(mockMappingData);
       onPlanningDataUpdate?.(mockMappingData);
       
+      console.log('Planning data search completed successfully');
+      
     } catch (error) {
       console.error("Error fetching state mapping data:", error);
+      alert('Failed to fetch planning data. Please try again.');
     } finally {
       setIsSearching(false);
     }
@@ -311,26 +327,48 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
     }
   };
 
+  // Debug function to check current state
+  const debugState = () => {
+    console.log('=== StateBasedMapping Debug Info ===');
+    console.log('Selected State:', selectedState);
+    console.log('Selected Portal:', selectedPortal);
+    console.log('Formatted Address:', getFormattedAddress());
+    console.log('Address Data:', addressData);
+    console.log('Is Searching:', isSearching);
+    console.log('Mapping Data:', mappingData);
+    console.log('===================================');
+  };
+
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Map className="h-5 w-5 text-primary" />
-            <CardTitle className="text-xl font-semibold">State-Based Mapping Integration</CardTitle>
-          </div>
-          <Badge variant="secondary" className="text-xs">
-            Enhanced Planning Search
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* State Portal Selection */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Layers className="h-4 w-4 text-primary" />
-            <Label className="font-medium">Planning Portal Selection</Label>
-          </div>
+       <CardHeader>
+         <div className="flex items-center justify-between">
+           <div className="flex items-center gap-2">
+             <Map className="h-5 w-5 text-primary" />
+             <CardTitle className="text-xl font-semibold">State-Based Mapping Integration</CardTitle>
+           </div>
+           <div className="flex items-center gap-2">
+             <Badge variant="secondary" className="text-xs">
+               Enhanced Planning Search
+             </Badge>
+             <Button
+               variant="ghost"
+               size="sm"
+               onClick={debugState}
+               className="text-xs"
+             >
+               Debug
+             </Button>
+           </div>
+         </div>
+       </CardHeader>
+       <CardContent className="space-y-6">
+         {/* State Portal Selection */}
+         <div className="space-y-4">
+           <div className="flex items-center gap-2">
+             <Layers className="h-4 w-4 text-primary" />
+             <Label className="font-medium">Planning Portal Selection</Label>
+           </div>
           
           <Select value={selectedState} onValueChange={handleStateChange}>
             <SelectTrigger className="w-full">
@@ -375,8 +413,18 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
                   Open Portal
                 </Button>
                 <Button
-                  onClick={() => handleStateSearch(selectedPortal)}
-                  disabled={!getFormattedAddress() || isSearching}
+                  onClick={() => {
+                    console.log('Search button clicked');
+                    console.log('Selected Portal:', selectedPortal);
+                    console.log('Address:', getFormattedAddress());
+                    if (selectedPortal) {
+                      handleStateSearch(selectedPortal);
+                    } else {
+                      console.error('No portal selected for search');
+                      alert('Please select a state planning portal first.');
+                    }
+                  }}
+                  disabled={!getFormattedAddress() || isSearching || !selectedPortal}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   {isSearching ? (
