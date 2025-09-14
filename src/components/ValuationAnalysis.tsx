@@ -14,6 +14,7 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AutomatedValuationAnalysis from "./AutomatedValuationAnalysis";
 import ValuationAnalysisCommercial from "./ValuationAnalysisCommercial";
 import ValuationAnalysisResidential from "./ValuationAnalysisResidential";
 import ValuationAnalysisAgricultural from "./ValuationAnalysisAgricultural";
@@ -22,13 +23,18 @@ import ValuationAnalysisSpecialised from "./ValuationAnalysisSpecialised";
 export default function ValuationAnalysis() {
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="residential" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+      <Tabs defaultValue="automated" className="w-full">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="automated">Automated</TabsTrigger>
           <TabsTrigger value="commercial">Commercial</TabsTrigger>
           <TabsTrigger value="residential">Residential</TabsTrigger>
           <TabsTrigger value="agricultural">Agricultural</TabsTrigger>
           <TabsTrigger value="specialised">Specialised</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="automated" className="mt-6">
+          <AutomatedValuationAnalysis />
+        </TabsContent>
         
         <TabsContent value="commercial" className="mt-6">
           <ValuationAnalysisCommercial />
