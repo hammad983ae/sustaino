@@ -15,6 +15,7 @@ import AddressConfirmation from '@/components/planning/AddressConfirmation';
 import PlanningDataDisplay from '@/components/planning/PlanningDataDisplay';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
+import GenerateReportData from '@/components/GenerateReportData';
 
 interface PropertyAssessmentFormProps {
   onComplete?: (data: any) => void;
@@ -70,46 +71,27 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       title: "Review & Generate",
       subtitle: "Review your information and generate the assessment report",
       component: (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Assessment Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-medium">Property Address</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {reportData.propertySearchData?.confirmedAddress || 'Not confirmed'}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Report Type</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {reportData.reportConfig?.reportType || 'Not selected'}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Property Type</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {reportData.reportConfig?.propertyType || 'Not selected'}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Photos Uploaded</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {reportData.fileAttachments?.propertyPhotos?.length || 0} files
-                  </p>
-                </div>
-              </div>
-              {onNavigateToReport && (
-                <Button onClick={onNavigateToReport} className="w-full" size="lg">
-                  Generate Full Assessment Report
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+        <GenerateReportData
+          onReportGenerated={(data) => {
+            toast({
+              title: "Report Generated",
+              description: `Report ID: ${data.reportId} | Job ID: ${data.jobId}`,
+            });
+          }}
+          onNavigateToReport={(reportId) => {
+            if (onNavigateToReport) {
+              onNavigateToReport();
+            }
+          }}
+          onNavigateToWorkHub={(jobId) => {
+            // Navigate to work hub with specific job
+            console.log('Navigate to Work Hub job:', jobId);
+          }}
+          clientInfo={{
+            instructingParty: reportData.reportConfig?.instructingParty,
+            reliantParty: reportData.reportConfig?.reliantParty
+          }}
+        />
       ),
       validation: () => true
     }
