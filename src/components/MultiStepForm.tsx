@@ -102,18 +102,8 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
 
   return (
     <div className="space-y-6">
-      {/* Top Navigation */}
-      <div className="flex items-center justify-between p-4 bg-purple-50/50 rounded-lg border border-purple-200/50">
-        <Button
-          variant="outline"
-          onClick={prevGroup}
-          disabled={currentGroup === 0}
-          className="flex items-center gap-2 text-purple-700 border-purple-300 hover:bg-purple-100"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          <span className="hidden sm:inline">Back</span>
-        </Button>
-
+      {/* Top Progress Info */}
+      <div className="flex items-center justify-center p-4 bg-purple-50/50 rounded-lg border border-purple-200/50">
         <div className="flex items-center gap-4">
           <div className="text-center">
             <div className="text-sm font-medium text-purple-800">
@@ -127,16 +117,6 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
             <Progress value={progress} className="h-2" />
           </div>
         </div>
-
-        <Button
-          onClick={nextGroup}
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
-        >
-          <span className="hidden sm:inline">
-            {currentGroup === stepGroups.length - 1 ? "Complete Assessment" : "Next"}
-          </span>
-          <ChevronRight className="h-4 w-4" />
-        </Button>
       </div>
 
       {/* Current Group Content */}
@@ -185,6 +165,29 @@ const MultiStepForm = ({ onSubmit }: MultiStepFormProps = {}) => {
             }`}
           />
         ))}
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="flex items-center justify-between p-4 bg-purple-50/50 rounded-lg border border-purple-200/50 mt-6">
+        <Button
+          variant="outline"
+          onClick={prevGroup}
+          disabled={currentGroup === 0}
+          className="flex items-center gap-2 text-purple-700 border-purple-300 hover:bg-purple-100"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          <span className="hidden sm:inline">Back</span>
+        </Button>
+
+        <Button
+          onClick={nextGroup}
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+        >
+          <span className="hidden sm:inline">
+            {currentGroup === stepGroups.length - 1 ? "Complete Assessment" : "Next"}
+          </span>
+          <ChevronRight className="h-4 w-4" />
+        </Button>
       </div>
 
       {/* Mobile-optimized spacing */}
