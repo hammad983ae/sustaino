@@ -27,6 +27,7 @@ import { PropertyProvider } from '@/contexts/PropertyContext';
 import { ValuationProvider } from '@/contexts/ValuationContext';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
 import InformationBrochure from '@/components/InformationBrochure';
+import { UserGuide } from '@/components/UserGuide';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
 import { useNavigate } from 'react-router-dom';
 
@@ -105,7 +106,7 @@ const Index = () => {
               {/* Clean Tabs */}
               <div className="max-w-7xl mx-auto">
                 <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
+                  <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                     <TabsTrigger value="assessment" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                       <Building className="h-4 w-4" />
                       Property Assessment
@@ -117,6 +118,10 @@ const Index = () => {
                     <TabsTrigger value="info" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                       <Info className="h-4 w-4" />
                       Product Information
+                    </TabsTrigger>
+                    <TabsTrigger value="user-guide" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                      <Building className="h-4 w-4" />
+                      User Guide
                     </TabsTrigger>
                   </TabsList>
 
@@ -297,6 +302,23 @@ const Index = () => {
                       </CardHeader>
                       <CardContent className="p-8">
                         <InformationBrochure />
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="user-guide" className="mt-8">
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <Building className="h-6 w-6 text-purple-700" />
+                          User Guide & Instructions
+                        </CardTitle>
+                        <p className="text-purple-700">
+                          Complete guide on how to use the property assessment platform
+                        </p>
+                      </CardHeader>
+                      <CardContent className="p-8">
+                        <UserGuide />
                       </CardContent>
                     </Card>
                   </TabsContent>
