@@ -29,7 +29,7 @@ export default function BrandedHeader({
   }
 
   const displayTitle = title || `${branding?.company_name || 'Property Valuation'} Platform`;
-  const displaySubtitle = subtitle || 'Professional property analysis and valuation services';
+  const displaySubtitle = subtitle || '';
 
   return (
     <div className={`flex items-center gap-4 ${className}`}>
