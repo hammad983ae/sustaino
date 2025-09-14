@@ -23,7 +23,7 @@ import {
   Info,
   FileCheck
 } from 'lucide-react';
-import MultiStepForm from '@/components/MultiStepForm';
+import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 import { ValuationProvider } from '@/contexts/ValuationContext';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
@@ -151,7 +151,7 @@ const Index = () => {
                           </p>
                         </CardHeader>
                         <CardContent className="p-8">
-                          <MultiStepForm onSubmit={handleFormSubmit} />
+                          <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/work-hub')} />
                         </CardContent>
                       </Card>
                     </div>
