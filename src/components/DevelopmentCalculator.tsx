@@ -35,6 +35,10 @@ interface AgriculturalInputs {
   drainage: string;
   storage: string;
   powerInfrastructure: string;
+  shedding: string;
+  workersAccommodation: string;
+  other: string;
+  otherCost: string;
 }
 
 const DevelopmentCalculator: React.FC = () => {
@@ -60,7 +64,11 @@ const DevelopmentCalculator: React.FC = () => {
     roadsDriveways: '',
     drainage: '',
     storage: '',
-    powerInfrastructure: ''
+    powerInfrastructure: '',
+    shedding: '',
+    workersAccommodation: '',
+    other: '',
+    otherCost: ''
   });
 
   const baseCosts = {
@@ -142,6 +150,17 @@ const DevelopmentCalculator: React.FC = () => {
       basic: 3200, // per hectare
       threephase: 5800,
       solar: 8500
+    },
+    shedding: {
+      basic: 4500, // per hectare
+      machinery: 7200,
+      processing: 12000,
+      premium: 18500
+    },
+    workersAccommodation: {
+      basic: 8500, // per hectare
+      standard: 15000,
+      premium: 25000
     }
   };
 
@@ -261,6 +280,28 @@ const DevelopmentCalculator: React.FC = () => {
       additionalCosts += agriculturalComponentCosts.powerInfrastructure[
         agriculturalInputs.powerInfrastructure as keyof typeof agriculturalComponentCosts.powerInfrastructure
       ] * baseArea;
+    }
+    
+    // Shedding costs
+    if (agriculturalInputs.shedding) {
+      additionalCosts += agriculturalComponentCosts.shedding[
+        agriculturalInputs.shedding as keyof typeof agriculturalComponentCosts.shedding
+      ] * baseArea;
+    }
+    
+    // Workers accommodation costs
+    if (agriculturalInputs.workersAccommodation) {
+      additionalCosts += agriculturalComponentCosts.workersAccommodation[
+        agriculturalInputs.workersAccommodation as keyof typeof agriculturalComponentCosts.workersAccommodation
+      ] * baseArea;
+    }
+    
+    // Other costs (custom input)
+    if (agriculturalInputs.otherCost) {
+      const otherCostValue = parseFloat(agriculturalInputs.otherCost);
+      if (!isNaN(otherCostValue)) {
+        additionalCosts += otherCostValue * baseArea;
+      }
     }
     
     return additionalCosts;
@@ -722,6 +763,58 @@ const DevelopmentCalculator: React.FC = () => {
                         onChange={(e) => setAgriculturalInputs(prev => ({...prev, numberOfTrees: e.target.value}))}
                       />
                       <p className="text-xs text-muted-foreground">Cost: $45 per tree/vine</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Shedding</Label>
+                      <Select 
+                        value={agriculturalInputs.shedding} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, shedding: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic Storage ($4.5k/ha)</SelectItem>
+                          <SelectItem value="machinery">Machinery Shed ($7.2k/ha)</SelectItem>
+                          <SelectItem value="processing">Processing Facility ($12k/ha)</SelectItem>
+                          <SelectItem value="premium">Premium Complex ($18.5k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Workers Accommodation</Label>
+                      <Select 
+                        value={agriculturalInputs.workersAccommodation} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, workersAccommodation: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic Quarters ($8.5k/ha)</SelectItem>
+                          <SelectItem value="standard">Standard Units ($15k/ha)</SelectItem>
+                          <SelectItem value="premium">Premium Complex ($25k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Other Components</Label>
+                      <Input
+                        type="text"
+                        placeholder="Describe other components"
+                        value={agriculturalInputs.other}
+                        onChange={(e) => setAgriculturalInputs(prev => ({...prev, other: e.target.value}))}
+                      />
+                      <Input
+                        type="number"
+                        placeholder="Cost per hectare (AUD)"
+                        value={agriculturalInputs.otherCost}
+                        onChange={(e) => setAgriculturalInputs(prev => ({...prev, otherCost: e.target.value}))}
+                      />
+                      <p className="text-xs text-muted-foreground">Custom cost per hectare</p>
                     </div>
                   </div>
                 </CardContent>
