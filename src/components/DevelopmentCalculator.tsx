@@ -6,29 +6,72 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calculator, Building, Home, Factory, Sprout, Leaf, DollarSign, TrendingUp } from 'lucide-react';
+import { Calculator, Building, Home, Factory, Sprout, Leaf, DollarSign, TrendingUp, Droplets, TreePine } from 'lucide-react';
 
 interface CalculationResult {
   traditionalCost: number;
   esgCost: number;
   esgPremium: number;
+  residualLandValue: number;
   totalArea: number;
-  costPerSqm: number;
+  costPerUnit: number;
   developmentType: string;
+  grossDevelopmentValue: number;
+  profitMargin: number;
+}
+
+interface AgriculturalInputs {
+  waterInfrastructure: string;
+  numberOfTrees: string;
+  soilQuality: string;
+  irrigationType: string;
 }
 
 const DevelopmentCalculator: React.FC = () => {
   const [developmentType, setDevelopmentType] = useState<string>('');
   const [area, setArea] = useState<string>('');
+  const [areaUnit, setAreaUnit] = useState<string>('sqm');
   const [state, setState] = useState<string>('');
   const [regionType, setRegionType] = useState<string>('');
+  const [expectedSaleValue, setExpectedSaleValue] = useState<string>('');
+  const [profitMargin, setProfitMargin] = useState<string>('20');
   const [result, setResult] = useState<CalculationResult | null>(null);
+  const [agriculturalInputs, setAgriculturalInputs] = useState<AgriculturalInputs>({
+    waterInfrastructure: '',
+    numberOfTrees: '',
+    soilQuality: '',
+    irrigationType: ''
+  });
 
   const baseCosts = {
     residential: { metro: 3200, regional: 2700 },
     commercial: { metro: 4000, regional: 3300 },
     specialized: { metro: 4500, regional: 3800 },
-    agricultural: { metro: 0, regional: 2000 }
+    agricultural: { metro: 85000, regional: 65000 } // Per hectare base cost
+  };
+
+  const agriculturalComponentCosts = {
+    waterInfrastructure: {
+      basic: 15000, // per hectare
+      advanced: 35000,
+      premium: 55000
+    },
+    irrigationType: {
+      drip: 12000, // per hectare
+      sprinkler: 8000,
+      flood: 3000,
+      smart: 18000
+    },
+    soilPreparation: {
+      poor: 8000, // per hectare
+      average: 5000,
+      good: 2000,
+      excellent: 1000
+    },
+    treesAndVines: {
+      perTree: 45, // per tree/vine
+      perHectare: 2200 // average density cost
+    }
   };
 
   const statePremiums = {
@@ -46,31 +89,89 @@ const DevelopmentCalculator: React.FC = () => {
     residential: 0.20,
     commercial: 0.25,
     specialized: 0.30,
-    agricultural: 0.20
+    agricultural: 0.15
+  };
+
+  const calculateAgriculturalCosts = (baseArea: number) => {
+    let additionalCosts = 0;
+    
+    // Water infrastructure costs
+    if (agriculturalInputs.waterInfrastructure) {
+      additionalCosts += agriculturalComponentCosts.waterInfrastructure[
+        agriculturalInputs.waterInfrastructure as keyof typeof agriculturalComponentCosts.waterInfrastructure
+      ] * baseArea;
+    }
+    
+    // Irrigation system costs
+    if (agriculturalInputs.irrigationType) {
+      additionalCosts += agriculturalComponentCosts.irrigationType[
+        agriculturalInputs.irrigationType as keyof typeof agriculturalComponentCosts.irrigationType
+      ] * baseArea;
+    }
+    
+    // Soil preparation costs
+    if (agriculturalInputs.soilQuality) {
+      additionalCosts += agriculturalComponentCosts.soilPreparation[
+        agriculturalInputs.soilQuality as keyof typeof agriculturalComponentCosts.soilPreparation
+      ] * baseArea;
+    }
+    
+    // Tree/vine costs
+    if (agriculturalInputs.numberOfTrees) {
+      const treeCount = parseInt(agriculturalInputs.numberOfTrees);
+      additionalCosts += treeCount * agriculturalComponentCosts.treesAndVines.perTree;
+    }
+    
+    return additionalCosts;
   };
 
   const calculateCosts = () => {
-    if (!developmentType || !area || !state || !regionType) return;
+    if (!developmentType || !area || !state || !regionType || !expectedSaleValue) return;
 
     const totalArea = parseFloat(area);
-    const baseCost = baseCosts[developmentType as keyof typeof baseCosts][regionType as keyof typeof baseCosts.residential];
+    const saleValue = parseFloat(expectedSaleValue);
+    const targetProfit = parseFloat(profitMargin) / 100;
+    
+    // Convert area to appropriate units for agricultural
+    const effectiveArea = developmentType === 'agricultural' && areaUnit === 'hectares' 
+      ? totalArea 
+      : developmentType === 'agricultural' && areaUnit === 'acres'
+        ? totalArea * 0.4047 // Convert acres to hectares
+        : totalArea;
+
+    let baseCost = baseCosts[developmentType as keyof typeof baseCosts][regionType as keyof typeof baseCosts.residential];
     const statePremium = statePremiums[state as keyof typeof statePremiums] || 1;
     const esgPremiumRate = esgPremiumRates[developmentType as keyof typeof esgPremiumRates];
 
-    const traditionalCostPerSqm = baseCost * statePremium;
-    const esgCostPerSqm = traditionalCostPerSqm * (1 + esgPremiumRate);
+    // Calculate agricultural component costs if applicable
+    let additionalCosts = 0;
+    if (developmentType === 'agricultural') {
+      additionalCosts = calculateAgriculturalCosts(effectiveArea);
+    }
+
+    const traditionalCostPerUnit = baseCost * statePremium;
+    const esgCostPerUnit = traditionalCostPerUnit * (1 + esgPremiumRate);
     
-    const traditionalTotal = traditionalCostPerSqm * totalArea;
-    const esgTotal = esgCostPerSqm * totalArea;
+    const traditionalTotal = (traditionalCostPerUnit * effectiveArea) + additionalCosts;
+    const esgTotal = (esgCostPerUnit * effectiveArea) + additionalCosts;
     const premiumAmount = esgTotal - traditionalTotal;
+
+    // Calculate Gross Development Value and Residual Land Value
+    const grossDevelopmentValue = saleValue;
+    const developmentCosts = esgTotal; // Using ESG costs for calculation
+    const profitAmount = grossDevelopmentValue * targetProfit;
+    const residualLandValue = grossDevelopmentValue - developmentCosts - profitAmount;
 
     setResult({
       traditionalCost: traditionalTotal,
       esgCost: esgTotal,
       esgPremium: premiumAmount,
-      totalArea,
-      costPerSqm: traditionalCostPerSqm,
-      developmentType
+      residualLandValue,
+      totalArea: effectiveArea,
+      costPerUnit: developmentType === 'agricultural' ? traditionalCostPerUnit : traditionalCostPerUnit,
+      developmentType,
+      grossDevelopmentValue,
+      profitMargin: targetProfit
     });
   };
 
@@ -102,10 +203,10 @@ const DevelopmentCalculator: React.FC = () => {
       <CardHeader className="border-b border-blue-100 bg-gradient-to-r from-blue-50/50 to-green-50/30">
         <CardTitle className="text-2xl flex items-center gap-3 text-blue-800">
           <Calculator className="h-6 w-6 text-blue-700" />
-          Quick Development Calculator
+          Hypothetical Development Calculator
         </CardTitle>
         <p className="text-blue-700">
-          Compare traditional vs ESD/ESG construction costs for your development project
+          Calculate residual land value and compare traditional vs ESD/ESG development costs
         </p>
       </CardHeader>
       <CardContent className="p-6">
@@ -116,14 +217,14 @@ const DevelopmentCalculator: React.FC = () => {
           </TabsList>
 
           <TabsContent value="calculator" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="development-type">Development Type</Label>
                 <Select value={developmentType} onValueChange={setDevelopmentType}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white z-50">
                     <SelectItem value="residential">
                       <div className="flex items-center gap-2">
                         <Home className="h-4 w-4" />
@@ -153,13 +254,52 @@ const DevelopmentCalculator: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="area">Total Area (m²)</Label>
+                <Label htmlFor="area">
+                  Total Area 
+                  {developmentType === 'agricultural' ? (areaUnit === 'hectares' ? ' (ha)' : ' (ac)') : ' (m²)'}
+                </Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="area"
+                    type="number"
+                    placeholder={developmentType === 'agricultural' ? "e.g., 50" : "e.g., 150"}
+                    value={area}
+                    onChange={(e) => setArea(e.target.value)}
+                    className="flex-1"
+                  />
+                  {developmentType === 'agricultural' && (
+                    <Select value={areaUnit} onValueChange={setAreaUnit}>
+                      <SelectTrigger className="w-20">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white z-50">
+                        <SelectItem value="hectares">ha</SelectItem>
+                        <SelectItem value="acres">ac</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="expected-sale-value">Expected Sale Value</Label>
                 <Input
-                  id="area"
+                  id="expected-sale-value"
                   type="number"
-                  placeholder="e.g., 150"
-                  value={area}
-                  onChange={(e) => setArea(e.target.value)}
+                  placeholder="e.g., 2500000"
+                  value={expectedSaleValue}
+                  onChange={(e) => setExpectedSaleValue(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="profit-margin">Profit Margin (%)</Label>
+                <Input
+                  id="profit-margin"
+                  type="number"
+                  placeholder="e.g., 20"
+                  value={profitMargin}
+                  onChange={(e) => setProfitMargin(e.target.value)}
                 />
               </div>
 
@@ -169,7 +309,7 @@ const DevelopmentCalculator: React.FC = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select state" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white z-50">
                     <SelectItem value="NSW">NSW</SelectItem>
                     <SelectItem value="VIC">VIC</SelectItem>
                     <SelectItem value="QLD">QLD</SelectItem>
@@ -188,7 +328,7 @@ const DevelopmentCalculator: React.FC = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select region" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white z-50">
                     <SelectItem value="metro">Metropolitan</SelectItem>
                     <SelectItem value="regional">Regional</SelectItem>
                   </SelectContent>
@@ -196,23 +336,129 @@ const DevelopmentCalculator: React.FC = () => {
               </div>
             </div>
 
+            {developmentType === 'agricultural' && (
+              <Card className="bg-green-50/50 border-green-200">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Sprout className="h-5 w-5 text-green-600" />
+                    Agricultural Development Components
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="water-infrastructure">Water Infrastructure</Label>
+                      <Select 
+                        value={agriculturalInputs.waterInfrastructure} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, waterInfrastructure: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic ($15k/ha)</SelectItem>
+                          <SelectItem value="advanced">Advanced ($35k/ha)</SelectItem>
+                          <SelectItem value="premium">Premium ($55k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="irrigation-type">Irrigation System</Label>
+                      <Select 
+                        value={agriculturalInputs.irrigationType} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, irrigationType: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="flood">Flood ($3k/ha)</SelectItem>
+                          <SelectItem value="sprinkler">Sprinkler ($8k/ha)</SelectItem>
+                          <SelectItem value="drip">Drip ($12k/ha)</SelectItem>
+                          <SelectItem value="smart">Smart ($18k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="soil-quality">Soil Quality</Label>
+                      <Select 
+                        value={agriculturalInputs.soilQuality} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, soilQuality: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select quality" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="poor">Poor ($8k/ha prep)</SelectItem>
+                          <SelectItem value="average">Average ($5k/ha prep)</SelectItem>
+                          <SelectItem value="good">Good ($2k/ha prep)</SelectItem>
+                          <SelectItem value="excellent">Excellent ($1k/ha prep)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="trees-vines">Trees/Vines Count</Label>
+                      <Input
+                        id="trees-vines"
+                        type="number"
+                        placeholder="e.g., 2000"
+                        value={agriculturalInputs.numberOfTrees}
+                        onChange={(e) => setAgriculturalInputs(prev => ({...prev, numberOfTrees: e.target.value}))}
+                      />
+                      <p className="text-xs text-muted-foreground">Cost: $45 per tree/vine</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <Button 
               onClick={calculateCosts} 
               className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={!developmentType || !area || !state || !regionType}
+              disabled={!developmentType || !area || !state || !regionType || !expectedSaleValue}
             >
               <Calculator className="h-4 w-4 mr-2" />
-              Calculate Development Costs
+              Calculate Residual Land Value
             </Button>
 
             {result && (
               <div className="space-y-4">
+                {/* Residual Land Value - Primary Result */}
+                <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200 shadow-lg">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-xl flex items-center gap-2">
+                      <DollarSign className="h-6 w-6 text-purple-600" />
+                      Residual Land Value
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <p className="text-3xl font-bold text-purple-700">
+                        {formatCurrency(result.residualLandValue)}
+                      </p>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-muted-foreground">Gross Development Value</p>
+                          <p className="font-semibold">{formatCurrency(result.grossDevelopmentValue)}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">Development Costs</p>
+                          <p className="font-semibold">{formatCurrency(result.esgCost)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card className="bg-blue-50 border-blue-200">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg flex items-center gap-2">
                         <Building className="h-5 w-5 text-blue-600" />
-                        Traditional Construction
+                        Traditional Development
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -221,7 +467,7 @@ const DevelopmentCalculator: React.FC = () => {
                           {formatCurrency(result.traditionalCost)}
                         </p>
                         <p className="text-sm text-blue-600">
-                          {formatCurrency(result.costPerSqm)}/m²
+                          {formatCurrency(result.costPerUnit)}/{result.developmentType === 'agricultural' ? (areaUnit === 'hectares' ? 'ha' : 'ac') : 'm²'}
                         </p>
                       </div>
                     </CardContent>
@@ -231,7 +477,7 @@ const DevelopmentCalculator: React.FC = () => {
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg flex items-center gap-2">
                         <Leaf className="h-5 w-5 text-green-600" />
-                        ESD/ESG Construction
+                        ESD/ESG Development
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -240,7 +486,7 @@ const DevelopmentCalculator: React.FC = () => {
                           {formatCurrency(result.esgCost)}
                         </p>
                         <p className="text-sm text-green-600">
-                          {formatCurrency(result.esgCost / result.totalArea)}/m²
+                          {formatCurrency(result.esgCost / result.totalArea)}/{result.developmentType === 'agricultural' ? (areaUnit === 'hectares' ? 'ha' : 'ac') : 'm²'}
                         </p>
                       </div>
                     </CardContent>
@@ -265,6 +511,42 @@ const DevelopmentCalculator: React.FC = () => {
                     </CardContent>
                   </Card>
                 </div>
+
+                {/* Agricultural Component Breakdown */}
+                {result.developmentType === 'agricultural' && (
+                  <Card className="bg-green-50/50 border-green-200">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <TreePine className="h-5 w-5 text-green-600" />
+                        Agricultural Development Breakdown
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <h4 className="font-medium mb-2 flex items-center gap-2">
+                            <Droplets className="h-4 w-4 text-blue-500" />
+                            Infrastructure Components
+                          </h4>
+                          <ul className="space-y-1 text-muted-foreground">
+                            {agriculturalInputs.waterInfrastructure && <li>• Water Infrastructure: {agriculturalInputs.waterInfrastructure}</li>}
+                            {agriculturalInputs.irrigationType && <li>• Irrigation: {agriculturalInputs.irrigationType}</li>}
+                            {agriculturalInputs.soilQuality && <li>• Soil Preparation: {agriculturalInputs.soilQuality}</li>}
+                            {agriculturalInputs.numberOfTrees && <li>• Trees/Vines: {agriculturalInputs.numberOfTrees} units</li>}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-medium mb-2">Cost Efficiency per {areaUnit === 'hectares' ? 'Hectare' : 'Acre'}</h4>
+                          <ul className="space-y-1 text-muted-foreground">
+                            <li>• Base Development: {formatCurrency(result.costPerUnit)}</li>
+                            <li>• Total Area: {result.totalArea} {areaUnit === 'hectares' ? 'ha' : 'ac'}</li>
+                            <li>• Profit Margin: {(result.profitMargin * 100).toFixed(1)}%</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
                 <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
                   <CardHeader>
