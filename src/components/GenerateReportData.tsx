@@ -69,12 +69,6 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
         value: assessmentData.reportData?.reportConfig?.valuationApproaches?.length > 0 ? 
           `${assessmentData.reportData.reportConfig.valuationApproaches.length} approaches selected` : 
           'Basic configuration available'
-      },
-      {
-        label: 'Currency of Valuation',
-        status: 'complete',
-        description: 'Currency pre-populated from platform',
-        value: 'AUD (Australian Dollars)'
       }
     ];
 

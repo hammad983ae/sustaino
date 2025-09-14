@@ -212,9 +212,7 @@ function generateReportSections(assessmentData: any) {
       customBasisDescription: reportConfig.customBasisDescription,
       instructingParty: reportConfig.instructingParty,
       reliantParty: reportConfig.reliantParty,
-      valuationPurpose: reportConfig.valuationPurpose,
-      currencyOfValuation: 'AUD', // Pre-populated from platform
-      reportCurrency: 'AUD' // Currency of Report
+      valuationPurpose: reportConfig.valuationPurpose
     },
 
     // Valuation Analysis - Only selected approaches
