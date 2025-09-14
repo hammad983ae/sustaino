@@ -20,7 +20,8 @@ import {
   Wrench,
   Scale,
   Shield,
-  Info
+  Info,
+  FileCheck
 } from 'lucide-react';
 import MultiStepForm from '@/components/MultiStepForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
@@ -28,6 +29,7 @@ import { ValuationProvider } from '@/contexts/ValuationContext';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
 import InformationBrochure from '@/components/InformationBrochure';
 import { UserGuide } from '@/components/UserGuide';
+import ProfessionalDeclarations from '@/components/ProfessionalDeclarations';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
 import { useNavigate } from 'react-router-dom';
 
@@ -106,24 +108,35 @@ const Index = () => {
               {/* Clean Tabs */}
               <div className="max-w-7xl mx-auto">
                 <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
-                  <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
-                    <TabsTrigger value="assessment" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
-                      <Building className="h-4 w-4" />
-                      Property Assessment
-                    </TabsTrigger>
-                    <TabsTrigger value="tools" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
-                      <Settings className="h-4 w-4" />
-                      Additional Tools
-                    </TabsTrigger>
-                    <TabsTrigger value="info" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
-                      <Info className="h-4 w-4" />
-                      Product Information
-                    </TabsTrigger>
-                    <TabsTrigger value="user-guide" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
-                      <Building className="h-4 w-4" />
-                      User Guide
-                    </TabsTrigger>
-                  </TabsList>
+                  <div className="space-y-4">
+                    {/* First row of tabs */}
+                    <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
+                      <TabsTrigger value="assessment" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <Building className="h-4 w-4" />
+                        Property Assessment
+                      </TabsTrigger>
+                      <TabsTrigger value="tools" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <Settings className="h-4 w-4" />
+                        Additional Tools
+                      </TabsTrigger>
+                      <TabsTrigger value="info" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <Info className="h-4 w-4" />
+                        Product Information
+                      </TabsTrigger>
+                      <TabsTrigger value="user-guide" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <Building className="h-4 w-4" />
+                        User Guide
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    {/* Second row of tabs */}
+                    <TabsList className="grid w-full grid-cols-1 max-w-xs mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
+                      <TabsTrigger value="professional-declarations" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <FileCheck className="h-4 w-4" />
+                        Professional Declarations
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
 
                   <TabsContent value="assessment" className="mt-8">
                     <div className="max-w-7xl mx-auto">
@@ -319,6 +332,23 @@ const Index = () => {
                       </CardHeader>
                       <CardContent className="p-8">
                         <UserGuide />
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="professional-declarations" className="mt-8">
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <FileCheck className="h-6 w-6 text-purple-700" />
+                          Professional Declarations
+                        </CardTitle>
+                        <p className="text-purple-700">
+                          Professional compliance and declaration requirements for valuers
+                        </p>
+                      </CardHeader>
+                      <CardContent className="p-8">
+                        <ProfessionalDeclarations onComplete={(data) => console.log('Professional declarations completed:', data)} />
                       </CardContent>
                     </Card>
                   </TabsContent>
