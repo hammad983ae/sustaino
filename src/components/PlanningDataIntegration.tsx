@@ -24,18 +24,23 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
   const [planningData, setPlanningData] = useState(null);
   const [searchStep, setSearchStep] = useState(1);
 
-  // Auto-populate address from context
+  // Auto-populate address from context and clear data when address changes
   useEffect(() => {
     const fullAddress = propertyAddress || getFormattedAddress();
+    
+    // If address has changed, clear old data and update search address
     if (fullAddress && fullAddress !== searchAddress) {
+      console.log('Address changed to:', fullAddress, 'clearing old planning data');
       setSearchAddress(fullAddress);
+      setPlanningData(null); // Clear old planning data
+      setSearchStep(1); // Reset search step
     }
     
     // Auto-select state if available
     if (addressData.state && addressData.state !== selectedState) {
       setSelectedState(addressData.state.toLowerCase());
     }
-  }, [addressData, propertyAddress, getFormattedAddress]);
+  }, [addressData, propertyAddress, getFormattedAddress, searchAddress, selectedState]);
 
   const handleStateChange = (state: string) => {
     setSelectedState(state);
@@ -86,10 +91,16 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
       <AddressConfirmation 
         onAddressConfirmed={(address) => {
           console.log('Address confirmed for planning search:', address);
-          // This could trigger the planning data search
+          // Clear old planning data when address is confirmed
+          setPlanningData(null);
+          setSearchStep(1);
+          // Trigger fresh planning data search
         }}
         onAddressChange={(address) => {
           console.log('Address updated:', address);
+          // Clear old planning data when address changes
+          setPlanningData(null);
+          setSearchStep(1);
         }}
       />
       
@@ -107,8 +118,11 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
         className="mb-6"
       />
       
-      {/* State-Based Mapping Integration */}
-      <StateBasedMappingIntegration onPlanningDataUpdate={onDataFetched} />
+      {/* State-Based Mapping Integration - Pass address to ensure updates */}
+      <StateBasedMappingIntegration 
+        key={searchAddress} // Force re-render when address changes
+        onPlanningDataUpdate={onDataFetched} 
+      />
     </div>
   );
 };

@@ -99,24 +99,38 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
     }
   }, [mappingData, getFormattedAddress, selectedState]);
 
-  // Load saved data on component mount
+  // Load saved data on component mount and clear if address changed
   useEffect(() => {
+    const currentAddress = getFormattedAddress();
     const savedData = localStorage.getItem('vicplan-mapping-data');
-    if (savedData) {
+    
+    if (savedData && currentAddress) {
       try {
         const parsed = JSON.parse(savedData);
-        if (parsed.propertyAddress === getFormattedAddress()) {
+        // Only load if the address matches exactly
+        if (parsed.propertyAddress === currentAddress) {
           setMappingData(parsed);
+        } else {
+          // Clear old data if address has changed
+          console.log('Address changed, clearing old planning data');
+          setMappingData(null);
+          localStorage.removeItem('vicplan-mapping-data');
         }
       } catch (error) {
         console.error('Error loading saved mapping data:', error);
+        localStorage.removeItem('vicplan-mapping-data');
       }
+    } else if (!currentAddress) {
+      // Clear data if no address
+      setMappingData(null);
     }
   }, [getFormattedAddress]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-populate state from context
+  // Auto-populate state from context and clear data when address changes
   useEffect(() => {
+    const currentAddress = getFormattedAddress();
+    
     if (addressData.state && addressData.state !== selectedState) {
       const stateCode = addressData.state.toLowerCase();
       setSelectedState(stateCode);
@@ -125,12 +139,23 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
         setSelectedPortal(portal);
       }
     }
-  }, [addressData.state]);
+    
+    // Clear mapping data when address changes to ensure fresh search
+    if (currentAddress && mappingData && mappingData.address !== currentAddress) {
+      console.log('Address changed from', mappingData.address, 'to', currentAddress, '- clearing mapping data');
+      setMappingData(null);
+      localStorage.removeItem('vicplan-mapping-data');
+    }
+  }, [addressData.state, addressData, getFormattedAddress, mappingData]);
 
   const handleStateChange = (stateId: string) => {
     setSelectedState(stateId);
     const portal = statePortals.find(p => p.id === stateId);
     setSelectedPortal(portal || null);
+    
+    // Clear old mapping data when state changes
+    setMappingData(null);
+    localStorage.removeItem('vicplan-mapping-data');
     
     if (portal?.status === "integrated" && getFormattedAddress()) {
       handleStateSearch(portal);
@@ -140,10 +165,21 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
   const handleStateSearch = async (portal: StatePortal) => {
     if (!portal) return;
     
+    const currentAddress = getFormattedAddress();
+    if (!currentAddress) {
+      console.warn('No address available for planning search');
+      return;
+    }
+    
+    // Clear old data before starting new search
+    setMappingData(null);
+    localStorage.removeItem('vicplan-mapping-data');
+    
     setIsSearching(true);
     
     try {
       // Simulate API call to state planning portal
+      console.log('Searching planning data for:', currentAddress, 'using portal:', portal.name);
       await new Promise(resolve => setTimeout(resolve, 2500));
       
       const mockMappingData = generateMockDataForState(portal.id);
