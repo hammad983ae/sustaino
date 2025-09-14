@@ -108,7 +108,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       await saveData(progressData);
     };
 
-    const debounceTimer = setTimeout(saveProgress, 1000);
+    const debounceTimer = setTimeout(saveProgress, 10000); // Changed to 10 seconds to reduce flashing
     return () => clearTimeout(debounceTimer);
   }, [currentStep, completedSteps, reportData, addressData, saveData]);
 
