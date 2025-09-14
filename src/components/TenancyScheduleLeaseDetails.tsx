@@ -35,10 +35,18 @@ const TenancyScheduleLeaseDetails = () => {
       // Import transformers dynamically to avoid bundle size issues
       const { pipeline } = await import('@huggingface/transformers');
       
-      // Create OCR pipeline
-      const ocr = await pipeline('image-to-text', 'Xenova/trocr-base-printed', {
-        device: 'webgpu',
-      });
+      // Create OCR pipeline with fallback to CPU if WebGPU fails
+      let ocr;
+      try {
+        ocr = await pipeline('image-to-text', 'onnx-community/trocr-base-printed', {
+          device: 'webgpu',
+        });
+      } catch (webgpuError) {
+        console.warn('WebGPU not available, falling back to CPU:', webgpuError);
+        ocr = await pipeline('image-to-text', 'onnx-community/trocr-base-printed', {
+          device: 'cpu',
+        });
+      }
 
       // Convert file to image element
       const imageUrl = URL.createObjectURL(file);
