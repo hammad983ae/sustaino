@@ -107,16 +107,28 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
   useEffect(() => {
     const propertyAddress = getFormattedAddress();
     if (propertyAddress && propertyAddress !== lastAddress.current) {
+      console.log('StateBasedMapping: Address changed, forcing complete refresh');
+      
+      // Clear ALL component state
       setMapImages([]);
       setIsLoading(false);
       setMapDataCached(false);
       setMappingData(null);
+      setSelectedState('');
+      setSelectedPortal(null);
       
-      // Clear ALL localStorage for this component
+      // Force clear ALL related localStorage
       if (typeof Storage !== 'undefined') {
         const keys = Object.keys(localStorage);
         keys.forEach(key => {
-          if (key.includes('mapping') || key.includes('state_based') || key.includes('property') || key.includes('planning') || key.includes('vicplan')) {
+          if (key.includes('mapping') || 
+              key.includes('state_based') || 
+              key.includes('property') || 
+              key.includes('planning') || 
+              key.includes('vicplan') ||
+              key.includes('analysis') ||
+              key.includes('search')) {
+            console.log('StateBasedMapping clearing:', key);
             localStorage.removeItem(key);
           }
         });
@@ -124,33 +136,46 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
       
       lastAddress.current = propertyAddress;
       
-      // Force component refresh
+      // Force complete component refresh with delay
       setTimeout(() => {
         setMapImages([]);
         setIsLoading(false);
         setMapDataCached(false);
         setMappingData(null);
-      }, 50);
+      }, 100);
     }
   }, [getFormattedAddress]);
 
-  // Listen for address change events
+  // Listen for planning data cleared events
   useEffect(() => {
-    const handleAddressChange = (event: CustomEvent) => {
-      const newAddress = event.detail.address;
-      if (newAddress !== lastAddress.current) {
-        setMapImages([]);
-        setIsLoading(false);
-        setMapDataCached(false);
-        setMappingData(null);
-        setSelectedState('');
-        setSelectedPortal(null);
-        lastAddress.current = newAddress;
-      }
+    const handlePlanningDataCleared = (event: CustomEvent) => {
+      console.log('StateBasedMapping: Received planningDataCleared event');
+      setMapImages([]);
+      setIsLoading(false);
+      setMapDataCached(false);
+      setMappingData(null);
+      setSelectedState('');
+      setSelectedPortal(null);
     };
 
-    window.addEventListener('addressChanged', handleAddressChange as EventListener);
-    return () => window.removeEventListener('addressChanged', handleAddressChange as EventListener);
+    const handleFreshStart = (event: CustomEvent) => {
+      console.log('StateBasedMapping: Received freshStart event');
+      setMapImages([]);
+      setIsLoading(false);
+      setMapDataCached(false);
+      setMappingData(null);
+      setSelectedState('');
+      setSelectedPortal(null);
+      lastAddress.current = '';
+    };
+
+    window.addEventListener('planningDataCleared', handlePlanningDataCleared as EventListener);
+    window.addEventListener('freshStart', handleFreshStart as EventListener);
+    
+    return () => {
+      window.removeEventListener('planningDataCleared', handlePlanningDataCleared as EventListener);
+      window.removeEventListener('freshStart', handleFreshStart as EventListener);
+    };
   }, []);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 

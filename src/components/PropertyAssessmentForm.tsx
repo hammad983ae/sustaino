@@ -14,6 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { AutofillAddressFields } from '@/components/AutofillAddressFields';
 import AddressConfirmation from '@/components/planning/AddressConfirmation';
 import PlanningDataIntegration from '@/components/PlanningDataIntegration';
+import PropertySearchAnalysis from '@/components/PropertySearchAnalysis';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
@@ -58,6 +59,12 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         />
       ),
       validation: () => reportData.propertySearchData?.confirmedAddress
+    },
+    {
+      title: "Search & Analysis",
+      subtitle: "Automated property location and site analysis with market valuation",
+      component: <PropertySearchAnalysis />,
+      validation: () => true // Analysis is optional but recommended
     },
     {
       title: "Property Photos",
@@ -140,29 +147,57 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const startFreshAssessment = async () => {
     setCurrentStep(0);
     setCompletedSteps([]);
-    // Clear all stored data for fresh start
+    
+    // Force clear ALL localStorage data
     if (typeof Storage !== 'undefined') {
       try {
         const { data: { user } } = await supabase.auth.getUser();
+        
+        // Clear all localStorage keys that might contain old data
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.includes('report') || 
+              key.includes('planning') || 
+              key.includes('mapping') || 
+              key.includes('vicplan') || 
+              key.includes('property') ||
+              key.includes('assessment') ||
+              key.includes('analysis') ||
+              key.includes('valuation') ||
+              key.includes('global_report') ||
+              key.includes('workingHub')) {
+            console.log('Clearing localStorage key:', key);
+            localStorage.removeItem(key);
+          }
+        });
+        
+        // Also clear user-specific keys if user exists
         if (user) {
-          const storageKey = `report_PropertyAssessmentForm_${user.id}`;
-          localStorage.removeItem(storageKey);
-          // Clear report data
-          localStorage.removeItem(`global_report_tracking_${user.id}`);
-          // Clear working hub files
-          localStorage.removeItem('workingHubFiles');
-          // Clear all planning and mapping data
-          const keys = Object.keys(localStorage);
-          keys.forEach(key => {
-            if (key.includes('planning') || key.includes('mapping') || key.includes('vicplan') || key.includes('property')) {
-              localStorage.removeItem(key);
-            }
+          const userSpecificKeys = [
+            `report_PropertyAssessmentForm_${user.id}`,
+            `global_report_tracking_${user.id}`,
+            'workingHubFiles'
+          ];
+          userSpecificKeys.forEach(key => {
+            localStorage.removeItem(key);
           });
         }
       } catch (error) {
         console.log('Could not clear user-specific data:', error);
+        // Still clear what we can
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.includes('report') || key.includes('planning') || key.includes('mapping') || key.includes('property')) {
+            localStorage.removeItem(key);
+          }
+        });
       }
     }
+    
+    // Dispatch event to force all components to refresh
+    const freshStartEvent = new CustomEvent('freshStart', { detail: { timestamp: Date.now() } });
+    window.dispatchEvent(freshStartEvent);
+    
     toast({
       title: "Fresh Start",
       description: "All previous data cleared. Starting fresh assessment.",
