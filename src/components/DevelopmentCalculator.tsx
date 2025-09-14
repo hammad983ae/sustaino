@@ -25,6 +25,16 @@ interface AgriculturalInputs {
   numberOfTrees: string;
   soilQuality: string;
   irrigationType: string;
+  posts: string;
+  wires: string;
+  strainers: string;
+  trellis: string;
+  hailNetting: string;
+  fencing: string;
+  roadsDriveways: string;
+  drainage: string;
+  storage: string;
+  powerInfrastructure: string;
 }
 
 const DevelopmentCalculator: React.FC = () => {
@@ -40,7 +50,17 @@ const DevelopmentCalculator: React.FC = () => {
     waterInfrastructure: '',
     numberOfTrees: '',
     soilQuality: '',
-    irrigationType: ''
+    irrigationType: '',
+    posts: '',
+    wires: '',
+    strainers: '',
+    trellis: '',
+    hailNetting: '',
+    fencing: '',
+    roadsDriveways: '',
+    drainage: '',
+    storage: '',
+    powerInfrastructure: ''
   });
 
   const baseCosts = {
@@ -71,6 +91,57 @@ const DevelopmentCalculator: React.FC = () => {
     treesAndVines: {
       perTree: 45, // per tree/vine
       perHectare: 2200 // average density cost
+    },
+    posts: {
+      standard: 2800, // per hectare
+      heavyDuty: 4200,
+      premium: 6500
+    },
+    wires: {
+      basic: 1800, // per hectare
+      galvanized: 2600,
+      stainlessSteel: 4200
+    },
+    strainers: {
+      standard: 850, // per hectare
+      heavyDuty: 1200,
+      adjustable: 1650
+    },
+    trellis: {
+      basic: 3200, // per hectare
+      vshaped: 4800,
+      pergola: 7200,
+      smartWire: 9500
+    },
+    hailNetting: {
+      standard: 8500, // per hectare
+      premium: 12000,
+      retractable: 18500
+    },
+    fencing: {
+      basic: 1200, // per hectare perimeter
+      agricultural: 2100,
+      security: 3800
+    },
+    roadsDriveways: {
+      gravel: 2200, // per hectare
+      sealed: 4500,
+      premium: 7200
+    },
+    drainage: {
+      basic: 1800, // per hectare
+      advanced: 3500,
+      comprehensive: 5800
+    },
+    storage: {
+      basic: 2800, // per hectare
+      climate: 5500,
+      premium: 8200
+    },
+    powerInfrastructure: {
+      basic: 3200, // per hectare
+      threephase: 5800,
+      solar: 8500
     }
   };
 
@@ -120,6 +191,76 @@ const DevelopmentCalculator: React.FC = () => {
     if (agriculturalInputs.numberOfTrees) {
       const treeCount = parseInt(agriculturalInputs.numberOfTrees);
       additionalCosts += treeCount * agriculturalComponentCosts.treesAndVines.perTree;
+    }
+    
+    // Posts costs
+    if (agriculturalInputs.posts) {
+      additionalCosts += agriculturalComponentCosts.posts[
+        agriculturalInputs.posts as keyof typeof agriculturalComponentCosts.posts
+      ] * baseArea;
+    }
+    
+    // Wires costs
+    if (agriculturalInputs.wires) {
+      additionalCosts += agriculturalComponentCosts.wires[
+        agriculturalInputs.wires as keyof typeof agriculturalComponentCosts.wires
+      ] * baseArea;
+    }
+    
+    // Strainers costs
+    if (agriculturalInputs.strainers) {
+      additionalCosts += agriculturalComponentCosts.strainers[
+        agriculturalInputs.strainers as keyof typeof agriculturalComponentCosts.strainers
+      ] * baseArea;
+    }
+    
+    // Trellis costs
+    if (agriculturalInputs.trellis) {
+      additionalCosts += agriculturalComponentCosts.trellis[
+        agriculturalInputs.trellis as keyof typeof agriculturalComponentCosts.trellis
+      ] * baseArea;
+    }
+    
+    // Hail netting costs
+    if (agriculturalInputs.hailNetting) {
+      additionalCosts += agriculturalComponentCosts.hailNetting[
+        agriculturalInputs.hailNetting as keyof typeof agriculturalComponentCosts.hailNetting
+      ] * baseArea;
+    }
+    
+    // Fencing costs
+    if (agriculturalInputs.fencing) {
+      additionalCosts += agriculturalComponentCosts.fencing[
+        agriculturalInputs.fencing as keyof typeof agriculturalComponentCosts.fencing
+      ] * baseArea;
+    }
+    
+    // Roads and driveways costs
+    if (agriculturalInputs.roadsDriveways) {
+      additionalCosts += agriculturalComponentCosts.roadsDriveways[
+        agriculturalInputs.roadsDriveways as keyof typeof agriculturalComponentCosts.roadsDriveways
+      ] * baseArea;
+    }
+    
+    // Drainage costs
+    if (agriculturalInputs.drainage) {
+      additionalCosts += agriculturalComponentCosts.drainage[
+        agriculturalInputs.drainage as keyof typeof agriculturalComponentCosts.drainage
+      ] * baseArea;
+    }
+    
+    // Storage costs
+    if (agriculturalInputs.storage) {
+      additionalCosts += agriculturalComponentCosts.storage[
+        agriculturalInputs.storage as keyof typeof agriculturalComponentCosts.storage
+      ] * baseArea;
+    }
+    
+    // Power infrastructure costs
+    if (agriculturalInputs.powerInfrastructure) {
+      additionalCosts += agriculturalComponentCosts.powerInfrastructure[
+        agriculturalInputs.powerInfrastructure as keyof typeof agriculturalComponentCosts.powerInfrastructure
+      ] * baseArea;
     }
     
     return additionalCosts;
@@ -341,13 +482,14 @@ const DevelopmentCalculator: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Sprout className="h-5 w-5 text-green-600" />
-                    Agricultural Development Components
+                    Comprehensive Agricultural Development Components
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Core Infrastructure */}
                     <div className="space-y-2">
-                      <Label htmlFor="water-infrastructure">Water Infrastructure</Label>
+                      <Label>Water Infrastructure</Label>
                       <Select 
                         value={agriculturalInputs.waterInfrastructure} 
                         onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, waterInfrastructure: value}))}
@@ -364,7 +506,7 @@ const DevelopmentCalculator: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="irrigation-type">Irrigation System</Label>
+                      <Label>Irrigation System</Label>
                       <Select 
                         value={agriculturalInputs.irrigationType} 
                         onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, irrigationType: value}))}
@@ -382,7 +524,7 @@ const DevelopmentCalculator: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="soil-quality">Soil Quality</Label>
+                      <Label>Soil Quality</Label>
                       <Select 
                         value={agriculturalInputs.soilQuality} 
                         onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, soilQuality: value}))}
@@ -399,10 +541,181 @@ const DevelopmentCalculator: React.FC = () => {
                       </Select>
                     </div>
 
+                    {/* Support Infrastructure */}
                     <div className="space-y-2">
-                      <Label htmlFor="trees-vines">Trees/Vines Count</Label>
+                      <Label>Posts</Label>
+                      <Select 
+                        value={agriculturalInputs.posts} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, posts: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="standard">Standard ($2.8k/ha)</SelectItem>
+                          <SelectItem value="heavyDuty">Heavy Duty ($4.2k/ha)</SelectItem>
+                          <SelectItem value="premium">Premium ($6.5k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Wires</Label>
+                      <Select 
+                        value={agriculturalInputs.wires} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, wires: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic ($1.8k/ha)</SelectItem>
+                          <SelectItem value="galvanized">Galvanized ($2.6k/ha)</SelectItem>
+                          <SelectItem value="stainlessSteel">Stainless Steel ($4.2k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Strainers</Label>
+                      <Select 
+                        value={agriculturalInputs.strainers} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, strainers: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="standard">Standard ($850/ha)</SelectItem>
+                          <SelectItem value="heavyDuty">Heavy Duty ($1.2k/ha)</SelectItem>
+                          <SelectItem value="adjustable">Adjustable ($1.65k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Trellis System</Label>
+                      <Select 
+                        value={agriculturalInputs.trellis} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, trellis: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic ($3.2k/ha)</SelectItem>
+                          <SelectItem value="vshaped">V-Shaped ($4.8k/ha)</SelectItem>
+                          <SelectItem value="pergola">Pergola ($7.2k/ha)</SelectItem>
+                          <SelectItem value="smartWire">Smart Wire ($9.5k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Hail Netting</Label>
+                      <Select 
+                        value={agriculturalInputs.hailNetting} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, hailNetting: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="standard">Standard ($8.5k/ha)</SelectItem>
+                          <SelectItem value="premium">Premium ($12k/ha)</SelectItem>
+                          <SelectItem value="retractable">Retractable ($18.5k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Fencing</Label>
+                      <Select 
+                        value={agriculturalInputs.fencing} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, fencing: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic ($1.2k/ha)</SelectItem>
+                          <SelectItem value="agricultural">Agricultural ($2.1k/ha)</SelectItem>
+                          <SelectItem value="security">Security ($3.8k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Roads & Driveways</Label>
+                      <Select 
+                        value={agriculturalInputs.roadsDriveways} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, roadsDriveways: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="gravel">Gravel ($2.2k/ha)</SelectItem>
+                          <SelectItem value="sealed">Sealed ($4.5k/ha)</SelectItem>
+                          <SelectItem value="premium">Premium ($7.2k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Drainage System</Label>
+                      <Select 
+                        value={agriculturalInputs.drainage} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, drainage: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic ($1.8k/ha)</SelectItem>
+                          <SelectItem value="advanced">Advanced ($3.5k/ha)</SelectItem>
+                          <SelectItem value="comprehensive">Comprehensive ($5.8k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Storage Facilities</Label>
+                      <Select 
+                        value={agriculturalInputs.storage} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, storage: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic ($2.8k/ha)</SelectItem>
+                          <SelectItem value="climate">Climate Controlled ($5.5k/ha)</SelectItem>
+                          <SelectItem value="premium">Premium ($8.2k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Power Infrastructure</Label>
+                      <Select 
+                        value={agriculturalInputs.powerInfrastructure} 
+                        onValueChange={(value) => setAgriculturalInputs(prev => ({...prev, powerInfrastructure: value}))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="basic">Basic ($3.2k/ha)</SelectItem>
+                          <SelectItem value="threephase">Three Phase ($5.8k/ha)</SelectItem>
+                          <SelectItem value="solar">Solar System ($8.5k/ha)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Trees/Vines Count</Label>
                       <Input
-                        id="trees-vines"
                         type="number"
                         placeholder="e.g., 2000"
                         value={agriculturalInputs.numberOfTrees}
