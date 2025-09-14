@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText, Building2, MapPin, Camera, Settings, Play } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
@@ -13,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 // Step Components
 import { AutofillAddressFields } from '@/components/AutofillAddressFields';
 import AddressConfirmation from '@/components/planning/AddressConfirmation';
+import RentalConfiguration from '@/components/RentalConfiguration';
 import PlanningDataIntegration from '@/components/PlanningDataIntegration';
 import PropertySearchAnalysis from '@/components/PropertySearchAnalysis';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
@@ -95,10 +96,16 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       title: "Report Configuration",
       subtitle: "Configure your report settings and client information",
       component: <ReportTypeConfiguration />,
-      validation: () => reportData.reportConfig?.reportType && reportData.reportConfig?.propertyType
+      validation: () => true // Allow progression from report configuration
     },
     {
-      title: "Review & Generate",
+      title: "Rental Configuration",
+      subtitle: "Configure detailed rental valuation settings (optional)",
+      component: <RentalConfiguration />,
+      validation: () => true // Rental configuration is optional
+    },
+    {
+      title: "Review & Generate", 
       subtitle: "Review your information and generate the assessment report",
       component: (
         <GenerateReportData

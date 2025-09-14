@@ -333,6 +333,23 @@ const ReportTypeConfiguration = () => {
             />
           </div>
 
+          {/* GST Treatment for Report Configuration */}
+          <div className="mt-4">
+            <div>
+              <Label htmlFor="report-gst-treatment" className="text-sm font-medium">GST Treatment</Label>
+              <Select value={formData['report-gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('report-gst-treatment', value)}>
+                <SelectTrigger id="report-gst-treatment" className="mt-1 max-w-xs">
+                  <SelectValue placeholder="Select GST approach" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border z-50">
+                  <SelectItem value="inclusive">Inclusive of GST</SelectItem>
+                  <SelectItem value="exclusive">Exclusive of GST</SelectItem>
+                  <SelectItem value="market-standard">Market Standard Practice</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           <div className="pt-4 space-y-4">
             <div>
               <Label htmlFor="custom-basis-auto" className="text-sm font-medium">Custom Basis (Auto-Generated)</Label>
@@ -355,12 +372,12 @@ const ReportTypeConfiguration = () => {
           </div>
         </div>
 
-        {/* Rental Valuation Configuration */}
+        {/* Quick Rental Assessment Toggle */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-lg">Rental Valuation Configuration</h3>
+            <h3 className="font-semibold text-lg">Quick Rental Assessment</h3>
             <div className="flex items-center space-x-2">
-              <Label htmlFor="include-rental-toggle" className="text-sm">Include Rental Valuation</Label>
+              <Label htmlFor="include-rental-toggle" className="text-sm">Include Basic Rental Assessment</Label>
               <Switch
                 id="include-rental-toggle"
                 checked={includeRentalValuation}
@@ -370,154 +387,40 @@ const ReportTypeConfiguration = () => {
           </div>
           
           {includeRentalValuation && (
-          <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Label htmlFor="rental-assessment-type" className="text-sm font-medium">Rental Assessment Type</Label>
-              <Select value={formData['rental-assessment-type'] || ''} onValueChange={(value) => handleSelectChange('rental-assessment-type', value)}>
-                <SelectTrigger id="rental-assessment-type" className="mt-1">
-                  <SelectValue placeholder="Select assessment type" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="market-rent">Market Rent Assessment (IVS)</SelectItem>
-                  <SelectItem value="market-value-rent">Rent for Market Value Assessment</SelectItem>
-                  <SelectItem value="negotiation-assistance">Rent Negotiation Assistance</SelectItem>
-                  <SelectItem value="advocacy-submission">Advocacy Submission</SelectItem>
-                  <SelectItem value="expert-determination">Expert Determination/Arbitration</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="text-sm text-blue-800 mb-3">
+                <p className="font-medium">Quick Rental Assessment Enabled</p>
+                <p>A separate detailed rental configuration step will be available for comprehensive rental valuation settings.</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="quick-rental-basis" className="text-sm font-medium">Quick Rental Basis</Label>
+                  <Select value={formData['quick-rental-basis'] || ''} onValueChange={(value) => handleSelectChange('quick-rental-basis', value)}>
+                    <SelectTrigger id="quick-rental-basis" className="mt-1">
+                      <SelectValue placeholder="Select rental basis" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border border-border z-50">
+                      <SelectItem value="market-rent">Market Rent</SelectItem>
+                      <SelectItem value="fair-market-rent">Fair Market Rent</SelectItem>
+                      <SelectItem value="passing-rent">Passing Rent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="quick-rental-gst" className="text-sm font-medium">GST Treatment</Label>
+                  <Select value={formData['quick-rental-gst'] || ''} onValueChange={(value) => handleSelectChange('quick-rental-gst', value)}>
+                    <SelectTrigger id="quick-rental-gst" className="mt-1">
+                      <SelectValue placeholder="Select GST approach" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border border-border z-50">
+                      <SelectItem value="inclusive">Inclusive of GST</SelectItem>
+                      <SelectItem value="exclusive">Exclusive of GST</SelectItem>
+                      <SelectItem value="market-standard">Market Standard Practice</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </div>
-
-            <div>
-              <Label htmlFor="rental-basis" className="text-sm font-medium">Basis of Rent</Label>
-              <Select value={formData['rental-basis'] || ''} onValueChange={(value) => handleSelectChange('rental-basis', value)}>
-                <SelectTrigger id="rental-basis" className="mt-1">
-                  <SelectValue placeholder="Select rental basis" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="market-rent">Market Rent</SelectItem>
-                  <SelectItem value="fair-market-rent">Fair Market Rent</SelectItem>
-                  <SelectItem value="passing-rent">Passing Rent</SelectItem>
-                  <SelectItem value="effective-rent">Effective Rent</SelectItem>
-                  <SelectItem value="custom-basis">Custom Basis</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="property-classification" className="text-sm font-medium">Property Classification</Label>
-              <Select value={formData['property-classification'] || ''} onValueChange={(value) => handleSelectChange('property-classification', value)}>
-                <SelectTrigger id="property-classification" className="mt-1">
-                  <SelectValue placeholder="Select classification" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="non-specialised">Non-Specialised Property</SelectItem>
-                  <SelectItem value="specialised">Specialised Property</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="comparison-unit" className="text-sm font-medium">Comparison Unit (Specialised)</Label>
-              <Select value={formData['comparison-unit'] || ''} onValueChange={(value) => handleSelectChange('comparison-unit', value)}>
-                <SelectTrigger id="comparison-unit" className="mt-1">
-                  <SelectValue placeholder="Select comparison unit" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="area-based">Area Based (sqm/sqft)</SelectItem>
-                  <SelectItem value="per-room">Per Room (Hotels/Motels)</SelectItem>
-                  <SelectItem value="per-bay">Per Bay (Carparks)</SelectItem>
-                  <SelectItem value="per-child">Per Licensed Child (Childcare)</SelectItem>
-                  <SelectItem value="per-seat">Per Seat (Cinemas)</SelectItem>
-                  <SelectItem value="cents-per-litre">Cents per Litre (Service Stations)</SelectItem>
-                  <SelectItem value="turnover-percentage">Turnover Percentage (Licensed)</SelectItem>
-                  <SelectItem value="per-bed">Per Bed (Healthcare)</SelectItem>
-                  <SelectItem value="workers-accommodation-per-bed">Workers Accommodation - Per/Bed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="outgoings-liability" className="text-sm font-medium">Outgoings Liability</Label>
-              <Select value={formData['outgoings-liability'] || ''} onValueChange={(value) => handleSelectChange('outgoings-liability', value)}>
-                <SelectTrigger id="outgoings-liability" className="mt-1">
-                  <SelectValue placeholder="Select outgoings structure" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="gross-lease">Gross Lease (Landlord pays all)</SelectItem>
-                  <SelectItem value="net-lease">Net Lease (Tenant pays all)</SelectItem>
-                  <SelectItem value="tenant-operating">Tenant pays Operating Only</SelectItem>
-                  <SelectItem value="proportional-split">Proportional Split</SelectItem>
-                  <SelectItem value="specific-allocation">Specific Allocation</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="incentives-treatment" className="text-sm font-medium">Incentives Treatment</Label>
-              <Select value={formData['incentives-treatment'] || ''} onValueChange={(value) => handleSelectChange('incentives-treatment', value)}>
-                <SelectTrigger id="incentives-treatment" className="mt-1">
-                  <SelectValue placeholder="Select incentives approach" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="face-rent">Face Rent (As Stated)</SelectItem>
-                  <SelectItem value="effective-rent">Effective Rent (Adjusted)</SelectItem>
-                  <SelectItem value="gross-effective">Gross Effective Rent (NPV)</SelectItem>
-                  <SelectItem value="no-incentives">No Incentives Assumed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="evidence-hierarchy" className="text-sm font-medium">Market Evidence Priority</Label>
-              <Select value={formData['evidence-hierarchy'] || ''} onValueChange={(value) => handleSelectChange('evidence-hierarchy', value)}>
-                <SelectTrigger id="evidence-hierarchy" className="mt-1">
-                  <SelectValue placeholder="Select evidence weighting" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="new-lease-new">New Lease to New Tenant (Primary)</SelectItem>
-                  <SelectItem value="market-rent-review">Market Rent at Review/Option</SelectItem>
-                  <SelectItem value="determined-rent">Determined Market Rent</SelectItem>
-                  <SelectItem value="new-lease-sitting">New Lease to Sitting Tenant</SelectItem>
-                  <SelectItem value="passing-rent-evidence">Passing Rent Evidence</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="gst-treatment" className="text-sm font-medium">GST Treatment</Label>
-              <Select value={formData['gst-treatment'] || ''} onValueChange={(value) => handleSelectChange('gst-treatment', value)}>
-                <SelectTrigger id="gst-treatment" className="mt-1">
-                  <SelectValue placeholder="Select GST approach" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-border z-50">
-                  <SelectItem value="inclusive">Inclusive of GST</SelectItem>
-                  <SelectItem value="exclusive">Exclusive of GST</SelectItem>
-                  <SelectItem value="market-standard">Market Standard Practice</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-            <MultiSelectDropdown 
-              options={['Rent-free periods', 'Fitout contributions', 'Cash incentives', 'Previous lease payout', 'Reduced rent periods', 'Other inducements']}
-              placeholder="Select incentive types to consider"
-              label="Incentive Types"
-            />
-
-            <div>
-              <Label htmlFor="rental-custom-basis-description" className="text-sm font-medium">Rental Custom Basis Description (if applicable)</Label>
-              <Textarea 
-                id="rental-custom-basis-description"
-                placeholder="Describe custom rental basis or specific requirements"
-                className="mt-1"
-                value={formData['rental-custom-basis-description'] || ''}
-                onChange={(e) => handleInputChange('rental-custom-basis-description', e.target.value)}
-              />
-            </div>
-          </div>
-          </>
           )}
         </div>
       </CardContent>
