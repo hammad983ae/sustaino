@@ -40,8 +40,12 @@ export default function BrandedHeader({
           className="h-12 w-auto"
         />
       )}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">{displayTitle}</h1>
+      <div className="flex-1">
+        <div className="overflow-hidden whitespace-nowrap">
+          <h1 className="text-3xl font-bold text-foreground animate-scroll-left">
+            Property Valuation Platform - ESG Assessment - Financial Statements and Analytics Platform
+          </h1>
+        </div>
         <p className="text-muted-foreground">{displaySubtitle}</p>
       </div>
     </div>
