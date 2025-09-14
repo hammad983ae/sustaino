@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText, Building2, MapPin, Camera, Settings, Play } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -31,12 +32,44 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
+  const [includeDetailedRentalConfig, setIncludeDetailedRentalConfig] = useState(false);
   const { toast } = useToast();
   const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('PropertyAssessmentForm');
   const { reportData, updateReportData } = useReportData();
   const { addressData } = useProperty();
 
-  const steps = [
+  // Listen for rental configuration toggle
+  useEffect(() => {
+    const handleRentalToggle = (event: CustomEvent) => {
+      const newValue = event.detail.includeDetailed;
+      setIncludeDetailedRentalConfig(newValue);
+      
+      // If we're currently on or past the rental config step and it's being disabled,
+      // adjust the current step to avoid being on a non-existent step
+      if (!newValue && currentStep >= 5) { // Rental config is typically step 5
+        const rentalConfigStepIndex = allSteps.findIndex(step => step.title === "Rental Configuration");
+        if (currentStep === rentalConfigStepIndex) {
+          // Move to the next step (Review & Generate)
+          setCurrentStep(currentStep - 1);
+        }
+      }
+    };
+
+    window.addEventListener('rentalConfigToggle', handleRentalToggle as EventListener);
+    
+    // Check localStorage on mount
+    const stored = localStorage.getItem('includeDetailedRentalConfig');
+    if (stored) {
+      setIncludeDetailedRentalConfig(stored === 'true');
+    }
+
+    return () => {
+      window.removeEventListener('rentalConfigToggle', handleRentalToggle as EventListener);
+    };
+  }, [currentStep]);
+
+  // Define all possible steps
+  const allSteps = [
     {
       title: "Property Address",
       subtitle: "Find and configure address to begin your valuation report",
@@ -182,6 +215,15 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       validation: () => true
     }
   ];
+
+  // Filter steps based on configuration
+  const steps = allSteps.filter((step, index) => {
+    // Remove rental configuration step if not needed
+    if (step.title === "Rental Configuration" && !includeDetailedRentalConfig) {
+      return false;
+    }
+    return true;
+  });
 
   useEffect(() => {
     // Load saved data on mount

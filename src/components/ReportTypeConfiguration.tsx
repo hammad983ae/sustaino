@@ -372,17 +372,43 @@ const ReportTypeConfiguration = () => {
           </div>
         </div>
 
-        {/* Quick Rental Assessment Toggle */}
+        {/* Detailed Rental Assessment Configuration */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-lg">Quick Rental Assessment</h3>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="include-rental-toggle" className="text-sm">Include Basic Rental Assessment</Label>
-              <Switch
-                id="include-rental-toggle"
-                checked={includeRentalValuation}
-                onCheckedChange={setIncludeRentalValuation}
-              />
+            <h3 className="font-semibold text-lg">Detailed Rental Assessment Configuration</h3>
+          </div>
+          
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h4 className="font-medium text-amber-900 mb-1">Optional Detailed Rental Configuration</h4>
+                <p className="text-sm text-amber-800 mb-3">
+                  Enable this only for comprehensive rental assessment reports that require detailed rental valuation settings. 
+                  Leave disabled for standard property valuations with basic rental components.
+                </p>
+                <div className="text-xs text-amber-700">
+                  <strong>Enable when:</strong> Report is primarily focused on rental determination, rental negotiation, or detailed rental analysis<br/>
+                  <strong>Leave disabled when:</strong> Standard property valuation with basic rental considerations
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 ml-4">
+                <Label htmlFor="detailed-rental-toggle" className="text-sm font-medium whitespace-nowrap">
+                  Include Detailed Rental Configuration
+                </Label>
+                <Switch
+                  id="detailed-rental-toggle"
+                  checked={includeRentalValuation}
+                  onCheckedChange={(checked) => {
+                    setIncludeRentalValuation(checked);
+                    // Store this preference for the form to access
+                    localStorage.setItem('includeDetailedRentalConfig', checked.toString());
+                    // Dispatch custom event to notify parent components
+                    window.dispatchEvent(new CustomEvent('rentalConfigToggle', { 
+                      detail: { includeDetailed: checked } 
+                    }));
+                  }}
+                />
+              </div>
             </div>
           </div>
           
