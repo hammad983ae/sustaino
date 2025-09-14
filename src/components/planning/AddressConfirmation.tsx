@@ -15,7 +15,7 @@ import {
 import { useProperty } from '@/contexts/PropertyContext';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { toast } from '@/hooks/use-toast';
-import LotPlanExtraction from '@/components/LotPlanExtraction';
+
 
 interface AddressConfirmationProps {
   onAddressConfirmed?: (address: string) => void;
@@ -77,25 +77,6 @@ export const AddressConfirmation: React.FC<AddressConfirmationProps> = ({
     });
   };
 
-  const handleLotPlanExtracted = (data: any) => {
-    // Update address data with extracted lot/plan
-    updateAddressData({
-      lotNumber: data.lotNumber,
-      planNumber: data.planNumber
-    });
-    
-    // Update report data
-    updateReportData('planningData', {
-      extractedLotPlan: data,
-      extractionSource: data.source,
-      extractionDate: new Date().toISOString()
-    });
-    
-    toast({
-      title: "Lot/Plan Extracted",
-      description: `Lot: ${data.lotNumber}, Plan: ${data.planNumber} from ${data.source}`,
-    });
-  };
 
   const handleAutoGenerate = () => {
     const formatted = getFormattedAddress();
@@ -259,15 +240,6 @@ export const AddressConfirmation: React.FC<AddressConfirmationProps> = ({
           </p>
         )}
 
-        <Separator />
-
-        {/* Lot/Plan Extraction Section */}
-        <div className="space-y-4">
-          <LotPlanExtraction 
-            onDataExtracted={handleLotPlanExtracted}
-            propertyAddress={currentAddress}
-          />
-        </div>
       </CardContent>
     </Card>
   );
