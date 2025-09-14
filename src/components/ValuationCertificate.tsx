@@ -2,11 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { MapPin, FileText, User, AlertTriangle, Info } from "lucide-react";
+import { MapPin, FileText, User, AlertTriangle, Shield, CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useReportData } from "@/contexts/ReportDataContext";
 
@@ -19,14 +17,16 @@ const ValuationCertificate = () => {
   const [includeCertificationStatement, setIncludeCertificationStatement] = useState(true);
   const [includeLimitations, setIncludeLimitations] = useState(true);
   const [includeDisclaimers, setIncludeDisclaimers] = useState(true);
-  const [includePurposeOfValuation, setIncludePurposeOfValuation] = useState(true);
   
   // Pre-populated data from Property Assessment Form
   const [prePopulatedData, setPrePopulatedData] = useState({
     valueComponent: '',
     valuationBasis: '',
     interestValues: '',
-    propertyType: ''
+    propertyType: '',
+    propertyAddress: '',
+    purposeOfValuation: '',
+    mortgageSecurity: ''
   });
 
   // Update pre-populated data when report config changes
@@ -36,27 +36,13 @@ const ValuationCertificate = () => {
         valueComponent: reportData.reportConfig.valueComponent || '',
         valuationBasis: reportData.reportConfig.valuationBasis || '',
         interestValues: reportData.reportConfig.interestValues || '',
-        propertyType: reportData.reportConfig.propertyType || ''
+        propertyType: reportData.reportConfig.propertyType || '',
+        propertyAddress: reportData.propertySearchData?.address || '',
+        purposeOfValuation: reportData.reportConfig.purposeOfValuation || '',
+        mortgageSecurity: reportData.reportConfig.mortgageSecurity || ''
       });
     }
-  }, [reportData.reportConfig]);
-  
-  // Individual valuation summary items
-  const [summaryItems, setSummaryItems] = useState({
-    interestValued: true,
-    valueComponent: true,
-    highestBestUse: true,
-    sellingPeriod: true,
-    currency: true,
-    gstTreatment: true,
-    marketValue: true,
-    insuranceReplacement: false, // Default off for desktop valuations
-    marketRentGrossResidential: false, // Default off for desktop valuations
-    netRent: false, // Default off for desktop valuations
-    netMarketRent: false, // Default off for desktop valuations
-    forcedSaleRange: false, // Default off for desktop valuations
-    totalGrossRealisation: false // Default off for desktop valuations
-  });
+  }, [reportData.reportConfig, reportData.propertySearchData]);
 
   return (
     <div className="space-y-6">
@@ -66,80 +52,6 @@ const ValuationCertificate = () => {
           <CardTitle className="text-2xl font-bold tracking-tight">VALUATION CERTIFICATE</CardTitle>
           <p className="text-muted-foreground">This certificate confirms the valuation details and professional compliance</p>
         </CardHeader>
-      </Card>
-
-      {/* Purpose of Valuation */}
-      {includePurposeOfValuation && (
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-primary" />
-              Purpose of Valuation
-            </CardTitle>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="include-purpose-of-valuation" className="text-sm">Include</Label>
-              <Switch 
-                id="include-purpose-of-valuation" 
-                checked={includePurposeOfValuation}
-                onCheckedChange={setIncludePurposeOfValuation}
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">Pre-populated from platform</Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="purpose-valuation">Purpose of Valuation</Label>
-              <Input
-                id="purpose-valuation"
-                value={prePopulatedData.valuationBasis || "Auto-populated from valuation instructions..."}
-                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
-                readOnly
-              />
-              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="mortgage-security">Mortgage Security</Label>
-              <Input
-                id="mortgage-security"
-                placeholder="Auto-populated from security assessment..."
-                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
-                readOnly
-              />
-              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from security assessment</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      )}
-
-      {/* Automated vs Manual Toggle */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <FileText className="h-5 w-5 text-primary" />
-              Certificate Generation Mode
-            </CardTitle>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="auto-mode" className="text-sm">Manual</Label>
-              <Switch id="auto-mode" />
-              <Label htmlFor="auto-mode" className="text-sm">Automated</Label>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
-            <Info className="h-4 w-4 text-blue-600" />
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              Automated mode pre-populates fields from platform data. Manual mode allows custom input.
-            </p>
-          </div>
-        </CardContent>
       </Card>
 
       {/* Property Identification */}
@@ -170,11 +82,11 @@ const ValuationCertificate = () => {
               <Label htmlFor="property-address">Property Address</Label>
               <Textarea
                 id="property-address"
-                placeholder="Complete property address will be auto-populated..."
+                value={prePopulatedData.propertyAddress || "Complete property address will be auto-populated..."}
                 className="min-h-[100px] bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
                 readOnly
               />
-              <p className="text-xs text-blue-600 dark:text-blue-400">Auto-populated from property data</p>
+              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="title-reference">Title Reference</Label>
@@ -234,7 +146,37 @@ const ValuationCertificate = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="purpose-valuation">Purpose of Valuation</Label>
+              <Input
+                id="purpose-valuation"
+                value={prePopulatedData.purposeOfValuation || prePopulatedData.valuationBasis || "Auto-populated from valuation instructions..."}
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
+              />
+              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="value-component">Value Component</Label>
+              <Input
+                id="value-component"
+                value={prePopulatedData.valueComponent || "Auto-populated from assessment..."}
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
+              />
+              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="mortgage-security">Mortgage Security</Label>
+              <Input
+                id="mortgage-security"
+                value={prePopulatedData.mortgageSecurity || "Auto-populated from security assessment..."}
+                className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800"
+                readOnly
+              />
+              <p className="text-xs text-blue-600 dark:text-blue-400">✅ Pre-filled from Property Assessment Form</p>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="valuation-date">Date of Valuation</Label>
               <Input
@@ -325,12 +267,15 @@ const ValuationCertificate = () => {
       </Card>
       )}
 
-      {/* Automated Valuation Details */}
+      {/* Valuation Summary */}
       {includeValuationSummary && (
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Automated Valuation Summary</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-primary" />
+              Valuation Summary
+            </CardTitle>
             <div className="flex items-center space-x-2">
               <Label htmlFor="include-valuation-summary" className="text-sm">Include</Label>
               <Switch 
@@ -345,35 +290,78 @@ const ValuationCertificate = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {[
-              { key: "interestValued", label: "Interest Valued", enabled: summaryItems.interestValued },
-              { key: "valueComponent", label: "Value Component", enabled: summaryItems.valueComponent },
-              { key: "highestBestUse", label: "Highest and Best Use", enabled: summaryItems.highestBestUse },
-              { key: "sellingPeriod", label: "Selling Period", enabled: summaryItems.sellingPeriod },
-              { key: "currency", label: "Currency of Valuation", enabled: summaryItems.currency },
-              { key: "gstTreatment", label: "GST Treatment", enabled: summaryItems.gstTreatment },
-              { key: "marketValue", label: "Market Value", enabled: summaryItems.marketValue },
-              { key: "insuranceReplacement", label: "Insurance Replacement Value", enabled: summaryItems.insuranceReplacement },
-              { key: "marketRentGrossResidential", label: "Market Rent (Gross Residential)", enabled: summaryItems.marketRentGrossResidential },
-              { key: "netRent", label: "Net Rent", enabled: summaryItems.netRent },
-              { key: "netMarketRent", label: "Net Market Rent", enabled: summaryItems.netMarketRent },
-              { key: "forcedSaleRange", label: "Forced Sale Range", enabled: summaryItems.forcedSaleRange },
-              { key: "totalGrossRealisation", label: "Total Gross Realisation (BTR)", enabled: summaryItems.totalGrossRealisation }
-            ].filter(item => item.enabled).map((item, index) => (
-              <div key={index} className="flex justify-between items-center py-2 border-b border-border last:border-b-0">
-                <div className="flex items-center justify-between w-full">
-                  <Label className="font-medium text-foreground">{item.label}</Label>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-muted-foreground italic">[Pre-populated from platform]</span>
-                    <Switch 
-                      checked={summaryItems[item.key as keyof typeof summaryItems]}
-                      onCheckedChange={(checked) => setSummaryItems(prev => ({...prev, [item.key]: checked}))}
-                    />
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-foreground">Interest Valued</Label>
+                <span className="text-xs text-blue-600 dark:text-blue-400">[Pre-populated from platform]</span>
               </div>
-            ))}
+              <Input 
+                value={prePopulatedData.interestValues || "Freehold"} 
+                className="bg-white dark:bg-gray-800" 
+                readOnly 
+              />
+            </div>
+            
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-foreground">Value Component</Label>
+                <span className="text-xs text-blue-600 dark:text-blue-400">[Pre-populated from platform]</span>
+              </div>
+              <Input 
+                value={prePopulatedData.valueComponent || "Market Value"} 
+                className="bg-white dark:bg-gray-800" 
+                readOnly 
+              />
+            </div>
+
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-foreground">Highest and Best Use</Label>
+                <span className="text-xs text-blue-600 dark:text-blue-400">[Pre-populated from platform]</span>
+              </div>
+              <Input 
+                value="Current Use" 
+                className="bg-white dark:bg-gray-800" 
+                readOnly 
+              />
+            </div>
+
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-foreground">Currency of Valuation</Label>
+                <span className="text-xs text-blue-600 dark:text-blue-400">[Pre-populated from platform]</span>
+              </div>
+              <Input 
+                value="AUD" 
+                className="bg-white dark:bg-gray-800" 
+                readOnly 
+              />
+            </div>
+
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-foreground">GST Treatment</Label>
+                <span className="text-xs text-blue-600 dark:text-blue-400">[Pre-populated from platform]</span>
+              </div>
+              <Input 
+                value="Exclusive" 
+                className="bg-white dark:bg-gray-800" 
+                readOnly 
+              />
+            </div>
+
+            <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-green-800 dark:text-green-200">Market Value</Label>
+                <span className="text-xs text-green-600 dark:text-green-400">[Pre-populated from platform]</span>
+              </div>
+              <Input 
+                value="$XXX,XXX" 
+                className="bg-white dark:bg-gray-800 font-bold" 
+                readOnly 
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
