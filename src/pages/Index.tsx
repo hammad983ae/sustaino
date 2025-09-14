@@ -50,8 +50,8 @@ const Index = () => {
       overall: 75
     });
     
-    // Redirect to WorkHub (Contents page) after form completion
-    navigate('/work-hub');
+    // Redirect to Report (Contents page) after form completion
+    navigate('/report');
   };
 
   const handleBackToForm = () => {
