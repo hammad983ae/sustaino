@@ -274,6 +274,12 @@ export interface ReportData {
     [key: string]: any;
   };
 
+  // Executive Summary
+  executiveSummary?: {
+    content?: string;
+    lastUpdated?: string;
+  };
+
   lastUpdated?: string;
   
   // Generated sections from assessment workflow

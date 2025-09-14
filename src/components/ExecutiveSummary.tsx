@@ -12,8 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, FileText, Sparkles, Shield, User, ScrollText } from "lucide-react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useReportData } from "@/contexts/ReportDataContext";
+import AutoGenerateSummary from "./AutoGenerateSummary";
 
 interface ExecutiveSummaryProps {
   onNavigateToSection: (sectionIndex: number) => void;
@@ -22,7 +23,8 @@ interface ExecutiveSummaryProps {
 const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isProfessionalOpen, setIsProfessionalOpen] = useState(false);
-  const { reportData } = useReportData();
+  const [executiveSummaryText, setExecutiveSummaryText] = useState('');
+  const { reportData, updateReportData } = useReportData();
 
   const tableOfContents = [
     { title: "Executive Summary", page: 1 },
@@ -47,6 +49,19 @@ const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
     { title: "Security and Certificates", page: 20 }
   ];
 
+  // Handle summary generation
+  const handleSummaryGenerated = (summary: string) => {
+    setExecutiveSummaryText(summary);
+    updateReportData('executiveSummary', { content: summary, lastUpdated: new Date().toISOString() });
+  };
+
+  // Load existing summary from report data
+  useEffect(() => {
+    if (reportData.executiveSummary?.content) {
+      setExecutiveSummaryText(reportData.executiveSummary.content);
+    }
+  }, [reportData.executiveSummary]);
+
   return (
     <div className="space-y-6">
       {/* Executive Summary Section */}
@@ -59,14 +74,22 @@ const ExecutiveSummary = ({ onNavigateToSection }: ExecutiveSummaryProps) => {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-medium">Executive Summary</h3>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4" />
-                Auto-Generate Summary
-              </Button>
+              <AutoGenerateSummary 
+                onSummaryGenerated={handleSummaryGenerated}
+                currentSummary={executiveSummaryText}
+              />
             </div>
             <Textarea 
               placeholder="Comprehensive overview of the property valuation, key findings, and investment recommendation..."
               className="min-h-[120px] resize-none"
+              value={executiveSummaryText}
+              onChange={(e) => {
+                setExecutiveSummaryText(e.target.value);
+                updateReportData('executiveSummary', { 
+                  content: e.target.value, 
+                  lastUpdated: new Date().toISOString() 
+                });
+              }}
             />
           </div>
         </CollapsibleContent>
