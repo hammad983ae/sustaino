@@ -74,23 +74,13 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
       
       setLastSaved(new Date());
       
-      if (showToast) {
-        toast.success(`${sectionName} saved successfully`, {
-          duration: 3000,
-          description: `✅ Data saved to local storage and working hub - ${new Date().toLocaleTimeString()}`
-        });
-      }
+      // Toast notifications disabled to reduce noise
       
       return { success: true, data: saveObject };
     } catch (error) {
       console.error(`Failed to save ${sectionName}:`, error);
       
-      if (showToast) {
-        toast.error(`Failed to save ${sectionName}`, {
-          description: error instanceof Error ? error.message : 'Unknown error',
-          duration: 4000,
-        });
-      }
+      // Error notifications disabled to reduce noise
       
       return { success: false, error };
     } finally {
@@ -129,15 +119,11 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
       
       setLastSaved(null);
       
-      if (showToast) {
-        toast.success(`${sectionName} data cleared`);
-      }
+      // Toast notifications disabled
     } catch (error) {
       console.error(`Failed to clear ${sectionName}:`, error);
       
-      if (showToast) {
-        toast.error(`Failed to clear ${sectionName}`);
-      }
+      // Error notifications disabled
     }
   }, [sectionName, showToast]);
 
