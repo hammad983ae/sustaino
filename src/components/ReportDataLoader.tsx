@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useReportData } from '@/contexts/ReportDataContext';
+import { validateAndFilterReportData } from '@/lib/reportDataValidation';
 
 const ReportDataLoader = () => {
   const { updateReportData } = useReportData();
@@ -13,12 +14,16 @@ const ReportDataLoader = () => {
           const reportData = JSON.parse(currentReportData);
           console.log('Loading generated report data into context:', reportData);
           
-          // Pre-populate report sections with generated data
-          if (reportData.reportSections) {
+          // Validate data before loading
+          const validation = validateAndFilterReportData(reportData);
+          console.log('Data validation results:', validation);
+          
+          // Pre-populate report sections with validated data only
+          if (reportData.reportSections && validation.isValid) {
             const sections = reportData.reportSections;
             
-            // Map RPD and Location data
-            if (sections.rpdAndLocation) {
+            // Map RPD and Location data - only if validation passes
+            if (sections.rpdAndLocation && validation.sections?.rpdAndLocation?.shouldInclude) {
               // Update property search data
               updateReportData('propertySearchData', {
                 address: sections.rpdAndLocation.propertyAddress,
@@ -37,14 +42,14 @@ const ReportDataLoader = () => {
               }
             }
 
-            // Map Legal and Planning data
-            if (sections.legalAndPlanning) {
+            // Map Legal and Planning data - only if validation passes
+            if (sections.legalAndPlanning && validation.sections?.legalAndPlanning?.shouldInclude) {
               updateReportData('planningData', sections.legalAndPlanning);
               updateReportData('legalAndPlanning', sections.legalAndPlanning);
             }
 
-            // Map Tenancy Details
-            if (sections.tenancyScheduleLeaseDetails) {
+            // Map Tenancy Details - only for leasehold properties
+            if (sections.tenancyScheduleLeaseDetails && validation.sections?.tenancyScheduleLeaseDetails?.shouldInclude) {
               updateReportData('tenancyDetails', sections.tenancyScheduleLeaseDetails);
             }
 
@@ -73,15 +78,22 @@ const ReportDataLoader = () => {
               updateReportData('propertyDetails', sections.propertyDetails);
             }
 
-            // Map Document Attachments
-            if (sections.documentAttachments) {
+            // Map Document Attachments - only if files exist
+            if (sections.documentAttachments && validation.sections?.fileAttachments?.shouldInclude) {
               updateReportData('fileAttachments', sections.documentAttachments);
             }
 
             // Store all generated sections for direct access
             updateReportData('generatedSections' as any, sections);
 
-            console.log('Successfully loaded all generated data into report context');
+            console.log('Successfully loaded validated data into report context');
+            
+            // Log any warnings
+            if (validation.validation?.warnings?.length > 0) {
+              console.warn('Data validation warnings:', validation.validation.warnings);
+            }
+          } else if (!validation.isValid) {
+            console.error('Data validation failed:', validation.validation?.missingFields);
           }
           
           // Clear the stored data to prevent reuse

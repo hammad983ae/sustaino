@@ -116,18 +116,39 @@ Deno.serve(async (req) => {
 
 function validateAssessmentData(assessmentData: any) {
   const missingFields = [];
+  const warnings = [];
   
-  // More lenient validation - only require address
+  // Enhanced validation with comprehensive checks
   const hasAddress = assessmentData.addressData?.propertyAddress || 
-                    assessmentData.reportData?.propertySearchData?.confirmedAddress;
+                    assessmentData.reportData?.propertySearchData?.confirmedAddress ||
+                    assessmentData.reportData?.planningData?.address;
   
   if (!hasAddress) {
     missingFields.push('Property Address');
   }
 
+  // Check for report configuration
+  const reportConfig = assessmentData.reportData?.reportConfig;
+  if (!reportConfig?.propertyType) {
+    missingFields.push('Property Type');
+  }
+  
+  if (!reportConfig?.reportType) {
+    missingFields.push('Report Type');
+  }
+
+  // Check data quality warnings
+  const planningData = assessmentData.reportData?.planningData;
+  if (!planningData?.zoning && !planningData?.lga) {
+    warnings.push('Limited planning data available - manual verification recommended');
+  }
+
   return {
     isValid: missingFields.length === 0,
-    missingFields
+    missingFields,
+    warnings,
+    dataQuality: missingFields.length === 0 && warnings.length === 0 ? 'high' : 
+                 missingFields.length === 0 ? 'medium' : 'low'
   };
 }
 
@@ -151,6 +172,43 @@ async function createPropertyRecord(supabase: any, assessmentData: any) {
     console.error('Error in createPropertyRecord:', error);
     return { success: false, error: error.message };
   }
+}
+
+// Data validation and formatting functions
+function validateDataForInclusion(assessmentData: any) {
+  const { reportData, addressData } = assessmentData;
+  const reportConfig = reportData?.reportConfig || {};
+  
+  return {
+    hasAddress: !!(addressData?.propertyAddress || 
+                  reportData?.propertySearchData?.confirmedAddress ||
+                  reportData?.planningData?.address),
+    hasPlanning: !!(reportData?.planningData?.zoning || reportData?.planningData?.lga),
+    hasReportConfig: !!(reportConfig.propertyType && reportConfig.reportType),
+    isLeasehold: reportConfig.interestValues?.includes('Leasehold Interest') || 
+                reportConfig.interestValues?.includes('Ground Lease'),
+    hasPhotos: !!(fileAttachments?.propertyPhotos?.length > 0),
+    hasDocuments: !!(fileAttachments?.propertyDocuments?.length > 0 ||
+                    fileAttachments?.planningDocuments?.length > 0),
+    hasValuationApproaches: !!(reportConfig.valuationApproaches?.length > 0),
+    includeRental: reportConfig.includeRentalValuation === true
+  };
+}
+
+function formatAddressFromComponents(addressData: any) {
+  if (!addressData) return null;
+  
+  const parts = [
+    addressData.unitNumber,
+    addressData.streetNumber,
+    addressData.streetName,
+    addressData.streetType,
+    addressData.suburb,
+    addressData.state,
+    addressData.postcode
+  ].filter(Boolean);
+  
+  return parts.length > 0 ? parts.join(' ') : null;
 }
 
 async function createWorkHubJob(supabase: any, data: any) {
@@ -189,26 +247,33 @@ function generateReportSections(assessmentData: any) {
   const locationData = reportData?.locationData || {};
   const propertyIdentification = reportData?.propertyIdentification || {};
 
-  // Get address from either location
+  // Comprehensive data validation and filtering
+  const dataValidation = validateDataForInclusion(assessmentData);
+  
+  // Get address from multiple sources with priority
   const propertyAddress = addressData?.propertyAddress || 
                          reportData?.propertySearchData?.confirmedAddress ||
                          reportData?.planningData?.address ||
-                         'Unknown Address';
+                         formatAddressFromComponents(addressData) ||
+                         'Address to be confirmed';
+
+  console.log('Data validation results:', dataValidation);
 
   return {
-    // RPD and Location - Auto-populated from assessment
-    rpdAndLocation: {
-      propertyAddress,
-      lotNumber: addressData?.lotNumber || planningData?.lotNumber,
-      planNumber: addressData?.planNumber || planningData?.planNumber,
-      unitNumber: addressData?.unitNumber,
-      streetNumber: addressData?.streetNumber,
-      streetName: addressData?.streetName,
-      streetType: addressData?.streetType,
-      suburb: addressData?.suburb,
-      state: addressData?.state,
-      postcode: addressData?.postcode,
-      country: addressData?.country || 'Australia',
+    // RPD and Location - Only include if address data is available
+    ...(dataValidation.hasAddress && {
+      rpdAndLocation: {
+        propertyAddress,
+        lotNumber: addressData?.lotNumber || planningData?.lotNumber || '',
+        planNumber: addressData?.planNumber || planningData?.planNumber || '',
+        unitNumber: addressData?.unitNumber || '',
+        streetNumber: addressData?.streetNumber || '',
+        streetName: addressData?.streetName || '',
+        streetType: addressData?.streetType || '',
+        suburb: addressData?.suburb || '',
+        state: addressData?.state || '',
+        postcode: addressData?.postcode || '',
+        country: addressData?.country || 'Australia',
       
       // Property identification methods
       propertyIdentification: {
@@ -232,10 +297,11 @@ function generateReportSections(assessmentData: any) {
         amenities: locationData.amenities || 'Amenities assessment to be completed',
         services: locationData.services || 'Services availability to be completed'
       }
-    },
+    }),
 
-    // Legal and Planning - Comprehensive planning data
-    legalAndPlanning: {
+    // Legal and Planning - Only include if planning data is available
+    ...(dataValidation.hasPlanning && {
+      legalAndPlanning: {
       zoneName: planningData.zoneName || planningData.zoning || 'Zoning to be determined',
       zoneDescription: planningData.zoneDescription || 'Zone description to be researched',
       overlays: planningData.overlays || [],
@@ -260,10 +326,11 @@ function generateReportSections(assessmentData: any) {
       coordinates: planningData.coordinates,
       address: propertyAddress,
       planningImage: planningData.planningImage
-    },
+    }),
 
-    // Tenancy Schedule/Lease Details - Pre-configured for leasehold properties
-    tenancyScheduleLeaseDetails: {
+    // Tenancy Schedule/Lease Details - Only include for leasehold properties
+    ...(dataValidation.isLeasehold && {
+      tenancyScheduleLeaseDetails: {
       groundLease: {
         include: reportConfig.interestValues?.includes('Leasehold Interest') || false,
         leaseType: '',
@@ -298,7 +365,7 @@ function generateReportSections(assessmentData: any) {
         incentives: '',
         repairsMaintenance: ''
       }
-    },
+    }),
 
     // Risk Assessment - PESTEL & SWOT Analysis pre-configured
     riskAssessmentMarketIndicators: {
@@ -392,21 +459,25 @@ function generateReportSections(assessmentData: any) {
       postcode: addressData?.postcode
     },
 
-    // File Attachments - Photos and documents
-    documentAttachments: {
-      propertyPhotos: fileAttachments.propertyPhotos || [],
-      documents: fileAttachments.documents || [],
-      planningDocuments: fileAttachments.planningDocuments || [],
-      marketEvidence: fileAttachments.marketEvidence || []
-    },
+    // File Attachments - Only include if files exist
+    ...((dataValidation.hasPhotos || dataValidation.hasDocuments) && {
+      documentAttachments: {
+        propertyPhotos: fileAttachments.propertyPhotos || [],
+        documents: fileAttachments.documents || [],
+        planningDocuments: fileAttachments.planningDocuments || [],
+        marketEvidence: fileAttachments.marketEvidence || []
+      }
+    }),
 
-    // Rental Valuation - If included
-    rentalValuation: reportConfig.includeRentalValuation ? {
-      enabled: true,
-      assessmentType: reportConfig.rentalAssessmentType || 'Current Market Rent',
-      rentalBasis: reportConfig.rentalBasis || 'Market Rent',
-      customRentalBasis: reportConfig.customRentalBasis || ''
-    } : { enabled: false },
+    // Rental Valuation - Only include if specifically requested
+    ...(dataValidation.includeRental && {
+      rentalValuation: {
+        enabled: true,
+        assessmentType: reportConfig.rentalAssessmentType || 'Current Market Rent',
+        rentalBasis: reportConfig.rentalBasis || 'Market Rent',
+        customRentalBasis: reportConfig.customRentalBasis || ''
+      }
+    }),
 
     // Metadata
     metadata: {
