@@ -34,6 +34,23 @@ const PlanningDataIntegration = ({ propertyAddress = "", onDataFetched }: Planni
       setSearchAddress(fullAddress);
       setPlanningData(null); // Clear old planning data
       setSearchStep(1); // Reset search step
+      setSelectedState(''); // Reset state to force fresh selection
+      
+      // Clear ALL localStorage data for fresh start
+      if (typeof Storage !== 'undefined') {
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.includes('planning') || key.includes('mapping') || key.includes('vicplan') || key.includes('property')) {
+            localStorage.removeItem(key);
+          }
+        });
+      }
+      
+      // Dispatch event to notify other components
+      setTimeout(() => {
+        const event = new CustomEvent('addressChanged', { detail: { address: fullAddress } });
+        window.dispatchEvent(event);
+      }, 100);
     }
     
     // Auto-select state if available

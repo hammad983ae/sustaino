@@ -13,6 +13,7 @@ const PropertyAssessment = () => {
   };
 
   const handleNavigateToReport = () => {
+    // Only navigate if explicitly requested from completion step
     navigate('/report');
   };
 

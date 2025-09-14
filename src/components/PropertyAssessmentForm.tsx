@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useProperty } from '@/contexts/PropertyContext';
+import { supabase } from '@/integrations/supabase/client';
 
 // Step Components
 import { AutofillAddressFields } from '@/components/AutofillAddressFields';
@@ -135,6 +136,47 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     });
   }, [loadData]);
 
+  // Clear old data when starting fresh assessment
+  const startFreshAssessment = async () => {
+    setCurrentStep(0);
+    setCompletedSteps([]);
+    // Clear all stored data for fresh start
+    if (typeof Storage !== 'undefined') {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const storageKey = `report_PropertyAssessmentForm_${user.id}`;
+          localStorage.removeItem(storageKey);
+          // Clear report data
+          localStorage.removeItem(`global_report_tracking_${user.id}`);
+          // Clear working hub files
+          localStorage.removeItem('workingHubFiles');
+          // Clear all planning and mapping data
+          const keys = Object.keys(localStorage);
+          keys.forEach(key => {
+            if (key.includes('planning') || key.includes('mapping') || key.includes('vicplan') || key.includes('property')) {
+              localStorage.removeItem(key);
+            }
+          });
+        }
+      } catch (error) {
+        console.log('Could not clear user-specific data:', error);
+      }
+    }
+    toast({
+      title: "Fresh Start",
+      description: "All previous data cleared. Starting fresh assessment.",
+    });
+  };
+
+  // Add button to start fresh in header
+  useEffect(() => {
+    // Check if this is a fresh start (no saved data and on step 0)
+    if (currentStep === 0 && completedSteps.length === 0) {
+      startFreshAssessment();
+    }
+  }, []);
+
   useEffect(() => {
     // Auto-save progress
     const saveProgress = async () => {
@@ -222,6 +264,14 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={startFreshAssessment}
+              className="text-xs"
+            >
+              Start Fresh
+            </Button>
             <Badge variant={isSaving ? "default" : lastSaved ? "secondary" : "outline"}>
               {isSaving ? "Saving..." : lastSaved ? "Saved" : "Unsaved"}
             </Badge>

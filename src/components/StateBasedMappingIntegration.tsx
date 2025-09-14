@@ -78,6 +78,10 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
   const [selectedPortal, setSelectedPortal] = useState<StatePortal | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [mappingData, setMappingData] = useState<any>(null);
+  const [mapImages, setMapImages] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [mapDataCached, setMapDataCached] = useState(false);
+  const lastAddress = useRef<string>('');
   const [mapLayers, setMapLayers] = useState({
     zoning: true,
     overlays: true,
@@ -99,32 +103,55 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
     }
   }, [mappingData, getFormattedAddress, selectedState]);
 
-  // Load saved data on component mount and clear if address changed
+  // Clear data when address changes
   useEffect(() => {
-    const currentAddress = getFormattedAddress();
-    const savedData = localStorage.getItem('vicplan-mapping-data');
-    
-    if (savedData && currentAddress) {
-      try {
-        const parsed = JSON.parse(savedData);
-        // Only load if the address matches exactly
-        if (parsed.propertyAddress === currentAddress) {
-          setMappingData(parsed);
-        } else {
-          // Clear old data if address has changed
-          console.log('Address changed, clearing old planning data');
-          setMappingData(null);
-          localStorage.removeItem('vicplan-mapping-data');
-        }
-      } catch (error) {
-        console.error('Error loading saved mapping data:', error);
-        localStorage.removeItem('vicplan-mapping-data');
-      }
-    } else if (!currentAddress) {
-      // Clear data if no address
+    const propertyAddress = getFormattedAddress();
+    if (propertyAddress && propertyAddress !== lastAddress.current) {
+      setMapImages([]);
+      setIsLoading(false);
+      setMapDataCached(false);
       setMappingData(null);
+      
+      // Clear ALL localStorage for this component
+      if (typeof Storage !== 'undefined') {
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.includes('mapping') || key.includes('state_based') || key.includes('property') || key.includes('planning') || key.includes('vicplan')) {
+            localStorage.removeItem(key);
+          }
+        });
+      }
+      
+      lastAddress.current = propertyAddress;
+      
+      // Force component refresh
+      setTimeout(() => {
+        setMapImages([]);
+        setIsLoading(false);
+        setMapDataCached(false);
+        setMappingData(null);
+      }, 50);
     }
   }, [getFormattedAddress]);
+
+  // Listen for address change events
+  useEffect(() => {
+    const handleAddressChange = (event: CustomEvent) => {
+      const newAddress = event.detail.address;
+      if (newAddress !== lastAddress.current) {
+        setMapImages([]);
+        setIsLoading(false);
+        setMapDataCached(false);
+        setMappingData(null);
+        setSelectedState('');
+        setSelectedPortal(null);
+        lastAddress.current = newAddress;
+      }
+    };
+
+    window.addEventListener('addressChanged', handleAddressChange as EventListener);
+    return () => window.removeEventListener('addressChanged', handleAddressChange as EventListener);
+  }, []);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   // Auto-populate state from context and clear data when address changes
