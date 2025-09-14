@@ -302,68 +302,70 @@ function generateReportSections(assessmentData: any) {
     // Legal and Planning - Only include if planning data is available
     ...(dataValidation.hasPlanning && {
       legalAndPlanning: {
-      zoneName: planningData.zoneName || planningData.zoning || 'Zoning to be determined',
-      zoneDescription: planningData.zoneDescription || 'Zone description to be researched',
-      overlays: planningData.overlays || [],
-      landUse: planningData.landUse || planningData.currentUse || 'Current use to be verified',
-      developmentPotential: planningData.developmentPotential || 'To be assessed',
-      permitRequired: planningData.permitRequired ?? true,
-      heightRestriction: planningData.heightRestriction || 'To be confirmed',
-      planningScheme: planningData.planningScheme || 'Planning scheme to be identified',
-      mapReference: planningData.mapReference || 'Map reference to be obtained',
-      riskAssessment: {
-        heritage: planningData.heritage || planningData.riskAssessment?.heritage || 'Heritage assessment required',
-        flooding: planningData.floodRisk || planningData.riskAssessment?.flooding || 'Flood risk to be assessed',
-        bushfire: planningData.bushfireRisk || planningData.riskAssessment?.bushfire || 'Bushfire risk to be assessed',
-        contamination: planningData.riskAssessment?.contamination || 'Contamination assessment required'
-      },
-      coreDetails: planningData.coreDetails || {
-        commercial: planningData.zoneName || 'Zone to be confirmed',
-        landUse: planningData.landUse || 'Current use to be verified',
-        development: planningData.developmentPotential || 'Development potential to be assessed',
-        planningScheme: planningData.planningScheme || 'Planning scheme to be identified'
-      },
-      coordinates: planningData.coordinates,
-      address: propertyAddress,
-      planningImage: planningData.planningImage
+        zoneName: planningData.zoneName || planningData.zoning || 'Zoning to be determined',
+        zoneDescription: planningData.zoneDescription || 'Zone description to be researched',
+        overlays: planningData.overlays || [],
+        landUse: planningData.landUse || planningData.currentUse || 'Current use to be verified',
+        developmentPotential: planningData.developmentPotential || 'To be assessed',
+        permitRequired: planningData.permitRequired ?? true,
+        heightRestriction: planningData.heightRestriction || 'To be confirmed',
+        planningScheme: planningData.planningScheme || 'Planning scheme to be identified',
+        mapReference: planningData.mapReference || 'Map reference to be obtained',
+        riskAssessment: {
+          heritage: planningData.heritage || planningData.riskAssessment?.heritage || 'Heritage assessment required',
+          flooding: planningData.floodRisk || planningData.riskAssessment?.flooding || 'Flood risk to be assessed',
+          bushfire: planningData.bushfireRisk || planningData.riskAssessment?.bushfire || 'Bushfire risk to be assessed',
+          contamination: planningData.riskAssessment?.contamination || 'Contamination assessment required'
+        },
+        coreDetails: planningData.coreDetails || {
+          commercial: planningData.zoneName || 'Zone to be confirmed',
+          landUse: planningData.landUse || 'Current use to be verified',
+          development: planningData.developmentPotential || 'Development potential to be assessed',
+          planningScheme: planningData.planningScheme || 'Planning scheme to be identified'
+        },
+        coordinates: planningData.coordinates,
+        address: propertyAddress,
+        planningImage: planningData.planningImage
+      }
     }),
 
     // Tenancy Schedule/Lease Details - Only include for leasehold properties
     ...(dataValidation.isLeasehold && {
       tenancyScheduleLeaseDetails: {
-      groundLease: {
-        include: reportConfig.interestValues?.includes('Leasehold Interest') || false,
-        leaseType: '',
-        leaseTerm: '',
-        annualGroundRent: '',
-        reviewPeriod: '',
-        commencementDate: '',
-        expiryDate: '',
-        nextReviewDate: '',
-        reviewMethod: 'cpi',
-        permittedUse: '',
-        restrictions: '',
-        impact: '',
-        leaseOptions: {
-          optionToRenew: false,
-          optionToPurchase: false,
-          surrenderClause: false,
-          breakClause: false
+        groundLease: {
+          include: reportConfig.interestValues?.includes('Leasehold Interest') || false,
+          leaseType: '',
+          leaseTerm: '',
+          annualGroundRent: '',
+          reviewPeriod: '',
+          commencementDate: '',
+          expiryDate: '',
+          nextReviewDate: '',
+          reviewMethod: 'cpi',
+          permittedUse: '',
+          restrictions: '',
+          impact: '',
+          leaseOptions: {
+            optionToRenew: false,
+            optionToPurchase: false,
+            surrenderClause: false,
+            breakClause: false
+          }
+        },
+        tenantSummary: {
+          include: true,
+          lessor: '',
+          lessee: '',
+          commencementDate: '',
+          expiryDate: '',
+          optionsTerms: '',
+          reviewDate: '',
+          reviewMethod: 'cpi',
+          outgoings: '',
+          commencementRent: '',
+          incentives: '',
+          repairsMaintenance: ''
         }
-      },
-      tenantSummary: {
-        include: true,
-        lessor: '',
-        lessee: '',
-        commencementDate: '',
-        expiryDate: '',
-        optionsTerms: '',
-        reviewDate: '',
-        reviewMethod: 'cpi',
-        outgoings: '',
-        commencementRent: '',
-        incentives: '',
-        repairsMaintenance: ''
       }
     }),
 
