@@ -352,7 +352,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     return true;
   };
 
-  // Auto-save on step changes and data updates with better error handling
+  // Auto-save on step changes and data updates with proper debouncing
   useEffect(() => {
     const saveCurrentProgress = async () => {
       try {
@@ -378,10 +378,35 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       }
     };
 
-    // Debounce auto-save to prevent excessive saves
-    const timeoutId = setTimeout(saveCurrentProgress, 2000);
+    // Only auto-save on step changes, not on every data change
+    // Manual save should be used for data changes
+    saveCurrentProgress();
+  }, [currentStep, completedSteps]); // Removed frequent changing dependencies
+
+  // Separate effect for manual data changes with longer debounce
+  useEffect(() => {
+    const saveDataChanges = async () => {
+      try {
+        const progressData = {
+          currentStep,
+          completedSteps,
+          reportData,
+          addressData,
+          includeDetailedRentalConfig,
+          timestamp: Date.now(),
+          lastUpdated: new Date().toISOString()
+        };
+        
+        await saveData(progressData);
+      } catch (error) {
+        console.warn('Failed to auto-save data changes:', error);
+      }
+    };
+
+    // Longer debounce for data changes (10 seconds)
+    const timeoutId = setTimeout(saveDataChanges, 10000);
     return () => clearTimeout(timeoutId);
-  }, [currentStep, completedSteps, reportData, addressData, includeDetailedRentalConfig, saveData, toast]);
+  }, [reportData, addressData, includeDetailedRentalConfig]);
 
   const nextStep = () => {
     if (validateCurrentStep()) {
