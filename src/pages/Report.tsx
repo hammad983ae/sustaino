@@ -43,6 +43,23 @@ const ReportViewer = () => {
 
   // Load saved progress on component mount, but ensure it starts from section 0
   useEffect(() => {
+    // Check for report data from Property Assessment Form
+    const currentReportData = localStorage.getItem('currentReportData');
+    if (currentReportData) {
+      try {
+        const reportData = JSON.parse(currentReportData);
+        console.log('Loaded report data from Property Assessment:', reportData);
+        // Clear the stored data to prevent reuse
+        localStorage.removeItem('currentReportData');
+        // Start from the first section with the new report data
+        setCurrentSection(0);
+        setLastSavedSection(null);
+        return;
+      } catch (error) {
+        console.error('Error parsing report data:', error);
+      }
+    }
+    
     const savedData = loadReport();
     if (savedData && savedData.currentSection >= 0) {
       // Allow loading saved progress only if it's valid

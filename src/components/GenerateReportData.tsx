@@ -219,7 +219,11 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
           <div className="flex gap-2">
             {onNavigateToReport && (
               <Button 
-                onClick={onNavigateToReport} 
+                onClick={() => {
+                  // Store the generated report data before navigating
+                  localStorage.setItem('currentReportData', JSON.stringify(generatedReport));
+                  onNavigateToReport();
+                }} 
                 className="flex items-center gap-2"
               >
                 <FileText className="h-4 w-4" />
