@@ -342,10 +342,46 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     setCompletedSteps(newCompletedSteps);
   };
 
-  const validateCurrentStep = () => {
+  const validateCurrentStep = (): boolean => {
+    if (currentStep >= steps.length) return true;
+    
     const step = steps[currentStep];
-    return step.validation ? step.validation() : true;
+    if (step.validation) {
+      return step.validation();
+    }
+    return true;
   };
+
+  // Auto-save on step changes and data updates with better error handling
+  useEffect(() => {
+    const saveCurrentProgress = async () => {
+      try {
+        const progressData = {
+          currentStep,
+          completedSteps,
+          reportData,
+          addressData,
+          includeDetailedRentalConfig,
+          timestamp: Date.now(),
+          lastUpdated: new Date().toISOString()
+        };
+        
+        console.log('Auto-saving progress:', progressData);
+        await saveData(progressData);
+      } catch (error) {
+        console.error('Failed to save progress:', error);
+        toast({
+          title: "Save Warning",
+          description: "Failed to auto-save progress. Please use Save Progress button.",
+          variant: "destructive"
+        });
+      }
+    };
+
+    // Debounce auto-save to prevent excessive saves
+    const timeoutId = setTimeout(saveCurrentProgress, 2000);
+    return () => clearTimeout(timeoutId);
+  }, [currentStep, completedSteps, reportData, addressData, includeDetailedRentalConfig, saveData, toast]);
 
   const nextStep = () => {
     if (validateCurrentStep()) {

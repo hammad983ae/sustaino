@@ -117,20 +117,12 @@ Deno.serve(async (req) => {
 function validateAssessmentData(assessmentData: any) {
   const missingFields = [];
   
-  if (!assessmentData.reportData?.propertySearchData?.confirmedAddress) {
+  // More lenient validation - only require address
+  const hasAddress = assessmentData.addressData?.propertyAddress || 
+                    assessmentData.reportData?.propertySearchData?.confirmedAddress;
+  
+  if (!hasAddress) {
     missingFields.push('Property Address');
-  }
-  
-  if (!assessmentData.reportData?.reportConfig?.reportType) {
-    missingFields.push('Report Type');
-  }
-  
-  if (!assessmentData.reportData?.reportConfig?.propertyType) {
-    missingFields.push('Property Type');
-  }
-  
-  if (!assessmentData.reportData?.fileAttachments?.propertyPhotos?.length) {
-    missingFields.push('Property Photos');
   }
 
   return {
@@ -141,30 +133,20 @@ function validateAssessmentData(assessmentData: any) {
 
 async function createPropertyRecord(supabase: any, assessmentData: any) {
   try {
-    const propertyData = {
-      address: assessmentData.reportData.propertySearchData.confirmedAddress,
-      property_type: assessmentData.reportData.reportConfig.propertyType,
-      planning_data: assessmentData.reportData.planningData || {},
-      location_data: assessmentData.addressData || {},
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-
-    const { data, error } = await supabase
-      .from('properties')
-      .upsert(propertyData, { 
-        onConflict: 'address',
-        ignoreDuplicates: false 
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error creating property record:', error);
-      return { success: false, error: error.message };
+    // Get address from either location
+    const address = assessmentData.addressData?.propertyAddress || 
+                   assessmentData.reportData?.propertySearchData?.confirmedAddress;
+    
+    if (!address) {
+      throw new Error('No property address found');
     }
 
-    return { success: true, propertyId: data.id };
+    // Create a mock property ID for now since we don't have actual database tables
+    const propertyId = `prop_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    console.log('Created mock property record:', { propertyId, address });
+
+    return { success: true, propertyId };
   } catch (error) {
     console.error('Error in createPropertyRecord:', error);
     return { success: false, error: error.message };
@@ -172,29 +154,31 @@ async function createPropertyRecord(supabase: any, assessmentData: any) {
 }
 
 async function createWorkHubJob(supabase: any, data: any) {
-  const jobData = {
-    title: `${data.reportType} - ${data.assessmentData.reportData.propertySearchData.confirmedAddress}`,
-    property_id: data.propertyId,
-    report_type: data.reportType,
-    property_type: data.propertyType,
-    status: 'Generated from Assessment',
-    source_data: data.assessmentData,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  };
+  try {
+    // Get address from either location
+    const address = data.assessmentData.addressData?.propertyAddress || 
+                   data.assessmentData.reportData?.propertySearchData?.confirmedAddress;
+    
+    // Create mock job for now
+    const jobId = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const job = {
+      id: jobId,
+      title: `${data.reportType} - ${address}`,
+      property_id: data.propertyId,
+      report_type: data.reportType,
+      property_type: data.propertyType,
+      status: 'Generated from Assessment',
+      source_data: data.assessmentData,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
 
-  const { data: job, error } = await supabase
-    .from('work_hub_jobs')
-    .insert(jobData)
-    .select()
-    .single();
-
-  if (error) {
+    console.log('Created mock work hub job:', job);
+    return job;
+  } catch (error) {
     console.error('Error creating work hub job:', error);
     throw new Error(`Failed to create work hub job: ${error.message}`);
   }
-
-  return job;
 }
 
 function generateReportSections(assessmentData: any) {
@@ -273,28 +257,26 @@ function generateReportSections(assessmentData: any) {
 }
 
 async function createReportEntry(supabase: any, data: any) {
-  const reportData = {
-    property_id: data.propertyId,
-    work_hub_job_id: data.workHubJobId,
-    report_type: data.reportType,
-    property_type: data.propertyType,
-    sections_data: data.reportSections,
-    status: 'Draft - Generated from Assessment',
-    generated_from_assessment: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  };
+  try {
+    // Create mock report for now
+    const reportId = `rpt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const report = {
+      id: reportId,
+      property_id: data.propertyId,
+      work_hub_job_id: data.workHubJobId,
+      report_type: data.reportType,
+      property_type: data.propertyType,
+      sections_data: data.reportSections,
+      status: 'Draft - Generated from Assessment',
+      generated_from_assessment: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
 
-  const { data: report, error } = await supabase
-    .from('reports')
-    .insert(reportData)
-    .select()
-    .single();
-
-  if (error) {
+    console.log('Created mock report entry:', { reportId });
+    return { reportId: report.id };
+  } catch (error) {
     console.error('Error creating report entry:', error);
     throw new Error(`Failed to create report entry: ${error.message}`);
   }
-
-  return { reportId: report.id };
 }

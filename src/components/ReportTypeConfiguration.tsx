@@ -347,6 +347,14 @@ const ReportTypeConfiguration = () => {
                   <SelectItem value="market-standard">Market Standard Practice</SelectItem>
                 </SelectContent>
               </Select>
+              <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+                <h4 className="text-sm font-medium text-blue-900 dark:text-blue-400 mb-1">GST Treatment Guidelines</h4>
+                <div className="text-xs text-blue-800 dark:text-blue-300 space-y-1">
+                  <p><strong>Inclusive of GST:</strong> Commercial properties where vendor is GST registered and purchase includes GST component</p>
+                  <p><strong>Exclusive of GST:</strong> Residential properties, agricultural land, or where GST doesn't apply</p>
+                  <p><strong>Market Standard:</strong> Property type determines GST treatment (Commercial: GST inclusive, Residential: GST exclusive)</p>
+                </div>
+              </div>
             </div>
           </div>
 
