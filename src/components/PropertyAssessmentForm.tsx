@@ -68,9 +68,28 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     },
     {
       title: "Property Photos",
-      subtitle: "Upload photos and documents for your property assessment",
-      component: <DocumentUploadManager />,
-      validation: () => reportData.fileAttachments?.propertyPhotos?.length > 0
+      subtitle: "Upload photos and documents for your property assessment (optional)",
+      component: (
+        <div className="space-y-4">
+          <DocumentUploadManager />
+          <div className="flex justify-center">
+            <Button
+              variant="outline"
+              onClick={() => {
+                toast({
+                  title: "Documents Skipped",
+                  description: "Proceeding without document uploads",
+                });
+                nextStep();
+              }}
+              className="text-muted-foreground"
+            >
+              Skip Document Upload (No Documents to Upload)
+            </Button>
+          </div>
+        </div>
+      ),
+      validation: () => true // Made optional - can skip if no documents
     },
     {
       title: "Report Configuration",
@@ -89,7 +108,15 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             currentStep,
             completedSteps
           }}
-          onNavigateToReport={undefined} // Don't auto-navigate
+          onReportGenerated={(reportData) => {
+            // Report generated successfully, update data but don't navigate
+            console.log('Report generated successfully:', reportData);
+            onComplete?.(reportData);
+          }}
+          onNavigateToReport={() => {
+            // Only navigate if explicitly called from completion buttons
+            console.log('Navigation requested but staying in form');
+          }}
         />
       ),
       validation: () => true
@@ -104,11 +131,20 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
           </div>
           <div>
             <h3 className="text-xl font-semibold text-green-800 mb-2">Property Assessment Complete!</h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-4">
               Your Work Hub job has been created successfully. You can now view your report or continue with other assessments.
             </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <h4 className="font-medium text-blue-900 mb-2">Next Steps Available:</h4>
+              <ul className="text-sm text-blue-800 space-y-1">
+                <li>• Continue to complete remaining report sections</li>
+                <li>• View your generated Work Hub job</li>
+                <li>• Access the full property valuation report</li>
+                <li>• Start a new property assessment</li>
+              </ul>
+            </div>
           </div>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap">
             <Button
               variant="outline"
               onClick={() => window.open('/work-hub', '_blank')}
@@ -116,6 +152,13 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             >
               <ExternalLink className="h-4 w-4" />
               View Work Hub
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => window.location.reload()} // Simple page refresh as alternative
+              className="flex items-center gap-2"
+            >
+              Start New Assessment
             </Button>
             {onNavigateToReport && (
               <Button
@@ -394,10 +437,12 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
 
             <Button
               onClick={() => {
-                if (isLastStep) {
-                  // Just move to the next step to complete the form
-                  // Don't automatically navigate to report
+                if (currentStep === steps.length - 2) {
+                  // This is the "Review & Generate" step - create job and move to completion
                   nextStep();
+                } else if (isLastStep) {
+                  // This is the final "Assessment Complete" step - do nothing, stay here
+                  console.log('Already at completion step');
                 } else {
                   nextStep();
                 }
@@ -405,7 +450,8 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
               disabled={!canProceed}
               className="flex items-center gap-2"
             >
-              {isLastStep ? "Create Work Hub Job" : "Next"}
+              {currentStep === steps.length - 2 ? "Create Work Hub Job" : 
+               isLastStep ? "Complete" : "Next"}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
