@@ -7,14 +7,76 @@ import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { FileText, Upload, Users, Eye, FileImage } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useReportData } from "@/contexts/ReportDataContext";
 import TenancyCalculationForm from "./TenancyCalculationForm";
 
 const TenancyScheduleLeaseDetails = () => {
   const [extractedText, setExtractedText] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
+  const { reportData } = useReportData();
+  
+  // Form state for ground lease
+  const [groundLeaseData, setGroundLeaseData] = useState({
+    include: false,
+    leaseType: '',
+    leaseTerm: '',
+    annualGroundRent: '',
+    reviewPeriod: '',
+    commencementDate: '',
+    expiryDate: '',
+    nextReviewDate: '',
+    reviewMethod: 'cpi',
+    permittedUse: '',
+    restrictions: '',
+    impact: '',
+    leaseOptions: {
+      optionToRenew: false,
+      optionToPurchase: false,
+      surrenderClause: false,
+      breakClause: false
+    }
+  });
+  
+  // Form state for tenant summary
+  const [tenantData, setTenantData] = useState({
+    include: true,
+    lessor: '',
+    lessee: '',
+    commencementDate: '',
+    expiryDate: '',
+    optionsTerms: '',
+    reviewDate: '',
+    reviewMethod: 'cpi',
+    outgoings: '',
+    commencementRent: '',
+    incentives: '',
+    repairsMaintenance: ''
+  });
+
+  // Load data from generated report sections
+  useEffect(() => {
+    const generatedSections = reportData.generatedSections as any;
+    if (generatedSections?.tenancyScheduleLeaseDetails) {
+      console.log('Loading tenancy data from generated report:', generatedSections.tenancyScheduleLeaseDetails);
+      
+      if (generatedSections.tenancyScheduleLeaseDetails.groundLease) {
+        setGroundLeaseData(prev => ({
+          ...prev,
+          ...generatedSections.tenancyScheduleLeaseDetails.groundLease
+        }));
+      }
+      
+      if (generatedSections.tenancyScheduleLeaseDetails.tenantSummary) {
+        setTenantData(prev => ({
+          ...prev,
+          ...generatedSections.tenancyScheduleLeaseDetails.tenantSummary
+        }));
+      }
+    }
+  }, [reportData]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

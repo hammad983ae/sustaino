@@ -31,34 +31,56 @@ const RPDAndLocation = () => {
     otherChecked: false
   });
 
-  // Load saved data on component mount and integrate from planning
+  // Load saved data on component mount and integrate from planning and generated report
   useEffect(() => {
     const integratedData = getIntegratedData();
     
-    // Load from local save first
-    const savedData = loadData();
-    if (savedData?.propertyIdentification) {
-      setPropertyIdentification(savedData.propertyIdentification);
-    }
-    if (savedData?.analysisData) {
-      const fields = ['location','access','siteDescription','neighbourhood','amenities','services'] as const;
-      fields.forEach((f) => {
-        if (savedData.analysisData[f]) {
-          updateAnalysisField(f, savedData.analysisData[f]);
+    // Check for generated sections data first (from assessment workflow)
+    const generatedSections = reportData.generatedSections as any;
+    if (generatedSections?.rpdAndLocation) {
+      console.log('Loading RPD data from generated report:', generatedSections.rpdAndLocation);
+      
+      // Load property identification from generated data
+      if (generatedSections.rpdAndLocation.propertyIdentification) {
+        setPropertyIdentification(generatedSections.rpdAndLocation.propertyIdentification);
+      }
+      
+      // Load location analysis from generated data
+      if (generatedSections.rpdAndLocation.locationAnalysis) {
+        const locationData = generatedSections.rpdAndLocation.locationAnalysis;
+        const fields = ['location','access','siteDescription','neighbourhood','amenities','services'] as const;
+        fields.forEach((field) => {
+          if (locationData[field]) {
+            updateAnalysisField(field, locationData[field]);
+          }
+        });
+      }
+    } else {
+      // Fallback to local save and integrated data
+      const savedData = loadData();
+      if (savedData?.propertyIdentification) {
+        setPropertyIdentification(savedData.propertyIdentification);
+      }
+      if (savedData?.analysisData) {
+        const fields = ['location','access','siteDescription','neighbourhood','amenities','services'] as const;
+        fields.forEach((f) => {
+          if (savedData.analysisData[f]) {
+            updateAnalysisField(f, savedData.analysisData[f]);
+          }
+        });
+      }
+      
+      // Override with integrated planning data if available
+      if (integratedData.planningData) {
+        if (integratedData.propertyIdentification) {
+          setPropertyIdentification(prev => ({
+            ...prev,
+            ...integratedData.propertyIdentification
+          }));
         }
-      });
-    }
-    
-    // Override with integrated planning data if available
-    if (integratedData.planningData) {
-      if (integratedData.propertyIdentification) {
-        setPropertyIdentification(prev => ({
-          ...prev,
-          ...integratedData.propertyIdentification
-        }));
       }
     }
-  }, [loadData, updateAnalysisField, getIntegratedData]);
+  }, [loadData, updateAnalysisField, getIntegratedData, reportData]);
 
   const handleSave = async () => {
     const dataToSave = {

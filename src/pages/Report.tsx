@@ -7,7 +7,9 @@ import ReportSection from "@/components/ReportSection";
 import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
 import { Badge } from "@/components/ui/badge";
 import ReportDataPrePopulation from "@/components/ReportDataPrePopulation";
+import ReportDataLoader from "@/components/ReportDataLoader";
 import { ValuationProvider } from "@/contexts/ValuationContext";
+import { ReportDataProvider } from "@/contexts/ReportDataContext";
 
 const ReportViewer = () => {
   const sections = [
@@ -112,15 +114,18 @@ const ReportViewer = () => {
   const progress = ((currentSection + 1) / sections.length) * 100;
 
   return (
-    <ValuationProvider>
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
-           style={{ 
-             background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 70%, hsl(var(--primary) / 0.05) 100%)',
-             transform: 'perspective(1000px) rotateX(1deg)',
-             transformStyle: 'preserve-3d'
-           }}>
-        {/* Data Pre-population Component */}
-        <ReportDataPrePopulation />
+    <ReportDataProvider>
+      <ValuationProvider>
+        <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
+             style={{ 
+               background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 70%, hsl(var(--primary) / 0.05) 100%)',
+               transform: 'perspective(1000px) rotateX(1deg)',
+               transformStyle: 'preserve-3d'
+             }}>
+          {/* Load generated data into report context */}
+          <ReportDataLoader />
+          {/* Data Pre-population Component */}
+          <ReportDataPrePopulation />
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-20 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm"
            style={{ 
@@ -227,8 +232,9 @@ const ReportViewer = () => {
           </div>
         </div>
       </div>
-      </div>
-    </ValuationProvider>
+        </div>
+      </ValuationProvider>
+    </ReportDataProvider>
   );
 };
 

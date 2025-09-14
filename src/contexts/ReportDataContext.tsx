@@ -5,18 +5,44 @@ export interface ReportData {
   planningData?: {
     lga?: string;
     zoning?: string;
+    zoneName?: string;
+    zoneDescription?: string;
     currentUse?: string;
+    permittedUse?: string;
     lotNumber?: string;
     planNumber?: string;
     overlays?: string[];
     heightRestrictions?: string;
     setbacks?: string;
+    developmentPotential?: string;
+    permitRequired?: boolean;
+    planningScheme?: string;
+    mapReference?: string;
+    coordinates?: { lat: number; lng: number };
+    address?: string;
+    planningImage?: string;
+    heritage?: string;
+    floodRisk?: string;
+    bushfireRisk?: string;
+    riskAssessment?: {
+      heritage?: string;
+      flooding?: string;
+      bushfire?: string;
+      contamination?: string;
+    };
+    coreDetails?: {
+      commercial?: string;
+      landUse?: string;
+      development?: string;
+      planningScheme?: string;
+    };
     [key: string]: any;
   };
   
   // Property Search Data
   propertySearchData?: {
     address?: string;
+    confirmedAddress?: string;
     lotPlan?: string;
     propertyType?: string;
     landArea?: string;
@@ -57,6 +83,13 @@ export interface ReportData {
     valueComponent?: string;
     interestValues?: string;
     customBasis?: string;
+    instructingParty?: string;
+    reliantParty?: string;
+    valuationPurpose?: string;
+    includeRentalValuation?: boolean;
+    rentalAssessmentType?: string;
+    rentalBasis?: string;
+    customRentalBasis?: string;
     [key: string]: any;
   };
   
@@ -89,7 +122,133 @@ export interface ReportData {
     [key: string]: any;
   };
   
-  // Additional report sections
+  // Tenancy and Lease Details
+  tenancyDetails?: {
+    groundLease?: {
+      include?: boolean;
+      leaseType?: string;
+      leaseTerm?: number;
+      annualGroundRent?: number;
+      reviewPeriod?: number;
+      commencementDate?: string;
+      expiryDate?: string;
+      nextReviewDate?: string;
+      reviewMethod?: string;
+      permittedUse?: string;
+      restrictions?: string;
+      impact?: string;
+      leaseOptions?: {
+        optionToRenew?: boolean;
+        optionToPurchase?: boolean;
+        surrenderClause?: boolean;
+        breakClause?: boolean;
+      };
+    };
+    tenantSummary?: {
+      include?: boolean;
+      lessor?: string;
+      lessee?: string;
+      commencementDate?: string;
+      expiryDate?: string;
+      optionsTerms?: string;
+      reviewDate?: string;
+      reviewMethod?: string;
+      outgoings?: number;
+      commencementRent?: number;
+      incentives?: number;
+      repairsMaintenance?: string;
+    };
+    [key: string]: any;
+  };
+
+  // Risk Assessment and Market Analysis
+  riskAssessment?: {
+    includePestelAnalysis?: boolean;
+    includeSwotAnalysis?: boolean;
+    includeTowsAnalysis?: boolean;
+    pestelFactors?: {
+      political?: string;
+      economic?: string;
+      social?: string;
+      technological?: string;
+      environmental?: string;
+      legal?: string;
+    };
+    swotAnalysis?: {
+      strengths?: string[];
+      weaknesses?: string[];
+      opportunities?: string[];
+      threats?: string[];
+    };
+    towsStrategies?: {
+      soStrategies?: string;
+      woStrategies?: string;
+      stStrategies?: string;
+      wtStrategies?: string;
+    };
+    [key: string]: any;
+  };
+
+  // Sales History and Transaction Analysis
+  salesHistory?: {
+    includePreviousSales?: boolean;
+    includeCurrentSale?: boolean;
+    lastSaleDate?: string;
+    lastSalePrice?: number;
+    saleMethod?: string;
+    saleHistoryNotes?: string;
+    supportingDocuments?: Array<{
+      id: string;
+      name: string;
+      url: string;
+    }>;
+    transactionAnalysis?: {
+      dateOfTransaction?: string;
+      dateOfValuation?: string;
+      marketTrends?: string;
+      priceVariation?: string;
+      transactionReliability?: string;
+      valuationImpact?: string;
+      overallComments?: string;
+    };
+    [key: string]: any;
+  };
+
+  // Valuation Certificate
+  valuationCertificate?: {
+    propertyAddress?: string;
+    titleReference?: string;
+    propertyType?: string;
+    interestValued?: string;
+    purposeOfValuation?: string;
+    valueComponent?: string;
+    mortgageSecurity?: string;
+    dateOfValuation?: string;
+    dateOfInspection?: string;
+    certificateDetails?: {
+      marketValue?: number;
+      highestAndBestUse?: string;
+      caveats?: string;
+      gstTreatment?: string;
+      currency?: string;
+    };
+    professionalCertification?: {
+      valuersName?: string;
+      professionalQualification?: string;
+      registrationNumber?: string;
+      valuationFirm?: string;
+    };
+    [key: string]: any;
+  };
+
+  // Valuation Analysis
+  valuationAnalysis?: {
+    activeApproaches?: string[];
+    selectedApproaches?: string[];
+    [key: string]: any;
+  };
+
+  // Legal and Planning
   legalAndPlanning?: {
     lga?: string;
     zoning?: string;
@@ -97,19 +256,7 @@ export interface ReportData {
     [key: string]: any;
   };
 
-  valuationCertificate?: {
-    valueComponent?: string;
-    valuationBasis?: string;
-    interestValues?: string;
-    [key: string]: any;
-  };
-
-  valuationAnalysis?: {
-    activeApproaches?: string[];
-    selectedApproaches?: string[];
-    [key: string]: any;
-  };
-
+  // Property Details
   propertyDetails?: {
     propertyType?: string;
     reportType?: string;
@@ -128,6 +275,11 @@ export interface ReportData {
   };
 
   lastUpdated?: string;
+  
+  // Generated sections from assessment workflow
+  generatedSections?: {
+    [key: string]: any;
+  };
 }
 
 interface ReportDataContextType {
