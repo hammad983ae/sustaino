@@ -15,8 +15,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { AutofillAddressFields } from '@/components/AutofillAddressFields';
 import AddressConfirmation from '@/components/planning/AddressConfirmation';
 import RentalConfiguration from '@/components/RentalConfiguration';
-import PlanningDataIntegration from '@/components/PlanningDataIntegration';
+import PropertyPlanningSearch from '@/components/PropertyPlanningSearch';
 import PropertySearchAnalysis from '@/components/PropertySearchAnalysis';
+import PropertyPhotos from '@/components/PropertyPhotos';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
@@ -36,7 +37,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const { toast } = useToast();
   const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('PropertyAssessmentForm');
   const { reportData, updateReportData } = useReportData();
-  const { addressData } = useProperty();
+  const { addressData, getFormattedAddress } = useProperty();
 
   // Listen for rental configuration toggle
   useEffect(() => {
@@ -74,25 +75,17 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       title: "Property Address",
       subtitle: "Find and configure address to begin your valuation report",
       component: <AutofillAddressFields showUnit={true} showSuburb={true} />,
-      validation: () => addressData.propertyAddress || addressData.streetNumber
+      validation: () => !!(addressData.propertyAddress || addressData.streetNumber)
     },
     {
-      title: "Planning Data", 
-      subtitle: "Please confirm the property address before proceeding with planning data search",
+      title: "Planning Search", 
+      subtitle: "Access planning data, zoning information, and state portal links for this property",
       component: (
-        <PlanningDataIntegration 
-          propertyAddress={reportData.propertySearchData?.confirmedAddress}
-          onDataFetched={(data) => {
-            console.log('Planning data fetched:', data);
-            // Update report data with planning information
-            updateReportData('legalAndPlanning', {
-              ...reportData.legalAndPlanning,
-              ...data
-            });
-          }}
+        <PropertyPlanningSearch 
+          propertyAddress={addressData.propertyAddress || getFormattedAddress() || ''}
         />
       ),
-      validation: () => reportData.propertySearchData?.confirmedAddress
+      validation: () => !!(addressData.propertyAddress || addressData.streetNumber)
     },
     {
       title: "Search & Analysis",
@@ -102,28 +95,13 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     },
     {
       title: "Property Photos",
-      subtitle: "Upload photos and documents for your property assessment (optional)",
+      subtitle: "Property photos and visual assessment for this specific property",
       component: (
-        <div className="space-y-4">
-          <DocumentUploadManager />
-          <div className="flex justify-center">
-            <Button
-              variant="outline"
-              onClick={() => {
-                toast({
-                  title: "Documents Skipped",
-                  description: "Proceeding without document uploads",
-                });
-                nextStep();
-              }}
-              className="text-muted-foreground"
-            >
-              Skip Document Upload (No Documents to Upload)
-            </Button>
-          </div>
-        </div>
+        <PropertyPhotos 
+          propertyAddress={addressData.propertyAddress || getFormattedAddress() || ''}
+        />
       ),
-      validation: () => true // Made optional - can skip if no documents
+      validation: () => true // Photos are optional but recommended
     },
     {
       title: "Report Configuration",
