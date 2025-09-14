@@ -131,10 +131,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             console.log('Report generated successfully:', reportData);
             onComplete?.(reportData);
           }}
-          onNavigateToReport={() => {
-            // Only navigate if explicitly called from completion buttons
-            console.log('Navigation requested but staying in form');
-          }}
+          onNavigateToReport={onNavigateToReport}
         />
       ),
       validation: () => true

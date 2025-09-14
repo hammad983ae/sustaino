@@ -151,7 +151,7 @@ const Index = () => {
                           </p>
                         </CardHeader>
                         <CardContent className="p-8">
-                          <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/work-hub')} />
+                          <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/report')} />
                         </CardContent>
                       </Card>
                     </div>
