@@ -5,12 +5,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useProperty } from "@/contexts/PropertyContext";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Lock, LockOpen, RotateCcw } from "lucide-react";
 
 const PropertyAddressForm = () => {
-  const { addressData, updateAddressData, getFormattedAddress } = useProperty();
+  const { addressData, updateAddressData, getFormattedAddress, clearAddressData } = useProperty();
+  const [isLocked, setIsLocked] = useState(false);
 
   const handleGenerateAddress = async () => {
     const formatted = getFormattedAddress();
@@ -45,6 +47,23 @@ const PropertyAddressForm = () => {
     }
   };
 
+  const handleLockToggle = () => {
+    setIsLocked(!isLocked);
+    toast({
+      title: isLocked ? "Address Unlocked 🔓" : "Address Locked 🔒",
+      description: isLocked ? "Address fields are now editable." : "Address fields are now locked from editing.",
+    });
+  };
+
+  const handleRefreshAddress = () => {
+    clearAddressData();
+    setIsLocked(false);
+    toast({
+      title: "Address Reset 🔄",
+      description: "All address fields have been cleared.",
+    });
+  };
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
@@ -55,13 +74,36 @@ const PropertyAddressForm = () => {
         {/* Property Address Section */}
         <div className="space-y-4">
           <div>
-            <Label htmlFor="property-address" className="text-sm font-medium">Property Address</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="property-address" className="text-sm font-medium">Property Address</Label>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLockToggle}
+                  className="flex items-center gap-1"
+                >
+                  {isLocked ? <Lock className="h-3 w-3" /> : <LockOpen className="h-3 w-3" />}
+                  {isLocked ? "Unlock" : "Lock"}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefreshAddress}
+                  className="flex items-center gap-1"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                  Refresh
+                </Button>
+              </div>
+            </div>
             <Input 
               id="property-address"
               placeholder="Enter property address"
               className="mt-1"
               value={addressData.propertyAddress}
               onChange={(e) => updateAddressData({ propertyAddress: e.target.value })}
+              disabled={isLocked}
             />
           </div>
         </div>
@@ -85,6 +127,7 @@ const PropertyAddressForm = () => {
                 className="mt-1"
                 value={addressData.lotNumber}
                 onChange={(e) => updateAddressData({ lotNumber: e.target.value })}
+                disabled={isLocked}
               />
             </div>
             <div>
@@ -95,6 +138,7 @@ const PropertyAddressForm = () => {
                 className="mt-1"
                 value={addressData.planNumber}
                 onChange={(e) => updateAddressData({ planNumber: e.target.value })}
+                disabled={isLocked}
               />
             </div>
           </div>
@@ -109,6 +153,7 @@ const PropertyAddressForm = () => {
                 className="mt-1"
                 value={addressData.unitNumber}
                 onChange={(e) => updateAddressData({ unitNumber: e.target.value })}
+                disabled={isLocked}
               />
             </div>
             <div>
@@ -119,6 +164,7 @@ const PropertyAddressForm = () => {
                 className="mt-1"
                 value={addressData.streetNumber}
                 onChange={(e) => updateAddressData({ streetNumber: e.target.value })}
+                disabled={isLocked}
               />
             </div>
             <div>
@@ -129,11 +175,12 @@ const PropertyAddressForm = () => {
                 className="mt-1"
                 value={addressData.streetName}
                 onChange={(e) => updateAddressData({ streetName: e.target.value })}
+                disabled={isLocked}
               />
             </div>
             <div>
               <Label htmlFor="street-type" className="text-sm">Street Type</Label>
-              <Select value={addressData.streetType} onValueChange={(value) => updateAddressData({ streetType: value })}>
+              <Select value={addressData.streetType} onValueChange={(value) => updateAddressData({ streetType: value })} disabled={isLocked}>
                 <SelectTrigger className="mt-1">
                   <SelectValue placeholder="Select street type" />
                 </SelectTrigger>
@@ -152,7 +199,7 @@ const PropertyAddressForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="state" className="text-sm">State</Label>
-            <Select value={addressData.state} onValueChange={(value) => updateAddressData({ state: value })}>
+            <Select value={addressData.state} onValueChange={(value) => updateAddressData({ state: value })} disabled={isLocked}>
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="Select state" />
               </SelectTrigger>
@@ -176,6 +223,7 @@ const PropertyAddressForm = () => {
                 className="mt-1"
                 value={addressData.postcode}
                 onChange={(e) => updateAddressData({ postcode: e.target.value })}
+                disabled={isLocked}
               />
             </div>
             <div>
@@ -185,6 +233,7 @@ const PropertyAddressForm = () => {
                 value={addressData.country}
                 onChange={(e) => updateAddressData({ country: e.target.value })}
                 className="mt-1"
+                disabled={isLocked}
               />
             </div>
           </div>
@@ -194,6 +243,7 @@ const PropertyAddressForm = () => {
             <Button 
               className="bg-emerald-500 hover:bg-emerald-600 text-white px-6"
               onClick={handleGenerateAddress}
+              disabled={isLocked}
             >
               Generate Address
             </Button>
