@@ -43,7 +43,9 @@ export default function AutomatedValuation() {
     }
   };
 
-  const handleQuickSetupComplete = () => {
+  const handleQuickSetupComplete = (data: any) => {
+    // Store the complete assessment data and move to report
+    localStorage.setItem('propertyAssessmentCompleted', JSON.stringify(data));
     setCurrentStep("automatedReport");
   };
 
