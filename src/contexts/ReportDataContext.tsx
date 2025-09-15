@@ -175,10 +175,10 @@ export interface ReportData {
       legal?: string;
     };
     swotAnalysis?: {
-      strengths?: string[];
-      weaknesses?: string[];
-      opportunities?: string[];
-      threats?: string[];
+      strengthsText?: string;
+      weaknessesText?: string;
+      opportunitiesText?: string;
+      threatsText?: string;
     };
     towsStrategies?: {
       soStrategies?: string;

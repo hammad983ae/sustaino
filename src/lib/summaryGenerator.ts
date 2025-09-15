@@ -228,11 +228,17 @@ function extractMarketKeyPoints(reportData: any): string[] {
   
   if (reportData.riskAssessment?.swotAnalysis) {
     const swot = reportData.riskAssessment.swotAnalysis;
-    if (swot.strengths?.length > 0) {
-      points.push(`Key strengths: ${swot.strengths.slice(0, 2).join(', ')}`);
+    if (swot.strengthsText && swot.strengthsText.trim()) {
+      const strengths = swot.strengthsText.split(/[,\n]/).map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+      if (strengths.length > 0) {
+        points.push(`Key strengths: ${strengths.slice(0, 2).join(', ')}`);
+      }
     }
-    if (swot.threats?.length > 0) {
-      points.push(`Primary risks: ${swot.threats.slice(0, 2).join(', ')}`);
+    if (swot.threatsText && swot.threatsText.trim()) {
+      const threats = swot.threatsText.split(/[,\n]/).map((t: string) => t.trim()).filter((t: string) => t.length > 0);
+      if (threats.length > 0) {
+        points.push(`Primary risks: ${threats.slice(0, 2).join(', ')}`);
+      }
     }
   }
 

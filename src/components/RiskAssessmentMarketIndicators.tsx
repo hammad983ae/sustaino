@@ -45,10 +45,10 @@ const RiskAssessmentMarketIndicators = () => {
   const [riskRatings, setRiskRatings] = useState<{[key: string]: number}>({});
   const [riskSummaries, setRiskSummaries] = useState<{[key: string]: string}>({});
 
-  const [strengths, setStrengths] = useState(["Strength 1"]);
-  const [weaknesses, setWeaknesses] = useState(["Weakness 1"]);
-  const [opportunities, setOpportunities] = useState(["Opportunity 1"]);
-  const [threats, setThreats] = useState(["Threat 1"]);
+  const [strengthsText, setStrengthsText] = useState("");
+  const [weaknessesText, setWeaknessesText] = useState("");
+  const [opportunitiesText, setOpportunitiesText] = useState("");
+  const [threatsText, setThreatsText] = useState("");
 
   
   // Load saved data on component mount
@@ -65,10 +65,10 @@ const RiskAssessmentMarketIndicators = () => {
         setIncludeTowsAnalysis(savedData.includeTowsAnalysis ?? true);
         setRiskRatings(savedData.riskRatings ?? {});
         setRiskSummaries(savedData.riskSummaries ?? {});
-        setStrengths(savedData.strengths ?? ["Strength 1"]);
-        setWeaknesses(savedData.weaknesses ?? ["Weakness 1"]);
-        setOpportunities(savedData.opportunities ?? ["Opportunity 1"]);
-        setThreats(savedData.threats ?? ["Threat 1"]);
+        setStrengthsText(savedData.strengthsText ?? "");
+        setWeaknessesText(savedData.weaknessesText ?? "");
+        setOpportunitiesText(savedData.opportunitiesText ?? "");
+        setThreatsText(savedData.threatsText ?? "");
       }
     };
     loadSavedData();
@@ -87,10 +87,10 @@ const RiskAssessmentMarketIndicators = () => {
         includeTowsAnalysis,
         riskRatings,
         riskSummaries,
-        strengths,
-        weaknesses,
-        opportunities,
-        threats
+        strengthsText,
+        weaknessesText,
+        opportunitiesText,
+        threatsText
       };
       
       await saveData(dataToSave);
@@ -100,21 +100,10 @@ const RiskAssessmentMarketIndicators = () => {
     return () => clearTimeout(debounceTimer);
   }, [includeSection, includePropertyRiskRatings, includeRiskCategories, includeMarketIndicators, 
       includePestelAnalysis, includeSwotAnalysis, includeTowsAnalysis, riskRatings, riskSummaries, 
-      strengths, weaknesses, opportunities, threats, saveData]);
+      strengthsText, weaknessesText, opportunitiesText, threatsText, saveData]);
 
-  const addItem = (list: string[], setList: (items: string[]) => void, defaultText: string) => {
-    setList([...list, defaultText]);
-  };
-
-  const removeItem = (list: string[], setList: (items: string[]) => void, index: number) => {
-    setList(list.filter((_, i) => i !== index));
-  };
-
-  const updateItem = (list: string[], setList: (items: string[]) => void, index: number, value: string) => {
-    const updated = [...list];
-    updated[index] = value;
-    setList(updated);
-  };
+  // Remove unused helper functions since we're now using text areas
+  // const addItem, removeItem, updateItem functions are no longer needed
 
   const setRating = (category: string, rating: number) => {
     setRiskRatings(prev => ({ ...prev, [category]: rating }));
@@ -701,34 +690,12 @@ const RiskAssessmentMarketIndicators = () => {
                   <span className="text-lg">💪</span>
                   <Label className="text-base font-medium">Strengths</Label>
                 </div>
-                <div className="space-y-2">
-                  {strengths.map((strength, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={strength}
-                        onChange={(e) => updateItem(strengths, setStrengths, index, e.target.value)}
-                        placeholder="Enter strength..."
-                      />
-                      {strengths.length > 1 && (
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => removeItem(strengths, setStrengths, index)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                  <Button
-                    variant="outline"
-                    onClick={() => addItem(strengths, setStrengths, `Strength ${strengths.length + 1}`)}
-                    className="w-full"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Strength
-                  </Button>
-                </div>
+                <Textarea
+                  value={strengthsText}
+                  onChange={(e) => setStrengthsText(e.target.value)}
+                  placeholder="Enter strengths (one per line or separate with commas)..."
+                  className="min-h-[120px]"
+                />
               </div>
 
               {/* Weaknesses */}
@@ -737,34 +704,12 @@ const RiskAssessmentMarketIndicators = () => {
                   <span className="text-lg">⚠️</span>
                   <Label className="text-base font-medium">Weaknesses</Label>
                 </div>
-                <div className="space-y-2">
-                  {weaknesses.map((weakness, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={weakness}
-                        onChange={(e) => updateItem(weaknesses, setWeaknesses, index, e.target.value)}
-                        placeholder="Enter weakness..."
-                      />
-                      {weaknesses.length > 1 && (
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => removeItem(weaknesses, setWeaknesses, index)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                  <Button
-                    variant="outline"
-                    onClick={() => addItem(weaknesses, setWeaknesses, `Weakness ${weaknesses.length + 1}`)}
-                    className="w-full"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Weakness
-                  </Button>
-                </div>
+                <Textarea
+                  value={weaknessesText}
+                  onChange={(e) => setWeaknessesText(e.target.value)}
+                  placeholder="Enter weaknesses (one per line or separate with commas)..."
+                  className="min-h-[120px]"
+                />
               </div>
 
               {/* Opportunities */}
@@ -773,34 +718,12 @@ const RiskAssessmentMarketIndicators = () => {
                   <span className="text-lg">🚀</span>
                   <Label className="text-base font-medium">Opportunities</Label>
                 </div>
-                <div className="space-y-2">
-                  {opportunities.map((opportunity, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={opportunity}
-                        onChange={(e) => updateItem(opportunities, setOpportunities, index, e.target.value)}
-                        placeholder="Enter opportunity..."
-                      />
-                      {opportunities.length > 1 && (
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => removeItem(opportunities, setOpportunities, index)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                  <Button
-                    variant="outline"
-                    onClick={() => addItem(opportunities, setOpportunities, `Opportunity ${opportunities.length + 1}`)}
-                    className="w-full"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Opportunity
-                  </Button>
-                </div>
+                <Textarea
+                  value={opportunitiesText}
+                  onChange={(e) => setOpportunitiesText(e.target.value)}
+                  placeholder="Enter opportunities (one per line or separate with commas)..."
+                  className="min-h-[120px]"
+                />
               </div>
 
               {/* Threats */}
@@ -809,34 +732,12 @@ const RiskAssessmentMarketIndicators = () => {
                   <span className="text-lg">⚡</span>
                   <Label className="text-base font-medium">Threats</Label>
                 </div>
-                <div className="space-y-2">
-                  {threats.map((threat, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={threat}
-                        onChange={(e) => updateItem(threats, setThreats, index, e.target.value)}
-                        placeholder="Enter threat..."
-                      />
-                      {threats.length > 1 && (
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => removeItem(threats, setThreats, index)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                  <Button
-                    variant="outline"
-                    onClick={() => addItem(threats, setThreats, `Threat ${threats.length + 1}`)}
-                    className="w-full"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Threat
-                  </Button>
-                </div>
+                <Textarea
+                  value={threatsText}
+                  onChange={(e) => setThreatsText(e.target.value)}
+                  placeholder="Enter threats (one per line or separate with commas)..."
+                  className="min-h-[120px]"
+                />
               </div>
             </div>
           </CardContent>
