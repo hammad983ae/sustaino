@@ -235,19 +235,21 @@ const Index = () => {
                             </CardContent>
                           </Card>
 
-                          <Card className="bg-gradient-to-br from-white to-purple-50/50 border border-purple-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-purple-700">
-                                <Shield className="h-5 w-5" />
-                                Insurance Valuations
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Professional insurance valuations and replacement cost assessments
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/insurance-valuations">
+                            <Card className="bg-gradient-to-br from-white to-purple-50/50 border border-purple-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-purple-700">
+                                  <Shield className="h-5 w-5" />
+                                  Insurance Valuations
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Professional insurance valuations and replacement cost assessments
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
 
                           <Card className="bg-gradient-to-br from-white to-green-50/50 border border-green-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
                             <CardHeader>

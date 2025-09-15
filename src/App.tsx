@@ -23,6 +23,7 @@ import ComprehensiveValuationAnalysis from "./pages/ComprehensiveValuationAnalys
 import ESGClimateAssessment from "./pages/ESGClimateAssessment";
 import FullScreenDemo from "./pages/FullScreenDemo";
 import SocialDemo from "./pages/SocialDemo";
+import InsuranceValuationsPage from "./pages/InsuranceValuations";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -59,6 +60,7 @@ const App = () => (
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/folder-manager" element={<AutomaticFolderManager />} />
                 <Route path="/esg-climate-assessment" element={<ESGClimateAssessment />} />
+                <Route path="/insurance-valuations" element={<InsuranceValuationsPage />} />
                 <Route path="/fullscreen-demo" element={<FullScreenDemo />} />
                 <Route path="/social-demo" element={<SocialDemo />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
