@@ -1,15 +1,14 @@
 /**
  * ============================================================================
- * PROFESSIONAL INSURANCE VALUATION REPORT
- * Comprehensive insurance replacement cost assessment tool
+ * PROFESSIONAL INSURANCE VALUATION SYSTEM
+ * Comprehensive replacement cost assessment for insurance purposes
  * 
- * INCLUDES:
- * - Property assessment and building areas
- * - Construction cost calculations
- * - Professional fees and escalation
- * - Debris removal costs
- * - Rental loss assessment
- * - Complete valuation certificate
+ * INTELLECTUAL PROPERTY NOTICE:
+ * This valuation methodology and calculation system is proprietary software
+ * protected by copyright and trade secret laws. Unauthorized reproduction,
+ * distribution, or commercial use is strictly prohibited.
+ * 
+ * PROFESSIONAL COMPLIANCE: Australian Property Institute Standards
  * ============================================================================
  */
 import React, { useState, useEffect } from "react";
@@ -25,8 +24,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Building2, Calculator, FileText, AlertTriangle, MapPin, Calendar, Users, DollarSign } from "lucide-react";
+import { Building2, Calculator, FileText, AlertTriangle, MapPin, Calendar, Users, DollarSign, Upload, Trash2, Download, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PropertyDetails {
   address: string;
@@ -39,6 +39,7 @@ interface PropertyDetails {
   localGovernmentArea: string;
   zoning: string;
   numberOfUnits: number;
+  propertyType: "residential" | "commercial" | "industrial" | "mixed-use" | "retail" | "office" | "agricultural";
 }
 
 interface BuildingAreas {
@@ -76,6 +77,7 @@ interface ProjectParameters {
 }
 
 interface RentalAssessment {
+  // Residential Properties
   studioUnits: { count: number; weeklyRent: number };
   oneBedUnits: { count: number; weeklyRent: number };
   twoBedUnits: { count: number; weeklyRent: number };
@@ -87,6 +89,25 @@ interface RentalAssessment {
   threeBedHouses: { count: number; weeklyRent: number };
   fourBedHouses: { count: number; weeklyRent: number };
   fiveBedHouses: { count: number; weeklyRent: number };
+  
+  // Commercial Properties  
+  retailSpaces: { area: number; monthlyRentPerSqm: number };
+  officeSpaces: { area: number; monthlyRentPerSqm: number };
+  warehouseSpaces: { area: number; monthlyRentPerSqm: number };
+  industrialSpaces: { area: number; monthlyRentPerSqm: number };
+  
+  // Other Properties
+  specialisedSpaces: { area: number; monthlyRentPerSqm: number };
+  mixedUseSpaces: { area: number; monthlyRentPerSqm: number };
+}
+
+interface UploadedFile {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  url: string;
+  uploadedAt: string;
 }
 
 interface ValuationResults {
@@ -117,7 +138,10 @@ export default function InsuranceValuations() {
     localGovernmentArea: "",
     zoning: "General Residential",
     numberOfUnits: 1,
+    propertyType: "residential",
   });
+
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
   const [buildingAreas, setBuildingAreas] = useState<BuildingAreas>({
     primaryBuilding: 0,
@@ -154,6 +178,7 @@ export default function InsuranceValuations() {
   });
 
   const [rentalAssessment, setRentalAssessment] = useState<RentalAssessment>({
+    // Residential
     studioUnits: { count: 0, weeklyRent: 0 },
     oneBedUnits: { count: 0, weeklyRent: 0 },
     twoBedUnits: { count: 0, weeklyRent: 0 },
@@ -165,6 +190,16 @@ export default function InsuranceValuations() {
     threeBedHouses: { count: 0, weeklyRent: 0 },
     fourBedHouses: { count: 0, weeklyRent: 0 },
     fiveBedHouses: { count: 0, weeklyRent: 0 },
+    
+    // Commercial
+    retailSpaces: { area: 0, monthlyRentPerSqm: 0 },
+    officeSpaces: { area: 0, monthlyRentPerSqm: 0 },
+    warehouseSpaces: { area: 0, monthlyRentPerSqm: 0 },
+    industrialSpaces: { area: 0, monthlyRentPerSqm: 0 },
+    
+    // Other
+    specialisedSpaces: { area: 0, monthlyRentPerSqm: 0 },
+    mixedUseSpaces: { area: 0, monthlyRentPerSqm: 0 },
   });
 
   const [results, setResults] = useState<ValuationResults | null>(null);
@@ -215,10 +250,31 @@ export default function InsuranceValuations() {
     const finalInsuredValue = grandTotal + gstComponent;
     const roundedInsuredValue = Math.ceil(finalInsuredValue / 5000) * 5000;
 
-    // Calculate rental loss
-    const weeklyRental = Object.values(rentalAssessment).reduce((total, item) => {
-      return total + (item.count * item.weeklyRent);
-    }, 0);
+    // Calculate rental loss based on property type
+    let weeklyRental = 0;
+    
+    if (propertyDetails.propertyType === "residential") {
+      // Residential calculation (weekly rent)
+      weeklyRental = Object.entries(rentalAssessment)
+        .filter(([key]) => !key.includes('Spaces'))
+        .reduce((total, [, item]) => {
+          if ('weeklyRent' in item) {
+            return total + (item.count * item.weeklyRent);
+          }
+          return total;
+        }, 0);
+    } else {
+      // Commercial calculation (monthly rent converted to weekly)
+      const monthlyRental = Object.entries(rentalAssessment)
+        .filter(([key]) => key.includes('Spaces'))
+        .reduce((total, [, item]) => {
+          if ('monthlyRentPerSqm' in item) {
+            return total + (item.area * item.monthlyRentPerSqm);
+          }
+          return total;
+        }, 0);
+      weeklyRental = monthlyRental / 4.33; // Convert monthly to weekly
+    }
     
     const annualRental = weeklyRental * 52;
     const totalRentalLoss = (annualRental / 12) * totalProjectMonths;
@@ -246,6 +302,77 @@ export default function InsuranceValuations() {
       title: "Insurance Valuation Complete",
       description: `Calculated insured value: ${formatCurrency(roundedInsuredValue)}`,
     });
+  };
+
+  // File upload functionality
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+      const filePath = `insurance-valuations/${fileName}`;
+
+      try {
+        const { data, error } = await supabase.storage
+          .from('insurance-valuations')
+          .upload(filePath, file);
+
+        if (error) throw error;
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('insurance-valuations')
+          .getPublicUrl(filePath);
+
+        const newFile: UploadedFile = {
+          id: data.path,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          url: publicUrl,
+          uploadedAt: new Date().toISOString(),
+        };
+
+        setUploadedFiles(prev => [...prev, newFile]);
+        
+        toast({
+          title: "File Uploaded",
+          description: `${file.name} has been uploaded successfully.`,
+        });
+      } catch (error) {
+        toast({
+          title: "Upload Failed",
+          description: `Failed to upload ${file.name}.`,
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleFileDelete = async (fileId: string) => {
+    try {
+      const { error } = await supabase.storage
+        .from('insurance-valuations')
+        .remove([fileId]);
+
+      if (error) throw error;
+
+      setUploadedFiles(prev => prev.filter(file => file.id !== fileId));
+      
+      toast({
+        title: "File Deleted",
+        description: "File has been removed successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Delete Failed",
+        description: "Failed to delete file.",
+        variant: "destructive",
+      });
+    }
   };
 
   useEffect(() => {
@@ -313,12 +440,13 @@ export default function InsuranceValuations() {
       </div>
 
       <Tabs defaultValue="property-details" className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="property-details">Property Details</TabsTrigger>
           <TabsTrigger value="building-areas">Building Areas</TabsTrigger>
           <TabsTrigger value="construction-rates">Construction Rates</TabsTrigger>
           <TabsTrigger value="project-parameters">Project Parameters</TabsTrigger>
           <TabsTrigger value="rental-assessment">Rental Assessment</TabsTrigger>
+          <TabsTrigger value="documents">Photos & Documents</TabsTrigger>
           <TabsTrigger value="valuation-results">Valuation Results</TabsTrigger>
           <TabsTrigger value="report-generator">Report Generator</TabsTrigger>
         </TabsList>
@@ -386,6 +514,23 @@ export default function InsuranceValuations() {
                     value={propertyDetails.numberOfUnits}
                     onChange={(e) => setPropertyDetails(prev => ({ ...prev, numberOfUnits: parseInt(e.target.value) || 1 }))}
                   />
+                </div>
+                <div>
+                  <Label htmlFor="propertyType">Property Type</Label>
+                  <Select value={propertyDetails.propertyType} onValueChange={(value) => setPropertyDetails(prev => ({ ...prev, propertyType: value as any }))}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="residential">Residential</SelectItem>
+                      <SelectItem value="commercial">Commercial</SelectItem>
+                      <SelectItem value="industrial">Industrial</SelectItem>
+                      <SelectItem value="mixed-use">Mixed Use</SelectItem>
+                      <SelectItem value="retail">Retail</SelectItem>
+                      <SelectItem value="office">Office</SelectItem>
+                      <SelectItem value="agricultural">Agricultural</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </CardContent>
             </Card>
@@ -793,53 +938,170 @@ export default function InsuranceValuations() {
           </div>
         </TabsContent>
 
+        <TabsContent value="documents" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Upload className="h-4 w-4" />
+                Property Photos & Documents
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="file-upload">Upload Files</Label>
+                <Input
+                  id="file-upload"
+                  type="file"
+                  multiple
+                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+                  onChange={handleFileUpload}
+                  className="cursor-pointer"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Supported: Images (JPG, PNG, etc.), PDF, Word, Excel documents
+                </p>
+              </div>
+
+              {uploadedFiles.length > 0 && (
+                <div>
+                  <h4 className="font-medium mb-3">Uploaded Files</h4>
+                  <div className="grid gap-3">
+                    {uploadedFiles.map((file) => (
+                      <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          {file.type.startsWith('image/') ? (
+                            <ImageIcon className="h-5 w-5 text-blue-500" />
+                          ) : (
+                            <FileText className="h-5 w-5 text-gray-500" />
+                          )}
+                          <div>
+                            <p className="font-medium text-sm">{file.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {(file.size / 1024 / 1024).toFixed(2)} MB • {new Date(file.uploadedAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => window.open(file.url, '_blank')}
+                          >
+                            <Download className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleFileDelete(file.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="rental-assessment" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4" />
-                Residential Rental Assessment
+                {propertyDetails.propertyType === "residential" ? "Residential" : 
+                 propertyDetails.propertyType === "commercial" ? "Commercial" : 
+                 propertyDetails.propertyType === "industrial" ? "Industrial" :
+                 propertyDetails.propertyType === "mixed-use" ? "Mixed Use" :
+                 "Property"} Rental Assessment
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Object.entries(rentalAssessment).map(([key, value]) => (
-                  <div key={key} className="p-4 border rounded-lg">
-                    <h4 className="font-medium mb-2 capitalize">
-                      {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label htmlFor={`${key}-count`}>Count</Label>
-                        <Input
-                          id={`${key}-count`}
-                          type="number"
-                          value={value.count}
-                          onChange={(e) => setRentalAssessment(prev => ({
-                            ...prev,
-                            [key]: { ...prev[key as keyof RentalAssessment], count: parseInt(e.target.value) || 0 }
-                          }))}
-                        />
+              {propertyDetails.propertyType === "residential" ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {Object.entries(rentalAssessment)
+                    .filter(([key]) => !key.includes('Spaces'))
+                    .map(([key, value]) => (
+                    <div key={key} className="p-4 border rounded-lg">
+                      <h4 className="font-medium mb-2 capitalize">
+                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <Label htmlFor={`${key}-count`}>Count</Label>
+                          <Input
+                            id={`${key}-count`}
+                            type="number"
+                            value={'count' in value ? value.count : 0}
+                            onChange={(e) => setRentalAssessment(prev => ({
+                              ...prev,
+                              [key]: { ...prev[key as keyof RentalAssessment], count: parseInt(e.target.value) || 0 }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`${key}-rent`}>Weekly Rent ($)</Label>
+                          <Input
+                            id={`${key}-rent`}
+                            type="number"
+                            value={'weeklyRent' in value ? value.weeklyRent : 0}
+                            onChange={(e) => setRentalAssessment(prev => ({
+                              ...prev,
+                              [key]: { ...prev[key as keyof RentalAssessment], weeklyRent: parseFloat(e.target.value) || 0 }
+                            }))}
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor={`${key}-rent`}>Weekly Rent ($)</Label>
-                        <Input
-                          id={`${key}-rent`}
-                          type="number"
-                          value={value.weeklyRent}
-                          onChange={(e) => setRentalAssessment(prev => ({
-                            ...prev,
-                            [key]: { ...prev[key as keyof RentalAssessment], weeklyRent: parseFloat(e.target.value) || 0 }
-                          }))}
-                        />
+                      <div className="mt-2 p-2 bg-muted rounded text-sm">
+                        Total: {formatCurrency(('count' in value && 'weeklyRent' in value ? value.count * value.weeklyRent : 0) * 52)} pa
                       </div>
                     </div>
-                    <div className="mt-2 p-2 bg-muted rounded text-sm">
-                      Total: {formatCurrency(value.count * value.weeklyRent * 52)} pa
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Object.entries(rentalAssessment)
+                    .filter(([key]) => key.includes('Spaces'))
+                    .map(([key, value]) => (
+                    <div key={key} className="p-4 border rounded-lg">
+                      <h4 className="font-medium mb-2 capitalize">
+                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <Label htmlFor={`${key}-area`}>Area (m²)</Label>
+                          <Input
+                            id={`${key}-area`}
+                            type="number"
+                            value={'area' in value ? value.area : 0}
+                            onChange={(e) => setRentalAssessment(prev => ({
+                              ...prev,
+                              [key]: { ...prev[key as keyof RentalAssessment], area: parseFloat(e.target.value) || 0 }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`${key}-rent`}>Monthly Rent ($/m²)</Label>
+                          <Input
+                            id={`${key}-rent`}
+                            type="number"
+                            value={'monthlyRentPerSqm' in value ? value.monthlyRentPerSqm : 0}
+                            onChange={(e) => setRentalAssessment(prev => ({
+                              ...prev,
+                              [key]: { ...prev[key as keyof RentalAssessment], monthlyRentPerSqm: parseFloat(e.target.value) || 0 }
+                            }))}
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-2 p-2 bg-muted rounded text-sm">
+                        Monthly Total: {formatCurrency(('area' in value && 'monthlyRentPerSqm' in value ? value.area * value.monthlyRentPerSqm : 0))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
