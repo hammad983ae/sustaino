@@ -76,7 +76,11 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       title: "Property Address",
       subtitle: "Find and configure address to begin your valuation report",
       component: <PropertyAddressForm />,
-      validation: () => !!(addressData.propertyAddress || addressData.streetNumber)
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Property Address validation:', { hasAddress, addressData });
+        return hasAddress;
+      }
     },
     {
       title: "Planning Search", 
@@ -86,13 +90,21 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
           propertyAddress={addressData.propertyAddress || getFormattedAddress() || ''}
         />
       ),
-      validation: () => !!(addressData.propertyAddress || addressData.streetNumber)
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Planning Search validation:', { hasAddress, addressData });
+        return hasAddress;
+      }
     },
     {
       title: "Search & Analysis",
       subtitle: "Automated property location and site analysis with market valuation",
       component: <PropertySearchAnalysis />,
-      validation: () => true // Analysis is optional but recommended
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Search & Analysis validation:', { hasAddress, addressData });
+        return hasAddress; // Require address to proceed with analysis
+      }
     },
     {
       title: "Property Photos",
@@ -102,19 +114,32 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
           propertyAddress={addressData.propertyAddress || getFormattedAddress() || ''}
         />
       ),
-      validation: () => true // Photos are optional but recommended
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Property Photos validation:', { hasAddress, addressData });
+        return hasAddress; // Require address to proceed
+      }
     },
     {
       title: "Report Configuration",
       subtitle: "Configure your report settings and client information",
       component: <ReportTypeConfiguration />,
-      validation: () => true // Allow progression from report configuration
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        const hasConfig = !!(reportData.reportConfig?.reportType && reportData.reportConfig?.propertyType);
+        console.log('Report Configuration validation:', { hasAddress, hasConfig, reportData: reportData.reportConfig });
+        return hasAddress; // Require address at minimum
+      }
     },
     {
       title: "Rental Configuration",
       subtitle: "Configure detailed rental valuation settings (optional)",
       component: <RentalConfiguration />,
-      validation: () => true // Rental configuration is optional
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Rental Configuration validation:', { hasAddress, addressData });
+        return hasAddress; // Require address
+      }
     },
     {
       title: "Review & Generate", 
@@ -135,7 +160,11 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
           onNavigateToReport={onNavigateToReport}
         />
       ),
-      validation: () => true
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Review & Generate validation:', { hasAddress, addressData });
+        return hasAddress; // Require address to generate report
+      }
     },
     {
       title: "Assessment Complete",
@@ -213,8 +242,12 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
 
   // Clear old data when starting fresh assessment
   const startFreshAssessment = async () => {
+    console.log('Starting fresh assessment - clearing all data');
+    
+    // Reset form state
     setCurrentStep(0);
     setCompletedSteps([]);
+    setIncludeDetailedRentalConfig(false);
     
     // Force clear ALL localStorage data
     if (typeof Storage !== 'undefined') {
@@ -266,19 +299,29 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     const freshStartEvent = new CustomEvent('freshStart', { detail: { timestamp: Date.now() } });
     window.dispatchEvent(freshStartEvent);
     
+    // Force page reload to ensure clean state
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+    
     toast({
       title: "Fresh Start",
       description: "All previous data cleared. Starting fresh assessment.",
     });
   };
 
-  // Add button to start fresh in header
+  // Only auto-clear if there's corrupted state (steps marked complete but no data)
   useEffect(() => {
-    // Check if this is a fresh start (no saved data and on step 0)
-    if (currentStep === 0 && completedSteps.length === 0) {
-      startFreshAssessment();
+    // Check if state is corrupted (completed steps but no actual data)
+    const hasCompletedSteps = completedSteps.some(step => step === true);
+    const hasValidData = !!(addressData.propertyAddress || addressData.streetNumber);
+    
+    if (hasCompletedSteps && !hasValidData) {
+      console.log('Detected corrupted state - completed steps but no data. Clearing state.');
+      setCurrentStep(0);
+      setCompletedSteps([]);
     }
-  }, []);
+  }, [completedSteps, addressData]);
 
   useEffect(() => {
     // Auto-save progress
@@ -313,9 +356,15 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   }
 
   const markStepComplete = (stepIndex: number) => {
-    const newCompletedSteps = [...completedSteps];
-    newCompletedSteps[stepIndex] = true;
-    setCompletedSteps(newCompletedSteps);
+    // Only mark step complete if it passes validation
+    if (stepIndex < allSteps.length && allSteps[stepIndex].validation()) {
+      const newCompletedSteps = [...completedSteps];
+      newCompletedSteps[stepIndex] = true;
+      setCompletedSteps(newCompletedSteps);
+      console.log(`Step ${stepIndex} marked as complete:`, allSteps[stepIndex].title);
+    } else {
+      console.log(`Step ${stepIndex} validation failed, not marking complete`);
+    }
   };
 
   const validateCurrentStep = (): boolean => {
