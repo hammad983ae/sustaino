@@ -14,7 +14,7 @@ import { useSaveSystem } from "@/hooks/useSaveSystem";
 import { useState, useEffect } from "react";
 
 const RPDAndLocation = () => {
-  const { addressData } = useProperty();
+  const { addressData, updateAddressData } = useProperty();
   const { analysisData, isGenerating, generateLocationAnalysis, updateAnalysisField } = usePropertyLocationData();
   const { saveData, loadData, isSaving, lastSaved } = useSaveSystem('RPD_and_Location');
   const { reportData, updateReportData, getIntegratedData } = useReportData();
@@ -34,6 +34,20 @@ const RPDAndLocation = () => {
   // Load saved data on component mount and integrate from planning and generated report
   useEffect(() => {
     const integratedData = getIntegratedData();
+    console.log('Integrated data in RPD component:', integratedData);
+    
+    // Transfer lot/plan from planning data to address data if available
+    if (integratedData.planningData?.lotNumber || integratedData.planningData?.planNumber) {
+      console.log('Updating lot/plan from planning data:', {
+        lotNumber: integratedData.planningData.lotNumber,
+        planNumber: integratedData.planningData.planNumber
+      });
+      
+      updateAddressData({
+        lotNumber: integratedData.planningData.lotNumber || addressData.lotNumber || '',
+        planNumber: integratedData.planningData.planNumber || addressData.planNumber || ''
+      });
+    }
     
     // Check for generated sections data first (from assessment workflow)
     const generatedSections = reportData.generatedSections as any;
@@ -80,7 +94,7 @@ const RPDAndLocation = () => {
         }
       }
     }
-  }, [loadData, updateAnalysisField, getIntegratedData, reportData]);
+  }, [loadData, updateAnalysisField, getIntegratedData, reportData, updateAddressData]);
 
   const handleSave = async () => {
     const dataToSave = {
@@ -130,7 +144,7 @@ const RPDAndLocation = () => {
         <div className="flex gap-3">
           <Button 
             onClick={generateLocationAnalysis}
-            disabled={isGenerating || !addressData?.propertyAddress}
+            disabled={isGenerating}
             variant="outline"
             className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-none"
           >

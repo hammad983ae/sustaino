@@ -30,6 +30,8 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
     const planningExamples = {
       // Sample data for 320 Deakin Avenue (as shown in uploaded images)
       '320 deakin avenue': {
+        lotNumber: '1',
+        planNumber: 'PS123456',
         zoneName: 'Commercial 1 Zone (C1Z)',
         zoneDescription: 'Provides for a range of commercial activities to service the needs of the wider community',
         overlays: ['Development Contributions Plan Overlay', 'Special Building Overlay', 'Heritage Overlay'],
@@ -64,6 +66,8 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
     
     // Generate generic planning data based on property type and location
     return {
+      lotNumber: Math.floor(Math.random() * 999 + 1).toString(),
+      planNumber: `PS${Math.floor(Math.random() * 999999 + 100000)}`,
       zoneName: `Residential 1 Zone (R1Z)`,
       zoneDescription: 'Provides for residential development at a range of densities with complementary uses',
       overlays: ['Development Contributions Plan Overlay'],
@@ -93,13 +97,17 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
     loadData().then(savedData => {
       if (savedData?.planningData) {
         setLocalPlanningData(savedData.planningData);
+        // Update report data with loaded planning data
+        updateReportData('planningData', savedData.planningData);
       } else {
         // Generate default planning data
         const defaultData = generateDefaultPlanningData();
         setLocalPlanningData(defaultData);
+        // Update report data with default planning data
+        updateReportData('planningData', defaultData);
       }
     });
-  }, [loadData, propertyAddress]);
+  }, [loadData, propertyAddress, updateReportData]);
 
   // Use saved planning data if available, otherwise use generated data
   const planningData = localPlanningData || generateDefaultPlanningData();
@@ -114,7 +122,8 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
     
     const result = await saveData(planningInfo);
     if (result.success) {
-      // Also update report data
+      // Also update report data with planning data including lot/plan
+      updateReportData('planningData', planningData);
       updateReportData('legalAndPlanning', {
         ...reportData.legalAndPlanning,
         ...planningData
@@ -131,7 +140,8 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
     };
     setLocalPlanningData(updatedData);
     
-    // Auto-save updated data
+    // Auto-save updated data and pass lot/plan to planning data
+    updateReportData('planningData', updatedData);
     updateReportData('legalAndPlanning', {
       ...reportData.legalAndPlanning,
       ...updatedData
