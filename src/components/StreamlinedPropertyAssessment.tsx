@@ -16,6 +16,7 @@ import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import RentalConfiguration from '@/components/RentalConfiguration';
 import IntelligentAssessmentAutomation from '@/components/IntelligentAssessmentAutomation';
 import AutoGenerateSummary from '@/components/AutoGenerateSummary';
+import TenancyScheduleLeaseDetails from '@/components/TenancyScheduleLeaseDetails';
 
 interface StreamlinedPropertyAssessmentProps {
   onComplete: (data: any) => void;
@@ -24,13 +25,13 @@ interface StreamlinedPropertyAssessmentProps {
 
 export default function StreamlinedPropertyAssessment({ onComplete, initialData }: StreamlinedPropertyAssessmentProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>(new Array(8).fill(false));
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>(new Array(9).fill(false));
   const [includeRentalConfig, setIncludeRentalConfig] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const { reportData, updateReportData } = useReportData();
 
-  // Core 8-step workflow that provides all data needed for full report generation
+  // Core 9-step workflow that provides all data needed for full report generation
   const coreSteps = [
     {
       id: 'property-address',
@@ -81,6 +82,15 @@ export default function StreamlinedPropertyAssessment({ onComplete, initialData 
       component: <RentalConfiguration />,
       required: false,
       conditional: true
+    },
+    {
+      id: 'tenancy-lease-details',
+      title: "Tenancy & Lease Details",
+      subtitle: "Ground lease details and tenancy information",
+      icon: <FileText className="h-5 w-5" />,
+      component: <TenancyScheduleLeaseDetails />,
+      required: false,
+      description: "Ground lease details will only appear for leasehold properties. Configure tenancy information and upload lease documents."
     },
     {
       id: 'intelligent-enhancement',
@@ -260,7 +270,7 @@ export default function StreamlinedPropertyAssessment({ onComplete, initialData 
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold mb-2">Streamlined Property Assessment</h1>
           <p className="text-muted-foreground">
-            8 core steps to collect all data needed for complete report generation
+            9 core steps to collect all data needed for complete report generation
           </p>
           <Badge variant="secondary" className="mt-2">
             Step {currentStep + 1} of {activeSteps.length}
@@ -342,7 +352,7 @@ export default function StreamlinedPropertyAssessment({ onComplete, initialData 
         {/* Step Overview */}
         <div className="mt-8 text-center text-sm text-muted-foreground">
           <p className="font-medium mb-2">
-            These 8 core steps provide all data needed to auto-generate:
+            These 9 core steps provide all data needed to auto-generate:
           </p>
           <p>
             Risk Assessment • Sales Evidence • ESG Analysis • Market Commentary • 
