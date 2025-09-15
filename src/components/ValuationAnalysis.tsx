@@ -22,12 +22,13 @@ import ValuationAnalysisSpecialised from "./ValuationAnalysisSpecialised";
 import LiveMarketDataFeed from "./LiveMarketDataFeed";
 import InteractivePropertyMap from "./InteractivePropertyMap";
 import PredictiveAnalyticsDashboard from "./PredictiveAnalyticsDashboard";
+import InsuranceValuations from "./InsuranceValuations";
 
 export default function ValuationAnalysis() {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="automated" className="w-full">
-        <TabsList className="grid w-full grid-cols-8">
+        <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="automated">Automated</TabsTrigger>
           <TabsTrigger value="commercial">Commercial</TabsTrigger>
           <TabsTrigger value="residential">Residential</TabsTrigger>
@@ -36,6 +37,7 @@ export default function ValuationAnalysis() {
           <TabsTrigger value="market-data">Live Market</TabsTrigger>
           <TabsTrigger value="mapping">Smart Maps</TabsTrigger>
           <TabsTrigger value="predictions">AI Predictions</TabsTrigger>
+          <TabsTrigger value="insurance">Insurance Valuations</TabsTrigger>
         </TabsList>
         
         <TabsContent value="automated" className="mt-6">
@@ -68,6 +70,10 @@ export default function ValuationAnalysis() {
         
         <TabsContent value="predictions" className="mt-6">
           <PredictiveAnalyticsDashboard />
+        </TabsContent>
+        
+        <TabsContent value="insurance" className="mt-6">
+          <InsuranceValuations />
         </TabsContent>
       </Tabs>
     </div>
