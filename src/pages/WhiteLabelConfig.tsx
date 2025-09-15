@@ -52,7 +52,7 @@ export default function WhiteLabelConfig() {
         .eq('user_id', user.id)
         .single();
       
-      setIsAuthorized(userRole?.role === 'admin');
+      setIsAuthorized(userRole?.role === 'admin' || userRole?.role === 'owner');
     }
   };
 
