@@ -10,6 +10,8 @@ import AddressConfirmation from '@/components/planning/AddressConfirmation';
 import StatePlanningPortalLinks from '@/components/planning/StatePlanningPortalLinks';
 import VicPlanReportExporter from '@/components/planning/VicPlanReportExporter';
 import StateBasedMappingIntegration from '@/components/StateBasedMappingIntegration';
+import AustralianPlanningPortalIntegration from '@/components/AustralianPlanningPortalIntegration';
+import AustralianAPIIntegration from '@/components/planning/AustralianAPIIntegration';
 
 interface PropertyPlanningSearchProps {
   propertyAddress: string;
@@ -267,6 +269,26 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
         key={propertyAddress} // Force re-render when address changes
         onPlanningDataUpdate={handlePlanningDataUpdate} 
       />
+
+      {/* Australian Planning Portal Integration */}
+      <AustralianPlanningPortalIntegration
+        propertyAddress={propertyAddress}
+        onDataReceived={(data) => {
+          console.log('Australian planning data received:', data);
+          // Integrate with existing planning data
+          if (data.length > 0) {
+            const planningUpdate = {
+              ...planningData,
+              australianPortalData: data,
+              lastUpdated: new Date().toISOString()
+            };
+            handlePlanningDataUpdate(planningUpdate);
+          }
+        }}
+      />
+
+      {/* API Integration Documentation */}
+      <AustralianAPIIntegration />
     </div>
   );
 };
