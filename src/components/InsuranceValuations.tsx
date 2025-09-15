@@ -42,7 +42,23 @@ interface PropertyDetails {
   propertyType: "residential" | "commercial" | "industrial" | "mixed-use" | "retail" | "office" | "agricultural";
 }
 
+interface BuildingComponent {
+  id: string;
+  name: string;
+  area: number;
+  rate: number;
+  category: "building" | "external";
+}
+
+interface Building {
+  id: string;
+  name: string;
+  components: BuildingComponent[];
+}
+
 interface BuildingAreas {
+  buildings: Building[];
+  // Keep legacy fields for backward compatibility
   primaryBuilding: number;
   carAccommodation: number;
   garage: number;
@@ -144,6 +160,19 @@ export default function InsuranceValuations() {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
   const [buildingAreas, setBuildingAreas] = useState<BuildingAreas>({
+    buildings: [
+      {
+        id: "building-1",
+        name: "Primary Building",
+        components: [
+          { id: "primary", name: "Primary Building", area: 0, rate: 2750, category: "building" },
+          { id: "garage", name: "Garage", area: 0, rate: 650, category: "building" },
+          { id: "porch", name: "Porch", area: 0, rate: 800, category: "building" },
+          { id: "balcony", name: "Balcony", area: 0, rate: 600, category: "building" },
+        ]
+      }
+    ],
+    // Legacy compatibility
     primaryBuilding: 0,
     carAccommodation: 0,
     garage: 0,
@@ -207,20 +236,28 @@ export default function InsuranceValuations() {
   const { toast } = useToast();
 
   const calculateValuation = () => {
-    // Calculate replacement costs
-    const primaryBuildingCost = buildingAreas.primaryBuilding * constructionRates.primaryBuildingRate;
-    const carAccommodationCost = buildingAreas.carAccommodation * constructionRates.carAccommodationRate;
-    const garageCost = buildingAreas.garage * constructionRates.garageRate;
-    const porchCost = buildingAreas.porch * constructionRates.porchRate;
-    const balconyCost = buildingAreas.balcony * constructionRates.balconyRate;
-    const patioCost = buildingAreas.openPatio * constructionRates.patioRate;
-    const pavingCost = buildingAreas.paving * constructionRates.pavingRate;
-    const landscapingCost = buildingAreas.landscaping * constructionRates.landscapingRate;
-    const fencingCost = buildingAreas.fencing * constructionRates.fencingRate;
+    // Calculate replacement costs from dynamic buildings and components
+    let totalReplacementValue = 0;
+    
+    // Calculate from new building system
+    buildingAreas.buildings.forEach(building => {
+      building.components.forEach(component => {
+        totalReplacementValue += component.area * component.rate;
+      });
+    });
+    
+    // Add legacy fields for backward compatibility
+    totalReplacementValue += buildingAreas.primaryBuilding * constructionRates.primaryBuildingRate;
+    totalReplacementValue += buildingAreas.carAccommodation * constructionRates.carAccommodationRate;
+    totalReplacementValue += buildingAreas.garage * constructionRates.garageRate;
+    totalReplacementValue += buildingAreas.porch * constructionRates.porchRate;
+    totalReplacementValue += buildingAreas.balcony * constructionRates.balconyRate;
+    totalReplacementValue += buildingAreas.openPatio * constructionRates.patioRate;
+    totalReplacementValue += buildingAreas.paving * constructionRates.pavingRate;
+    totalReplacementValue += buildingAreas.landscaping * constructionRates.landscapingRate;
+    totalReplacementValue += buildingAreas.fencing * constructionRates.fencingRate;
 
-    const replacementValue = primaryBuildingCost + carAccommodationCost + garageCost + 
-                           porchCost + balconyCost + patioCost + pavingCost + 
-                           landscapingCost + fencingCost;
+    const replacementValue = totalReplacementValue;
 
     // Calculate project period
     const totalProjectMonths = projectParameters.designDocMonths + 
@@ -375,8 +412,100 @@ export default function InsuranceValuations() {
     }
   };
 
+  // Building management functions
+  const addBuilding = () => {
+    const newBuilding: Building = {
+      id: `building-${Date.now()}`,
+      name: `Building ${buildingAreas.buildings.length + 1}`,
+      components: [
+        { id: `primary-${Date.now()}`, name: "Primary Structure", area: 0, rate: 2750, category: "building" },
+      ]
+    };
+    
+    setBuildingAreas(prev => ({
+      ...prev,
+      buildings: [...prev.buildings, newBuilding]
+    }));
+  };
+
+  const removeBuilding = (buildingId: string) => {
+    setBuildingAreas(prev => ({
+      ...prev,
+      buildings: prev.buildings.filter(b => b.id !== buildingId)
+    }));
+  };
+
+  const updateBuildingName = (buildingId: string, name: string) => {
+    setBuildingAreas(prev => ({
+      ...prev,
+      buildings: prev.buildings.map(b => 
+        b.id === buildingId ? { ...b, name } : b
+      )
+    }));
+  };
+
+  const addComponent = (buildingId: string, category: "building" | "external") => {
+    const componentTypes = {
+      building: ["Additional Structure", "Shed", "Carport", "Storage", "Workshop", "Granny Flat"],
+      external: ["Pool", "BBQ Area", "Tennis Court", "Deck", "Pergola", "Driveway", "Garden Beds", "Retaining Wall"]
+    };
+    
+    const defaultNames = componentTypes[category];
+    const defaultName = defaultNames[Math.floor(Math.random() * defaultNames.length)];
+    
+    const newComponent: BuildingComponent = {
+      id: `component-${Date.now()}`,
+      name: defaultName,
+      area: 0,
+      rate: category === "building" ? 2000 : 300,
+      category
+    };
+
+    setBuildingAreas(prev => ({
+      ...prev,
+      buildings: prev.buildings.map(b => 
+        b.id === buildingId 
+          ? { ...b, components: [...b.components, newComponent] }
+          : b
+      )
+    }));
+  };
+
+  const removeComponent = (buildingId: string, componentId: string) => {
+    setBuildingAreas(prev => ({
+      ...prev,
+      buildings: prev.buildings.map(b => 
+        b.id === buildingId 
+          ? { ...b, components: b.components.filter(c => c.id !== componentId) }
+          : b
+      )
+    }));
+  };
+
+  const updateComponent = (buildingId: string, componentId: string, updates: Partial<BuildingComponent>) => {
+    setBuildingAreas(prev => ({
+      ...prev,
+      buildings: prev.buildings.map(b => 
+        b.id === buildingId 
+          ? { 
+              ...b, 
+              components: b.components.map(c => 
+                c.id === componentId ? { ...c, ...updates } : c
+              )
+            }
+          : b
+      )
+    }));
+  };
+
   useEffect(() => {
-    if (buildingAreas.primaryBuilding > 0) {
+    const totalPrimaryBuilding = buildingAreas.buildings.reduce((total, building) => {
+      return total + building.components.reduce((buildingTotal, component) => {
+        return buildingTotal + (component.category === "building" ? component.area : 0);
+      }, 0);
+    }, 0);
+    
+    if (totalPrimaryBuilding > 0) {
       calculateValuation();
     }
   }, [buildingAreas, constructionRates, projectParameters, rentalAssessment]);
@@ -616,133 +745,231 @@ export default function InsuranceValuations() {
         </TabsContent>
 
         <TabsContent value="building-areas" className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Building Areas (m²)</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="primaryBuilding">Primary Building</Label>
-                  <Input
-                    id="primaryBuilding"
-                    type="number"
-                    value={buildingAreas.primaryBuilding}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, primaryBuilding: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="carAccommodation">Car Accommodation</Label>
-                  <Input
-                    id="carAccommodation"
-                    type="number"
-                    value={buildingAreas.carAccommodation}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, carAccommodation: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="garage">Garage</Label>
-                  <Input
-                    id="garage"
-                    type="number"
-                    value={buildingAreas.garage}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, garage: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="porch">Porch</Label>
-                  <Input
-                    id="porch"
-                    type="number"
-                    value={buildingAreas.porch}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, porch: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="balcony">Balcony</Label>
-                  <Input
-                    id="balcony"
-                    type="number"
-                    value={buildingAreas.balcony}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, balcony: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>External Areas (m²)</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="openPatio">Open Patio</Label>
-                  <Input
-                    id="openPatio"
-                    type="number"
-                    value={buildingAreas.openPatio}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, openPatio: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="paving">Paving</Label>
-                  <Input
-                    id="paving"
-                    type="number"
-                    value={buildingAreas.paving}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, paving: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="landscaping">Landscaping (m² or $ amount)</Label>
-                  <Input
-                    id="landscaping"
-                    type="number"
-                    value={buildingAreas.landscaping}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, landscaping: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="fencing">Fencing (linear metres)</Label>
-                  <Input
-                    id="fencing"
-                    type="number"
-                    value={buildingAreas.fencing}
-                    onChange={(e) => setBuildingAreas(prev => ({ ...prev, fencing: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">Buildings & Areas</h3>
+            <Button onClick={addBuilding} variant="outline">
+              <Building2 className="h-4 w-4 mr-2" />
+              Add Building
+            </Button>
           </div>
 
-          {areaBreakdownData.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Area Breakdown</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={areaBreakdownData}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
-                        label={({ name, value }) => `${name}: ${value}m²`}
+          <div className="space-y-6">
+            {buildingAreas.buildings.map((building) => (
+              <Card key={building.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Building2 className="h-4 w-4" />
+                      <Input
+                        value={building.name}
+                        onChange={(e) => updateBuildingName(building.id, e.target.value)}
+                        className="font-medium"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addComponent(building.id, "building")}
                       >
-                        {areaBreakdownData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        Add Building Component
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addComponent(building.id, "external")}
+                      >
+                        Add External Component
+                      </Button>
+                      {buildingAreas.buildings.length > 1 && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => removeBuilding(building.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Building Components */}
+                    <div>
+                      <h4 className="font-medium mb-4 flex items-center gap-2">
+                        <Building2 className="h-4 w-4" />
+                        Building Components (m²)
+                      </h4>
+                      <div className="space-y-4">
+                        {building.components
+                          .filter(c => c.category === "building")
+                          .map((component) => (
+                          <div key={component.id} className="grid grid-cols-12 gap-2 items-center">
+                            <div className="col-span-4">
+                              <Input
+                                value={component.name}
+                                onChange={(e) => updateComponent(building.id, component.id, { name: e.target.value })}
+                                placeholder="Component name"
+                              />
+                            </div>
+                            <div className="col-span-3">
+                              <Input
+                                type="number"
+                                value={component.area}
+                                onChange={(e) => updateComponent(building.id, component.id, { area: parseFloat(e.target.value) || 0 })}
+                                placeholder="Area"
+                              />
+                            </div>
+                            <div className="col-span-3">
+                              <Input
+                                type="number"
+                                value={component.rate}
+                                onChange={(e) => updateComponent(building.id, component.id, { rate: parseFloat(e.target.value) || 0 })}
+                                placeholder="Rate $/m²"
+                              />
+                            </div>
+                            <div className="col-span-1">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => removeComponent(building.id, component.id)}
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            <div className="col-span-1 text-right text-sm font-medium">
+                              {formatCurrency(component.area * component.rate)}
+                            </div>
+                          </div>
                         ))}
-                      </Pie>
-                      <Tooltip formatter={(value) => [`${value}m²`, "Area"]} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* External Components */}
+                    <div>
+                      <h4 className="font-medium mb-4 flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        External Components (m²)
+                      </h4>
+                      <div className="space-y-4">
+                        {building.components
+                          .filter(c => c.category === "external")
+                          .map((component) => (
+                          <div key={component.id} className="grid grid-cols-12 gap-2 items-center">
+                            <div className="col-span-4">
+                              <Input
+                                value={component.name}
+                                onChange={(e) => updateComponent(building.id, component.id, { name: e.target.value })}
+                                placeholder="Component name"
+                              />
+                            </div>
+                            <div className="col-span-3">
+                              <Input
+                                type="number"
+                                value={component.area}
+                                onChange={(e) => updateComponent(building.id, component.id, { area: parseFloat(e.target.value) || 0 })}
+                                placeholder="Area"
+                              />
+                            </div>
+                            <div className="col-span-3">
+                              <Input
+                                type="number"
+                                value={component.rate}
+                                onChange={(e) => updateComponent(building.id, component.id, { rate: parseFloat(e.target.value) || 0 })}
+                                placeholder="Rate $/m²"
+                              />
+                            </div>
+                            <div className="col-span-1">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => removeComponent(building.id, component.id)}
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            <div className="col-span-1 text-right text-sm font-medium">
+                              {formatCurrency(component.area * component.rate)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Building Summary */}
+                  <div className="mt-6 p-4 bg-muted rounded-lg">
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Building Area</p>
+                        <p className="text-lg font-bold">
+                          {building.components
+                            .filter(c => c.category === "building")
+                            .reduce((sum, c) => sum + c.area, 0).toFixed(0)} m²
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">External Area</p>
+                        <p className="text-lg font-bold">
+                          {building.components
+                            .filter(c => c.category === "external")
+                            .reduce((sum, c) => sum + c.area, 0).toFixed(0)} m²
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Building Total</p>
+                        <p className="text-lg font-bold text-blue-600">
+                          {formatCurrency(building.components.reduce((sum, c) => sum + (c.area * c.rate), 0))}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Overall Summary */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Total Project Summary</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Buildings</p>
+                  <p className="text-xl font-bold">{buildingAreas.buildings.length}</p>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Building Area</p>
+                  <p className="text-xl font-bold">
+                    {buildingAreas.buildings
+                      .reduce((sum, b) => sum + b.components
+                        .filter(c => c.category === "building")
+                        .reduce((bSum, c) => bSum + c.area, 0), 0).toFixed(0)} m²
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total External Area</p>
+                  <p className="text-xl font-bold">
+                    {buildingAreas.buildings
+                      .reduce((sum, b) => sum + b.components
+                        .filter(c => c.category === "external")
+                        .reduce((bSum, c) => bSum + c.area, 0), 0).toFixed(0)} m²
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Replacement Cost</p>
+                  <p className="text-xl font-bold text-blue-600">
+                    {formatCurrency(buildingAreas.buildings
+                      .reduce((sum, b) => sum + b.components
+                        .reduce((bSum, c) => bSum + (c.area * c.rate), 0), 0))}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="construction-rates" className="space-y-4">
