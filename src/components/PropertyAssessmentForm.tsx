@@ -19,6 +19,7 @@ import RentalConfiguration from '@/components/RentalConfiguration';
 import PropertyPlanningSearch from '@/components/PropertyPlanningSearch';
 import PropertySearchAnalysis from '@/components/PropertySearchAnalysis';
 import PropertyPhotos from '@/components/PropertyPhotos';
+import RiskAssessmentMarketIndicators from '@/components/RiskAssessmentMarketIndicators';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
@@ -118,6 +119,16 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         console.log('Property Photos validation:', { hasAddress, addressData });
+        return hasAddress; // Require address to proceed
+      }
+    },
+    {
+      title: "Risk Assessment & Market Indicators",
+      subtitle: "World-Class Automated Risk Assessment with AI-powered comprehensive risk analysis and real-time market indicators",
+      component: <RiskAssessmentMarketIndicators />,
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Risk Assessment validation:', { hasAddress, addressData });
         return hasAddress; // Require address to proceed
       }
     },
