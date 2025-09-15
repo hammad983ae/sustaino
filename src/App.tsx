@@ -22,6 +22,7 @@ import CostaGroupValuationsPage from "./pages/CostaGroupValuations";
 import ComprehensiveValuationAnalysis from "./pages/ComprehensiveValuationAnalysis";
 import ESGClimateAssessment from "./pages/ESGClimateAssessment";
 import FullScreenDemo from "./pages/FullScreenDemo";
+import SocialDemo from "./pages/SocialDemo";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -59,6 +60,7 @@ const App = () => (
                 <Route path="/folder-manager" element={<AutomaticFolderManager />} />
                 <Route path="/esg-climate-assessment" element={<ESGClimateAssessment />} />
                 <Route path="/fullscreen-demo" element={<FullScreenDemo />} />
+                <Route path="/social-demo" element={<SocialDemo />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
