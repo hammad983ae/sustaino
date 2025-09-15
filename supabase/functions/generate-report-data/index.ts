@@ -118,6 +118,8 @@ function validateAssessmentData(assessmentData: any) {
   const missingFields = [];
   const warnings = [];
   
+  console.log('Validating assessment data:', assessmentData);
+  
   // Enhanced validation with comprehensive checks
   const hasAddress = assessmentData.addressData?.propertyAddress || 
                     assessmentData.reportData?.propertySearchData?.confirmedAddress ||
@@ -127,14 +129,16 @@ function validateAssessmentData(assessmentData: any) {
     missingFields.push('Property Address');
   }
 
-  // Check for report configuration
+  // Only require property address - make report configuration optional
   const reportConfig = assessmentData.reportData?.reportConfig;
+  
+  // Add warnings for missing optional data instead of failing validation
   if (!reportConfig?.propertyType) {
-    missingFields.push('Property Type');
+    warnings.push('Property Type not configured - will default to Residential');
   }
   
   if (!reportConfig?.reportType) {
-    missingFields.push('Report Type');
+    warnings.push('Report Type not configured - will default to Desktop Report');
   }
 
   // Check data quality warnings
@@ -143,8 +147,14 @@ function validateAssessmentData(assessmentData: any) {
     warnings.push('Limited planning data available - manual verification recommended');
   }
 
+  console.log('Validation results:', { 
+    isValid: missingFields.length === 0, 
+    missingFields, 
+    warnings 
+  });
+
   return {
-    isValid: missingFields.length === 0,
+    isValid: missingFields.length === 0, // Only fail if missing critical data (address)
     missingFields,
     warnings,
     dataQuality: missingFields.length === 0 && warnings.length === 0 ? 'high' : 
@@ -261,75 +271,71 @@ function generateReportSections(assessmentData: any) {
 
   const reportSections = {};
 
-  // RPD and Location - Only include if address data is available
-  if (dataValidation.hasAddress) {
-    reportSections.rpdAndLocation = {
-      propertyAddress,
-      lotNumber: addressData?.lotNumber || planningData?.lotNumber || '',
-      planNumber: addressData?.planNumber || planningData?.planNumber || '',
-      unitNumber: addressData?.unitNumber || '',
-      streetNumber: addressData?.streetNumber || '',
-      streetName: addressData?.streetName || '',
-      streetType: addressData?.streetType || '',
-      suburb: addressData?.suburb || '',
-      state: addressData?.state || '',
-      postcode: addressData?.postcode || '',
-      country: addressData?.country || 'Australia',
-    
-      // Property identification methods
-      propertyIdentification: {
-        physicalInspection: propertyIdentification.physicalInspection ?? true,
-        surveyorPeg: propertyIdentification.surveyorPeg ?? false,
-        plan: propertyIdentification.plan ?? false,
-        cadastralMap: propertyIdentification.cadastralMap ?? true,
-        certificateTitle: propertyIdentification.certificateTitle ?? false,
-        aerialMapping: propertyIdentification.aerialMapping ?? true,
-        includeInReport: propertyIdentification.includeInReport ?? true,
-        other: propertyIdentification.other || '',
-        otherChecked: propertyIdentification.otherChecked ?? false
-      },
+  // RPD and Location - Always include (core section)
+  reportSections.rpdAndLocation = {
+    propertyAddress,
+    lotNumber: addressData?.lotNumber || planningData?.lotNumber || '',
+    planNumber: addressData?.planNumber || planningData?.planNumber || '',
+    unitNumber: addressData?.unitNumber || '',
+    streetNumber: addressData?.streetNumber || '',
+    streetName: addressData?.streetName || '',
+    streetType: addressData?.streetType || '',
+    suburb: addressData?.suburb || '',
+    state: addressData?.state || '',
+    postcode: addressData?.postcode || '',
+    country: addressData?.country || 'Australia',
+  
+    // Property identification methods
+    propertyIdentification: {
+      physicalInspection: propertyIdentification.physicalInspection ?? true,
+      surveyorPeg: propertyIdentification.surveyorPeg ?? false,
+      plan: propertyIdentification.plan ?? false,
+      cadastralMap: propertyIdentification.cadastralMap ?? true,
+      certificateTitle: propertyIdentification.certificateTitle ?? false,
+      aerialMapping: propertyIdentification.aerialMapping ?? true,
+      includeInReport: propertyIdentification.includeInReport ?? true,
+      other: propertyIdentification.other || '',
+      otherChecked: propertyIdentification.otherChecked ?? false
+    },
 
-      // Location analysis
-      locationAnalysis: {
-        location: locationData.location || 'Location analysis to be completed',
-        access: locationData.access || 'Access description to be completed',
-        siteDescription: locationData.siteDescription || 'Site description to be completed',
-        neighbourhood: locationData.neighbourhood || 'Neighbourhood analysis to be completed',
-        amenities: locationData.amenities || 'Amenities assessment to be completed',
-        services: locationData.services || 'Services availability to be completed'
-      }
-    };
-  }
+    // Location analysis
+    locationAnalysis: {
+      location: locationData.location || 'Location analysis to be completed',
+      access: locationData.access || 'Access description to be completed',
+      siteDescription: locationData.siteDescription || 'Site description to be completed',
+      neighbourhood: locationData.neighbourhood || 'Neighbourhood analysis to be completed',
+      amenities: locationData.amenities || 'Amenities assessment to be completed',
+      services: locationData.services || 'Services availability to be completed'
+    }
+  };
 
-  // Legal and Planning - Only include if planning data is available
-  if (dataValidation.hasPlanning) {
-    reportSections.legalAndPlanning = {
-      zoneName: planningData.zoneName || planningData.zoning || 'Zoning to be determined',
-      zoneDescription: planningData.zoneDescription || 'Zone description to be researched',
-      overlays: planningData.overlays || [],
-      landUse: planningData.landUse || planningData.currentUse || 'Current use to be verified',
-      developmentPotential: planningData.developmentPotential || 'To be assessed',
-      permitRequired: planningData.permitRequired ?? true,
-      heightRestriction: planningData.heightRestriction || 'To be confirmed',
-      planningScheme: planningData.planningScheme || 'Planning scheme to be identified',
-      mapReference: planningData.mapReference || 'Map reference to be obtained',
-      riskAssessment: {
-        heritage: planningData.heritage || planningData.riskAssessment?.heritage || 'Heritage assessment required',
-        flooding: planningData.floodRisk || planningData.riskAssessment?.flooding || 'Flood risk to be assessed',
-        bushfire: planningData.bushfireRisk || planningData.riskAssessment?.bushfire || 'Bushfire risk to be assessed',
-        contamination: planningData.riskAssessment?.contamination || 'Contamination assessment required'
-      },
-      coreDetails: planningData.coreDetails || {
-        commercial: planningData.zoneName || 'Zone to be confirmed',
-        landUse: planningData.landUse || 'Current use to be verified',
-        development: planningData.developmentPotential || 'Development potential to be assessed',
-        planningScheme: planningData.planningScheme || 'Planning scheme to be identified'
-      },
-      coordinates: planningData.coordinates,
-      address: propertyAddress,
-      planningImage: planningData.planningImage
-    };
-  }
+  // Legal and Planning - Always include (core section)
+  reportSections.legalAndPlanning = {
+    zoneName: planningData.zoneName || planningData.zoning || 'Zoning to be determined',
+    zoneDescription: planningData.zoneDescription || 'Zone description to be researched',
+    overlays: planningData.overlays || [],
+    landUse: planningData.landUse || planningData.currentUse || 'Current use to be verified',
+    developmentPotential: planningData.developmentPotential || 'To be assessed',
+    permitRequired: planningData.permitRequired ?? true,
+    heightRestriction: planningData.heightRestriction || 'To be confirmed',
+    planningScheme: planningData.planningScheme || 'Planning scheme to be identified',
+    mapReference: planningData.mapReference || 'Map reference to be obtained',
+    riskAssessment: {
+      heritage: planningData.heritage || planningData.riskAssessment?.heritage || 'Heritage assessment required',
+      flooding: planningData.floodRisk || planningData.riskAssessment?.flooding || 'Flood risk to be assessed',
+      bushfire: planningData.bushfireRisk || planningData.riskAssessment?.bushfire || 'Bushfire risk to be assessed',
+      contamination: planningData.riskAssessment?.contamination || 'Contamination assessment required'
+    },
+    coreDetails: planningData.coreDetails || {
+      commercial: planningData.zoneName || 'Zone to be confirmed',
+      landUse: planningData.landUse || 'Current use to be verified',
+      development: planningData.developmentPotential || 'Development potential to be assessed',
+      planningScheme: planningData.planningScheme || 'Planning scheme to be identified'
+    },
+    coordinates: planningData.coordinates,
+    address: propertyAddress,
+    planningImage: planningData.planningImage
+  };
 
   // Tenancy Schedule/Lease Details - Only include for leasehold properties
   if (dataValidation.isLeasehold) {
@@ -418,11 +424,11 @@ function generateReportSections(assessmentData: any) {
     }
   };
 
-  // Valuation Certificate - Pre-populated from report config
+  // Valuation Certificate - Pre-populated from report config with defaults
   reportSections.valuationCertificate = {
     propertyAddress,
     titleReference: `${addressData?.lotNumber || 'LOT'} ${addressData?.planNumber || 'PLAN'}`,
-    propertyType: reportConfig.propertyType || 'To be confirmed',
+    propertyType: reportConfig.propertyType || 'Residential',
     interestValued: reportConfig.interestValues || 'Fee Simple',
     purposeOfValuation: reportConfig.valuationPurpose || 'Market Valuation',
     valueComponent: reportConfig.valueComponent || 'Land and Buildings',
@@ -451,7 +457,7 @@ function generateReportSections(assessmentData: any) {
     enabledSections: reportConfig.valuationApproaches || ['Direct Comparison']
   };
 
-  // Property Details - From assessment
+  // Property Details - From assessment with proper defaults
   reportSections.propertyDetails = {
     propertyType: reportConfig.propertyType || 'Residential',
     reportType: reportConfig.reportType || 'Desktop Report',
@@ -463,15 +469,13 @@ function generateReportSections(assessmentData: any) {
     postcode: addressData?.postcode
   };
 
-  // File Attachments - Only include if files exist
-  if (dataValidation.hasPhotos || dataValidation.hasDocuments) {
-    reportSections.documentAttachments = {
-      propertyPhotos: fileAttachments.propertyPhotos || [],
-      documents: fileAttachments.documents || [],
-      planningDocuments: fileAttachments.planningDocuments || [],
-      marketEvidence: fileAttachments.marketEvidence || []
-    };
-  }
+  // File Attachments - Always include section even if empty
+  reportSections.documentAttachments = {
+    propertyPhotos: fileAttachments.propertyPhotos || [],
+    documents: fileAttachments.documents || [],
+    planningDocuments: fileAttachments.planningDocuments || [],
+    marketEvidence: fileAttachments.marketEvidence || []
+  };
 
   // Rental Valuation - Only include if specifically requested
   if (dataValidation.includeRental) {
