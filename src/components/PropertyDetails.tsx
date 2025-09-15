@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Image, Upload, Download } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Image, Upload, Download, AlertCircle, CheckCircle2, Shield } from "lucide-react";
 import { usePropertyTypeLock } from "@/components/PropertyTypeLockProvider";
 import { useReportData } from "@/contexts/ReportDataContext";
 import { useProperty } from "@/contexts/PropertyContext";
@@ -19,6 +22,40 @@ const EnhancedPropertyDetails = () => {
   const { addressData } = useProperty();
   const { saveData, isSaving, lastSaved } = useUniversalSave('PropertyDetails', { showToast: false });
   const { toast } = useToast();
+
+  // Enhanced property details state
+  const [propertyDetails, setPropertyDetails] = useState({
+    buildingArea: '',
+    buildingHeight: '',
+    constructionType: '',
+    yearBuilt: '',
+    buildingCondition: '',
+    numberOfFloors: '',
+    carParkingSpaces: '',
+    accessibility: '',
+    airConditioning: '',
+    heating: '',
+    lighting: '',
+    description: ''
+  });
+
+  // Commercial compliance state
+  const [complianceChecks, setComplianceChecks] = useState({
+    fireSafety: false,
+    buildingCode: false,
+    disabilityAccess: false,
+    environmental: false,
+    healthSafety: false,
+    zoning: false,
+    structural: false,
+    electrical: false,
+    plumbing: false,
+    hvac: false,
+    lifeSafety: false,
+    asbestos: false,
+    energyEfficiency: false,
+    waterCompliance: false
+  });
 
   // Helper function to check if a property type is specialized
   const isSpecializedPropertyType = (propertyType: string | null): boolean => {
@@ -48,7 +85,7 @@ const EnhancedPropertyDetails = () => {
     selectedPropertyType === 'workers-accommodation' ? 'workers-accommodation' : ''
   );
 
-  // Auto-save functionality
+  // Auto-save functionality - changed to 10 seconds
   useEffect(() => {
     const saveCurrentData = async () => {
       const propertyDetailsData = {
@@ -57,6 +94,8 @@ const EnhancedPropertyDetails = () => {
         specializedType,
         selectedPropertyType,
         addressData,
+        propertyDetails,
+        complianceChecks,
         reportConfig: reportData.reportConfig,
         photos: reportData.fileAttachments?.propertyPhotos || []
       };
@@ -64,9 +103,23 @@ const EnhancedPropertyDetails = () => {
       await saveData(propertyDetailsData);
     };
 
-    const debounceTimer = setTimeout(saveCurrentData, 1000);
+    const debounceTimer = setTimeout(saveCurrentData, 10000); // Changed to 10 seconds
     return () => clearTimeout(debounceTimer);
-  }, [includeSection, propertyTypes, specializedType, selectedPropertyType, addressData, reportData, saveData]);
+  }, [includeSection, propertyTypes, specializedType, selectedPropertyType, addressData, propertyDetails, complianceChecks, reportData, saveData]);
+
+  const handlePropertyDetailChange = (field: string, value: string) => {
+    setPropertyDetails(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleComplianceChange = (field: string, checked: boolean) => {
+    setComplianceChecks(prev => ({ ...prev, [field]: checked }));
+  };
+
+  const getComplianceStatus = () => {
+    const totalChecks = Object.keys(complianceChecks).length;
+    const completedChecks = Object.values(complianceChecks).filter(Boolean).length;
+    return { completedChecks, totalChecks, percentage: Math.round((completedChecks / totalChecks) * 100) };
+  };
 
   return (
     <div className="space-y-6">
@@ -223,45 +276,235 @@ const EnhancedPropertyDetails = () => {
             </div>
           )}
 
-          {/* Building Attributes and Compliance */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="building-area">Building Area (m²)</Label>
-                <Input id="building-area" placeholder="Enter building area" />
-              </div>
-              <div>
-                <Label htmlFor="building-height">Building Height (m)</Label>
-                <Input id="building-height" placeholder="Enter building height" />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="construction-type">Construction Type</Label>
-                <Input id="construction-type" placeholder="e.g., Brick veneer, Steel frame" />
-              </div>
-              <div>
-                <Label htmlFor="year-built">Year Built</Label>
-                <Input id="year-built" placeholder="Enter construction year" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="building-condition">Building Condition</Label>
-                <Input id="building-condition" placeholder="e.g., Good, Fair, Poor" />
-              </div>
-              <div>
-                <Label htmlFor="compliance-status">Compliance Status</Label>
-                <Input id="compliance-status" placeholder="e.g., Compliant, Non-compliant" />
-              </div>
-            </div>
-
+          {/* Enhanced Building Attributes */}
+          <div className="space-y-6">
             <div>
-              <Label htmlFor="building-description">Building Description</Label>
-              <Input id="building-description" placeholder="Detailed description of building attributes" className="h-24" />
+              <h4 className="text-lg font-medium mb-4 flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                Building Specifications
+              </h4>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="building-area">Building Area (m²)</Label>
+                  <Input 
+                    id="building-area" 
+                    value={propertyDetails.buildingArea}
+                    onChange={(e) => handlePropertyDetailChange('buildingArea', e.target.value)}
+                    placeholder="Enter total building area" 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="building-height">Building Height (m)</Label>
+                  <Input 
+                    id="building-height" 
+                    value={propertyDetails.buildingHeight}
+                    onChange={(e) => handlePropertyDetailChange('buildingHeight', e.target.value)}
+                    placeholder="Maximum height" 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="number-floors">Number of Floors</Label>
+                  <Input 
+                    id="number-floors" 
+                    value={propertyDetails.numberOfFloors}
+                    onChange={(e) => handlePropertyDetailChange('numberOfFloors', e.target.value)}
+                    placeholder="Total floors" 
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                  <Label htmlFor="construction-type">Construction Type</Label>
+                  <Select value={propertyDetails.constructionType} onValueChange={(value) => handlePropertyDetailChange('constructionType', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select construction type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="brick-veneer">Brick Veneer</SelectItem>
+                      <SelectItem value="steel-frame">Steel Frame</SelectItem>
+                      <SelectItem value="concrete-block">Concrete Block</SelectItem>
+                      <SelectItem value="timber-frame">Timber Frame</SelectItem>
+                      <SelectItem value="reinforced-concrete">Reinforced Concrete</SelectItem>
+                      <SelectItem value="composite">Composite Construction</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="year-built">Year Built</Label>
+                  <Input 
+                    id="year-built" 
+                    value={propertyDetails.yearBuilt}
+                    onChange={(e) => handlePropertyDetailChange('yearBuilt', e.target.value)}
+                    placeholder="Construction year" 
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                <div>
+                  <Label htmlFor="building-condition">Building Condition</Label>
+                  <Select value={propertyDetails.buildingCondition} onValueChange={(value) => handlePropertyDetailChange('buildingCondition', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select condition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="excellent">Excellent</SelectItem>
+                      <SelectItem value="very-good">Very Good</SelectItem>
+                      <SelectItem value="good">Good</SelectItem>
+                      <SelectItem value="fair">Fair</SelectItem>
+                      <SelectItem value="poor">Poor</SelectItem>
+                      <SelectItem value="requires-renovation">Requires Renovation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="car-parking">Car Parking Spaces</Label>
+                  <Input 
+                    id="car-parking" 
+                    value={propertyDetails.carParkingSpaces}
+                    onChange={(e) => handlePropertyDetailChange('carParkingSpaces', e.target.value)}
+                    placeholder="Number of spaces" 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="accessibility">Accessibility Features</Label>
+                  <Select value={propertyDetails.accessibility} onValueChange={(value) => handlePropertyDetailChange('accessibility', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select accessibility" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fully-accessible">Fully Accessible</SelectItem>
+                      <SelectItem value="partially-accessible">Partially Accessible</SelectItem>
+                      <SelectItem value="limited-access">Limited Access</SelectItem>
+                      <SelectItem value="not-accessible">Not Accessible</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                  <Label htmlFor="air-conditioning">Air Conditioning</Label>
+                  <Select value={propertyDetails.airConditioning} onValueChange={(value) => handlePropertyDetailChange('airConditioning', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select A/C type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="central">Central Air</SelectItem>
+                      <SelectItem value="split-system">Split System</SelectItem>
+                      <SelectItem value="ducted">Ducted</SelectItem>
+                      <SelectItem value="window-units">Window Units</SelectItem>
+                      <SelectItem value="none">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="heating">Heating System</Label>
+                  <Select value={propertyDetails.heating} onValueChange={(value) => handlePropertyDetailChange('heating', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select heating" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="gas">Gas Heating</SelectItem>
+                      <SelectItem value="electric">Electric Heating</SelectItem>
+                      <SelectItem value="hydronic">Hydronic</SelectItem>
+                      <SelectItem value="solar">Solar Heating</SelectItem>
+                      <SelectItem value="none">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="lighting">Lighting Type</Label>
+                  <Select value={propertyDetails.lighting} onValueChange={(value) => handlePropertyDetailChange('lighting', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select lighting" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="led">LED</SelectItem>
+                      <SelectItem value="fluorescent">Fluorescent</SelectItem>
+                      <SelectItem value="halogen">Halogen</SelectItem>
+                      <SelectItem value="mixed">Mixed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <Label htmlFor="building-description">Detailed Building Description</Label>
+                <Textarea 
+                  id="building-description" 
+                  value={propertyDetails.description}
+                  onChange={(e) => handlePropertyDetailChange('description', e.target.value)}
+                  placeholder="Provide comprehensive description including unique features, layout, materials, and notable characteristics..."
+                  className="min-h-[120px] mt-2"
+                />
+              </div>
             </div>
+
+            {/* Commercial Compliance Checks */}
+            {(propertyTypes.commercial || propertyTypes.specialized) && (
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-lg font-medium flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5" />
+                    Commercial Compliance Checks
+                  </h4>
+                  <Badge variant="outline" className="text-sm">
+                    {getComplianceStatus().completedChecks}/{getComplianceStatus().totalChecks} Complete ({getComplianceStatus().percentage}%)
+                  </Badge>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-muted/30 rounded-lg">
+                  {Object.entries({
+                    fireSafety: 'Fire Safety Systems',
+                    buildingCode: 'Building Code Compliance',
+                    disabilityAccess: 'Disability Access (DDA)',
+                    environmental: 'Environmental Compliance',
+                    healthSafety: 'Health & Safety (WHS)',
+                    zoning: 'Zoning Compliance',
+                    structural: 'Structural Certification',
+                    electrical: 'Electrical Compliance',
+                    plumbing: 'Plumbing Compliance',
+                    hvac: 'HVAC Compliance',
+                    lifeSafety: 'Life Safety Systems',
+                    asbestos: 'Asbestos Management',
+                    energyEfficiency: 'Energy Efficiency Rating',
+                    waterCompliance: 'Water Compliance'
+                  }).map(([key, label]) => (
+                    <div key={key} className="flex items-center space-x-3 p-2 bg-background rounded border">
+                      <Checkbox
+                        id={key}
+                        checked={complianceChecks[key as keyof typeof complianceChecks]}
+                        onCheckedChange={(checked) => handleComplianceChange(key, checked as boolean)}
+                      />
+                      <Label htmlFor={key} className="text-sm cursor-pointer flex-1">
+                        {label}
+                      </Label>
+                      {complianceChecks[key as keyof typeof complianceChecks] ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      ) : (
+                        <AlertCircle className="h-4 w-4 text-amber-500" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {getComplianceStatus().percentage < 80 && (
+                  <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <AlertCircle className="h-4 w-4 text-amber-600" />
+                      <span className="text-sm font-medium text-amber-800">Compliance Warning</span>
+                    </div>
+                    <p className="text-sm text-amber-700 mt-1">
+                      Less than 80% of compliance checks completed. Ensure all relevant certifications are verified before finalizing the valuation.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -275,19 +518,21 @@ const EnhancedPropertyDetails = () => {
               propertyTypes,
               specializedType,
               selectedPropertyType,
+              propertyDetails,
+              complianceChecks,
               reportConfig: reportData.reportConfig,
               photos: reportData.fileAttachments?.propertyPhotos || []
             };
             saveData(propertyDetailsData);
             toast({
               title: "Property Details Saved",
-              description: "Your property details have been saved successfully.",
+              description: `Enhanced property details saved. Auto-save every 10 seconds. Compliance: ${getComplianceStatus().percentage}% complete.`,
             });
           }}
           disabled={isSaving}
           className="flex items-center gap-2"
         >
-          {isSaving ? "✓ Saved" : "Save Property Details"}
+          {isSaving ? "Saving..." : "Save Property Details"}
         </Button>
       </div>
     </div>
