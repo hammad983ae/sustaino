@@ -12,6 +12,7 @@ import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
 import SetupFlowSelector from "@/components/SetupFlowSelector";
 import QuickSetupForm from "@/components/QuickSetupForm";
+import StreamlinedPropertyAssessment from "@/components/StreamlinedPropertyAssessment";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 
@@ -44,8 +45,18 @@ export default function AutomatedValuation() {
   };
 
   const handleQuickSetupComplete = (data: any) => {
-    // Store the complete assessment data and move to report
-    localStorage.setItem('propertyAssessmentCompleted', JSON.stringify(data));
+    // Store the setup data and proceed to streamlined assessment
+    localStorage.setItem('quickSetupData', JSON.stringify(data));
+    if (data.proceedToStreamlined) {
+      setCurrentStep("streamlinedAssessment");
+    } else {
+      setCurrentStep("automatedReport");
+    }
+  };
+
+  const handleStreamlinedComplete = (data: any) => {
+    // Assessment complete, proceed to report
+    localStorage.setItem('streamlinedAssessmentData', JSON.stringify(data));
     setCurrentStep("automatedReport");
   };
 
@@ -245,6 +256,18 @@ export default function AutomatedValuation() {
             onAdvancedSetup={() => handleSetupMethodSelect("advanced")}
           />
           <AIAssistantToggle context="Quick Setup Form" />
+        </div>
+      );
+
+    case "streamlinedAssessment":
+      const quickSetupData = JSON.parse(localStorage.getItem('quickSetupData') || '{}');
+      return (
+        <div className="min-h-screen">
+          <StreamlinedPropertyAssessment
+            onComplete={handleStreamlinedComplete}
+            initialData={quickSetupData}
+          />
+          <AIAssistantToggle context="Streamlined Assessment" />
         </div>
       );
 
