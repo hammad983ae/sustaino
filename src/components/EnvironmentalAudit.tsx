@@ -1,17 +1,7 @@
 /**
  * ============================================================================
- * PROPRIETARY ESG ASSESSMENT METHODOLOGY
- * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
- * 
- * This ESG assessment methodology, algorithms, scoring systems, and valuation 
- * adjustment factors are proprietary intellectual property protected by copyright, 
- * patents, and trade secrets.
- * 
- * TRADEMARK: ESG Property Assessment Platform™
- * Patent: AU2025123456 - Automated ESG Property Assessment System
- * 
- * Use of ESG assessment features requires a valid commercial license.
- * Unauthorized use prohibited. Legal compliance guaranteed.
+ * Environmental Audit Component (Basic EPA Compliance Only)
+ * Note: All ESG and Climate functions have been moved to ESGClimateAssessment page
  * ============================================================================
  */
 
@@ -20,18 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Shield, Lock, FileText, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, Shield, CheckCircle2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import ESGMethodologyProtection from "./ESGMethodologyProtection";
 
 const EnvironmentalAudit = () => {
   const [includeSection, setIncludeSection] = useState(true);
   const [epaAuditRequired, setEpaAuditRequired] = useState("no");
   const [epaAuditStatus, setEpaAuditStatus] = useState("not-applicable");
-  const [sustainabilityClimateRisk, setSustainabilityClimateRisk] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -122,141 +107,26 @@ const EnvironmentalAudit = () => {
             </CardContent>
           </Card>
 
-          {/* Sustainability & Climate Risk */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-green-500" />
-                  <CardTitle>Sustainability & Climate Risk</CardTitle>
-                </div>
-                <Switch 
-                  checked={sustainabilityClimateRisk}
-                  onCheckedChange={setSustainabilityClimateRisk}
-                />
+          {/* Note about ESG and Climate Functions */}
+          <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/30">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 mb-2">
+                <Shield className="h-5 w-5 text-blue-600" />
+                <h4 className="font-medium text-blue-800 dark:text-blue-200">
+                  ESG & Climate Assessment Available
+                </h4>
               </div>
-            </CardHeader>
-            {sustainabilityClimateRisk && (
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <Label>Climate Risk Assessment</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select risk level" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border border-border z-50">
-                        <SelectItem value="low">Low Risk</SelectItem>
-                        <SelectItem value="moderate">Moderate Risk</SelectItem>
-                        <SelectItem value="high">High Risk</SelectItem>
-                        <SelectItem value="extreme">Extreme Risk</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Flood Risk Rating</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select flood risk" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border border-border z-50">
-                        <SelectItem value="minimal">Minimal</SelectItem>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="moderate">Moderate</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Bushfire Risk</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select bushfire risk" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border border-border z-50">
-                        <SelectItem value="minimal">Minimal</SelectItem>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="moderate">Moderate</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
-                        <SelectItem value="extreme">Extreme</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardContent>
-            )}
-          </Card>
-
-          {/* Protected ESG Methodology */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Lock className="h-5 w-5 text-amber-600" />
-                <CardTitle className="text-amber-700">🛡️ PROTECTED ESG METHODOLOGY 🔒</CardTitle>
-              </div>
-              <div className="flex gap-2">
-                <Badge variant="destructive" className="text-xs">
-                  🔒 PROPRIETARY
-                </Badge>
-                <Badge variant="secondary" className="text-xs">
-                  📋 PATENT PROTECTED
-                </Badge>
-                <Badge variant="outline" className="text-xs">
-                  🎓 LICENSED ONLY
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ESGMethodologyProtection />
+              <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                For comprehensive ESG assessment, climate risk analysis, and carbon farming projects, visit our dedicated ESG & Climate Assessment platform.
+              </p>
+              <a 
+                href="/esg-climate-assessment" 
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+              >
+                <Shield className="h-4 w-4" />
+                Access ESG & Climate Assessment
+              </a>
             </CardContent>
-          </Card>
-
-          {/* Environmental (E) - Environmental Impact Assessment */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-green-500" />
-                  <CardTitle>Environmental (E) - Environmental Impact Assessment</CardTitle>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Environmental factors including contamination, sustainability, climate risks, and regulatory compliance.
-              </p>
-            </CardHeader>
-          </Card>
-
-          {/* Social (S) - Community and Social Impact */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-blue-500" />
-                  <CardTitle>Social (S) - Community and Social Impact</CardTitle>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Social factors including community impact, accessibility, and socio-economic considerations.
-              </p>
-            </CardHeader>
-          </Card>
-
-          {/* Governance (G) - Corporate Governance and Compliance */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-purple-500" />
-                  <CardTitle>Governance (G) - Corporate Governance and Compliance</CardTitle>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Governance factors including regulatory compliance, transparency, and ethical practices.
-              </p>
-            </CardHeader>
           </Card>
         </div>
       )}

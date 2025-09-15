@@ -291,19 +291,21 @@ const Index = () => {
                             </CardContent>
                           </Card>
 
-                          <Card className="bg-gradient-to-br from-white to-teal-50/50 border border-teal-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-teal-700">
-                                <CloudRain className="h-5 w-5" />
-                                Climate Risk
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Comprehensive climate risk assessment and environmental analysis
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/esg-climate-assessment">
+                            <Card className="bg-gradient-to-br from-white to-teal-50/50 border border-teal-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-teal-700">
+                                  <CloudRain className="h-5 w-5" />
+                                  ESG & Climate Assessment
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Comprehensive ESG assessment, climate risk analysis, and carbon farming projects
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
                         </div>
                       </CardContent>
                     </Card>
