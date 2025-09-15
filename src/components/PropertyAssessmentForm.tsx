@@ -20,6 +20,7 @@ import PropertyPlanningSearch from '@/components/PropertyPlanningSearch';
 import PropertySearchAnalysis from '@/components/PropertySearchAnalysis';
 import PropertyPhotos from '@/components/PropertyPhotos';
 import RiskAssessmentMarketIndicators from '@/components/RiskAssessmentMarketIndicators';
+import PreviousSalesHistoryAndCurrentSale from '@/components/PreviousSalesHistoryAndCurrentSale';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
@@ -129,6 +130,16 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         console.log('Risk Assessment validation:', { hasAddress, addressData });
+        return hasAddress; // Require address to proceed
+      }
+    },
+    {
+      title: "Previous Sales History and Current Sale",
+      subtitle: "Historical sales data from RP Data integration and current transaction details",
+      component: <PreviousSalesHistoryAndCurrentSale />,
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Sales History validation:', { hasAddress, addressData });
         return hasAddress; // Require address to proceed
       }
     },
