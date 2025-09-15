@@ -184,12 +184,61 @@ const PropertyAddressForm = () => {
                 <SelectTrigger className="mt-1">
                   <SelectValue placeholder="Select street type" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="street">Street</SelectItem>
+                <SelectContent className="bg-white z-50 max-h-[200px] overflow-y-auto">
+                  <SelectItem value="alley">Alley</SelectItem>
+                  <SelectItem value="arcade">Arcade</SelectItem>
                   <SelectItem value="avenue">Avenue</SelectItem>
-                  <SelectItem value="road">Road</SelectItem>
-                  <SelectItem value="lane">Lane</SelectItem>
+                  <SelectItem value="boulevard">Boulevard</SelectItem>
+                  <SelectItem value="bypass">Bypass</SelectItem>
+                  <SelectItem value="causeway">Causeway</SelectItem>
+                  <SelectItem value="centre">Centre</SelectItem>
+                  <SelectItem value="chase">Chase</SelectItem>
+                  <SelectItem value="circle">Circle</SelectItem>
+                  <SelectItem value="circuit">Circuit</SelectItem>
+                  <SelectItem value="close">Close</SelectItem>
+                  <SelectItem value="corner">Corner</SelectItem>
+                  <SelectItem value="corso">Corso</SelectItem>
+                  <SelectItem value="court">Court</SelectItem>
+                  <SelectItem value="crescent">Crescent</SelectItem>
+                  <SelectItem value="cul-de-sac">Cul-de-sac</SelectItem>
                   <SelectItem value="drive">Drive</SelectItem>
+                  <SelectItem value="esplanade">Esplanade</SelectItem>
+                  <SelectItem value="expressway">Expressway</SelectItem>
+                  <SelectItem value="freeway">Freeway</SelectItem>
+                  <SelectItem value="garden">Garden</SelectItem>
+                  <SelectItem value="gardens">Gardens</SelectItem>
+                  <SelectItem value="gate">Gate</SelectItem>
+                  <SelectItem value="green">Green</SelectItem>
+                  <SelectItem value="grove">Grove</SelectItem>
+                  <SelectItem value="highway">Highway</SelectItem>
+                  <SelectItem value="lane">Lane</SelectItem>
+                  <SelectItem value="link">Link</SelectItem>
+                  <SelectItem value="loop">Loop</SelectItem>
+                  <SelectItem value="mall">Mall</SelectItem>
+                  <SelectItem value="mews">Mews</SelectItem>
+                  <SelectItem value="parade">Parade</SelectItem>
+                  <SelectItem value="park">Park</SelectItem>
+                  <SelectItem value="parkway">Parkway</SelectItem>
+                  <SelectItem value="passage">Passage</SelectItem>
+                  <SelectItem value="path">Path</SelectItem>
+                  <SelectItem value="place">Place</SelectItem>
+                  <SelectItem value="plaza">Plaza</SelectItem>
+                  <SelectItem value="promenade">Promenade</SelectItem>
+                  <SelectItem value="quay">Quay</SelectItem>
+                  <SelectItem value="rise">Rise</SelectItem>
+                  <SelectItem value="road">Road</SelectItem>
+                  <SelectItem value="row">Row</SelectItem>
+                  <SelectItem value="square">Square</SelectItem>
+                  <SelectItem value="street">Street</SelectItem>
+                  <SelectItem value="strip">Strip</SelectItem>
+                  <SelectItem value="terrace">Terrace</SelectItem>
+                  <SelectItem value="track">Track</SelectItem>
+                  <SelectItem value="trail">Trail</SelectItem>
+                  <SelectItem value="turn">Turn</SelectItem>
+                  <SelectItem value="walk">Walk</SelectItem>
+                  <SelectItem value="walkway">Walkway</SelectItem>
+                  <SelectItem value="way">Way</SelectItem>
+                  <SelectItem value="wharf">Wharf</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -203,7 +252,7 @@ const PropertyAddressForm = () => {
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="Select state" />
               </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white z-50">
                   <SelectItem value="nsw">NSW</SelectItem>
                   <SelectItem value="vic">VIC</SelectItem>
                   <SelectItem value="qld">QLD</SelectItem>
