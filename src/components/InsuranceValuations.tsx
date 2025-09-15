@@ -27,6 +27,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Building2, Calculator, FileText, AlertTriangle, MapPin, Calendar, Users, DollarSign, Upload, Trash2, Download, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { getAllPropertyTypes } from "@/components/PropertyTypesComprehensive";
 
 interface PropertyDetails {
   address: string;
@@ -39,7 +40,8 @@ interface PropertyDetails {
   localGovernmentArea: string;
   zoning: string;
   numberOfUnits: number;
-  propertyType: "residential" | "commercial" | "industrial" | "mixed-use" | "retail" | "office" | "agricultural";
+  propertyType: string;
+  propertyClass: string;
 }
 
 interface BuildingComponent {
@@ -154,7 +156,8 @@ export default function InsuranceValuations() {
     localGovernmentArea: "",
     zoning: "General Residential",
     numberOfUnits: 1,
-    propertyType: "residential",
+    propertyType: "",
+    propertyClass: "",
   });
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
@@ -644,22 +647,43 @@ export default function InsuranceValuations() {
                     onChange={(e) => setPropertyDetails(prev => ({ ...prev, numberOfUnits: parseInt(e.target.value) || 1 }))}
                   />
                 </div>
-                <div>
-                  <Label htmlFor="propertyType">Property Type</Label>
-                  <Select value={propertyDetails.propertyType} onValueChange={(value) => setPropertyDetails(prev => ({ ...prev, propertyType: value as any }))}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="residential">Residential</SelectItem>
-                      <SelectItem value="commercial">Commercial</SelectItem>
-                      <SelectItem value="industrial">Industrial</SelectItem>
-                      <SelectItem value="mixed-use">Mixed Use</SelectItem>
-                      <SelectItem value="retail">Retail</SelectItem>
-                      <SelectItem value="office">Office</SelectItem>
-                      <SelectItem value="agricultural">Agricultural</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="propertyType">Property Type</Label>
+                    <Select value={propertyDetails.propertyType} onValueChange={(value) => setPropertyDetails(prev => ({ ...prev, propertyType: value }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select property type" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        {getAllPropertyTypes().map((type) => (
+                          <SelectItem key={type.value} value={type.value}>
+                            <div className="flex flex-col">
+                              <span>{type.label}</span>
+                              <span className="text-xs text-muted-foreground">{type.category}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="propertyClass">Property Class</Label>
+                    <Select value={propertyDetails.propertyClass} onValueChange={(value) => setPropertyDetails(prev => ({ ...prev, propertyClass: value }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select property class" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="standard">Standard Quality</SelectItem>
+                        <SelectItem value="good">Good Quality</SelectItem>
+                        <SelectItem value="high">High Quality</SelectItem>
+                        <SelectItem value="premium">Premium Quality</SelectItem>
+                        <SelectItem value="luxury">Luxury</SelectItem>
+                        <SelectItem value="heritage">Heritage/Historic</SelectItem>
+                        <SelectItem value="new">New Construction</SelectItem>
+                        <SelectItem value="refurbished">Recently Refurbished</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </CardContent>
             </Card>
