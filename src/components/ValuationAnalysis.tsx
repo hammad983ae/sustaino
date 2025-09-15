@@ -19,17 +19,23 @@ import ValuationAnalysisCommercial from "./ValuationAnalysisCommercial";
 import ValuationAnalysisResidential from "./ValuationAnalysisResidential";
 import ValuationAnalysisAgricultural from "./ValuationAnalysisAgricultural";
 import ValuationAnalysisSpecialised from "./ValuationAnalysisSpecialised";
+import LiveMarketDataFeed from "./LiveMarketDataFeed";
+import InteractivePropertyMap from "./InteractivePropertyMap";
+import PredictiveAnalyticsDashboard from "./PredictiveAnalyticsDashboard";
 
 export default function ValuationAnalysis() {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="automated" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="automated">Automated</TabsTrigger>
           <TabsTrigger value="commercial">Commercial</TabsTrigger>
           <TabsTrigger value="residential">Residential</TabsTrigger>
           <TabsTrigger value="agricultural">Agricultural</TabsTrigger>
           <TabsTrigger value="specialised">Specialised</TabsTrigger>
+          <TabsTrigger value="market-data">Live Market</TabsTrigger>
+          <TabsTrigger value="mapping">Smart Maps</TabsTrigger>
+          <TabsTrigger value="predictions">AI Predictions</TabsTrigger>
         </TabsList>
         
         <TabsContent value="automated" className="mt-6">
@@ -50,6 +56,18 @@ export default function ValuationAnalysis() {
         
         <TabsContent value="specialised" className="mt-6">
           <ValuationAnalysisSpecialised />
+        </TabsContent>
+        
+        <TabsContent value="market-data" className="mt-6">
+          <LiveMarketDataFeed />
+        </TabsContent>
+        
+        <TabsContent value="mapping" className="mt-6">
+          <InteractivePropertyMap />
+        </TabsContent>
+        
+        <TabsContent value="predictions" className="mt-6">
+          <PredictiveAnalyticsDashboard />
         </TabsContent>
       </Tabs>
     </div>

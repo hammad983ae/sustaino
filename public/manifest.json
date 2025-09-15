@@ -1,0 +1,27 @@
+{
+  "name": "Property Assessment Platform",
+  "short_name": "PropAssess",
+  "description": "Professional property valuation and assessment platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/lovable-uploads/26df2df4-d039-40ea-a3eb-4cba94b29f25.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/26df2df4-d039-40ea-a3eb-4cba94b29f25.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "finance"],
+  "lang": "en-AU",
+  "dir": "ltr"
+}
