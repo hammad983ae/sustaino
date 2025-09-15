@@ -71,12 +71,19 @@ const Index = () => {
         <div className="relative z-10 container mx-auto px-4 py-12">
           {currentStep === 'form' ? (
             <div className="space-y-12">
-              {/* Back to Dashboard Button */}
-              <div className="flex justify-start">
+              {/* Navigation Buttons */}
+              <div className="flex justify-between">
                 <Link to="/automated-valuation">
                   <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-purple-200 text-purple-700 hover:bg-purple-50">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to Main Dashboard
+                  </Button>
+                </Link>
+                
+                <Link to="/auth">
+                  <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+                    <Shield className="w-4 h-4 mr-2" />
+                    Client Login
                   </Button>
                 </Link>
               </div>
