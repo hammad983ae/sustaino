@@ -6,17 +6,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { FileText, Upload, Users, Eye, FileImage } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { FileText, Upload, Users, Eye, FileImage, AlertCircle, CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useReportData } from "@/contexts/ReportDataContext";
+import { useValuation } from "@/contexts/ValuationContext";
 import TenancyCalculationForm from "./TenancyCalculationForm";
 
 const TenancyScheduleLeaseDetails = () => {
   const [extractedText, setExtractedText] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
-  const { reportData } = useReportData();
+  const { reportData, updateReportData } = useReportData();
+  const { isLeaseholdValuation, valuationType } = useValuation();
   
   // Form state for ground lease
   const [groundLeaseData, setGroundLeaseData] = useState({
@@ -78,6 +81,45 @@ const TenancyScheduleLeaseDetails = () => {
     }
   }, [reportData]);
 
+  // Auto-populate function for OCR extracted data
+  const autoPopulateFromOCR = (text: string) => {
+    // Extract key information using regex patterns
+    const patterns = {
+      lessor: /(?:lessor|landlord)[:\s]+([^\n,;]+)/i,
+      lessee: /(?:lessee|tenant)[:\s]+([^\n,;]+)/i,
+      rent: /(?:rent|rental)[:\s]*(?:\$)?([0-9,]+)/i,
+      commencementDate: /(?:commencement|start)[:\s]*(?:date)?[:\s]*([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i,
+      expiryDate: /(?:expiry|end)[:\s]*(?:date)?[:\s]*([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i,
+      term: /(?:term|period)[:\s]*([0-9]+)\s*(?:years?|yrs?)/i
+    };
+
+    const extractedData: any = {};
+    
+    Object.entries(patterns).forEach(([key, pattern]) => {
+      const match = text.match(pattern);
+      if (match && match[1]) {
+        extractedData[key] = match[1].trim();
+      }
+    });
+
+    // Update tenant data with extracted information
+    if (Object.keys(extractedData).length > 0) {
+      setTenantData(prev => ({
+        ...prev,
+        lessor: extractedData.lessor || prev.lessor,
+        lessee: extractedData.lessee || prev.lessee,
+        commencementRent: extractedData.rent || prev.commencementRent,
+        commencementDate: extractedData.commencementDate || prev.commencementDate,
+        expiryDate: extractedData.expiryDate || prev.expiryDate
+      }));
+
+      toast({
+        title: "Data Auto-populated",
+        description: "Lease information has been extracted and populated in the form fields.",
+      });
+    }
+  };
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -126,9 +168,14 @@ const TenancyScheduleLeaseDetails = () => {
       
       setExtractedText(text);
       
+      // Automatically try to populate form fields from OCR text
+      if (text && text !== "No text detected") {
+        autoPopulateFromOCR(text);
+      }
+      
       toast({
         title: "OCR Processing Complete",
-        description: "Text has been extracted from the document.",
+        description: "Text has been extracted and form fields auto-populated where possible.",
       });
 
       // Clean up
@@ -146,127 +193,253 @@ const TenancyScheduleLeaseDetails = () => {
     }
   };
 
+  // Save data to report context when form data changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      updateReportData('tenancyDetails', {
+        groundLease: groundLeaseData,
+        tenantSummary: tenantData,
+        extractedText,
+        lastUpdated: new Date().toISOString()
+      });
+    }, 1000);
+    
+    return () => clearTimeout(timeoutId);
+  }, [groundLeaseData, tenantData, extractedText, updateReportData]);
+
   return (
     <div className="space-y-6">
-      {/* Ground Lease Section */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+      {/* Conditional Ground Lease Section - Only show for leasehold valuations */}
+      {isLeaseholdValuation && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-orange-500" />
+                <div>
+                  <CardTitle className="text-lg">Ground Lease</CardTitle>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant="secondary" className="text-xs">
+                      Leasehold Valuation
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      Valuation Type: {valuationType}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Label htmlFor="include-ground-lease" className="text-sm">Include</Label>
+                <Switch 
+                  id="include-ground-lease" 
+                  checked={groundLeaseData.include}
+                  onCheckedChange={(checked) => 
+                    setGroundLeaseData(prev => ({...prev, include: checked}))
+                  }
+                />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Lease Basic Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="lease-type">Lease Type</Label>
+                <Input 
+                  id="lease-type" 
+                  placeholder="e.g., Ground Lease, Peppercorn Lease" 
+                  className="mt-1"
+                  value={groundLeaseData.leaseType}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, leaseType: e.target.value}))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="lease-term">Lease Term (Years)</Label>
+                <Input 
+                  id="lease-term" 
+                  placeholder="e.g., 99, 999" 
+                  className="mt-1"
+                  value={groundLeaseData.leaseTerm}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, leaseTerm: e.target.value}))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="annual-ground-rent">Annual Ground Rent ($)</Label>
+                <Input 
+                  id="annual-ground-rent" 
+                  placeholder="$0.00" 
+                  className="mt-1"
+                  value={groundLeaseData.annualGroundRent}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, annualGroundRent: e.target.value}))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="review-period">Review Period (Years)</Label>
+                <Input 
+                  id="review-period" 
+                  placeholder="e.g., 5, 10, 21" 
+                  className="mt-1"
+                  value={groundLeaseData.reviewPeriod}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, reviewPeriod: e.target.value}))}
+                />
+              </div>
+            </div>
+
+            {/* Lease Dates */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="lease-commencement">Lease Commencement Date</Label>
+                <Input 
+                  id="lease-commencement" 
+                  type="date" 
+                  className="mt-1"
+                  value={groundLeaseData.commencementDate}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, commencementDate: e.target.value}))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="lease-expiry">Lease Expiry Date</Label>
+                <Input 
+                  id="lease-expiry" 
+                  type="date" 
+                  className="mt-1"
+                  value={groundLeaseData.expiryDate}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, expiryDate: e.target.value}))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="next-review">Next Review Date</Label>
+                <Input 
+                  id="next-review" 
+                  type="date" 
+                  className="mt-1"
+                  value={groundLeaseData.nextReviewDate}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, nextReviewDate: e.target.value}))}
+                />
+              </div>
+            </div>
+
+            {/* Review Method */}
+            <div className="max-w-md">
+              <Label htmlFor="review-method">Review Method</Label>
+              <Select 
+                value={groundLeaseData.reviewMethod} 
+                onValueChange={(value) => setGroundLeaseData(prev => ({...prev, reviewMethod: value}))}
+              >
+                <SelectTrigger className="mt-1 bg-background">
+                  <SelectValue placeholder="Select review method" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border shadow-lg z-50">
+                  <SelectItem value="cpi">CPI</SelectItem>
+                  <SelectItem value="market">Market Review</SelectItem>
+                  <SelectItem value="fixed">Fixed Increase</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Lease Options */}
+            <div>
+              <Label className="text-base font-medium">Lease Options</Label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="option-renew" 
+                    checked={groundLeaseData.leaseOptions.optionToRenew}
+                    onCheckedChange={(checked) => setGroundLeaseData(prev => ({
+                      ...prev, 
+                      leaseOptions: {...prev.leaseOptions, optionToRenew: !!checked}
+                    }))}
+                  />
+                  <Label htmlFor="option-renew" className="text-sm">Option to Renew</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="option-purchase" 
+                    checked={groundLeaseData.leaseOptions.optionToPurchase}
+                    onCheckedChange={(checked) => setGroundLeaseData(prev => ({
+                      ...prev, 
+                      leaseOptions: {...prev.leaseOptions, optionToPurchase: !!checked}
+                    }))}
+                  />
+                  <Label htmlFor="option-purchase" className="text-sm">Option to Purchase</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="surrender-clause" 
+                    checked={groundLeaseData.leaseOptions.surrenderClause}
+                    onCheckedChange={(checked) => setGroundLeaseData(prev => ({
+                      ...prev, 
+                      leaseOptions: {...prev.leaseOptions, surrenderClause: !!checked}
+                    }))}
+                  />
+                  <Label htmlFor="surrender-clause" className="text-sm">Surrender Clause</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="break-clause" 
+                    checked={groundLeaseData.leaseOptions.breakClause}
+                    onCheckedChange={(checked) => setGroundLeaseData(prev => ({
+                      ...prev, 
+                      leaseOptions: {...prev.leaseOptions, breakClause: !!checked}
+                    }))}
+                  />
+                  <Label htmlFor="break-clause" className="text-sm">Break Clause</Label>
+                </div>
+              </div>
+            </div>
+
+            {/* Text Areas */}
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="permitted-use">Permitted Use</Label>
+                <Textarea 
+                  id="permitted-use"
+                  placeholder="Describe the permitted use of the property under the ground lease..."
+                  className="mt-1 h-24"
+                  value={groundLeaseData.permittedUse}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, permittedUse: e.target.value}))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="restrictions-covenants">Restrictions & Covenants</Label>
+                <Textarea 
+                  id="restrictions-covenants"
+                  placeholder="Detail any restrictions, covenants, or special conditions..."
+                  className="mt-1 h-24"
+                  value={groundLeaseData.restrictions}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, restrictions: e.target.value}))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="impact-valuation">Impact on Valuation</Label>
+                <Textarea 
+                  id="impact-valuation"
+                  placeholder="Assess how the ground lease affects the property valuation..."
+                  className="mt-1 h-24"
+                  value={groundLeaseData.impact}
+                  onChange={(e) => setGroundLeaseData(prev => ({...prev, impact: e.target.value}))}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Freehold Property Notice */}
+      {!isLeaseholdValuation && (
+        <Card className="border-blue-200 bg-blue-50">
+          <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-orange-500" />
-              <CardTitle className="text-lg">Ground Lease</CardTitle>
+              <AlertCircle className="h-4 w-4 text-blue-600" />
+              <span className="text-sm text-blue-700">
+                Ground Lease section is not applicable for freehold properties. 
+                {valuationType && ` Current valuation type: ${valuationType}`}
+              </span>
             </div>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="include-ground-lease" className="text-sm">Include</Label>
-              <Switch id="include-ground-lease" defaultChecked />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Lease Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="lease-type">Lease Type</Label>
-              <Input id="lease-type" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="lease-term">Lease Term (Years)</Label>
-              <Input id="lease-term" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="annual-ground-rent">Annual Ground Rent ($)</Label>
-              <Input id="annual-ground-rent" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="review-period">Review Period (Years)</Label>
-              <Input id="review-period" placeholder="" className="mt-1" />
-            </div>
-          </div>
-
-          {/* Lease Dates */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="lease-commencement">Lease Commencement Date</Label>
-              <Input id="lease-commencement" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="lease-expiry">Lease Expiry Date</Label>
-              <Input id="lease-expiry" placeholder="" className="mt-1" />
-            </div>
-            <div>
-              <Label htmlFor="next-review">Next Review Date</Label>
-              <Input id="next-review" placeholder="" className="mt-1" />
-            </div>
-          </div>
-
-          {/* Review Method */}
-          <div className="max-w-md">
-            <Label htmlFor="review-method">Review Method</Label>
-            <Select>
-              <SelectTrigger className="mt-1 bg-background">
-                <SelectValue placeholder="Select review method" />
-              </SelectTrigger>
-              <SelectContent className="bg-background border shadow-lg z-50">
-                <SelectItem value="cpi">CPI</SelectItem>
-                <SelectItem value="market">Market Review</SelectItem>
-                <SelectItem value="fixed">Fixed Increase</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Lease Options */}
-          <div>
-            <Label className="text-base font-medium">Lease Options</Label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="option-renew" />
-                <Label htmlFor="option-renew" className="text-sm">Option to Renew</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="option-purchase" />
-                <Label htmlFor="option-purchase" className="text-sm">Option to Purchase</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="surrender-clause" />
-                <Label htmlFor="surrender-clause" className="text-sm">Surrender Clause</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="break-clause" />
-                <Label htmlFor="break-clause" className="text-sm">Break Clause</Label>
-              </div>
-            </div>
-          </div>
-
-          {/* Text Areas */}
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="permitted-use">Permitted Use</Label>
-              <Textarea 
-                id="permitted-use"
-                placeholder=""
-                className="mt-1 h-24"
-              />
-            </div>
-            <div>
-              <Label htmlFor="restrictions-covenants">Restrictions & Covenants</Label>
-              <Textarea 
-                id="restrictions-covenants"
-                placeholder=""
-                className="mt-1 h-24"
-              />
-            </div>
-            <div>
-              <Label htmlFor="impact-valuation">Impact on Valuation</Label>
-              <Textarea 
-                id="impact-valuation"
-                placeholder=""
-                className="mt-1 h-24"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Tenant Summary & Documents Section */}
       <Card>
@@ -281,7 +454,11 @@ const TenancyScheduleLeaseDetails = () => {
             </div>
             <div className="flex items-center space-x-2">
               <Label htmlFor="include-tenant-summary" className="text-sm">Include</Label>
-              <Switch id="include-tenant-summary" defaultChecked />
+              <Switch 
+                id="include-tenant-summary" 
+                checked={tenantData.include}
+                onCheckedChange={(checked) => setTenantData(prev => ({...prev, include: checked}))}
+              />
             </div>
           </div>
         </CardHeader>
@@ -326,8 +503,11 @@ const TenancyScheduleLeaseDetails = () => {
             {extractedText && (
               <div className="border rounded-lg p-4 bg-green-50">
                 <div className="flex items-center gap-2 mb-2">
-                  <Eye className="h-4 w-4 text-green-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600" />
                   <h4 className="font-medium text-green-800">Extracted Text (OCR)</h4>
+                  <Badge variant="outline" className="text-xs">
+                    Auto-populated form fields
+                  </Badge>
                 </div>
                 <Textarea
                   value={extractedText}
@@ -355,6 +535,13 @@ const TenancyScheduleLeaseDetails = () => {
                   >
                     Copy Text
                   </Button>
+                  <Button 
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => autoPopulateFromOCR(extractedText)}
+                  >
+                    Re-populate Fields
+                  </Button>
                 </div>
               </div>
             )}
@@ -374,11 +561,23 @@ const TenancyScheduleLeaseDetails = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="lessor">Lessor</Label>
-                  <Input id="lessor" placeholder="Enter lessor name" className="mt-1" />
+                  <Input 
+                    id="lessor" 
+                    placeholder="Enter lessor name" 
+                    className="mt-1"
+                    value={tenantData.lessor}
+                    onChange={(e) => setTenantData(prev => ({...prev, lessor: e.target.value}))}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="lessee">Lessee</Label>
-                  <Input id="lessee" placeholder="Enter lessee name" className="mt-1" />
+                  <Input 
+                    id="lessee" 
+                    placeholder="Enter lessee name" 
+                    className="mt-1"
+                    value={tenantData.lessee}
+                    onChange={(e) => setTenantData(prev => ({...prev, lessee: e.target.value}))}
+                  />
                 </div>
               </div>
 
@@ -386,19 +585,43 @@ const TenancyScheduleLeaseDetails = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="commencement-date">Commencement Date</Label>
-                  <Input id="commencement-date" type="date" className="mt-1" />
+                  <Input 
+                    id="commencement-date" 
+                    type="date" 
+                    className="mt-1"
+                    value={tenantData.commencementDate}
+                    onChange={(e) => setTenantData(prev => ({...prev, commencementDate: e.target.value}))}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="expiry-date">Expiry Date</Label>
-                  <Input id="expiry-date" type="date" className="mt-1" />
+                  <Input 
+                    id="expiry-date" 
+                    type="date" 
+                    className="mt-1"
+                    value={tenantData.expiryDate}
+                    onChange={(e) => setTenantData(prev => ({...prev, expiryDate: e.target.value}))}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="options-terms">Options/Further Terms</Label>
-                  <Input id="options-terms" placeholder="e.g., 5+5 years" className="mt-1" />
+                  <Input 
+                    id="options-terms" 
+                    placeholder="e.g., 5+5 years" 
+                    className="mt-1"
+                    value={tenantData.optionsTerms}
+                    onChange={(e) => setTenantData(prev => ({...prev, optionsTerms: e.target.value}))}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="review-date">Review Date</Label>
-                  <Input id="review-date" type="date" className="mt-1" />
+                  <Input 
+                    id="review-date" 
+                    type="date" 
+                    className="mt-1"
+                    value={tenantData.reviewDate}
+                    onChange={(e) => setTenantData(prev => ({...prev, reviewDate: e.target.value}))}
+                  />
                 </div>
               </div>
 
@@ -406,7 +629,10 @@ const TenancyScheduleLeaseDetails = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="tenant-review-method">Review Method</Label>
-                  <Select>
+                  <Select 
+                    value={tenantData.reviewMethod} 
+                    onValueChange={(value) => setTenantData(prev => ({...prev, reviewMethod: value}))}
+                  >
                     <SelectTrigger className="mt-1">
                       <SelectValue placeholder="Select method" />
                     </SelectTrigger>
@@ -420,22 +646,46 @@ const TenancyScheduleLeaseDetails = () => {
                 </div>
                 <div>
                   <Label htmlFor="outgoings">Outgoings</Label>
-                  <Input id="outgoings" placeholder="$0.00" className="mt-1" />
+                  <Input 
+                    id="outgoings" 
+                    placeholder="$0.00" 
+                    className="mt-1"
+                    value={tenantData.outgoings}
+                    onChange={(e) => setTenantData(prev => ({...prev, outgoings: e.target.value}))}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="commencement-rent">Commencement Rent</Label>
-                  <Input id="commencement-rent" placeholder="$0.00" className="mt-1" />
+                  <Input 
+                    id="commencement-rent" 
+                    placeholder="$0.00" 
+                    className="mt-1"
+                    value={tenantData.commencementRent}
+                    onChange={(e) => setTenantData(prev => ({...prev, commencementRent: e.target.value}))}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="incentives">Incentives</Label>
-                  <Input id="incentives" placeholder="$0.00" className="mt-1" />
+                  <Input 
+                    id="incentives" 
+                    placeholder="$0.00" 
+                    className="mt-1"
+                    value={tenantData.incentives}
+                    onChange={(e) => setTenantData(prev => ({...prev, incentives: e.target.value}))}
+                  />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="repairs-maintenance">Repairs and Maintenance</Label>
-                  <Textarea id="repairs-maintenance" placeholder="Describe responsibility allocation" className="mt-1 h-20" />
+                  <Textarea 
+                    id="repairs-maintenance" 
+                    placeholder="Describe responsibility allocation" 
+                    className="mt-1 h-20"
+                    value={tenantData.repairsMaintenance}
+                    onChange={(e) => setTenantData(prev => ({...prev, repairsMaintenance: e.target.value}))}
+                  />
                 </div>
               </div>
             </div>
