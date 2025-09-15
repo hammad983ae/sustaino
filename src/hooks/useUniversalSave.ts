@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 interface SaveData {
   [key: string]: any;
@@ -15,6 +15,7 @@ interface SaveOptions {
 export const useUniversalSave = (sectionName: string, options: SaveOptions = {}) => {
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const { toast } = useToast();
   
   const { showToast = true, autoSave = false, debounceMs = 1000 } = options;
 
@@ -26,28 +27,31 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
     try {
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
+      
+      // Use fallback identifier for demo/unauthenticated users
+      const userId = user?.id || 'demo_user';
+      const isDemo = !user;
 
       // Save to localStorage for immediate persistence
-      const storageKey = `report_${sectionName}_${user.id}`;
+      const storageKey = `report_${sectionName}_${userId}`;
       const saveObject = {
         ...data,
         savedAt: new Date().toISOString(),
         section: sectionName,
-        userId: user.id
+        userId: userId,
+        isDemo: isDemo
       };
       
       localStorage.setItem(storageKey, JSON.stringify(saveObject));
 
       // Also save to global report tracking
-      const globalReportKey = `global_report_tracking_${user.id}`;
+      const globalReportKey = `global_report_tracking_${userId}`;
       const existingTracking = JSON.parse(localStorage.getItem(globalReportKey) || '{}');
       existingTracking[sectionName] = {
         lastSaved: saveObject.savedAt,
         hasData: true,
-        dataSize: JSON.stringify(data).length
+        dataSize: JSON.stringify(data).length,
+        isDemo: isDemo
       };
       localStorage.setItem(globalReportKey, JSON.stringify(existingTracking));
 
@@ -60,8 +64,9 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
         type: 'Report Section',
         lastModified: saveObject.savedAt,
         size: JSON.stringify(data).length,
-        status: 'Saved',
-        section: sectionName
+        status: isDemo ? 'Demo Save' : 'Saved',
+        section: sectionName,
+        isDemo: isDemo
       };
       
       if (existingFileIndex >= 0) {
@@ -74,15 +79,44 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
       
       setLastSaved(new Date());
       
-      // Toast notifications disabled to reduce noise
+      // Show toast only for demo users to indicate save status
+      if (isDemo && showToast) {
+        toast({
+          title: "Demo Save Complete",
+          description: "Data saved locally for this demo session.",
+        });
+      }
       
       return { success: true, data: saveObject };
     } catch (error) {
       console.error(`Failed to save ${sectionName}:`, error);
       
-      // Error notifications disabled to reduce noise
-      
-      return { success: false, error };
+      // For demo users, still try to save to localStorage
+      try {
+        const storageKey = `report_${sectionName}_demo_user`;
+        const saveObject = {
+          ...data,
+          savedAt: new Date().toISOString(),
+          section: sectionName,
+          userId: 'demo_user',
+          isDemo: true
+        };
+        
+        localStorage.setItem(storageKey, JSON.stringify(saveObject));
+        setLastSaved(new Date());
+        
+        if (showToast) {
+          toast({
+            title: "Demo Save Complete",
+            description: "Data saved locally for this demo session.",
+          });
+        }
+        
+        return { success: true, data: saveObject };
+      } catch (fallbackError) {
+        console.error(`Fallback save also failed:`, fallbackError);
+        return { success: false, error: fallbackError };
+      }
     } finally {
       setIsSaving(false);
     }
@@ -91,9 +125,9 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
   const loadData = useCallback(async (): Promise<SaveData | null> => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return null;
+      const userId = user?.id || 'demo_user';
 
-      const storageKey = `report_${sectionName}_${user.id}`;
+      const storageKey = `report_${sectionName}_${userId}`;
       const savedData = localStorage.getItem(storageKey);
       
       if (savedData) {
@@ -105,6 +139,21 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
       return null;
     } catch (error) {
       console.error(`Failed to load ${sectionName}:`, error);
+      
+      // Fallback for demo users
+      try {
+        const storageKey = `report_${sectionName}_demo_user`;
+        const savedData = localStorage.getItem(storageKey);
+        
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          setLastSaved(new Date(parsed.savedAt));
+          return parsed;
+        }
+      } catch (fallbackError) {
+        console.error(`Fallback load also failed:`, fallbackError);
+      }
+      
       return null;
     }
   }, [sectionName]);
@@ -112,9 +161,9 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
   const clearData = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      const userId = user?.id || 'demo_user';
 
-      const storageKey = `report_${sectionName}_${user.id}`;
+      const storageKey = `report_${sectionName}_${userId}`;
       localStorage.removeItem(storageKey);
       
       setLastSaved(null);
@@ -123,9 +172,16 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
     } catch (error) {
       console.error(`Failed to clear ${sectionName}:`, error);
       
-      // Error notifications disabled
+      // Fallback for demo users
+      try {
+        const storageKey = `report_${sectionName}_demo_user`;
+        localStorage.removeItem(storageKey);
+        setLastSaved(null);
+      } catch (fallbackError) {
+        console.error(`Fallback clear also failed:`, fallbackError);
+      }
     }
-  }, [sectionName, showToast]);
+  }, [sectionName]);
 
   return {
     saveData,
