@@ -18,12 +18,12 @@ const ReportDataLoader = () => {
           const validation = validateAndFilterReportData(reportData);
           console.log('Data validation results:', validation);
           
-          // Pre-populate report sections with validated data only
-          if (reportData.reportSections && validation.isValid) {
+          // Pre-populate report sections with data - always load if available
+          if (reportData.reportSections) {
             const sections = reportData.reportSections;
             
-            // Map RPD and Location data - only if validation passes
-            if (sections.rpdAndLocation && validation.sections?.rpdAndLocation?.shouldInclude) {
+            // Map RPD and Location data - always include if present
+            if (sections.rpdAndLocation) {
               // Update property search data
               updateReportData('propertySearchData', {
                 address: sections.rpdAndLocation.propertyAddress,
@@ -42,14 +42,14 @@ const ReportDataLoader = () => {
               }
             }
 
-            // Map Legal and Planning data - only if validation passes
-            if (sections.legalAndPlanning && validation.sections?.legalAndPlanning?.shouldInclude) {
+            // Map Legal and Planning data - always include if present
+            if (sections.legalAndPlanning) {
               updateReportData('planningData', sections.legalAndPlanning);
               updateReportData('legalAndPlanning', sections.legalAndPlanning);
             }
 
-            // Map Tenancy Details - only for leasehold properties
-            if (sections.tenancyScheduleLeaseDetails && validation.sections?.tenancyScheduleLeaseDetails?.shouldInclude) {
+            // Map Tenancy Details - always include if present
+            if (sections.tenancyScheduleLeaseDetails) {
               updateReportData('tenancyDetails', sections.tenancyScheduleLeaseDetails);
             }
 
@@ -78,22 +78,20 @@ const ReportDataLoader = () => {
               updateReportData('propertyDetails', sections.propertyDetails);
             }
 
-            // Map Document Attachments - only if files exist
-            if (sections.documentAttachments && validation.sections?.fileAttachments?.shouldInclude) {
+            // Map Document Attachments - always include if present
+            if (sections.documentAttachments) {
               updateReportData('fileAttachments', sections.documentAttachments);
             }
 
             // Store all generated sections for direct access
             updateReportData('generatedSections' as any, sections);
 
-            console.log('Successfully loaded validated data into report context');
+            console.log('Successfully loaded all available data into report context');
             
             // Log any warnings
             if (validation.validation?.warnings?.length > 0) {
               console.warn('Data validation warnings:', validation.validation.warnings);
             }
-          } else if (!validation.isValid) {
-            console.error('Data validation failed:', validation.validation?.missingFields);
           }
           
           // Clear the stored data to prevent reuse

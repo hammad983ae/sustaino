@@ -12,18 +12,14 @@ const ReportDataPrePopulation = () => {
   const { setValuationType } = useValuation();
 
   useEffect(() => {
-    // Validate all data before pre-populating
-    const validation = validateAndFilterReportData({ reportData });
-    
-    if (!validation.isValid) {
-      console.warn('Report data validation failed:', validation.validation?.missingFields);
-      return;
-    }
-
-    console.log('Pre-populating report sections with validated data');
+    console.log('Pre-populating report sections with assessment data');
+    console.log('Current reportData:', reportData);
 
     const reportConfig = reportData.reportConfig;
-    if (!reportConfig) return;
+    if (!reportConfig) {
+      console.log('No report config found, skipping pre-population');
+      return;
+    }
 
     // Pre-populate Valuation Certificate with Value Component - always include if data exists
     if (reportConfig.valueComponent) {
@@ -90,15 +86,7 @@ const ReportDataPrePopulation = () => {
       updateReportData('fileAttachments', reportData.fileAttachments);
     }
 
-    // Log completion with data quality metrics
-    const qualityMetrics = Object.entries(validation.sections || {}).map(([section, check]) => ({
-      section,
-      included: check.shouldInclude,
-      quality: check.dataQuality,
-      completeness: check.completeness
-    }));
-
-    console.log('Pre-population completed. Quality metrics:', qualityMetrics);
+    console.log('Pre-population completed successfully');
 
   }, [reportData.reportConfig, reportData.planningData, reportData.tenancyDetails, 
       reportData.fileAttachments, updateReportData, setValuationType]);
