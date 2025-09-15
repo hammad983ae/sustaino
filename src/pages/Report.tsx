@@ -12,6 +12,7 @@ import ReportDataLoader from "@/components/ReportDataLoader";
 import { ValuationProvider } from "@/contexts/ValuationContext";
 import { ReportDataProvider } from "@/contexts/ReportDataContext";
 import PDFReportGenerator from "@/components/PDFReportGenerator";
+import AIAnimationPreview from "@/components/AIAnimationPreview";
 
 const ReportViewer = () => {
   const sections = [
@@ -224,7 +225,13 @@ const ReportViewer = () => {
 
       {/* Report content */}
       <div className="p-4 pb-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* AI Animation Preview */}
+          <AIAnimationPreview 
+            title="AI Report Generation in Progress"
+            isActive={true}
+          />
+          
           <ReportSection 
             title={sections[currentSection].title}
             subtitle={sections[currentSection].subtitle}
