@@ -31,18 +31,44 @@ const ValuationCertificate = () => {
 
   // Update pre-populated data when report config changes
   useEffect(() => {
-    if (reportData.reportConfig) {
+    console.log('Updating valuation certificate pre-populated data from:', reportData);
+    
+    if (reportData.reportConfig || reportData.valuationCertificate) {
+      const config = reportData.reportConfig || {};
+      const certificate = reportData.valuationCertificate || {};
+      
       setPrePopulatedData({
-        valueComponent: reportData.reportConfig.valueComponent || '',
-        valuationBasis: reportData.reportConfig.valuationBasis || '',
-        interestValues: reportData.reportConfig.interestValues || '',
-        propertyType: reportData.reportConfig.propertyType || '',
-        propertyAddress: reportData.propertySearchData?.address || '',
-        purposeOfValuation: reportData.reportConfig.purposeOfValuation || '',
-        mortgageSecurity: reportData.reportConfig.mortgageSecurity || ''
+        // Use certificate data first, then config data, then array values
+        valueComponent: certificate.valueComponent || 
+                      config.valueComponent || 
+                      (Array.isArray(config['Value Component']) ? config['Value Component'].join(', ') : config['Value Component']) || '',
+        
+        valuationBasis: certificate.valuationBasis || 
+                       config.valuationBasis || 
+                       (Array.isArray(config['Basis of Valuation']) ? config['Basis of Valuation'].join(', ') : config['Basis of Valuation']) || '',
+        
+        interestValues: certificate.interestValues || 
+                       config.interestValues || 
+                       (Array.isArray(config['Interest Values']) ? config['Interest Values'].join(', ') : config['Interest Values']) || '',
+        
+        propertyType: certificate.propertyType || 
+                     config.propertyType || 
+                     config['property-type'] || '',
+        
+        propertyAddress: certificate.propertyAddress || 
+                        reportData.propertySearchData?.confirmedAddress || 
+                        reportData.propertySearchData?.address || 
+                        reportData.propertySearchData?.propertyAddress || '',
+        
+        purposeOfValuation: certificate.purposeOfValuation || 
+                           config.purposeOfValuation || 
+                           (Array.isArray(config['Valuation Purpose']) ? config['Valuation Purpose'].join(', ') : config['Valuation Purpose']) || '',
+        
+        mortgageSecurity: certificate.mortgageSecurity || 
+                         config.mortgageSecurity || 'To be assessed'
       });
     }
-  }, [reportData.reportConfig, reportData.propertySearchData]);
+  }, [reportData.reportConfig, reportData.propertySearchData, reportData.valuationCertificate]);
 
   return (
     <div className="space-y-6">
