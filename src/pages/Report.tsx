@@ -146,7 +146,15 @@ const ReportViewer = () => {
               Section {currentSection + 1}: {sections[currentSection].title}
             </h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            {/* AI Animator in toolbar */}
+            <div className="hidden md:block">
+              <AIAnimationPreview 
+                title="AI Processing"
+                isActive={true}
+              />
+            </div>
+            <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={manualSave}>
               <Save className="h-4 w-4 mr-1" />
               Save
@@ -172,6 +180,7 @@ const ReportViewer = () => {
             )}
             <div className="text-sm text-muted-foreground">
               {currentSection + 1} of {sections.length}
+            </div>
             </div>
           </div>
         </div>
@@ -225,13 +234,7 @@ const ReportViewer = () => {
 
       {/* Report content */}
       <div className="p-4 pb-4">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* AI Animation Preview */}
-          <AIAnimationPreview 
-            title="AI Report Generation in Progress"
-            isActive={true}
-          />
-          
+        <div className="max-w-4xl mx-auto">
           <ReportSection 
             title={sections[currentSection].title}
             subtitle={sections[currentSection].subtitle}
