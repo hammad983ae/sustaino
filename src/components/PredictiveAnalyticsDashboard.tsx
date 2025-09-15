@@ -19,6 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { TrendingUp, Calendar, MapPin, AlertTriangle, Brain, Target, Construction } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import FinancialRatiosAnalysis from "./FinancialRatiosAnalysis";
 
 interface PredictionModel {
   timeframe: string;
@@ -258,11 +259,12 @@ export default function PredictiveAnalyticsDashboard() {
         </Card>
       ) : analytics && (
         <Tabs defaultValue="projections" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="projections">Value Projections</TabsTrigger>
             <TabsTrigger value="infrastructure">Infrastructure Impact</TabsTrigger>
             <TabsTrigger value="market-cycle">Market Cycle</TabsTrigger>
             <TabsTrigger value="risk-analysis">Risk Analysis</TabsTrigger>
+            <TabsTrigger value="financial-ratios">Financial Ratios</TabsTrigger>
           </TabsList>
 
           <TabsContent value="projections" className="space-y-4">
@@ -485,6 +487,10 @@ export default function PredictiveAnalyticsDashboard() {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="financial-ratios" className="space-y-4">
+            <FinancialRatiosAnalysis />
           </TabsContent>
         </Tabs>
       )}
