@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, Home, Save, Mail } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Save, Mail, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
@@ -147,6 +147,22 @@ const ReportViewer = () => {
             </h1>
           </div>
           <div className="flex items-center gap-2">
+            {/* AI Animation Engine */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="bg-emerald-600/10 hover:bg-emerald-600/20 border-emerald-600/20">
+                  <Zap className="h-4 w-4 mr-1" />
+                  AI Engine
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <AIAnimationPreview 
+                  title="AI Report Generation Engine"
+                  isActive={true}
+                />
+              </DialogContent>
+            </Dialog>
+
             <Button variant="outline" size="sm" onClick={manualSave}>
               <Save className="h-4 w-4 mr-1" />
               Save
@@ -226,12 +242,6 @@ const ReportViewer = () => {
       {/* Report content */}
       <div className="p-4 pb-4">
         <div className="max-w-4xl mx-auto space-y-6">
-          {/* AI Animation Preview */}
-          <AIAnimationPreview 
-            title="AI Report Generation in Progress"
-            isActive={true}
-          />
-          
           <ReportSection 
             title={sections[currentSection].title}
             subtitle={sections[currentSection].subtitle}
