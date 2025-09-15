@@ -280,6 +280,23 @@ export interface ReportData {
     lastUpdated?: string;
   };
 
+  // Statutory Assessment
+  statutoryAssessment?: {
+    included?: boolean;
+    assessmentDate?: string;
+    currentStatutoryValue?: string;
+    landValue?: string;
+    capitalImprovedValue?: string;
+    annualRates?: string;
+    assessingAuthority?: string;
+    landTax?: string;
+    windfallTax?: string;
+    stampDuty?: string;
+    assessmentNotes?: string;
+    uploadedDocuments?: string[];
+    [key: string]: any;
+  };
+
   lastUpdated?: string;
   
   // Generated sections from assessment workflow
