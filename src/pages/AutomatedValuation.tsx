@@ -10,6 +10,8 @@ import { Zap, Sparkles } from "lucide-react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
+import SetupFlowSelector from "@/components/SetupFlowSelector";
+import QuickSetupForm from "@/components/QuickSetupForm";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 
@@ -25,10 +27,24 @@ import DevelopmentCalculator from "@/components/DevelopmentCalculator";
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [setupMethod, setSetupMethod] = useState<"quick" | "advanced" | null>(null);
 
   const handlePropertyTypeSelect = (type: string) => {
     setSelectedPropertyType(type);
-    setCurrentStep("propertyDetails");
+    setCurrentStep("setupMethod");
+  };
+
+  const handleSetupMethodSelect = (method: "quick" | "advanced") => {
+    setSetupMethod(method);
+    if (method === "quick") {
+      setCurrentStep("quickSetup");
+    } else {
+      setCurrentStep("propertyDetails");
+    }
+  };
+
+  const handleQuickSetupComplete = () => {
+    setCurrentStep("automatedReport");
   };
 
   const handlePropertyDetailsNext = () => {
@@ -36,10 +52,18 @@ export default function AutomatedValuation() {
   };
 
   const handleBack = () => {
-    if (currentStep === "propertyDetails") {
+    if (currentStep === "setupMethod") {
       setCurrentStep("propertyType");
+    } else if (currentStep === "quickSetup") {
+      setCurrentStep("setupMethod");
+    } else if (currentStep === "propertyDetails") {
+      setCurrentStep("setupMethod");
     } else if (currentStep === "automatedReport") {
-      setCurrentStep("propertyDetails");
+      if (setupMethod === "quick") {
+        setCurrentStep("quickSetup");
+      } else {
+        setCurrentStep("propertyDetails");
+      }
     }
   };
 
@@ -200,6 +224,28 @@ export default function AutomatedValuation() {
   }
 
   switch (currentStep) {
+    case "setupMethod":
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+          <SetupFlowSelector
+            onQuickSetup={() => handleSetupMethodSelect("quick")}
+            onAdvancedSetup={() => handleSetupMethodSelect("advanced")}
+          />
+          <AIAssistantToggle context="Setup Method Selection" />
+        </div>
+      );
+
+    case "quickSetup":
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+          <QuickSetupForm
+            onComplete={handleQuickSetupComplete}
+            onAdvancedSetup={() => handleSetupMethodSelect("advanced")}
+          />
+          <AIAssistantToggle context="Quick Setup Form" />
+        </div>
+      );
+
     case "propertyDetails":
       return (
         <>
