@@ -25,8 +25,8 @@ const ReportDataPrePopulation = () => {
     const reportConfig = reportData.reportConfig;
     if (!reportConfig) return;
 
-    // Pre-populate Valuation Certificate with Value Component - only if data is complete
-    if (reportConfig.valueComponent && validation.sections?.valuationCertificate?.shouldInclude) {
+    // Pre-populate Valuation Certificate with Value Component - always include if data exists
+    if (reportConfig.valueComponent) {
       updateReportData('valuationCertificate', {
         valueComponent: reportConfig.valueComponent,
         valuationBasis: reportConfig.valuationBasis,
@@ -36,13 +36,14 @@ const ReportDataPrePopulation = () => {
       });
     }
 
-    // Set valuation type for context (Ground Lease visibility) - only if leasehold
-    if (reportConfig.interestValues && validation.sections?.tenancyScheduleLeaseDetails?.shouldInclude) {
+    // Set valuation type for context (Ground Lease visibility) - if leasehold
+    if (reportConfig.interestValues?.includes('Leasehold Interest') || 
+        reportConfig.interestValues?.includes('Ground Lease')) {
       setValuationType(reportConfig.interestValues);
     }
 
-    // Pre-populate Valuation Analysis with selected approaches only - only if approaches exist
-    if (reportConfig.valuationApproaches && validation.sections?.valuationAnalysis?.shouldInclude) {
+    // Pre-populate Valuation Analysis with selected approaches - always include section
+    if (reportConfig.valuationApproaches?.length > 0) {
       updateReportData('valuationAnalysis', {
         activeApproaches: reportConfig.valuationApproaches,
         selectedApproaches: reportConfig.valuationApproaches,
@@ -50,9 +51,8 @@ const ReportDataPrePopulation = () => {
       });
     }
 
-    // Pre-populate Legal and Planning with LGA from planning data - only if planning data exists
-    if ((reportData.planningData?.lga || reportData.planningData?.zoning) && 
-        validation.sections?.legalAndPlanning?.shouldInclude) {
+    // Pre-populate Legal and Planning with LGA from planning data - always include section
+    if (reportData.planningData) {
       updateReportData('legalAndPlanning', {
         lga: reportData.planningData.lga,
         zoning: reportData.planningData.zoning,
@@ -73,8 +73,9 @@ const ReportDataPrePopulation = () => {
     }
 
     // Pre-populate tenancy details only for leasehold properties
-    if (validation.sections?.tenancyScheduleLeaseDetails?.shouldInclude && 
-        reportData.tenancyDetails) {
+    if (reportData.tenancyDetails && 
+        (reportConfig.interestValues?.includes('Leasehold Interest') || 
+         reportConfig.interestValues?.includes('Ground Lease'))) {
       updateReportData('tenancyDetails', {
         ...reportData.tenancyDetails,
         groundLease: {
@@ -84,8 +85,8 @@ const ReportDataPrePopulation = () => {
       });
     }
 
-    // Pre-populate file attachments only if files exist
-    if (validation.sections?.fileAttachments?.shouldInclude && reportData.fileAttachments) {
+    // Pre-populate file attachments - always include section even if empty
+    if (reportData.fileAttachments) {
       updateReportData('fileAttachments', reportData.fileAttachments);
     }
 

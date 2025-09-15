@@ -125,12 +125,13 @@ export function checkPlanningData(assessmentData: any): DataCheckResult {
                      completeness >= 50 ? 'good' : 
                      completeness >= 30 ? 'fair' : 'poor';
 
+  // Always include planning section - it's optional content that can be filled manually
   return {
-    shouldInclude: hasMinimumData,
+    shouldInclude: true, // Changed from hasMinimumData
     hasRequiredData: hasMinimumData,
     completeness: Math.round(completeness),
     dataQuality,
-    reason: hasMinimumData ? undefined : 'Insufficient planning data for reliable analysis'
+    reason: hasMinimumData ? undefined : 'Planning data section available for manual entry'
   };
 }
 
@@ -194,14 +195,15 @@ export function checkFileAttachments(assessmentData: any): DataCheckResult {
   }
 
   const dataQuality = (hasPhotos && hasDocuments) ? 'excellent' :
-                     (hasPhotos || hasDocuments) ? 'good' : 'poor';
+                     (hasPhotos || hasDocuments) ? 'good' : 'fair';
 
+  // Always include file attachments section, even if empty - it's optional content
   return {
-    shouldInclude: hasPhotos || hasDocuments,
+    shouldInclude: true, // Changed from hasPhotos || hasDocuments
     hasRequiredData: hasPhotos || hasDocuments,
     completeness,
     dataQuality,
-    reason: (!hasPhotos && !hasDocuments) ? 'No supporting files uploaded' : undefined
+    reason: (!hasPhotos && !hasDocuments) ? 'No supporting files uploaded - section will be available for manual entry' : undefined
   };
 }
 
@@ -212,28 +214,20 @@ export function checkValuationApproaches(assessmentData: any): DataCheckResult {
   const reportConfig = assessmentData.reportData?.reportConfig || {};
   const approaches = reportConfig.valuationApproaches || [];
 
-  if (approaches.length === 0) {
-    return {
-      shouldInclude: false,
-      hasRequiredData: false,
-      completeness: 0,
-      dataQuality: 'poor',
-      reason: 'No valuation approaches selected'
-    };
-  }
-
   // Calculate completeness based on approach diversity
   const maxApproaches = 4; // Direct Comparison, Income, Cost, Development
-  const completeness = (approaches.length / maxApproaches) * 100;
+  const completeness = approaches.length > 0 ? (approaches.length / maxApproaches) * 100 : 0;
 
   const dataQuality = approaches.length >= 2 ? 'excellent' :
-                     approaches.length === 1 ? 'good' : 'poor';
+                     approaches.length === 1 ? 'good' : 'fair';
 
+  // Always include valuation analysis section - it's core to any report
   return {
-    shouldInclude: true,
-    hasRequiredData: true,
+    shouldInclude: true, // Changed from approaches.length > 0
+    hasRequiredData: approaches.length > 0,
     completeness: Math.min(completeness, 100),
-    dataQuality
+    dataQuality,
+    reason: approaches.length === 0 ? 'Valuation approaches section available for manual configuration' : undefined
   };
 }
 
@@ -249,20 +243,20 @@ export function checkPropertyIdentification(assessmentData: any): DataCheckResul
   ];
 
   const selectedMethods = methods.filter(method => propertyId[method]).length;
-  const completeness = (selectedMethods / methods.length) * 100;
+  const completeness = selectedMethods > 0 ? (selectedMethods / methods.length) * 100 : 0;
 
-  // At least one method should be selected
   const hasMinimum = selectedMethods >= 1;
   const dataQuality = selectedMethods >= 3 ? 'excellent' :
                      selectedMethods >= 2 ? 'good' :
-                     selectedMethods >= 1 ? 'fair' : 'poor';
+                     selectedMethods >= 1 ? 'fair' : 'fair';
 
+  // Always include property identification section - it's important for report completion
   return {
-    shouldInclude: hasMinimum,
+    shouldInclude: true, // Changed from hasMinimum
     hasRequiredData: hasMinimum,
     completeness,
     dataQuality,
-    reason: !hasMinimum ? 'No property identification methods selected' : undefined
+    reason: !hasMinimum ? 'Property identification section available for manual completion' : undefined
   };
 }
 
