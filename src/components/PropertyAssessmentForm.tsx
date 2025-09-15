@@ -22,6 +22,7 @@ import PropertyPhotos from '@/components/PropertyPhotos';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
+import IntelligentAssessmentAutomation from '@/components/IntelligentAssessmentAutomation';
 
 interface PropertyAssessmentFormProps {
   onComplete?: (data: any) => void;
@@ -139,6 +140,16 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         console.log('Rental Configuration validation:', { hasAddress, addressData });
         return hasAddress; // Require address
+      }
+    },
+    {
+      title: "Intelligent Enhancement", 
+      subtitle: "AI-powered assessment automation and optimization",
+      component: <IntelligentAssessmentAutomation />,
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Intelligent Enhancement validation:', { hasAddress, addressData });
+        return hasAddress;
       }
     },
     {

@@ -22,6 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AutomaticRiskAssessment, type PropertyData } from "@/lib/automaticRiskAssessment";
 import { useReportData } from "@/contexts/ReportDataContext";
 import { useProperty } from "@/contexts/PropertyContext";
+import WorldClassRiskAssessment from '@/components/WorldClassRiskAssessment';
 
 const RiskAssessmentMarketIndicators = () => {
   const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('RiskAssessmentMarketIndicators', { 
@@ -227,13 +228,17 @@ const RiskAssessmentMarketIndicators = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
+      {/* AI-Powered Risk Assessment Section */}
+      <WorldClassRiskAssessment />
+      
+      {/* Legacy Manual Risk Assessment - Optional */}
+      <Card className="border-dashed border-2 border-gray-300">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Risk Assessment & Market Indicators</CardTitle>
+              <CardTitle>Manual Risk Assessment (Legacy)</CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
-                Assess property risk factors and market indicators to provide comprehensive risk analysis
+                Traditional manual risk assessment - superseded by AI analysis above
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -241,7 +246,7 @@ const RiskAssessmentMarketIndicators = () => {
                 {isSaving ? "Saving..." : lastSaved ? "✅ Saved" : "Unsaved"}
               </div>
               <div className="flex items-center gap-2">
-                <Label htmlFor="include-section">Include</Label>
+                <Label htmlFor="include-section">Include Legacy</Label>
                 <Switch
                   id="include-section"
                   checked={includeSection}
