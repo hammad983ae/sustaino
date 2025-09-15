@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight, Home, Save } from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { ChevronLeft, ChevronRight, Home, Save, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
@@ -10,6 +11,7 @@ import ReportDataPrePopulation from "@/components/ReportDataPrePopulation";
 import ReportDataLoader from "@/components/ReportDataLoader";
 import { ValuationProvider } from "@/contexts/ValuationContext";
 import { ReportDataProvider } from "@/contexts/ReportDataContext";
+import PDFReportGenerator from "@/components/PDFReportGenerator";
 
 const ReportViewer = () => {
   const sections = [
@@ -148,6 +150,20 @@ const ReportViewer = () => {
               <Save className="h-4 w-4 mr-1" />
               Save
             </Button>
+
+            {/* PDF & Email Report Button */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="default" size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+                  <Mail className="h-4 w-4 mr-1" />
+                  Send
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                <PDFReportGenerator />
+              </DialogContent>
+            </Dialog>
+
             {lastSavedSection !== null && (
               <Badge variant="secondary" className="text-xs">
                 Saved: Section {lastSavedSection + 1}
