@@ -36,23 +36,29 @@ export default function WhiteLabelConfig() {
   }, [branding]);
 
   const checkAuthorization = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      // Check if user is admin or partner admin
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('user_id', user.id)
-        .single();
-      
-      // Check user roles table instead since profiles doesn't have role
-      const { data: userRole } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .single();
-      
-      setIsAuthorized(userRole?.role === 'admin' || userRole?.role === 'owner');
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Check user roles table
+        const { data: userRole, error } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single();
+        
+        console.log('User role check:', { userRole, error, userId: user.id });
+        
+        if (userRole && (userRole.role === 'admin' || userRole.role === 'owner')) {
+          setIsAuthorized(true);
+        } else {
+          setIsAuthorized(false);
+        }
+      } else {
+        setIsAuthorized(false);
+      }
+    } catch (error) {
+      console.error('Authorization check failed:', error);
+      setIsAuthorized(false);
     }
   };
 
