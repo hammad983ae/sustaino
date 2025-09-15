@@ -124,26 +124,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       }
     },
     {
-      title: "Risk Assessment & Market Indicators",
-      subtitle: "World-Class Automated Risk Assessment with AI-powered comprehensive risk analysis and real-time market indicators",
-      component: <RiskAssessmentMarketIndicators />,
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Risk Assessment validation:', { hasAddress, addressData });
-        return hasAddress; // Require address to proceed
-      }
-    },
-    {
-      title: "Previous Sales History and Current Sale",
-      subtitle: "Historical sales data from RP Data integration and current transaction details",
-      component: <PreviousSalesHistoryAndCurrentSale />,
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Sales History validation:', { hasAddress, addressData });
-        return hasAddress; // Require address to proceed
-      }
-    },
-    {
       title: "Report Configuration",
       subtitle: "Configure your report settings and client information",
       component: <ReportTypeConfiguration />,
