@@ -184,7 +184,7 @@ export const WebDataUploader = () => {
       <CardContent className="space-y-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="url">Website URL</Label>
+            <Label htmlFor="url">Website URL or PDF Link</Label>
             <div className="relative">
               <Link className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -192,11 +192,14 @@ export const WebDataUploader = () => {
                 type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://www.realestate.com.au/property/..."
+                placeholder="https://example.com/property-listing or PDF link"
                 className="pl-10"
                 disabled={isLoading}
               />
             </div>
+            <p className="text-xs text-muted-foreground">
+              Tip: For PDFs viewed in Chrome, copy the direct URL without the chrome-extension part
+            </p>
           </div>
 
           <div className="space-y-3">

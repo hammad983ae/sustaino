@@ -230,13 +230,40 @@ async function extractFromPDF(url: string, dataType: 'sales' | 'rental'): Promis
   try {
     console.log('Downloading PDF content...')
     
-    // Download PDF content
-    const response = await fetch(url)
+    // Validate URL
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      throw new Error('Invalid URL format. Must start with http:// or https://')
+    }
+    
+    // Download PDF content with timeout and better headers
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
+    
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/pdf,*/*',
+      }
+    })
+    clearTimeout(timeoutId)
     if (!response.ok) {
-      throw new Error(`Failed to download PDF: ${response.status}`)
+      throw new Error(`Failed to download PDF: ${response.status} ${response.statusText}`)
+    }
+    
+    const contentType = response.headers.get('content-type')
+    console.log('Content type:', contentType)
+    
+    if (!contentType?.includes('pdf') && !url.toLowerCase().includes('.pdf')) {
+      console.warn('Warning: Content may not be a PDF file')
     }
     
     const pdfArrayBuffer = await response.arrayBuffer()
+    if (pdfArrayBuffer.byteLength === 0) {
+      throw new Error('Downloaded file is empty')
+    }
+    
+    console.log(`Downloaded ${pdfArrayBuffer.byteLength} bytes`)
     const pdfBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfArrayBuffer)))
     
     console.log('Analyzing PDF with OpenAI...')
@@ -348,7 +375,10 @@ Important:
 
   } catch (error) {
     console.error('Error extracting from PDF:', error)
-    throw error
+    if (error instanceof Error) {
+      throw new Error(`PDF extraction failed: ${error.message}`)
+    }
+    throw new Error('PDF extraction failed with unknown error')
   }
 }
 
