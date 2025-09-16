@@ -28,6 +28,7 @@ export default function SalesEvidenceCommercial() {
   const [zoning, setZoning] = useState(true);
   const [buildingCondition, setBuildingCondition] = useState(true);
   const [streetAccess, setStreetAccess] = useState(true);
+  const [esgScore, setEsgScore] = useState(true);
 
   return (
     <div className="space-y-6">
@@ -294,6 +295,16 @@ export default function SalesEvidenceCommercial() {
               </div>
               <Input placeholder="Main road frontage" className="text-sm" />
               <Input placeholder="Street access comparison..." className="text-sm" />
+            </div>
+
+            {/* ESG Score */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>ESG Score</Label>
+              <div className="flex justify-center">
+                <Switch checked={esgScore} onCheckedChange={setEsgScore} />
+              </div>
+              <Input placeholder="7.5/10" className="text-sm" />
+              <Input placeholder="ESG score comparison..." className="text-sm" />
             </div>
           </div>
         </CardContent>
