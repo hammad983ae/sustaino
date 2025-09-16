@@ -432,15 +432,296 @@ const EnhancedPropertyDetails = () => {
                 </div>
               </div>
 
-              <div className="mt-4">
-                <Label htmlFor="building-description">Detailed Building Description</Label>
-                <Textarea 
-                  id="building-description" 
-                  value={propertyDetails.description}
-                  onChange={(e) => handlePropertyDetailChange('description', e.target.value)}
-                  placeholder="Provide comprehensive description including unique features, layout, materials, and notable characteristics..."
-                  className="min-h-[120px] mt-2"
-                />
+              {/* Comprehensive Property Description Table */}
+              <div className="mt-6">
+                <Label className="text-base font-medium mb-4 block">Comprehensive Property Description</Label>
+                
+                {/* Construction Details */}
+                <div className="border rounded-lg overflow-hidden mb-4">
+                  <div className="bg-muted px-4 py-2 border-b">
+                    <h5 className="font-medium text-sm">Construction Details</h5>
+                  </div>
+                  <div className="divide-y">
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Year Built</Label>
+                      <Input 
+                        value={propertyDetails.yearBuilt}
+                        onChange={(e) => handlePropertyDetailChange('yearBuilt', e.target.value)}
+                        placeholder="e.g., 1985"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">Construction year</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Construction</Label>
+                      <Select value={propertyDetails.constructionType} onValueChange={(value) => handlePropertyDetailChange('constructionType', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="concrete">Concrete</SelectItem>
+                          <SelectItem value="brick-veneer">Brick Veneer</SelectItem>
+                          <SelectItem value="steel-frame">Steel Frame</SelectItem>
+                          <SelectItem value="timber-frame">Timber Frame</SelectItem>
+                          <SelectItem value="reinforced-concrete">Reinforced Concrete</SelectItem>
+                          <SelectItem value="composite">Composite</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Primary construction method</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Foundation</Label>
+                      <Select onValueChange={(value) => handlePropertyDetailChange('foundation', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select foundation" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="concrete-slab">Concrete Slab</SelectItem>
+                          <SelectItem value="strip-footing">Strip Footing</SelectItem>
+                          <SelectItem value="pile-foundation">Pile Foundation</SelectItem>
+                          <SelectItem value="basement">Basement</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Foundation type</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* External Features */}
+                <div className="border rounded-lg overflow-hidden mb-4">
+                  <div className="bg-muted px-4 py-2 border-b">
+                    <h5 className="font-medium text-sm">External Features</h5>
+                  </div>
+                  <div className="divide-y">
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Roof</Label>
+                      <Select onValueChange={(value) => handlePropertyDetailChange('roofType', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select roof type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="tile">Tile</SelectItem>
+                          <SelectItem value="metal">Metal Sheeting</SelectItem>
+                          <SelectItem value="concrete">Concrete</SelectItem>
+                          <SelectItem value="composite">Composite</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Roof material</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Windows</Label>
+                      <Select onValueChange={(value) => handlePropertyDetailChange('windowType', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select window type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="standard">Standard Windows</SelectItem>
+                          <SelectItem value="double-glazed">Double Glazed</SelectItem>
+                          <SelectItem value="aluminium">Aluminium Frame</SelectItem>
+                          <SelectItem value="timber">Timber Frame</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Window specifications</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">External Cladding</Label>
+                      <Select onValueChange={(value) => handlePropertyDetailChange('externalCladding', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select cladding" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="brick">Brick Render</SelectItem>
+                          <SelectItem value="weatherboard">Weatherboard</SelectItem>
+                          <SelectItem value="vinyl">Vinyl Cladding</SelectItem>
+                          <SelectItem value="cement-render">Cement Render</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">External wall finish</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Internal Features */}
+                <div className="border rounded-lg overflow-hidden mb-4">
+                  <div className="bg-muted px-4 py-2 border-b">
+                    <h5 className="font-medium text-sm">Internal Features</h5>
+                  </div>
+                  <div className="divide-y">
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Layout</Label>
+                      <Input 
+                        onChange={(e) => handlePropertyDetailChange('layoutDescription', e.target.value)}
+                        placeholder="e.g., Open plan office areas for office plan"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">General layout description</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Floor Coverings</Label>
+                      <Select onValueChange={(value) => handlePropertyDetailChange('floorCoverings', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select flooring" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="carpet-tile">Carpet and Tile</SelectItem>
+                          <SelectItem value="timber">Timber Flooring</SelectItem>
+                          <SelectItem value="concrete">Polished Concrete</SelectItem>
+                          <SelectItem value="vinyl">Vinyl Flooring</SelectItem>
+                          <SelectItem value="ceramic">Ceramic Tiles</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Primary floor covering</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Fixtures and Fittings</Label>
+                      <Input 
+                        onChange={(e) => handlePropertyDetailChange('fixturesAndFittings', e.target.value)}
+                        placeholder="e.g., Blind, hot light, front desk, dishwasher, electric stove-top, oven"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">Included fixtures</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Amenities and Services */}
+                <div className="border rounded-lg overflow-hidden mb-4">
+                  <div className="bg-muted px-4 py-2 border-b">
+                    <h5 className="font-medium text-sm">Amenities and Services</h5>
+                  </div>
+                  <div className="divide-y">
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">External Condition</Label>
+                      <Select value={propertyDetails.buildingCondition} onValueChange={(value) => handlePropertyDetailChange('buildingCondition', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select condition" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="good">Good</SelectItem>
+                          <SelectItem value="very-good">Very Good</SelectItem>
+                          <SelectItem value="excellent">Excellent</SelectItem>
+                          <SelectItem value="fair">Fair</SelectItem>
+                          <SelectItem value="poor">Poor</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Overall external condition</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Internal Condition</Label>
+                      <Select onValueChange={(value) => handlePropertyDetailChange('internalCondition', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select condition" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="good">Good</SelectItem>
+                          <SelectItem value="very-good">Very Good</SelectItem>
+                          <SelectItem value="excellent">Excellent</SelectItem>
+                          <SelectItem value="fair">Fair</SelectItem>
+                          <SelectItem value="poor">Poor</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Overall internal condition</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Parking</Label>
+                      <Select onValueChange={(value) => handlePropertyDetailChange('parkingType', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select parking" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="street-parking">Street Parking</SelectItem>
+                          <SelectItem value="covered-parking">Covered Parking</SelectItem>
+                          <SelectItem value="basement-parking">Basement Parking</SelectItem>
+                          <SelectItem value="dedicated-spaces">Dedicated Spaces</SelectItem>
+                          <SelectItem value="no-parking">No Parking</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Parking arrangements</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Disability Amenities</Label>
+                      <Select value={propertyDetails.accessibility} onValueChange={(value) => handlePropertyDetailChange('accessibility', value)}>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select accessibility" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                          <SelectItem value="partial">Partial</SelectItem>
+                          <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground">Accessibility features</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Communal Areas</Label>
+                      <Input 
+                        onChange={(e) => handlePropertyDetailChange('communalAreas', e.target.value)}
+                        placeholder="e.g., Not Applicable or describe areas"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">Shared facilities</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Area Summary Table */}
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-muted px-4 py-2 border-b">
+                    <h5 className="font-medium text-sm">Area Summary</h5>
+                  </div>
+                  <div className="divide-y">
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">GLAR</Label>
+                      <Input 
+                        onChange={(e) => handlePropertyDetailChange('glar', e.target.value)}
+                        placeholder="950 sqm"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">Gross lettable area</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Annex</Label>
+                      <Input 
+                        onChange={(e) => handlePropertyDetailChange('annexArea', e.target.value)}
+                        placeholder="0 sqm"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">Additional area</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Land Area</Label>
+                      <Input 
+                        onChange={(e) => handlePropertyDetailChange('landArea', e.target.value)}
+                        placeholder="950 sqm"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">Total land area</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 p-3">
+                      <Label className="text-sm font-medium">Total Area</Label>
+                      <Input 
+                        value={propertyDetails.buildingArea}
+                        onChange={(e) => handlePropertyDetailChange('buildingArea', e.target.value)}
+                        placeholder="950 sqm"
+                        className="text-sm"
+                      />
+                      <div className="text-xs text-muted-foreground">Combined total area</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Comprehensive Description */}
+                <div className="mt-4">
+                  <Label htmlFor="building-description">Additional Property Notes</Label>
+                  <Textarea 
+                    id="building-description" 
+                    value={propertyDetails.description}
+                    onChange={(e) => handlePropertyDetailChange('description', e.target.value)}
+                    placeholder="Any additional notes, unique features, or important details not covered above..."
+                    className="min-h-[80px] mt-2"
+                  />
+                </div>
               </div>
             </div>
 
