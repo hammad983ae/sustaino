@@ -112,7 +112,8 @@ export const WebDataStatus = () => {
           if (functionError.message.includes('URL and data_type are required') || 
               functionError.message.includes('Invalid URL format') ||
               functionError.message.includes('Failed to fetch') ||
-              functionError.message.includes('No property data found')) {
+              functionError.message.includes('No property data found') ||
+              functionError.message.includes('Could not extract property data from the document')) {
             updateStatus('Web Scraper Function', 'success', 'Function deployed and responding correctly');
           } else {
             updateStatus('Web Scraper Function', 'warning', `Function may have issues: ${functionError.message}`);
