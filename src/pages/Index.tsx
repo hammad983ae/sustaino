@@ -82,12 +82,21 @@ const Index = () => {
                   </Button>
                 </Link>
                 
-                <Link to="/client-demo">
-                  <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-emerald-200 text-emerald-700 hover:bg-emerald-50">
-                    <Shield className="w-4 h-4 mr-2" />
-                    Client Demo
-                  </Button>
-                </Link>
+                <div className="flex gap-3">
+                  <Link to="/report">
+                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                      <FileText className="w-4 h-4 mr-2" />
+                      View Table of Contents
+                    </Button>
+                  </Link>
+                  
+                  <Link to="/client-demo">
+                    <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+                      <Shield className="w-4 h-4 mr-2" />
+                      Client Demo
+                    </Button>
+                  </Link>
+                </div>
               </div>
               
               {/* Clean Header */}
