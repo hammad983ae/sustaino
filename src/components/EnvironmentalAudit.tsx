@@ -107,25 +107,322 @@ const EnvironmentalAudit = () => {
             </CardContent>
           </Card>
 
-          {/* Note about ESG and Climate Functions */}
-          <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/30">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Shield className="h-5 w-5 text-blue-600" />
-                <h4 className="font-medium text-blue-800 dark:text-blue-200">
-                  ESG & Climate Assessment Available
-                </h4>
+          {/* Contamination Assessment */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                  <CardTitle>Contamination Assessment</CardTitle>
+                </div>
+                <Switch 
+                  checked={true}
+                  onCheckedChange={() => {}}
+                />
               </div>
-              <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-                For comprehensive ESG assessment, climate risk analysis, and carbon farming projects, visit our dedicated ESG & Climate Assessment platform.
-              </p>
-              <a 
-                href="/esg-climate-assessment" 
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
-              >
-                <Shield className="h-4 w-4" />
-                Access ESG & Climate Assessment
-              </a>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Contamination Risk Level</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select risk level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="low">Low Risk</SelectItem>
+                      <SelectItem value="moderate">Moderate Risk</SelectItem>
+                      <SelectItem value="high">High Risk</SelectItem>
+                      <SelectItem value="confirmed">Confirmed Contamination</SelectItem>
+                      <SelectItem value="unknown">Unknown/Under Investigation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Site Investigation Status</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="not-required">Not Required</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="required">Required</SelectItem>
+                      <SelectItem value="in-progress">In Progress</SelectItem>
+                      <SelectItem value="recommended">Recommended</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Previous Land Use</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select previous use" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="residential">Residential</SelectItem>
+                      <SelectItem value="commercial">Commercial</SelectItem>
+                      <SelectItem value="industrial">Industrial</SelectItem>
+                      <SelectItem value="agricultural">Agricultural</SelectItem>
+                      <SelectItem value="fuel-station">Fuel Station</SelectItem>
+                      <SelectItem value="dry-cleaner">Dry Cleaner</SelectItem>
+                      <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                      <SelectItem value="unknown">Unknown</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Remediation Status</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="required">Required</SelectItem>
+                      <SelectItem value="in-progress">In Progress</SelectItem>
+                      <SelectItem value="ongoing">Ongoing Monitoring</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Hazardous Materials Assessment */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  <CardTitle>Hazardous Materials Assessment</CardTitle>
+                </div>
+                <Switch 
+                  checked={true}
+                  onCheckedChange={() => {}}
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Asbestos Assessment</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select asbestos status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="not-present">Not Present</SelectItem>
+                      <SelectItem value="present-managed">Present - Managed</SelectItem>
+                      <SelectItem value="present-unmanaged">Present - Unmanaged</SelectItem>
+                      <SelectItem value="requires-survey">Requires Survey</SelectItem>
+                      <SelectItem value="unknown">Unknown</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Lead Paint Assessment</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select lead paint status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="not-present">Not Present</SelectItem>
+                      <SelectItem value="present-stable">Present - Stable</SelectItem>
+                      <SelectItem value="present-deteriorating">Present - Deteriorating</SelectItem>
+                      <SelectItem value="requires-testing">Requires Testing</SelectItem>
+                      <SelectItem value="unknown">Unknown</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Underground Storage Tanks</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select UST status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">None Present</SelectItem>
+                      <SelectItem value="active">Active - Compliant</SelectItem>
+                      <SelectItem value="inactive">Inactive/Abandoned</SelectItem>
+                      <SelectItem value="removed">Removed</SelectItem>
+                      <SelectItem value="unknown">Unknown</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Other Hazardous Materials</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none-identified">None Identified</SelectItem>
+                      <SelectItem value="present-minor">Present - Minor</SelectItem>
+                      <SelectItem value="present-significant">Present - Significant</SelectItem>
+                      <SelectItem value="requires-assessment">Requires Assessment</SelectItem>
+                      <SelectItem value="unknown">Unknown</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Environmental Site History */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-blue-500" />
+                  <CardTitle>Environmental Site History</CardTitle>
+                </div>
+                <Switch 
+                  checked={true}
+                  onCheckedChange={() => {}}
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Historical Aerial Review</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="required">Required</SelectItem>
+                      <SelectItem value="not-available">Not Available</SelectItem>
+                      <SelectItem value="in-progress">In Progress</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Government Database Search</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="required">Required</SelectItem>
+                      <SelectItem value="limited-data">Limited Data Available</SelectItem>
+                      <SelectItem value="in-progress">In Progress</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Chain of Title Review</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="required">Required</SelectItem>
+                      <SelectItem value="partial">Partial</SelectItem>
+                      <SelectItem value="not-available">Not Available</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Environmental Reports Available</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select availability" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="current">Current Reports Available</SelectItem>
+                      <SelectItem value="outdated">Outdated Reports Only</SelectItem>
+                      <SelectItem value="none">No Reports Available</SelectItem>
+                      <SelectItem value="pending">Pending Delivery</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Environmental Compliance & Permits */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <CardTitle>Environmental Compliance & Permits</CardTitle>
+                </div>
+                <Switch 
+                  checked={true}
+                  onCheckedChange={() => {}}
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Environmental Permits Current</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="current">All Current</SelectItem>
+                      <SelectItem value="some-expired">Some Expired</SelectItem>
+                      <SelectItem value="requires-renewal">Requires Renewal</SelectItem>
+                      <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                      <SelectItem value="unknown">Unknown</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Waste Management Compliance</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select compliance" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="compliant">Fully Compliant</SelectItem>
+                      <SelectItem value="minor-issues">Minor Issues</SelectItem>
+                      <SelectItem value="significant-issues">Significant Issues</SelectItem>
+                      <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                      <SelectItem value="requires-review">Requires Review</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Water Quality Compliance</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select compliance" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="compliant">Compliant</SelectItem>
+                      <SelectItem value="minor-exceedances">Minor Exceedances</SelectItem>
+                      <SelectItem value="significant-issues">Significant Issues</SelectItem>
+                      <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                      <SelectItem value="testing-required">Testing Required</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Air Quality Compliance</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select compliance" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="compliant">Compliant</SelectItem>
+                      <SelectItem value="minor-issues">Minor Issues</SelectItem>
+                      <SelectItem value="significant-issues">Significant Issues</SelectItem>
+                      <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                      <SelectItem value="monitoring-required">Monitoring Required</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
