@@ -39,7 +39,13 @@ import {
   Eye,
   Printer,
   Settings,
-  Palette
+  Palette,
+  Star,
+  Building,
+  Construction,
+  PiggyBank,
+  Gavel,
+  Phone
 } from "lucide-react";
 
 interface PropertyDetails {
@@ -120,6 +126,69 @@ interface WhiteLabelConfig {
   address: string;
 }
 
+interface RegionalGrowth {
+  headline: string;
+  stats: string;
+  description: string;
+}
+
+interface CouncilInfo {
+  population: string;
+  growthRate: string;
+  grossProduct: string;
+  developments: string;
+  description: string;
+}
+
+interface Infrastructure {
+  hospital?: {
+    name: string;
+    value: string;
+    description: string;
+  };
+  solarFarm?: {
+    name: string;
+    value: string;
+    description: string;
+  };
+}
+
+interface QLDInvestment {
+  economySize: string;
+  retailGrowth: string;
+  populationGrowth: string;
+  employmentGrowth: string;
+  description: string;
+}
+
+interface SaleDetails {
+  method: string;
+  closing: string;
+  inspections: string;
+  dueDiligence: string;
+}
+
+interface ContactDetails {
+  agencyName: string;
+  primary?: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  secondary?: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+}
+
+interface PropertyManagement {
+  headline: string;
+  portfolioSize: string;
+  description: string;
+  contact: string;
+}
+
 interface InformationMemorandum {
   id: string;
   title: string;
@@ -133,6 +202,13 @@ interface InformationMemorandum {
   tenantProfiles: TenantProfile[];
   propertyPhotos: PropertyPhotos;
   locationShowcase: LocationShowcase;
+  regionalGrowth: RegionalGrowth;
+  councilInfo: CouncilInfo;
+  infrastructure: Infrastructure;
+  qldInvestment: QLDInvestment;
+  saleDetails: SaleDetails;
+  contactDetails: ContactDetails;
+  propertyManagement: PropertyManagement;
   whiteLabelConfig: WhiteLabelConfig;
   createdAt: string;
   updatedAt: string;
@@ -184,6 +260,62 @@ export const InformationMemorandumGenerator = () => {
       heroImage: "",
       keyLocationBenefits: []
     },
+    regionalGrowth: {
+      headline: "",
+      stats: "",
+      description: ""
+    },
+    councilInfo: {
+      population: "",
+      growthRate: "",
+      grossProduct: "",
+      developments: "",
+      description: ""
+    },
+    infrastructure: {
+      hospital: {
+        name: "",
+        value: "",
+        description: ""
+      },
+      solarFarm: {
+        name: "",
+        value: "",
+        description: ""
+      }
+    },
+    qldInvestment: {
+      economySize: "",
+      retailGrowth: "",
+      populationGrowth: "",
+      employmentGrowth: "",
+      description: ""
+    },
+    saleDetails: {
+      method: "",
+      closing: "",
+      inspections: "",
+      dueDiligence: ""
+    },
+    contactDetails: {
+      agencyName: "",
+      primary: {
+        name: "",
+        phone: "",
+        email: ""
+      },
+      secondary: {
+        name: "",
+        phone: "",
+        email: ""
+      }
+    },
+    propertyManagement: {
+      headline: "",
+      portfolioSize: "",
+      description: "",
+      contact: ""
+    },
     whiteLabelConfig: {
       companyName: "Delderenzo Property Group",
       logo: "",
@@ -202,7 +334,7 @@ export const InformationMemorandumGenerator = () => {
 
   const updateMemorandum = (section: string, data: any) => {
     setMemorandum(prev => {
-      const currentSection = prev[section as keyof typeof prev] || {};
+      const currentSection = (prev as any)[section] || {};
       return {
         ...prev,
         [section]: { ...currentSection, ...data }
@@ -590,7 +722,7 @@ export const InformationMemorandumGenerator = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-8">
+            <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 lg:grid-cols-15">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="property">Property</TabsTrigger>
               <TabsTrigger value="location">Location</TabsTrigger>
@@ -598,6 +730,13 @@ export const InformationMemorandumGenerator = () => {
               <TabsTrigger value="leases">Leases</TabsTrigger>
               <TabsTrigger value="tenants">Tenants</TabsTrigger>
               <TabsTrigger value="financial">Financial</TabsTrigger>
+              <TabsTrigger value="growth">Growth</TabsTrigger>
+              <TabsTrigger value="council">Council</TabsTrigger>
+              <TabsTrigger value="infrastructure">Infrastructure</TabsTrigger>
+              <TabsTrigger value="investment">QLD Invest</TabsTrigger>
+              <TabsTrigger value="sale">Sale Method</TabsTrigger>
+              <TabsTrigger value="contact">Contact</TabsTrigger>
+              <TabsTrigger value="management">Property Mgmt</TabsTrigger>
               <TabsTrigger value="branding">Branding</TabsTrigger>
             </TabsList>
 
@@ -869,6 +1008,460 @@ export const InformationMemorandumGenerator = () => {
                       placeholder="e.g., $193,766 pa + GST"
                     />
                   </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="growth" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Regional Growth
+                </h3>
+                
+                <div>
+                  <Label htmlFor="growthHeadline">Growth Headline</Label>
+                  <Input
+                    id="growthHeadline"
+                    value={memorandum.regionalGrowth?.headline || ""}
+                    onChange={(e) => updateMemorandum('regionalGrowth', { headline: e.target.value })}
+                    placeholder="e.g., The Bundaberg area benefits from significant growth"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="growthStats">Growth Statistics</Label>
+                  <Input
+                    id="growthStats"
+                    value={memorandum.regionalGrowth?.stats || ""}
+                    onChange={(e) => updateMemorandum('regionalGrowth', { stats: e.target.value })}
+                    placeholder="e.g., housing prices surging by 94% from 2021 to 2025"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="growthDescription">Growth Description</Label>
+                  <Textarea
+                    id="growthDescription"
+                    value={memorandum.regionalGrowth?.description || ""}
+                    onChange={(e) => updateMemorandum('regionalGrowth', { description: e.target.value })}
+                    placeholder="Detailed description of regional growth factors..."
+                    rows={4}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="council" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Building2 className="h-5 w-5" />
+                  Council Information
+                </h3>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="population">Current Population</Label>
+                    <Input
+                      id="population"
+                      value={memorandum.councilInfo?.population || ""}
+                      onChange={(e) => updateMemorandum('councilInfo', { population: e.target.value })}
+                      placeholder="e.g., 106,146"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="growthRate">Growth Rate</Label>
+                    <Input
+                      id="growthRate"
+                      value={memorandum.councilInfo?.growthRate || ""}
+                      onChange={(e) => updateMemorandum('councilInfo', { growthRate: e.target.value })}
+                      placeholder="e.g., 1.90%"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="grossProduct">Gross Regional Product</Label>
+                    <Input
+                      id="grossProduct"
+                      value={memorandum.councilInfo?.grossProduct || ""}
+                      onChange={(e) => updateMemorandum('councilInfo', { grossProduct: e.target.value })}
+                      placeholder="e.g., $6.08 billion"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="developments">Recent Developments Value</Label>
+                    <Input
+                      id="developments"
+                      value={memorandum.councilInfo?.developments || ""}
+                      onChange={(e) => updateMemorandum('councilInfo', { developments: e.target.value })}
+                      placeholder="e.g., $4.2 billion"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="councilDescription">Council Description</Label>
+                  <Textarea
+                    id="councilDescription"
+                    value={memorandum.councilInfo?.description || ""}
+                    onChange={(e) => updateMemorandum('councilInfo', { description: e.target.value })}
+                    placeholder="Detailed description of the council area and its economic profile..."
+                    rows={6}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="infrastructure" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Construction className="h-5 w-5" />
+                  Key Infrastructure Projects
+                </h3>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">New Hospital Project</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Project Name</Label>
+                          <Input
+                            value={memorandum.infrastructure?.hospital?.name || ""}
+                            onChange={(e) => updateMemorandum('infrastructure', { 
+                              hospital: { ...memorandum.infrastructure?.hospital, name: e.target.value }
+                            })}
+                            placeholder="e.g., New Bundaberg Hospital"
+                          />
+                        </div>
+                        <div>
+                          <Label>Project Value</Label>
+                          <Input
+                            value={memorandum.infrastructure?.hospital?.value || ""}
+                            onChange={(e) => updateMemorandum('infrastructure', { 
+                              hospital: { ...memorandum.infrastructure?.hospital, value: e.target.value }
+                            })}
+                            placeholder="e.g., $1.2 billion"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label>Project Description</Label>
+                        <Textarea
+                          value={memorandum.infrastructure?.hospital?.description || ""}
+                          onChange={(e) => updateMemorandum('infrastructure', { 
+                            hospital: { ...memorandum.infrastructure?.hospital, description: e.target.value }
+                          })}
+                          placeholder="Details about the hospital project..."
+                          rows={3}
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Solar Farm Project</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Project Name</Label>
+                          <Input
+                            value={memorandum.infrastructure?.solarFarm?.name || ""}
+                            onChange={(e) => updateMemorandum('infrastructure', { 
+                              solarFarm: { ...memorandum.infrastructure?.solarFarm, name: e.target.value }
+                            })}
+                            placeholder="e.g., New Bundaberg Solar Farm"
+                          />
+                        </div>
+                        <div>
+                          <Label>Project Value</Label>
+                          <Input
+                            value={memorandum.infrastructure?.solarFarm?.value || ""}
+                            onChange={(e) => updateMemorandum('infrastructure', { 
+                              solarFarm: { ...memorandum.infrastructure?.solarFarm, value: e.target.value }
+                            })}
+                            placeholder="e.g., $130 million"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label>Project Description</Label>
+                        <Textarea
+                          value={memorandum.infrastructure?.solarFarm?.description || ""}
+                          onChange={(e) => updateMemorandum('infrastructure', { 
+                            solarFarm: { ...memorandum.infrastructure?.solarFarm, description: e.target.value }
+                          })}
+                          placeholder="Details about the solar farm project..."
+                          rows={3}
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="investment" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <PiggyBank className="h-5 w-5" />
+                  Investing in Queensland
+                </h3>
+                
+                <div>
+                  <Label htmlFor="qldEconomySize">Economy Size</Label>
+                  <Input
+                    id="qldEconomySize"
+                    value={memorandum.qldInvestment?.economySize || ""}
+                    onChange={(e) => updateMemorandum('qldInvestment', { economySize: e.target.value })}
+                    placeholder="e.g., Queensland's $500 billion economy"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <Label>Retail Trade Growth</Label>
+                    <Input
+                      value={memorandum.qldInvestment?.retailGrowth || ""}
+                      onChange={(e) => updateMemorandum('qldInvestment', { retailGrowth: e.target.value })}
+                      placeholder="e.g., 4.0%"
+                    />
+                  </div>
+                  <div>
+                    <Label>Population Growth</Label>
+                    <Input
+                      value={memorandum.qldInvestment?.populationGrowth || ""}
+                      onChange={(e) => updateMemorandum('qldInvestment', { populationGrowth: e.target.value })}
+                      placeholder="e.g., 2.0%"
+                    />
+                  </div>
+                  <div>
+                    <Label>Employment Growth</Label>
+                    <Input
+                      value={memorandum.qldInvestment?.employmentGrowth || ""}
+                      onChange={(e) => updateMemorandum('qldInvestment', { employmentGrowth: e.target.value })}
+                      placeholder="e.g., 3.0%"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="qldDescription">Investment Overview</Label>
+                  <Textarea
+                    id="qldDescription"
+                    value={memorandum.qldInvestment?.description || ""}
+                    onChange={(e) => updateMemorandum('qldInvestment', { description: e.target.value })}
+                    placeholder="Overview of Queensland investment opportunities and economic growth..."
+                    rows={4}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="sale" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Gavel className="h-5 w-5" />
+                  Method of Sale
+                </h3>
+                
+                <div>
+                  <Label htmlFor="saleMethodDetails">Sale Method</Label>
+                  <Input
+                    id="saleMethodDetails"
+                    value={memorandum.saleDetails?.method || ""}
+                    onChange={(e) => updateMemorandum('saleDetails', { method: e.target.value })}
+                    placeholder="e.g., For Sale via Expressions of Interest"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="saleClosing">Closing Details</Label>
+                  <Input
+                    id="saleClosing"
+                    value={memorandum.saleDetails?.closing || ""}
+                    onChange={(e) => updateMemorandum('saleDetails', { closing: e.target.value })}
+                    placeholder="e.g., Closing 3pm (AEST) Wednesday 24 September 2025"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="inspectionDetails">Inspections</Label>
+                  <Input
+                    id="inspectionDetails"
+                    value={memorandum.saleDetails?.inspections || ""}
+                    onChange={(e) => updateMemorandum('saleDetails', { inspections: e.target.value })}
+                    placeholder="e.g., Inspections can be arranged by prior appointment"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="dueDiligenceDetails">Due Diligence</Label>
+                  <Input
+                    id="dueDiligenceDetails"
+                    value={memorandum.saleDetails?.dueDiligence || ""}
+                    onChange={(e) => updateMemorandum('saleDetails', { dueDiligence: e.target.value })}
+                    placeholder="e.g., Due Diligence material will be provided upon request"
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="contact" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Phone className="h-5 w-5" />
+                  Contact Information
+                </h3>
+                
+                <div>
+                  <Label htmlFor="agencyName">Agency Name</Label>
+                  <Input
+                    id="agencyName"
+                    value={memorandum.contactDetails?.agencyName || ""}
+                    onChange={(e) => updateMemorandum('contactDetails', { agencyName: e.target.value })}
+                    placeholder="e.g., Burgess Rawson from CBRE"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Primary Contact</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div>
+                          <Label>Name</Label>
+                          <Input
+                            value={memorandum.contactDetails?.primary?.name || ""}
+                            onChange={(e) => updateMemorandum('contactDetails', { 
+                              primary: { ...memorandum.contactDetails?.primary, name: e.target.value }
+                            })}
+                            placeholder="e.g., Josh Scapolan"
+                          />
+                        </div>
+                        <div>
+                          <Label>Phone</Label>
+                          <Input
+                            value={memorandum.contactDetails?.primary?.phone || ""}
+                            onChange={(e) => updateMemorandum('contactDetails', { 
+                              primary: { ...memorandum.contactDetails?.primary, phone: e.target.value }
+                            })}
+                            placeholder="e.g., 0484 229 829"
+                          />
+                        </div>
+                        <div>
+                          <Label>Email</Label>
+                          <Input
+                            value={memorandum.contactDetails?.primary?.email || ""}
+                            onChange={(e) => updateMemorandum('contactDetails', { 
+                              primary: { ...memorandum.contactDetails?.primary, email: e.target.value }
+                            })}
+                            placeholder="e.g., josh.scapolan@cbre.com"
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Secondary Contact</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div>
+                          <Label>Name</Label>
+                          <Input
+                            value={memorandum.contactDetails?.secondary?.name || ""}
+                            onChange={(e) => updateMemorandum('contactDetails', { 
+                              secondary: { ...memorandum.contactDetails?.secondary, name: e.target.value }
+                            })}
+                            placeholder="e.g., Fin Hume"
+                          />
+                        </div>
+                        <div>
+                          <Label>Phone</Label>
+                          <Input
+                            value={memorandum.contactDetails?.secondary?.phone || ""}
+                            onChange={(e) => updateMemorandum('contactDetails', { 
+                              secondary: { ...memorandum.contactDetails?.secondary, phone: e.target.value }
+                            })}
+                            placeholder="e.g., 0488 008 975"
+                          />
+                        </div>
+                        <div>
+                          <Label>Email</Label>
+                          <Input
+                            value={memorandum.contactDetails?.secondary?.email || ""}
+                            onChange={(e) => updateMemorandum('contactDetails', { 
+                              secondary: { ...memorandum.contactDetails?.secondary, email: e.target.value }
+                            })}
+                            placeholder="e.g., fin.hume@cbre.com"
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="management" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Settings className="h-5 w-5" />
+                  Property Management Services
+                </h3>
+                
+                <div>
+                  <Label htmlFor="managementHeadline">Management Headline</Label>
+                  <Input
+                    id="managementHeadline"
+                    value={memorandum.propertyManagement?.headline || ""}
+                    onChange={(e) => updateMemorandum('propertyManagement', { headline: e.target.value })}
+                    placeholder="e.g., Purchased the Property? We can Manage it."
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="portfolioSize">Portfolio Size</Label>
+                  <Input
+                    id="portfolioSize"
+                    value={memorandum.propertyManagement?.portfolioSize || ""}
+                    onChange={(e) => updateMemorandum('propertyManagement', { portfolioSize: e.target.value })}
+                    placeholder="e.g., over $11 billion Australia wide management portfolio"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="managementDescription">Management Services Description</Label>
+                  <Textarea
+                    id="managementDescription"
+                    value={memorandum.propertyManagement?.description || ""}
+                    onChange={(e) => updateMemorandum('propertyManagement', { description: e.target.value })}
+                    placeholder="Detailed description of property management services offered..."
+                    rows={6}
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="managementContact">Management Contact</Label>
+                  <Input
+                    id="managementContact"
+                    value={memorandum.propertyManagement?.contact || ""}
+                    onChange={(e) => updateMemorandum('propertyManagement', { contact: e.target.value })}
+                    placeholder="e.g., Donna Alexander - 0409 914 659"
+                  />
                 </div>
               </div>
             </TabsContent>
