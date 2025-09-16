@@ -162,6 +162,66 @@ export type Database = {
           },
         ]
       }
+      evidence_files: {
+        Row: {
+          bucket_name: string
+          created_at: string
+          evidence_type: string
+          extracted_data: Json | null
+          extraction_status: string | null
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          is_public: boolean | null
+          mime_type: string | null
+          property_address: string | null
+          source_url: string | null
+          tags: string[] | null
+          updated_at: string
+          upload_method: string | null
+          user_id: string
+        }
+        Insert: {
+          bucket_name: string
+          created_at?: string
+          evidence_type: string
+          extracted_data?: Json | null
+          extraction_status?: string | null
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          is_public?: boolean | null
+          mime_type?: string | null
+          property_address?: string | null
+          source_url?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          upload_method?: string | null
+          user_id: string
+        }
+        Update: {
+          bucket_name?: string
+          created_at?: string
+          evidence_type?: string
+          extracted_data?: Json | null
+          extraction_status?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          is_public?: boolean | null
+          mime_type?: string | null
+          property_address?: string | null
+          source_url?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          upload_method?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       financial_metrics: {
         Row: {
           accounts_receivable: number
