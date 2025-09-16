@@ -259,6 +259,22 @@ const Index = () => {
                             </Card>
                           </Link>
 
+                          <Link to="/brick-by-brick">
+                            <Card className="bg-gradient-to-br from-white to-purple-50/50 border border-purple-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-purple-700">
+                                  <Building2 className="h-5 w-5" />
+                                  BrickByBrick Pro™
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Fractional property investment platform - pool investments in premium real estate
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
                           <Card className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-100 hover:shadow-md transition-all duration-300 cursor-pointer">
                             <CardHeader>
                               <CardTitle className="flex items-center gap-2 text-slate-700">

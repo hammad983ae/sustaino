@@ -394,6 +394,285 @@ export type Database = {
           },
         ]
       }
+      investment_pools: {
+        Row: {
+          created_at: string
+          current_pool_size: number
+          id: string
+          investment_property_id: string
+          lock_in_period_months: number | null
+          management_fee_percentage: number | null
+          maximum_pool_size: number | null
+          minimum_pool_size: number
+          number_of_investors: number
+          performance_fee_percentage: number | null
+          pool_description: string | null
+          pool_name: string
+          pool_status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_pool_size?: number
+          id?: string
+          investment_property_id: string
+          lock_in_period_months?: number | null
+          management_fee_percentage?: number | null
+          maximum_pool_size?: number | null
+          minimum_pool_size?: number
+          number_of_investors?: number
+          performance_fee_percentage?: number | null
+          pool_description?: string | null
+          pool_name: string
+          pool_status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_pool_size?: number
+          id?: string
+          investment_property_id?: string
+          lock_in_period_months?: number | null
+          management_fee_percentage?: number | null
+          maximum_pool_size?: number | null
+          minimum_pool_size?: number
+          number_of_investors?: number
+          performance_fee_percentage?: number | null
+          pool_description?: string | null
+          pool_name?: string
+          pool_status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investment_pools_investment_property_id_fkey"
+            columns: ["investment_property_id"]
+            isOneToOne: false
+            referencedRelation: "investment_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      investment_properties: {
+        Row: {
+          created_at: string
+          description: string | null
+          expected_annual_return: number | null
+          funding_progress: number | null
+          id: string
+          investment_deadline: string
+          investment_status: string
+          location_score: number | null
+          maximum_investment: number | null
+          minimum_investment: number
+          property_address: string
+          property_id: string | null
+          property_images: Json | null
+          property_type: string
+          raised_amount: number
+          rental_yield: number | null
+          target_amount: number
+          title: string
+          total_property_value: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          expected_annual_return?: number | null
+          funding_progress?: number | null
+          id?: string
+          investment_deadline: string
+          investment_status?: string
+          location_score?: number | null
+          maximum_investment?: number | null
+          minimum_investment?: number
+          property_address: string
+          property_id?: string | null
+          property_images?: Json | null
+          property_type: string
+          raised_amount?: number
+          rental_yield?: number | null
+          target_amount: number
+          title: string
+          total_property_value: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          expected_annual_return?: number | null
+          funding_progress?: number | null
+          id?: string
+          investment_deadline?: string
+          investment_status?: string
+          location_score?: number | null
+          maximum_investment?: number | null
+          minimum_investment?: number
+          property_address?: string
+          property_id?: string | null
+          property_images?: Json | null
+          property_type?: string
+          raised_amount?: number
+          rental_yield?: number | null
+          target_amount?: number
+          title?: string
+          total_property_value?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investment_properties_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "investment_properties_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_addresses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      investment_returns: {
+        Row: {
+          created_at: string
+          distribution_date: string | null
+          id: string
+          investment_property_id: string
+          pool_id: string
+          return_per_unit: number
+          return_period: string
+          return_status: string
+          return_type: string
+          total_return_amount: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          distribution_date?: string | null
+          id?: string
+          investment_property_id: string
+          pool_id: string
+          return_per_unit: number
+          return_period: string
+          return_status?: string
+          return_type: string
+          total_return_amount: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          distribution_date?: string | null
+          id?: string
+          investment_property_id?: string
+          pool_id?: string
+          return_per_unit?: number
+          return_period?: string
+          return_status?: string
+          return_type?: string
+          total_return_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investment_returns_investment_property_id_fkey"
+            columns: ["investment_property_id"]
+            isOneToOne: false
+            referencedRelation: "investment_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "investment_returns_pool_id_fkey"
+            columns: ["pool_id"]
+            isOneToOne: false
+            referencedRelation: "investment_pools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      investment_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          investment_property_id: string | null
+          net_amount: number | null
+          notes: string | null
+          payment_method: string | null
+          pool_id: string | null
+          pool_investment_id: string | null
+          processed_at: string | null
+          transaction_fee: number | null
+          transaction_reference: string | null
+          transaction_status: string
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          investment_property_id?: string | null
+          net_amount?: number | null
+          notes?: string | null
+          payment_method?: string | null
+          pool_id?: string | null
+          pool_investment_id?: string | null
+          processed_at?: string | null
+          transaction_fee?: number | null
+          transaction_reference?: string | null
+          transaction_status?: string
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          investment_property_id?: string | null
+          net_amount?: number | null
+          notes?: string | null
+          payment_method?: string | null
+          pool_id?: string | null
+          pool_investment_id?: string | null
+          processed_at?: string | null
+          transaction_fee?: number | null
+          transaction_reference?: string | null
+          transaction_status?: string
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investment_transactions_investment_property_id_fkey"
+            columns: ["investment_property_id"]
+            isOneToOne: false
+            referencedRelation: "investment_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "investment_transactions_pool_id_fkey"
+            columns: ["pool_id"]
+            isOneToOne: false
+            referencedRelation: "investment_pools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "investment_transactions_pool_investment_id_fkey"
+            columns: ["pool_investment_id"]
+            isOneToOne: false
+            referencedRelation: "pool_investments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_summaries: {
         Row: {
           created_at: string
@@ -465,6 +744,72 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      pool_investments: {
+        Row: {
+          actual_returns: number | null
+          created_at: string
+          expected_returns: number | null
+          id: string
+          investment_amount: number
+          investment_date: string
+          investment_property_id: string
+          investment_status: string
+          investment_units: number
+          investor_id: string
+          ownership_percentage: number | null
+          pool_id: string
+          unit_price: number
+          updated_at: string
+        }
+        Insert: {
+          actual_returns?: number | null
+          created_at?: string
+          expected_returns?: number | null
+          id?: string
+          investment_amount: number
+          investment_date?: string
+          investment_property_id: string
+          investment_status?: string
+          investment_units: number
+          investor_id: string
+          ownership_percentage?: number | null
+          pool_id: string
+          unit_price: number
+          updated_at?: string
+        }
+        Update: {
+          actual_returns?: number | null
+          created_at?: string
+          expected_returns?: number | null
+          id?: string
+          investment_amount?: number
+          investment_date?: string
+          investment_property_id?: string
+          investment_status?: string
+          investment_units?: number
+          investor_id?: string
+          ownership_percentage?: number | null
+          pool_id?: string
+          unit_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pool_investments_investment_property_id_fkey"
+            columns: ["investment_property_id"]
+            isOneToOne: false
+            referencedRelation: "investment_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pool_investments_pool_id_fkey"
+            columns: ["pool_id"]
+            isOneToOne: false
+            referencedRelation: "investment_pools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
