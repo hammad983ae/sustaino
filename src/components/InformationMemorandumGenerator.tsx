@@ -189,6 +189,27 @@ interface PropertyManagement {
   contact: string;
 }
 
+interface Disclaimer {
+  title: string;
+  mainText: string;
+  intellectualProperty: string;
+  gstDisclaimer: string;
+}
+
+interface CompanyOffices {
+  headline: string;
+  subheadline: string;
+  offices: Array<{
+    state: string;
+    locations: Array<{
+      city: string;
+      address: string;
+      phone: string;
+      email: string;
+    }>;
+  }>;
+}
+
 interface InformationMemorandum {
   id: string;
   title: string;
@@ -209,6 +230,8 @@ interface InformationMemorandum {
   saleDetails: SaleDetails;
   contactDetails: ContactDetails;
   propertyManagement: PropertyManagement;
+  disclaimer: Disclaimer;
+  companyOffices: CompanyOffices;
   whiteLabelConfig: WhiteLabelConfig;
   createdAt: string;
   updatedAt: string;
@@ -315,6 +338,17 @@ export const InformationMemorandumGenerator = () => {
       portfolioSize: "",
       description: "",
       contact: ""
+    },
+    disclaimer: {
+      title: "Disclaimer",
+      mainText: "",
+      intellectualProperty: "",
+      gstDisclaimer: ""
+    },
+    companyOffices: {
+      headline: "",
+      subheadline: "",
+      offices: []
     },
     whiteLabelConfig: {
       companyName: "Delderenzo Property Group",
@@ -722,7 +756,7 @@ export const InformationMemorandumGenerator = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 lg:grid-cols-15">
+            <TabsList className="grid w-full grid-cols-5 md:grid-cols-9 lg:grid-cols-17">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="property">Property</TabsTrigger>
               <TabsTrigger value="location">Location</TabsTrigger>
@@ -737,6 +771,8 @@ export const InformationMemorandumGenerator = () => {
               <TabsTrigger value="sale">Sale Method</TabsTrigger>
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="management">Property Mgmt</TabsTrigger>
+              <TabsTrigger value="disclaimer">Disclaimer</TabsTrigger>
+              <TabsTrigger value="offices">Offices</TabsTrigger>
               <TabsTrigger value="branding">Branding</TabsTrigger>
             </TabsList>
 
@@ -1462,6 +1498,114 @@ export const InformationMemorandumGenerator = () => {
                     onChange={(e) => updateMemorandum('propertyManagement', { contact: e.target.value })}
                     placeholder="e.g., Donna Alexander - 0409 914 659"
                   />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="disclaimer" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Disclaimer Information
+                </h3>
+                
+                <div>
+                  <Label htmlFor="disclaimerTitle">Disclaimer Title</Label>
+                  <Input
+                    id="disclaimerTitle"
+                    value={memorandum.disclaimer?.title || ""}
+                    onChange={(e) => updateMemorandum('disclaimer', { title: e.target.value })}
+                    placeholder="e.g., Disclaimer"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="disclaimerMainText">Main Disclaimer Text</Label>
+                  <Textarea
+                    id="disclaimerMainText"
+                    value={memorandum.disclaimer?.mainText || ""}
+                    onChange={(e) => updateMemorandum('disclaimer', { mainText: e.target.value })}
+                    placeholder="The information contained in the report/information memorandum has been prepared in good faith..."
+                    rows={8}
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="disclaimerIP">Intellectual Property Notice</Label>
+                  <Textarea
+                    id="disclaimerIP"
+                    value={memorandum.disclaimer?.intellectualProperty || ""}
+                    onChange={(e) => updateMemorandum('disclaimer', { intellectualProperty: e.target.value })}
+                    placeholder="The information contained in the report has been prepared by... intellectual property notices..."
+                    rows={4}
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="disclaimerGST">GST Disclaimer</Label>
+                  <Textarea
+                    id="disclaimerGST"
+                    value={memorandum.disclaimer?.gstDisclaimer || ""}
+                    onChange={(e) => updateMemorandum('disclaimer', { gstDisclaimer: e.target.value })}
+                    placeholder="GST disclaimer information..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="offices" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Building2 className="h-5 w-5" />
+                  Company Offices
+                </h3>
+                
+                <div>
+                  <Label htmlFor="officesHeadline">Main Headline</Label>
+                  <Input
+                    id="officesHeadline"
+                    value={memorandum.companyOffices?.headline || ""}
+                    onChange={(e) => updateMemorandum('companyOffices', { headline: e.target.value })}
+                    placeholder="e.g., With offices across Australia, Burgess Rawson from CBRE"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="officesSubheadline">Sub Headline</Label>
+                  <Input
+                    id="officesSubheadline"
+                    value={memorandum.companyOffices?.subheadline || ""}
+                    onChange={(e) => updateMemorandum('companyOffices', { subheadline: e.target.value })}
+                    placeholder="e.g., has a truly national understanding and unparalleled collective expertise"
+                  />
+                </div>
+                
+                <div>
+                  <Label>Office Locations</Label>
+                  <Card>
+                    <CardContent className="p-4">
+                      <p className="text-sm text-gray-600 mb-4">
+                        Office locations will be displayed in the preview. Use the branding section to configure your company's office network.
+                      </p>
+                      <div className="space-y-2 text-xs">
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <p className="font-semibold">VICTORIA/TASMANIA</p>
+                            <p>Melbourne, Brisbane, Sydney</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">QUEENSLAND/NT</p>
+                            <p>Brisbane, Gold Coast, Cairns</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">SOUTH AUSTRALIA</p>
+                            <p>Adelaide, Mount Gambier</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             </TabsContent>
