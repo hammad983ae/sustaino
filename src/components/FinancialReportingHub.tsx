@@ -33,7 +33,7 @@ export const FinancialReportingHub = () => {
               <Calculator className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              AASB Financial Reporting
+              Accountancy and Financial Reporting
             </h1>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
