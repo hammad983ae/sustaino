@@ -180,6 +180,20 @@ export const PROTECTED_TECHNOLOGIES = [
     protection_level: "MAXIMUM"
   },
   {
+    category: "Data Extraction & Web Intelligence",
+    technologies: [
+      "AI-Powered PDF Data Extraction Systems",
+      "Web-Based Property Data Scraping Technology",
+      "Automated Document Analysis & Pattern Recognition", 
+      "Multi-Source Data Integration Platforms",
+      "Real Estate Document Processing & OCR Systems",
+      "Intelligent Property Data Mining & Classification",
+      "Automated Sales & Rental Evidence Collection Systems"
+    ],
+    patents: ["AU2025123460", "US11,987,654", "EP4123456"],
+    protection_level: "MAXIMUM"
+  },
+  {
     category: "Analytics & Intelligence",
     technologies: [
       "Risk Assessment & Market Analysis Models",

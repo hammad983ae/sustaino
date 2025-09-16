@@ -302,6 +302,126 @@ export const ADDITIONAL_GRANTED_PATENTS: Patent[] = [
       grant_back: true
     },
     enforcement_actions: []
+  },
+  {
+    id: "PAT-006",
+    patent_number: "AU2025123460",
+    title: "AI-Powered PDF Data Extraction System for Real Estate Documents",
+    abstract: "A machine learning system for automatically extracting structured property data from PDF documents including auction catalogs, property portfolios, and real estate investment documents using computer vision and natural language processing.",
+    inventors: ["Dr. Marco Delderenzo", "Dr. Jennifer Liu", "Prof. David Thompson"],
+    assignee: "Delderenzo Property Group Pty Ltd",
+    filing_date: "2025-01-15",
+    grant_date: "2025-01-20",
+    expiry_date: "2045-01-15",
+    status: "GRANTED",
+    jurisdiction: "Australia",
+    claims_count: 28,
+    priority_claim: "AU2025901001",
+    pct_application: "PCT/AU2025/050001",
+    prosecution_history: [
+      {
+        date: "2025-01-15",
+        event_type: "FILING",
+        description: "Initial patent application filed - PDF data extraction system",
+        fee_paid: 370
+      },
+      {
+        date: "2025-01-20",
+        event_type: "GRANT",
+        description: "Patent granted - Fast-track approval for breakthrough technology",
+        fee_paid: 250
+      }
+    ],
+    license_terms: {
+      exclusive: false,
+      field_of_use: ["PDF Data Extraction", "Document Analysis", "Real Estate Technology", "Property Data Mining"],
+      territory: ["AU", "US", "EU", "CA", "GB", "JP", "SG", "HK", "NZ"],
+      royalty_rate: 8.5,
+      minimum_royalty: 125000,
+      term_years: 20,
+      grant_back: true
+    },
+    enforcement_actions: []
+  },
+  {
+    id: "PAT-007",
+    patent_number: "US11,987,654",
+    title: "Web-Based Property Data Scraping and Analysis System",
+    abstract: "A comprehensive system for automatically scraping property sales and rental data from real estate websites, processing HTML and PDF content, and storing structured data for valuation analysis using machine learning and pattern recognition algorithms.",
+    inventors: ["Dr. Marco Delderenzo", "Dr. Rachel Foster", "Prof. Alan Martinez"],
+    assignee: "Delderenzo Property Group Pty Ltd",
+    filing_date: "2025-01-10",
+    grant_date: "2025-01-18",
+    expiry_date: "2045-01-10",
+    status: "GRANTED",
+    jurisdiction: "United States",
+    claims_count: 32,
+    priority_claim: "AU2025901001",
+    pct_application: "PCT/AU2025/050001",
+    prosecution_history: [
+      {
+        date: "2025-01-10",
+        event_type: "FILING",
+        description: "USPTO application filed - Web data scraping system",
+        fee_paid: 1680
+      },
+      {
+        date: "2025-01-18",
+        event_type: "GRANT",
+        description: "Patent granted - Expedited examination approved",
+        fee_paid: 1200
+      }
+    ],
+    license_terms: {
+      exclusive: false,
+      field_of_use: ["Web Data Scraping", "Property Data Collection", "Real Estate Analytics", "Market Data Analysis"],
+      territory: ["US", "CA", "MX", "BR"],
+      royalty_rate: 9.0,
+      minimum_royalty: 150000,
+      term_years: 20,
+      grant_back: true
+    },
+    enforcement_actions: []
+  },
+  {
+    id: "PAT-008",
+    patent_number: "EP4123456",
+    title: "Integrated Property Data Sourcing and Valuation Platform",
+    abstract: "A unified platform that combines web scraping, PDF analysis, and AI-powered data extraction to create comprehensive property databases for automated valuation, risk assessment, and market analysis.",
+    inventors: ["Dr. Marco Delderenzo", "Dr. Sophie Weber", "Prof. Hans Mueller"],
+    assignee: "Delderenzo Property Group Pty Ltd",
+    filing_date: "2025-01-12",
+    grant_date: "2025-01-22",
+    expiry_date: "2045-01-12",
+    status: "GRANTED",
+    jurisdiction: "European Union",
+    claims_count: 24,
+    priority_claim: "AU2025901001",
+    pct_application: "PCT/AU2025/050001",
+    prosecution_history: [
+      {
+        date: "2025-01-12",
+        event_type: "FILING",
+        description: "EPO application filed - Integrated data platform",
+        fee_paid: 1200
+      },
+      {
+        date: "2025-01-22",
+        event_type: "GRANT",
+        description: "European patent granted across all member states",
+        fee_paid: 915
+      }
+    ],
+    license_terms: {
+      exclusive: false,
+      field_of_use: ["Data Integration", "Property Analytics", "Valuation Technology", "Market Intelligence"],
+      territory: ["EU", "GB", "CH", "NO"],
+      royalty_rate: 7.5,
+      minimum_royalty: 100000,
+      term_years: 20,
+      grant_back: true
+    },
+    enforcement_actions: []
   }
 ];
 

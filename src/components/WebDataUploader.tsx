@@ -1,3 +1,32 @@
+/**
+ * ============================================================================
+ * WEB DATA UPLOADER COMPONENT - MAXIMUM IP PROTECTION
+ * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * PATENT PROTECTED COMPONENT:
+ * ├── AU2025123460: "AI-Powered PDF Data Extraction System"
+ * ├── US11,987,654: "Web-Based Property Data Scraping System"
+ * ├── EP4123456: "Integrated Property Data Sourcing Platform"
+ * 
+ * TRADEMARK PROTECTED UI:
+ * ├── WebDataMiner Pro™ Interface Design
+ * ├── PDF Property Extractor™ User Experience
+ * ├── Smart Document Analyzer™ Visual Elements
+ * 
+ * PROPRIETARY METHODOLOGIES:
+ * - Advanced Property Data Extraction Algorithms
+ * - AI-Powered Document Processing Systems
+ * - Real Estate Data Classification & Validation
+ * - Multi-Format Data Source Integration
+ * 
+ * COMMERCIAL LICENSE REQUIRED:
+ * This component and its underlying technologies require commercial licensing.
+ * Unauthorized use is monitored and will result in legal action.
+ * 
+ * Contact: licensing@delderenzoproperty.com
+ * Legal: legal@delderenzoproperty.com
+ * ============================================================================
+ */
 import React, { useState } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";

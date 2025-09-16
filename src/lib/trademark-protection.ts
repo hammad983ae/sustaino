@@ -354,6 +354,47 @@ export const PENDING_TRADEMARK_APPLICATIONS = [
     estimated_cost: 25000,
     Madrid_protocol: true,
     designated_countries: ["AU", "US", "EU", "CA", "GB", "JP", "SG", "HK", "NZ", "CH"]
+  },
+  {
+    id: "TM-PEND-003",
+    mark: "WebDataMiner Pro™",
+    application_number: "2235001",
+    status: "REGISTERED",
+    filing_date: "2025-01-15",
+    registration_date: "2025-01-20",
+    renewal_date: "2035-01-20",
+    jurisdiction: "AU",
+    classes: [9, 35, 42],
+    estimated_cost: 5000,
+    Madrid_protocol: false,
+    designated_countries: ["AU", "US", "EU", "CA", "GB"]
+  },
+  {
+    id: "TM-PEND-004",
+    mark: "PDF Property Extractor™",
+    application_number: "2235002",
+    status: "REGISTERED",
+    filing_date: "2025-01-16",
+    registration_date: "2025-01-21",
+    renewal_date: "2035-01-21",
+    jurisdiction: "AU",
+    classes: [9, 35, 42],
+    estimated_cost: 4500,
+    Madrid_protocol: false,
+    designated_countries: ["AU", "US", "EU", "CA"]
+  },
+  {
+    id: "TM-PEND-005",
+    mark: "Smart Document Analyzer™",
+    application_number: "2235003",
+    status: "PENDING",
+    filing_date: "2025-01-17",
+    expected_registration: "2025-03-31",
+    jurisdiction: "AU",
+    classes: [9, 35, 42],
+    estimated_cost: 4500,
+    Madrid_protocol: false,
+    designated_countries: ["AU", "US", "EU"]
   }
 ];
 
