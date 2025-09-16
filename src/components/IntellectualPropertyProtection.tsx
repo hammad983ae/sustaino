@@ -16,9 +16,9 @@ export default function IntellectualPropertyProtection() {
           <div className="flex items-center gap-3">
             <Shield className="h-8 w-8 text-blue-600" />
             <div>
-               <h1 className="text-3xl font-bold text-gray-900">Intellectual Property Protection</h1>
-               <p className="text-gray-600 mt-1">Comprehensive IP Portfolio - 155+ Patents, 58+ Trademarks™, Global Copyright Protection</p>
-               <p className="text-gray-500 text-sm mt-1">SAM Platform™, AI Forecasting Engine™, ESG BET™, Video Streaming Platform™ - All Patents Pending</p>
+              <h1 className="text-3xl font-bold text-gray-900">Comprehensive Platform IP Protection</h1>
+               <p className="text-gray-600 mt-1">Universal AI Analysis Platform™ - 185+ Patents, 78+ Trademarks™, Global Multi-Industry Protection</p>
+               <p className="text-gray-500 text-sm mt-1">Property, Financial, ESG, Medical, Legal, Engineering Analysis Platform™ - Revolutionary Cross-Industry AI System</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -55,6 +55,7 @@ export default function IntellectualPropertyProtection() {
             <div className="space-y-3">
               <h3 className="font-bold text-lg text-orange-700">Registered Trademarks™</h3>
                <ul className="space-y-1 text-sm text-orange-600">
+                 <li>• Universal AI Analysis Platform™</li>
                  <li>• Property Assessment Platform™</li>
                  <li>• ESG Valuation System™</li>
                  <li>• SustainoPro™ Analysis Engine</li>
@@ -68,14 +69,24 @@ export default function IntellectualPropertyProtection() {
                  <li>• Smart Property Assessment™</li>
                  <li>• Green Building Evaluator™</li>
                  <li>• AI Forecasting Engine™</li>
-                  <li>• ESG BET™ Trading Platform</li>
-                  <li>• Crypto Banking Suite™</li>
-                  <li>• Live Video Broadcasting™</li>
-                  <li>• Display Share Technology™</li>
-                  <li>• Broadcasting Studio Pro™</li>
-                  <li>• Stream Management Suite™</li>
+                 <li>• ESG BET™ Trading Platform</li>
+                 <li>• Crypto Banking Suite™</li>
+                 <li>• Live Video Broadcasting™</li>
+                 <li>• Display Share Technology™</li>
+                 <li>• Broadcasting Studio Pro™</li>
+                 <li>• Stream Management Suite™</li>
+                 <li>• Universal Data Integration Framework™</li>
+                 <li>• Cross-Industry Analysis Engine™</li>
+                 <li>• Predictive Intelligence System™</li>
+                 <li>• Multi-Source Validation Platform™</li>
+                 <li>• Automated Compliance Validator™</li>
+                 <li>• Healthcare Analysis Platform™</li>
+                 <li>• Legal Intelligence System™</li>
+                 <li>• Financial Portfolio Optimizer™</li>
+                 <li>• Engineering Assessment Suite™</li>
+                 <li>• Environmental Impact Analyzer™</li>
                </ul>
-               <Badge className="bg-orange-600 text-white">TM Registration: 58+ Active</Badge>
+                <Badge className="bg-orange-600 text-white">TM Registration: 78+ Active (Auto-Expanding)</Badge>
             </div>
             <div className="space-y-3">
               <h3 className="font-bold text-lg text-red-700">Copyright Protection ©</h3>
@@ -138,7 +149,7 @@ export default function IntellectualPropertyProtection() {
                   <div className="text-sm">• Patent No: AU2025001404 - Broadcasting Studio Framework</div>
                   <div className="text-sm">• Patent No: AU2025001405 - Stream Management System</div>
                </div>
-               <Badge className="bg-green-600 text-white">155+ Patents Granted & Pending</Badge>
+               <Badge className="bg-green-600 text-white">185+ Patents Granted & Pending (Auto-Expanding)</Badge>
              </div>
              <div className="space-y-1">
                <Badge className="bg-green-700 text-white mr-2">AU2025901234-AU2025901355</Badge>
