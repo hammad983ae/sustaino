@@ -21,7 +21,8 @@ import {
   Scale,
   Shield,
   Info,
-  FileCheck
+  FileCheck,
+  FileText
 } from 'lucide-react';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
@@ -220,6 +221,22 @@ const Index = () => {
                               <CardContent>
                                 <p className="text-sm text-slate-600">
                                   Professional rent determination and arbitration services
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
+                          <Link to="/information-memorandum">
+                            <Card className="bg-gradient-to-br from-white to-blue-50/50 border border-blue-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-blue-700">
+                                  <FileText className="h-5 w-5" />
+                                  Information Memorandum
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Generate professional investment property memorandums with white label branding
                                 </p>
                               </CardContent>
                             </Card>
