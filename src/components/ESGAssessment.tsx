@@ -29,8 +29,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Lock } from "lucide-react";
 import ESGMethodologyProtection from "./ESGMethodologyProtection";
+import PropertyESGAssessmentForm from "./PropertyESGAssessmentForm";
+import AdvancedPropertyRiskCalculations from "./AdvancedPropertyRiskCalculations";
 import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
 
@@ -85,6 +88,27 @@ const ESGAssessment = () => {
         <div className="space-y-6">
           {/* IP Protection Notice */}
           <ESGMethodologyProtection />
+          
+          {/* New ESG Assessment Forms */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Powered Valuation Report - ESG Assessment Tools</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="basic" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="basic">Property Assessment Form</TabsTrigger>
+                  <TabsTrigger value="advanced">Advanced Risk Calculations</TabsTrigger>
+                </TabsList>
+                <TabsContent value="basic" className="mt-6">
+                  <PropertyESGAssessmentForm />
+                </TabsContent>
+                <TabsContent value="advanced" className="mt-6">
+                  <AdvancedPropertyRiskCalculations />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
           
           {/* Environmental (E) */}
           <Card>
