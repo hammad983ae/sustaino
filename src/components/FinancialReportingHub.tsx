@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 import { 
   Calculator, 
   BarChart3, 
@@ -12,7 +13,8 @@ import {
   Shield,
   Zap,
   Building2,
-  Settings
+  Settings,
+  Home
 } from "lucide-react";
 import { FinancialMetricsForm } from "./FinancialMetricsForm";
 import { FinancialDashboard } from "./FinancialDashboard";
@@ -26,6 +28,15 @@ export const FinancialReportingHub = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-8 space-y-8">
         
+        {/* Back to Dashboard Button */}
+        <div className="mb-6">
+          <Link to="/">
+            <Button variant="outline" className="border-blue-200 text-blue-700 hover:bg-blue-50">
+              <Home className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+        </div>
         {/* Header Section */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center gap-3">
