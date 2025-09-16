@@ -21,8 +21,8 @@ import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity
 import PreviousSalesHistoryAndCurrentSale from "./PreviousSalesHistoryAndCurrentSale";
 import SalesEvidence from "./SalesEvidence";
 import LeasingEvidence from "./LeasingEvidence";
-import ESGAssessmentSummary from "./ESGAssessmentSummary";
-import ClimateRiskAssessment from "./ClimateRiskAssessment";
+import ComprehensiveESGAssessment from "./ComprehensiveESGAssessment";
+import ComprehensiveClimateRiskAssessment from "./ComprehensiveClimateRiskAssessment";
 import ValuationAnalysis from "./ValuationAnalysis";
 import EnvironmentalAudit from "./EnvironmentalAudit";
 import SustainoProAnalysis from "./SustainoProAnalysis";
@@ -220,7 +220,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for ESG Assessment Summary section
+  // Special handling for Comprehensive ESG Assessment section
   if (sectionIndex === 12) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -229,13 +229,13 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <ESGAssessmentSummary />
+          <ComprehensiveESGAssessment />
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Climate Risk Assessment section
+  // Special handling for Comprehensive Climate Risk Assessment section
   if (sectionIndex === 13) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -244,7 +244,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <ClimateRiskAssessment />
+          <ComprehensiveClimateRiskAssessment />
         </CardContent>
       </Card>
     );
