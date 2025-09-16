@@ -13,6 +13,9 @@ import { PiggyBank, ArrowLeft, TrendingUp, Shield, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
+// Import professional images
+import investmentPlatformInterface from '@/assets/investment-platform-interface.jpg';
+
 const InvestmentPlatformPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100">

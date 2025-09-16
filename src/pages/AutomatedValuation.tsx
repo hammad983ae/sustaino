@@ -34,6 +34,9 @@ import ConstructionCostIndex from "@/components/ConstructionCostIndex";
 import DevelopmentCalculator from "@/components/DevelopmentCalculator";
 import PEXAIntegration from "@/components/PEXAIntegration";
 
+// Import professional images
+import automatedValuationPlatform from '@/assets/automated-valuation-platform.jpg';
+
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
@@ -93,6 +96,15 @@ export default function AutomatedValuation() {
   if (currentStep === "propertyType") {
     return (
       <div className="min-h-screen hero-green-background relative overflow-hidden">
+        {/* Professional Platform Visual */}
+        <div className="absolute inset-0 opacity-20">
+          <img 
+            src={automatedValuationPlatform} 
+            alt="Professional Automated Valuation Platform" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        
         {/* Enhanced 3D Background Effect */}
         <div className="absolute inset-0 green-glow-effect opacity-40"></div>
         <div className="absolute inset-0">

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BlockchainIntegration } from '@/components/BlockchainIntegration';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
 import { 
   BarChart, 
   Bar, 
@@ -38,11 +39,20 @@ import {
   ArrowRight,
   Building,
   MapPin,
-  Gavel
+  Gavel,
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Lock
 } from 'lucide-react';
 import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
 import DashboardQuickSearch from '@/components/DashboardQuickSearch';
 import { RevolutionarySustainoSphere } from '@/components/RevolutionarySustanoSphere';
+
+// Import professional images
+import securityAnalysisDashboard from '@/assets/security-analysis-dashboard.jpg';
+import propertyValuationDashboard from '@/assets/property-valuation-dashboard.jpg';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -70,6 +80,20 @@ const Dashboard = () => {
     { name: 'Water Conservation', score: 78, properties: 156 },
     { name: 'Sustainable Materials', score: 71, properties: 98 },
     { name: 'Green Transport', score: 83, properties: 67 }
+  ];
+
+  // Security Analysis Data
+  const securityMetrics = [
+    { name: 'System Security', score: 94, status: 'Excellent' },
+    { name: 'Data Protection', score: 87, status: 'Good' },
+    { name: 'Access Control', score: 92, status: 'Excellent' },
+    { name: 'Compliance', score: 89, status: 'Good' }
+  ];
+
+  const vulnerabilities = [
+    { severity: 'High', count: 2, description: 'Critical security patches needed' },
+    { severity: 'Medium', count: 7, description: 'Configuration improvements' },
+    { severity: 'Low', count: 15, description: 'Minor security enhancements' }
   ];
 
   const recentActivities = [
@@ -118,7 +142,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
@@ -135,9 +159,13 @@ const Dashboard = () => {
               <TrendingUp className="h-4 w-4" />
               Analytics
             </TabsTrigger>
+            <TabsTrigger value="security" className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4" />
+              Security Analysis
+            </TabsTrigger>
             <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
               <Gavel className="h-4 w-4" />
-              Sustano-Phere™
+              Sustaino-Phere™
             </TabsTrigger>
             <TabsTrigger value="tools" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -446,6 +474,158 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="security" className="space-y-6 mt-6">
+            {/* Professional Security Visual */}
+            <Card className="overflow-hidden border-2 border-red-200">
+              <div className="relative h-64">
+                <img 
+                  src={securityAnalysisDashboard} 
+                  alt="Professional Security Analysis Dashboard" 
+                  className="w-full h-full object-cover opacity-80"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-purple-500/20" />
+                <div className="absolute top-4 left-4">
+                  <Badge className="bg-red-500 text-white">
+                    <Shield className="h-4 w-4 mr-2" />
+                    Security Analysis
+                  </Badge>
+                </div>
+              </div>
+            </Card>
+
+            {/* Security Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {securityMetrics.map((metric, index) => (
+                <Card key={index} className="border-2 hover:border-red-300 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">{metric.name}</p>
+                        <p className="text-2xl font-bold">{metric.score}%</p>
+                        <Badge variant={metric.status === 'Excellent' ? 'default' : 'secondary'} className="mt-1">
+                          {metric.status}
+                        </Badge>
+                      </div>
+                      <div className={`p-2 rounded-full ${metric.score >= 90 ? 'bg-green-100' : 'bg-yellow-100'}`}>
+                        <ShieldCheck className={`h-6 w-6 ${metric.score >= 90 ? 'text-green-600' : 'text-yellow-600'}`} />
+                      </div>
+                    </div>
+                    <Progress value={metric.score} className="h-2" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Vulnerability Assessment */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-orange-600" />
+                    Vulnerability Assessment
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {vulnerabilities.map((vuln, index) => (
+                      <div key={index} className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          {vuln.severity === 'High' ? (
+                            <XCircle className="h-5 w-5 text-red-600" />
+                          ) : vuln.severity === 'Medium' ? (
+                            <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                          ) : (
+                            <CheckCircle className="h-5 w-5 text-green-600" />
+                          )}
+                          <div>
+                            <p className="font-medium">{vuln.severity} Severity</p>
+                            <p className="text-sm text-muted-foreground">{vuln.description}</p>
+                          </div>
+                        </div>
+                        <Badge className={`${vuln.severity === 'High' ? 'bg-red-100 text-red-800' : vuln.severity === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
+                          {vuln.count} Issues
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Lock className="h-5 w-5 text-green-600" />
+                    Security Recommendations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
+                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Multi-Factor Authentication</p>
+                        <p className="text-sm text-muted-foreground">Implement MFA for all admin accounts</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
+                      <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Regular Security Audits</p>
+                        <p className="text-sm text-muted-foreground">Conduct quarterly penetration testing</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg">
+                      <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Encryption Upgrade</p>
+                        <p className="text-sm text-muted-foreground">Update to AES-256 encryption standards</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
+                      <CheckCircle className="h-5 w-5 text-orange-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Staff Training</p>
+                        <p className="text-sm text-muted-foreground">Security awareness training program</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Compliance Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-blue-600" />
+                  Compliance Status
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                    <h3 className="font-bold text-green-800">GDPR</h3>
+                    <p className="text-sm text-green-700">Compliant</p>
+                    <p className="text-xs text-green-600 mt-1">95% Score</p>
+                  </div>
+                  <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                    <AlertTriangle className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
+                    <h3 className="font-bold text-yellow-800">ISO 27001</h3>
+                    <p className="text-sm text-yellow-700">In Progress</p>
+                    <p className="text-xs text-yellow-600 mt-1">78% Score</p>
+                  </div>
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <CheckCircle className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                    <h3 className="font-bold text-blue-800">SOC 2</h3>
+                    <p className="text-sm text-blue-700">Certified</p>
+                    <p className="text-xs text-blue-600 mt-1">92% Score</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="sustano-sphere" className="space-y-6 mt-6">
