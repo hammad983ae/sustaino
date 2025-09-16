@@ -22,6 +22,7 @@ import { FinancialRatiosDisplay } from "./FinancialRatiosDisplay";
 import { FinancialAIAssistant } from "./FinancialAIAssistant";
 import { AccountingPlatformIntegration } from "./AccountingPlatformIntegration";
 import { PlantMachineryFinancial } from "./PlantMachineryFinancial";
+import { GovernmentServicesIntegration } from "./GovernmentServicesIntegration";
 
 export const FinancialReportingHub = () => {
   return (
@@ -138,7 +139,7 @@ export const FinancialReportingHub = () => {
           <CardContent className="p-0">
             <Tabs defaultValue="input" className="w-full">
               <div className="border-b bg-gray-50/80 px-6 py-4">
-                <TabsList className="grid w-full grid-cols-6 bg-white border border-gray-200 shadow-sm">
+                <TabsList className="grid w-full grid-cols-7 bg-white border border-gray-200 shadow-sm">
                   <TabsTrigger 
                     value="input" 
                     className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
@@ -181,6 +182,13 @@ export const FinancialReportingHub = () => {
                     <Settings className="h-4 w-4" />
                     Plant & Machinery
                   </TabsTrigger>
+                  <TabsTrigger 
+                    value="government" 
+                    className="flex items-center gap-2 data-[state=active]:bg-cyan-50 data-[state=active]:text-cyan-700"
+                  >
+                    <Building2 className="h-4 w-4" />
+                    Government
+                  </TabsTrigger>
                 </TabsList>
               </div>
 
@@ -207,6 +215,10 @@ export const FinancialReportingHub = () => {
 
                 <TabsContent value="plant-machinery" className="mt-0">
                   <PlantMachineryFinancial />
+                </TabsContent>
+
+                <TabsContent value="government" className="mt-0">
+                  <GovernmentServicesIntegration />
                 </TabsContent>
               </div>
             </Tabs>
