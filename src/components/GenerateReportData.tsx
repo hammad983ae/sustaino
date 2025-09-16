@@ -15,7 +15,7 @@ interface GenerateReportDataProps {
 
 interface ValidationItem {
   label: string;
-  status: 'complete' | 'incomplete' | 'warning';
+  status: 'complete' | 'missing' | 'partial' | 'optional';
   description: string;
   value?: string;
 }
@@ -31,64 +31,96 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   const [generatedReport, setGeneratedReport] = useState<any>(null);
   const { toast } = useToast();
 
-  // Validate PRE-INSPECTION assessment data readiness
+  // Validate PAF workflow sections for pre-inspection report generation
   const validateAssessmentData = (): ValidationItem[] => {
-    console.log('Validating pre-inspection assessment data:', assessmentData);
+    console.log('Validating PAF workflow assessment data:', assessmentData);
     
     const validations: ValidationItem[] = [
+      // Section 2: RPD and Location (from PAF workflow)
       {
-        label: 'Property Address',
-        status: (assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress) ? 'complete' : 'incomplete',
-        description: 'Confirmed property address identification',
+        label: '2. RPD and Location',
+        status: (assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress) && assessmentData.reportData?.locationData ? 'complete' : 'missing',
+        description: 'Property identification and location data from PAF workflow',
         value: assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress || 'Address not confirmed'
       },
+      // Section 3: Legal and Planning (from PAF workflow)
       {
-        label: 'Planning Search',
-        status: (assessmentData.reportData?.planningData?.lga && assessmentData.reportData?.planningData?.zoning) ? 'complete' : 'incomplete',
-        description: 'Government planning data extraction (zoning, LGA, overlays)',
+        label: '3. Legal and Planning',
+        status: (assessmentData.reportData?.planningData?.lga && assessmentData.reportData?.planningData?.zoning) ? 'complete' : 'missing',
+        description: 'Planning search and legal information from government portals',
         value: assessmentData.reportData?.planningData?.lga ? 
           `LGA: ${assessmentData.reportData.planningData.lga}, Zoning: ${assessmentData.reportData.planningData.zoning}` : 
-          'Planning search incomplete'
+          'Planning search required'
       },
+      // Section 4: Tenancy Schedule/Lease Details (conditional - toggle if supplied)
       {
-        label: 'Property Analysis',
-        status: (assessmentData.reportData?.propertySearchData?.analysisComplete || assessmentData.reportData?.automatedAnalysis?.completed) ? 'complete' : 'incomplete',
-        description: 'Automated location analysis and market positioning',
-        value: assessmentData.reportData?.propertySearchData?.analysisComplete ? 
-          'Automated analysis completed' : 
-          'Property analysis not completed'
+        label: '4. Tenancy Schedule/Lease Details',
+        status: assessmentData.reportData?.tenancyData ? 'complete' : 
+                assessmentData.reportData?.reportConfig?.propertyType?.includes('leasehold') ? 'missing' : 'optional',
+        description: 'Tenancy information (toggle off if not applicable)',
+        value: assessmentData.reportData?.tenancyData ? 'Tenancy data available' : 'Not applicable/Toggle off'
       },
+      // Section 5: Statutory Assessment (conditional - toggle if supplied)
       {
-        label: 'Market Data Integration',
-        status: (assessmentData.reportData?.marketData?.indicators || assessmentData.reportData?.propertySearchData?.marketAnalysis) ? 'complete' : 'incomplete',
-        description: 'Market indicators and comparative market analysis',
+        label: '5. Statutory Assessment',
+        status: assessmentData.reportData?.statutoryData ? 'complete' : 'optional',
+        description: 'Statutory assessment (toggle off if not required)',
+        value: assessmentData.reportData?.statutoryData ? 'Statutory data available' : 'Toggle off if not required'
+      },
+      // Section 6: Market Commentary (from PAF workflow)
+      {
+        label: '6. Market Commentary',
+        status: (assessmentData.reportData?.marketData?.indicators || assessmentData.reportData?.propertySearchData?.marketAnalysis) ? 'complete' : 'missing',
+        description: 'Market analysis and commentary from PAF workflow',
         value: assessmentData.reportData?.marketData?.indicators ? 
           'Market data integrated' : 
-          'Market analysis incomplete'
+          'Market analysis required'
       },
+      // Section 7: Property Details (partial from PAF - working drawings, info provided, or full if virtual/desktop/kerbside)
       {
-        label: 'Report Configuration',
-        status: (assessmentData.reportData?.reportConfig?.reportType && assessmentData.reportData?.reportConfig?.propertyType) ? 'complete' : 'incomplete',
-        description: 'Report type and property classification configuration',
-        value: assessmentData.reportData?.reportConfig?.reportType ? 
-          `${assessmentData.reportData.reportConfig.reportType} - ${assessmentData.reportData.reportConfig.propertyType}` : 
-          'Report configuration incomplete'
+        label: '7. Property Details (Pre-Inspection)',
+        status: (assessmentData.reportData?.propertyDetails || assessmentData.reportData?.workingDrawings) ? 'partial' : 'missing',
+        description: 'Partial property information from PAF workflow (working drawings, provided info, or virtual inspection)',
+        value: assessmentData.reportData?.propertyDetails ? 'Property info available' : 'Working drawings or provided information needed'
       },
+      // Section 8: Environmental Statement and Sustainability Assessment (from EPA and government sites)
       {
-        label: 'Valuation Methodology',
-        status: (assessmentData.reportData?.methodologyConfig?.approaches?.length > 0 || assessmentData.reportData?.reportConfig?.reportType) ? 'complete' : 'incomplete',
-        description: 'Planned valuation approaches and methodology framework',
-        value: assessmentData.reportData?.methodologyConfig?.approaches?.length > 0 ? 
-          `Approaches: ${assessmentData.reportData.methodologyConfig.approaches.join(', ')}` : 
-          'Methodology configuration needed'
+        label: '8. Environmental & Sustainability Assessment',
+        status: assessmentData.reportData?.environmentalData ? 'complete' : 'missing',
+        description: 'Environmental data from EPA and government environmental sites',
+        value: assessmentData.reportData?.environmentalData ? 'Environmental data available' : 'EPA data extraction required'
       },
+      // Section 10: Risk Assessment (market, land, location, cashflow, management from PAF - excluding physical property)
       {
-        label: 'ESG Assessment',
-        status: (assessmentData.reportData?.esgData?.completed) ? 'complete' : 'warning',
-        description: 'ESG summary (if supplied prior to inspection) - Optional',
+        label: '10. Risk Assessment (Pre-Physical Inspection)',
+        status: assessmentData.reportData?.riskAssessment ? 'complete' : 'missing',
+        description: 'Market, land, location, cashflow and management risk assessment from PAF workflow',
+        value: assessmentData.reportData?.riskAssessment ? 'Risk data available' : 'Risk assessment required'
+      },
+      // Section 11: Previous Sales History and Current Sale (from RP data and contract if supplied)
+      {
+        label: '11. Previous Sales History and Current Sale',
+        status: assessmentData.reportData?.salesHistory ? 'complete' : 'missing',
+        description: 'Previous sales history from RP data and current sale (if contract supplied)',
+        value: assessmentData.reportData?.salesHistory ? 'Sales history available' : 'RP data extraction required'
+      },
+      // Sections 18-20: Annexures (documents, planning maps, etc. from PAF)
+      {
+        label: '18-20. Annexures & Documentation',
+        status: (assessmentData.reportData?.fileAttachments || assessmentData.reportData?.planningMaps) ? 'complete' : 'missing',
+        description: 'Annexures including documents, planning maps and certificates from PAF workflow',
+        value: assessmentData.reportData?.fileAttachments ? 
+          `${Object.keys(assessmentData.reportData.fileAttachments).length} files attached` : 
+          'Documents and annexures required'
+      },
+      // ESG Assessment (separate section if information provided)
+      {
+        label: 'Sustainability Assessment (Separate Section)',
+        status: assessmentData.reportData?.esgData?.completed ? 'complete' : 'optional',
+        description: 'ESG/Sustainability assessment in separate section (if information provided)',
         value: assessmentData.reportData?.esgData?.completed ? 
           `ESG Score: ${assessmentData.reportData.esgData.overallScore}/100` : 
-          'ESG assessment not provided (can be completed post-inspection)'
+          'Optional - can be completed if information provided'
       }
     ];
 
@@ -96,8 +128,8 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   };
 
   const validationItems = validateAssessmentData();
-  const allCriticalComplete = validationItems.filter(item => item.status === 'incomplete').length === 0;
-  const criticalItems = validationItems.filter(item => item.status !== 'warning');
+  const allCriticalComplete = validationItems.filter(item => item.status === 'missing').length === 0;
+  const criticalItems = validationItems.filter(item => item.status !== 'optional');
   const completedCritical = criticalItems.filter(item => item.status === 'complete').length;
   const readinessScore = Math.round((completedCritical / criticalItems.length) * 100);
 
@@ -261,7 +293,9 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
     switch (status) {
       case 'complete':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'warning':
+      case 'partial':
+        return <AlertCircle className="h-4 w-4 text-blue-500" />;
+      case 'optional':
         return <AlertCircle className="h-4 w-4 text-yellow-500" />;
       default:
         return <AlertCircle className="h-4 w-4 text-red-500" />;
@@ -272,8 +306,10 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
     switch (status) {
       case 'complete':
         return <Badge variant="default" className="bg-green-500/10 text-green-700 dark:text-green-400">Complete</Badge>;
-      case 'warning':
-        return <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400">Recommended</Badge>;
+      case 'partial':
+        return <Badge variant="secondary" className="bg-blue-500/10 text-blue-700 dark:text-blue-400">Partial</Badge>;
+      case 'optional':
+        return <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400">Optional</Badge>;
       default:
         return <Badge variant="destructive" className="bg-red-500/10 text-red-700 dark:text-red-400">Required</Badge>;
     }
