@@ -31,70 +31,64 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   const [generatedReport, setGeneratedReport] = useState<any>(null);
   const { toast } = useToast();
 
-  // Validate assessment data readiness
+  // Validate PRE-INSPECTION assessment data readiness
   const validateAssessmentData = (): ValidationItem[] => {
-    console.log('Validating assessment data:', assessmentData);
+    console.log('Validating pre-inspection assessment data:', assessmentData);
     
     const validations: ValidationItem[] = [
       {
         label: 'Property Address',
         status: (assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress) ? 'complete' : 'incomplete',
-        description: 'Confirmed property address for the report',
-        value: assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress || 'Not confirmed'
+        description: 'Confirmed property address identification',
+        value: assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress || 'Address not confirmed'
       },
       {
-        label: 'Planning Data',
+        label: 'Planning Search',
         status: (assessmentData.reportData?.planningData?.lga && assessmentData.reportData?.planningData?.zoning) ? 'complete' : 'incomplete',
-        description: 'Planning information extracted from government sources - REQUIRED',
+        description: 'Government planning data extraction (zoning, LGA, overlays)',
         value: assessmentData.reportData?.planningData?.lga ? 
-          `${assessmentData.reportData.planningData.lga} - ${assessmentData.reportData.planningData.zoning || 'Missing zoning data'}` : 
-          'Planning data incomplete - zoning and LGA required'
+          `LGA: ${assessmentData.reportData.planningData.lga}, Zoning: ${assessmentData.reportData.planningData.zoning}` : 
+          'Planning search incomplete'
       },
       {
-        label: 'Property Photos',
-        status: (assessmentData.reportData?.fileAttachments?.propertyPhotos?.length >= 3) ? 'complete' : 'incomplete',
-        description: 'Minimum 3 property photos required for professional valuation',
-        value: `${assessmentData.reportData?.fileAttachments?.propertyPhotos?.length || 0} files uploaded (minimum 3 required)`
-      },
-      {
-        label: 'Report Configuration',
-        status: (assessmentData.reportData?.reportConfig?.reportType && assessmentData.reportData?.reportConfig?.propertyType) ? 'complete' : 'incomplete',
-        description: 'Report type and property configuration - REQUIRED',
-        value: assessmentData.reportData?.reportConfig?.reportType ? 
-          `${assessmentData.reportData.reportConfig.reportType} - ${assessmentData.reportData.reportConfig.propertyType || 'Property type missing'}` : 
-          'Report configuration incomplete'
-      },
-      {
-        label: 'Valuation Methodology',
-        status: (assessmentData.reportData?.methodologyConfig?.approaches?.length > 0) ? 'complete' : 'incomplete',
-        description: 'Valuation approaches and methodology configuration - REQUIRED',
-        value: assessmentData.reportData?.methodologyConfig?.approaches?.length > 0 ? 
-          `${assessmentData.reportData.methodologyConfig.approaches.join(', ')} approaches configured` : 
-          'Valuation methodology not configured'
+        label: 'Property Analysis',
+        status: (assessmentData.reportData?.propertySearchData?.analysisComplete || assessmentData.reportData?.automatedAnalysis?.completed) ? 'complete' : 'incomplete',
+        description: 'Automated location analysis and market positioning',
+        value: assessmentData.reportData?.propertySearchData?.analysisComplete ? 
+          'Automated analysis completed' : 
+          'Property analysis not completed'
       },
       {
         label: 'Market Data Integration',
         status: (assessmentData.reportData?.marketData?.indicators || assessmentData.reportData?.propertySearchData?.marketAnalysis) ? 'complete' : 'incomplete',
-        description: 'Market indicators and comparative analysis - REQUIRED',
+        description: 'Market indicators and comparative market analysis',
         value: assessmentData.reportData?.marketData?.indicators ? 
           'Market data integrated' : 
-          'Market data analysis incomplete'
+          'Market analysis incomplete'
       },
       {
-        label: 'Property Analysis',
-        status: (assessmentData.reportData?.propertySearchData?.analysisComplete) ? 'complete' : 'incomplete',
-        description: 'Automated property analysis and location assessment - REQUIRED',
-        value: assessmentData.reportData?.propertySearchData?.analysisComplete ? 
-          'Property analysis complete' : 
-          'Property analysis not completed'
+        label: 'Report Configuration',
+        status: (assessmentData.reportData?.reportConfig?.reportType && assessmentData.reportData?.reportConfig?.propertyType) ? 'complete' : 'incomplete',
+        description: 'Report type and property classification configuration',
+        value: assessmentData.reportData?.reportConfig?.reportType ? 
+          `${assessmentData.reportData.reportConfig.reportType} - ${assessmentData.reportData.reportConfig.propertyType}` : 
+          'Report configuration incomplete'
+      },
+      {
+        label: 'Valuation Methodology',
+        status: (assessmentData.reportData?.methodologyConfig?.approaches?.length > 0 || assessmentData.reportData?.reportConfig?.reportType) ? 'complete' : 'incomplete',
+        description: 'Planned valuation approaches and methodology framework',
+        value: assessmentData.reportData?.methodologyConfig?.approaches?.length > 0 ? 
+          `Approaches: ${assessmentData.reportData.methodologyConfig.approaches.join(', ')}` : 
+          'Methodology configuration needed'
       },
       {
         label: 'ESG Assessment',
         status: (assessmentData.reportData?.esgData?.completed) ? 'complete' : 'warning',
-        description: 'Environmental, Social & Governance assessment (recommended for modern valuations)',
+        description: 'ESG summary (if supplied prior to inspection) - Optional',
         value: assessmentData.reportData?.esgData?.completed ? 
-          `ESG Score: ${assessmentData.reportData.esgData.overallScore || 'N/A'}` : 
-          'ESG assessment available but not completed'
+          `ESG Score: ${assessmentData.reportData.esgData.overallScore}/100` : 
+          'ESG assessment not provided (can be completed post-inspection)'
       }
     ];
 
