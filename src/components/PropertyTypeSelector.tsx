@@ -234,15 +234,53 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
               </Link>
             </Button>
             <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
-              <Link to="/comprehensive-valuation-analysis">
-                <BarChart3 className="mr-2 h-4 w-4" />
-                Economic Activity
+              <Link to="/rent-revision">
+                <TrendingUp className="mr-2 h-4 w-4" />
+                Rent Revision
               </Link>
             </Button>
             <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
-              <Link to="/property-assessment">
+              <Link to="/rent-determination">
                 <Activity className="mr-2 h-4 w-4" />
                 Rent Determination
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Additional Tools Section */}
+      <Card className="bg-gradient-to-br from-white/90 to-emerald-50/80 border-emerald-200/50 backdrop-blur-sm animate-fade-in" style={{ animationDelay: '0.8s' }}>
+        <CardHeader>
+          <CardTitle className="text-center text-2xl font-bold text-emerald-700">Additional Professional Tools</CardTitle>
+          <CardDescription className="text-center text-gray-600">
+            Specialized valuation and assessment tools for comprehensive property analysis
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/rent-revision">
+                <TrendingUp className="mr-2 h-4 w-4" />
+                Rent Revision
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/rent-determination">
+                <Activity className="mr-2 h-4 w-4" />
+                Rent Determination
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/plant-equipment">
+                <Building2 className="mr-2 h-4 w-4" />
+                Plant & Equipment
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/comprehensive-valuation-analysis">
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Economic Activity
               </Link>
             </Button>
           </div>

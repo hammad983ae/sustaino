@@ -25,6 +25,9 @@ import FullScreenDemo from "./pages/FullScreenDemo";
 import SocialDemo from "./pages/SocialDemo";
 import InsuranceValuationsPage from "./pages/InsuranceValuations";
 import FinancialReporting from "./pages/FinancialReporting";
+import RentRevisionPage from "./pages/RentRevision";
+import RentDeterminationPage from "./pages/RentDeterminationPage";
+import PlantAndEquipmentPage from "./pages/PlantAndEquipmentPage";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -65,6 +68,9 @@ const App = () => (
                 <Route path="/fullscreen-demo" element={<FullScreenDemo />} />
                 <Route path="/social-demo" element={<SocialDemo />} />
                 <Route path="/financial-reporting" element={<FinancialReporting />} />
+                <Route path="/rent-revision" element={<RentRevisionPage />} />
+                <Route path="/rent-determination" element={<RentDeterminationPage />} />
+                <Route path="/plant-equipment" element={<PlantAndEquipmentPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
