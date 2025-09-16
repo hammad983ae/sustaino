@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText, MapPin } from "lucide-react";
+import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText, MapPin, Shield, TrendingUp, BarChart3, Activity } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface PropertyTypeSelectorProps {
@@ -44,7 +44,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
     },
     {
       id: "development",
-      title: "Development Site Property",
+      title: "Development Site",
       description: "Land and properties with development potential or approval",
       icon: MapPin,
       features: ["Site analysis", "Development feasibility", "Zoning assessment", "Market absorption"],
@@ -55,55 +55,165 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
   return (
     <div className="w-full">
       {/* Property Type Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        {propertyTypes.map((type, index) => {
-          const IconComponent = type.icon;
-          return (
-            <Card 
-              key={type.id} 
-              className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => onSelect(type.id)}
-            >
-              <CardHeader className="pb-4">
-                <div className="flex items-center space-x-4">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="h-8 w-8 text-white" />
+      <div className="space-y-8 mb-12">
+        {/* Top row - Commercial and Residential */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {propertyTypes.slice(0, 2).map((type, index) => {
+            const IconComponent = type.icon;
+            return (
+              <Card 
+                key={type.id} 
+                className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => onSelect(type.id)}
+              >
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="h-8 w-8 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-emerald-700 transition-colors">
+                        {type.title}
+                      </CardTitle>
+                      <CardDescription className="text-gray-600 mt-1">
+                        {type.description}
+                      </CardDescription>
+                    </div>
                   </div>
-                  <div>
-                    <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-emerald-700 transition-colors">
-                      {type.title}
-                    </CardTitle>
-                    <CardDescription className="text-gray-600 mt-1">
-                      {type.description}
-                    </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-3 mb-6">
+                    <h4 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">
+                      Automated Analysis Includes:
+                    </h4>
+                    <ul className="text-sm space-y-2">
+                      {type.features.map((feature, index) => (
+                        <li key={index} className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
+                          <div className="h-2 w-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mr-3 group-hover:scale-125 transition-transform duration-200" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="space-y-3 mb-6">
-                  <h4 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">
-                    Automated Analysis Includes:
-                  </h4>
-                  <ul className="text-sm space-y-2">
-                    {type.features.map((feature, index) => (
-                      <li key={index} className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
-                        <div className="h-2 w-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mr-3 group-hover:scale-125 transition-transform duration-200" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Button 
-                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group-hover:scale-105"
-                  variant="default"
+                  <Button 
+                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group-hover:scale-105"
+                    variant="default"
+                  >
+                    Start {type.title} Valuation
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+        
+        {/* Second row - Agricultural and Specialized */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {propertyTypes.slice(2, 4).map((type, index) => {
+            const IconComponent = type.icon;
+            return (
+              <Card 
+                key={type.id} 
+                className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
+                style={{ animationDelay: `${(index + 2) * 0.1}s` }}
+                onClick={() => onSelect(type.id)}
+              >
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="h-8 w-8 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-emerald-700 transition-colors">
+                        {type.title}
+                      </CardTitle>
+                      <CardDescription className="text-gray-600 mt-1">
+                        {type.description}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-3 mb-6">
+                    <h4 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">
+                      Automated Analysis Includes:
+                    </h4>
+                    <ul className="text-sm space-y-2">
+                      {type.features.map((feature, index) => (
+                        <li key={index} className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
+                          <div className="h-2 w-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mr-3 group-hover:scale-125 transition-transform duration-200" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button 
+                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group-hover:scale-105"
+                    variant="default"
+                  >
+                    Start {type.title} Valuation
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+        
+        {/* Third row - Development Site (centered) */}
+        <div className="flex justify-center">
+          <div className="w-full md:w-1/2 lg:w-1/3">
+            {(() => {
+              const type = propertyTypes[4]; // Development Site
+              const IconComponent = type.icon;
+              return (
+                <Card 
+                  key={type.id} 
+                  className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
+                  style={{ animationDelay: '0.5s' }}
+                  onClick={() => onSelect(type.id)}
                 >
-                  Start {type.title} Valuation
-                </Button>
-              </CardContent>
-            </Card>
-          );
-        })}
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-emerald-700 transition-colors">
+                          {type.title}
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 mt-1">
+                          {type.description}
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="space-y-3 mb-6">
+                      <h4 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">
+                        Automated Analysis Includes:
+                      </h4>
+                      <ul className="text-sm space-y-2">
+                        {type.features.map((feature, index) => (
+                          <li key={index} className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
+                            <div className="h-2 w-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mr-3 group-hover:scale-125 transition-transform duration-200" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <Button 
+                      className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group-hover:scale-105"
+                      variant="default"
+                    >
+                      Start {type.title} Valuation
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })()}
+          </div>
+        </div>
       </div>
 
       {/* Features Banner */}
@@ -138,23 +248,53 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Button variant="outline" asChild className="flex-1 min-w-[180px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
-              <Link to="/property-valuations">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/financial-reporting">
                 <Calculator className="mr-2 h-4 w-4" />
-                Property Valuations
+                Financial Reporting
               </Link>
             </Button>
-            <Button variant="outline" asChild className="flex-1 min-w-[180px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
               <Link to="/comprehensive-valuation">
                 <Building2 className="mr-2 h-4 w-4" />
-                Complete Valuation
+                Property Valuation
               </Link>
             </Button>
-            <Button variant="outline" asChild className="flex-1 min-w-[180px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
               <Link to="/work-hub">
                 <FileText className="mr-2 h-4 w-4" />
-                Work Hub
+                Property Hub
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/insurance-valuations">
+                <Shield className="mr-2 h-4 w-4" />
+                Insurance Valuations
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/esg-climate-assessment">
+                <Leaf className="mr-2 h-4 w-4" />
+                ESG & Climate Assessment
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/costa-group-valuations">
+                <TrendingUp className="mr-2 h-4 w-4" />
+                Agricultural Hub
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/comprehensive-valuation-analysis">
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Economic Activity
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1 min-w-[140px] hover-scale border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50">
+              <Link to="/property-assessment">
+                <Activity className="mr-2 h-4 w-4" />
+                Rent Determination
               </Link>
             </Button>
           </div>
