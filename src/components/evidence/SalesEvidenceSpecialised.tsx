@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,12 @@ export default function SalesEvidenceSpecialised() {
   const [marketingPeriod, setMarketingPeriod] = useState(true);
   const [buildingArea, setBuildingArea] = useState(true);
   const [landArea, setLandArea] = useState(true);
+  const [propertyType, setPropertyType] = useState(true);
+  const [roomsKeys, setRoomsKeys] = useState(true);
+  const [seatingCapacity, setSeatingCapacity] = useState(true);
+  const [ldcPlacements, setLdcPlacements] = useState(true);
+  const [bedCapacity, setBedCapacity] = useState(true);
+  const [lettableAreaType, setLettableAreaType] = useState(true);
   const [specialPurpose, setSpecialPurpose] = useState(true);
   const [operationalAssets, setOperationalAssets] = useState(true);
   const [licenses, setLicenses] = useState(true);
@@ -207,7 +212,7 @@ export default function SalesEvidenceSpecialised() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Property Type</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={propertyType} onCheckedChange={setPropertyType} />
               </div>
               <Select>
                 <SelectTrigger className="text-sm">
@@ -240,7 +245,7 @@ export default function SalesEvidenceSpecialised() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Rooms/Keys</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={roomsKeys} onCheckedChange={setRoomsKeys} />
               </div>
               <Input placeholder="45 rooms" className="text-sm" />
               <Input placeholder="Rooms/keys comparison..." className="text-sm" />
@@ -250,7 +255,7 @@ export default function SalesEvidenceSpecialised() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Seating Capacity</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={seatingCapacity} onCheckedChange={setSeatingCapacity} />
               </div>
               <Input placeholder="250 seats" className="text-sm" />
               <Input placeholder="Seating capacity comparison..." className="text-sm" />
@@ -260,7 +265,7 @@ export default function SalesEvidenceSpecialised() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>LDC Placements</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={ldcPlacements} onCheckedChange={setLdcPlacements} />
               </div>
               <Input placeholder="75 licensed placements" className="text-sm" />
               <Input placeholder="LDC placements comparison..." className="text-sm" />
@@ -270,7 +275,7 @@ export default function SalesEvidenceSpecialised() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Bed Capacity</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={bedCapacity} onCheckedChange={setBedCapacity} />
               </div>
               <Input placeholder="80 beds" className="text-sm" />
               <Input placeholder="Bed capacity comparison..." className="text-sm" />
@@ -280,7 +285,7 @@ export default function SalesEvidenceSpecialised() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Lettable Area Type</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={lettableAreaType} onCheckedChange={setLettableAreaType} />
               </div>
               <Select>
                 <SelectTrigger className="text-sm">
@@ -372,7 +377,7 @@ export default function SalesEvidenceSpecialised() {
               <div className="flex justify-center">
                 <Switch checked={compliance} onCheckedChange={setCompliance} />
               </div>
-              <Input placeholder="EPA compliant, safety standards met" className="text-sm" />
+              <Input placeholder="All regulatory requirements met" className="text-sm" />
               <Input placeholder="Compliance comparison..." className="text-sm" />
             </div>
 
@@ -382,7 +387,7 @@ export default function SalesEvidenceSpecialised() {
               <div className="flex justify-center">
                 <Switch checked={marketSegment} onCheckedChange={setMarketSegment} />
               </div>
-              <Input placeholder="Limited market, specialist buyers" className="text-sm" />
+              <Input placeholder="Premium market, budget segment" className="text-sm" />
               <Input placeholder="Market segment comparison..." className="text-sm" />
             </div>
           </div>

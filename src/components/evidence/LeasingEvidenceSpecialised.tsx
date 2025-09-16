@@ -153,7 +153,7 @@ export default function LeasingEvidenceSpecialised() {
 
             {/* Specialized Property Type */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>Specialized Property Type</Label>
+              <Label>Property Type</Label>
               <div className="flex justify-center">
                 <Switch checked={specializedType} onCheckedChange={setSpecializedType} />
               </div>

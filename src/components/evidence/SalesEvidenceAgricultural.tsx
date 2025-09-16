@@ -18,6 +18,10 @@ export default function SalesEvidenceAgricultural() {
   const [marketingPeriod, setMarketingPeriod] = useState(true);
   const [totalArea, setTotalArea] = useState(true);
   const [arableArea, setArableArea] = useState(true);
+  const [farmType, setFarmType] = useState(true);
+  const [carryingCapacity, setCarryingCapacity] = useState(true);
+  const [annualRainfall, setAnnualRainfall] = useState(true);
+  const [growingSeason, setGrowingSeason] = useState(true);
   const [landQuality, setLandQuality] = useState(true);
   const [soilType, setSoilType] = useState(true);
   const [waterRights, setWaterRights] = useState(true);
@@ -208,7 +212,7 @@ export default function SalesEvidenceAgricultural() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Farm Type</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={farmType} onCheckedChange={setFarmType} />
               </div>
               <Select>
                 <SelectTrigger className="text-sm">
@@ -234,7 +238,7 @@ export default function SalesEvidenceAgricultural() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Carrying Capacity</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={carryingCapacity} onCheckedChange={setCarryingCapacity} />
               </div>
               <div className="flex gap-2">
                 <Input placeholder="150" className="text-sm" />
@@ -256,7 +260,7 @@ export default function SalesEvidenceAgricultural() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Annual Rainfall</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={annualRainfall} onCheckedChange={setAnnualRainfall} />
               </div>
               <div className="flex gap-2">
                 <Input placeholder="650" className="text-sm" />
@@ -269,7 +273,7 @@ export default function SalesEvidenceAgricultural() {
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Growing Season</Label>
               <div className="flex justify-center">
-                <Switch checked={true} />
+                <Switch checked={growingSeason} onCheckedChange={setGrowingSeason} />
               </div>
               <Input placeholder="7-8 months productive growing" className="text-sm" />
               <Input placeholder="Growing season comparison..." className="text-sm" />

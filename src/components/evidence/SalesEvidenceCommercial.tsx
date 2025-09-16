@@ -1,304 +1,233 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Upload, MapPin, Building2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-
-interface SaleData {
-  address: string;
-  saleDate: string;
-  salePrice: string;
-  incentives: string;
-  buildingArea: string;
-  landArea: string;
-  netRent: string;
-  yieldRate: string;
-  tenancy: string;
-  lease: string;
-  [key: string]: string;
-}
+import { Upload, MapPin } from "lucide-react";
 
 export default function SalesEvidenceCommercial() {
-  const [salesData, setSalesData] = useState<SaleData[]>([
-    { address: "", saleDate: "", salePrice: "", incentives: "", buildingArea: "", landArea: "", netRent: "", yieldRate: "", tenancy: "", lease: "" },
-    { address: "", saleDate: "", salePrice: "", incentives: "", buildingArea: "", landArea: "", netRent: "", yieldRate: "", tenancy: "", lease: "" },
-    { address: "", saleDate: "", salePrice: "", incentives: "", buildingArea: "", landArea: "", netRent: "", yieldRate: "", tenancy: "", lease: "" }
-  ]);
-
-  const [includeAttributes, setIncludeAttributes] = useState({
-    saleDate: true,
-    salePrice: true,
-    incentives: true,
-    buildingArea: true,
-    landArea: true,
-    carParking: true,
-    tenancy: true,
-    lease: true,
-    netRent: true,
-    outgoings: true,
-    yieldRate: true,
-    zoning: true,
-    buildingCondition: true,
-    streetAccess: true,
-  });
-
-  const updateSaleData = (saleIndex: number, field: string, value: string) => {
-    setSalesData(prev => prev.map((sale, index) => 
-      index === saleIndex ? { ...sale, [field]: value } : sale
-    ));
-  };
-
-  const toggleAttribute = (attribute: string) => {
-    setIncludeAttributes(prev => ({
-      ...prev,
-      [attribute]: !prev[attribute]
-    }));
-  };
-
-  const AttributeRow = ({ 
-    label, 
-    attribute, 
-    placeholder, 
-    unit 
-  }: { 
-    label: string; 
-    attribute: string; 
-    placeholder: string; 
-    unit?: string;
-  }) => (
-    <div className="grid grid-cols-12 gap-3 items-center py-3 border-b border-muted/30">
-      <div className="col-span-2">
-        <Label className="text-sm font-medium">{label}</Label>
-      </div>
-      <div className="col-span-1 flex justify-center">
-        <Switch 
-          checked={includeAttributes[attribute as keyof typeof includeAttributes]} 
-          onCheckedChange={() => toggleAttribute(attribute)}
-        />
-      </div>
-      <div className="col-span-3">
-        <div className="flex gap-1">
-          <Input 
-            placeholder={placeholder}
-            className="text-sm"
-            value={salesData[0][attribute] || ""}
-            onChange={(e) => updateSaleData(0, attribute, e.target.value)}
-          />
-          {unit && <span className="text-xs text-muted-foreground self-center">{unit}</span>}
-        </div>
-      </div>
-      <div className="col-span-3">
-        <div className="flex gap-1">
-          <Input 
-            placeholder={placeholder}
-            className="text-sm"
-            value={salesData[1][attribute] || ""}
-            onChange={(e) => updateSaleData(1, attribute, e.target.value)}
-          />
-          {unit && <span className="text-xs text-muted-foreground self-center">{unit}</span>}
-        </div>
-      </div>
-      <div className="col-span-3">
-        <div className="flex gap-1">
-          <Input 
-            placeholder={placeholder}
-            className="text-sm"
-            value={salesData[2][attribute] || ""}
-            onChange={(e) => updateSaleData(2, attribute, e.target.value)}
-          />
-          {unit && <span className="text-xs text-muted-foreground self-center">{unit}</span>}
-        </div>
-      </div>
-    </div>
-  );
+  const [saleDate, setSaleDate] = useState(true);
+  const [salePrice, setSalePrice] = useState(true);
+  const [incentives, setIncentives] = useState(true);
+  const [buildingArea, setBuildingArea] = useState(true);
+  const [landArea, setLandArea] = useState(true);
+  const [carParking, setCarParking] = useState(true);
+  const [tenancy, setTenancy] = useState(true);
+  const [leaseTerms, setLeaseTerms] = useState(true);
+  const [netRent, setNetRent] = useState(true);
+  const [outgoings, setOutgoings] = useState(true);
+  const [yieldRate, setYieldRate] = useState(true);
+  const [zoning, setZoning] = useState(true);
+  const [buildingCondition, setBuildingCondition] = useState(true);
+  const [streetAccess, setStreetAccess] = useState(true);
 
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" />
-            Commercial Sales Evidence
-            <Badge variant="secondary" className="ml-2">3 Settled Sales Required</Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Header Row */}
-          <div className="grid grid-cols-12 gap-3 items-center pb-3 border-b-2 border-primary/20">
-            <div className="col-span-2">
-              <Label className="text-sm font-semibold">Attribute</Label>
-            </div>
-            <div className="col-span-1 text-center">
-              <Label className="text-sm font-semibold">Include</Label>
-            </div>
-            <div className="col-span-3 text-center">
-              <Label className="text-sm font-semibold">Sale 1 (Settled)</Label>
-            </div>
-            <div className="col-span-3 text-center">
-              <Label className="text-sm font-semibold">Sale 2 (Settled)</Label>
-            </div>
-            <div className="col-span-3 text-center">
-              <Label className="text-sm font-semibold">Sale 3 (Settled)</Label>
-            </div>
-          </div>
-
-          {/* Property Addresses */}
-          <div className="grid grid-cols-12 gap-3 items-center py-3 bg-primary/5 rounded-lg px-3">
-            <div className="col-span-2">
-              <Label className="text-sm font-semibold">Property Address</Label>
-            </div>
-            <div className="col-span-1"></div>
-            <div className="col-span-3">
+        <CardContent className="p-6">
+          <h3 className="text-lg font-semibold mb-4">Commercial Sales Evidence</h3>
+          
+          {/* Property Address Input */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 p-3 border border-primary rounded-lg bg-primary/5">
               <Input 
-                placeholder="101 King Avenue Middle Park VIC 3206"
-                className="text-sm border-primary/30"
-                value={salesData[0].address}
-                onChange={(e) => updateSaleData(0, 'address', e.target.value)}
-              />
-            </div>
-            <div className="col-span-3">
-              <Input 
-                placeholder="102 Queen Street Carlton VIC 3053"
-                className="text-sm border-primary/30"
-                value={salesData[1].address}
-                onChange={(e) => updateSaleData(1, 'address', e.target.value)}
-              />
-            </div>
-            <div className="col-span-3">
-              <Input 
-                placeholder="103 Collins Street Melbourne VIC 3000"
-                className="text-sm border-primary/30"
-                value={salesData[2].address}
-                onChange={(e) => updateSaleData(2, 'address', e.target.value)}
+                placeholder="Property Address: Eg. 101 King Avenue Middle Park VIC 3206"
+                className="border-0 bg-transparent text-sm font-medium placeholder:text-muted-foreground/60"
               />
             </div>
           </div>
 
           {/* Image Upload Section */}
-          <div className="grid grid-cols-3 gap-4">
-            {[1, 2, 3].map((saleNum) => (
-              <div key={saleNum} className="space-y-2">
-                <Label className="text-sm font-medium">Sale {saleNum} Image</Label>
-                <div className="border-2 border-dashed border-muted-foreground/20 rounded-lg p-6 text-center bg-muted/10">
-                  <div className="flex flex-col items-center justify-center space-y-2">
-                    <Upload className="h-6 w-6 text-muted-foreground/40" />
-                    <Button variant="outline" size="sm">Upload</Button>
-                    <p className="text-xs text-muted-foreground">Property photo</p>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="border-2 border-dashed border-muted-foreground/20 rounded-lg p-8 text-center bg-muted/20">
+              <div className="flex flex-col items-center justify-center space-y-3">
+                <Upload className="h-8 w-8 text-muted-foreground/40" />
+                <div>
+                  <Button variant="outline" size="sm">Upload Image/Map</Button>
+                  <p className="text-sm text-muted-foreground mt-2">Property photo or location map</p>
                 </div>
               </div>
-            ))}
+            </div>
+            
+            <div className="border border-muted-foreground/20 rounded-lg p-4 bg-muted/10">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <MapPin className="h-4 w-4" />
+                <span className="text-sm">Map unavailable – missing location data</span>
+              </div>
+            </div>
           </div>
 
-          {/* Sales Attributes */}
-          <div className="space-y-1">
-            <AttributeRow 
-              label="Sale Date" 
-              attribute="saleDate" 
-              placeholder="01 March 2024"
-            />
-            
-            <AttributeRow 
-              label="Sale Price" 
-              attribute="salePrice" 
-              placeholder="$2,500,000"
-            />
-            
-            <AttributeRow 
-              label="Incentives" 
-              attribute="incentives" 
-              placeholder="Vendor contributions, fit-out"
-            />
-            
-            <AttributeRow 
-              label="Building Area" 
-              attribute="buildingArea" 
-              placeholder="450"
-              unit="sqm"
-            />
-            
-            <AttributeRow 
-              label="Land Area" 
-              attribute="landArea" 
-              placeholder="850"
-              unit="sqm"
-            />
-            
-            <AttributeRow 
-              label="Car Parking" 
-              attribute="carParking" 
-              placeholder="20 spaces"
-            />
-            
-            <AttributeRow 
-              label="Tenancy" 
-              attribute="tenancy" 
-              placeholder="Single tenant"
-            />
-            
-            <AttributeRow 
-              label="Lease Terms" 
-              attribute="lease" 
-              placeholder="5 year + 3+3 options"
-            />
-            
-            <AttributeRow 
-              label="Net Rent" 
-              attribute="netRent" 
-              placeholder="$120,000 p.a."
-            />
-            
-            <AttributeRow 
-              label="Outgoings" 
-              attribute="outgoings" 
-              placeholder="$15,000 p.a."
-            />
-            
-            <AttributeRow 
-              label="Yield Rate" 
-              attribute="yieldRate" 
-              placeholder="4.8%"
-            />
-            
-            <AttributeRow 
-              label="Zoning" 
-              attribute="zoning" 
-              placeholder="Commercial 1 Zone"
-            />
-            
-            <AttributeRow 
-              label="Building Condition" 
-              attribute="buildingCondition" 
-              placeholder="Good condition"
-            />
-            
-            <AttributeRow 
-              label="Street Access" 
-              attribute="streetAccess" 
-              placeholder="Main road frontage"
-            />
-          </div>
+          {/* Attributes Table */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-4 gap-4 text-sm font-medium border-b pb-2">
+              <div>Attribute</div>
+              <div className="text-center">Include</div>
+              <div>Value</div>
+              <div>Comparison to Subject</div>
+            </div>
 
-          {/* Analysis Summary */}
-          <div className="mt-6 p-4 bg-muted/30 rounded-lg">
-            <Label className="text-sm font-semibold mb-3 block">Sales Evidence Analysis Summary</Label>
-            <div className="grid grid-cols-3 gap-4 text-sm">
-              <div>
-                <span className="font-medium">Average Sale Price:</span>
-                <p className="text-muted-foreground">Calculated from settled sales</p>
+            {/* Sale Date */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Sale Date</Label>
+              <div className="flex justify-center">
+                <Switch checked={saleDate} onCheckedChange={setSaleDate} />
               </div>
-              <div>
-                <span className="font-medium">Average Yield:</span>
-                <p className="text-muted-foreground">Based on net rent analysis</p>
+              <Input placeholder="01 March 2024" className="text-sm" />
+              <Input placeholder="Comparison notes for sale date..." className="text-sm" />
+            </div>
+
+            {/* Sale Price */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Sale Price</Label>
+              <div className="flex justify-center">
+                <Switch checked={salePrice} onCheckedChange={setSalePrice} />
               </div>
-              <div>
-                <span className="font-medium">Market Indication:</span>
-                <p className="text-muted-foreground">Price per sqm comparison</p>
+              <Input placeholder="$2,500,000" className="text-sm" />
+              <Input placeholder="Price comparison analysis..." className="text-sm" />
+            </div>
+
+            {/* Incentives */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Incentives</Label>
+              <div className="flex justify-center">
+                <Switch checked={incentives} onCheckedChange={setIncentives} />
               </div>
+              <Input placeholder="Vendor contributions, fit-out" className="text-sm" />
+              <Input placeholder="Incentives comparison..." className="text-sm" />
+            </div>
+
+            {/* Building Area */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Building Area</Label>
+              <div className="flex justify-center">
+                <Switch checked={buildingArea} onCheckedChange={setBuildingArea} />
+              </div>
+              <div className="flex gap-2">
+                <Input placeholder="450" className="text-sm" />
+                <Select>
+                  <SelectTrigger className="w-20">
+                    <SelectValue placeholder="sqm" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sqm">sqm</SelectItem>
+                    <SelectItem value="sqft">sqft</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Input placeholder="Building area comparison..." className="text-sm" />
+            </div>
+
+            {/* Land Area */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Land Area</Label>
+              <div className="flex justify-center">
+                <Switch checked={landArea} onCheckedChange={setLandArea} />
+              </div>
+              <div className="flex gap-2">
+                <Input placeholder="850" className="text-sm" />
+                <Select>
+                  <SelectTrigger className="w-20">
+                    <SelectValue placeholder="sqm" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sqm">sqm</SelectItem>
+                    <SelectItem value="hectares">hectares</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Input placeholder="Land area comparison..." className="text-sm" />
+            </div>
+
+            {/* Car Parking */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Car Parking</Label>
+              <div className="flex justify-center">
+                <Switch checked={carParking} onCheckedChange={setCarParking} />
+              </div>
+              <Input placeholder="20 spaces" className="text-sm" />
+              <Input placeholder="Parking comparison..." className="text-sm" />
+            </div>
+
+            {/* Tenancy */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Tenancy</Label>
+              <div className="flex justify-center">
+                <Switch checked={tenancy} onCheckedChange={setTenancy} />
+              </div>
+              <Input placeholder="Single tenant" className="text-sm" />
+              <Input placeholder="Tenancy comparison..." className="text-sm" />
+            </div>
+
+            {/* Lease Terms */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Lease Terms</Label>
+              <div className="flex justify-center">
+                <Switch checked={leaseTerms} onCheckedChange={setLeaseTerms} />
+              </div>
+              <Input placeholder="5 year + 3+3 options" className="text-sm" />
+              <Input placeholder="Lease terms comparison..." className="text-sm" />
+            </div>
+
+            {/* Net Rent */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Net Rent</Label>
+              <div className="flex justify-center">
+                <Switch checked={netRent} onCheckedChange={setNetRent} />
+              </div>
+              <Input placeholder="$120,000 p.a." className="text-sm" />
+              <Input placeholder="Net rent comparison..." className="text-sm" />
+            </div>
+
+            {/* Outgoings */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Outgoings</Label>
+              <div className="flex justify-center">
+                <Switch checked={outgoings} onCheckedChange={setOutgoings} />
+              </div>
+              <Input placeholder="$15,000 p.a." className="text-sm" />
+              <Input placeholder="Outgoings comparison..." className="text-sm" />
+            </div>
+
+            {/* Yield Rate */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Yield Rate</Label>
+              <div className="flex justify-center">
+                <Switch checked={yieldRate} onCheckedChange={setYieldRate} />
+              </div>
+              <Input placeholder="4.8%" className="text-sm" />
+              <Input placeholder="Yield rate comparison..." className="text-sm" />
+            </div>
+
+            {/* Zoning */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Zoning</Label>
+              <div className="flex justify-center">
+                <Switch checked={zoning} onCheckedChange={setZoning} />
+              </div>
+              <Input placeholder="Commercial 1 Zone" className="text-sm" />
+              <Input placeholder="Zoning comparison..." className="text-sm" />
+            </div>
+
+            {/* Building Condition */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Building Condition</Label>
+              <div className="flex justify-center">
+                <Switch checked={buildingCondition} onCheckedChange={setBuildingCondition} />
+              </div>
+              <Input placeholder="Good condition" className="text-sm" />
+              <Input placeholder="Building condition comparison..." className="text-sm" />
+            </div>
+
+            {/* Street Access */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Street Access</Label>
+              <div className="flex justify-center">
+                <Switch checked={streetAccess} onCheckedChange={setStreetAccess} />
+              </div>
+              <Input placeholder="Main road frontage" className="text-sm" />
+              <Input placeholder="Street access comparison..." className="text-sm" />
             </div>
           </div>
         </CardContent>
