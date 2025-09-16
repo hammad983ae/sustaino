@@ -225,21 +225,33 @@ const Index = () => {
                             </Card>
                           </Link>
 
-                          <Link to="/plant-equipment">
-                            <Card className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                              <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-slate-700">
-                                  <Wrench className="h-5 w-5" />
-                                  Plant & Equipment
-                                </CardTitle>
-                              </CardHeader>
-                              <CardContent>
-                                <p className="text-sm text-slate-600">
-                                  Specialized valuation for plant, equipment and machinery assets
-                                </p>
-                              </CardContent>
-                            </Card>
-                          </Link>
+                          <Card className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-100 hover:shadow-md transition-all duration-300 cursor-pointer">
+                            <CardHeader>
+                              <CardTitle className="flex items-center gap-2 text-slate-700">
+                                <Wrench className="h-5 w-5" />
+                                Plant & Equipment
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-slate-600 mb-3">
+                                Specialized valuation for plant, equipment and machinery assets
+                              </p>
+                              <div className="grid grid-cols-2 gap-2">
+                                <Link to="/plant-equipment">
+                                  <Button size="sm" className="w-full text-xs">
+                                    <Wrench className="h-3 w-3 mr-1" />
+                                    Valuation Tool
+                                  </Button>
+                                </Link>
+                                <Link to="/financial-reporting">
+                                  <Button variant="outline" size="sm" className="w-full text-xs">
+                                    <Calculator className="h-3 w-3 mr-1" />
+                                    Financial
+                                  </Button>
+                                </Link>
+                              </div>
+                            </CardContent>
+                          </Card>
 
                           <Link to="/insurance-valuations">
                             <Card className="bg-gradient-to-br from-white to-purple-50/50 border border-purple-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
