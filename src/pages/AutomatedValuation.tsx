@@ -22,6 +22,7 @@ import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
 import MortgageBrokerTab from "@/components/MortgageBrokerTab";
 import RealitySalesTab from "@/components/RealitySalesTab";
 import PropertyManagementTab from "@/components/PropertyManagementTab";
+import { RealCommercialScraper } from "@/components/RealCommercialScraper";
 
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
@@ -350,13 +351,18 @@ export default function AutomatedValuation() {
           
           {/* Professional Services Hub */}
           <div className="mt-16">
-            <Tabs defaultValue="blockchain" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+            <Tabs defaultValue="scraper" className="w-full">
+              <TabsList className="grid w-full grid-cols-5">
+                <TabsTrigger value="scraper">🎯 RealCommercial Scraper</TabsTrigger>
                 <TabsTrigger value="blockchain">⚡ Blockchain Hub</TabsTrigger>
                 <TabsTrigger value="mortgage">🏠 Mortgage Broker</TabsTrigger>
                 <TabsTrigger value="sales">🏢 Reality Sales</TabsTrigger>
                 <TabsTrigger value="management">🔧 Property Management</TabsTrigger>
               </TabsList>
+
+              <TabsContent value="scraper" className="space-y-4">
+                <RealCommercialScraper />
+              </TabsContent>
 
               <TabsContent value="blockchain" className="space-y-4">
                 <Card>
