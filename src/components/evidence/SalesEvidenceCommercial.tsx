@@ -19,6 +19,8 @@ export default function SalesEvidenceCommercial() {
   const [grossRent, setGrossRent] = useState(true);
   const [netRent, setNetRent] = useState(true);
   const [outgoings, setOutgoings] = useState(true);
+  const [landTax, setLandTax] = useState(true);
+  const [noi, setNoi] = useState(true);
   const [yieldRate, setYieldRate] = useState(true);
   const [zoning, setZoning] = useState(true);
   const [buildingCondition, setBuildingCondition] = useState(true);
@@ -199,6 +201,26 @@ export default function SalesEvidenceCommercial() {
               </div>
               <Input placeholder="$120,000 p.a." className="text-sm" />
               <Input placeholder="Net rent comparison..." className="text-sm" />
+            </div>
+
+            {/* Land Tax (Non Recoverable) */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Land Tax (Non Recoverable)</Label>
+              <div className="flex justify-center">
+                <Switch checked={landTax} onCheckedChange={setLandTax} />
+              </div>
+              <Input placeholder="$5,000 p.a." className="text-sm" />
+              <Input placeholder="Land tax comparison..." className="text-sm" />
+            </div>
+
+            {/* NOI (excl. CAJST) */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>NOI (excl. CAJST)</Label>
+              <div className="flex justify-center">
+                <Switch checked={noi} onCheckedChange={setNoi} />
+              </div>
+              <Input placeholder="$115,000 p.a." className="text-sm" />
+              <Input placeholder="NOI comparison..." className="text-sm" />
             </div>
 
             {/* Yield Rate */}
