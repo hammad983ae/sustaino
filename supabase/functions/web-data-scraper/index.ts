@@ -80,13 +80,27 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { url, data_type, property_type = 'residential' }: WebScrapingRequest = await req.json()
+    let { url, data_type, property_type = 'residential' }: WebScrapingRequest = await req.json()
 
     if (!url || !data_type) {
       return new Response(
         JSON.stringify({ error: 'URL and data_type are required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
+    }
+
+    // Handle chrome-extension URLs by extracting the actual PDF URL
+    if (url.includes('chrome-extension://')) {
+      const urlMatch = url.match(/https?:\/\/[^\\?#]+\.pdf/i)
+      if (urlMatch) {
+        url = urlMatch[0]
+        console.log(`Extracted PDF URL from chrome extension: ${url}`)
+      } else {
+        return new Response(
+          JSON.stringify({ error: 'Could not extract valid PDF URL from chrome extension link. Please copy the direct PDF URL instead.' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
     }
 
     console.log(`Processing ${data_type} data from: ${url}`)
