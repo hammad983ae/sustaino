@@ -561,7 +561,7 @@ const VideoStreamingPlatform: React.FC<VideoStreamingPlatformProps> = ({ classNa
                     </Button>
                     <Button variant="outline" size="sm">
                       <Monitor className="h-4 w-4 mr-2" />
-                      Screen Share
+                      Share Display
                     </Button>
                   </div>
 
