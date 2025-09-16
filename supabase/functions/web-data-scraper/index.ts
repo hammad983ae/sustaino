@@ -68,6 +68,15 @@ interface ExtractedPropertyData {
   property_type?: string
 }
 
+// Helper function to safely get hostname from URL
+function getHostname(url: string): string {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return 'unknown source';
+  }
+}
+
 Deno.serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -167,7 +176,7 @@ Deno.serve(async (req) => {
         building_area: extractedData.building_area || null,
         land_area: extractedData.land_area || null,
         source: url,
-        notes: `Auto-extracted from ${new URL(url).hostname}`
+        notes: `Auto-extracted from ${getHostname(url)}`
       }
 
       const { data, error } = await supabase
@@ -193,7 +202,7 @@ Deno.serve(async (req) => {
         building_area: extractedData.building_area || null,
         land_area: extractedData.land_area || null,
         source: url,
-        notes: `Auto-extracted from ${new URL(url).hostname}`
+        notes: `Auto-extracted from ${getHostname(url)}`
       }
 
       const { data, error } = await supabase
@@ -212,16 +221,29 @@ Deno.serve(async (req) => {
         success: true,
         data: insertResult,
         extracted_fields: extractedData,
-        message: `Successfully extracted ${data_type} data from ${new URL(url).hostname}`
+        message: `Successfully extracted ${data_type} data from ${getHostname(url)}`
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in web-data-scraper:', error)
+    
+    const errorMessage = error?.message || 'Unknown error occurred'
+    const statusCode = error?.message?.includes('PDF file too large') ? 400 : 
+                      error?.message?.includes('Invalid URL') ? 400 : 
+                      error?.message?.includes('Could not extract') ? 400 : 500
+    
     return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ 
+        success: false,
+        error: errorMessage,
+        message: errorMessage 
+      }),
+      { 
+        status: statusCode, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
     )
   }
 })
