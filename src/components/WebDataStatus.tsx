@@ -57,35 +57,63 @@ export const WebDataStatus = () => {
     setStatusItems(prev => prev.map(item => ({ ...item, status: 'checking' as const })));
 
     try {
-      // Check database connection
-      const { error: dbError } = await supabase.from('sales_evidence').select('id').limit(1);
-      if (dbError) {
-        updateStatus('Database Connection', 'error', `Database error: ${dbError.message}`);
-        updateStatus('Sales Evidence Table', 'error', 'Cannot verify - database connection failed');
-        updateStatus('Rental Evidence Table', 'error', 'Cannot verify - database connection failed');
-      } else {
-        updateStatus('Database Connection', 'success', 'Database connection established');
-        updateStatus('Sales Evidence Table', 'success', 'Table accessible and ready');
+      // Check authentication first
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
+        updateStatus('Database Connection', 'error', 'User must be authenticated to access database');
+        updateStatus('Sales Evidence Table', 'error', 'Authentication required');
+        updateStatus('Rental Evidence Table', 'error', 'Authentication required');
+        return;
+      }
+
+      updateStatus('Database Connection', 'success', `Connected as authenticated user: ${user.email}`);
+
+      // Check sales evidence table with authenticated user
+      try {
+        const { error: salesError } = await supabase
+          .from('sales_evidence')
+          .select('id')
+          .limit(1);
         
-        // Check rental evidence table
-        const { error: rentalError } = await supabase.from('rental_evidence').select('id').limit(1);
+        if (salesError) {
+          updateStatus('Sales Evidence Table', 'error', `Sales table error: ${salesError.message}`);
+        } else {
+          updateStatus('Sales Evidence Table', 'success', 'Table accessible and ready');
+        }
+      } catch (err) {
+        updateStatus('Sales Evidence Table', 'error', 'Failed to access sales_evidence table');
+      }
+
+      // Check rental evidence table with authenticated user
+      try {
+        const { error: rentalError } = await supabase
+          .from('rental_evidence')
+          .select('id')
+          .limit(1);
+        
         if (rentalError) {
           updateStatus('Rental Evidence Table', 'error', `Rental table error: ${rentalError.message}`);
         } else {
           updateStatus('Rental Evidence Table', 'success', 'Table accessible and ready');
         }
+      } catch (err) {
+        updateStatus('Rental Evidence Table', 'error', 'Failed to access rental_evidence table');
       }
 
-      // Test web scraper function
+      // Test web scraper function with authenticated request
       try {
         const { error: functionError } = await supabase.functions.invoke('web-data-scraper', {
-          body: { url: 'test', data_type: 'sales' }
+          body: { url: 'test-url', data_type: 'sales' }
         });
         
-        if (functionError && functionError.message.includes('URL and data_type are required')) {
-          updateStatus('Web Scraper Function', 'success', 'Function deployed and responding');
-        } else if (functionError) {
-          updateStatus('Web Scraper Function', 'warning', `Function accessible but may have issues: ${functionError.message}`);
+        if (functionError) {
+          if (functionError.message.includes('URL and data_type are required') || 
+              functionError.message.includes('Invalid URL format')) {
+            updateStatus('Web Scraper Function', 'success', 'Function deployed and responding correctly');
+          } else {
+            updateStatus('Web Scraper Function', 'warning', `Function may have issues: ${functionError.message}`);
+          }
         } else {
           updateStatus('Web Scraper Function', 'success', 'Function deployed and working');
         }
@@ -93,7 +121,7 @@ export const WebDataStatus = () => {
         updateStatus('Web Scraper Function', 'error', 'Function deployment issue');
       }
 
-      // Check OpenAI (indirectly through a simple test)
+      // OpenAI integration status
       updateStatus('OpenAI Integration', 'success', 'API key configured in edge function');
 
     } catch (error) {

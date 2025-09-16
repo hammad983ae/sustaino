@@ -25,6 +25,7 @@ import PredictiveAnalyticsDashboard from "./PredictiveAnalyticsDashboard";
 import InsuranceValuations from "./InsuranceValuations";
 import { WebDataUploader } from "./WebDataUploader";
 import { WebDataStatus } from "./WebDataStatus";
+import { AuthRequiredWrapper } from "./AuthRequiredWrapper";
 
 export default function ValuationAnalysis() {
   return (
@@ -83,20 +84,25 @@ export default function ValuationAnalysis() {
           </TabsContent>
           
           <TabsContent value="web-data" className="mt-6">
-            <div className="space-y-6">
-              <WebDataStatus />
-              <Card>
-                <CardContent className="p-6">
-                  <div className="text-center mb-4">
-                    <h3 className="text-xl font-semibold text-primary">PDF & Web Data Extraction</h3>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Extract property data from PDFs and websites automatically using AI
-                    </p>
-                  </div>
-                  <WebDataUploader />
-                </CardContent>
-              </Card>
-            </div>
+            <AuthRequiredWrapper 
+              title="Web Data Extraction"
+              description="Authentication is required to extract and save property data from PDFs and websites"
+            >
+              <div className="space-y-6">
+                <WebDataStatus />
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="text-center mb-4">
+                      <h3 className="text-xl font-semibold text-primary">PDF & Web Data Extraction</h3>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Extract property data from PDFs and websites automatically using AI
+                      </p>
+                    </div>
+                    <WebDataUploader />
+                  </CardContent>
+                </Card>
+              </div>
+            </AuthRequiredWrapper>
           </TabsContent>
         </div>
       </Tabs>
