@@ -44,29 +44,57 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
       },
       {
         label: 'Planning Data',
-        status: assessmentData.reportData?.planningData?.lga ? 'complete' : 'warning',
-        description: 'Planning information extracted from government sources',
+        status: (assessmentData.reportData?.planningData?.lga && assessmentData.reportData?.planningData?.zoning) ? 'complete' : 'incomplete',
+        description: 'Planning information extracted from government sources - REQUIRED',
         value: assessmentData.reportData?.planningData?.lga ? 
-          `${assessmentData.reportData.planningData.lga} - ${assessmentData.reportData.planningData.zoning || 'No zoning'}` : 
-          'Planning data available but may be incomplete'
-      },
-      {
-        label: 'Report Configuration',
-        status: 'warning',  // Make this optional since configuration might be stored elsewhere
-        description: 'Report type and property configuration',
-        value: 'Basic configuration available'
+          `${assessmentData.reportData.planningData.lga} - ${assessmentData.reportData.planningData.zoning || 'Missing zoning data'}` : 
+          'Planning data incomplete - zoning and LGA required'
       },
       {
         label: 'Property Photos',
-        status: (assessmentData.reportData?.fileAttachments?.propertyPhotos?.length > 0) ? 'complete' : 'warning',
-        description: 'Photos and supporting documentation',
-        value: `${assessmentData.reportData?.fileAttachments?.propertyPhotos?.length || 0} files uploaded`
+        status: (assessmentData.reportData?.fileAttachments?.propertyPhotos?.length >= 3) ? 'complete' : 'incomplete',
+        description: 'Minimum 3 property photos required for professional valuation',
+        value: `${assessmentData.reportData?.fileAttachments?.propertyPhotos?.length || 0} files uploaded (minimum 3 required)`
       },
       {
-        label: 'Valuation Configuration',
-        status: 'warning',  // Make this optional
-        description: 'Valuation approaches and methodology',
-        value: 'Basic configuration available'
+        label: 'Report Configuration',
+        status: (assessmentData.reportData?.reportConfig?.reportType && assessmentData.reportData?.reportConfig?.propertyType) ? 'complete' : 'incomplete',
+        description: 'Report type and property configuration - REQUIRED',
+        value: assessmentData.reportData?.reportConfig?.reportType ? 
+          `${assessmentData.reportData.reportConfig.reportType} - ${assessmentData.reportData.reportConfig.propertyType || 'Property type missing'}` : 
+          'Report configuration incomplete'
+      },
+      {
+        label: 'Valuation Methodology',
+        status: (assessmentData.reportData?.methodologyConfig?.approaches?.length > 0) ? 'complete' : 'incomplete',
+        description: 'Valuation approaches and methodology configuration - REQUIRED',
+        value: assessmentData.reportData?.methodologyConfig?.approaches?.length > 0 ? 
+          `${assessmentData.reportData.methodologyConfig.approaches.join(', ')} approaches configured` : 
+          'Valuation methodology not configured'
+      },
+      {
+        label: 'Market Data Integration',
+        status: (assessmentData.reportData?.marketData?.indicators || assessmentData.reportData?.propertySearchData?.marketAnalysis) ? 'complete' : 'incomplete',
+        description: 'Market indicators and comparative analysis - REQUIRED',
+        value: assessmentData.reportData?.marketData?.indicators ? 
+          'Market data integrated' : 
+          'Market data analysis incomplete'
+      },
+      {
+        label: 'Property Analysis',
+        status: (assessmentData.reportData?.propertySearchData?.analysisComplete) ? 'complete' : 'incomplete',
+        description: 'Automated property analysis and location assessment - REQUIRED',
+        value: assessmentData.reportData?.propertySearchData?.analysisComplete ? 
+          'Property analysis complete' : 
+          'Property analysis not completed'
+      },
+      {
+        label: 'ESG Assessment',
+        status: (assessmentData.reportData?.esgData?.completed) ? 'complete' : 'warning',
+        description: 'Environmental, Social & Governance assessment (recommended for modern valuations)',
+        value: assessmentData.reportData?.esgData?.completed ? 
+          `ESG Score: ${assessmentData.reportData.esgData.overallScore || 'N/A'}` : 
+          'ESG assessment available but not completed'
       }
     ];
 
@@ -75,17 +103,80 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
 
   const validationItems = validateAssessmentData();
   const allCriticalComplete = validationItems.filter(item => item.status === 'incomplete').length === 0;
-  const readinessScore = Math.round((validationItems.filter(item => item.status === 'complete').length / validationItems.length) * 100);
+  const criticalItems = validationItems.filter(item => item.status !== 'warning');
+  const completedCritical = criticalItems.filter(item => item.status === 'complete').length;
+  const readinessScore = Math.round((completedCritical / criticalItems.length) * 100);
 
   const generateReportData = async () => {
     console.log('Generating report with data:', assessmentData);
     
-    // More lenient validation - only require address
+    // Strict validation - require all critical components
     const hasAddress = assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress;
+    const hasPlanningData = assessmentData.reportData?.planningData?.lga && assessmentData.reportData?.planningData?.zoning;
+    const hasPhotos = assessmentData.reportData?.fileAttachments?.propertyPhotos?.length >= 3;
+    const hasReportConfig = assessmentData.reportData?.reportConfig?.reportType && assessmentData.reportData?.reportConfig?.propertyType;
+    const hasValuationConfig = assessmentData.reportData?.methodologyConfig?.approaches?.length > 0;
+    const hasMarketData = assessmentData.reportData?.marketData?.indicators || assessmentData.reportData?.propertySearchData?.marketAnalysis;
+    const hasPropertyAnalysis = assessmentData.reportData?.propertySearchData?.analysisComplete;
+
     if (!hasAddress) {
       toast({
         title: "Missing Property Address",
         description: "Please complete the property address before generating the report.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!hasPlanningData) {
+      toast({
+        title: "Missing Planning Data",
+        description: "Planning data with zoning and LGA information is required for comprehensive valuation.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!hasPhotos) {
+      toast({
+        title: "Insufficient Property Photos",
+        description: "Minimum 3 property photos are required for professional valuation standards.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!hasReportConfig) {
+      toast({
+        title: "Missing Report Configuration",
+        description: "Report type and property type configuration is required.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!hasValuationConfig) {
+      toast({
+        title: "Missing Valuation Methodology",
+        description: "Valuation approaches and methodology must be configured.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!hasMarketData) {
+      toast({
+        title: "Missing Market Data",
+        description: "Market analysis and comparative data is required for accurate valuation.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!hasPropertyAnalysis) {
+      toast({
+        title: "Incomplete Property Analysis",
+        description: "Automated property analysis must be completed before generating report.",
         variant: "destructive"
       });
       return;
@@ -188,9 +279,9 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
       case 'complete':
         return <Badge variant="default" className="bg-green-500/10 text-green-700 dark:text-green-400">Complete</Badge>;
       case 'warning':
-        return <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400">Optional</Badge>;
+        return <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400">Recommended</Badge>;
       default:
-        return <Badge variant="destructive">Required</Badge>;
+        return <Badge variant="destructive" className="bg-red-500/10 text-red-700 dark:text-red-400">Required</Badge>;
     }
   };
 
