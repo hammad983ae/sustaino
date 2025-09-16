@@ -6,6 +6,10 @@
  * ============================================================================
  */
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Zap, Sparkles } from "lucide-react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
@@ -15,6 +19,9 @@ import QuickSetupForm from "@/components/QuickSetupForm";
 import StreamlinedPropertyAssessment from "@/components/StreamlinedPropertyAssessment";
 import ComprehensiveIPProtection from "@/components/ComprehensiveIPProtection";
 import SecurityCertificatesGrid from "@/components/SecurityCertificatesGrid";
+import MortgageBrokerTab from "@/components/MortgageBrokerTab";
+import RealitySalesTab from "@/components/RealitySalesTab";
+import PropertyManagementTab from "@/components/PropertyManagementTab";
 
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
@@ -135,6 +142,24 @@ export default function AutomatedValuation() {
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   ⚡ Blockchain Hub
+                </a>
+                <a 
+                  href="#mortgage-broker" 
+                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
+                >
+                  🏠 Mortgage Broker
+                </a>
+                <a 
+                  href="#reality-sales" 
+                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
+                >
+                  🏢 Reality Sales
+                </a>
+                <a 
+                  href="#property-management" 
+                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
+                >
+                  🔧 Property Management
                 </a>
               </div>
               <div className="flex items-center gap-4">
@@ -322,6 +347,49 @@ export default function AutomatedValuation() {
         <>
           <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
           <AIAssistantToggle context="Property Analysis" />
+          
+          {/* Professional Services Hub */}
+          <div className="mt-16">
+            <Tabs defaultValue="blockchain" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="blockchain">⚡ Blockchain Hub</TabsTrigger>
+                <TabsTrigger value="mortgage">🏠 Mortgage Broker</TabsTrigger>
+                <TabsTrigger value="sales">🏢 Reality Sales</TabsTrigger>
+                <TabsTrigger value="management">🔧 Property Management</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="blockchain" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Zap className="h-5 w-5 text-primary" />
+                      Blockchain Hub
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">
+                      Access blockchain integrations and cryptocurrency trading tools.
+                    </p>
+                    <Link to="/crypto-trading">
+                      <Button className="w-full">Access Blockchain Hub</Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="mortgage">
+                <MortgageBrokerTab />
+              </TabsContent>
+
+              <TabsContent value="sales">
+                <RealitySalesTab />
+              </TabsContent>
+
+              <TabsContent value="management">
+                <PropertyManagementTab />
+              </TabsContent>
+            </Tabs>
+          </div>
         </>
       );
   }
