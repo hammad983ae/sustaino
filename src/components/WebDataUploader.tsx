@@ -129,11 +129,18 @@ export const WebDataUploader = () => {
         });
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error scraping web data:', error);
+      const errorMessage = error?.message || "Failed to process the URL. Please try again.";
+      
+      setLastResult({
+        success: false,
+        error: errorMessage
+      });
+      
       toast({
         title: "Error",
-        description: "Failed to process the URL. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
