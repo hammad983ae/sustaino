@@ -56,9 +56,9 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
     <div className="w-full">
       {/* Property Type Cards */}
       <div className="space-y-8 mb-12">
-        {/* Top row - Commercial and Residential */}
+        {/* Main 4 property types in 2x2 grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {propertyTypes.slice(0, 2).map((type, index) => {
+          {propertyTypes.slice(0, 4).map((type, index) => {
             const IconComponent = type.icon;
             return (
               <Card 
@@ -108,61 +108,9 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
           })}
         </div>
         
-        {/* Second row - Agricultural and Specialized */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {propertyTypes.slice(2, 4).map((type, index) => {
-            const IconComponent = type.icon;
-            return (
-              <Card 
-                key={type.id} 
-                className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
-                style={{ animationDelay: `${(index + 2) * 0.1}s` }}
-                onClick={() => onSelect(type.id)}
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="h-8 w-8 text-white" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-emerald-700 transition-colors">
-                        {type.title}
-                      </CardTitle>
-                      <CardDescription className="text-gray-600 mt-1">
-                        {type.description}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="space-y-3 mb-6">
-                    <h4 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">
-                      Automated Analysis Includes:
-                    </h4>
-                    <ul className="text-sm space-y-2">
-                      {type.features.map((feature, index) => (
-                        <li key={index} className="flex items-center text-gray-600 group-hover:text-gray-700 transition-colors">
-                          <div className="h-2 w-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mr-3 group-hover:scale-125 transition-transform duration-200" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <Button 
-                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group-hover:scale-105"
-                    variant="default"
-                  >
-                    Start {type.title} Valuation
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-        
-        {/* Third row - Development Site (centered) */}
+        {/* Development Site (centered below) */}
         <div className="flex justify-center">
-          <div className="w-full md:w-1/2 lg:w-1/3">
+          <div className="w-full md:w-1/2">
             {(() => {
               const type = propertyTypes[4]; // Development Site
               const IconComponent = type.icon;
