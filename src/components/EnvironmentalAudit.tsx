@@ -1,7 +1,7 @@
 /**
  * ============================================================================
- * Environmental Audit Component (Basic EPA Compliance Only)
- * Note: All ESG and Climate functions have been moved to ESGClimateAssessment page
+ * Environmental Audit Component (Comprehensive Assessment)
+ * Full environmental assessment including EPA, contamination, climate, and sustainability
  * ============================================================================
  */
 
@@ -10,13 +10,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AlertTriangle, Shield, CheckCircle2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { AlertTriangle, Shield, CheckCircle2, CloudRain, Flame, Leaf, Users, Building } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const EnvironmentalAudit = () => {
   const [includeSection, setIncludeSection] = useState(true);
   const [epaAuditRequired, setEpaAuditRequired] = useState("no");
   const [epaAuditStatus, setEpaAuditStatus] = useState("not-applicable");
+
+  // Climate risk states
+  const [climateRisk, setClimateRisk] = useState("");
+  const [floodRisk, setFloodRisk] = useState("");
+  const [bushfireRisk, setBushfireRisk] = useState("");
+
+  // Carbon Projects states
+  const [carbonSections, setCarbonSections] = useState({
+    overview: true,
+    classification: true,
+    impact: true
+  });
+
+  const toggleCarbonSection = (section: keyof typeof carbonSections) => {
+    setCarbonSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
 
   return (
     <div className="space-y-6">
@@ -270,6 +288,94 @@ const EnvironmentalAudit = () => {
             </CardContent>
           </Card>
 
+          {/* Climate Risk Assessment */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <CloudRain className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-xl">Climate Risk Assessment</CardTitle>
+                </div>
+                <Switch 
+                  checked={true}
+                  onCheckedChange={() => {}}
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label>Climate Risk Level</Label>
+                  <Select value={climateRisk} onValueChange={setClimateRisk}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select climate risk" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="low">Low Risk</SelectItem>
+                      <SelectItem value="moderate">Moderate Risk</SelectItem>
+                      <SelectItem value="high">High Risk</SelectItem>
+                      <SelectItem value="extreme">Extreme Risk</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Flood Risk Rating</Label>
+                  <Select value={floodRisk} onValueChange={setFloodRisk}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select flood risk" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="minimal">Minimal Risk</SelectItem>
+                      <SelectItem value="low">Low Risk</SelectItem>
+                      <SelectItem value="moderate">Moderate Risk</SelectItem>
+                      <SelectItem value="high">High Risk</SelectItem>
+                      <SelectItem value="extreme">Extreme Risk</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Bushfire Risk</Label>
+                  <Select value={bushfireRisk} onValueChange={setBushfireRisk}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select bushfire risk" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="minimal">Minimal Risk</SelectItem>
+                      <SelectItem value="low">Low Risk</SelectItem>
+                      <SelectItem value="moderate">Moderate Risk</SelectItem>
+                      <SelectItem value="high">High Risk</SelectItem>
+                      <SelectItem value="extreme">Extreme Risk</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Risk Assessment Summary */}
+              {(climateRisk || floodRisk || bushfireRisk) && (
+                <div className="mt-6 p-4 bg-primary/5 rounded-lg border border-primary/20">
+                  <h4 className="font-medium mb-3 text-foreground">Risk Assessment Summary</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {climateRisk && (
+                      <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                        Climate: {climateRisk}
+                      </Badge>
+                    )}
+                    {floodRisk && (
+                      <Badge variant="secondary" className="bg-blue-500/10 text-blue-600 border-blue-500/20">
+                        Flood: {floodRisk}
+                      </Badge>
+                    )}
+                    {bushfireRisk && (
+                      <Badge variant="secondary" className="bg-orange-500/10 text-orange-600 border-orange-500/20">
+                        Bushfire: {bushfireRisk}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Environmental Site History */}
           <Card>
             <CardHeader>
@@ -423,6 +529,287 @@ const EnvironmentalAudit = () => {
                   </Select>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Carbon Farming Projects */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Leaf className="h-6 w-6 text-green-500" />
+                  <CardTitle className="text-xl">Carbon Farming Projects</CardTitle>
+                </div>
+                <Switch 
+                  checked={true}
+                  onCheckedChange={() => {}}
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Carbon Project Overview */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Leaf className="h-5 w-5 text-green-500" />
+                      <CardTitle className="text-lg">Carbon Project Overview</CardTitle>
+                    </div>
+                    <Switch 
+                      checked={carbonSections.overview}
+                      onCheckedChange={() => toggleCarbonSection('overview')}
+                    />
+                  </div>
+                </CardHeader>
+                {carbonSections.overview && (
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Carbon Project Status</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select project status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">No Carbon Projects</SelectItem>
+                            <SelectItem value="planned">Planned</SelectItem>
+                            <SelectItem value="approved">Approved</SelectItem>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="under-review">Under Review</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Project Type</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select project type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="vegetation">Vegetation Management</SelectItem>
+                            <SelectItem value="soil-carbon">Soil Carbon</SelectItem>
+                            <SelectItem value="forestry">Forestry</SelectItem>
+                            <SelectItem value="agricultural">Agricultural</SelectItem>
+                            <SelectItem value="mixed">Mixed Methods</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Methodology Used</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select methodology" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="cfm-14">CFM 14 - Sequestration by Revegetation</SelectItem>
+                            <SelectItem value="cfm-15">CFM 15 - Avoided Deforestation</SelectItem>
+                            <SelectItem value="cfm-16">CFM 16 - Soil Carbon</SelectItem>
+                            <SelectItem value="cfm-18">CFM 18 - Vegetation Management</SelectItem>
+                            <SelectItem value="other">Other Approved Methodology</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Project Registration</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select registration status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="not-registered">Not Registered</SelectItem>
+                            <SelectItem value="application-submitted">Application Submitted</SelectItem>
+                            <SelectItem value="registered">Registered</SelectItem>
+                            <SelectItem value="conditional">Conditional Registration</SelectItem>
+                            <SelectItem value="rejected">Rejected</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+
+              {/* Carbon Classification & Eligibility */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Shield className="h-5 w-5 text-blue-500" />
+                      <CardTitle className="text-lg">Carbon Classification & Eligibility</CardTitle>
+                    </div>
+                    <Switch 
+                      checked={carbonSections.classification}
+                      onCheckedChange={() => toggleCarbonSection('classification')}
+                    />
+                  </div>
+                </CardHeader>
+                {carbonSections.classification && (
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Land Eligibility</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select eligibility" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="eligible">Eligible</SelectItem>
+                            <SelectItem value="conditionally-eligible">Conditionally Eligible</SelectItem>
+                            <SelectItem value="not-eligible">Not Eligible</SelectItem>
+                            <SelectItem value="under-assessment">Under Assessment</SelectItem>
+                            <SelectItem value="unknown">Unknown</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Native Title Considerations</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select native title status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="no-issues">No Known Issues</SelectItem>
+                            <SelectItem value="consent-obtained">Consent Obtained</SelectItem>
+                            <SelectItem value="consultation-required">Consultation Required</SelectItem>
+                            <SelectItem value="claim-exists">Native Title Claim Exists</SelectItem>
+                            <SelectItem value="under-review">Under Review</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Historical Land Use</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select historical use" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="cleared-agriculture">Cleared Agricultural Land</SelectItem>
+                            <SelectItem value="grazing">Grazing Land</SelectItem>
+                            <SelectItem value="forestry">Forestry</SelectItem>
+                            <SelectItem value="native-vegetation">Native Vegetation</SelectItem>
+                            <SelectItem value="degraded">Degraded Land</SelectItem>
+                            <SelectItem value="mixed">Mixed Use</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Baseline Establishment</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select baseline status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="established">Baseline Established</SelectItem>
+                            <SelectItem value="in-progress">In Progress</SelectItem>
+                            <SelectItem value="required">Required</SelectItem>
+                            <SelectItem value="pending-approval">Pending Approval</SelectItem>
+                            <SelectItem value="not-started">Not Started</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Regulatory Compliance Notes</Label>
+                      <Textarea 
+                        placeholder="Enter any relevant compliance considerations, permits required, or regulatory issues..."
+                        className="min-h-[80px]"
+                      />
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+
+              {/* Carbon Impact Assessment */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Building className="h-5 w-5 text-purple-500" />
+                      <CardTitle className="text-lg">Carbon Impact Assessment</CardTitle>
+                    </div>
+                    <Switch 
+                      checked={carbonSections.impact}
+                      onCheckedChange={() => toggleCarbonSection('impact')}
+                    />
+                  </div>
+                </CardHeader>
+                {carbonSections.impact && (
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Estimated Carbon Yield (tCO2-e/ha/year)</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select estimated yield" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="0-2">0-2 tCO2-e/ha/year</SelectItem>
+                            <SelectItem value="2-5">2-5 tCO2-e/ha/year</SelectItem>
+                            <SelectItem value="5-10">5-10 tCO2-e/ha/year</SelectItem>
+                            <SelectItem value="10-15">10-15 tCO2-e/ha/year</SelectItem>
+                            <SelectItem value="15-plus">15+ tCO2-e/ha/year</SelectItem>
+                            <SelectItem value="tbd">To Be Determined</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Project Duration</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select project duration" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="25-years">25 Years (Standard)</SelectItem>
+                            <SelectItem value="50-years">50 Years</SelectItem>
+                            <SelectItem value="100-years">100 Years (Permanent)</SelectItem>
+                            <SelectItem value="other">Other Duration</SelectItem>
+                            <SelectItem value="tbd">To Be Determined</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Economic Viability</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select viability assessment" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="highly-viable">Highly Viable</SelectItem>
+                            <SelectItem value="viable">Viable</SelectItem>
+                            <SelectItem value="marginal">Marginal</SelectItem>
+                            <SelectItem value="not-viable">Not Viable</SelectItem>
+                            <SelectItem value="under-assessment">Under Assessment</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Risk Assessment</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select risk level" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="low-risk">Low Risk</SelectItem>
+                            <SelectItem value="moderate-risk">Moderate Risk</SelectItem>
+                            <SelectItem value="high-risk">High Risk</SelectItem>
+                            <SelectItem value="very-high-risk">Very High Risk</SelectItem>
+                            <SelectItem value="assessment-required">Assessment Required</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Impact on Property Value</Label>
+                      <Textarea 
+                        placeholder="Describe the potential impact of carbon projects on property valuation, including revenue streams, land use restrictions, and market considerations..."
+                        className="min-h-[100px]"
+                      />
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
             </CardContent>
           </Card>
         </div>
