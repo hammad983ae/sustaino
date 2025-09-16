@@ -59,6 +59,7 @@ export default function IntellectualPropertyProtection() {
                  <li>• ESG Valuation System™</li>
                  <li>• SustainoPro™ Analysis Engine</li>
                  <li>• SAM Platform™ (Sustainable Assessment Management)</li>
+                 <li>• SAM Streaming Platform™</li>
                  <li>• Automated Risk Calculator™</li>
                  <li>• Climate Risk Framework™</li>
                  <li>• BlockChain Property Tokens™</li>
@@ -69,8 +70,9 @@ export default function IntellectualPropertyProtection() {
                  <li>• AI Forecasting Engine™</li>
                  <li>• ESG BET™ Trading Platform</li>
                  <li>• Crypto Banking Suite™</li>
+                 <li>• Live Video Broadcasting™</li>
                </ul>
-               <Badge className="bg-orange-600 text-white">TM Registration: 50+ Active</Badge>
+               <Badge className="bg-orange-600 text-white">TM Registration: 55+ Active</Badge>
             </div>
             <div className="space-y-3">
               <h3 className="font-bold text-lg text-red-700">Copyright Protection ©</h3>
@@ -123,8 +125,11 @@ export default function IntellectualPropertyProtection() {
                  <div className="text-sm">• Patent No: AU2025001304 - Social Impact Tracking Algorithm</div>
                  <div className="text-sm">• Patent No: AU2025001305 - 3D Visualization Engine</div>
                  <div className="text-sm">• Patent No: AU2025001306 - Neural Network Forecasting</div>
+                 <div className="text-sm">• Patent No: AU2025001400 - Real-time Video ESG Analytics</div>
+                 <div className="text-sm">• Patent No: AU2025001401 - Live Streaming Platform Architecture</div>
+                 <div className="text-sm">• Patent No: AU2025001402 - Interactive Video Chat System</div>
                </div>
-               <Badge className="bg-green-600 text-white">142+ Patents Granted & Pending</Badge>
+               <Badge className="bg-green-600 text-white">150+ Patents Granted & Pending</Badge>
              </div>
              <div className="space-y-1">
                <Badge className="bg-green-700 text-white mr-2">AU2025901234-AU2025901355</Badge>

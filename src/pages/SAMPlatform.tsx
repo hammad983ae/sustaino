@@ -42,6 +42,7 @@ import AuthStatus from '@/components/AuthStatus';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
 import AIAssistantToggle from '@/components/AIAssistantToggle';
 import SAMForecastingEngine from '@/components/SAMForecastingEngine';
+import VideoStreamingPlatform from '@/components/VideoStreamingPlatform';
 
 const SAMPlatform = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -151,7 +152,7 @@ const SAMPlatform = () => {
           {/* Main Platform Tabs */}
           <div className="max-w-7xl mx-auto">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-              <TabsList className="grid w-full grid-cols-7 lg:grid-cols-7 bg-background/50 backdrop-blur-sm border border-green-200/50">
+              <TabsList className="grid w-full grid-cols-8 lg:grid-cols-8 bg-background/50 backdrop-blur-sm border border-green-200/50">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   Overview
@@ -163,6 +164,10 @@ const SAMPlatform = () => {
                 <TabsTrigger value="ai-forecasting" className="flex items-center gap-2">
                   <Zap className="h-4 w-4" />
                   AI Forecasting
+                </TabsTrigger>
+                <TabsTrigger value="video-streaming" className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  Video Platform
                 </TabsTrigger>
                 <TabsTrigger value="crypto-banking" className="flex items-center gap-2">
                   <CreditCard className="h-4 w-4" />
@@ -335,6 +340,11 @@ const SAMPlatform = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              {/* Video Streaming Tab */}
+              <TabsContent value="video-streaming" className="space-y-6">
+                <VideoStreamingPlatform />
               </TabsContent>
 
               {/* AI Forecasting Tab */}
