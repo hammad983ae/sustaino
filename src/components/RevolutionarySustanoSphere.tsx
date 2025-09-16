@@ -703,7 +703,7 @@ export const RevolutionarySustainoSphere = () => {
 
       {/* Revolutionary Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-8 bg-gradient-to-r from-slate-100 to-blue-100 p-2 rounded-xl">
+        <TabsList className="grid w-full grid-cols-9 bg-gradient-to-r from-slate-100 to-blue-100 p-2 rounded-xl">
           <TabsTrigger value="intelligence" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white">
             <Brain className="h-4 w-4" />
             AI Intelligence
@@ -731,6 +731,10 @@ export const RevolutionarySustainoSphere = () => {
           <TabsTrigger value="auctions" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-600 data-[state=active]:text-white">
             <Gavel className="h-4 w-4" />
             Live Auctions
+          </TabsTrigger>
+          <TabsTrigger value="market-analysis" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-600 data-[state=active]:text-white">
+            <Radar className="h-4 w-4" />
+            Market Intelligence
           </TabsTrigger>
           <TabsTrigger value="reports" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-slate-500 data-[state=active]:to-gray-600 data-[state=active]:text-white">
             <FileBarChart className="h-4 w-4" />
@@ -1322,6 +1326,92 @@ export const RevolutionarySustainoSphere = () => {
                   </Card>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Market Intelligence Analysis Tab */}
+        <TabsContent value="market-analysis" className="space-y-6 animate-fade-in">
+          <Card className="bg-gradient-to-r from-orange-50 via-red-50 to-pink-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <Radar className="h-8 w-8 text-orange-600" />
+                SustanoAnalytics™ Market Intelligence
+              </CardTitle>
+              <CardDescription className="text-lg">
+                Comprehensive PESTEL, SWOT, VRIO, and market analysis for strategic decision making.
+              </CardDescription>
+              <div className="flex gap-2 mt-2">
+                <Badge variant="outline" className="bg-orange-100 text-orange-700 border-orange-300">
+                  Patent Pending
+                </Badge>
+                <Badge variant="outline" className="bg-red-100 text-red-700 border-red-300">
+                  SustanoAnalytics™
+                </Badge>
+                <Badge variant="outline" className="bg-pink-100 text-pink-700 border-pink-300">
+                  MarketIQ™
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {selectedAsset ? (
+                <SustanoSphereMarketAnalysisReport 
+                  assetData={selectedAsset}
+                  onReportGenerated={(report) => {
+                    setComprehensiveReport(report);
+                    toast({
+                      title: "Market Intelligence Report Generated! 🚀",
+                      description: "Comprehensive analysis complete with PESTEL, SWOT, VRIO frameworks.",
+                    });
+                  }}
+                />
+              ) : (
+                <Card className="border-2 border-dashed border-orange-300">
+                  <CardContent className="flex flex-col items-center justify-center py-12">
+                    <Radar className="h-16 w-16 text-orange-400 mb-4" />
+                    <h3 className="text-xl font-semibold text-orange-700 mb-2">
+                      Select Asset for Market Analysis
+                    </h3>
+                    <p className="text-orange-600 text-center mb-6 max-w-md">
+                      Choose a digital asset from the marketplace to generate comprehensive market intelligence 
+                      including PESTEL analysis, SWOT assessment, competitor analysis, and strategic recommendations.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                      {filteredAssets.slice(0, 3).map((asset) => (
+                        <Card 
+                          key={asset.id} 
+                          className="cursor-pointer border-orange-200 hover:border-orange-400 transition-colors"
+                          onClick={() => {
+                            setSelectedAsset(asset);
+                            setActiveTab("market-analysis");
+                          }}
+                        >
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-sm">{asset.title}</CardTitle>
+                            <div className="flex items-center gap-2">
+                              <Badge className="bg-orange-100 text-orange-700 text-xs">
+                                SustanoVal™ {asset.sustainoValScore}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {formatCurrency(asset.currentValuation)}
+                              </Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="pt-0">
+                            <Button 
+                              size="sm" 
+                              className="w-full bg-orange-600 hover:bg-orange-700"
+                            >
+                              <Radar className="h-3 w-3 mr-1" />
+                              Analyze Market
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

@@ -626,8 +626,10 @@ function calculateOpportunityScore(assetData: any): number {
 }
 
 function calculateThreatScore(assetData: any): number {
-  const competitorThreat = (assetData.competitorAnalysis?.directCompetitors || 0) * 5;
-  const riskThreat = Object.values(assetData.riskFactors || {}).reduce((sum: number, risk: any) => sum + (Number(risk) || 0), 0) / 5;
+  const competitorThreat: number = Number(assetData.competitorAnalysis?.directCompetitors || 0) * 5;
+  const riskFactors = assetData.riskFactors || {};
+  const riskValues = Object.values(riskFactors).map((risk: any) => Number(risk) || 0);
+  const riskThreat: number = riskValues.reduce((sum: number, risk: number) => sum + risk, 0) / 5;
   return (competitorThreat + riskThreat) / 2;
 }
 
