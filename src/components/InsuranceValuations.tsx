@@ -12,6 +12,7 @@
  * ============================================================================
  */
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +25,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Building2, Calculator, FileText, AlertTriangle, MapPin, Calendar, Users, DollarSign, Upload, Trash2, Download, Image as ImageIcon } from "lucide-react";
+import { Building2, Calculator, FileText, AlertTriangle, MapPin, Calendar, Users, DollarSign, Upload, Trash2, Download, Image as ImageIcon, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { getAllPropertyTypes } from "@/components/PropertyTypesComprehensive";
@@ -145,6 +146,7 @@ interface ValuationResults {
 }
 
 export default function InsuranceValuations() {
+  const navigate = useNavigate();
   const [propertyDetails, setPropertyDetails] = useState<PropertyDetails>({
     address: "",
     suburb: "",
@@ -544,6 +546,18 @@ export default function InsuranceValuations() {
 
   return (
     <div className="space-y-6">
+      {/* Back to Dashboard Button */}
+      <div className="flex items-center justify-between">
+        <Button 
+          variant="outline" 
+          onClick={() => navigate('/dashboard')}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Button>
+      </div>
+
       {/* Professional Header */}
       <Alert>
         <Building2 className="h-4 w-4" />
