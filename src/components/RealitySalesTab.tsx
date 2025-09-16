@@ -208,6 +208,28 @@ const RealitySalesTab = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Professional Licensing Notice */}
+      <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/30 mt-6">
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-2 mb-2">
+            <Building2 className="h-5 w-5 text-blue-600" />
+            <h4 className="font-medium text-blue-800 dark:text-blue-200">
+              Real Estate Licensing Required
+            </h4>
+          </div>
+          <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+            Real estate sales activities require appropriate state-based licensing. Ensure compliance with local regulations.
+          </p>
+          <a 
+            href="/licensing-hub" 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+          >
+            <Building2 className="h-4 w-4" />
+            View Licensing Hub
+          </a>
+        </CardContent>
+      </Card>
     </div>
   );
 };

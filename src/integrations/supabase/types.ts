@@ -14,6 +14,158 @@ export type Database = {
   }
   public: {
     Tables: {
+      aggregator_relationships: {
+        Row: {
+          aggregator_afsl: string | null
+          aggregator_name: string
+          agreement_end_date: string | null
+          agreement_start_date: string | null
+          commission_structure: Json | null
+          created_at: string
+          id: string
+          obligations: Json | null
+          relationship_type: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aggregator_afsl?: string | null
+          aggregator_name: string
+          agreement_end_date?: string | null
+          agreement_start_date?: string | null
+          commission_structure?: Json | null
+          created_at?: string
+          id?: string
+          obligations?: Json | null
+          relationship_type: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aggregator_afsl?: string | null
+          aggregator_name?: string
+          agreement_end_date?: string | null
+          agreement_start_date?: string | null
+          commission_structure?: Json | null
+          created_at?: string
+          id?: string
+          obligations?: Json | null
+          relationship_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      business_licenses: {
+        Row: {
+          annual_compliance_fee: number | null
+          compliance_score: number | null
+          conditions_attached: Json | null
+          created_at: string
+          expiry_date: string | null
+          id: string
+          issue_date: string | null
+          issuing_authority: string
+          license_holder_name: string
+          license_number: string | null
+          license_status: string
+          license_type: string
+          renewal_reminder_days: number | null
+          responsible_managers: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          annual_compliance_fee?: number | null
+          compliance_score?: number | null
+          conditions_attached?: Json | null
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          issue_date?: string | null
+          issuing_authority: string
+          license_holder_name: string
+          license_number?: string | null
+          license_status?: string
+          license_type: string
+          renewal_reminder_days?: number | null
+          responsible_managers?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          annual_compliance_fee?: number | null
+          compliance_score?: number | null
+          conditions_attached?: Json | null
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          issue_date?: string | null
+          issuing_authority?: string
+          license_holder_name?: string
+          license_number?: string | null
+          license_status?: string
+          license_type?: string
+          renewal_reminder_days?: number | null
+          responsible_managers?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      compliance_requirements: {
+        Row: {
+          completion_status: string
+          compliance_officer: string | null
+          created_at: string
+          due_date: string | null
+          evidence_document_url: string | null
+          evidence_required: boolean | null
+          id: string
+          license_id: string
+          requirement_description: string
+          requirement_type: string
+          updated_at: string
+        }
+        Insert: {
+          completion_status?: string
+          compliance_officer?: string | null
+          created_at?: string
+          due_date?: string | null
+          evidence_document_url?: string | null
+          evidence_required?: boolean | null
+          id?: string
+          license_id: string
+          requirement_description: string
+          requirement_type: string
+          updated_at?: string
+        }
+        Update: {
+          completion_status?: string
+          compliance_officer?: string | null
+          created_at?: string
+          due_date?: string | null
+          evidence_document_url?: string | null
+          evidence_required?: boolean | null
+          id?: string
+          license_id?: string
+          requirement_description?: string
+          requirement_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_requirements_license_id_fkey"
+            columns: ["license_id"]
+            isOneToOne: false
+            referencedRelation: "business_licenses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       construction_cost_index: {
         Row: {
           asset_class: string

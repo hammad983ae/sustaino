@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Calculator, DollarSign, FileText, Users, TrendingUp, Home, Building } from 'lucide-react';
+import { Calculator, DollarSign, FileText, Users, TrendingUp, Home, Building, Shield } from 'lucide-react';
 
 const MortgageBrokerTab = () => {
   const [loanAmount, setLoanAmount] = useState('');
@@ -180,6 +180,28 @@ const MortgageBrokerTab = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Professional Licensing Notice */}
+      <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950/30 mt-6">
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-2 mb-2">
+            <Shield className="h-5 w-5 text-amber-600" />
+            <h4 className="font-medium text-amber-800 dark:text-amber-200">
+              Professional Licensing Required
+            </h4>
+          </div>
+          <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
+            Mortgage broking requires AFSL and/or Australian Credit License. Ensure you have appropriate licensing before conducting business.
+          </p>
+          <a 
+            href="/licensing-hub" 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors text-sm"
+          >
+            <Shield className="h-4 w-4" />
+            View Licensing Hub
+          </a>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -249,6 +249,28 @@ const PropertyManagementTab = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Professional Licensing Notice */}
+      <Card className="border-green-200 bg-green-50 dark:bg-green-950/30 mt-6">
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-2 mb-2">
+            <Building className="h-5 w-5 text-green-600" />
+            <h4 className="font-medium text-green-800 dark:text-green-200">
+              Property Management Licensing
+            </h4>
+          </div>
+          <p className="text-sm text-green-700 dark:text-green-300 mb-3">
+            Property management activities may require real estate licensing depending on your state. Verify local requirements.
+          </p>
+          <a 
+            href="/licensing-hub" 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+          >
+            <Building className="h-4 w-4" />
+            View Licensing Hub
+          </a>
+        </CardContent>
+      </Card>
     </div>
   );
 };
