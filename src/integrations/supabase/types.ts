@@ -1018,75 +1018,429 @@ export type Database = {
       rental_evidence: {
         Row: {
           adjusted_rental: number | null
+          adjustment_summary: string | null
           adjustments: Json | null
+          administrative_fund_balance: number | null
+          air_conditioning: string | null
+          asking_rent: number | null
+          aspect: string | null
+          balcony_area: number | null
           bathrooms: number | null
           bedrooms: number | null
+          body_corporate_name: string | null
+          bond_amount: number | null
+          break_clause: string | null
           building_area: number | null
+          building_type: string | null
+          bushfire_risk: string | null
           car_spaces: number | null
+          coastal_erosion_risk: string | null
+          common_property_description: string | null
           comparable_address: string
+          comparable_rank: number | null
+          comparable_rentals_analysis: string | null
+          condition_rating: string | null
+          construction_type: string | null
+          contamination_risk: string | null
+          county: string | null
+          courtyard_area: number | null
           created_at: string
+          data_quality_score: number | null
+          data_source_verified: boolean | null
           distance_km: number | null
+          easements: string | null
+          encumbrances: string | null
+          energy_rating: string | null
+          exclusive_use_areas: string | null
+          external_walls: string | null
+          extraction_confidence: number | null
+          flooding_risk: string | null
+          furnished: boolean | null
+          garden_area: number | null
+          garden_maintenance: boolean | null
+          green_star_rating: string | null
+          greywater_system: boolean | null
+          gym: boolean | null
+          heating: string | null
+          heritage_listing: boolean | null
+          hot_water_system: string | null
           id: string
+          inspection_date: string | null
+          internet_included: boolean | null
+          is_strata: boolean | null
           land_area: number | null
+          landlord_type: string | null
+          last_verified_date: string | null
+          lease_conditions: string | null
           lease_date: string
+          lease_end_date: string | null
+          lease_renewal_options: string | null
+          lease_start_date: string | null
           lease_term_months: number | null
+          lease_type: string | null
+          letting_rights: boolean | null
+          lift_access: boolean | null
+          local_government_area: string | null
+          location_benefits: string | null
+          location_detriments: string | null
+          lot_number: string | null
+          management_rights: boolean | null
+          market_commentary: string | null
+          marketing_period_days: number | null
+          nbers_rating: string | null
           notes: string | null
+          parish: string | null
+          parking_included: boolean | null
+          parking_spaces: number | null
+          parking_type: string | null
+          pet_policy: string | null
+          plan_number: string | null
+          plan_type: string | null
+          pool: boolean | null
+          pool_maintenance: boolean | null
+          postcode: string | null
+          previous_rentals: Json | null
+          property_description: string | null
           property_id: string | null
           property_type: string
+          quality_rating: string | null
+          rainwater_tank: boolean | null
+          reliability_score: number | null
+          rent_increase_percentage: number | null
+          rent_per_month: number | null
+          rent_per_sqm_annual: number | null
+          rent_per_week: number | null
+          rent_review_date: string | null
           rental_amount: number
+          rental_guarantees: string | null
+          rental_incentives: string | null
           rental_period: string
+          roof_type: string | null
+          sales_history: Json | null
+          security_features: string | null
+          services: string | null
+          sinking_fund_balance: number | null
+          soil_type: string | null
+          solar_hot_water: boolean | null
+          solar_panels: boolean | null
           source: string | null
+          spa: boolean | null
+          special_levies: number | null
+          state: string | null
+          storage_areas: string | null
+          storage_included: boolean | null
+          strata_fees_annual: number | null
+          strata_fees_quarterly: number | null
+          strata_lot_number: string | null
+          strata_manager: string | null
+          strata_plan_number: string | null
+          strata_scheme_number: string | null
+          street_name: string | null
+          street_number: string | null
+          street_type: string | null
+          suburb: string | null
+          tenant_type: string | null
+          tennis_court: boolean | null
+          title_particulars: string | null
+          topography: string | null
+          unit_number: string | null
           user_id: string
+          utilities_included: string | null
+          vacancy_period_days: number | null
           valuation_id: string | null
+          valuer_comments: string | null
+          view_rating: string | null
+          ward: string | null
+          water_rating: string | null
           weight_percentage: number | null
+          wheelchair_access: boolean | null
+          year_built: number | null
+          year_renovated: number | null
+          zoning: string | null
         }
         Insert: {
           adjusted_rental?: number | null
+          adjustment_summary?: string | null
           adjustments?: Json | null
+          administrative_fund_balance?: number | null
+          air_conditioning?: string | null
+          asking_rent?: number | null
+          aspect?: string | null
+          balcony_area?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
+          body_corporate_name?: string | null
+          bond_amount?: number | null
+          break_clause?: string | null
           building_area?: number | null
+          building_type?: string | null
+          bushfire_risk?: string | null
           car_spaces?: number | null
+          coastal_erosion_risk?: string | null
+          common_property_description?: string | null
           comparable_address: string
+          comparable_rank?: number | null
+          comparable_rentals_analysis?: string | null
+          condition_rating?: string | null
+          construction_type?: string | null
+          contamination_risk?: string | null
+          county?: string | null
+          courtyard_area?: number | null
           created_at?: string
+          data_quality_score?: number | null
+          data_source_verified?: boolean | null
           distance_km?: number | null
+          easements?: string | null
+          encumbrances?: string | null
+          energy_rating?: string | null
+          exclusive_use_areas?: string | null
+          external_walls?: string | null
+          extraction_confidence?: number | null
+          flooding_risk?: string | null
+          furnished?: boolean | null
+          garden_area?: number | null
+          garden_maintenance?: boolean | null
+          green_star_rating?: string | null
+          greywater_system?: boolean | null
+          gym?: boolean | null
+          heating?: string | null
+          heritage_listing?: boolean | null
+          hot_water_system?: string | null
           id?: string
+          inspection_date?: string | null
+          internet_included?: boolean | null
+          is_strata?: boolean | null
           land_area?: number | null
+          landlord_type?: string | null
+          last_verified_date?: string | null
+          lease_conditions?: string | null
           lease_date: string
+          lease_end_date?: string | null
+          lease_renewal_options?: string | null
+          lease_start_date?: string | null
           lease_term_months?: number | null
+          lease_type?: string | null
+          letting_rights?: boolean | null
+          lift_access?: boolean | null
+          local_government_area?: string | null
+          location_benefits?: string | null
+          location_detriments?: string | null
+          lot_number?: string | null
+          management_rights?: boolean | null
+          market_commentary?: string | null
+          marketing_period_days?: number | null
+          nbers_rating?: string | null
           notes?: string | null
+          parish?: string | null
+          parking_included?: boolean | null
+          parking_spaces?: number | null
+          parking_type?: string | null
+          pet_policy?: string | null
+          plan_number?: string | null
+          plan_type?: string | null
+          pool?: boolean | null
+          pool_maintenance?: boolean | null
+          postcode?: string | null
+          previous_rentals?: Json | null
+          property_description?: string | null
           property_id?: string | null
           property_type: string
+          quality_rating?: string | null
+          rainwater_tank?: boolean | null
+          reliability_score?: number | null
+          rent_increase_percentage?: number | null
+          rent_per_month?: number | null
+          rent_per_sqm_annual?: number | null
+          rent_per_week?: number | null
+          rent_review_date?: string | null
           rental_amount: number
+          rental_guarantees?: string | null
+          rental_incentives?: string | null
           rental_period: string
+          roof_type?: string | null
+          sales_history?: Json | null
+          security_features?: string | null
+          services?: string | null
+          sinking_fund_balance?: number | null
+          soil_type?: string | null
+          solar_hot_water?: boolean | null
+          solar_panels?: boolean | null
           source?: string | null
+          spa?: boolean | null
+          special_levies?: number | null
+          state?: string | null
+          storage_areas?: string | null
+          storage_included?: boolean | null
+          strata_fees_annual?: number | null
+          strata_fees_quarterly?: number | null
+          strata_lot_number?: string | null
+          strata_manager?: string | null
+          strata_plan_number?: string | null
+          strata_scheme_number?: string | null
+          street_name?: string | null
+          street_number?: string | null
+          street_type?: string | null
+          suburb?: string | null
+          tenant_type?: string | null
+          tennis_court?: boolean | null
+          title_particulars?: string | null
+          topography?: string | null
+          unit_number?: string | null
           user_id: string
+          utilities_included?: string | null
+          vacancy_period_days?: number | null
           valuation_id?: string | null
+          valuer_comments?: string | null
+          view_rating?: string | null
+          ward?: string | null
+          water_rating?: string | null
           weight_percentage?: number | null
+          wheelchair_access?: boolean | null
+          year_built?: number | null
+          year_renovated?: number | null
+          zoning?: string | null
         }
         Update: {
           adjusted_rental?: number | null
+          adjustment_summary?: string | null
           adjustments?: Json | null
+          administrative_fund_balance?: number | null
+          air_conditioning?: string | null
+          asking_rent?: number | null
+          aspect?: string | null
+          balcony_area?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
+          body_corporate_name?: string | null
+          bond_amount?: number | null
+          break_clause?: string | null
           building_area?: number | null
+          building_type?: string | null
+          bushfire_risk?: string | null
           car_spaces?: number | null
+          coastal_erosion_risk?: string | null
+          common_property_description?: string | null
           comparable_address?: string
+          comparable_rank?: number | null
+          comparable_rentals_analysis?: string | null
+          condition_rating?: string | null
+          construction_type?: string | null
+          contamination_risk?: string | null
+          county?: string | null
+          courtyard_area?: number | null
           created_at?: string
+          data_quality_score?: number | null
+          data_source_verified?: boolean | null
           distance_km?: number | null
+          easements?: string | null
+          encumbrances?: string | null
+          energy_rating?: string | null
+          exclusive_use_areas?: string | null
+          external_walls?: string | null
+          extraction_confidence?: number | null
+          flooding_risk?: string | null
+          furnished?: boolean | null
+          garden_area?: number | null
+          garden_maintenance?: boolean | null
+          green_star_rating?: string | null
+          greywater_system?: boolean | null
+          gym?: boolean | null
+          heating?: string | null
+          heritage_listing?: boolean | null
+          hot_water_system?: string | null
           id?: string
+          inspection_date?: string | null
+          internet_included?: boolean | null
+          is_strata?: boolean | null
           land_area?: number | null
+          landlord_type?: string | null
+          last_verified_date?: string | null
+          lease_conditions?: string | null
           lease_date?: string
+          lease_end_date?: string | null
+          lease_renewal_options?: string | null
+          lease_start_date?: string | null
           lease_term_months?: number | null
+          lease_type?: string | null
+          letting_rights?: boolean | null
+          lift_access?: boolean | null
+          local_government_area?: string | null
+          location_benefits?: string | null
+          location_detriments?: string | null
+          lot_number?: string | null
+          management_rights?: boolean | null
+          market_commentary?: string | null
+          marketing_period_days?: number | null
+          nbers_rating?: string | null
           notes?: string | null
+          parish?: string | null
+          parking_included?: boolean | null
+          parking_spaces?: number | null
+          parking_type?: string | null
+          pet_policy?: string | null
+          plan_number?: string | null
+          plan_type?: string | null
+          pool?: boolean | null
+          pool_maintenance?: boolean | null
+          postcode?: string | null
+          previous_rentals?: Json | null
+          property_description?: string | null
           property_id?: string | null
           property_type?: string
+          quality_rating?: string | null
+          rainwater_tank?: boolean | null
+          reliability_score?: number | null
+          rent_increase_percentage?: number | null
+          rent_per_month?: number | null
+          rent_per_sqm_annual?: number | null
+          rent_per_week?: number | null
+          rent_review_date?: string | null
           rental_amount?: number
+          rental_guarantees?: string | null
+          rental_incentives?: string | null
           rental_period?: string
+          roof_type?: string | null
+          sales_history?: Json | null
+          security_features?: string | null
+          services?: string | null
+          sinking_fund_balance?: number | null
+          soil_type?: string | null
+          solar_hot_water?: boolean | null
+          solar_panels?: boolean | null
           source?: string | null
+          spa?: boolean | null
+          special_levies?: number | null
+          state?: string | null
+          storage_areas?: string | null
+          storage_included?: boolean | null
+          strata_fees_annual?: number | null
+          strata_fees_quarterly?: number | null
+          strata_lot_number?: string | null
+          strata_manager?: string | null
+          strata_plan_number?: string | null
+          strata_scheme_number?: string | null
+          street_name?: string | null
+          street_number?: string | null
+          street_type?: string | null
+          suburb?: string | null
+          tenant_type?: string | null
+          tennis_court?: boolean | null
+          title_particulars?: string | null
+          topography?: string | null
+          unit_number?: string | null
           user_id?: string
+          utilities_included?: string | null
+          vacancy_period_days?: number | null
           valuation_id?: string | null
+          valuer_comments?: string | null
+          view_rating?: string | null
+          ward?: string | null
+          water_rating?: string | null
           weight_percentage?: number | null
+          wheelchair_access?: boolean | null
+          year_built?: number | null
+          year_renovated?: number | null
+          zoning?: string | null
         }
         Relationships: [
           {
