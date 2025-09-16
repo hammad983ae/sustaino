@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText } from "lucide-react";
+import { Building2, Home, Trees, Factory, Leaf, Calculator, FileText, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface PropertyTypeSelectorProps {
@@ -41,13 +41,21 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
       icon: Factory,
       features: ["Replacement cost", "Operational analysis", "Industry metrics", "Specialized comps"],
       color: "bg-gradient-to-br from-card to-primary/10 border-primary/20"
+    },
+    {
+      id: "development",
+      title: "Development Site Property",
+      description: "Land and properties with development potential or approval",
+      icon: MapPin,
+      features: ["Site analysis", "Development feasibility", "Zoning assessment", "Market absorption"],
+      color: "bg-gradient-to-br from-card to-destructive/10 border-destructive/20"
     }
   ];
 
   return (
     <div className="w-full">
       {/* Property Type Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
         {propertyTypes.map((type, index) => {
           const IconComponent = type.icon;
           return (
