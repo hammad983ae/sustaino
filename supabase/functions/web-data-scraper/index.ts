@@ -84,6 +84,9 @@ Deno.serve(async (req) => {
   }
 
   try {
+    console.log('=== WEB DATA SCRAPER STARTED ===')
+    console.log('Request method:', req.method)
+    console.log('Request headers authorization:', req.headers.get('authorization') ? 'PRESENT' : 'MISSING')
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -228,11 +231,16 @@ Deno.serve(async (req) => {
 
   } catch (error: any) {
     console.error('Error in web-data-scraper:', error)
+    console.error('Error stack:', error.stack)
+    console.error('Error name:', error.name)
+    console.error('Error message:', error.message)
     
     const errorMessage = error?.message || 'Unknown error occurred'
     const statusCode = error?.message?.includes('PDF file too large') ? 400 : 
                       error?.message?.includes('Invalid URL') ? 400 : 
                       error?.message?.includes('Could not extract') ? 400 : 500
+    
+    console.log('Returning error response with status:', statusCode)
     
     return new Response(
       JSON.stringify({ 

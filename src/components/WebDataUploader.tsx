@@ -100,6 +100,8 @@ export const WebDataUploader = () => {
     setLastResult(null);
 
     try {
+      console.log('Calling web-data-scraper with:', { url: url.trim(), data_type: dataType, property_type: propertyType })
+      
       const { data, error } = await supabase.functions.invoke('web-data-scraper', {
         body: {
           url: url.trim(),
@@ -107,6 +109,8 @@ export const WebDataUploader = () => {
           property_type: propertyType
         }
       });
+
+      console.log('Supabase function response:', { data, error })
 
       if (error) {
         throw error;
