@@ -164,7 +164,9 @@ export type Database = {
       }
       evidence_files: {
         Row: {
+          bucket_id: string | null
           bucket_name: string
+          classification: string | null
           created_at: string
           evidence_type: string
           extracted_data: Json | null
@@ -175,7 +177,10 @@ export type Database = {
           id: string
           is_public: boolean | null
           mime_type: string | null
+          name: string | null
+          path: string | null
           property_address: string | null
+          size_bytes: number | null
           source_url: string | null
           tags: string[] | null
           updated_at: string
@@ -183,7 +188,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          bucket_id?: string | null
           bucket_name: string
+          classification?: string | null
           created_at?: string
           evidence_type: string
           extracted_data?: Json | null
@@ -194,7 +201,10 @@ export type Database = {
           id?: string
           is_public?: boolean | null
           mime_type?: string | null
+          name?: string | null
+          path?: string | null
           property_address?: string | null
+          size_bytes?: number | null
           source_url?: string | null
           tags?: string[] | null
           updated_at?: string
@@ -202,7 +212,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          bucket_id?: string | null
           bucket_name?: string
+          classification?: string | null
           created_at?: string
           evidence_type?: string
           extracted_data?: Json | null
@@ -213,7 +225,10 @@ export type Database = {
           id?: string
           is_public?: boolean | null
           mime_type?: string | null
+          name?: string | null
+          path?: string | null
           property_address?: string | null
+          size_bytes?: number | null
           source_url?: string | null
           tags?: string[] | null
           updated_at?: string

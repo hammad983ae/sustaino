@@ -39,17 +39,19 @@ export default function WhiteLabelConfig() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Check user roles table
-        const { data: userRole, error } = await supabase
+        // Check user roles table - use maybeSingle() to handle multiple or no results
+        const { data: userRoles, error } = await supabase
           .from('user_roles')
           .select('role')
-          .eq('user_id', user.id)
-          .single();
+          .eq('user_id', user.id);
         
-        console.log('User role check:', { userRole, error, userId: user.id });
+        console.log('User role check:', { userRoles, error, userId: user.id });
         
-        if (userRole && (userRole.role === 'admin' || userRole.role === 'owner')) {
-          setIsAuthorized(true);
+        if (userRoles && userRoles.length > 0) {
+          const hasAdminRole = userRoles.some(roleData => 
+            roleData.role === 'admin' || roleData.role === 'owner'
+          );
+          setIsAuthorized(hasAdminRole);
         } else {
           setIsAuthorized(false);
         }
