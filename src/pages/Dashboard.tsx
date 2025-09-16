@@ -37,10 +37,12 @@ import {
   Target,
   ArrowRight,
   Building,
-  MapPin
+  MapPin,
+  Gavel
 } from 'lucide-react';
 import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
 import DashboardQuickSearch from '@/components/DashboardQuickSearch';
+import { SustanoSphere } from '@/components/SustanoSphere';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -116,7 +118,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
@@ -132,6 +134,10 @@ const Dashboard = () => {
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Analytics
+            </TabsTrigger>
+            <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
+              <Gavel className="h-4 w-4" />
+              Sustano-Phere™
             </TabsTrigger>
             <TabsTrigger value="tools" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -440,6 +446,10 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="sustano-sphere" className="space-y-6 mt-6">
+            <SustanoSphere />
           </TabsContent>
 
           <TabsContent value="tools" className="space-y-6 mt-6">
