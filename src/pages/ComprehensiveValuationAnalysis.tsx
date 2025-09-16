@@ -4,6 +4,7 @@ import {
   Sliders, Baby, Fuel, Users, BarChart3, PieChart, Activity,
   DollarSign, TrendingDown, Home, ShoppingCart, MapPin
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -223,6 +224,16 @@ const ComprehensiveValuationAnalysis = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
       <div className="container mx-auto p-6">
+        {/* Back to Dashboard Button */}
+        <div className="mb-6">
+          <Button variant="outline" asChild>
+            <Link to="/">
+              <Home className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Link>
+          </Button>
+        </div>
+        
         {/* IP Protection Notice */}
         <div className="mb-8">
           <ESGMethodologyProtection />

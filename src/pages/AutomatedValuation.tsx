@@ -106,8 +106,14 @@ export default function AutomatedValuation() {
             <div className="flex items-center justify-between mb-8 animate-fade-in">
               <div className="flex items-center gap-4">
                 <a 
-                  href="/dashboard" 
+                  href="/" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-glow backdrop-blur-sm border border-green-300/70"
+                >
+                  🏠 Back to Dashboard
+                </a>
+                <a 
+                  href="/dashboard" 
+                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   📊 Analytics Dashboard
                 </a>
