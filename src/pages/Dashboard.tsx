@@ -42,7 +42,7 @@ import {
 } from 'lucide-react';
 import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
 import DashboardQuickSearch from '@/components/DashboardQuickSearch';
-import { RevolutionarySustanoSphere } from '@/components/RevolutionarySustanoSphere';
+import { RevolutionarySustainoSphere } from '@/components/RevolutionarySustanoSphere';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -449,7 +449,7 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="sustano-sphere" className="space-y-6 mt-6">
-            <RevolutionarySustanoSphere />
+            <RevolutionarySustainoSphere />
           </TabsContent>
 
           <TabsContent value="tools" className="space-y-6 mt-6">

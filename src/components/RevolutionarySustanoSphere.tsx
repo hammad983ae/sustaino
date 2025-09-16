@@ -1,9 +1,9 @@
 /**
  * ============================================================================
- * SUSTANO-PHERE™ REVOLUTIONARY DIGITAL ASSET VALUATION PLATFORM
+ * SUSTAINO-PHERE™ REVOLUTIONARY DIGITAL ASSET VALUATION PLATFORM
  * Patent Pending: US Application #2025-XXXX "AI-Enhanced Digital Asset Valuation System"
  * Copyright © 2025 DeLorenzo Property Group Pty Ltd. All Rights Reserved.
- * Trademark: Sustano-Phere™, SustanoVal™, DigitalAssetIQ™
+ * Trademark: Sustaino-Phere™, SustainoVal™, DigitalAssetIQ™
  * 
  * CONFIDENTIAL PROPRIETARY ALGORITHMS:
  * - Multi-Variable Valuation Engine™ (Trade Secret)
@@ -87,7 +87,6 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-// Import professional images
 import sustainoSphereDashboard from "@/assets/sustano-sphere-dashboard.jpg";
 import roiAnalysisVisual from "@/assets/roi-analysis-visual.jpg";
 import liveAuctionPlatform from "@/assets/live-auction-platform.jpg";
@@ -366,7 +365,7 @@ const REVOLUTIONARY_ASSETS: AdvancedDigitalAsset[] = [
   }
 ];
 
-export const RevolutionarySustanoSphere = () => {
+export const RevolutionarySustainoSphere = () => {
   const { toast } = useToast();
   const [selectedAsset, setSelectedAsset] = useState<AdvancedDigitalAsset | null>(null);
   const [bidAmount, setBidAmount] = useState("");
@@ -443,14 +442,14 @@ export const RevolutionarySustanoSphere = () => {
       const response = await supabase.functions.invoke('advanced-asset-valuation', {
         body: {
           assetData: asset,
-          valuationMethod: "sustano-val-algorithm"
+          valuationMethod: "sustaino-val-algorithm"
         }
       });
       
       if (response.error) throw response.error;
       
       toast({
-        title: "SustanoVal™ Analysis Complete! 🚀",
+        title: "SustainoVal™ Analysis Complete! 🚀",
         description: `Advanced valuation: ${formatCurrency(response.data.valuation)}`,
       });
       
@@ -458,7 +457,7 @@ export const RevolutionarySustanoSphere = () => {
     } catch (error) {
       console.error("Valuation error:", error);
       toast({
-        title: "SustanoVal™ Analysis",
+        title: "SustainoVal™ Analysis",
         description: "Using cached algorithmic valuation",
         variant: "default",
       });
@@ -603,7 +602,7 @@ export const RevolutionarySustanoSphere = () => {
       ]);
 
       setComprehensiveReport({
-        executiveSummary: `${asset.title} demonstrates exceptional market potential with a SustanoVal™ score of ${asset.sustainoValScore}/100...`,
+        executiveSummary: `${asset.title} demonstrates exceptional market potential with a SustainoVal™ score of ${asset.sustainoValScore}/100...`,
         valuation: asset.currentValuation,
         recommendations: [
           "Immediate focus on AI capabilities enhancement",
@@ -634,7 +633,7 @@ export const RevolutionarySustanoSphere = () => {
           <div className="absolute inset-0 opacity-10">
             <img 
               src={sustainoSphereDashboard} 
-              alt="Sustano-Phere Dashboard" 
+              alt="Sustaino-Phere Dashboard" 
               className="w-full h-full object-cover animate-fade-in"
             />
           </div>
@@ -653,7 +652,7 @@ export const RevolutionarySustanoSphere = () => {
               </div>
               <div className="space-y-2">
                 <CardTitle className="text-6xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Sustano-Phere™
+                  Sustaino-Phere™
                 </CardTitle>
                 <CardDescription className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                   Revolutionary Digital Asset Intelligence Platform
@@ -668,7 +667,7 @@ export const RevolutionarySustanoSphere = () => {
               </Badge>
               <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-4 py-2 animate-pulse">
                 <Diamond className="h-4 w-4 mr-2" />
-                SustanoVal™ Algorithm
+                SustainoVal™ Algorithm
               </Badge>
               <Badge className="bg-gradient-to-r from-purple-500 to-pink-600 text-white border-0 px-4 py-2 animate-pulse">
                 <Brain className="h-4 w-4 mr-2" />
@@ -682,7 +681,8 @@ export const RevolutionarySustanoSphere = () => {
 
             <p className="text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               The world's most advanced digital asset valuation platform powered by revolutionary algorithms, 
-              quantum-inspired analytics, and comprehensive ESG integration. Transforming how digital businesses are valued, analyzed, and traded.
+              quantum-inspired analytics, and comprehensive ESG integration. Specializing in startups and emerging digital businesses, 
+              we transform how digital assets are valued, analyzed, and traded across all industries.
             </p>
 
             {/* IP Protection Notice */}
@@ -692,7 +692,7 @@ export const RevolutionarySustanoSphere = () => {
                 <span className="font-bold text-amber-800">PROTECTED INTELLECTUAL PROPERTY</span>
               </div>
               <p className="text-sm text-amber-800 font-medium">
-                © 2025 DeLorenzo Property Group Pty Ltd. Sustano-Phere™, SustanoVal™, DigitalAssetIQ™ are registered trademarks. 
+                © 2025 DeLorenzo Property Group Pty Ltd. Sustaino-Phere™, SustainoVal™, DigitalAssetIQ™ are registered trademarks. 
                 Patent applications filed globally. Unauthorized use prohibited.
               </p>
             </div>
@@ -709,7 +709,7 @@ export const RevolutionarySustanoSphere = () => {
           </TabsTrigger>
           <TabsTrigger value="sustanoval" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-green-600 data-[state=active]:text-white">
             <Diamond className="h-4 w-4" />
-            SustanoVal™
+            SustainoVal™
           </TabsTrigger>
           <TabsTrigger value="roi" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white">
             <Calculator className="h-4 w-4" />
@@ -746,7 +746,7 @@ export const RevolutionarySustanoSphere = () => {
                 Revolutionary AI Intelligence Dashboard
               </CardTitle>
               <CardDescription className="text-lg">
-                Advanced AI-powered analysis of digital assets with proprietary SustanoVal™ scoring.
+                Advanced AI-powered analysis of digital assets with proprietary SustainoVal™ scoring.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -791,7 +791,7 @@ export const RevolutionarySustanoSphere = () => {
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="sustainoValScore">SustanoVal™ Score</SelectItem>
+                    <SelectItem value="sustainoValScore">SustainoVal™ Score</SelectItem>
                     <SelectItem value="currentValuation">Current Valuation</SelectItem>
                     <SelectItem value="revenueGrowthRate">Growth Rate</SelectItem>
                   </SelectContent>
@@ -819,7 +819,7 @@ export const RevolutionarySustanoSphere = () => {
                         <div className="space-y-2">
                           <CardTitle className="text-xl font-bold">{asset.title}</CardTitle>
                           <Badge className={`${getScoreColor(asset.sustainoValScore)} px-3 py-1 font-bold animate-pulse`}>
-                            SustanoVal™: {asset.sustainoValScore}/100
+                            SustainoVal™: {asset.sustainoValScore}/100
                           </Badge>
                         </div>
                         <Badge variant="outline" className="capitalize">
@@ -886,7 +886,7 @@ export const RevolutionarySustanoSphere = () => {
                           className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover-scale"
                         >
                           <Diamond className="h-4 w-4 mr-2" />
-                          SustanoVal™
+                          SustainoVal™
                         </Button>
                         <Button 
                           onClick={() => generateComprehensiveReport(asset.id)}
@@ -905,16 +905,16 @@ export const RevolutionarySustanoSphere = () => {
           </Card>
         </TabsContent>
 
-        {/* SustanoVal™ Tab */}
+        {/* SustainoVal™ Tab */}
         <TabsContent value="sustanoval" className="space-y-6 animate-fade-in">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-2xl">
                 <Diamond className="h-8 w-8 text-emerald-600" />
-                SustanoVal™ Revolutionary Valuation Engine
+                SustainoVal™ Revolutionary Valuation Engine
               </CardTitle>
               <CardDescription className="text-lg">
-                Proprietary AI-powered valuation algorithm providing unprecedented accuracy in digital asset pricing.
+                Proprietary AI-powered valuation algorithm providing unprecedented accuracy for digital assets across all industries, with specialized focus on startups and emerging tech companies.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -927,11 +927,11 @@ export const RevolutionarySustanoSphere = () => {
                 </div>
                 <div className="space-y-4">
                   <h3 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                    SustanoVal™ Algorithm
+                    SustainoVal™ Algorithm
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                     Revolutionary multi-variable valuation engine combining traditional financial metrics with AI-powered market intelligence, 
-                    ESG impact scoring, and predictive growth modeling.
+                    ESG impact scoring, and predictive growth modeling. Specialized for startups, scale-ups, and digital enterprises across all sectors.
                   </p>
                 </div>
                 
@@ -963,10 +963,10 @@ export const RevolutionarySustanoSphere = () => {
                 <Button 
                   size="lg" 
                   className="bg-gradient-to-r from-emerald-500 to-green-600 text-lg px-8 py-4 hover-scale"
-                  onClick={() => toast({ title: "SustanoVal™ Engine Activated", description: "Processing valuation algorithms..." })}
+                  onClick={() => toast({ title: "SustainoVal™ Engine Activated", description: "Processing valuation algorithms..." })}
                 >
                   <Diamond className="h-5 w-5 mr-2" />
-                  Activate SustanoVal™ Engine
+                  Activate SustainoVal™ Engine
                 </Button>
               </div>
             </CardContent>
@@ -1429,7 +1429,7 @@ export const RevolutionarySustanoSphere = () => {
               <Crown className="h-6 w-6 text-yellow-400 animate-pulse" />
             </div>
             <p className="text-slate-300 text-lg max-w-3xl mx-auto">
-              Sustano-Phere™ represents the future of digital asset valuation and trading. 
+              Sustaino-Phere™ represents the future of digital asset valuation and trading. 
               Our proprietary algorithms and revolutionary approach create unprecedented market opportunities.
             </p>
             <div className="flex justify-center gap-4 text-sm">
