@@ -14,6 +14,10 @@ import ESGCalculationForm from "@/components/ESGCalculationForm";
 import CapitalizationSensitivityForm from "@/components/CapitalizationSensitivityForm";
 import NetIncomeForm from "@/components/NetIncomeForm";
 import DCFAnalysisForm from "@/components/DCFAnalysisForm";
+import HypotheticalDevelopmentForm from "@/components/HypotheticalDevelopmentForm";
+import SportsStadiumValuationForm from "@/components/SportsStadiumValuationForm";
+import HospitalityCommercialValuationForm from "@/components/HospitalityCommercialValuationForm";
+import DeferredManagementValuationForm from "@/components/DeferredManagementValuationForm";
 
 const ComprehensiveValuationAnalysis = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -190,6 +194,19 @@ const ComprehensiveValuationAnalysis = () => {
         return <NetIncomeForm onSubmit={(data) => console.log('Net Income:', data)} />;
       case "dcf-analysis":
         return <DCFAnalysisForm onSubmit={(data) => console.log('DCF:', data)} />;
+      case "hypothetical-dev":
+        return <HypotheticalDevelopmentForm onSubmit={(data) => console.log('Hypothetical Development:', data)} />;
+      case "sports-stadium":
+        return <SportsStadiumValuationForm onSubmit={(data) => console.log('Sports Stadium:', data)} />;
+      case "hospitality-commercial":
+        return <HospitalityCommercialValuationForm onSubmit={(data) => console.log('Hospitality Commercial:', data)} />;
+      case "deferred-management":
+        return <DeferredManagementValuationForm onSubmit={(data) => console.log('Deferred Management:', data)} />;
+      case "direct-comparison":
+      case "summation":
+      case "childcare":
+      case "petrol-stations":
+        return <ARYCalculationForm onSubmit={(data) => console.log(`${selectedTool}:`, data)} />;
       default:
         return (
           <Card className="w-full max-w-2xl mx-auto">
