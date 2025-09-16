@@ -19,6 +19,7 @@ const ReportTypeConfiguration = () => {
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [includeRentalValuation, setIncludeRentalValuation] = useState(false);
+  const [includeESGAssessment, setIncludeESGAssessment] = useState(false);
   const { selectedPropertyType, isPropertyTypeLocked, lockPropertyType, unlockPropertyType } = usePropertyTypeLock();
   const { addressData } = useProperty();
   const { setValuationType } = useValuation();
@@ -93,6 +94,14 @@ const ReportTypeConfiguration = () => {
     }
   }, [selectedValues]);
 
+  // Load ESG preference from localStorage on mount
+  useEffect(() => {
+    const storedESG = localStorage.getItem('includeESGAssessment');
+    if (storedESG) {
+      setIncludeESGAssessment(storedESG === 'true');
+    }
+  }, []);
+
   const MultiSelectDropdown = ({
     options, 
     placeholder, 
@@ -144,7 +153,7 @@ const ReportTypeConfiguration = () => {
   const reportTypes = [
     "Desktop Report", "Kerbside", "Short Form", "Long Form", 
     "Virtual Inspection - Short Form", "Virtual Inspection (Long Form)", 
-    "Sustaino-Pro", "Insurance Valuation", "Other"
+    "PropertyPRO Report", "Sustaino-Pro", "Insurance Valuation", "Other"
   ];
 
   const propertyTypes = [
@@ -210,6 +219,43 @@ const ReportTypeConfiguration = () => {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* PropertyPRO ESG Toggle */}
+              {formData['report-type'] === 'propertypro-report' && (
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Label htmlFor="esg-assessment" className="text-sm font-medium text-blue-900 dark:text-blue-400">
+                        Include ESG Assessment
+                      </Label>
+                      <p className="text-xs text-blue-800 dark:text-blue-300">
+                        Add Environmental, Social & Governance assessment to your PropertyPRO report
+                      </p>
+                    </div>
+                    <Switch
+                      id="esg-assessment"
+                      checked={includeESGAssessment}
+                      onCheckedChange={(checked) => {
+                        setIncludeESGAssessment(checked);
+                        // Store ESG preference
+                        localStorage.setItem('includeESGAssessment', checked.toString());
+                        // Dispatch event for other components to listen
+                        window.dispatchEvent(new CustomEvent('esgAssessmentToggle', { 
+                          detail: { includeESG: checked } 
+                        }));
+                      }}
+                    />
+                  </div>
+                  {includeESGAssessment && (
+                    <div className="mt-3 p-3 bg-white dark:bg-blue-950/50 rounded border">
+                      <p className="text-xs text-blue-700 dark:text-blue-300">
+                        <strong>ESG Assessment includes:</strong> Energy efficiency ratings, sustainability features, 
+                        climate risk analysis, ESG premium calculations, and compliance status evaluation.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div>
                 <div className="flex items-center justify-between mb-1">
@@ -457,6 +503,31 @@ const ReportTypeConfiguration = () => {
             </div>
           )}
         </div>
+
+        {/* PropertyPRO Compliance Notice */}
+        {formData['report-type'] === 'propertypro-report' && (
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <FileText className="w-4 h-4 text-white" />
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-medium text-blue-900 dark:text-blue-400">PropertyPRO Report Configuration</h4>
+                <p className="text-sm text-blue-800 dark:text-blue-300">
+                  This report will be generated according to the Australian Property Institute PropertyPRO Supporting Memorandum standards, 
+                  including comprehensive risk analysis, valuation methodology, and professional compliance requirements.
+                </p>
+                <div className="text-xs text-blue-700 dark:text-blue-400 space-y-1">
+                  <p><strong>Includes:</strong> Property & Market Risk Ratings (1-5 scale), Valuation Risk Alerts (VRA), Professional Declarations</p>
+                  <p><strong>Compliance:</strong> API Standards, Professional certification requirements, Australian Property Institute guidelines</p>
+                  {includeESGAssessment && (
+                    <p><strong>ESG Enhancement:</strong> Environmental, Social & Governance assessment with market premium analysis</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
