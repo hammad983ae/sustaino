@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { BlockchainIntegration } from '@/components/BlockchainIntegration';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   BarChart, 
@@ -192,6 +193,39 @@ const Dashboard = () => {
                   </div>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Blockchain Integration */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <BlockchainIntegration variant="compact" />
+              </div>
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Zap className="h-5 w-5 text-yellow-500" />
+                      Blockchain Activity
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Recent Transactions</span>
+                        <Badge variant="secondary">47 today</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Smart Contracts Deployed</span>
+                        <Badge variant="secondary">12 this week</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Validation Rewards Earned</span>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">+156 SUST</Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
 
             {/* Charts Row */}

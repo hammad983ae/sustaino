@@ -335,6 +335,22 @@ const Index = () => {
                             </Card>
                           </Link>
 
+                          <Link to="/crypto-trading">
+                            <Card className="bg-gradient-to-br from-white to-amber-50/50 border border-amber-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-amber-700">
+                                  <Activity className="h-5 w-5" />
+                                  Blockchain Trading
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  SustainoCoin ecosystem with ESG-focused tokens and sustainable investing
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
                           <Link to="/work-hub">
                             <Card className="bg-gradient-to-br from-white to-amber-50/50 border border-amber-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
                               <CardHeader>

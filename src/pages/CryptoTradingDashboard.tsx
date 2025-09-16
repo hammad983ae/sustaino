@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Wallet, TrendingUp, Coins, PiggyBank, Award } from "lucide-react";
+import { Wallet, TrendingUp, Coins, PiggyBank, Award, ArrowLeft, Shield, Activity, Zap } from "lucide-react";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -65,14 +66,42 @@ export default function CryptoTradingDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-background/80 p-6">
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* Navigation */}
+        <div className="flex justify-between items-center">
+          <Link to="/">
+            <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-purple-200 text-purple-700 hover:bg-purple-50">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+          <div className="flex gap-2">
+            <Badge variant="secondary" className="bg-green-100 text-green-800">
+              <Activity className="w-3 h-3 mr-1" />
+              Live Network
+            </Badge>
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+              <Shield className="w-3 h-3 mr-1" />
+              Secure Trading
+            </Badge>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            SustainoCoin Trading Platform
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Zap className="h-10 w-10 text-yellow-500 animate-pulse" />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              SustainoCoin Trading Platform
+            </h1>
+            <Zap className="h-10 w-10 text-yellow-500 animate-pulse" />
+          </div>
           <p className="text-xl text-muted-foreground">
             Trade ESG-focused tokens and manage your sustainable investment portfolio
           </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-green-700">Blockchain Network Active</span>
+          </div>
         </div>
 
         {/* Wallet Connection */}
