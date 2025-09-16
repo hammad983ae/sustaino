@@ -159,7 +159,8 @@ interface Infrastructure {
   };
 }
 
-interface QLDInvestment {
+interface RegionalInvestment {
+  regionName: string;
   economySize: string;
   retailGrowth: string;
   populationGrowth: string;
@@ -222,7 +223,7 @@ interface InformationMemorandum {
   subtitle: string;
   saleMethod: string;
   closingDate: string;
-  propertyDetails: PropertyDetails;
+  properties: PropertyDetails[];
   investmentHighlights: InvestmentHighlights;
   leases: LeaseDetails[];
   financialSummary: FinancialSummary;
@@ -232,7 +233,7 @@ interface InformationMemorandum {
   regionalGrowth: RegionalGrowth;
   councilInfo: CouncilInfo;
   infrastructure: Infrastructure;
-  qldInvestment: QLDInvestment;
+  regionalInvestment: RegionalInvestment;
   saleDetails: SaleDetails;
   contactDetails: ContactDetails;
   propertyManagement: PropertyManagement;
@@ -249,7 +250,7 @@ export const InformationMemorandumGenerator = () => {
     title: "",
     subtitle: "",
     saleMethod: "Expressions of Interest",
-    propertyDetails: {
+    properties: [{
       address: "",
       landArea: "",
       buildingArea: "",
@@ -257,7 +258,7 @@ export const InformationMemorandumGenerator = () => {
       titleDetails: "",
       frontage: "",
       overlay: ""
-    },
+    }],
     investmentHighlights: {
       primaryHighlight: "",
       keyFeatures: [],
@@ -313,7 +314,8 @@ export const InformationMemorandumGenerator = () => {
         description: ""
       }
     },
-    qldInvestment: {
+    regionalInvestment: {
+      regionName: "",
       economySize: "",
       retailGrowth: "",
       populationGrowth: "",
@@ -475,6 +477,38 @@ export const InformationMemorandumGenerator = () => {
     }));
   };
 
+  const addProperty = () => {
+    const newProperty: PropertyDetails = {
+      address: "",
+      landArea: "",
+      buildingArea: "",
+      zoning: "",
+      titleDetails: "",
+      frontage: "",
+      overlay: ""
+    };
+    setMemorandum(prev => ({
+      ...prev,
+      properties: [...(prev.properties || []), newProperty]
+    }));
+  };
+
+  const updateProperty = (index: number, field: keyof PropertyDetails, value: string) => {
+    setMemorandum(prev => ({
+      ...prev,
+      properties: prev.properties?.map((property, i) => 
+        i === index ? { ...property, [field]: value } : property
+      ) || []
+    }));
+  };
+
+  const removeProperty = (index: number) => {
+    setMemorandum(prev => ({
+      ...prev,
+      properties: prev.properties?.filter((_, i) => i !== index) || []
+    }));
+  };
+
   const updateKeyFeature = (index: number, value: string) => {
     setMemorandum(prev => ({
       ...prev,
@@ -502,17 +536,15 @@ export const InformationMemorandumGenerator = () => {
       const updates: any = {};
       
       if (data.fields.address) {
-        updates.propertyDetails = {
-          ...memorandum.propertyDetails,
-          address: data.fields.address
-        };
+        updates.properties = memorandum.properties?.map((prop, i) => 
+          i === 0 ? { ...prop, address: data.fields.address } : prop
+        ) || [{ address: data.fields.address, landArea: "", buildingArea: "", zoning: "", titleDetails: "", frontage: "", overlay: "" }];
       }
       
       if (data.fields.area) {
-        updates.propertyDetails = {
-          ...memorandum.propertyDetails,
-          landArea: data.fields.area
-        };
+        updates.properties = memorandum.properties?.map((prop, i) => 
+          i === 0 ? { ...prop, landArea: data.fields.area } : prop
+        ) || [{ address: "", landArea: data.fields.area, buildingArea: "", zoning: "", titleDetails: "", frontage: "", overlay: "" }];
       }
       
       if (data.fields.tenant) {
@@ -544,7 +576,7 @@ export const InformationMemorandumGenerator = () => {
       ...prev,
       title: "Premium Investment Opportunity",
       subtitle: "Commercial Property | High Yield Investment",
-      propertyDetails: {
+      properties: [{
         address: "123 Business District, Central City",
         landArea: "2,400 sqm",
         buildingArea: "1,800 sqm",
@@ -552,7 +584,7 @@ export const InformationMemorandumGenerator = () => {
         titleDetails: "Freehold",
         frontage: "40m",
         overlay: "None"
-      },
+      }],
       investmentHighlights: {
         primaryHighlight: "8.5% Net Yield | Prime Location | Secure Tenant",
         keyFeatures: [
@@ -617,7 +649,7 @@ export const InformationMemorandumGenerator = () => {
                   {memorandum.title || "Property Investment Opportunity"}
                 </h1>
                 <p className="text-xl text-blue-100">
-                  {memorandum.subtitle || memorandum.propertyDetails?.address}
+                  {memorandum.subtitle || memorandum.properties?.[0]?.address}
                 </p>
                 <div className="pt-8">
                   <p className="text-lg mb-2">{memorandum.saleMethod || "For Sale"}</p>
@@ -872,7 +904,7 @@ export const InformationMemorandumGenerator = () => {
               <TabsTrigger value="growth">Growth</TabsTrigger>
               <TabsTrigger value="council">Council</TabsTrigger>
               <TabsTrigger value="infrastructure">Infrastructure</TabsTrigger>
-              <TabsTrigger value="investment">QLD Invest</TabsTrigger>
+              <TabsTrigger value="investment">Regional Invest</TabsTrigger>
               <TabsTrigger value="sale">Sale Method</TabsTrigger>
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="management">Property Mgmt</TabsTrigger>
@@ -921,6 +953,107 @@ export const InformationMemorandumGenerator = () => {
                     />
                   </div>
                 </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="property" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Property Details</h3>
+                <Button onClick={addProperty} size="sm">
+                  <Building className="h-4 w-4 mr-2" />
+                  Add Property
+                </Button>
+              </div>
+              
+              <div className="space-y-6">
+                {memorandum.properties?.map((property, index) => (
+                  <Card key={index} className="relative">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base">Property {index + 1}</CardTitle>
+                        {memorandum.properties && memorandum.properties.length > 1 && (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => removeProperty(index)}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-4">
+                        <div>
+                          <Label>Property Address</Label>
+                          <Input
+                            value={property.address}
+                            onChange={(e) => updateProperty(index, 'address', e.target.value)}
+                            placeholder="e.g., 91-101 Bourbong Street, Bundaberg Central QLD 4670"
+                          />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label>Land Area</Label>
+                            <Input
+                              value={property.landArea}
+                              onChange={(e) => updateProperty(index, 'landArea', e.target.value)}
+                              placeholder="e.g., 1,002 sqm"
+                            />
+                          </div>
+                          <div>
+                            <Label>Building Area</Label>
+                            <Input
+                              value={property.buildingArea}
+                              onChange={(e) => updateProperty(index, 'buildingArea', e.target.value)}
+                              placeholder="e.g., 850 sqm"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label>Zoning</Label>
+                            <Input
+                              value={property.zoning}
+                              onChange={(e) => updateProperty(index, 'zoning', e.target.value)}
+                              placeholder="e.g., Commercial Core Zone"
+                            />
+                          </div>
+                          <div>
+                            <Label>Title Details</Label>
+                            <Input
+                              value={property.titleDetails}
+                              onChange={(e) => updateProperty(index, 'titleDetails', e.target.value)}
+                              placeholder="e.g., Freehold"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label>Frontage</Label>
+                            <Input
+                              value={property.frontage}
+                              onChange={(e) => updateProperty(index, 'frontage', e.target.value)}
+                              placeholder="e.g., 25.6m (approx) to Bourbong Street"
+                            />
+                          </div>
+                          <div>
+                            <Label>Overlay</Label>
+                            <Input
+                              value={property.overlay}
+                              onChange={(e) => updateProperty(index, 'overlay', e.target.value)}
+                              placeholder="e.g., Centre Activities Overlay"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </TabsContent>
 
@@ -1352,17 +1485,22 @@ export const InformationMemorandumGenerator = () => {
 
             <TabsContent value="investment" className="space-y-4">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <PiggyBank className="h-5 w-5" />
-                  Investing in Queensland
-                </h3>
-                
                 <div>
-                  <Label htmlFor="qldEconomySize">Economy Size</Label>
+                  <Label htmlFor="regionName">Investment Region/Location</Label>
                   <Input
-                    id="qldEconomySize"
-                    value={memorandum.qldInvestment?.economySize || ""}
-                    onChange={(e) => updateMemorandum('qldInvestment', { economySize: e.target.value })}
+                    id="regionName"
+                    value={memorandum.regionalInvestment?.regionName || ""}
+                    onChange={(e) => updateMemorandum('regionalInvestment', { regionName: e.target.value })}
+                    placeholder="e.g., Queensland, NSW, Victoria, or any global location"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="economySize">Economy Size</Label>
+                  <Input
+                    id="economySize"
+                    value={memorandum.regionalInvestment?.economySize || ""}
+                    onChange={(e) => updateMemorandum('regionalInvestment', { economySize: e.target.value })}
                     placeholder="e.g., Queensland's $500 billion economy"
                   />
                 </div>
@@ -1371,36 +1509,36 @@ export const InformationMemorandumGenerator = () => {
                   <div>
                     <Label>Retail Trade Growth</Label>
                     <Input
-                      value={memorandum.qldInvestment?.retailGrowth || ""}
-                      onChange={(e) => updateMemorandum('qldInvestment', { retailGrowth: e.target.value })}
+                      value={memorandum.regionalInvestment?.retailGrowth || ""}
+                      onChange={(e) => updateMemorandum('regionalInvestment', { retailGrowth: e.target.value })}
                       placeholder="e.g., 4.0%"
                     />
                   </div>
                   <div>
                     <Label>Population Growth</Label>
                     <Input
-                      value={memorandum.qldInvestment?.populationGrowth || ""}
-                      onChange={(e) => updateMemorandum('qldInvestment', { populationGrowth: e.target.value })}
+                      value={memorandum.regionalInvestment?.populationGrowth || ""}
+                      onChange={(e) => updateMemorandum('regionalInvestment', { populationGrowth: e.target.value })}
                       placeholder="e.g., 2.0%"
                     />
                   </div>
                   <div>
                     <Label>Employment Growth</Label>
                     <Input
-                      value={memorandum.qldInvestment?.employmentGrowth || ""}
-                      onChange={(e) => updateMemorandum('qldInvestment', { employmentGrowth: e.target.value })}
+                      value={memorandum.regionalInvestment?.employmentGrowth || ""}
+                      onChange={(e) => updateMemorandum('regionalInvestment', { employmentGrowth: e.target.value })}
                       placeholder="e.g., 3.0%"
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <Label htmlFor="qldDescription">Investment Overview</Label>
+                  <Label htmlFor="regionalDescription">Investment Overview</Label>
                   <Textarea
-                    id="qldDescription"
-                    value={memorandum.qldInvestment?.description || ""}
-                    onChange={(e) => updateMemorandum('qldInvestment', { description: e.target.value })}
-                    placeholder="Overview of Queensland investment opportunities and economic growth..."
+                    id="regionalDescription"
+                    value={memorandum.regionalInvestment?.description || ""}
+                    onChange={(e) => updateMemorandum('regionalInvestment', { description: e.target.value })}
+                    placeholder="Overview of regional investment opportunities and economic growth..."
                     rows={4}
                   />
                 </div>
