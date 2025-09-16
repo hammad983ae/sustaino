@@ -21,6 +21,9 @@ export default function SalesEvidenceCommercial() {
   const [outgoings, setOutgoings] = useState(true);
   const [landTax, setLandTax] = useState(true);
   const [noi, setNoi] = useState(true);
+  const [grossYield, setGrossYield] = useState(true);
+  const [netYield, setNetYield] = useState(true);
+  const [noiYield, setNoiYield] = useState(true);
   const [yieldRate, setYieldRate] = useState(true);
   const [zoning, setZoning] = useState(true);
   const [buildingCondition, setBuildingCondition] = useState(true);
@@ -221,6 +224,36 @@ export default function SalesEvidenceCommercial() {
               </div>
               <Input placeholder="$115,000 p.a." className="text-sm" />
               <Input placeholder="NOI comparison..." className="text-sm" />
+            </div>
+
+            {/* Gross Yield */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Gross Yield</Label>
+              <div className="flex justify-center">
+                <Switch checked={grossYield} onCheckedChange={setGrossYield} />
+              </div>
+              <Input placeholder="5.4%" className="text-sm" />
+              <Input placeholder="Gross yield comparison..." className="text-sm" />
+            </div>
+
+            {/* Net Yield */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Net Yield</Label>
+              <div className="flex justify-center">
+                <Switch checked={netYield} onCheckedChange={setNetYield} />
+              </div>
+              <Input placeholder="4.8%" className="text-sm" />
+              <Input placeholder="Net yield comparison..." className="text-sm" />
+            </div>
+
+            {/* NOI Yield */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>NOI Yield</Label>
+              <div className="flex justify-center">
+                <Switch checked={noiYield} onCheckedChange={setNoiYield} />
+              </div>
+              <Input placeholder="4.6%" className="text-sm" />
+              <Input placeholder="NOI yield comparison..." className="text-sm" />
             </div>
 
             {/* Yield Rate */}
