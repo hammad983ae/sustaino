@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Upload, MapPin } from "lucide-react";
+import { Upload, MapPin, Calculator, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import PropertyAdjustmentTable from './PropertyAdjustmentTable';
+import { PropertyAttributes, SubjectProperty } from '@/lib/valuationAdjustments';
 
 export default function SalesEvidenceCommercial() {
   const [saleDate, setSaleDate] = useState(true);
@@ -29,6 +31,83 @@ export default function SalesEvidenceCommercial() {
   const [buildingCondition, setBuildingCondition] = useState(true);
   const [streetAccess, setStreetAccess] = useState(true);
   const [esgScore, setEsgScore] = useState(true);
+  const [showAdjustmentTable, setShowAdjustmentTable] = useState(false);
+
+  // Sample subject property for demonstration
+  const subjectProperty: SubjectProperty = {
+    salePrice: 0, // Not applicable for subject
+    saleDate: new Date().toISOString(),
+    landArea: 850,
+    livingArea: 450, // Building area
+    bedrooms: 0, // Commercial properties typically don't have bedrooms
+    bathrooms: 2,
+    carSpaces: 20,
+    yearBuilt: 2018,
+    condition: 'good' as const,
+    location: 'similar' as const,
+    marketConditions: 'stable' as const,
+    improvements: 75000,
+    zoning: 'Commercial 1'
+  };
+
+  // Sample comparable property for demonstration  
+  const comparableProperty: PropertyAttributes = {
+    salePrice: 2500000,
+    saleDate: '2024-03-01',
+    landArea: 800,
+    livingArea: 400, // Building area
+    bedrooms: 0,
+    bathrooms: 1,
+    carSpaces: 15,
+    yearBuilt: 2015,
+    condition: 'fair' as const,
+    location: 'similar' as const,
+    marketConditions: 'stable' as const,
+    improvements: 60000,
+    zoning: 'Commercial 1'
+  };
+
+  // Helper function to format percentage adjustments
+  const formatPercentage = (percentage: number): string => {
+    const sign = percentage >= 0 ? '+' : '';
+    return `${sign}${percentage.toFixed(1)}%`;
+  };
+
+  // Helper function to format currency
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-AU', {
+      style: 'currency',
+      currency: 'AUD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  // Helper function to get adjustment icon
+  const getAdjustmentIcon = (type: 'positive' | 'negative' | 'neutral') => {
+    switch (type) {
+      case 'positive':
+        return <TrendingUp className="h-3 w-3 text-green-600" />;
+      case 'negative':
+        return <TrendingDown className="h-3 w-3 text-red-600" />;
+      default:
+        return <Minus className="h-3 w-3 text-gray-400" />;
+    }
+  };
+
+  // Sample adjustment calculations for demonstration
+  const getSampleAdjustment = (attribute: string) => {
+    const adjustments: Record<string, { percentage: number; dollar: number; type: 'positive' | 'negative' | 'neutral' }> = {
+      'Land Area': { percentage: 2.8, dollar: 70000, type: 'positive' },
+      'Building Area': { percentage: 4.2, dollar: 105000, type: 'positive' },
+      'Car Parking': { percentage: 3.0, dollar: 75000, type: 'positive' },
+      'Building Condition': { percentage: 5.0, dollar: 125000, type: 'positive' },
+      'Sale Date': { percentage: -1.2, dollar: -30000, type: 'negative' },
+      'ESG Score': { percentage: 2.5, dollar: 62500, type: 'positive' }
+    };
+    
+    return adjustments[attribute] || { percentage: 0, dollar: 0, type: 'neutral' };
+  };
 
   return (
     <div className="space-y-6">
@@ -68,31 +147,54 @@ export default function SalesEvidenceCommercial() {
 
           {/* Attributes Table */}
           <div className="space-y-4">
-            <div className="grid grid-cols-4 gap-4 text-sm font-medium border-b pb-2">
+            <div className="grid grid-cols-6 gap-4 text-sm font-medium border-b pb-2">
               <div>Attribute</div>
               <div className="text-center">Include</div>
               <div>Value</div>
               <div>Comparison to Subject</div>
+              <div className="text-center">+/- Value</div>
+              <div className="text-right">$ Value</div>
             </div>
 
             {/* Sale Date */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
+            <div className="grid grid-cols-6 gap-4 items-center py-2">
               <Label>Sale Date</Label>
               <div className="flex justify-center">
                 <Switch checked={saleDate} onCheckedChange={setSaleDate} />
               </div>
               <Input placeholder="01 March 2024" className="text-sm" />
               <Input placeholder="Comparison notes for sale date..." className="text-sm" />
+              {(() => {
+                const adj = getSampleAdjustment('Sale Date');
+                return (
+                  <>
+                    <div className="flex items-center justify-center gap-1 text-red-600">
+                      {getAdjustmentIcon(adj.type)}
+                      <span className="text-sm font-medium">{formatPercentage(adj.percentage)}</span>
+                    </div>
+                    <div className="text-right text-sm font-medium text-red-600">
+                      {formatCurrency(adj.dollar)}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Sale Price */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
+            <div className="grid grid-cols-6 gap-4 items-center py-2">
               <Label>Sale Price</Label>
               <div className="flex justify-center">
                 <Switch checked={salePrice} onCheckedChange={setSalePrice} />
               </div>
               <Input placeholder="$2,500,000" className="text-sm" />
               <Input placeholder="Price comparison analysis..." className="text-sm" />
+              <div className="flex items-center justify-center gap-1 text-gray-400">
+                <Minus className="h-3 w-3" />
+                <span className="text-sm">Base</span>
+              </div>
+              <div className="text-right text-sm text-gray-600">
+                {formatCurrency(2500000)}
+              </div>
             </div>
 
             {/* Incentives */}
@@ -106,7 +208,7 @@ export default function SalesEvidenceCommercial() {
             </div>
 
             {/* Building Area */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
+            <div className="grid grid-cols-6 gap-4 items-center py-2">
               <Label>Building Area</Label>
               <div className="flex justify-center">
                 <Switch checked={buildingArea} onCheckedChange={setBuildingArea} />
@@ -124,10 +226,24 @@ export default function SalesEvidenceCommercial() {
                 </Select>
               </div>
               <Input placeholder="Building area comparison..." className="text-sm" />
+              {(() => {
+                const adj = getSampleAdjustment('Building Area');
+                return (
+                  <>
+                    <div className="flex items-center justify-center gap-1 text-green-600">
+                      {getAdjustmentIcon(adj.type)}
+                      <span className="text-sm font-medium">{formatPercentage(adj.percentage)}</span>
+                    </div>
+                    <div className="text-right text-sm font-medium text-green-600">
+                      +{formatCurrency(adj.dollar)}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Land Area */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
+            <div className="grid grid-cols-6 gap-4 items-center py-2">
               <Label>Land Area</Label>
               <div className="flex justify-center">
                 <Switch checked={landArea} onCheckedChange={setLandArea} />
@@ -145,16 +261,44 @@ export default function SalesEvidenceCommercial() {
                 </Select>
               </div>
               <Input placeholder="Land area comparison..." className="text-sm" />
+              {(() => {
+                const adj = getSampleAdjustment('Land Area');
+                return (
+                  <>
+                    <div className="flex items-center justify-center gap-1 text-green-600">
+                      {getAdjustmentIcon(adj.type)}
+                      <span className="text-sm font-medium">{formatPercentage(adj.percentage)}</span>
+                    </div>
+                    <div className="text-right text-sm font-medium text-green-600">
+                      +{formatCurrency(adj.dollar)}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Car Parking */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
+            <div className="grid grid-cols-6 gap-4 items-center py-2">
               <Label>Car Parking</Label>
               <div className="flex justify-center">
                 <Switch checked={carParking} onCheckedChange={setCarParking} />
               </div>
               <Input placeholder="20 spaces" className="text-sm" />
               <Input placeholder="Parking comparison..." className="text-sm" />
+              {(() => {
+                const adj = getSampleAdjustment('Car Parking');
+                return (
+                  <>
+                    <div className="flex items-center justify-center gap-1 text-green-600">
+                      {getAdjustmentIcon(adj.type)}
+                      <span className="text-sm font-medium">{formatPercentage(adj.percentage)}</span>
+                    </div>
+                    <div className="text-right text-sm font-medium text-green-600">
+                      +{formatCurrency(adj.dollar)}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Tenancy */}
@@ -278,35 +422,107 @@ export default function SalesEvidenceCommercial() {
             </div>
 
             {/* Building Condition */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
+            <div className="grid grid-cols-6 gap-4 items-center py-2">
               <Label>Building Condition</Label>
               <div className="flex justify-center">
                 <Switch checked={buildingCondition} onCheckedChange={setBuildingCondition} />
               </div>
               <Input placeholder="Good condition" className="text-sm" />
               <Input placeholder="Building condition comparison..." className="text-sm" />
-            </div>
-
-            {/* Street Access */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>Street Access</Label>
-              <div className="flex justify-center">
-                <Switch checked={streetAccess} onCheckedChange={setStreetAccess} />
-              </div>
-              <Input placeholder="Main road frontage" className="text-sm" />
-              <Input placeholder="Street access comparison..." className="text-sm" />
+              {(() => {
+                const adj = getSampleAdjustment('Building Condition');
+                return (
+                  <>
+                    <div className="flex items-center justify-center gap-1 text-green-600">
+                      {getAdjustmentIcon(adj.type)}
+                      <span className="text-sm font-medium">{formatPercentage(adj.percentage)}</span>
+                    </div>
+                    <div className="text-right text-sm font-medium text-green-600">
+                      +{formatCurrency(adj.dollar)}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* ESG Score */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
+            <div className="grid grid-cols-6 gap-4 items-center py-2">
               <Label>ESG Score</Label>
               <div className="flex justify-center">
                 <Switch checked={esgScore} onCheckedChange={setEsgScore} />
               </div>
               <Input placeholder="7.5/10" className="text-sm" />
               <Input placeholder="ESG score comparison..." className="text-sm" />
+              {(() => {
+                const adj = getSampleAdjustment('ESG Score');
+                return (
+                  <>
+                    <div className="flex items-center justify-center gap-1 text-green-600">
+                      {getAdjustmentIcon(adj.type)}
+                      <span className="text-sm font-medium">{formatPercentage(adj.percentage)}</span>
+                    </div>
+                    <div className="text-right text-sm font-medium text-green-600">
+                      +{formatCurrency(adj.dollar)}
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+
+            {/* Total Adjustments Row */}
+            <div className="grid grid-cols-6 gap-4 items-center py-3 border-t-2 bg-gray-50 font-bold">
+              <div></div>
+              <div></div>
+              <div className="text-sm font-bold">TOTAL ADJUSTMENTS</div>
+              <div className="text-sm">Net adjustment to comparable</div>
+              <div className="flex items-center justify-center gap-1 text-green-600">
+                <TrendingUp className="h-4 w-4" />
+                <span className="font-bold">+16.3%</span>
+              </div>
+              <div className="text-right font-bold text-green-600 text-lg">
+                +{formatCurrency(407500)}
+              </div>
+            </div>
+
+            {/* Adjusted Value Row */}
+            <div className="grid grid-cols-6 gap-4 items-center py-3 bg-blue-50 border-t">
+              <div></div>
+              <div></div>
+              <div className="text-sm font-bold text-blue-900">ADJUSTED SALE PRICE</div>
+              <div className="text-sm text-blue-700">Indicates value of subject</div>
+              <div></div>
+              <div className="text-right font-bold text-blue-900 text-xl">
+                {formatCurrency(2907500)}
+              </div>
             </div>
           </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 mt-6 pt-4 border-t">
+            <Button variant="outline">
+              Add Sale Evidence
+            </Button>
+            
+            <Button 
+              variant="outline"
+              onClick={() => setShowAdjustmentTable(!showAdjustmentTable)}
+            >
+              <Calculator className="h-4 w-4 mr-2" />
+              {showAdjustmentTable ? 'Hide' : 'Show'} Advanced Analysis
+            </Button>
+          </div>
+          
+          {showAdjustmentTable && (
+            <div className="mt-6">
+              <PropertyAdjustmentTable
+                comparable={comparableProperty}
+                subject={subjectProperty}
+                onAdjustmentChange={(adjustments) => {
+                  console.log('Adjustments updated:', adjustments);
+                }}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
