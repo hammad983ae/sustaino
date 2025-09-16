@@ -48,6 +48,20 @@ interface ExtractedData {
   car_spaces?: number;
   building_area?: number;
   land_area?: number;
+  property_type?: string;
+  unit_number?: string;
+  street_number?: string;
+  street_name?: string;
+  street_type?: string;
+  suburb?: string;
+  state?: string;
+  postcode?: string;
+  year_built?: number;
+  condition_rating?: string;
+  parking_spaces?: number;
+  is_strata?: boolean;
+  strata_fees_quarterly?: number;
+  strata_fees_annual?: number;
 }
 
 interface ScrapingResult {
@@ -62,7 +76,6 @@ export const WebDataUploader = () => {
   const { toast } = useToast();
   const [url, setUrl] = useState('');
   const [dataType, setDataType] = useState<'sales' | 'rental'>('sales');
-  const [propertyType, setPropertyType] = useState('residential');
   const [isLoading, setIsLoading] = useState(false);
   const [lastResult, setLastResult] = useState<ScrapingResult | null>(null);
 
@@ -100,13 +113,12 @@ export const WebDataUploader = () => {
     setLastResult(null);
 
     try {
-      console.log('Calling web-data-scraper with:', { url: url.trim(), data_type: dataType, property_type: propertyType })
+      console.log('Calling web-data-scraper with:', { url: url.trim(), data_type: dataType })
       
       const { data, error } = await supabase.functions.invoke('web-data-scraper', {
         body: {
           url: url.trim(),
-          data_type: dataType,
-          property_type: propertyType
+          data_type: dataType
         }
       });
 
@@ -155,13 +167,19 @@ export const WebDataUploader = () => {
   const renderExtractedData = (data: ExtractedData) => {
     const fields = [
       { label: 'Address', value: data.address, icon: '📍' },
+      { label: 'Property Type', value: data.property_type, icon: '🏢' },
       { label: 'Price', value: data.price ? `$${data.price.toLocaleString()}` : undefined, icon: '💰' },
       { label: 'Date', value: data.date, icon: '📅' },
       { label: 'Bedrooms', value: data.bedrooms, icon: '🛏️' },
       { label: 'Bathrooms', value: data.bathrooms, icon: '🚿' },
-      { label: 'Car Spaces', value: data.car_spaces, icon: '🚗' },
+      { label: 'Car/Parking Spaces', value: data.car_spaces || data.parking_spaces, icon: '🚗' },
       { label: 'Building Area', value: data.building_area ? `${data.building_area} m²` : undefined, icon: '🏠' },
       { label: 'Land Area', value: data.land_area ? `${data.land_area} m²` : undefined, icon: '🌍' },
+      { label: 'Year Built', value: data.year_built, icon: '🗓️' },
+      { label: 'Condition', value: data.condition_rating, icon: '⭐' },
+      { label: 'Is Strata', value: data.is_strata ? 'Yes' : undefined, icon: '🏢' },
+      { label: 'Strata Fees (Quarterly)', value: data.strata_fees_quarterly ? `$${data.strata_fees_quarterly.toLocaleString()}` : undefined, icon: '💳' },
+      { label: 'Strata Fees (Annual)', value: data.strata_fees_annual ? `$${data.strata_fees_annual.toLocaleString()}` : undefined, icon: '💳' },
     ];
 
     return (
@@ -232,21 +250,6 @@ export const WebDataUploader = () => {
             </RadioGroup>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="property-type">Property Type</Label>
-            <Select value={propertyType} onValueChange={setPropertyType} disabled={isLoading}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="residential">Residential</SelectItem>
-                <SelectItem value="commercial">Commercial</SelectItem>
-                <SelectItem value="industrial">Industrial</SelectItem>
-                <SelectItem value="agricultural">Agricultural</SelectItem>
-                <SelectItem value="specialised">Specialised</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
 
           <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? (
@@ -300,7 +303,7 @@ export const WebDataUploader = () => {
 
         <div className="text-xs text-muted-foreground space-y-1">
           <p><strong>Supported sites:</strong> Most real estate websites including Domain, Real Estate, Property.com.au, and international sites</p>
-          <p><strong>Extracted data:</strong> Address, price, bedrooms, bathrooms, car spaces, areas, and dates</p>
+          <p><strong>Extracted data:</strong> Address, property type, price, bedrooms, bathrooms, parking, areas, year built, condition, strata details, and dates</p>
           <p><strong>Note:</strong> Data accuracy depends on website structure. Review extracted data before use.</p>
         </div>
       </CardContent>
