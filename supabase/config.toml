@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.property-data-analysis]
 verify_jwt = false
+
+[functions.web-data-scraper]
+verify_jwt = false

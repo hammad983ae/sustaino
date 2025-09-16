@@ -264,7 +264,22 @@ async function extractFromPDF(url: string, dataType: 'sales' | 'rental'): Promis
     }
     
     console.log(`Downloaded ${pdfArrayBuffer.byteLength} bytes`)
-    const pdfBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfArrayBuffer)))
+    
+    // Check file size limit (10MB = 10 * 1024 * 1024 bytes)
+    const maxFileSize = 10 * 1024 * 1024
+    if (pdfArrayBuffer.byteLength > maxFileSize) {
+      throw new Error(`PDF file too large (${Math.round(pdfArrayBuffer.byteLength / 1024 / 1024)}MB). Maximum supported size is 10MB. Please try a smaller file.`)
+    }
+    
+    // Convert to base64 in chunks to avoid memory issues
+    const chunkSize = 1024 * 1024 // 1MB chunks
+    let pdfBase64 = ''
+    const uint8Array = new Uint8Array(pdfArrayBuffer)
+    
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.slice(i, i + chunkSize)
+      pdfBase64 += btoa(String.fromCharCode(...chunk))
+    }
     
     console.log('Analyzing PDF with OpenAI...')
     
