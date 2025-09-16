@@ -217,6 +217,80 @@ interface CompanyOffices {
   }>;
 }
 
+interface NationalInvestment {
+  countryOverview: string;
+  nationalGdpGrowth: string;
+  populationGrowth: string;
+  unemploymentRate: string;
+  interestRateEnvironment: string;
+  governmentIncentives: string;
+  nationalMarketTrends: string;
+  economicForecast: string;
+}
+
+interface AssetSpecificInvestment {
+  assetType: string;
+  assetGrading: string;
+  locationScore: string;
+  buildingCondition: string;
+  tenantQuality: string;
+  leaseCovenantStrength: string;
+  futureGrowthPotential: string;
+  riskFactors: string[];
+  assetComparisons: Array<{
+    comparable: string;
+    location: string;
+    yield: string;
+    price: string;
+  }>;
+}
+
+interface GeographicalAnalysis {
+  suburb: string;
+  municipality: string;
+  state: string;
+  country: string;
+  regionType: string;
+  demographics: {
+    population: string;
+    medianAge: string;
+    householdIncome: string;
+    educationLevel: string;
+  };
+  infrastructure: {
+    transport: string[];
+    healthcare: string[];
+    education: string[];
+    retail: string[];
+  };
+  marketAnalysis: {
+    medianPrice: string;
+    priceGrowth: string;
+    rentalYield: string;
+    daysOnMarket: string;
+  };
+}
+
+interface GapAnalysis {
+  supplySideAnalysis: {
+    currentSupply: string;
+    futureSupply: string;
+    competitorAnalysis: string;
+  };
+  demandAnalysis: {
+    currentDemand: string;
+    projectedDemand: string;
+    demandDrivers: string[];
+  };
+  marketGap: {
+    identifiedGap: string;
+    opportunitySize: string;
+    competitiveAdvantage: string;
+    riskMitigation: string;
+  };
+  recommendations: string[];
+}
+
 interface InformationMemorandum {
   id: string;
   title: string;
@@ -234,6 +308,10 @@ interface InformationMemorandum {
   councilInfo: CouncilInfo;
   infrastructure: Infrastructure;
   regionalInvestment: RegionalInvestment;
+  nationalInvestment: NationalInvestment;
+  assetSpecificInvestment: AssetSpecificInvestment;
+  geographicalAnalysis: GeographicalAnalysis;
+  gapAnalysis: GapAnalysis;
   saleDetails: SaleDetails;
   contactDetails: ContactDetails;
   propertyManagement: PropertyManagement;
@@ -321,6 +399,71 @@ export const InformationMemorandumGenerator = () => {
       populationGrowth: "",
       employmentGrowth: "",
       description: ""
+    },
+    nationalInvestment: {
+      countryOverview: "",
+      nationalGdpGrowth: "",
+      populationGrowth: "",
+      unemploymentRate: "",
+      interestRateEnvironment: "",
+      governmentIncentives: "",
+      nationalMarketTrends: "",
+      economicForecast: ""
+    },
+    assetSpecificInvestment: {
+      assetType: "",
+      assetGrading: "",
+      locationScore: "",
+      buildingCondition: "",
+      tenantQuality: "",
+      leaseCovenantStrength: "",
+      futureGrowthPotential: "",
+      riskFactors: [],
+      assetComparisons: []
+    },
+    geographicalAnalysis: {
+      suburb: "",
+      municipality: "",
+      state: "",
+      country: "",
+      regionType: "",
+      demographics: {
+        population: "",
+        medianAge: "",
+        householdIncome: "",
+        educationLevel: ""
+      },
+      infrastructure: {
+        transport: [],
+        healthcare: [],
+        education: [],
+        retail: []
+      },
+      marketAnalysis: {
+        medianPrice: "",
+        priceGrowth: "",
+        rentalYield: "",
+        daysOnMarket: ""
+      }
+    },
+    gapAnalysis: {
+      supplySideAnalysis: {
+        currentSupply: "",
+        futureSupply: "",
+        competitorAnalysis: ""
+      },
+      demandAnalysis: {
+        currentDemand: "",
+        projectedDemand: "",
+        demandDrivers: []
+      },
+      marketGap: {
+        identifiedGap: "",
+        opportunitySize: "",
+        competitiveAdvantage: "",
+        riskMitigation: ""
+      },
+      recommendations: []
     },
     saleDetails: {
       method: "",
@@ -905,6 +1048,10 @@ export const InformationMemorandumGenerator = () => {
               <TabsTrigger value="council">Council</TabsTrigger>
               <TabsTrigger value="infrastructure">Infrastructure</TabsTrigger>
               <TabsTrigger value="investment">Regional Invest</TabsTrigger>
+              <TabsTrigger value="national">National Invest</TabsTrigger>
+              <TabsTrigger value="asset">Asset Specific</TabsTrigger>
+              <TabsTrigger value="geographical">Geographical</TabsTrigger>
+              <TabsTrigger value="gap">Gap Analysis</TabsTrigger>
               <TabsTrigger value="sale">Sale Method</TabsTrigger>
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="management">Property Mgmt</TabsTrigger>
@@ -1741,6 +1888,435 @@ export const InformationMemorandumGenerator = () => {
                     onChange={(e) => updateMemorandum('propertyManagement', { contact: e.target.value })}
                     placeholder="e.g., Donna Alexander - 0409 914 659"
                   />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="national" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  National Investment Analysis
+                </h3>
+                
+                <div className="grid gap-4">
+                  <div>
+                    <Label htmlFor="countryOverview">Country Overview</Label>
+                    <Textarea
+                      id="countryOverview"
+                      value={memorandum.nationalInvestment?.countryOverview || ""}
+                      onChange={(e) => updateMemorandum('nationalInvestment', { countryOverview: e.target.value })}
+                      placeholder="Overview of the national investment environment and economic outlook"
+                      rows={4}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="nationalGdpGrowth">National GDP Growth</Label>
+                      <Input
+                        id="nationalGdpGrowth"
+                        value={memorandum.nationalInvestment?.nationalGdpGrowth || ""}
+                        onChange={(e) => updateMemorandum('nationalInvestment', { nationalGdpGrowth: e.target.value })}
+                        placeholder="e.g., 2.8% annual growth"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="nationalPopulationGrowth">Population Growth</Label>
+                      <Input
+                        id="nationalPopulationGrowth"
+                        value={memorandum.nationalInvestment?.populationGrowth || ""}
+                        onChange={(e) => updateMemorandum('nationalInvestment', { populationGrowth: e.target.value })}
+                        placeholder="e.g., 1.6% population growth"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="unemploymentRate">Unemployment Rate</Label>
+                      <Input
+                        id="unemploymentRate"
+                        value={memorandum.nationalInvestment?.unemploymentRate || ""}
+                        onChange={(e) => updateMemorandum('nationalInvestment', { unemploymentRate: e.target.value })}
+                        placeholder="e.g., 3.9%"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="interestRateEnvironment">Interest Rate Environment</Label>
+                      <Input
+                        id="interestRateEnvironment"
+                        value={memorandum.nationalInvestment?.interestRateEnvironment || ""}
+                        onChange={(e) => updateMemorandum('nationalInvestment', { interestRateEnvironment: e.target.value })}
+                        placeholder="e.g., 4.35% cash rate"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="governmentIncentives">Government Incentives</Label>
+                    <Textarea
+                      id="governmentIncentives"
+                      value={memorandum.nationalInvestment?.governmentIncentives || ""}
+                      onChange={(e) => updateMemorandum('nationalInvestment', { governmentIncentives: e.target.value })}
+                      placeholder="Current government incentives and policies supporting investment"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="nationalMarketTrends">National Market Trends</Label>
+                    <Textarea
+                      id="nationalMarketTrends"
+                      value={memorandum.nationalInvestment?.nationalMarketTrends || ""}
+                      onChange={(e) => updateMemorandum('nationalInvestment', { nationalMarketTrends: e.target.value })}
+                      placeholder="Key national property market trends and indicators"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="economicForecast">Economic Forecast</Label>
+                    <Textarea
+                      id="economicForecast"
+                      value={memorandum.nationalInvestment?.economicForecast || ""}
+                      onChange={(e) => updateMemorandum('nationalInvestment', { economicForecast: e.target.value })}
+                      placeholder="Economic outlook and projections for the investment period"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="asset" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Building2 className="h-5 w-5" />
+                  Asset Specific Investment Analysis
+                </h3>
+                
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="assetType">Asset Type</Label>
+                      <Input
+                        id="assetType"
+                        value={memorandum.assetSpecificInvestment?.assetType || ""}
+                        onChange={(e) => updateMemorandum('assetSpecificInvestment', { assetType: e.target.value })}
+                        placeholder="e.g., Retail, Office, Industrial"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="assetGrading">Asset Grading</Label>
+                      <Input
+                        id="assetGrading"
+                        value={memorandum.assetSpecificInvestment?.assetGrading || ""}
+                        onChange={(e) => updateMemorandum('assetSpecificInvestment', { assetGrading: e.target.value })}
+                        placeholder="e.g., A-Grade, B-Grade, C-Grade"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="locationScore">Location Score</Label>
+                      <Input
+                        id="locationScore"
+                        value={memorandum.assetSpecificInvestment?.locationScore || ""}
+                        onChange={(e) => updateMemorandum('assetSpecificInvestment', { locationScore: e.target.value })}
+                        placeholder="e.g., 8.5/10 - Prime location"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="buildingCondition">Building Condition</Label>
+                      <Input
+                        id="buildingCondition"
+                        value={memorandum.assetSpecificInvestment?.buildingCondition || ""}
+                        onChange={(e) => updateMemorandum('assetSpecificInvestment', { buildingCondition: e.target.value })}
+                        placeholder="e.g., Excellent, Good, Fair"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="tenantQuality">Tenant Quality</Label>
+                      <Input
+                        id="tenantQuality"
+                        value={memorandum.assetSpecificInvestment?.tenantQuality || ""}
+                        onChange={(e) => updateMemorandum('assetSpecificInvestment', { tenantQuality: e.target.value })}
+                        placeholder="e.g., National tenant, Regional, Local"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="leaseCovenantStrength">Lease Covenant Strength</Label>
+                      <Input
+                        id="leaseCovenantStrength"
+                        value={memorandum.assetSpecificInvestment?.leaseCovenantStrength || ""}
+                        onChange={(e) => updateMemorandum('assetSpecificInvestment', { leaseCovenantStrength: e.target.value })}
+                        placeholder="e.g., Strong, Medium, Weak"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="futureGrowthPotential">Future Growth Potential</Label>
+                    <Textarea
+                      id="futureGrowthPotential"
+                      value={memorandum.assetSpecificInvestment?.futureGrowthPotential || ""}
+                      onChange={(e) => updateMemorandum('assetSpecificInvestment', { futureGrowthPotential: e.target.value })}
+                      placeholder="Analysis of future growth potential for this specific asset"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="geographical" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Geographical Analysis
+                </h3>
+                
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="suburb">Suburb</Label>
+                      <Input
+                        id="suburb"
+                        value={memorandum.geographicalAnalysis?.suburb || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { suburb: e.target.value })}
+                        placeholder="e.g., Bundaberg Central"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="municipality">Municipality</Label>
+                      <Input
+                        id="municipality"
+                        value={memorandum.geographicalAnalysis?.municipality || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { municipality: e.target.value })}
+                        placeholder="e.g., Bundaberg Regional Council"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="geoState">State/Territory</Label>
+                      <Input
+                        id="geoState"
+                        value={memorandum.geographicalAnalysis?.state || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { state: e.target.value })}
+                        placeholder="e.g., Queensland"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="geoCountry">Country</Label>
+                      <Input
+                        id="geoCountry"
+                        value={memorandum.geographicalAnalysis?.country || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { country: e.target.value })}
+                        placeholder="e.g., Australia"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="regionType">Region Type</Label>
+                    <Input
+                      id="regionType"
+                      value={memorandum.geographicalAnalysis?.regionType || ""}
+                      onChange={(e) => updateMemorandum('geographicalAnalysis', { regionType: e.target.value })}
+                      placeholder="e.g., Regional City, Metropolitan, Rural"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="population">Population</Label>
+                      <Input
+                        id="population"
+                        value={memorandum.geographicalAnalysis?.demographics?.population || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { 
+                          demographics: { 
+                            ...memorandum.geographicalAnalysis?.demographics,
+                            population: e.target.value 
+                          }
+                        })}
+                        placeholder="e.g., 70,921"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="medianAge">Median Age</Label>
+                      <Input
+                        id="medianAge"
+                        value={memorandum.geographicalAnalysis?.demographics?.medianAge || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { 
+                          demographics: { 
+                            ...memorandum.geographicalAnalysis?.demographics,
+                            medianAge: e.target.value 
+                          }
+                        })}
+                        placeholder="e.g., 42 years"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="householdIncome">Median Household Income</Label>
+                      <Input
+                        id="householdIncome"
+                        value={memorandum.geographicalAnalysis?.demographics?.householdIncome || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { 
+                          demographics: { 
+                            ...memorandum.geographicalAnalysis?.demographics,
+                            householdIncome: e.target.value 
+                          }
+                        })}
+                        placeholder="e.g., $68,400"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="educationLevel">Education Level</Label>
+                      <Input
+                        id="educationLevel"
+                        value={memorandum.geographicalAnalysis?.demographics?.educationLevel || ""}
+                        onChange={(e) => updateMemorandum('geographicalAnalysis', { 
+                          demographics: { 
+                            ...memorandum.geographicalAnalysis?.demographics,
+                            educationLevel: e.target.value 
+                          }
+                        })}
+                        placeholder="e.g., 15% tertiary qualified"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="gap" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Star className="h-5 w-5" />
+                  Gap Analysis
+                </h3>
+                
+                <div className="grid gap-4">
+                  <div>
+                    <Label htmlFor="currentSupply">Current Supply Analysis</Label>
+                    <Textarea
+                      id="currentSupply"
+                      value={memorandum.gapAnalysis?.supplySideAnalysis?.currentSupply || ""}
+                      onChange={(e) => updateMemorandum('gapAnalysis', { 
+                        supplySideAnalysis: { 
+                          ...memorandum.gapAnalysis?.supplySideAnalysis,
+                          currentSupply: e.target.value 
+                        }
+                      })}
+                      placeholder="Analysis of current supply in the market"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="futureSupply">Future Supply Projections</Label>
+                    <Textarea
+                      id="futureSupply"
+                      value={memorandum.gapAnalysis?.supplySideAnalysis?.futureSupply || ""}
+                      onChange={(e) => updateMemorandum('gapAnalysis', { 
+                        supplySideAnalysis: { 
+                          ...memorandum.gapAnalysis?.supplySideAnalysis,
+                          futureSupply: e.target.value 
+                        }
+                      })}
+                      placeholder="Projected future supply and development pipeline"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="currentDemand">Current Demand Analysis</Label>
+                    <Textarea
+                      id="currentDemand"
+                      value={memorandum.gapAnalysis?.demandAnalysis?.currentDemand || ""}
+                      onChange={(e) => updateMemorandum('gapAnalysis', { 
+                        demandAnalysis: { 
+                          ...memorandum.gapAnalysis?.demandAnalysis,
+                          currentDemand: e.target.value 
+                        }
+                      })}
+                      placeholder="Current demand metrics and indicators"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="projectedDemand">Projected Demand</Label>
+                    <Textarea
+                      id="projectedDemand"
+                      value={memorandum.gapAnalysis?.demandAnalysis?.projectedDemand || ""}
+                      onChange={(e) => updateMemorandum('gapAnalysis', { 
+                        demandAnalysis: { 
+                          ...memorandum.gapAnalysis?.demandAnalysis,
+                          projectedDemand: e.target.value 
+                        }
+                      })}
+                      placeholder="Future demand projections and growth drivers"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="identifiedGap">Identified Market Gap</Label>
+                    <Textarea
+                      id="identifiedGap"
+                      value={memorandum.gapAnalysis?.marketGap?.identifiedGap || ""}
+                      onChange={(e) => updateMemorandum('gapAnalysis', { 
+                        marketGap: { 
+                          ...memorandum.gapAnalysis?.marketGap,
+                          identifiedGap: e.target.value 
+                        }
+                      })}
+                      placeholder="Key market gaps and opportunities identified"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="opportunitySize">Opportunity Size</Label>
+                      <Input
+                        id="opportunitySize"
+                        value={memorandum.gapAnalysis?.marketGap?.opportunitySize || ""}
+                        onChange={(e) => updateMemorandum('gapAnalysis', { 
+                          marketGap: { 
+                            ...memorandum.gapAnalysis?.marketGap,
+                            opportunitySize: e.target.value 
+                          }
+                        })}
+                        placeholder="e.g., $50M market opportunity"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="competitiveAdvantage">Competitive Advantage</Label>
+                      <Input
+                        id="competitiveAdvantage"
+                        value={memorandum.gapAnalysis?.marketGap?.competitiveAdvantage || ""}
+                        onChange={(e) => updateMemorandum('gapAnalysis', { 
+                          marketGap: { 
+                            ...memorandum.gapAnalysis?.marketGap,
+                            competitiveAdvantage: e.target.value 
+                          }
+                        })}
+                        placeholder="Key competitive advantages"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </TabsContent>
