@@ -63,7 +63,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
             return (
               <Card 
                 key={type.id} 
-                className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
+                className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in h-auto min-h-[400px]"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 onClick={() => onSelect(type.id)}
               >
@@ -117,7 +117,7 @@ export default function PropertyTypeSelector({ onSelect }: PropertyTypeSelectorP
               return (
                 <Card 
                   key={type.id} 
-                  className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in"
+                  className="cursor-pointer transition-all duration-500 hover:shadow-2xl hover:scale-105 group bg-white/80 backdrop-blur-sm border-emerald-200/50 hover:border-emerald-400/70 animate-fade-in h-auto min-h-[400px]"
                   style={{ animationDelay: '0.5s' }}
                   onClick={() => onSelect(type.id)}
                 >
