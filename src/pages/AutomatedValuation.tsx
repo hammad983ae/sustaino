@@ -24,6 +24,7 @@ import AuthStatus from "@/components/AuthStatus";
 import PropertyUpdateFeed from "@/components/PropertyUpdateFeed";
 import ConstructionCostIndex from "@/components/ConstructionCostIndex";
 import DevelopmentCalculator from "@/components/DevelopmentCalculator";
+import PEXAIntegration from "@/components/PEXAIntegration";
 
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
@@ -217,6 +218,10 @@ export default function AutomatedValuation() {
               
               <div className="animate-fade-in" style={{ animationDelay: '1.3s' }}>
                 <DevelopmentCalculator />
+              </div>
+              
+              <div className="animate-fade-in" style={{ animationDelay: '1.35s' }}>
+                <PEXAIntegration />
               </div>
             </div>
             
