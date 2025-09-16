@@ -746,7 +746,7 @@ export const RevolutionarySustainoSphere = () => {
                 Revolutionary AI Intelligence Dashboard
               </CardTitle>
               <CardDescription className="text-lg">
-                Advanced AI-powered analysis of digital assets with proprietary SustainoVal™ scoring.
+                AI Enhanced (people still like people interaction, Delorenzo Property Group Algorithms Enhanced by AI)
               </CardDescription>
             </CardHeader>
             <CardContent>
