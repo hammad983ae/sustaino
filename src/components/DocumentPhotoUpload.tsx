@@ -1,418 +1,277 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Upload, Image, FileText, Sparkles, ArrowLeft, X, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useState, useRef, useCallback } from "react";
-import { useToast } from "@/components/ui/use-toast";
+/**
+ * Document Photo Upload Component with OCR capabilities
+ * Provides intelligent text extraction from uploaded images
+ */
+import React, { useState, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { 
+  Upload, 
+  Camera, 
+  FileText, 
+  Loader2, 
+  CheckCircle, 
+  XCircle,
+  Eye,
+  Copy
+} from 'lucide-react';
+import Tesseract from 'tesseract.js';
 
-interface UploadedFile {
-  id: string;
-  name: string;
-  size: number;
-  type: string;
-  url: string;
-  ocrProcessed?: boolean;
-  ocrData?: any;
+interface ExtractedData {
+  text: string;
+  confidence: number;
+  fields?: {
+    [key: string]: string;
+  };
 }
 
-const DocumentPhotoUpload = () => {
-  const [ocrProcessing, setOcrProcessing] = useState("all");
-  const [customPages, setCustomPages] = useState("10");
-  const [uploadedPhotos, setUploadedPhotos] = useState<UploadedFile[]>([]);
-  const [uploadedDocuments, setUploadedDocuments] = useState<UploadedFile[]>([]);
-  const [propertyDocuments, setPropertyDocuments] = useState<UploadedFile[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
-  const [ocrProcessingFiles, setOcrProcessingFiles] = useState<Set<string>>(new Set());
-  
-  const photoInputRef = useRef<HTMLInputElement>(null);
-  const documentInputRef = useRef<HTMLInputElement>(null);
-  const propertyDocInputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
+interface DocumentPhotoUploadProps {
+  onDataExtracted: (data: ExtractedData) => void;
+  acceptedTypes?: string[];
+  maxSize?: number;
+}
 
-  const handleFileUpload = useCallback(async (files: FileList, type: 'photos' | 'documents' | 'property') => {
-    setIsUploading(true);
+const DocumentPhotoUpload: React.FC<DocumentPhotoUploadProps> = ({
+  onDataExtracted,
+  acceptedTypes = ['image/jpeg', 'image/png', 'image/jpg'],
+  maxSize = 10 * 1024 * 1024 // 10MB
+}) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [extractedText, setExtractedText] = useState<string>('');
+  const [confidence, setConfidence] = useState<number>(0);
+  const [uploadedImage, setUploadedImage] = useState<string>('');
+  const [error, setError] = useState<string>('');
+
+  const processImage = useCallback(async (file: File) => {
+    setIsProcessing(true);
+    setProgress(0);
+    setError('');
     
     try {
-      const newFiles: UploadedFile[] = [];
-      
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        
-        // Validate file size (10MB limit)
-        if (file.size > 10 * 1024 * 1024) {
-          toast({
-            title: "File too large",
-            description: `${file.name} exceeds 10MB limit`,
-            variant: "destructive",
-          });
-          continue;
+      // Create image URL for preview
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImage(imageUrl);
+
+      // Process with Tesseract.js
+      const { data } = await Tesseract.recognize(file, 'eng', {
+        logger: (m: any) => {
+          if (m.status === 'recognizing text') {
+            setProgress(Math.round(m.progress * 100));
+          }
         }
-        
-        // Create file URL for preview
-        const url = URL.createObjectURL(file);
-        const uploadedFile: UploadedFile = {
-          id: `${Date.now()}-${i}`,
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          url,
-        };
-        
-        newFiles.push(uploadedFile);
-      }
-      
-      // Update state based on type
-      if (type === 'photos') {
-        setUploadedPhotos(prev => [...prev, ...newFiles]);
-      } else if (type === 'documents') {
-        setUploadedDocuments(prev => [...prev, ...newFiles]);
-      } else {
-        setPropertyDocuments(prev => [...prev, ...newFiles]);
-      }
-      
-      toast({
-        title: "Upload successful",
-        description: `${newFiles.length} file(s) uploaded successfully`,
       });
+
       
-    } catch (error) {
-      toast({
-        title: "Upload failed",
-        description: "There was an error uploading your files",
-        variant: "destructive",
-      });
+
+      const text = data.text.trim();
+      const avgConfidence = data.confidence;
+
+      setExtractedText(text);
+      setConfidence(avgConfidence);
+
+      // Extract potential fields from text
+      const fields = extractFields(text);
+
+      const extractedData: ExtractedData = {
+        text,
+        confidence: avgConfidence,
+        fields
+      };
+
+      onDataExtracted(extractedData);
+      
+    } catch (err) {
+      console.error('OCR Error:', err);
+      setError('Failed to process image. Please try again or check image quality.');
     } finally {
-      setIsUploading(false);
+      setIsProcessing(false);
+      setProgress(0);
     }
-  }, [toast]);
+  }, [onDataExtracted]);
 
-  const handleDrop = useCallback((e: React.DragEvent, type: 'photos' | 'documents' | 'property') => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      handleFileUpload(files, type);
-    }
-  }, [handleFileUpload]);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-  }, []);
-
-  const removeFile = useCallback((id: string, type: 'photos' | 'documents' | 'property') => {
-    if (type === 'photos') {
-      setUploadedPhotos(prev => prev.filter(file => file.id !== id));
-    } else if (type === 'documents') {
-      setUploadedDocuments(prev => prev.filter(file => file.id !== id));
-    } else {
-      setPropertyDocuments(prev => prev.filter(file => file.id !== id));
-    }
-  }, []);
-
-  const performOCR = useCallback(async (file: UploadedFile) => {
-    setOcrProcessingFiles(prev => new Set([...prev, file.id]));
+  const extractFields = (text: string) => {
+    const fields: { [key: string]: string } = {};
     
-    try {
-      // Simulate OCR processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Update file with OCR data
-      const updateFile = (prevFiles: UploadedFile[]) => 
-        prevFiles.map(f => 
-          f.id === file.id 
-            ? { ...f, ocrProcessed: true, ocrData: { text: "Sample OCR extracted text...", confidence: 0.95 } }
-            : f
-        );
-      
-      setUploadedDocuments(updateFile);
-      setPropertyDocuments(updateFile);
-      
-      toast({
-        title: "OCR Complete",
-        description: `Text extracted from ${file.name}`,
-      });
-      
-    } catch (error) {
-      toast({
-        title: "OCR Failed",
-        description: `Failed to process ${file.name}`,
-        variant: "destructive",
-      });
-    } finally {
-      setOcrProcessingFiles(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(file.id);
-        return newSet;
-      });
-    }
-  }, [toast]);
+    // Common patterns for property documents
+    const patterns = {
+      address: /(?:address|location|property)[\s:]+([^\n\r]+)/i,
+      area: /(?:area|size)[\s:]+([0-9,]+\.?[0-9]*)\s*(?:m2|sqm|square)/i,
+      rent: /(?:rent|rental)[\s:]+\$?([0-9,]+\.?[0-9]*)/i,
+      tenant: /(?:tenant|occupant)[\s:]+([^\n\r]+)/i,
+      lease: /(?:lease|term)[\s:]+([0-9]+)\s*(?:year|month)/i,
+      yield: /(?:yield|return)[\s:]+([0-9.]+)%/i,
+      value: /(?:value|price)[\s:]+\$([0-9,]+)/i
+    };
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    Object.entries(patterns).forEach(([key, pattern]) => {
+      const match = text.match(pattern);
+      if (match && match[1]) {
+        fields[key] = match[1].trim();
+      }
+    });
+
+    return fields;
   };
 
-  const FileList = ({ files, type }: { files: UploadedFile[], type: 'photos' | 'documents' | 'property' }) => (
-    <div className="space-y-2 mt-4">
-      {files.map((file) => (
-        <div key={file.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-          <div className="flex items-center gap-3">
-            {file.type.startsWith('image/') ? (
-              <Image className="h-4 w-4 text-blue-600" />
-            ) : (
-              <FileText className="h-4 w-4 text-red-600" />
-            )}
-            <div>
-              <p className="text-sm font-medium">{file.name}</p>
-              <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
-              {file.ocrProcessed && (
-                <p className="text-xs text-green-600 flex items-center gap-1">
-                  <CheckCircle className="h-3 w-3" />
-                  OCR Complete
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {file.type.includes('pdf') || file.type.includes('image') ? (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => performOCR(file)}
-                disabled={ocrProcessingFiles.has(file.id) || file.ocrProcessed}
-              >
-                {ocrProcessingFiles.has(file.id) ? "Processing..." : file.ocrProcessed ? "OCR Done" : "Extract Text"}
-              </Button>
-            ) : null}
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => removeFile(file.id, type)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!acceptedTypes.includes(file.type)) {
+      setError('Please select a valid image file (JPEG, PNG).');
+      return;
+    }
+
+    if (file.size > maxSize) {
+      setError('File size too large. Please select an image under 10MB.');
+      return;
+    }
+
+    processImage(file);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files?.[0];
+    if (file) {
+      if (!acceptedTypes.includes(file.type)) {
+        setError('Please select a valid image file (JPEG, PNG).');
+        return;
+      }
+      processImage(file);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(extractedText);
+  };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold">Document and Photo Uploader and OCR Upload</CardTitle>
-        <p className="text-sm text-muted-foreground">Name Page: Additional Information and Report Generator:</p>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Property Photos & Documents Tabs */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium">Property Photos & Documents</h3>
-          <Tabs defaultValue="photos" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="photos" className="flex items-center gap-2">
-                <Image className="h-4 w-4" />
-                Photos
-              </TabsTrigger>
-              <TabsTrigger value="documents" className="flex items-center gap-2">
-                <FileText className="h-4 w-4" />
-                Documents
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="photos" className="space-y-4">
-              <div 
-                className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center"
-                onDrop={(e) => handleDrop(e, 'photos')}
-                onDragOver={handleDragOver}
-              >
-                <Image className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h4 className="text-lg font-medium mb-2">
-                  {uploadedPhotos.length === 0 ? "No Property Images" : `${uploadedPhotos.length} Image(s) Uploaded`}
-                </h4>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Drag and drop images here or click to upload
-                </p>
-                <div className="flex gap-3 justify-center">
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <Image className="h-4 w-4" />
-                    Auto Fetch Images
-                  </Button>
-                  <Button 
-                    className="flex items-center gap-2"
-                    onClick={() => photoInputRef.current?.click()}
-                    disabled={isUploading}
-                  >
-                    <Upload className="h-4 w-4" />
-                    {isUploading ? "Uploading..." : "Upload Images"}
-                  </Button>
-                </div>
-                <input
-                  ref={photoInputRef}
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => e.target.files && handleFileUpload(e.target.files, 'photos')}
-                />
-              </div>
-              <FileList files={uploadedPhotos} type="photos" />
-            </TabsContent>
-            
-            <TabsContent value="documents" className="space-y-4">
-              <div 
-                className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center"
-                onDrop={(e) => handleDrop(e, 'documents')}
-                onDragOver={handleDragOver}
-              >
-                <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h4 className="text-lg font-medium mb-2">
-                  {uploadedDocuments.length === 0 ? "No Documents" : `${uploadedDocuments.length} Document(s) Uploaded`}
-                </h4>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Drag and drop documents here or click to browse
-                </p>
-                <Button 
-                  className="flex items-center gap-2"
-                  onClick={() => documentInputRef.current?.click()}
-                  disabled={isUploading}
-                >
-                  <Upload className="h-4 w-4" />
-                  {isUploading ? "Uploading..." : "Upload Documents"}
-                </Button>
-                <input
-                  ref={documentInputRef}
-                  type="file"
-                  multiple
-                  accept=".pdf,.doc,.docx,.txt,.rtf"
-                  className="hidden"
-                  onChange={(e) => e.target.files && handleFileUpload(e.target.files, 'documents')}
-                />
-              </div>
-              <FileList files={uploadedDocuments} type="documents" />
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {/* Document OCR Upload */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
-            <h3 className="text-lg font-medium">Document OCR Upload</h3>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Upload property documents (like auction reports) for automatic data extraction.
-          </p>
-          
-          <div className="bg-muted/30 p-4 rounded-lg">
-            <h4 className="font-medium mb-3">OCR Processing Preferences:</h4>
-            <RadioGroup value={ocrProcessing} onValueChange={setOcrProcessing}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all" id="all" />
-                <Label htmlFor="all" className="text-sm">
-                  Process ALL pages (recommended for comprehensive reports)
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="first2" id="first2" />
-                <Label htmlFor="first2" className="text-sm">
-                  Process First 2 pages (quick balance of speed and accuracy)
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="first1" id="first1" />
-                <Label htmlFor="first1" className="text-sm">
-                  Process First 1 page (fastest option)
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="custom" id="custom" />
-                <Label htmlFor="custom" className="text-sm">Custom Preview Set</Label>
-                <Input 
-                  type="number" 
-                  value={customPages}
-                  onChange={(e) => setCustomPages(e.target.value)}
-                  className="w-16 h-8 ml-2"
-                  disabled={ocrProcessing !== "custom"}
-                />
-                <span className="text-sm text-muted-foreground">pages</span>
-              </div>
-            </RadioGroup>
-          </div>
-        </div>
-
-        {/* Upload Property Documents */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium">Upload Property Documents</h3>
-          <div 
-            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center"
-            onDrop={(e) => handleDrop(e, 'property')}
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Camera className="h-5 w-5" />
+            Document OCR Upload
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div
+            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center hover:border-muted-foreground/50 transition-colors"
+            onDrop={handleDrop}
             onDragOver={handleDragOver}
           >
-            <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <h4 className="text-lg font-medium mb-2">
-              {propertyDocuments.length === 0 ? "Drag & Drop files here, or click to browse" : `${propertyDocuments.length} File(s) Uploaded`}
-            </h4>
-            <p className="text-sm text-muted-foreground mb-4">
-              Supports files such as PDFs, images, spreadsheets. Max single file size 10mb
-            </p>
-            <Button 
-              className="flex items-center gap-2"
-              onClick={() => propertyDocInputRef.current?.click()}
-              disabled={isUploading}
-            >
-              <Upload className="h-4 w-4" />
-              {isUploading ? "Uploading..." : "Upload Files"}
-            </Button>
-            <input
-              ref={propertyDocInputRef}
-              type="file"
-              multiple
-              accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif"
-              className="hidden"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files, 'property')}
+            {isProcessing ? (
+              <div className="space-y-4">
+                <Loader2 className="h-12 w-12 mx-auto animate-spin text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Processing image...</p>
+                  <Progress value={progress} className="w-full max-w-sm mx-auto" />
+                  <p className="text-xs text-muted-foreground mt-2">{progress}% complete</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Upload className="h-12 w-12 mx-auto text-muted-foreground" />
+                <div>
+                  <p className="text-lg font-medium">Upload Document Image</p>
+                  <p className="text-sm text-muted-foreground">
+                    Drag and drop or click to select a property document, lease, or contract
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <Badge variant="secondary">Lease Agreements</Badge>
+                  <Badge variant="secondary">Property Reports</Badge>
+                  <Badge variant="secondary">Contracts</Badge>
+                  <Badge variant="secondary">Financial Documents</Badge>
+                </div>
+                <input
+                  type="file"
+                  accept={acceptedTypes.join(',')}
+                  onChange={handleFileSelect}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label htmlFor="file-upload">
+                  <Button variant="outline" className="cursor-pointer">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Select Image
+                  </Button>
+                </label>
+              </div>
+            )}
+          </div>
+
+          {error && (
+            <Alert className="mt-4" variant="destructive">
+              <XCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      {uploadedImage && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Eye className="h-5 w-5" />
+              Uploaded Image
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <img 
+              src={uploadedImage} 
+              alt="Uploaded document" 
+              className="max-w-full h-auto rounded-lg border"
             />
-          </div>
-          <FileList files={propertyDocuments} type="property" />
-        </div>
+          </CardContent>
+        </Card>
+      )}
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-6 border-t">
-          <Button variant="outline" className="flex items-center gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Details
-          </Button>
-          
-          <div className="flex gap-3">
-            <Link to="/report">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
-                Perform Comprehensive Valuation
-              </Button>
-            </Link>
-            <Button variant="outline" size="lg" className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4" />
-              Enhance with AI
-            </Button>
-          </div>
-        </div>
-
-        {/* AI Enhancement Section */}
-        <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg">
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-5 w-5 text-blue-600" />
-            <h4 className="font-medium">Enhance Your Report with AI</h4>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Generate professional content, market analytics, and sustainability insights instantly
-          </p>
-        </div>
-      </CardContent>
-    </Card>
+      {extractedText && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Extracted Text
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant={confidence > 80 ? "default" : confidence > 60 ? "secondary" : "destructive"}>
+                  {Math.round(confidence)}% confidence
+                </Badge>
+                <Button variant="outline" size="sm" onClick={copyToClipboard}>
+                  <Copy className="h-4 w-4 mr-1" />
+                  Copy
+                </Button>
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-muted p-4 rounded-lg">
+              <pre className="whitespace-pre-wrap text-sm">{extractedText}</pre>
+            </div>
+            
+            {confidence < 70 && (
+              <Alert className="mt-4">
+                <AlertDescription>
+                  Low confidence detected. Consider retaking the photo with better lighting or resolution.
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 };
 

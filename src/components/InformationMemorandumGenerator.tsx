@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * INFORMATION MEMORANDUM GENERATOR - MAXIMUM IP PROTECTION
+ * ENHANCED INFORMATION MEMORANDUM GENERATOR - MAXIMUM IP PROTECTION
  * Copyright © 2025 Delderenzo Property Group Pty Ltd. All Rights Reserved.
  * 
  * PATENT PROTECTED TECHNOLOGY:
@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import DocumentPhotoUpload from "@/components/DocumentPhotoUpload";
 import { 
   FileText, 
   Download, 
@@ -45,7 +46,12 @@ import {
   Construction,
   PiggyBank,
   Gavel,
-  Phone
+  Phone,
+  Upload,
+  Zap,
+  Copy,
+  Save,
+  RefreshCw
 } from "lucide-react";
 
 interface PropertyDetails {
@@ -490,6 +496,80 @@ export const InformationMemorandumGenerator = () => {
     console.log("Exporting to PDF...");
   };
 
+  const handleOCRDataExtracted = (data: any) => {
+    // Auto-fill form fields based on extracted data
+    if (data.fields) {
+      const updates: any = {};
+      
+      if (data.fields.address) {
+        updates.propertyDetails = {
+          ...memorandum.propertyDetails,
+          address: data.fields.address
+        };
+      }
+      
+      if (data.fields.area) {
+        updates.propertyDetails = {
+          ...memorandum.propertyDetails,
+          landArea: data.fields.area
+        };
+      }
+      
+      if (data.fields.tenant) {
+        const newLease = {
+          tenant: data.fields.tenant,
+          area: data.fields.area || "",
+          term: data.fields.lease || "",
+          expiry: "",
+          rent: data.fields.rent || "",
+          reviewType: "CPI",
+          options: ""
+        };
+        updates.leases = [...(memorandum.leases || []), newLease];
+      }
+      
+      if (data.fields.rent) {
+        updates.financialSummary = {
+          ...memorandum.financialSummary,
+          grossIncome: data.fields.rent
+        };
+      }
+      
+      setMemorandum(prev => ({ ...prev, ...updates }));
+    }
+  };
+
+  const autoFillSampleData = () => {
+    setMemorandum(prev => ({
+      ...prev,
+      title: "Premium Investment Opportunity",
+      subtitle: "Commercial Property | High Yield Investment",
+      propertyDetails: {
+        address: "123 Business District, Central City",
+        landArea: "2,400 sqm",
+        buildingArea: "1,800 sqm",
+        zoning: "Commercial 1",
+        titleDetails: "Freehold",
+        frontage: "40m",
+        overlay: "None"
+      },
+      investmentHighlights: {
+        primaryHighlight: "8.5% Net Yield | Prime Location | Secure Tenant",
+        keyFeatures: [
+          "Prime commercial location",
+          "Secure long-term tenant",
+          "Strong rental growth",
+          "Development potential"
+        ],
+        financialMetrics: {
+          netIncome: "$425,000",
+          estimatedYield: "8.5%",
+          occupancyRate: "100%"
+        }
+      }
+    }));
+  };
+
   if (previewMode) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -729,34 +809,59 @@ export const InformationMemorandumGenerator = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <Card>
+    <div className="space-y-8 max-w-7xl mx-auto">
+      {/* Enhanced Header with Quick Actions */}
+      <Card className="border-2 border-primary/20 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-primary" />
-                Information Memorandum Generator
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <FileText className="h-6 w-6 text-primary" />
+                Enhanced Information Memorandum Generator
               </CardTitle>
-              <CardDescription>
-                Create professional investment property memorandums with white label branding
+              <CardDescription className="text-lg">
+                Create professional investment property memorandums with OCR capabilities and white label branding
               </CardDescription>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              <Button variant="outline" onClick={autoFillSampleData} size="sm">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Sample Data
+              </Button>
               <Button variant="outline" onClick={() => setPreviewMode(true)}>
                 <Eye className="h-4 w-4 mr-2" />
                 Preview
               </Button>
-              <Button>
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600">
                 <Download className="h-4 w-4 mr-2" />
                 Generate PDF
               </Button>
             </div>
           </div>
         </CardHeader>
+      </Card>
+
+      {/* OCR Upload Section */}
+      <Card className="border-2 border-dashed border-primary/20 bg-gradient-to-r from-emerald-50/30 to-blue-50/30">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-primary">
+            <Upload className="h-5 w-5" />
+            Smart Document Upload & OCR
+          </CardTitle>
+          <CardDescription>
+            Upload property documents, leases, or contracts to auto-fill form fields using advanced OCR technology
+          </CardDescription>
+        </CardHeader>
         <CardContent>
+          <DocumentPhotoUpload onDataExtracted={handleOCRDataExtracted} />
+        </CardContent>
+      </Card>
+
+      {/* Enhanced Form */}
+      <Card>
+        <CardContent className="p-8">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-5 md:grid-cols-9 lg:grid-cols-17">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 xl:grid-cols-12 gap-1 h-auto p-2">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="property">Property</TabsTrigger>
               <TabsTrigger value="location">Location</TabsTrigger>

@@ -62,7 +62,7 @@ export default function StreamlinedPropertyAssessment({ onComplete, initialData 
       title: "Property Photos & Documents",
       subtitle: "OCR and document upload with content selections",
       icon: <Camera className="h-5 w-5" />,
-      component: <DocumentPhotoUpload />,
+      component: <DocumentPhotoUpload onDataExtracted={() => {}} />,
       required: false,
       description: "Upload photos and documents. Use text box selections to specify what content to include in analysis."
     },
