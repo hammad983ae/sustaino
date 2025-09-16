@@ -109,7 +109,7 @@ const ComprehensiveIPProtection = () => {
               </div>
               
               <p className="text-sm text-muted-foreground">
-                © 2024 Delderenzo Property Group Pty Ltd. All rights reserved.
+                © 2025 Delderenzo Property Group Pty Ltd. All rights reserved.
               </p>
               <p className="text-sm">
                 Property Pro™ is a registered trademark of Delderenzo Property Group Pty Ltd. 

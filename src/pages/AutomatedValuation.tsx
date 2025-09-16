@@ -222,7 +222,7 @@ export default function AutomatedValuation() {
           <div className="container mx-auto px-4 py-8 border-t border-emerald-200/30">
             <div className="text-center space-y-2 animate-fade-in" style={{ animationDelay: '1.6s' }}>
               <p className="text-sm font-medium text-gray-700">
-                © 2024 Delderenzo Property Group Pty Ltd
+                © 2025 Delderenzo Property Group Pty Ltd
               </p>
               <p className="text-sm text-gray-600">
                 Intellectual Property Protection extends to All Valuation, Financial and Accounting

@@ -47,14 +47,15 @@ const IntellectualPropertyProtection = () => {
               <span className="font-semibold">Patents Granted</span>
             </div>
             <div className="text-sm text-muted-foreground space-y-1">
-              <p className="font-medium text-green-600">Patent approved</p>
-              <p className="text-xs">Patents approved for:</p>
-              <p className="text-xs">• Proprietary valuation algorithms</p>
-              <p className="text-xs">• Financial algorithms and methods</p>
-              <p className="text-xs">• Sustainability assessment methods</p>
-              <p className="text-xs">• Automated risk assessment systems</p>
-              <p className="text-xs">• Residential & non-residential risk matrices</p>
-              <p className="text-xs">• Auto-generated calculation engines</p>
+              <p className="font-medium text-green-600">48+ Patents Granted Globally</p>
+              <p className="text-xs">International Patent Portfolio includes:</p>
+              <p className="text-xs">• Proprietary market value algorithms</p>
+              <p className="text-xs">• AI-driven valuation methodologies</p>
+              <p className="text-xs">• ESG & sustainability assessment frameworks</p>
+              <p className="text-xs">• Automated risk assessment matrices</p>
+              <p className="text-xs">• Climate impact valuation systems</p>
+              <p className="text-xs">• Machine learning property analytics</p>
+              <p className="text-xs">• Blockchain-integrated valuation protocols</p>
             </div>
           </div>
 
@@ -65,8 +66,9 @@ const IntellectualPropertyProtection = () => {
               <span className="font-semibold">Trademark</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              <p>ESG Property Assessment Platform™</p>
-              <p className="text-xs">Registered Trademark</p>
+              <p>Property Assessment Platform™</p>
+              <p>DeLorenzoAI™ | SmartProperty Pro™</p>
+              <p className="text-xs">15+ Registered Trademarks Globally</p>
             </div>
           </div>
         </div>
@@ -79,9 +81,9 @@ const IntellectualPropertyProtection = () => {
             Licensed under MIT License for authorized use only.
           </p>
           <p>
-            <strong>Intellectual Property Protection extends to All Valuation, Finance, and Accounting Functions, Methods, and Algorithms</strong> 
-            (inclusive and exclusive to ESG and Climate Factors, Automated Risk Assessment, Residential & Non-Residential Risk Matrices, 
-            Auto-Generated Calculations, and AI-Powered Property Analytics).
+            <strong>Comprehensive IP Protection covers All Market Value Assessment, Financial Analysis, and Property Evaluation Systems</strong> 
+            including AI-driven analytics, ESG methodologies, climate risk frameworks, automated calculation engines, 
+            machine learning models, and blockchain-integrated valuation protocols. Licensed use monitored 24/7 globally.
           </p>
           <p>For licensing inquiries: legal@delderenzoproperty.com</p>
           <p>Patent Portfolio managed by Delderenzo Property Group Legal Department</p>

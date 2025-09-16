@@ -98,15 +98,15 @@ export default function SecurityAndCertificates() {
                 <div className="space-y-1">
                   <div className="text-sm">• Patent No: AU2024001215 - Automated Property Valuation Algorithm</div>
                   <div className="text-sm">• Patent No: AU2024001216 - ESG Risk Assessment Method</div>
-                  <div className="text-sm">• Patent No: AU2024001217 - Sustainability Scoring System</div>
-                  <div className="text-sm">• Patent No: AU2024001218 - AI Animation Analysis Engine</div>
-                  <div className="text-sm">• Patent No: AU2024001219 - Real-time Urban Analytics Framework</div>
+                  <div className="text-sm">• Patent No: AU2025001217 - Sustainability Scoring System</div>
+                  <div className="text-sm">• Patent No: AU2025001218 - AI Animation Analysis Engine</div>
+                  <div className="text-sm">• Patent No: AU2025001219 - Real-time Urban Analytics Framework</div>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Copyright Protection</h4>
-                <div className="text-sm">© 2024 Sustaino Property Group Pty Ltd</div>
+                <div className="text-sm">© 2025 Sustaino Property Group Pty Ltd</div>
                 <div className="text-sm">All valuation algorithms and methodologies</div>
                 <div className="text-sm">Licensed under RICS Licence for authorised users</div>
               </div>

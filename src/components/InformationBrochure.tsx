@@ -57,7 +57,7 @@ Email: support@sustainopro.com
 Website: www.sustainopro.com
 Phone: 1800 SUSTAIN (1800 787 824)
 
-© 2024 Sustaino Pro. All rights reserved.
+© 2025 Sustaino Pro. All rights reserved.
     `;
 
     const blob = new Blob([brochureContent], { type: 'text/plain' });
