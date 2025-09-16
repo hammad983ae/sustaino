@@ -16,6 +16,7 @@ export default function SalesEvidenceCommercial() {
   const [carParking, setCarParking] = useState(true);
   const [tenancy, setTenancy] = useState(true);
   const [leaseTerms, setLeaseTerms] = useState(true);
+  const [grossRent, setGrossRent] = useState(true);
   const [netRent, setNetRent] = useState(true);
   const [outgoings, setOutgoings] = useState(true);
   const [yieldRate, setYieldRate] = useState(true);
@@ -170,14 +171,14 @@ export default function SalesEvidenceCommercial() {
               <Input placeholder="Lease terms comparison..." className="text-sm" />
             </div>
 
-            {/* Net Rent */}
+            {/* Gross Rent */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>Net Rent</Label>
+              <Label>Gross Rent</Label>
               <div className="flex justify-center">
-                <Switch checked={netRent} onCheckedChange={setNetRent} />
+                <Switch checked={grossRent} onCheckedChange={setGrossRent} />
               </div>
-              <Input placeholder="$120,000 p.a." className="text-sm" />
-              <Input placeholder="Net rent comparison..." className="text-sm" />
+              <Input placeholder="$135,000 p.a." className="text-sm" />
+              <Input placeholder="Gross rent comparison..." className="text-sm" />
             </div>
 
             {/* Outgoings */}
@@ -188,6 +189,16 @@ export default function SalesEvidenceCommercial() {
               </div>
               <Input placeholder="$15,000 p.a." className="text-sm" />
               <Input placeholder="Outgoings comparison..." className="text-sm" />
+            </div>
+
+            {/* Net Rent */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Net Rent</Label>
+              <div className="flex justify-center">
+                <Switch checked={netRent} onCheckedChange={setNetRent} />
+              </div>
+              <Input placeholder="$120,000 p.a." className="text-sm" />
+              <Input placeholder="Net rent comparison..." className="text-sm" />
             </div>
 
             {/* Yield Rate */}

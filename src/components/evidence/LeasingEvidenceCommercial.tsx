@@ -162,16 +162,6 @@ export default function LeasingEvidenceCommercial() {
               <Input placeholder="Outgoings comparison..." className="text-sm" />
             </div>
 
-            {/* Land Tax */}
-            <div className="grid grid-cols-4 gap-4 items-center py-2">
-              <Label>Land Tax</Label>
-              <div className="flex justify-center">
-                <Switch checked={landTax} onCheckedChange={setLandTax} />
-              </div>
-              <Input placeholder="$8,500 p.a." className="text-sm" />
-              <Input placeholder="Land tax comparison..." className="text-sm" />
-            </div>
-
             {/* Net Rent */}
             <div className="grid grid-cols-4 gap-4 items-center py-2">
               <Label>Net Rent</Label>
@@ -180,6 +170,16 @@ export default function LeasingEvidenceCommercial() {
               </div>
               <Input placeholder="$120,000 p.a." className="text-sm" />
               <Input placeholder="Net rent comparison..." className="text-sm" />
+            </div>
+
+            {/* Land Tax */}
+            <div className="grid grid-cols-4 gap-4 items-center py-2">
+              <Label>Land Tax</Label>
+              <div className="flex justify-center">
+                <Switch checked={landTax} onCheckedChange={setLandTax} />
+              </div>
+              <Input placeholder="$8,500 p.a." className="text-sm" />
+              <Input placeholder="Land tax comparison..." className="text-sm" />
             </div>
 
             {/* Rate per sqm */}
