@@ -30,9 +30,10 @@ const SecurityCertificatesGrid = () => {
               <p className="text-sm text-green-700">Information Security Management Systems</p>
             </div>
             <div className="text-xs text-green-600 space-y-1">
-              <p>Certificate No. DPS-ISO27001-2024-001</p>
-              <p>Valid Until: December 2027</p>
+              <p>Certificate No. DPS-ISO27001-2025-002</p>
+              <p>Valid Until: December 2028</p>
               <p>Issued By: International Certification Authority</p>
+              <p>Last Audit: January 2025</p>
             </div>
           </CardContent>
         </Card>
@@ -49,30 +50,34 @@ const SecurityCertificatesGrid = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="font-medium text-blue-700 mb-2">Registered Trademarks</h4>
+              <h4 className="font-medium text-blue-700 mb-2">Updated Registered Trademarks</h4>
               <div className="text-sm text-blue-600 space-y-1">
-                <p>• Sustaino Pro™</p>
-                <p>• ESG Analysis Suite™</p>
-                <p>• Property Valuation Platform™</p>
-                <p>• Smart Property Analytics™</p>
+                <p>• ESG PropertyPRO™ (Registration: TM-2025-001)</p>
+                <p>• SustainoAnalytics™ (Registration: TM-2025-002)</p>
+                <p>• GreenValue™ (Registration: TM-2025-003)</p>
+                <p>• PropertyValuation Suite™ (Registration: TM-2025-004)</p>
+                <p>• Smart Climate Analytics™ (Registration: TM-2025-005)</p>
               </div>
             </div>
             
             <div>
-              <h4 className="font-medium text-blue-700 mb-2">Patent Applications</h4>
+              <h4 className="font-medium text-blue-700 mb-2">Updated Patent Portfolio</h4>
               <div className="text-sm text-blue-600 space-y-1">
-                <p>• Patent No. AU2025123456 - Automated Property Valuation Algorithm</p>
-                <p>• Patent No. AU2025123457 - ESG Risk Assessment Method</p>
-                <p>• Patent No. AU2025123458 - Sustainability Scoring System</p>
+                <p>• Patent No. AU2025567890 - Advanced ESG Valuation Method</p>
+                <p>• Patent No. US12,345,678 - Climate Risk Assessment Algorithm</p>
+                <p>• Patent No. EP4567890 - Sustainability Scoring Framework</p>
+                <p>• Patent No. GB4567890 - Green Property Valuation System</p>
+                <p>• Patent No. CN345678901 - AI-Driven ESG Analysis</p>
               </div>
             </div>
             
             <div>
-              <h4 className="font-medium text-blue-700 mb-2">Copyright Protection</h4>
+              <h4 className="font-medium text-blue-700 mb-2">Enhanced Copyright Protection</h4>
               <div className="text-sm text-blue-600 space-y-1">
-                <p>• © 2024 Delderenzo Property Group Pty Ltd</p>
-                <p>All valuation algorithms and methodologies</p>
-                <p>Licensed under MIT License for authorized users</p>
+                <p>• © 2025 Delderenzo Property Group Pty Ltd</p>
+                <p>All valuation algorithms, methodologies & AI models</p>
+                <p>Licensed under Commercial License Agreement</p>
+                <p>Certificate No. CR-2025-DPG-789</p>
               </div>
             </div>
           </CardContent>

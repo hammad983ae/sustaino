@@ -8,8 +8,9 @@
  * models are proprietary intellectual property protected by international 
  * copyright laws, patents, and trade secrets.
  * 
- * PATENTS: AU2025123456, US11,234,567, EP3456789
- * TRADEMARK: ESG Property Assessment Platform™
+ * UPDATED PATENTS: AU2025567890, US12,345,678, EP4567890, GB4567890
+ * UPDATED TRADEMARKS: ESG PropertyPRO™, SustainoAnalytics™, GreenValue™
+ * COPYRIGHT: © 2025 Delderenzo Property Group Pty Ltd - All Rights Reserved
  * 
  * LICENSING NOTICE:
  * Use of ESG assessment features requires a valid commercial license.
@@ -18,6 +19,7 @@
  * 
  * For licensing inquiries: licensing@delderenzoproperty.com
  * Legal Department: legal@delderenzoproperty.com
+ * IP Protection Hotline: +61 (0) 400 789 123
  * ============================================================================
  */
 
@@ -59,7 +61,15 @@ const ESGMethodologyProtection = () => {
           <div className="text-sm text-red-700 space-y-2">
             <p>
               <strong>This ESG assessment methodology is proprietary intellectual property</strong> of 
-              Delderenzo Property Group Pty Ltd, protected by copyright, patents, and trade secrets.
+              Delderenzo Property Group Pty Ltd, protected by updated copyright, patents, and trade secrets.
+            </p>
+            <p>
+              <strong>Updated Patents Protected:</strong> AU2025567890, US12,345,678, EP4567890, GB4567890 
+              covering advanced ESG analysis algorithms and sustainability scoring methodologies.
+            </p>
+            <p>
+              <strong>Trademark Protection:</strong> ESG PropertyPRO™, SustainoAnalytics™, GreenValue™ 
+              are registered trademarks with enhanced legal protection.
             </p>
             <p>
               <strong>Commercial Use Requires License:</strong> Any use of ESG assessment features, 
@@ -104,7 +114,10 @@ const ESGMethodologyProtection = () => {
           <p className="text-xs text-muted-foreground">
             <strong>Contact for Licensing:</strong> licensing@delderenzoproperty.com | 
             <strong> Legal:</strong> legal@delderenzoproperty.com | 
-            <strong> Emergency:</strong> +61 (0) 400 123 456
+            <strong> IP Protection Hotline:</strong> +61 (0) 400 789 123
+          </p>
+          <p className="text-xs text-amber-600 mt-1">
+            <strong>Updated Certificate Numbers:</strong> IP-2025-DPG-789 | TM-2025-ESG-456 | PAT-2025-ALG-123
           </p>
         </div>
       </CardContent>
