@@ -29,6 +29,7 @@ import RentRevisionPage from "./pages/RentRevision";
 import RentDeterminationPage from "./pages/RentDeterminationPage";
 import PlantAndEquipmentPage from "./pages/PlantAndEquipmentPage";
 import InformationMemorandum from "./pages/InformationMemorandum";
+import InvestmentPlatformPage from "./pages/InvestmentPlatform";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -73,6 +74,7 @@ const App = () => (
                 <Route path="/rent-determination" element={<RentDeterminationPage />} />
                 <Route path="/plant-equipment" element={<PlantAndEquipmentPage />} />
                 <Route path="/information-memorandum" element={<InformationMemorandum />} />
+                <Route path="/investment-platform" element={<InvestmentPlatformPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

@@ -22,7 +22,8 @@ import {
   Shield,
   Info,
   FileCheck,
-  FileText
+  FileText,
+  PiggyBank
 } from 'lucide-react';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
@@ -237,6 +238,22 @@ const Index = () => {
                               <CardContent>
                                 <p className="text-sm text-slate-600">
                                   Generate professional investment property memorandums with white label branding
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
+                          <Link to="/investment-platform">
+                            <Card className="bg-gradient-to-br from-white to-emerald-50/50 border border-emerald-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-emerald-700">
+                                  <PiggyBank className="h-5 w-5" />
+                                  SmartInvest Pro™
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Micro-investing platform with smart portfolios and goal-based investing
                                 </p>
                               </CardContent>
                             </Card>
