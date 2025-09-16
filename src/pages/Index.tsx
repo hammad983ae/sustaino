@@ -193,47 +193,53 @@ const Index = () => {
                             </Card>
                           </Link>
 
-                          <Card className="bg-gradient-to-br from-white to-indigo-50/50 border border-indigo-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-indigo-700">
-                                <ArrowUpDown className="h-5 w-5" />
-                                Rent Revision
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Calculate and review rental valuations with market comparisons
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/rent-revision">
+                            <Card className="bg-gradient-to-br from-white to-indigo-50/50 border border-indigo-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-indigo-700">
+                                  <ArrowUpDown className="h-5 w-5" />
+                                  Rent Revision
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Calculate and review rental valuations with market comparisons
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
 
-                          <Card className="bg-gradient-to-br from-white to-orange-50/50 border border-orange-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-orange-700">
-                                <Scale className="h-5 w-5" />
-                                Rent Determination
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Professional rent determination and arbitration services
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/rent-determination">
+                            <Card className="bg-gradient-to-br from-white to-orange-50/50 border border-orange-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-orange-700">
+                                  <Scale className="h-5 w-5" />
+                                  Rent Determination
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Professional rent determination and arbitration services
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
 
-                          <Card className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-slate-700">
-                                <Wrench className="h-5 w-5" />
-                                Plant & Equipment
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Specialized valuation for plant, equipment and machinery assets
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/plant-equipment">
+                            <Card className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-slate-700">
+                                  <Wrench className="h-5 w-5" />
+                                  Plant & Equipment
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Specialized valuation for plant, equipment and machinery assets
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
 
                           <Link to="/insurance-valuations">
                             <Card className="bg-gradient-to-br from-white to-purple-50/50 border border-purple-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
@@ -251,47 +257,53 @@ const Index = () => {
                             </Card>
                           </Link>
 
-                          <Card className="bg-gradient-to-br from-white to-green-50/50 border border-green-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-green-700">
-                                <Sprout className="h-5 w-5" />
-                                Agricultural Hub
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Specialized tools for agricultural property assessment and valuation
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/costa-group-valuations">
+                            <Card className="bg-gradient-to-br from-white to-green-50/50 border border-green-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-green-700">
+                                  <Sprout className="h-5 w-5" />
+                                  Agricultural Hub
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Specialized tools for agricultural property assessment and valuation
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
 
-                          <Card className="bg-gradient-to-br from-white to-amber-50/50 border border-amber-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-amber-700">
-                                <Building2 className="h-5 w-5" />
-                                Property Hub
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Central hub for all property management and analysis tools
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/work-hub">
+                            <Card className="bg-gradient-to-br from-white to-amber-50/50 border border-amber-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-amber-700">
+                                  <Building2 className="h-5 w-5" />
+                                  Property Hub
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Central hub for all property management and analysis tools
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
 
-                          <Card className="bg-gradient-to-br from-white to-violet-50/50 border border-violet-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
-                            <CardHeader>
-                              <CardTitle className="flex items-center gap-2 text-violet-700">
-                                <Activity className="h-5 w-5" />
-                                Economic Activity
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-slate-600">
-                                Analyze economic indicators and market trends affecting property values
-                              </p>
-                            </CardContent>
-                          </Card>
+                          <Link to="/comprehensive-valuation-analysis">
+                            <Card className="bg-gradient-to-br from-white to-violet-50/50 border border-violet-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-violet-700">
+                                  <Activity className="h-5 w-5" />
+                                  Economic Activity
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Analyze economic indicators and market trends affecting property values
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
 
                           <Link to="/esg-climate-assessment">
                             <Card className="bg-gradient-to-br from-white to-teal-50/50 border border-teal-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
