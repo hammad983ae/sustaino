@@ -112,6 +112,12 @@ export default function FullScreenDemo() {
                 >
                   🌍 ESG Platform
                 </a>
+                <a 
+                  href="/sam-platform" 
+                  className="flex items-center gap-2 px-6 py-3 bg-purple-500/10 hover:bg-purple-500/20 rounded-xl transition-all duration-300 text-purple-700 font-medium hover-scale backdrop-blur-sm border border-purple-200/50 hover:border-purple-300/70 text-lg"
+                >
+                  🎯 SAM Platform
+                </a>
               </div>
             </div>
           </div>

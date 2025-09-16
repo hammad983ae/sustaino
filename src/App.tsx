@@ -31,6 +31,8 @@ import PlantAndEquipmentPage from "./pages/PlantAndEquipmentPage";
 import InformationMemorandum from "./pages/InformationMemorandum";
 import InvestmentPlatformPage from "./pages/InvestmentPlatform";
 import BrickByBrickPage from "./pages/BrickByBrick";
+import ESGStrategyAnalysis from "./pages/ESGStrategyAnalysis";
+import SAMPlatform from "./pages/SAMPlatform";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -77,6 +79,8 @@ const App = () => (
                 <Route path="/information-memorandum" element={<InformationMemorandum />} />
                 <Route path="/investment-platform" element={<InvestmentPlatformPage />} />
                 <Route path="/brick-by-brick" element={<BrickByBrickPage />} />
+                <Route path="/esg-strategy-analysis" element={<ESGStrategyAnalysis />} />
+                <Route path="/sam-platform" element={<SAMPlatform />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

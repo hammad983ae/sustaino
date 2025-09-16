@@ -124,6 +124,12 @@ export default function AutomatedValuation() {
                   🌍 ESG Platform
                 </a>
                 <a 
+                  href="/sam-platform" 
+                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
+                >
+                  🎯 SAM Platform
+                </a>
+                <a 
                   href="/crypto-trading" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
