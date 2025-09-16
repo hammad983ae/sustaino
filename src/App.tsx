@@ -24,6 +24,7 @@ import ESGClimateAssessment from "./pages/ESGClimateAssessment";
 import FullScreenDemo from "./pages/FullScreenDemo";
 import SocialDemo from "./pages/SocialDemo";
 import InsuranceValuationsPage from "./pages/InsuranceValuations";
+import FinancialReporting from "./pages/FinancialReporting";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -63,6 +64,7 @@ const App = () => (
                 <Route path="/insurance-valuations" element={<InsuranceValuationsPage />} />
                 <Route path="/fullscreen-demo" element={<FullScreenDemo />} />
                 <Route path="/social-demo" element={<SocialDemo />} />
+                <Route path="/financial-reporting" element={<FinancialReporting />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

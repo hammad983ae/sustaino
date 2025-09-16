@@ -162,6 +162,238 @@ export type Database = {
           },
         ]
       }
+      financial_metrics: {
+        Row: {
+          accounts_receivable: number
+          annual_dividends_per_share: number | null
+          biodiversity_score: number | null
+          cogs: number
+          common_stock_outstanding: number
+          community_investment: number | null
+          company_name: string | null
+          created_at: string
+          current_assets: number
+          current_liabilities: number
+          current_market_price_per_share: number | null
+          depreciation: number | null
+          ebit: number
+          financing_cash_flow: number | null
+          ghg_emissions_tons: number | null
+          gross_profit: number
+          id: string
+          interest_expense: number
+          inventory: number
+          investing_cash_flow: number | null
+          long_term_debt: number
+          net_profit: number
+          operating_cash_flow: number | null
+          operating_income: number
+          period_end: string
+          period_start: string
+          renewable_energy_percentage: number | null
+          sales: number
+          total_assets: number
+          total_liabilities: number
+          total_stockholders_equity: number
+          updated_at: string
+          user_id: string
+          waste_recycled_percentage: number | null
+          water_usage_ml: number | null
+        }
+        Insert: {
+          accounts_receivable?: number
+          annual_dividends_per_share?: number | null
+          biodiversity_score?: number | null
+          cogs?: number
+          common_stock_outstanding?: number
+          community_investment?: number | null
+          company_name?: string | null
+          created_at?: string
+          current_assets?: number
+          current_liabilities?: number
+          current_market_price_per_share?: number | null
+          depreciation?: number | null
+          ebit?: number
+          financing_cash_flow?: number | null
+          ghg_emissions_tons?: number | null
+          gross_profit?: number
+          id?: string
+          interest_expense?: number
+          inventory?: number
+          investing_cash_flow?: number | null
+          long_term_debt?: number
+          net_profit?: number
+          operating_cash_flow?: number | null
+          operating_income?: number
+          period_end: string
+          period_start: string
+          renewable_energy_percentage?: number | null
+          sales?: number
+          total_assets?: number
+          total_liabilities?: number
+          total_stockholders_equity?: number
+          updated_at?: string
+          user_id: string
+          waste_recycled_percentage?: number | null
+          water_usage_ml?: number | null
+        }
+        Update: {
+          accounts_receivable?: number
+          annual_dividends_per_share?: number | null
+          biodiversity_score?: number | null
+          cogs?: number
+          common_stock_outstanding?: number
+          community_investment?: number | null
+          company_name?: string | null
+          created_at?: string
+          current_assets?: number
+          current_liabilities?: number
+          current_market_price_per_share?: number | null
+          depreciation?: number | null
+          ebit?: number
+          financing_cash_flow?: number | null
+          ghg_emissions_tons?: number | null
+          gross_profit?: number
+          id?: string
+          interest_expense?: number
+          inventory?: number
+          investing_cash_flow?: number | null
+          long_term_debt?: number
+          net_profit?: number
+          operating_cash_flow?: number | null
+          operating_income?: number
+          period_end?: string
+          period_start?: string
+          renewable_energy_percentage?: number | null
+          sales?: number
+          total_assets?: number
+          total_liabilities?: number
+          total_stockholders_equity?: number
+          updated_at?: string
+          user_id?: string
+          waste_recycled_percentage?: number | null
+          water_usage_ml?: number | null
+        }
+        Relationships: []
+      }
+      financial_ratios: {
+        Row: {
+          accounts_receivable_turnover: number | null
+          created_at: string
+          current_ratio: number | null
+          debt_to_equity_ratio: number | null
+          debt_to_total_assets_ratio: number | null
+          earnings_per_share: number | null
+          gross_profit_margin: number | null
+          id: string
+          inventory_turnover: number | null
+          metrics_id: string
+          net_profit_margin: number | null
+          operating_profit_margin: number | null
+          price_earnings_ratio: number | null
+          quick_ratio: number | null
+          return_on_assets: number | null
+          return_on_stockholders_equity: number | null
+          times_interest_earned_ratio: number | null
+          updated_at: string
+          user_id: string
+          working_capital: number | null
+        }
+        Insert: {
+          accounts_receivable_turnover?: number | null
+          created_at?: string
+          current_ratio?: number | null
+          debt_to_equity_ratio?: number | null
+          debt_to_total_assets_ratio?: number | null
+          earnings_per_share?: number | null
+          gross_profit_margin?: number | null
+          id?: string
+          inventory_turnover?: number | null
+          metrics_id: string
+          net_profit_margin?: number | null
+          operating_profit_margin?: number | null
+          price_earnings_ratio?: number | null
+          quick_ratio?: number | null
+          return_on_assets?: number | null
+          return_on_stockholders_equity?: number | null
+          times_interest_earned_ratio?: number | null
+          updated_at?: string
+          user_id: string
+          working_capital?: number | null
+        }
+        Update: {
+          accounts_receivable_turnover?: number | null
+          created_at?: string
+          current_ratio?: number | null
+          debt_to_equity_ratio?: number | null
+          debt_to_total_assets_ratio?: number | null
+          earnings_per_share?: number | null
+          gross_profit_margin?: number | null
+          id?: string
+          inventory_turnover?: number | null
+          metrics_id?: string
+          net_profit_margin?: number | null
+          operating_profit_margin?: number | null
+          price_earnings_ratio?: number | null
+          quick_ratio?: number | null
+          return_on_assets?: number | null
+          return_on_stockholders_equity?: number | null
+          times_interest_earned_ratio?: number | null
+          updated_at?: string
+          user_id?: string
+          working_capital?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_ratios_metrics_id_fkey"
+            columns: ["metrics_id"]
+            isOneToOne: false
+            referencedRelation: "financial_metrics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_reports: {
+        Row: {
+          ai_analysis: string | null
+          created_at: string
+          id: string
+          metrics_id: string
+          report_data: Json
+          report_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: string | null
+          created_at?: string
+          id?: string
+          metrics_id: string
+          report_data: Json
+          report_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: string | null
+          created_at?: string
+          id?: string
+          metrics_id?: string
+          report_data?: Json
+          report_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_reports_metrics_id_fkey"
+            columns: ["metrics_id"]
+            isOneToOne: false
+            referencedRelation: "financial_metrics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_summaries: {
         Row: {
           created_at: string
