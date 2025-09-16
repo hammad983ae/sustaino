@@ -717,32 +717,186 @@ export const InformationMemorandumGenerator = () => {
   const autoFillSampleData = () => {
     setMemorandum(prev => ({
       ...prev,
-      title: "Premium Investment Opportunity",
-      subtitle: "Commercial Property | High Yield Investment",
+      title: "320 Deakin Avenue Investment Opportunity",
+      subtitle: "Mildura Central VIC 3500",
+      saleMethod: "Expressions of Interest",
+      closingDate: "3pm (AEST) Wednesday 15 January 2025",
       properties: [{
-        address: "123 Business District, Central City",
-        landArea: "2,400 sqm",
-        buildingArea: "1,800 sqm",
-        zoning: "Commercial 1",
+        address: "320 Deakin Avenue, Mildura Central VIC 3500",
+        landArea: "1,845 sqm",
+        buildingArea: "1,250 sqm",
+        zoning: "Commercial 1 Zone",
         titleDetails: "Freehold",
-        frontage: "40m",
-        overlay: "None"
+        frontage: "32.5m (approx) to Deakin Avenue",
+        overlay: "Design and Development Overlay"
       }],
       investmentHighlights: {
-        primaryHighlight: "8.5% Net Yield | Prime Location | Secure Tenant",
+        primaryHighlight: "7.8% Net Yield | Regional Shopping Anchor | Secure National Tenant",
         keyFeatures: [
-          "Prime commercial location",
-          "Secure long-term tenant",
-          "Strong rental growth",
-          "Development potential"
+          "Prime Deakin Avenue frontage location",
+          "Secure 10-year lease with national tenant",
+          "Strong rental growth potential",
+          "Excellent car parking provision",
+          "Regional shopping precinct anchor"
         ],
         financialMetrics: {
-          netIncome: "$425,000",
-          estimatedYield: "8.5%",
+          netIncome: "$385,000",
+          estimatedYield: "7.8%",
           occupancyRate: "100%"
         }
+      },
+      leases: [{
+        tenant: "Woolworths Limited",
+        area: "1,250 sqm",
+        term: "10 years",
+        expiry: "31 December 2034",
+        rent: "$425,000 per annum plus GST",
+        reviewType: "CPI with 2.5% minimum",
+        options: "2 x 5 year options"
+      }],
+      financialSummary: {
+        grossIncome: "$425,000",
+        totalOutgoings: "$40,000",
+        netIncome: "$385,000",
+        expenses: [
+          { category: "Council Rates", amount: "$18,500" },
+          { category: "Insurance", amount: "$12,500" },
+          { category: "Property Management", amount: "$9,000" }
+        ]
+      },
+      tenantProfiles: [{
+        name: "Woolworths Limited",
+        logo: "",
+        description: "Woolworths Limited is Australia's largest supermarket chain and a leading player in general merchandise and food. With over 1,000 stores across Australia, Woolworths has established itself as a cornerstone of Australian retail. The company's strong covenant strength and commitment to regional markets makes it an ideal anchor tenant for commercial properties. Woolworths continues to invest in regional locations like Mildura, recognizing the growth potential and strong community support in these markets.",
+        website: "www.woolworths.com.au",
+        businessType: "Supermarket and General Merchandise",
+        establishedYear: "1924",
+        keyFeatures: ["ASX Listed (WOW)", "AAA Credit Rating", "Market Leader", "Long-term Regional Commitment"]
+      }],
+      locationShowcase: {
+        mainHeadline: "Mildura's Premier Commercial Precinct",
+        subHeadline: "Gateway to Australia's Food Bowl",
+        positioningStatement: "320 Deakin Avenue sits in the heart of Mildura's thriving commercial district, benefiting from high foot traffic and excellent accessibility. Deakin Avenue is the main commercial thoroughfare, connecting residential areas to the CBD and providing maximum exposure for retail businesses.",
+        heroImage: "",
+        keyLocationBenefits: [
+          "Major arterial road with 25,000+ vehicles daily",
+          "Walking distance to Mildura Central Shopping Centre",
+          "Close proximity to government services and banks",
+          "Excellent public transport connectivity",
+          "Surrounded by complementary retail businesses"
+        ]
+      },
+      regionalGrowth: {
+        headline: "Strong Regional Growth Fundamentals",
+        stats: "3.2% annual growth, $2.8B regional economy",
+        description: "Mildura region has demonstrated consistent economic growth driven by agricultural exports, tourism, and population growth. The region benefits from significant government infrastructure investment and strategic location as a gateway between Victoria, NSW, and SA."
+      },
+      councilInfo: {
+        population: "55,921",
+        growthRate: "1.8% annually",
+        grossProduct: "$2.8 billion",
+        developments: "$450M infrastructure pipeline",
+        description: "Mildura Rural City Council area is experiencing sustained growth with major infrastructure projects including the Murray River bridge upgrade, airport expansion, and new residential developments driving economic activity."
+      },
+      infrastructure: {
+        hospital: {
+          name: "Mildura Base Hospital Redevelopment",
+          value: "$180 million",
+          description: "Major health infrastructure investment creating 400+ construction jobs and ongoing healthcare employment opportunities"
+        },
+        solarFarm: {
+          name: "Mildura Solar Farm",
+          value: "$350 million",
+          description: "One of Australia's largest solar farms, reinforcing Mildura's position as a renewable energy hub and attracting related industries"
+        }
+      },
+      regionalInvestment: {
+        regionName: "Sunraysia Region",
+        economySize: "$2.8 billion annually",
+        retailGrowth: "4.2% annually",
+        populationGrowth: "1.8% annually",
+        employmentGrowth: "2.1% annually",
+        description: "The Sunraysia region, anchored by Mildura, is Victoria's premier food bowl and a growing hub for agriculture, manufacturing, and renewable energy. Strong export markets and government investment continue to drive economic expansion."
+      },
+      nationalInvestment: {
+        countryOverview: "Australia's economy remains resilient with strong fundamentals supporting commercial property investment. Regional markets like Mildura benefit from decentralization trends and government infrastructure spending.",
+        nationalGdpGrowth: "2.8% annual growth",
+        populationGrowth: "1.6% annual growth",
+        unemploymentRate: "3.9%",
+        interestRateEnvironment: "RBA cash rate 4.35% - stabilizing after recent rises",
+        governmentIncentives: "Regional Development Australia funding, drought resilience packages, and renewable energy incentives supporting regional business growth",
+        nationalMarketTrends: "Flight to quality regional assets, yield compression in metro markets driving regional investment, strong consumer spending in regional areas",
+        economicForecast: "Continued growth supported by commodity exports, tourism recovery, and infrastructure investment. Regional markets expected to outperform metros over medium term."
+      },
+      assetSpecificInvestment: {
+        assetType: "Neighbourhood Shopping Centre",
+        assetGrading: "A-Grade Regional",
+        locationScore: "9.5/10 - Premier arterial frontage",
+        buildingCondition: "Excellent - Recently renovated",
+        tenantQuality: "AAA - Woolworths Limited (ASX: WOW)",
+        leaseCovenantStrength: "Very Strong - National covenant",
+        futureGrowthPotential: "Strong fundamentals with population growth, tourism expansion, and agricultural sector strength supporting rental growth. Potential for rental increases above CPI over medium term.",
+        riskFactors: ["Regional market exposure", "Single tenant dependency", "Economic cycle sensitivity"],
+        assetComparisons: [
+          { comparable: "Similar Woolworths Regional", location: "Ballarat", yield: "6.8%", price: "$6.2M" },
+          { comparable: "Coles Regional Centre", location: "Warrnambool", yield: "7.2%", price: "$5.8M" },
+          { comparable: "Woolworths Neighbourhood", location: "Bendigo", yield: "6.9%", price: "$7.1M" }
+        ]
+      },
+      geographicalAnalysis: {
+        suburb: "Mildura Central",
+        municipality: "Mildura Rural City",
+        state: "Victoria",
+        country: "Australia",
+        regionType: "Regional City",
+        demographics: {
+          population: "55,921",
+          medianAge: "41.2 years",
+          householdIncome: "$62,400",
+          educationLevel: "18% tertiary qualified"
+        },
+        infrastructure: {
+          transport: ["Mildura Airport (domestic flights)", "V/Line coach connections", "Major highway intersection"],
+          healthcare: ["Mildura Base Hospital", "Private medical centres", "Specialist services"],
+          education: ["La Trobe University campus", "TAFE facilities", "Multiple schools"],
+          retail: ["Mildura Central Shopping Centre", "Deakin Avenue strip shopping", "Langtree Mall CBD"]
+        },
+        marketAnalysis: {
+          medianPrice: "$340,000",
+          priceGrowth: "8.5% annually",
+          rentalYield: "5.2%",
+          daysOnMarket: "42 days"
+        }
+      },
+      gapAnalysis: {
+        supplySideAnalysis: {
+          currentSupply: "Limited quality commercial space on Deakin Avenue. Most existing retail is older format requiring significant capital investment.",
+          futureSupply: "Minimal development pipeline for commercial retail. Planning restrictions and high development costs limiting new supply.",
+          competitorAnalysis: "No direct competitors with similar scale or tenant quality. Closest comparable assets are in Mildura Central (2km away) or smaller strip shops with inferior exposure."
+        },
+        demandAnalysis: {
+          currentDemand: "Strong demand from national retailers seeking regional exposure. Limited quality options driving premium pricing for prime sites.",
+          projectedDemand: "Population growth and tourism expansion expected to increase retail spending by 15% over next 5 years.",
+          demandDrivers: ["Population growth 1.8% annually", "Tourism visitor growth", "Agricultural prosperity", "Government infrastructure investment"]
+        },
+        marketGap: {
+          identifiedGap: "Shortage of modern, accessible retail space on major arterials. Gap between supply and demand creating rental growth opportunity.",
+          opportunitySize: "Estimated $2.5M rental growth opportunity over 10 years",
+          competitiveAdvantage: "Premier location, secure national tenant, modern facilities, excellent parking and access",
+          riskMitigation: "Woolworths long-term commitment, diverse regional economy, government infrastructure support"
+        },
+        recommendations: [
+          "Hold for long-term capital growth and rental increases",
+          "Consider expansion opportunities if adjacent land becomes available",
+          "Monitor lease renewal negotiations for rental increases",
+          "Maintain property to premium standard to support rental growth"
+        ]
       }
     }));
+  };
+
+  const autoFill320DeakinData = () => {
+    autoFillSampleData();
   };
 
   if (previewMode) {
@@ -999,9 +1153,9 @@ export const InformationMemorandumGenerator = () => {
               </CardDescription>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={autoFillSampleData} size="sm">
+              <Button variant="outline" onClick={autoFill320DeakinData} size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Sample Data
+                Load 320 Deakin Avenue
               </Button>
               <Button variant="outline" onClick={() => setPreviewMode(true)}>
                 <Eye className="h-4 w-4 mr-2" />
