@@ -1,3 +1,4 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -44,27 +45,36 @@ Deno.serve(async (req) => {
       )
     }
 
-    console.log(`Scraping ${data_type} data from: ${url}`)
+    console.log(`Processing ${data_type} data from: ${url}`)
 
-    // Fetch the webpage content
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    // Check if URL is a PDF
+    const isPDF = url.toLowerCase().includes('.pdf') || url.toLowerCase().includes('pdf')
+    let extractedData: ExtractedPropertyData
+
+    if (isPDF) {
+      console.log('Detected PDF document, using AI extraction...')
+      extractedData = await extractFromPDF(url, data_type)
+    } else {
+      console.log('Detected HTML page, using pattern matching...')
+      // Fetch the webpage content
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch URL: ${response.status}`)
       }
-    })
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch URL: ${response.status}`)
+      const html = await response.text()
+      extractedData = extractPropertyData(html, url)
     }
-
-    const html = await response.text()
     
-    // Extract property data using pattern matching
-    const extractedData = extractPropertyData(html, url)
     
-    if (!extractedData.address) {
+    if (!extractedData.address && !extractedData.price) {
       return new Response(
-        JSON.stringify({ error: 'Could not extract property address from the webpage' }),
+        JSON.stringify({ error: 'Could not extract property data from the document' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -157,6 +167,132 @@ Deno.serve(async (req) => {
     )
   }
 })
+
+async function extractFromPDF(url: string, dataType: 'sales' | 'rental'): Promise<ExtractedPropertyData> {
+  try {
+    console.log('Downloading PDF content...')
+    
+    // Download PDF content
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`Failed to download PDF: ${response.status}`)
+    }
+    
+    const pdfArrayBuffer = await response.arrayBuffer()
+    const pdfBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfArrayBuffer)))
+    
+    console.log('Analyzing PDF with OpenAI...')
+    
+    const openAIKey = Deno.env.get('OPENAI_API_KEY')
+    if (!openAIKey) {
+      throw new Error('OpenAI API key not configured')
+    }
+
+    const prompt = `
+Analyze this property ${dataType} document and extract structured data. Look for:
+
+${dataType === 'sales' ? 'SALES DATA:' : 'RENTAL DATA:'}
+- Property addresses
+- ${dataType === 'sales' ? 'Sale prices' : 'Rental amounts (weekly/monthly)'}
+- ${dataType === 'sales' ? 'Sale dates' : 'Lease dates'}
+- Property details (bedrooms, bathrooms, car spaces)
+- Building and land areas
+- Property types
+
+Return ONLY a JSON array of properties found, using this exact format:
+[
+  {
+    "address": "123 Main Street, Suburb, State 1234",
+    "price": 850000,
+    "date": "2024-01-15",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "car_spaces": 2,
+    "building_area": 150,
+    "land_area": 600,
+    "property_type": "residential"
+  }
+]
+
+Important:
+- Include ALL properties found in the document
+- Use Australian address format
+- Price should be numeric (no $ or commas)
+- Date format: YYYY-MM-DD
+- If a field is unknown, omit it from the JSON
+- Return empty array [] if no properties found
+`
+
+    const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          { 
+            role: 'system', 
+            content: 'You are a property data extraction specialist. Extract structured property data from documents with 100% accuracy.' 
+          },
+          { 
+            role: 'user', 
+            content: [
+              { type: 'text', text: prompt },
+              { 
+                type: 'image_url', 
+                image_url: { url: `data:application/pdf;base64,${pdfBase64}` }
+              }
+            ]
+          }
+        ],
+        max_tokens: 2000,
+        temperature: 0.1
+      }),
+    })
+
+    if (!aiResponse.ok) {
+      const errorText = await aiResponse.text()
+      console.error('OpenAI API error:', errorText)
+      throw new Error(`OpenAI API error: ${aiResponse.status}`)
+    }
+
+    const aiData = await aiResponse.json()
+    const extractedText = aiData.choices[0].message.content
+
+    console.log('Raw AI response:', extractedText)
+
+    // Parse the JSON response
+    let properties = []
+    try {
+      // Extract JSON from the response (in case there's extra text)
+      const jsonMatch = extractedText.match(/\[[\s\S]*\]/)
+      if (jsonMatch) {
+        properties = JSON.parse(jsonMatch[0])
+      } else {
+        console.warn('No JSON array found in AI response')
+        return {}
+      }
+    } catch (parseError) {
+      console.error('Failed to parse AI response as JSON:', parseError)
+      return {}
+    }
+
+    // Return the first property found, or aggregate data if multiple
+    if (properties.length > 0) {
+      const firstProperty = properties[0]
+      console.log('Extracted property data:', firstProperty)
+      return firstProperty
+    }
+
+    return {}
+
+  } catch (error) {
+    console.error('Error extracting from PDF:', error)
+    throw error
+  }
+}
 
 function extractPropertyData(html: string, url: string): ExtractedPropertyData {
   const data: ExtractedPropertyData = {}
