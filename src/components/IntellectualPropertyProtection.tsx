@@ -17,8 +17,8 @@ export default function IntellectualPropertyProtection() {
             <Shield className="h-8 w-8 text-blue-600" />
             <div>
                <h1 className="text-3xl font-bold text-gray-900">Intellectual Property Protection</h1>
-               <p className="text-gray-600 mt-1">Comprehensive IP Portfolio - 142+ Patents, 50+ Trademarks™, Global Copyright Protection</p>
-               <p className="text-gray-500 text-sm mt-1">SAM Platform™, AI Forecasting Engine™, ESG BET™ - All Patents Pending</p>
+               <p className="text-gray-600 mt-1">Comprehensive IP Portfolio - 155+ Patents, 58+ Trademarks™, Global Copyright Protection</p>
+               <p className="text-gray-500 text-sm mt-1">SAM Platform™, AI Forecasting Engine™, ESG BET™, Video Streaming Platform™ - All Patents Pending</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -68,11 +68,14 @@ export default function IntellectualPropertyProtection() {
                  <li>• Smart Property Assessment™</li>
                  <li>• Green Building Evaluator™</li>
                  <li>• AI Forecasting Engine™</li>
-                 <li>• ESG BET™ Trading Platform</li>
-                 <li>• Crypto Banking Suite™</li>
-                 <li>• Live Video Broadcasting™</li>
+                  <li>• ESG BET™ Trading Platform</li>
+                  <li>• Crypto Banking Suite™</li>
+                  <li>• Live Video Broadcasting™</li>
+                  <li>• Display Share Technology™</li>
+                  <li>• Broadcasting Studio Pro™</li>
+                  <li>• Stream Management Suite™</li>
                </ul>
-               <Badge className="bg-orange-600 text-white">TM Registration: 55+ Active</Badge>
+               <Badge className="bg-orange-600 text-white">TM Registration: 58+ Active</Badge>
             </div>
             <div className="space-y-3">
               <h3 className="font-bold text-lg text-red-700">Copyright Protection ©</h3>
@@ -89,8 +92,11 @@ export default function IntellectualPropertyProtection() {
                  <li>• Business Processes © 2025</li>
                  <li>• AI Forecasting Algorithms © 2025</li>
                  <li>• Animation Engine Code © 2025</li>
-                 <li>• SAM Platform Architecture © 2025</li>
-                 <li>• ESG BET™ System Design © 2025</li>
+                  <li>• SAM Platform Architecture © 2025</li>
+                  <li>• ESG BET™ System Design © 2025</li>
+                  <li>• Video Streaming Protocols © 2025</li>
+                  <li>• Broadcasting Infrastructure © 2025</li>
+                  <li>• Display Share Technology © 2025</li>
                </ul>
                <Badge className="bg-red-600 text-white">© Delderenzo Property Group Pty Ltd</Badge>
             </div>
@@ -125,11 +131,14 @@ export default function IntellectualPropertyProtection() {
                  <div className="text-sm">• Patent No: AU2025001304 - Social Impact Tracking Algorithm</div>
                  <div className="text-sm">• Patent No: AU2025001305 - 3D Visualization Engine</div>
                  <div className="text-sm">• Patent No: AU2025001306 - Neural Network Forecasting</div>
-                 <div className="text-sm">• Patent No: AU2025001400 - Real-time Video ESG Analytics</div>
-                 <div className="text-sm">• Patent No: AU2025001401 - Live Streaming Platform Architecture</div>
-                 <div className="text-sm">• Patent No: AU2025001402 - Interactive Video Chat System</div>
+                  <div className="text-sm">• Patent No: AU2025001400 - Real-time Video ESG Analytics</div>
+                  <div className="text-sm">• Patent No: AU2025001401 - Live Streaming Platform Architecture</div>
+                  <div className="text-sm">• Patent No: AU2025001402 - Interactive Video Chat System</div>
+                  <div className="text-sm">• Patent No: AU2025001403 - Display Share Technology</div>
+                  <div className="text-sm">• Patent No: AU2025001404 - Broadcasting Studio Framework</div>
+                  <div className="text-sm">• Patent No: AU2025001405 - Stream Management System</div>
                </div>
-               <Badge className="bg-green-600 text-white">150+ Patents Granted & Pending</Badge>
+               <Badge className="bg-green-600 text-white">155+ Patents Granted & Pending</Badge>
              </div>
              <div className="space-y-1">
                <Badge className="bg-green-700 text-white mr-2">AU2025901234-AU2025901355</Badge>
@@ -342,7 +351,7 @@ export default function IntellectualPropertyProtection() {
       {/* Footer */}
       <div className="text-center text-xs text-gray-500 pt-4 border-t">
         <p>© 2025 Property Valuation Platform. All rights reserved globally.</p>
-        <p>Protected by 52+ patents, 18+ trademarks, and comprehensive copyright registrations.</p>
+        <p>Protected by 155+ patents, 58+ trademarks, and comprehensive copyright registrations.</p>
         <p>Last updated: January 2025 | Next review: April 2025</p>
       </div>
     </div>
