@@ -14,13 +14,18 @@ import {
   CheckCircle,
   AlertCircle,
   Zap,
-  Settings
+  Settings,
+  Building,
+  Shield,
+  Globe
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const AccountingPlatformIntegration = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState("");
+  const [governmentConnections, setGovernmentConnections] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
 
   const platforms = [
@@ -68,6 +73,41 @@ export const AccountingPlatformIntegration = () => {
     }
   ];
 
+  const governmentServices = [
+    {
+      id: "ato",
+      name: "Australian Tax Office (ATO)",
+      logo: "🏛️",
+      description: "SBR submissions, tax obligations, and compliance",
+      status: "available",
+      department: "Treasury"
+    },
+    {
+      id: "asic",
+      name: "ASIC Registry",
+      logo: "🏢",
+      description: "Company registrations, annual returns, and searches",
+      status: "available",
+      department: "Treasury"
+    },
+    {
+      id: "abr",
+      name: "Australian Business Register",
+      logo: "📋",
+      description: "ABN verification and business details",
+      status: "available",
+      department: "ATO"
+    },
+    {
+      id: "acnc",
+      name: "ACNC Charity Register",
+      logo: "❤️",
+      description: "Charity registration and compliance",
+      status: "coming-soon",
+      department: "ACNC"
+    }
+  ];
+
   const handleConnect = (platformId: string) => {
     setSelectedPlatform(platformId);
     // Simulate connection process
@@ -92,6 +132,79 @@ export const AccountingPlatformIntegration = () => {
     });
   };
 
+  const handleGovernmentConnect = async (serviceId: string) => {
+    try {
+      toast({
+        title: "Connecting to Government Service",
+        description: `Establishing secure connection to ${governmentServices.find(s => s.id === serviceId)?.name}`,
+      });
+
+      // Test connection to government service
+      const { data, error } = await supabase.functions.invoke('government-services', {
+        body: {
+          service: serviceId,
+          action: 'test_connection',
+          data: {}
+        }
+      });
+
+      if (error) throw error;
+
+      setGovernmentConnections(prev => ({ ...prev, [serviceId]: true }));
+      
+      toast({
+        title: "Government Service Connected",
+        description: "Successfully connected to government service",
+      });
+    } catch (error) {
+      console.error('Government connection error:', error);
+      toast({
+        title: "Connection Failed",
+        description: "Failed to connect to government service",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleATOSubmission = async () => {
+    try {
+      toast({
+        title: "Submitting to ATO",
+        description: "Preparing SBR submission to Australian Tax Office",
+      });
+
+      // This would include actual financial data
+      const submissionData = {
+        abn: "12345678901", // Would come from user data
+        taxPeriod: "2024-Q4",
+        financialData: {
+          // Financial statement data
+        }
+      };
+
+      const { data, error } = await supabase.functions.invoke('ato-integration', {
+        body: {
+          action: 'submit_sbr',
+          data: submissionData
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "ATO Submission Successful",
+        description: `Submission ID: ${data.submissionId}`,
+      });
+    } catch (error) {
+      console.error('ATO submission error:', error);
+      toast({
+        title: "Submission Failed",
+        description: "Failed to submit to ATO",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -106,8 +219,9 @@ export const AccountingPlatformIntegration = () => {
       </div>
 
       <Tabs defaultValue="platforms" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="platforms">Platforms</TabsTrigger>
+          <TabsTrigger value="government">Government</TabsTrigger>
           <TabsTrigger value="custom">Custom System</TabsTrigger>
           <TabsTrigger value="import">Data Import</TabsTrigger>
         </TabsList>
@@ -187,6 +301,121 @@ export const AccountingPlatformIntegration = () => {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="government" className="space-y-6">
+          {/* Government Services Integration */}
+          <Card className="border-blue-200 bg-blue-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building className="h-5 w-5 text-blue-600" />
+                Australian Government Services Integration
+              </CardTitle>
+              <p className="text-blue-700">
+                Connect directly to Australian government departments for compliance and reporting
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {governmentServices.map((service) => (
+                  <Card 
+                    key={service.id} 
+                    className={`cursor-pointer transition-all hover:shadow-lg ${
+                      governmentConnections[service.id] ? 'ring-2 ring-green-500' : ''
+                    } ${service.status === 'coming-soon' ? 'opacity-60' : ''}`}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{service.logo}</span>
+                          <div>
+                            <CardTitle className="text-lg">{service.name}</CardTitle>
+                            <p className="text-sm text-gray-600 mt-1">{service.description}</p>
+                            <Badge variant="outline" className="mt-1">{service.department}</Badge>
+                          </div>
+                        </div>
+                        {service.status === 'coming-soon' && (
+                          <Badge variant="outline">Coming Soon</Badge>
+                        )}
+                        {governmentConnections[service.id] && (
+                          <CheckCircle className="h-5 w-5 text-green-500" />
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <Button 
+                        onClick={() => handleGovernmentConnect(service.id)}
+                        disabled={service.status === 'coming-soon' || governmentConnections[service.id]}
+                        className="w-full"
+                        variant={governmentConnections[service.id] ? "outline" : "default"}
+                      >
+                        {governmentConnections[service.id] ? (
+                          <>
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Connected
+                          </>
+                        ) : service.status === 'coming-soon' ? (
+                          'Coming Soon'
+                        ) : (
+                          <>
+                            <Globe className="h-4 w-4 mr-2" />
+                            Connect
+                          </>
+                        )}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Government Actions */}
+          {(governmentConnections.ato || governmentConnections.asic) && (
+            <Card className="border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-green-600" />
+                  Government Compliance Actions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {governmentConnections.ato && (
+                    <Button 
+                      onClick={handleATOSubmission}
+                      className="flex flex-col items-center p-6 h-auto"
+                    >
+                      <FileText className="h-8 w-8 mb-2" />
+                      <span className="font-semibold">Submit SBR to ATO</span>
+                      <span className="text-xs mt-1">Business Activity Statement</span>
+                    </Button>
+                  )}
+                  
+                  {governmentConnections.asic && (
+                    <Button 
+                      variant="outline"
+                      className="flex flex-col items-center p-6 h-auto"
+                    >
+                      <Building className="h-8 w-8 mb-2" />
+                      <span className="font-semibold">ASIC Annual Return</span>
+                      <span className="text-xs mt-1">Company compliance</span>
+                    </Button>
+                  )}
+                  
+                  <Button 
+                    variant="outline"
+                    className="flex flex-col items-center p-6 h-auto"
+                  >
+                    <Database className="h-8 w-8 mb-2" />
+                    <span className="font-semibold">Sync All Data</span>
+                    <span className="text-xs mt-1">Auto-update compliance</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
         </TabsContent>
 
         <TabsContent value="custom" className="space-y-6">
