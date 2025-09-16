@@ -82,6 +82,32 @@ interface FinancialSummary {
   }>;
 }
 
+interface TenantProfile {
+  name: string;
+  logo?: string;
+  description: string;
+  website?: string;
+  businessType: string;
+  establishedYear?: string;
+  keyFeatures: string[];
+}
+
+interface PropertyPhotos {
+  heroImage?: string;
+  exteriorPhotos: string[];
+  interiorPhotos: string[];
+  aerialMap?: string;
+  locationPhotos: string[];
+}
+
+interface LocationShowcase {
+  mainHeadline: string;
+  subHeadline: string;
+  positioningStatement: string;
+  heroImage?: string;
+  keyLocationBenefits: string[];
+}
+
 interface WhiteLabelConfig {
   companyName: string;
   logo: string;
@@ -104,6 +130,9 @@ interface InformationMemorandum {
   investmentHighlights: InvestmentHighlights;
   leases: LeaseDetails[];
   financialSummary: FinancialSummary;
+  tenantProfiles: TenantProfile[];
+  propertyPhotos: PropertyPhotos;
+  locationShowcase: LocationShowcase;
   whiteLabelConfig: WhiteLabelConfig;
   createdAt: string;
   updatedAt: string;
@@ -139,6 +168,21 @@ export const InformationMemorandumGenerator = () => {
       totalOutgoings: "",
       netIncome: "",
       expenses: []
+    },
+    tenantProfiles: [],
+    propertyPhotos: {
+      heroImage: "",
+      exteriorPhotos: [],
+      interiorPhotos: [],
+      aerialMap: "",
+      locationPhotos: []
+    },
+    locationShowcase: {
+      mainHeadline: "",
+      subHeadline: "",
+      positioningStatement: "",
+      heroImage: "",
+      keyLocationBenefits: []
     },
     whiteLabelConfig: {
       companyName: "Delderenzo Property Group",
@@ -198,6 +242,53 @@ export const InformationMemorandumGenerator = () => {
       financialSummary: {
         ...prev.financialSummary!,
         expenses: [...(prev.financialSummary?.expenses || []), newExpense]
+      }
+    }));
+  };
+
+  const addTenantProfile = () => {
+    const newProfile: TenantProfile = {
+      name: "",
+      logo: "",
+      description: "",
+      website: "",
+      businessType: "",
+      establishedYear: "",
+      keyFeatures: []
+    };
+    setMemorandum(prev => ({
+      ...prev,
+      tenantProfiles: [...(prev.tenantProfiles || []), newProfile]
+    }));
+  };
+
+  const updateTenantProfile = (index: number, field: keyof TenantProfile, value: string | string[]) => {
+    setMemorandum(prev => ({
+      ...prev,
+      tenantProfiles: prev.tenantProfiles?.map((profile, i) => 
+        i === index ? { ...profile, [field]: value } : profile
+      ) || []
+    }));
+  };
+
+  const addLocationBenefit = () => {
+    setMemorandum(prev => ({
+      ...prev,
+      locationShowcase: {
+        ...prev.locationShowcase!,
+        keyLocationBenefits: [...(prev.locationShowcase?.keyLocationBenefits || []), ""]
+      }
+    }));
+  };
+
+  const updateLocationBenefit = (index: number, value: string) => {
+    setMemorandum(prev => ({
+      ...prev,
+      locationShowcase: {
+        ...prev.locationShowcase!,
+        keyLocationBenefits: prev.locationShowcase?.keyLocationBenefits.map((benefit, i) => 
+          i === index ? value : benefit
+        ) || []
       }
     }));
   };
@@ -298,191 +389,150 @@ export const InformationMemorandumGenerator = () => {
             </div>
           </div>
 
-          {/* Table of Contents */}
-          <div className="p-8 bg-gray-50">
-            <h2 className="text-2xl font-bold mb-6">Table of Contents</h2>
-            <div className="grid gap-2 text-lg">
-              <div className="flex justify-between py-2 border-b border-gray-200">
-                <span>Investment Highlights</span>
-                <span>4</span>
+          {/* Location Showcase */}
+          {memorandum.locationShowcase?.mainHeadline && (
+            <div className="min-h-screen bg-gray-900 text-white p-8 flex items-center relative overflow-hidden">
+              <div className="max-w-4xl mx-auto relative z-10">
+                <h2 className="text-5xl font-bold mb-6 leading-tight">
+                  {memorandum.locationShowcase.mainHeadline}
+                </h2>
+                <p className="text-xl text-gray-300 mb-8">
+                  {memorandum.locationShowcase.subHeadline}
+                </p>
+                <p className="text-lg text-gray-400 max-w-2xl">
+                  {memorandum.locationShowcase.positioningStatement}
+                </p>
               </div>
-              <div className="flex justify-between py-2 border-b border-gray-200">
-                <span>Investment Snapshot</span>
-                <span>5</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-gray-200">
-                <span>Property Details</span>
-                <span>7</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-gray-200">
-                <span>Lease Summary</span>
-                <span>12</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-gray-200">
-                <span>Financial Summary</span>
-                <span>15</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-gray-200">
-                <span>Contact</span>
-                <span>29</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Investment Highlights */}
-          <div className="p-8">
-            <h2 className="text-3xl font-bold mb-6">Investment Highlights</h2>
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <Building2 className="h-5 w-5 mr-2 text-blue-600" />
-                {memorandum.investmentHighlights?.primaryHighlight || "Prime Investment Opportunity"}
-              </h3>
-            </div>
-            <div className="space-y-4">
-              {memorandum.investmentHighlights?.keyFeatures?.map((feature, index) => (
-                <div key={index} className="flex items-start">
-                  <span className="text-blue-600 mr-3 mt-1">+</span>
-                  <p className="text-gray-700">{feature}</p>
+              {memorandum.locationShowcase.heroImage && (
+                <div className="absolute inset-0 z-0">
+                  <div className="absolute inset-0 bg-black/60 z-10"></div>
+                  <img 
+                    src={memorandum.locationShowcase.heroImage} 
+                    alt="Property Location"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Investment Snapshot */}
-          <div className="p-8 bg-blue-900 text-white">
-            <h2 className="text-3xl font-bold mb-8">Investment Snapshot</h2>
-            <div className="grid gap-6">
-              <div className="flex items-start">
-                <MapPin className="h-6 w-6 mr-3 mt-1 flex-shrink-0" />
-                <div>
-                  <p className="text-blue-200 text-sm">Prime Location:</p>
-                  <p className="text-xl font-semibold">{memorandum.propertyDetails?.address}</p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <DollarSign className="h-6 w-6 mr-3 mt-1 flex-shrink-0" />
-                <div>
-                  <p className="text-blue-200 text-sm">Net Income:</p>
-                  <p className="text-xl font-semibold">
-                    {memorandum.financialSummary?.netIncome || "Contact for Details"}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <TrendingUp className="h-6 w-6 mr-3 mt-1 flex-shrink-0" />
-                <div>
-                  <p className="text-blue-200 text-sm">Estimated Yield:</p>
-                  <p className="text-xl font-semibold">
-                    {memorandum.investmentHighlights?.financialMetrics?.estimatedYield || "TBA"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Property Details */}
-          <div className="p-8">
-            <h2 className="text-3xl font-bold mb-6">Property Details</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <div className="flex items-center mb-4">
-                  <FileText className="h-5 w-5 mr-2 text-blue-600" />
-                  <h3 className="font-semibold">Title Details</h3>
-                </div>
-                <p>{memorandum.propertyDetails?.titleDetails || "Details to be confirmed"}</p>
-                
-                <div className="flex items-center mb-4 mt-6">
-                  <Building2 className="h-5 w-5 mr-2 text-blue-600" />
-                  <h3 className="font-semibold">Building Area</h3>
-                </div>
-                <p>{memorandum.propertyDetails?.buildingArea || "TBC"}</p>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center mb-4">
-                  <MapPin className="h-5 w-5 mr-2 text-blue-600" />
-                  <h3 className="font-semibold">Land Area</h3>
-                </div>
-                <p>{memorandum.propertyDetails?.landArea || "TBC"}</p>
-                
-                <div className="flex items-center mb-4 mt-6">
-                  <Shield className="h-5 w-5 mr-2 text-blue-600" />
-                  <h3 className="font-semibold">Zoning</h3>
-                </div>
-                <p>{memorandum.propertyDetails?.zoning || "TBC"}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Lease Summary */}
-          {memorandum.leases && memorandum.leases.length > 0 && (
-            <div className="p-8 bg-gray-50">
-              <h2 className="text-3xl font-bold mb-6">Lease Summary</h2>
-              <div className="space-y-6">
-                {memorandum.leases.map((lease, index) => (
-                  <Card key={index} className="border-l-4 border-blue-600">
-                    <CardHeader>
-                      <CardTitle className="text-xl">{lease.tenant || `Tenant ${index + 1}`}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid md:grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <p className="font-medium text-gray-600">Lease Term</p>
-                          <p>{lease.term || "TBC"}</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-600">Expiry</p>
-                          <p>{lease.expiry || "TBC"}</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-600">Annual Rent</p>
-                          <p className="font-semibold">{lease.rent || "TBC"}</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-600">Area</p>
-                          <p>{lease.area || "TBC"}</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-600">Reviews</p>
-                          <p>{lease.reviewType || "TBC"}</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-600">Options</p>
-                          <p>{lease.options || "TBC"}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              )}
             </div>
           )}
 
-          {/* Financial Summary */}
+          {/* Enhanced Lease Summary */}
+          {memorandum.leases && memorandum.leases.length > 0 && (
+            <div className="space-y-8">
+              {memorandum.leases.map((lease, index) => (
+                <div key={index} className="p-8 bg-gray-50">
+                  <h2 className="text-3xl font-bold mb-6">Lease Summary ({index + 1} of {memorandum.leases?.length})</h2>
+                  
+                  <div className="bg-white rounded-lg shadow-sm border p-6">
+                    <h3 className="text-xl font-semibold text-blue-600 mb-4">
+                      {lease.tenant || `Tenant ${index + 1}`}
+                    </h3>
+                    
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">Lessee</span>
+                          <span>{lease.tenant || "TBC"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">Lease Term</span>
+                          <span>{lease.term || "TBC"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">Lease Expiry</span>
+                          <span>{lease.expiry || "TBC"}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">Options</span>
+                          <span>{lease.options || "TBC"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">Annual Rent Reviews</span>
+                          <span>{lease.reviewType || "TBC"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-600">Gross Rent</span>
+                          <span className="font-semibold">{lease.rent || "TBC"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Enhanced Financial Summary */}
           <div className="p-8">
             <h2 className="text-3xl font-bold mb-6">Financial Summary</h2>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <div className="grid gap-4">
-                <div className="flex justify-between items-center py-2 border-b">
-                  <span className="font-medium">Gross Income</span>
-                  <span className="font-semibold">
-                    {memorandum.financialSummary?.grossIncome || "TBC"}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b">
-                  <span className="font-medium">Total Outgoings</span>
-                  <span className="font-semibold">
-                    {memorandum.financialSummary?.totalOutgoings || "TBC"}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-t-2 border-blue-600 bg-blue-50 px-4 rounded">
-                  <span className="font-bold text-lg">Net Annual Income</span>
-                  <span className="font-bold text-lg text-blue-600">
-                    {memorandum.financialSummary?.netIncome || "TBC"}
-                  </span>
+            
+            {/* Gross Rent Breakdown */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4">Gross Rent</h3>
+              <div className="bg-gray-50 rounded-lg p-6">
+                {memorandum.leases?.map((lease, index) => (
+                  <div key={index} className="flex justify-between py-2 border-b border-gray-200 last:border-b-0">
+                    <span>{lease.tenant || `Tenant ${index + 1}`}</span>
+                    <span className="font-medium">{lease.rent || "TBC"}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between py-3 mt-4 border-t-2 border-blue-600 font-bold text-lg">
+                  <span>Total Gross Income</span>
+                  <span className="text-blue-600">{memorandum.financialSummary?.grossIncome || "TBC"}</span>
                 </div>
               </div>
             </div>
+
+            {/* Net Income */}
+            <div className="bg-blue-900 text-white p-6 rounded-lg">
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-bold">Net Annual Income</span>
+                <span className="text-2xl font-bold">
+                  {memorandum.financialSummary?.netIncome || "TBC"}
+                </span>
+              </div>
+            </div>
           </div>
+
+          {/* Tenant Profiles */}
+          {memorandum.tenantProfiles && memorandum.tenantProfiles.length > 0 && (
+            <div className="space-y-8">
+              {memorandum.tenantProfiles.map((tenant, index) => (
+                <div key={index} className="p-8">
+                  <h2 className="text-3xl font-bold mb-6">
+                    {index === 0 ? "Tenant Profile" : "Tenant Profiles"}
+                  </h2>
+                  
+                  <div className="space-y-6">
+                    {tenant.logo && (
+                      <div className="mb-6">
+                        <img 
+                          src={tenant.logo} 
+                          alt={`${tenant.name} logo`}
+                          className="h-16 object-contain"
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="prose max-w-none">
+                      <p className="text-gray-700 leading-relaxed mb-4">
+                        {tenant.description}
+                      </p>
+                      
+                      {tenant.website && (
+                        <p className="text-sm text-blue-600">
+                          For more information, visit: {tenant.website}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Contact Information */}
           <div className="p-8 bg-blue-900 text-white">
@@ -540,11 +590,13 @@ export const InformationMemorandumGenerator = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-8">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="property">Property</TabsTrigger>
+              <TabsTrigger value="location">Location</TabsTrigger>
               <TabsTrigger value="highlights">Highlights</TabsTrigger>
               <TabsTrigger value="leases">Leases</TabsTrigger>
+              <TabsTrigger value="tenants">Tenants</TabsTrigger>
               <TabsTrigger value="financial">Financial</TabsTrigger>
               <TabsTrigger value="branding">Branding</TabsTrigger>
             </TabsList>
@@ -592,66 +644,136 @@ export const InformationMemorandumGenerator = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="property" className="space-y-4">
-              <div className="grid gap-4">
+            <TabsContent value="location" className="space-y-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Location Showcase</h3>
+                
                 <div>
-                  <Label htmlFor="address">Property Address</Label>
+                  <Label htmlFor="mainHeadline">Main Headline</Label>
                   <Input
-                    id="address"
-                    value={memorandum.propertyDetails?.address || ""}
-                    onChange={(e) => updateMemorandum('propertyDetails', { address: e.target.value })}
-                    placeholder="Full property address"
+                    id="mainHeadline"
+                    value={memorandum.locationShowcase?.mainHeadline || ""}
+                    onChange={(e) => updateMemorandum('locationShowcase', { mainHeadline: e.target.value })}
+                    placeholder="e.g., Extremely well-positioned 1,002sqm corner site"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="landArea">Land Area</Label>
-                    <Input
-                      id="landArea"
-                      value={memorandum.propertyDetails?.landArea || ""}
-                      onChange={(e) => updateMemorandum('propertyDetails', { landArea: e.target.value })}
-                      placeholder="e.g., 1,002sqm"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="buildingArea">Building Area</Label>
-                    <Input
-                      id="buildingArea"
-                      value={memorandum.propertyDetails?.buildingArea || ""}
-                      onChange={(e) => updateMemorandum('propertyDetails', { buildingArea: e.target.value })}
-                      placeholder="e.g., 919sqm NLA"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="zoning">Zoning</Label>
-                    <Input
-                      id="zoning"
-                      value={memorandum.propertyDetails?.zoning || ""}
-                      onChange={(e) => updateMemorandum('propertyDetails', { zoning: e.target.value })}
-                      placeholder="e.g., Principal Centre"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="frontage">Frontage</Label>
-                    <Input
-                      id="frontage"
-                      value={memorandum.propertyDetails?.frontage || ""}
-                      onChange={(e) => updateMemorandum('propertyDetails', { frontage: e.target.value })}
-                      placeholder="e.g., 40.15m Bourbong Street"
-                    />
-                  </div>
-                </div>
+                
                 <div>
-                  <Label htmlFor="titleDetails">Title Details</Label>
+                  <Label htmlFor="subHeadline">Sub Headline</Label>
                   <Input
-                    id="titleDetails"
-                    value={memorandum.propertyDetails?.titleDetails || ""}
-                    onChange={(e) => updateMemorandum('propertyDetails', { titleDetails: e.target.value })}
-                    placeholder="e.g., Lot 1 & 2 RP89805"
+                    id="subHeadline"
+                    value={memorandum.locationShowcase?.subHeadline || ""}
+                    onChange={(e) => updateMemorandum('locationShowcase', { subHeadline: e.target.value })}
+                    placeholder="e.g., offering excellent exposure to the thriving CBD"
                   />
                 </div>
+                
+                <div>
+                  <Label htmlFor="positioningStatement">Positioning Statement</Label>
+                  <Textarea
+                    id="positioningStatement"
+                    value={memorandum.locationShowcase?.positioningStatement || ""}
+                    onChange={(e) => updateMemorandum('locationShowcase', { positioningStatement: e.target.value })}
+                    placeholder="Detailed description of the location benefits and positioning..."
+                    rows={4}
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label>Key Location Benefits</Label>
+                    <Button size="sm" variant="outline" onClick={addLocationBenefit}>
+                      Add Benefit
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {memorandum.locationShowcase?.keyLocationBenefits?.map((benefit, index) => (
+                      <Input
+                        key={index}
+                        value={benefit}
+                        onChange={(e) => updateLocationBenefit(index, e.target.value)}
+                        placeholder="Location benefit or advantage..."
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="tenants" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Tenant Profiles</h3>
+                <Button onClick={addTenantProfile}>Add Tenant Profile</Button>
+              </div>
+              
+              <div className="space-y-4">
+                {memorandum.tenantProfiles?.map((tenant, index) => (
+                  <Card key={index}>
+                    <CardHeader>
+                      <CardTitle className="text-base">Tenant Profile {index + 1}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label>Tenant Name</Label>
+                            <Input
+                              value={tenant.name}
+                              onChange={(e) => updateTenantProfile(index, 'name', e.target.value)}
+                              placeholder="e.g., Dymocks Bookstore"
+                            />
+                          </div>
+                          <div>
+                            <Label>Business Type</Label>
+                            <Input
+                              value={tenant.businessType}
+                              onChange={(e) => updateTenantProfile(index, 'businessType', e.target.value)}
+                              placeholder="e.g., Bookstore Chain"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label>Logo URL</Label>
+                            <Input
+                              value={tenant.logo || ""}
+                              onChange={(e) => updateTenantProfile(index, 'logo', e.target.value)}
+                              placeholder="URL to tenant logo"
+                            />
+                          </div>
+                          <div>
+                            <Label>Website</Label>
+                            <Input
+                              value={tenant.website || ""}
+                              onChange={(e) => updateTenantProfile(index, 'website', e.target.value)}
+                              placeholder="e.g., https://www.dymocks.com.au"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label>Business Description</Label>
+                          <Textarea
+                            value={tenant.description}
+                            onChange={(e) => updateTenantProfile(index, 'description', e.target.value)}
+                            placeholder="Detailed description of the tenant's business, history, and operations..."
+                            rows={4}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label>Established Year</Label>
+                          <Input
+                            value={tenant.establishedYear || ""}
+                            onChange={(e) => updateTenantProfile(index, 'establishedYear', e.target.value)}
+                            placeholder="e.g., 1884"
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </TabsContent>
 
@@ -686,54 +808,6 @@ export const InformationMemorandumGenerator = () => {
                     ))}
                   </div>
                 </div>
-
-                <Separator />
-
-                <h3 className="font-semibold">Financial Metrics</h3>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="netIncome">Net Income</Label>
-                    <Input
-                      id="netIncome"
-                      value={memorandum.investmentHighlights?.financialMetrics?.netIncome || ""}
-                      onChange={(e) => updateMemorandum('investmentHighlights', { 
-                        financialMetrics: { 
-                          ...memorandum.investmentHighlights?.financialMetrics, 
-                          netIncome: e.target.value 
-                        }
-                      })}
-                      placeholder="e.g., $193,766 pa + GST"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="estimatedYield">Estimated Yield</Label>
-                    <Input
-                      id="estimatedYield"
-                      value={memorandum.investmentHighlights?.financialMetrics?.estimatedYield || ""}
-                      onChange={(e) => updateMemorandum('investmentHighlights', { 
-                        financialMetrics: { 
-                          ...memorandum.investmentHighlights?.financialMetrics, 
-                          estimatedYield: e.target.value 
-                        }
-                      })}
-                      placeholder="e.g., 6.5% p.a."
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="occupancyRate">Occupancy Rate</Label>
-                    <Input
-                      id="occupancyRate"
-                      value={memorandum.investmentHighlights?.financialMetrics?.occupancyRate || ""}
-                      onChange={(e) => updateMemorandum('investmentHighlights', { 
-                        financialMetrics: { 
-                          ...memorandum.investmentHighlights?.financialMetrics, 
-                          occupancyRate: e.target.value 
-                        }
-                      })}
-                      placeholder="e.g., 95%"
-                    />
-                  </div>
-                </div>
               </div>
             </TabsContent>
 
@@ -760,51 +834,11 @@ export const InformationMemorandumGenerator = () => {
                           />
                         </div>
                         <div>
-                          <Label>Area</Label>
-                          <Input
-                            value={lease.area}
-                            onChange={(e) => updateLease(index, 'area', e.target.value)}
-                            placeholder="e.g., 269sqm"
-                          />
-                        </div>
-                        <div>
-                          <Label>Lease Term</Label>
-                          <Input
-                            value={lease.term}
-                            onChange={(e) => updateLease(index, 'term', e.target.value)}
-                            placeholder="e.g., 5 year lease"
-                          />
-                        </div>
-                        <div>
-                          <Label>Expiry Date</Label>
-                          <Input
-                            value={lease.expiry}
-                            onChange={(e) => updateLease(index, 'expiry', e.target.value)}
-                            placeholder="e.g., 31 August 2029"
-                          />
-                        </div>
-                        <div>
                           <Label>Annual Rent</Label>
                           <Input
                             value={lease.rent}
                             onChange={(e) => updateLease(index, 'rent', e.target.value)}
                             placeholder="e.g., $78,281 pa + GST"
-                          />
-                        </div>
-                        <div>
-                          <Label>Review Type</Label>
-                          <Input
-                            value={lease.reviewType}
-                            onChange={(e) => updateLease(index, 'reviewType', e.target.value)}
-                            placeholder="e.g., CPI or Fixed 3%"
-                          />
-                        </div>
-                        <div className="col-span-2">
-                          <Label>Options</Label>
-                          <Input
-                            value={lease.options}
-                            onChange={(e) => updateLease(index, 'options', e.target.value)}
-                            placeholder="e.g., One 5 year option to 2034"
                           />
                         </div>
                       </div>
@@ -827,15 +861,6 @@ export const InformationMemorandumGenerator = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="totalOutgoings">Total Outgoings</Label>
-                    <Input
-                      id="totalOutgoings"
-                      value={memorandum.financialSummary?.totalOutgoings || ""}
-                      onChange={(e) => updateMemorandum('financialSummary', { totalOutgoings: e.target.value })}
-                      placeholder="e.g., $110,339"
-                    />
-                  </div>
-                  <div>
                     <Label htmlFor="netIncome">Net Income</Label>
                     <Input
                       id="netIncome"
@@ -843,41 +868,6 @@ export const InformationMemorandumGenerator = () => {
                       onChange={(e) => updateMemorandum('financialSummary', { netIncome: e.target.value })}
                       placeholder="e.g., $193,766 pa + GST"
                     />
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold">Expense Breakdown</h3>
-                    <Button size="sm" variant="outline" onClick={addExpense}>
-                      Add Expense
-                    </Button>
-                  </div>
-                  <div className="space-y-2">
-                    {memorandum.financialSummary?.expenses?.map((expense, index) => (
-                      <div key={index} className="grid grid-cols-2 gap-2">
-                        <Input
-                          value={expense.category}
-                          onChange={(e) => {
-                            const newExpenses = [...(memorandum.financialSummary?.expenses || [])];
-                            newExpenses[index] = { ...newExpenses[index], category: e.target.value };
-                            updateMemorandum('financialSummary', { expenses: newExpenses });
-                          }}
-                          placeholder="Expense category"
-                        />
-                        <Input
-                          value={expense.amount}
-                          onChange={(e) => {
-                            const newExpenses = [...(memorandum.financialSummary?.expenses || [])];
-                            newExpenses[index] = { ...newExpenses[index], amount: e.target.value };
-                            updateMemorandum('financialSummary', { expenses: newExpenses });
-                          }}
-                          placeholder="Amount"
-                        />
-                      </div>
-                    ))}
                   </div>
                 </div>
               </div>
@@ -922,58 +912,14 @@ export const InformationMemorandumGenerator = () => {
                     </div>
                   </div>
 
-                  <Separator />
-
-                  <h4 className="font-semibold">Contact Information</h4>
-                  <div className="grid gap-4">
-                    <div>
-                      <Label htmlFor="contactName">Contact Name</Label>
-                      <Input
-                        id="contactName"
-                        value={memorandum.whiteLabelConfig?.contactName || ""}
-                        onChange={(e) => updateMemorandum('whiteLabelConfig', { contactName: e.target.value })}
-                        placeholder="Primary contact person"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="contactPhone">Phone</Label>
-                        <Input
-                          id="contactPhone"
-                          value={memorandum.whiteLabelConfig?.contactPhone || ""}
-                          onChange={(e) => updateMemorandum('whiteLabelConfig', { contactPhone: e.target.value })}
-                          placeholder="Contact phone number"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="contactEmail">Email</Label>
-                        <Input
-                          id="contactEmail"
-                          value={memorandum.whiteLabelConfig?.contactEmail || ""}
-                          onChange={(e) => updateMemorandum('whiteLabelConfig', { contactEmail: e.target.value })}
-                          placeholder="Contact email address"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="address">Office Address</Label>
-                      <Textarea
-                        id="address"
-                        value={memorandum.whiteLabelConfig?.address || ""}
-                        onChange={(e) => updateMemorandum('whiteLabelConfig', { address: e.target.value })}
-                        placeholder="Full business address"
-                        rows={3}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="licenseNumber">License Number</Label>
-                      <Input
-                        id="licenseNumber"
-                        value={memorandum.whiteLabelConfig?.licenseNumber || ""}
-                        onChange={(e) => updateMemorandum('whiteLabelConfig', { licenseNumber: e.target.value })}
-                        placeholder="Real estate license number"
-                      />
-                    </div>
+                  <div>
+                    <Label htmlFor="contactName">Contact Name</Label>
+                    <Input
+                      id="contactName"
+                      value={memorandum.whiteLabelConfig?.contactName || ""}
+                      onChange={(e) => updateMemorandum('whiteLabelConfig', { contactName: e.target.value })}
+                      placeholder="Primary contact person"
+                    />
                   </div>
                 </div>
               </div>
