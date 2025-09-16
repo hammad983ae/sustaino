@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CheckCircle, Circle, FileText, Calculator, TrendingUp, Home, ArrowLeft } from "lucide-react";
 import PropertyDetails from "./PropertyDetails";
 import ValuationAnalysis from "./ValuationAnalysis";
-import SalesEvidence from "./SalesEvidence";
+import { SalesEvidence } from "./evidence";
 import MarketCommentary from "./MarketCommentary";
 import ValuationCertificate from "./ValuationCertificate";
 import { supabase } from "@/integrations/supabase/client";
