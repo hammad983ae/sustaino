@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import VendorStatementGenerator from './VendorStatementGenerator';
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -289,10 +290,11 @@ export const SustanoSphere = () => {
 
       {/* Main Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="browse">🔍 Browse Auctions</TabsTrigger>
           <TabsTrigger value="featured">⭐ Featured</TabsTrigger>
           <TabsTrigger value="watchlist">❤️ Watchlist</TabsTrigger>
+          <TabsTrigger value="vendor">📄 Vendor Statements</TabsTrigger>
           <TabsTrigger value="sell">💼 List Asset</TabsTrigger>
         </TabsList>
 
@@ -545,6 +547,22 @@ export const SustanoSphere = () => {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Vendor Statement Tab */}
+        <TabsContent value="vendor">
+          <VendorStatementGenerator 
+            propertyData={{
+              address: selectedAsset?.title || "Digital Asset Address",
+              type: "Digital Asset"
+            }}
+            onGenerate={(data) => {
+              toast({
+                title: "Vendor Statement Generated! 📄",
+                description: "Digital asset disclosure documentation completed",
+              });
+            }}
+          />
         </TabsContent>
 
         {/* Sell Tab */}

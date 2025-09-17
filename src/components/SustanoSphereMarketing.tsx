@@ -26,7 +26,7 @@ import {
   CheckCircle, ArrowRight, Smartphone, Camera, Lock,
   BarChart3, Target, Crown, Sparkles, ArrowLeft, Home,
   Brain, Layers, Activity, Timer, Play, Maximize,
-  ThumbsUp, MapPin, Rocket
+  ThumbsUp, MapPin, Rocket, FileText
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import sustainoSphereDashboard from '@/assets/sustano-sphere-dashboard.jpg';
@@ -415,6 +415,23 @@ const SustanoSphereMarketing = () => {
 
         {/* Key Features Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {/* Add Vendor Statement Feature First */}
+          <Card className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl border-slate-700/50 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-105">
+            <CardContent className="p-6 text-center">
+              <div className="relative mb-4">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-violet-400/20 rounded-full blur-xl"></div>
+                <div className="relative w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-600 rounded-full mx-auto flex items-center justify-center text-white shadow-2xl">
+                  <FileText className="h-8 w-8" />
+                </div>
+                <Badge className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold">
+                  NEW
+                </Badge>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">AI Vendor Statements</h3>
+              <p className="text-slate-300 text-sm leading-relaxed">Auto-generate Section 32/vendor statements with government API integration and compliance verification</p>
+            </CardContent>
+          </Card>
+          
           {keyFeatures.map((feature, index) => (
             <Card key={index} className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl border-slate-700/50 hover:border-green-500/50 transition-all duration-300 transform hover:scale-105">
               <CardContent className="p-6 text-center">

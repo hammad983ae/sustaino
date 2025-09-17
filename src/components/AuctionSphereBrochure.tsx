@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   Gavel, Globe, DollarSign, Brain, BarChart3, Shield, 
   Building2, Star, Crown, Zap, Award, CheckCircle,
-  Phone, Mail, MapPin, Calendar
+  Phone, Mail, MapPin, Calendar, FileText
 } from 'lucide-react';
 
 const AuctionSphereBrochure = () => {
@@ -177,7 +177,7 @@ const AuctionSphereBrochure = () => {
         <h2 className="text-2xl font-bold mb-4 text-center">
           🚀 Revolutionary Technology Stack
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="text-center">
             <Zap className="h-8 w-8 mx-auto mb-2 text-yellow-400" />
             <div className="font-bold">WebGL 3D Engine</div>
@@ -187,6 +187,11 @@ const AuctionSphereBrochure = () => {
             <Brain className="h-8 w-8 mx-auto mb-2 text-green-400" />
             <div className="font-bold">AI Intelligence</div>
             <div className="text-xs opacity-90">Machine learning algorithms</div>
+          </div>
+          <div className="text-center">
+            <FileText className="h-8 w-8 mx-auto mb-2 text-purple-400" />
+            <div className="font-bold">Auto Vendor Statements</div>
+            <div className="text-xs opacity-90">AI-generated legal docs</div>
           </div>
           <div className="text-center">
             <Shield className="h-8 w-8 mx-auto mb-2 text-blue-400" />
