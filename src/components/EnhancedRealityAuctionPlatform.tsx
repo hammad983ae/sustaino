@@ -66,10 +66,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BidTermsAnalyzer from './BidTermsAnalyzer';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { useNavigate } from 'react-router-dom';
 import { 
   Gavel, Users, Timer, DollarSign, Heart, Eye, TrendingUp, Building2, 
   BarChart3, Map, PieChart, Calculator, Target, AlertTriangle, MapPin,
-  Camera, Activity, Zap, Star
+  Camera, Activity, Zap, Star, ArrowLeft, Home
 } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
@@ -105,6 +106,7 @@ const PropertyScene = () => {
 };
 
 const EnhancedRealityAuctionPlatform = () => {
+  const navigate = useNavigate();
   const [selectedAuction, setSelectedAuction] = useState(0);
   const [bidAmount, setBidAmount] = useState('');
   const [timeLeft, setTimeLeft] = useState(323);
@@ -275,6 +277,17 @@ const EnhancedRealityAuctionPlatform = () => {
       </div>
 
       <div className="container mx-auto p-6 space-y-6 relative z-10">
+        {/* Back to Dashboard Button */}
+        <div className="mb-6">
+          <Button
+            onClick={() => navigate('/dashboard')}
+            variant="outline"
+            className="border-primary/30 text-foreground hover:bg-primary/10 font-bold"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </div>
         {/* Enhanced Header */}
         <div className="text-center space-y-4 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 blur-3xl -z-10" />
@@ -283,7 +296,7 @@ const EnhancedRealityAuctionPlatform = () => {
               <Gavel className="h-12 w-12 text-primary animate-pulse" />
               <div className="absolute inset-0 h-12 w-12 bg-primary/20 rounded-full animate-ping" />
             </div>
-            Reality Auction Platform
+            Auction-Sphere™
             <Zap className="h-8 w-8 text-yellow-500 animate-bounce" />
           </h1>
           <p className="text-xl text-muted-foreground">Advanced Off-Market Auctions with AI-Powered Analysis</p>
