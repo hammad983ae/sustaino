@@ -24,8 +24,12 @@ import {
   Gavel, Users, Timer, DollarSign, Star, TrendingUp, Building2, 
   Zap, Eye, Target, Award, Shield, Sparkles, Rocket, Crown,
   BarChart3, MapPin, Camera, Activity, CheckCircle, ArrowRight,
-  Layers, Globe, Brain, Lock, Wifi, Smartphone
+  Layers, Globe, Brain, Lock, Wifi, Smartphone, Play, Volume2,
+  Maximize, ThumbsUp, Share2, Heart
 } from 'lucide-react';
+import luxuryApartment from '@/assets/luxury-apartment-demo.jpg';
+import commercialBuilding from '@/assets/commercial-building-demo.jpg';
+import auction3DInterface from '@/assets/auction-3d-interface.jpg';
 
 const AuctionSphereMarketing = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -33,6 +37,45 @@ const AuctionSphereMarketing = () => {
   const [timeLeft, setTimeLeft] = useState(323);
   const [marketScore, setMarketScore] = useState(92);
   const [liveUsers, setLiveUsers] = useState(247);
+  const [currentProperty, setCurrentProperty] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  // Demo properties data
+  const demoProperties = [
+    {
+      id: 1,
+      title: "15 Harbour View Terrace",
+      subtitle: "Luxury Waterfront Apartment • Sydney NSW",
+      image: luxuryApartment,
+      price: 2650000,
+      bedrooms: 3,
+      bathrooms: 2,
+      parking: 2,
+      features: ["Harbour Views", "Premium Finishes", "Concierge"]
+    },
+    {
+      id: 2,
+      title: "Collins Street Tower",
+      subtitle: "Premium Commercial Office • Melbourne VIC",
+      image: commercialBuilding,
+      price: 8500000,
+      bedrooms: null,
+      bathrooms: null,
+      parking: 50,
+      features: ["CBD Location", "Modern Facade", "High Yield"]
+    },
+    {
+      id: 3,
+      title: "3D Auction Interface",
+      subtitle: "Revolutionary Technology Preview",
+      image: auction3DInterface,
+      price: null,
+      bedrooms: null,
+      bathrooms: null,
+      parking: null,
+      features: ["WebGL 3D", "AI Powered", "Real-time"]
+    }
+  ];
 
   // Animated counters and live data simulation
   useEffect(() => {
@@ -41,10 +84,11 @@ const AuctionSphereMarketing = () => {
       setTimeLeft(prev => Math.max(0, prev - 1));
       setMarketScore(prev => Math.min(100, prev + Math.random() * 3));
       setLiveUsers(prev => prev + Math.floor(Math.random() * 10) - 5);
-    }, 2500);
+      setCurrentProperty(prev => (prev + 1) % demoProperties.length);
+    }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [demoProperties.length]);
 
   // Marketing slides rotation
   useEffect(() => {
@@ -136,30 +180,51 @@ const AuctionSphereMarketing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 overflow-hidden relative">
-      {/* Animated Background Effects */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-purple-950 overflow-hidden relative">
+      {/* Enhanced 3D Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-cyan-500/5 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        {/* Primary gradient overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500/8 via-cyan-500/5 to-purple-500/8"></div>
+        
+        {/* Floating 3D orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/15 to-cyan-400/15 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-400/15 to-violet-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-400/8 to-blue-400/8 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        
+        {/* Dynamic grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+        
+        {/* Floating particles */}
+        <div className="absolute top-10 left-10 w-2 h-2 bg-cyan-400/60 rounded-full animate-bounce delay-300"></div>
+        <div className="absolute top-32 right-20 w-1 h-1 bg-blue-400/60 rounded-full animate-bounce delay-700"></div>
+        <div className="absolute bottom-40 left-32 w-3 h-3 bg-purple-400/60 rounded-full animate-bounce delay-1100"></div>
+        <div className="absolute bottom-20 right-40 w-1.5 h-1.5 bg-violet-400/60 rounded-full animate-bounce delay-1500"></div>
       </div>
 
       <div className="relative z-10 p-6 max-w-7xl mx-auto">
-        {/* Main Header */}
+        {/* Main Header with 3D Effects */}
         <div className="text-center mb-12 animate-fade-in">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-2xl">
-              <Crown className="h-12 w-12 text-white" />
+          <div className="flex items-center justify-center gap-6 mb-8">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl blur-xl opacity-75 animate-pulse"></div>
+              <div className="relative p-6 bg-gradient-to-br from-blue-500/90 to-purple-600/90 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/10">
+                <Crown className="h-16 w-16 text-white drop-shadow-lg" />
+              </div>
             </div>
-            <div>
-              <h1 className="text-7xl font-black bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 bg-clip-text text-transparent">
-                Auction-Sphere™
-              </h1>
-              <p className="text-2xl text-slate-300 font-bold">The Future of Real Estate Auctions</p>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-3xl rounded-3xl"></div>
+              <div className="relative">
+                <h1 className="text-8xl font-black bg-gradient-to-r from-blue-300 via-cyan-200 to-purple-300 bg-clip-text text-transparent drop-shadow-2xl">
+                  Auction-Sphere™
+                </h1>
+                <p className="text-3xl text-slate-200 font-bold mt-2 drop-shadow-lg">The Future of Real Estate Auctions</p>
+              </div>
             </div>
-            <div className="p-4 bg-gradient-to-r from-purple-600 to-blue-500 rounded-2xl shadow-2xl">
-              <Rocket className="h-12 w-12 text-white" />
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 rounded-3xl blur-xl opacity-75 animate-pulse delay-500"></div>
+              <div className="relative p-6 bg-gradient-to-br from-purple-600/90 to-blue-500/90 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/10">
+                <Rocket className="h-16 w-16 text-white drop-shadow-lg" />
+              </div>
             </div>
           </div>
           
@@ -206,35 +271,122 @@ const AuctionSphereMarketing = () => {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Property Showcase */}
-              <div className="relative h-64 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <Building2 className="h-20 w-20 mx-auto mb-4 animate-bounce text-cyan-400" />
-                    <h3 className="text-2xl font-bold mb-2">3D WebGL Visualization</h3>
-                    <p className="text-lg opacity-90">Immersive Property Experience</p>
+              {/* Enhanced Property Showcase */}
+              <div className="relative h-80 rounded-2xl overflow-hidden shadow-2xl">
+                {/* Property Image */}
+                <img 
+                  src={demoProperties[currentProperty].image} 
+                  alt={demoProperties[currentProperty].title}
+                  className="w-full h-full object-cover transition-all duration-1000"
+                />
+                
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
+                
+                {/* 3D Interface Overlay for tech demo */}
+                {currentProperty === 2 && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center text-white">
+                      <div className="relative mb-6">
+                        <div className="absolute inset-0 bg-cyan-400/30 rounded-full blur-xl animate-pulse"></div>
+                        <Building2 className="h-24 w-24 mx-auto relative text-cyan-300 drop-shadow-lg animate-bounce" />
+                      </div>
+                      <h3 className="text-3xl font-bold mb-2 drop-shadow-lg">3D WebGL Visualization</h3>
+                      <p className="text-xl opacity-90 drop-shadow-lg">Revolutionary Auction Technology</p>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* Live Video Controls */}
                 <div className="absolute top-4 left-4 flex gap-2">
-                  <Badge className="bg-cyan-500 text-white font-bold">
+                  <Badge className="bg-red-500/90 text-white font-bold backdrop-blur-sm border border-white/20">
+                    <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
+                    LIVE
+                  </Badge>
+                  <Badge className="bg-cyan-500/90 text-white font-bold backdrop-blur-sm border border-white/20">
                     <Camera className="h-4 w-4 mr-2" />
-                    WebGL 3D
+                    4K Stream
                   </Badge>
-                  <Badge className="bg-green-500 text-white font-bold">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Virtual Tour
-                  </Badge>
+                  {currentProperty !== 2 && (
+                    <Badge className="bg-green-500/90 text-white font-bold backdrop-blur-sm border border-white/20">
+                      <Eye className="h-4 w-4 mr-2" />
+                      Virtual Tour
+                    </Badge>
+                  )}
                 </div>
+
+                {/* Video Controls */}
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <Button 
+                    size="sm" 
+                    variant="secondary" 
+                    className="bg-black/50 border-white/20 text-white hover:bg-black/70 backdrop-blur-sm"
+                    onClick={() => setIsPlaying(!isPlaying)}
+                  >
+                    {isPlaying ? <Volume2 className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="secondary" 
+                    className="bg-black/50 border-white/20 text-white hover:bg-black/70 backdrop-blur-sm"
+                  >
+                    <Maximize className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Property Information */}
                 <div className="absolute bottom-4 left-4 text-white">
-                  <h4 className="text-xl font-bold">15 Harbour View Terrace</h4>
-                  <p className="text-lg opacity-90">Luxury Apartment • Sydney NSW</p>
+                  <h4 className="text-2xl font-bold drop-shadow-lg">{demoProperties[currentProperty].title}</h4>
+                  <p className="text-lg opacity-90 drop-shadow-lg">{demoProperties[currentProperty].subtitle}</p>
+                  {demoProperties[currentProperty].bedrooms && (
+                    <div className="flex gap-4 mt-2 text-sm">
+                      <span className="bg-white/20 px-2 py-1 rounded backdrop-blur-sm">
+                        {demoProperties[currentProperty].bedrooms} bed
+                      </span>
+                      <span className="bg-white/20 px-2 py-1 rounded backdrop-blur-sm">
+                        {demoProperties[currentProperty].bathrooms} bath
+                      </span>
+                      <span className="bg-white/20 px-2 py-1 rounded backdrop-blur-sm">
+                        {demoProperties[currentProperty].parking} car
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <div className="absolute bottom-4 right-4 text-white">
-                  <div className="text-right">
-                    <p className="text-sm opacity-75">Instant Valuation</p>
-                    <p className="text-lg font-bold">{formatCurrency(2650000)}</p>
+
+                {/* Valuation */}
+                <div className="absolute bottom-4 right-4 text-white text-right">
+                  {demoProperties[currentProperty].price && (
+                    <>
+                      <p className="text-sm opacity-75 drop-shadow-lg">Live Valuation</p>
+                      <p className="text-2xl font-bold drop-shadow-lg">
+                        {formatCurrency(demoProperties[currentProperty].price)}
+                      </p>
+                    </>
+                  )}
+                  <div className="flex gap-1 mt-2 justify-end">
+                    <Button size="sm" variant="ghost" className="text-white/80 hover:text-white p-1">
+                      <Heart className="h-4 w-4" />
+                    </Button>
+                    <Button size="sm" variant="ghost" className="text-white/80 hover:text-white p-1">
+                      <Share2 className="h-4 w-4" />
+                    </Button>
+                    <Button size="sm" variant="ghost" className="text-white/80 hover:text-white p-1">
+                      <ThumbsUp className="h-4 w-4" />
+                    </Button>
                   </div>
+                </div>
+
+                {/* Property Indicators */}
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
+                  {demoProperties.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        index === currentProperty ? 'bg-white' : 'bg-white/40'
+                      }`}
+                    />
+                  ))}
                 </div>
               </div>
 
