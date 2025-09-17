@@ -58,7 +58,7 @@ import securityAnalysisDashboard from '@/assets/security-analysis-dashboard.jpg'
 import propertyValuationDashboard from '@/assets/property-valuation-dashboard.jpg';
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('sustaino-world');
 
   // Sample data for charts
   const portfolioData = [
