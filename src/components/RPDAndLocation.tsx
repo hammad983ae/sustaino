@@ -179,7 +179,7 @@ const RPDAndLocation = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <AutofillAddressFields showUnit={true} showSuburb={true} showLotPlan={true} />
+          <AutofillAddressFields showUnit={true} showLotPlan={true} />
         </CardContent>
       </Card>
 

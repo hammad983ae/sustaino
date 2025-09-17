@@ -6,7 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 interface AutofillAddressFieldsProps {
   showLotPlan?: boolean;
   showUnit?: boolean;
-  showSuburb?: boolean;
   readonly?: boolean;
   className?: string;
 }
@@ -14,7 +13,6 @@ interface AutofillAddressFieldsProps {
 export const AutofillAddressFields = ({ 
   showLotPlan = false, 
   showUnit = false, 
-  showSuburb = false,
   readonly = false,
   className = ""
 }: AutofillAddressFieldsProps) => {
@@ -166,18 +164,17 @@ export const AutofillAddressFields = ({
 
       {/* Location Details */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {showSuburb && (
-          <div>
-            <Label htmlFor="auto-suburb" className="text-sm">Suburb</Label>
-            <Input 
-              id="auto-suburb"
-              value={addressData.suburb || ''}
-              onChange={(e) => !readonly && updateAddressData({ suburb: e.target.value })}
-              readOnly={readonly}
-              className="mt-1"
-            />
-          </div>
-        )}
+        <div>
+          <Label htmlFor="auto-suburb" className="text-sm">Suburb</Label>
+          <Input 
+            id="auto-suburb"
+            value={addressData.suburb || ''}
+            onChange={(e) => !readonly && updateAddressData({ suburb: e.target.value })}
+            readOnly={readonly}
+            className="mt-1"
+            placeholder="Suburb"
+          />
+        </div>
         <div>
           <Label htmlFor="auto-state" className="text-sm">State</Label>
           <Select 

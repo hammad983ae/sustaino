@@ -244,8 +244,19 @@ const PropertyAddressForm = () => {
             </div>
           </div>
 
-          {/* Third Row - State, Postcode, Country */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Third Row - Suburb, State, Postcode, Country */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <Label htmlFor="suburb" className="text-sm">Suburb</Label>
+              <Input 
+                id="suburb"
+                placeholder="Suburb"
+                className="mt-1"
+                value={addressData.suburb || ''}
+                onChange={(e) => updateAddressData({ suburb: e.target.value })}
+                disabled={isLocked}
+              />
+            </div>
             <div>
               <Label htmlFor="state" className="text-sm">State</Label>
             <Select value={addressData.state} onValueChange={(value) => updateAddressData({ state: value })} disabled={isLocked}>
