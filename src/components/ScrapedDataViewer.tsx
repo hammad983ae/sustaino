@@ -168,7 +168,7 @@ export const ScrapedDataViewer = () => {
         <div>
           <h2 className="text-2xl font-bold">Scraped Property Data</h2>
           <p className="text-muted-foreground">
-            View and manage data extracted from RealCommercial.com.au
+            View and manage data extracted from commercial property websites
           </p>
         </div>
         <Button onClick={loadScrapedData} disabled={isLoading} className="gap-2">
@@ -290,7 +290,7 @@ export const ScrapedDataViewer = () => {
                 <div>
                   <CardTitle>Sales Evidence</CardTitle>
                   <CardDescription>
-                    Property sales data scraped from RealCommercial.com.au
+                    Property sales data scraped from commercial property websites
                   </CardDescription>
                 </div>
                 <Button 
@@ -373,7 +373,7 @@ export const ScrapedDataViewer = () => {
                 <div>
                   <CardTitle>Rental Evidence</CardTitle>
                   <CardDescription>
-                    Property rental data scraped from RealCommercial.com.au
+                    Property rental data scraped from commercial property websites
                   </CardDescription>
                 </div>
                 <Button 

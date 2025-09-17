@@ -217,7 +217,7 @@ export default function AdvertisingValuationDashboard() {
                   <div>
                     <h3 className="font-semibold mb-2">Professional Valuation Services</h3>
                     <p className="text-sm text-muted-foreground">
-                      At Sovereign Valuations, we maintain extensive data on $300,000+ per annum billboard leases, 
+                      We maintain extensive data on $300,000+ per annum billboard leases, 
                       including both lease and advertising sales data. Our valuations incorporate comprehensive market 
                       analysis, risk assessment, and industry-specific expertise for accurate investment decisions.
                     </p>

@@ -111,7 +111,7 @@ export default function LiveMarketDataFeed() {
             distance: 0.3,
             confidence: 95,
             adjustmentFactors: ["Location", "Condition", "Size"],
-            source: "CoreLogic"
+            source: "Market Data"
           },
           {
             id: "2",
@@ -127,7 +127,7 @@ export default function LiveMarketDataFeed() {
             distance: 0.5,
             confidence: 88,
             adjustmentFactors: ["Bathrooms", "Parking"],
-            source: "CoreLogic"
+            source: "Market Data"
           }
         ],
         marketSummary: {

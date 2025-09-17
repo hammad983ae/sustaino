@@ -177,7 +177,7 @@ export const RealCommercialScraper = () => {
         <div className="flex items-center justify-center gap-2">
           <Target className="h-8 w-8 text-primary" />
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            RealCommercial.com.au Power Scraper
+            Commercial Property Data Scraper
           </h1>
         </div>
         <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -290,7 +290,7 @@ export const RealCommercialScraper = () => {
             <CardHeader>
               <CardTitle>Bulk Property Scraping</CardTitle>
               <CardDescription>
-                Scrape thousands of properties from RealCommercial.com.au automatically. 
+                Scrape thousands of properties from commercial property websites automatically. 
                 Configure your search parameters below.
               </CardDescription>
             </CardHeader>
@@ -404,7 +404,7 @@ export const RealCommercialScraper = () => {
             <CardHeader>
               <CardTitle>Single Property Scraping</CardTitle>
               <CardDescription>
-                Extract detailed data from a specific RealCommercial.com.au property listing URL.
+                Extract detailed data from a specific commercial property listing URL.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -418,7 +418,7 @@ export const RealCommercialScraper = () => {
                   onChange={(e) => setSinglePropertyUrl(e.target.value)}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Paste any RealCommercial.com.au property listing URL for detailed extraction.
+                  Paste any commercial property listing URL for detailed extraction.
                 </p>
               </div>
 

@@ -268,7 +268,7 @@ export default function AutomatedValuation() {
                           <CardHeader>
                             <CardTitle className="text-emerald-700 flex items-center gap-2">
                               <Database className="h-5 w-5" />
-                              RealCommercial Scraper
+                              Commercial Data Scraper
                             </CardTitle>
                             <CardDescription className="text-emerald-600">
                               Extract property data from URLs and documents
@@ -743,7 +743,7 @@ export default function AutomatedValuation() {
           <div className="mt-16">
             <Tabs defaultValue="scraper" className="w-full">
               <TabsList className="grid w-full grid-cols-5">
-                <TabsTrigger value="scraper">🎯 RealCommercial Scraper</TabsTrigger>
+                <TabsTrigger value="scraper">🎯 Commercial Data Scraper</TabsTrigger>
                 <TabsTrigger value="blockchain">⚡ Blockchain Hub</TabsTrigger>
                 <TabsTrigger value="mortgage">🏠 Mortgage Broker</TabsTrigger>
                 <TabsTrigger value="sales">🏢 Reality Sales</TabsTrigger>
