@@ -60,6 +60,7 @@ import BrochureViewer from "./pages/BrochureViewer";
 import DevelopmentSiteValuation from "./pages/DevelopmentSiteValuation";
 import NASDAQCompetitorAnalysis from "./components/NASDAQCompetitorAnalysis";
 import DigitalAssetValuationEngine from "./components/DigitalAssetValuationEngine";
+import ComprehensivePlatformValuation from "./components/ComprehensivePlatformValuation";
 
 const queryClient = new QueryClient();
 
@@ -110,6 +111,7 @@ const App = () => (
                 <Route path="/advertising-platforms" element={<AdvertisingPlatforms />} />
                 <Route path="/nasdaq-analysis" element={<NASDAQCompetitorAnalysis />} />
                 <Route path="/digital-valuation" element={<DigitalAssetValuationEngine />} />
+                <Route path="/platform-valuation" element={<ComprehensivePlatformValuation />} />
                 <Route path="/brochures" element={<BrochureViewer />} />
                 <Route path="/development-site-valuation" element={<DevelopmentSiteValuation />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
