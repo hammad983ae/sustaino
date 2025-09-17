@@ -1,9 +1,9 @@
 /**
  * ============================================================================
- * SUSTAINO-PHERE™ REVOLUTIONARY DIGITAL ASSET VALUATION PLATFORM
+ * SUSTAINO SPHERE™ REVOLUTIONARY DIGITAL ASSET VALUATION PLATFORM
  * Patent Pending: US Application #2025-XXXX "AI-Enhanced Digital Asset Valuation System"
  * Copyright © 2025 DeLorenzo Property Group Pty Ltd. All Rights Reserved.
- * Trademark: Sustaino-Phere™, SustainoVal™, DigitalAssetIQ™
+ * Trademark: Sustaino Sphere™, SustainoVal™, DigitalAssetIQ™
  * 
  * CONFIDENTIAL PROPRIETARY ALGORITHMS:
  * - Multi-Variable Valuation Engine™ (Trade Secret)
@@ -634,7 +634,7 @@ export const RevolutionarySustainoSphere = () => {
           <div className="absolute inset-0 opacity-10">
             <img 
               src={sustainoSphereDashboard} 
-              alt="Sustaino-Phere Dashboard" 
+              alt="Sustaino Sphere Dashboard" 
               className="w-full h-full object-cover animate-fade-in"
             />
           </div>
@@ -653,7 +653,7 @@ export const RevolutionarySustainoSphere = () => {
               </div>
               <div className="space-y-2">
                 <CardTitle className="text-6xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Sustaino-Phere™
+                  Sustaino Sphere™
                 </CardTitle>
                 <CardDescription className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                   Revolutionary Digital Asset Intelligence Platform
@@ -693,7 +693,7 @@ export const RevolutionarySustainoSphere = () => {
                 <span className="font-bold text-amber-800">PROTECTED INTELLECTUAL PROPERTY</span>
               </div>
               <p className="text-sm text-amber-800 font-medium">
-                © 2025 DeLorenzo Property Group Pty Ltd. Sustaino-Phere™, SustainoVal™, DigitalAssetIQ™ are registered trademarks. 
+                © 2025 DeLorenzo Property Group Pty Ltd. Sustaino Sphere™, SustainoVal™, DigitalAssetIQ™ are registered trademarks. 
                 Patent applications filed globally. Unauthorized use prohibited.
               </p>
             </div>
@@ -1520,7 +1520,7 @@ export const RevolutionarySustainoSphere = () => {
               <Crown className="h-6 w-6 text-yellow-400 animate-pulse" />
             </div>
             <p className="text-slate-300 text-lg max-w-3xl mx-auto">
-              Sustaino-Phere™ represents the future of digital asset valuation and trading. 
+              Sustaino Sphere™ represents the future of digital asset valuation and trading. 
               Our proprietary algorithms and revolutionary approach create unprecedented market opportunities.
             </p>
             <div className="flex justify-center gap-4 text-sm">

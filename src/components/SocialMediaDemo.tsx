@@ -110,7 +110,7 @@ const SocialMediaDemo = () => {
               <Crown className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              AuctionSphere™
+              Auction-Sphere™
             </h1>
             <div className="p-3 bg-gradient-to-r from-purple-600 to-blue-500 rounded-xl">
               <Rocket className="h-8 w-8 text-white" />
@@ -281,7 +281,7 @@ const SocialMediaDemo = () => {
                 Experience the Future of Real Estate Auctions
               </h3>
               <p className="text-slate-300 mb-6 max-w-md">
-                Join thousands of professionals using AuctionSphere™ to revolutionize 
+                Join thousands of professionals using Auction-Sphere™ to revolutionize 
                 property auctions with AI-powered insights and 3D visualization.
               </p>
               <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8">
@@ -295,7 +295,7 @@ const SocialMediaDemo = () => {
         {/* Footer Badge */}
         <div className="text-center mt-8">
           <Badge className="bg-gradient-to-r from-slate-700 to-slate-800 text-slate-300 px-6 py-2">
-            © 2025 AuctionSphere™ - Patent Protected Technology
+            © 2025 Auction-Sphere™ - Patent Protected Technology
           </Badge>
         </div>
       </div>

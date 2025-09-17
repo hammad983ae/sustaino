@@ -165,7 +165,7 @@ const Dashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
               <Gavel className="h-4 w-4" />
-              Sustaino-Phere™
+              Sustaino Sphere™
             </TabsTrigger>
             <TabsTrigger value="tools" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />

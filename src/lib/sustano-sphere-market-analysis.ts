@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * SUSTAINO-PHERE™ COMPREHENSIVE MARKET ANALYSIS ENGINE
+ * SUSTAINO SPHERE™ COMPREHENSIVE MARKET ANALYSIS ENGINE
  * Patent Pending: US Application #2025-XXXX "AI-Enhanced Market Intelligence System"
  * Copyright © 2025 DeLorenzo Property Group Pty Ltd. All Rights Reserved.
  * Trademark: SustanoAnalytics™, MarketIQ™, CompetitorMind™

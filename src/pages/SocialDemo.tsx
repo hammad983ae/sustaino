@@ -1,8 +1,8 @@
 import React from 'react';
-import SocialMediaDemo from '@/components/SocialMediaDemo';
+import AuctionSphereMarketing from '@/components/AuctionSphereMarketing';
 
 const SocialDemo = () => {
-  return <SocialMediaDemo />;
+  return <AuctionSphereMarketing />;
 };
 
 export default SocialDemo;
