@@ -163,7 +163,7 @@ export default function AutomatedValuation() {
                   🏠 Mortgage Broker
                 </Link>
                 <Link 
-                  to="/work-hub" 
+                  to="/reality-sales" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   🏢 Reality Sales
