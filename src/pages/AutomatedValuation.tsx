@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Zap, Sparkles } from "lucide-react";
+import { Zap, Sparkles, Megaphone, Building2, TrendingUp, FileText, BarChart3 } from "lucide-react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
@@ -33,6 +33,7 @@ import PropertyUpdateFeed from "@/components/PropertyUpdateFeed";
 import ConstructionCostIndex from "@/components/ConstructionCostIndex";
 import DevelopmentCalculator from "@/components/DevelopmentCalculator";
 import PEXAIntegration from "@/components/PEXAIntegration";
+import AdvertisingValuationDashboard from "@/components/AdvertisingValuationDashboard";
 
 // Import professional images
 import automatedValuationPlatform from '@/assets/automated-valuation-platform.jpg';
@@ -260,6 +261,213 @@ export default function AutomatedValuation() {
               
               <div className="animate-fade-in" style={{ animationDelay: '1.35s' }}>
                 <PEXAIntegration />
+              </div>
+
+              {/* Additional Professional Tools Section */}
+              <div className="animate-fade-in mt-16" style={{ animationDelay: '1.4s' }}>
+                <Card className="bg-gradient-to-br from-card/90 to-primary/5 border-primary/20">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                      <div className="p-3 bg-primary/10 rounded-lg">
+                        <BarChart3 className="h-6 w-6 text-primary" />
+                      </div>
+                      Additional Professional Tools
+                    </CardTitle>
+                    <p className="text-muted-foreground text-lg">
+                      Access specialized valuation and assessment tools for comprehensive property analysis
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {/* Property Valuation */}
+                      <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer border-blue-200 hover:border-blue-300">
+                        <CardContent className="p-6 text-center">
+                          <TrendingUp className="h-12 w-12 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                          <h3 className="font-semibold mb-2 text-blue-600">Property Valuation</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Access comprehensive property valuation tools and market analysis
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      {/* Rent Revision */}
+                      <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer border-purple-200 hover:border-purple-300">
+                        <CardContent className="p-6 text-center">
+                          <TrendingUp className="h-12 w-12 text-purple-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                          <h3 className="font-semibold mb-2 text-purple-600">Rent Revision</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Calculate and review rental valuations with market comparisons
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      {/* Rent Determination */}
+                      <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer border-orange-200 hover:border-orange-300">
+                        <CardContent className="p-6 text-center">
+                          <Building2 className="h-12 w-12 text-orange-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                          <h3 className="font-semibold mb-2 text-orange-600">Rent Determination</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Professional rent determination and arbitration services
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      {/* Information Memorandum */}
+                      <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer border-blue-200 hover:border-blue-300">
+                        <CardContent className="p-6 text-center">
+                          <FileText className="h-12 w-12 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                          <h3 className="font-semibold mb-2 text-blue-600">Information Memorandum</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Generate professional investment property memorandums with white label branding
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      {/* Advertising Valuations - NEW */}
+                      <Card 
+                        className="hover:shadow-lg transition-all duration-300 group cursor-pointer border-red-200 hover:border-red-300 bg-gradient-to-br from-orange-50 to-red-50"
+                        onClick={() => {
+                          // Scroll to advertising section
+                          document.getElementById('advertising-valuations')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                      >
+                        <CardContent className="p-6 text-center">
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full blur-xl animate-pulse group-hover:scale-110 transition-transform duration-500"></div>
+                            <Megaphone className="relative h-12 w-12 text-red-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                          </div>
+                          <h3 className="font-semibold mb-2 text-red-600">🆕 Advertising Valuations</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Professional signage & digital platform valuations with traffic analysis
+                          </p>
+                          <div className="flex justify-center gap-1 mt-2 flex-wrap">
+                            <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">Billboard Analysis</span>
+                            <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Digital Platforms</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* ESG & Climate Assessment */}
+                      <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer border-green-200 hover:border-green-300">
+                        <CardContent className="p-6 text-center">
+                          <Sparkles className="h-12 w-12 text-green-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                          <h3 className="font-semibold mb-2 text-green-600">ESG & Climate Assessment</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Comprehensive ESG assessment, climate risk analysis, and carbon farming projects
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Enhanced PEXA Integration Benefits Section */}
+              <div className="animate-fade-in mt-8" style={{ animationDelay: '1.45s' }}>
+                <Card className="bg-gradient-to-br from-blue-50/50 to-primary/5 border-blue-200/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                      <div className="p-3 bg-blue-500/10 rounded-lg">
+                        <Building2 className="h-6 w-6 text-blue-600" />
+                      </div>
+                      PEXA Integration Benefits
+                    </CardTitle>
+                    <p className="text-muted-foreground text-lg">
+                      Seamless property settlement and verification through Australia's electronic conveyancing platform
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="p-4 bg-white/50 rounded-lg border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                            <Zap className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <h4 className="font-semibold text-blue-900">Real-Time Settlement Data</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Access live settlement information and transaction status updates directly within our valuation platform for accurate market timing analysis.
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-white/50 rounded-lg border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <TrendingUp className="h-4 w-4 text-green-600" />
+                          </div>
+                          <h4 className="font-semibold text-green-900">Enhanced Market Analysis</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Combine PEXA settlement data with our valuation algorithms for more accurate comparable sales analysis and market trend identification.
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-white/50 rounded-lg border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                            <FileText className="h-4 w-4 text-purple-600" />
+                          </div>
+                          <h4 className="font-semibold text-purple-900">Automated Verification</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Automatically verify property ownership, title details, and encumbrances to ensure valuation accuracy and reduce manual verification time.
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-white/50 rounded-lg border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                            <BarChart3 className="h-4 w-4 text-orange-600" />
+                          </div>
+                          <h4 className="font-semibold text-orange-900">Transaction Speed Insights</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Analyze settlement timeframes and transaction volumes to identify market velocity indicators affecting property valuations.
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-white/50 rounded-lg border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                            <Building2 className="h-4 w-4 text-red-600" />
+                          </div>
+                          <h4 className="font-semibold text-red-900">Risk Assessment Enhancement</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Access caveat and mortgage information to provide comprehensive risk assessment for valuation clients and investment analysis.
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-white/50 rounded-lg border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                            <Sparkles className="h-4 w-4 text-teal-600" />
+                          </div>
+                          <h4 className="font-semibold text-teal-900">Streamlined Reporting</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Generate comprehensive valuation reports with integrated PEXA data, providing clients with complete transaction transparency and confidence.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 p-4 bg-gradient-to-r from-blue-500/10 to-primary/10 rounded-lg border border-blue-200/50">
+                      <h4 className="font-semibold text-blue-900 mb-2">Key PEXA Integration Advantages:</h4>
+                      <ul className="text-sm text-gray-700 space-y-1">
+                        <li>• <strong>Reduced Settlement Risk:</strong> Real-time monitoring of transaction progress and potential issues</li>
+                        <li>• <strong>Enhanced Due Diligence:</strong> Automated access to title searches and property history</li>
+                        <li>• <strong>Market Intelligence:</strong> Settlement data integration for superior comparable analysis</li>
+                        <li>• <strong>Client Confidence:</strong> Transparent reporting with verified transaction data</li>
+                        <li>• <strong>Efficiency Gains:</strong> Automated data collection reducing manual research time by up to 60%</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* New Advertising Valuations Section */}
+              <div id="advertising-valuations" className="animate-fade-in mt-8" style={{ animationDelay: '1.5s' }}>
+                <AdvertisingValuationDashboard />
               </div>
             </div>
             
