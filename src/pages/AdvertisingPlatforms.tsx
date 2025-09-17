@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -133,7 +134,15 @@ const sustainoSpherePackages: Package[] = [
 ];
 
 export default function AdvertisingPlatforms() {
+  const [searchParams] = useSearchParams();
   const [selectedPlatform, setSelectedPlatform] = useState<"auction" | "sustano">("auction");
+
+  useEffect(() => {
+    const platform = searchParams.get("platform");
+    if (platform === "auction" || platform === "sustano") {
+      setSelectedPlatform(platform);
+    }
+  }, [searchParams]);
 
   const handleInquiry = async (packageId: string, packageName: string, platform: string) => {
     const subject = `Inquiry for ${platform} ${packageName} Package`;
