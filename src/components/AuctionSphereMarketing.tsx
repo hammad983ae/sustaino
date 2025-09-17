@@ -215,52 +215,90 @@ const AuctionSphereMarketing = () => {
             Back to Dashboard
           </Button>
         </div>
-        {/* Main Header with 3D Effects */}
-        <div className="text-center mb-12 animate-fade-in">
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl blur-xl opacity-75 animate-pulse"></div>
-              <div className="relative p-6 bg-gradient-to-br from-blue-500/90 to-purple-600/90 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/10">
-                <Crown className="h-16 w-16 text-white drop-shadow-lg" />
+        {/* Enhanced Marketing Header with 3D Effects */}
+        <div className="text-center mb-12 relative">
+          {/* Floating 3D Logo Elements */}
+          <div className="relative mb-12">
+            <div className="flex items-center justify-center gap-8 mb-8">
+              {/* Left 3D Element */}
+              <div className="relative animate-float">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/40 to-purple-600/40 rounded-full blur-2xl"></div>
+                <div className="relative w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl backdrop-blur-xl border border-white/20 flex items-center justify-center transform rotate-12">
+                  <Crown className="h-12 w-12 text-white drop-shadow-lg" />
+                </div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-3xl rounded-3xl"></div>
+
+              {/* Center Logo */}
               <div className="relative">
-                <h1 className="text-8xl font-black bg-gradient-to-r from-blue-300 via-cyan-200 to-purple-300 bg-clip-text text-transparent drop-shadow-2xl">
-                  Auction-Sphere™
-                </h1>
-                <p className="text-3xl text-slate-200 font-bold mt-2 drop-shadow-lg">The Future of Real Estate Auctions</p>
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/30 to-blue-400/30 blur-3xl rounded-3xl animate-pulse"></div>
+                <div className="relative">
+                  <h1 className="text-9xl font-black bg-gradient-to-r from-blue-300 via-cyan-200 to-purple-300 bg-clip-text text-transparent drop-shadow-2xl animate-glow-pulse">
+                    Auction-Sphere™
+                  </h1>
+                  <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-bounce shadow-lg flex items-center justify-center">
+                    <Star className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Right 3D Element */}
+              <div className="relative animate-float delay-1000">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/40 to-blue-500/40 rounded-full blur-2xl"></div>
+                <div className="relative w-24 h-24 bg-gradient-to-br from-purple-600 to-blue-500 rounded-full shadow-2xl backdrop-blur-xl border border-white/20 flex items-center justify-center transform -rotate-12">
+                  <Rocket className="h-12 w-12 text-white drop-shadow-lg" />
+                </div>
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 rounded-3xl blur-xl opacity-75 animate-pulse delay-500"></div>
-              <div className="relative p-6 bg-gradient-to-br from-purple-600/90 to-blue-500/90 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/10">
-                <Rocket className="h-16 w-16 text-white drop-shadow-lg" />
-              </div>
+
+            {/* Tagline with enhanced effects */}
+            <div className="relative mb-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-xl rounded-2xl"></div>
+              <p className="relative text-4xl text-slate-200 font-bold drop-shadow-lg bg-black/20 backdrop-blur-sm rounded-2xl py-4 px-8 border border-white/10">
+                The Future of Real Estate Auctions
+              </p>
             </div>
           </div>
           
+          {/* Enhanced Feature Badges */}
           <div className="flex items-center justify-center gap-6 flex-wrap mb-8">
-            <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 text-lg font-bold">
-              <Sparkles className="h-5 w-5 mr-2" />
-              World's First 3D Auction Platform
+            <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-8 py-4 text-xl font-bold shadow-2xl transform hover:scale-105 transition-transform">
+              <Sparkles className="h-6 w-6 mr-3" />
+              World's First 3D Platform
             </Badge>
-            <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 text-lg font-bold">
-              <Award className="h-5 w-5 mr-2" />
-              Patent Protected Technology
+            <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-4 text-xl font-bold shadow-2xl transform hover:scale-105 transition-transform">
+              <Award className="h-6 w-6 mr-3" />
+              Patent Protected
             </Badge>
-            <Badge className="bg-gradient-to-r from-purple-500 to-violet-500 text-white px-6 py-3 text-lg font-bold">
-              <Zap className="h-5 w-5 mr-2" />
-              AI-Powered Intelligence
+            <Badge className="bg-gradient-to-r from-purple-500 to-violet-500 text-white px-8 py-4 text-xl font-bold shadow-2xl transform hover:scale-105 transition-transform">
+              <Zap className="h-6 w-6 mr-3" />
+              AI Intelligence
             </Badge>
           </div>
 
-          <p className="text-xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
-            Revolutionary real estate auction platform combining cutting-edge 3D visualization, 
-            AI-powered bidder qualification, and comprehensive market intelligence for the world's 
-            most advanced property auction experience.
-          </p>
+          {/* Enhanced Description */}
+          <div className="max-w-5xl mx-auto">
+            <p className="text-2xl text-slate-300 leading-relaxed mb-6">
+              Revolutionary real estate auction platform combining cutting-edge 3D visualization, 
+              AI-powered bidder qualification, and comprehensive market intelligence.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/20 backdrop-blur-sm">
+                <Building2 className="h-12 w-12 text-blue-400 mb-4 mx-auto" />
+                <h3 className="text-xl font-bold text-white mb-2">3D Property Viewing</h3>
+                <p className="text-slate-300">Immersive WebGL visualization technology</p>
+              </div>
+              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-2xl p-6 border border-green-500/20 backdrop-blur-sm">
+                <Brain className="h-12 w-12 text-green-400 mb-4 mx-auto" />
+                <h3 className="text-xl font-bold text-white mb-2">AI Qualification</h3>
+                <p className="text-slate-300">95% accuracy in bidder assessment</p>
+              </div>
+              <div className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 rounded-2xl p-6 border border-purple-500/20 backdrop-blur-sm">
+                <BarChart3 className="h-12 w-12 text-purple-400 mb-4 mx-auto" />
+                <h3 className="text-xl font-bold text-white mb-2">Live Analytics</h3>
+                <p className="text-slate-300">Real-time market intelligence</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Live Demo Section */}

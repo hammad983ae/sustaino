@@ -377,8 +377,8 @@ export default function AdvertisingPlatforms() {
                 <Mail className="h-8 w-8 text-primary group-hover:scale-110 transition-transform duration-300" />
               </div>
               <h3 className="font-semibold mb-1 group-hover:text-primary transition-colors duration-300">Email</h3>
-              <a href="mailto:advertising@realityauctions.com.au" className="text-primary hover:underline transition-all duration-300 hover:text-accent">
-                advertising@realityauctions.com.au
+               <a href="mailto:advertising@sovereignvaluations.com.au" className="text-primary hover:underline transition-all duration-300 hover:text-accent">
+                advertising@sovereignvaluations.com.au
               </a>
             </div>
             <div className="flex flex-col items-center group hover:transform hover:scale-105 transition-all duration-300">
@@ -386,8 +386,8 @@ export default function AdvertisingPlatforms() {
                 <Phone className="h-8 w-8 text-primary group-hover:scale-110 transition-transform duration-300" />
               </div>
               <h3 className="font-semibold mb-1 group-hover:text-primary transition-colors duration-300">Phone</h3>
-              <a href="tel:+61-2-8000-8000" className="text-primary hover:underline transition-all duration-300 hover:text-accent">
-                +61 2 8000 8000
+               <a href="tel:+61-3-9016-0000" className="text-primary hover:underline transition-all duration-300 hover:text-accent">
+                +61 3 9016 0000
               </a>
             </div>
             <div className="flex flex-col items-center group hover:transform hover:scale-105 transition-all duration-300">
@@ -395,7 +395,9 @@ export default function AdvertisingPlatforms() {
                 <Camera className="h-8 w-8 text-primary group-hover:scale-110 transition-transform duration-300" />
               </div>
               <h3 className="font-semibold mb-1 group-hover:text-primary transition-colors duration-300">Photography</h3>
-              <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">Professional services available</span>
+               <a href="mailto:photography@sovereignvaluations.com.au" className="text-primary hover:underline transition-all duration-300 hover:text-accent">
+                photography@sovereignvaluations.com.au
+              </a>
             </div>
           </div>
           
