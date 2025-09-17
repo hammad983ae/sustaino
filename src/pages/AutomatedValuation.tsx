@@ -7,10 +7,11 @@
  */
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Zap, Sparkles, Megaphone, Building2, TrendingUp, FileText, BarChart3 } from "lucide-react";
+import { Separator } from '@/components/ui/separator';
+import { Zap, Sparkles, Megaphone, Building2, TrendingUp, FileText, BarChart3, Database } from "lucide-react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
@@ -124,7 +125,7 @@ export default function AutomatedValuation() {
         <div className="relative z-10">
           <BrandedHeader />
           
-          {/* Navigation Links with enhanced styling */}
+          {/* Clean Navigation - Only Essential Links */}
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between mb-8 animate-fade-in">
               <div className="flex items-center gap-4">
@@ -134,52 +135,206 @@ export default function AutomatedValuation() {
                 >
                   🏠 Back to Dashboard
                 </Link>
-                <Link 
-                  to="/dashboard" 
-                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
-                >
-                  📊 Analytics Dashboard
-                </Link>
-                <Link 
-                  to="/index" 
-                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
-                >
-                  🌍 ESG Platform
-                </Link>
-                <Link 
-                  to="/sam-platform" 
-                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
-                >
-                  🎯 SAM Platform
-                </Link>
-                <Link 
-                  to="/crypto-trading" 
-                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
-                >
-                  ⚡ Blockchain Hub
-                </Link>
-                <Link 
-                  to="/work-hub" 
-                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
-                >
-                  🏠 Mortgage Broker
-                </Link>
-                <Link 
-                  to="/reality-sales" 
-                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
-                >
-                  🏢 Reality Sales
-                </Link>
-                <Link 
-                  to="/work-hub" 
-                  className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
-                >
-                  🔧 Property Management
-                </Link>
+                
+                {/* New Sustaino World Tab - Primary Platform Access */}
+                <div className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 backdrop-blur-sm border border-emerald-300/50 rounded-lg px-6 py-2">
+                  <span className="text-white font-semibold text-lg">🌍 Sustaino World - Professional Platform Suite</span>
+                </div>
               </div>
               <div className="flex items-center gap-4">
                 <AuthStatus />
               </div>
+            </div>
+            
+            {/* Sustaino World Platform Hub */}
+            <div className="mb-12">
+              <Card className="bg-gradient-to-br from-emerald-50/90 to-teal-50/90 border-emerald-200/50 backdrop-blur-sm">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl text-emerald-700 flex items-center justify-center gap-2">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                      🌍
+                    </div>
+                    Sustaino World - Integrated Platform Suite
+                  </CardTitle>
+                  <p className="text-emerald-600">Access all professional tools from one organized dashboard</p>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="platforms" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="platforms">Platform Access</TabsTrigger>
+                      <TabsTrigger value="tools">Data Tools</TabsTrigger>
+                      <TabsTrigger value="advanced">Advanced Features</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="platforms" className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {/* Core Platforms */}
+                        <Link to="/dashboard" className="block group">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+                            <CardContent className="p-6 text-center">
+                              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-200 transition-colors">
+                                <span className="text-xl">📊</span>
+                              </div>
+                              <h3 className="font-semibold text-blue-700 mb-2">Analytics Dashboard</h3>
+                              <p className="text-sm text-blue-600">Comprehensive analytics and reporting</p>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                        
+                        <Link to="/index" className="block group">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
+                            <CardContent className="p-6 text-center">
+                              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-green-200 transition-colors">
+                                <span className="text-xl">🌱</span>
+                              </div>
+                              <h3 className="font-semibold text-green-700 mb-2">ESG Platform</h3>
+                              <p className="text-sm text-green-600">Environmental & sustainability analysis</p>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                        
+                        <Link to="/sam-platform" className="block group">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-purple-200 bg-gradient-to-br from-purple-50 to-violet-50">
+                            <CardContent className="p-6 text-center">
+                              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-200 transition-colors">
+                                <span className="text-xl">🎯</span>
+                              </div>
+                              <h3 className="font-semibold text-purple-700 mb-2">SAM Platform</h3>
+                              <p className="text-sm text-purple-600">Strategic Asset Management</p>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                        
+                        <Link to="/crypto-trading" className="block group">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50">
+                            <CardContent className="p-6 text-center">
+                              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-orange-200 transition-colors">
+                                <span className="text-xl">⚡</span>
+                              </div>
+                              <h3 className="font-semibold text-orange-700 mb-2">Blockchain Hub</h3>
+                              <p className="text-sm text-orange-600">Cryptocurrency & blockchain tools</p>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {/* Professional Services */}
+                        <Link to="/work-hub" className="block group">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50">
+                            <CardContent className="p-6 text-center">
+                              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-teal-200 transition-colors">
+                                <span className="text-xl">🏠</span>
+                              </div>
+                              <h3 className="font-semibold text-teal-700 mb-2">Mortgage Broker</h3>
+                              <p className="text-sm text-teal-600">Mortgage and finance services</p>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                        
+                        <Link to="/reality-sales" className="block group">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50">
+                            <CardContent className="p-6 text-center">
+                              <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-rose-200 transition-colors">
+                                <span className="text-xl">🏢</span>
+                              </div>
+                              <h3 className="font-semibold text-rose-700 mb-2">Reality Sales</h3>
+                              <p className="text-sm text-rose-600">Real estate sales platform</p>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                        
+                        <Link to="/work-hub" className="block group">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-slate-200 bg-gradient-to-br from-slate-50 to-gray-50">
+                            <CardContent className="p-6 text-center">
+                              <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-slate-200 transition-colors">
+                                <span className="text-xl">🔧</span>
+                              </div>
+                              <h3 className="font-semibold text-slate-700 mb-2">Property Management</h3>
+                              <p className="text-sm text-slate-600">Property management tools</p>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="tools" className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Web Scraper Tool */}
+                        <Card className="border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-50">
+                          <CardHeader>
+                            <CardTitle className="text-emerald-700 flex items-center gap-2">
+                              <Database className="h-5 w-5" />
+                              RealCommercial Scraper
+                            </CardTitle>
+                            <CardDescription className="text-emerald-600">
+                              Extract property data from URLs and documents
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <RealCommercialScraper />
+                          </CardContent>
+                        </Card>
+                        
+                        {/* Additional Tools Placeholder */}
+                        <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+                          <CardHeader>
+                            <CardTitle className="text-blue-700 flex items-center gap-2">
+                              <TrendingUp className="h-5 w-5" />
+                              Market Data Tools
+                            </CardTitle>
+                            <CardDescription className="text-blue-600">
+                              Advanced market analysis and data extraction
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="text-center py-8">
+                            <p className="text-blue-600 mb-4">Additional data tools coming soon</p>
+                            <Button variant="outline" className="border-blue-300 text-blue-700">
+                              Request Feature
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="advanced" className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-violet-50">
+                          <CardHeader>
+                            <CardTitle className="text-purple-700">Advanced Analytics</CardTitle>
+                            <CardDescription className="text-purple-600">
+                              Enterprise-level analytics and reporting
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="text-center py-8">
+                            <p className="text-purple-600 mb-4">AI-powered insights and predictions</p>
+                            <Button variant="outline" className="border-purple-300 text-purple-700">
+                              Coming Soon
+                            </Button>
+                          </CardContent>
+                        </Card>
+                        
+                        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50">
+                          <CardHeader>
+                            <CardTitle className="text-amber-700">Enterprise Features</CardTitle>
+                            <CardDescription className="text-amber-600">
+                              White-label and custom integrations
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="text-center py-8">
+                            <p className="text-amber-600 mb-4">Custom solutions for enterprise clients</p>
+                            <Button variant="outline" className="border-amber-300 text-amber-700">
+                              Contact Sales
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
             </div>
           </div>
           
