@@ -657,18 +657,16 @@ export default function AutomatedValuation() {
           
           {/* Always Available Professional Services Hub */}
           <div className="mt-16">
-            <Tabs defaultValue="scraper" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
-                <TabsTrigger value="scraper">🎯 RealCommercial Scraper</TabsTrigger>
-                <TabsTrigger value="blockchain">⚡ Blockchain Hub</TabsTrigger>
-                <TabsTrigger value="mortgage">🏠 Mortgage Broker</TabsTrigger>
-                <TabsTrigger value="sales">🏢 Reality Sales</TabsTrigger>
-                <TabsTrigger value="management">🔧 Property Management</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="scraper" className="space-y-4">
-                <RealCommercialScraper />
-              </TabsContent>
+            {/* REMOVED: Redundant scraper instance - Now only in Sustaino World tabs */}
+            <div className="text-center p-8 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg">
+              <h3 className="text-2xl font-bold text-emerald-800 mb-4">🚀 All Tools Moved to Sustaino World!</h3>
+              <p className="text-emerald-600 mb-4">
+                Access the ENHANCED Power Scraper and all professional tools in the organized Sustaino World tabs above.
+              </p>
+              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full">
+                <span>✨ Cleaner Interface • Better Organization • More Power</span>
+              </div>
+            </div>
 
               <TabsContent value="blockchain" className="space-y-4">
                 <Card>

@@ -8,8 +8,10 @@
  */
 import React from 'react';
 import { BrickByBrickPlatform } from '@/components/BrickByBrickPlatform';
+import { BrickByBrickProBrochure } from '@/components/brochures/BrickByBrickProBrochure';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, ArrowLeft, Users, TrendingUp, Shield } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Building2, ArrowLeft, Users, TrendingUp, Shield, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
