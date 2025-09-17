@@ -22,6 +22,10 @@ interface SiteData {
   state: string;
   council: string;
   description: string;
+  valuationPurpose: string;
+  valuationDate: string;
+  clientName: string;
+  clientCompany: string;
 }
 
 interface SiteDetailsFormProps {
@@ -42,7 +46,11 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     heightLimit: 120,
     state: 'NSW',
     council: 'Ryde City Council',
-    description: 'Scalable Mixed-Use Development Site within a Transformative Precinct. HDA declared SSD project with proposed GFA of 48,051m² and indicative yield of 500 apartments.'
+    description: 'Scalable Mixed-Use Development Site within a Transformative Precinct. HDA declared SSD project with proposed GFA of 48,051m² and indicative yield of 500 apartments.',
+    valuationPurpose: '',
+    valuationDate: new Date().toISOString().split('T')[0],
+    clientName: '',
+    clientCompany: ''
   });
 
   const handleInputChange = (field: keyof SiteData, value: any) => {
@@ -53,6 +61,138 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
 
   return (
     <div className="space-y-6">
+      {/* Valuation Details */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="w-5 h-5" />
+            Valuation Details
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="valuationPurpose">Purpose of Valuation</Label>
+              <Select value={siteData.valuationPurpose} onValueChange={(value) => handleInputChange('valuationPurpose', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select valuation purpose" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="mortgage-security">Mortgage/Security Purposes</SelectItem>
+                  <SelectItem value="sale-purchase">Sale/Purchase</SelectItem>
+                  <SelectItem value="development-feasibility">Development Feasibility</SelectItem>
+                  <SelectItem value="investment-analysis">Investment Analysis</SelectItem>
+                  <SelectItem value="compulsory-acquisition">Compulsory Acquisition</SelectItem>
+                  <SelectItem value="insurance">Insurance Purposes</SelectItem>
+                  <SelectItem value="financial-reporting">Financial Reporting</SelectItem>
+                  <SelectItem value="litigation-support">Litigation Support</SelectItem>
+                  <SelectItem value="lease-negotiations">Lease Negotiations</SelectItem>
+                  <SelectItem value="family-law">Family Law/Matrimonial</SelectItem>
+                  <SelectItem value="taxation">Taxation Purposes</SelectItem>
+                  <SelectItem value="stamp-duty">Stamp Duty Assessment</SelectItem>
+                  <SelectItem value="capital-gains-tax">Capital Gains Tax</SelectItem>
+                  <SelectItem value="estate-planning">Estate Planning</SelectItem>
+                  <SelectItem value="partnership-dissolution">Partnership Dissolution</SelectItem>
+                  <SelectItem value="joint-venture">Joint Venture</SelectItem>
+                  <SelectItem value="refinancing">Refinancing</SelectItem>
+                  <SelectItem value="restructuring">Corporate Restructuring</SelectItem>
+                  <SelectItem value="acquisition-due-diligence">Acquisition Due Diligence</SelectItem>
+                  <SelectItem value="asset-management">Asset Management</SelectItem>
+                  <SelectItem value="portfolio-management">Portfolio Management</SelectItem>
+                  <SelectItem value="fund-management">Fund Management</SelectItem>
+                  <SelectItem value="rei-listing">REIT Listing</SelectItem>
+                  <SelectItem value="going-concern">Going Concern</SelectItem>
+                  <SelectItem value="liquidation">Liquidation/Forced Sale</SelectItem>
+                  <SelectItem value="rental-determination">Rental Determination</SelectItem>
+                  <SelectItem value="rent-review">Rent Review</SelectItem>
+                  <SelectItem value="lease-renewal">Lease Renewal</SelectItem>
+                  <SelectItem value="arbitration">Arbitration</SelectItem>
+                  <SelectItem value="expert-determination">Expert Determination</SelectItem>
+                  <SelectItem value="compensation">Compensation Assessment</SelectItem>
+                  <SelectItem value="infrastructure-funding">Infrastructure Funding</SelectItem>
+                  <SelectItem value="development-contributions">Development Contributions</SelectItem>
+                  <SelectItem value="heritage-listing">Heritage Listing Impact</SelectItem>
+                  <SelectItem value="contamination-impact">Contamination Impact</SelectItem>
+                  <SelectItem value="native-title">Native Title</SelectItem>
+                  <SelectItem value="crown-land">Crown Land Assessment</SelectItem>
+                  <SelectItem value="government-acquisition">Government Acquisition</SelectItem>
+                  <SelectItem value="utility-easement">Utility Easement</SelectItem>
+                  <SelectItem value="road-widening">Road Widening</SelectItem>
+                  <SelectItem value="resumption">Resumption</SelectItem>
+                  <SelectItem value="rating-objection">Rating Objection</SelectItem>
+                  <SelectItem value="land-tax">Land Tax Assessment</SelectItem>
+                  <SelectItem value="council-rates">Council Rates Objection</SelectItem>
+                  <SelectItem value="highest-best-use">Highest and Best Use</SelectItem>
+                  <SelectItem value="market-value">Market Value Assessment</SelectItem>
+                  <SelectItem value="fair-value">Fair Value (AASB 13)</SelectItem>
+                  <SelectItem value="depreciated-replacement-cost">Depreciated Replacement Cost</SelectItem>
+                  <SelectItem value="existing-use-value">Existing Use Value</SelectItem>
+                  <SelectItem value="special-value">Special Value</SelectItem>
+                  <SelectItem value="synergistic-value">Synergistic Value</SelectItem>
+                  <SelectItem value="investment-value">Investment Value</SelectItem>
+                  <SelectItem value="mortgagee-sale">Mortgagee in Possession Sale</SelectItem>
+                  <SelectItem value="court-ordered-sale">Court Ordered Sale</SelectItem>
+                  <SelectItem value="deceased-estate">Deceased Estate</SelectItem>
+                  <SelectItem value="probate">Probate Valuation</SelectItem>
+                  <SelectItem value="charitable-purpose">Charitable Purpose</SelectItem>
+                  <SelectItem value="education-facility">Educational Facility</SelectItem>
+                  <SelectItem value="religious-facility">Religious Facility</SelectItem>
+                  <SelectItem value="community-facility">Community Facility</SelectItem>
+                  <SelectItem value="social-housing">Social Housing</SelectItem>
+                  <SelectItem value="affordable-housing">Affordable Housing</SelectItem>
+                  <SelectItem value="build-to-rent">Build to Rent</SelectItem>
+                  <SelectItem value="student-accommodation">Student Accommodation</SelectItem>
+                  <SelectItem value="aged-care">Aged Care Facility</SelectItem>
+                  <SelectItem value="childcare">Childcare Facility</SelectItem>
+                  <SelectItem value="medical-facility">Medical Facility</SelectItem>
+                  <SelectItem value="other">Other (Please Specify)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label htmlFor="valuationDate">Valuation Date</Label>
+              <Input
+                id="valuationDate"
+                type="date"
+                value={siteData.valuationDate}
+                onChange={(e) => handleInputChange('valuationDate', e.target.value)}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Client Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Client Information</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="clientName">Client Name</Label>
+              <Input
+                id="clientName"
+                value={siteData.clientName}
+                onChange={(e) => handleInputChange('clientName', e.target.value)}
+                placeholder="Enter client name"
+              />
+            </div>
+            <div>
+              <Label htmlFor="clientCompany">Client Company</Label>
+              <Input
+                id="clientCompany"
+                value={siteData.clientCompany}
+                onChange={(e) => handleInputChange('clientCompany', e.target.value)}
+                placeholder="Enter company name (if applicable)"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Site Information */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
