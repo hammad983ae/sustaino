@@ -126,54 +126,54 @@ export default function AutomatedValuation() {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between mb-8 animate-fade-in">
               <div className="flex items-center gap-4">
-                <a 
-                  href="/" 
+                <Link 
+                  to="/" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-glow backdrop-blur-sm border border-green-300/70"
                 >
                   🏠 Back to Dashboard
-                </a>
-                <a 
-                  href="/dashboard" 
+                </Link>
+                <Link 
+                  to="/dashboard" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   📊 Analytics Dashboard
-                </a>
-                <a 
-                  href="/index" 
+                </Link>
+                <Link 
+                  to="/index" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   🌍 ESG Platform
-                </a>
-                <a 
-                  href="/sam-platform" 
+                </Link>
+                <Link 
+                  to="/sam-platform" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   🎯 SAM Platform
-                </a>
-                <a 
-                  href="/crypto-trading" 
+                </Link>
+                <Link 
+                  to="/crypto-trading" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   ⚡ Blockchain Hub
-                </a>
-                <a 
-                  href="/work-hub" 
+                </Link>
+                <Link 
+                  to="/work-hub" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   🏠 Mortgage Broker
-                </a>
-                <a 
-                  href="/work-hub" 
+                </Link>
+                <Link 
+                  to="/work-hub" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   🏢 Reality Sales
-                </a>
-                <a 
-                  href="/work-hub" 
+                </Link>
+                <Link 
+                  to="/work-hub" 
                   className="green-3d-button flex items-center gap-2 px-4 py-2 hover:shadow-green-glow rounded-lg transition-all duration-300 text-white font-medium animate-green-pulse backdrop-blur-sm border border-green-300/70"
                 >
                   🔧 Property Management
-                </a>
+                </Link>
               </div>
               <div className="flex items-center gap-4">
                 <AuthStatus />
