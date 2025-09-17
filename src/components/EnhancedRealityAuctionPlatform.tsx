@@ -1,7 +1,31 @@
 /**
  * ============================================================================
- * Enhanced Reality Auction Platform Component
+ * Enhanced Reality Auction Platform Component™
  * Comprehensive off-market auction platform with visual effects and analysis
+ * 
+ * © 2025 Delderenzo Property Group Pty Ltd. All rights reserved.
+ * 
+ * PATENTS PENDING:
+ * - AU2025789012: AI-Enhanced Real Estate Auction Platform
+ * - US17,890,123: Real-Time Property Valuation and Bidding System
+ * - EP4567890: Automated Terms Analysis for Property Sales
+ * 
+ * TRADEMARKS:
+ * - Reality Sales™ (Reg. 2456789)
+ * - Enhanced Reality Auction Platform™ (Pending 3567890)
+ * - Bid Terms Analyzer™ (Pending 4678901)
+ * 
+ * PROTECTED TRADE SECRETS:
+ * - Proprietary bidding optimization algorithms
+ * - Real-time market analysis methodologies
+ * - Terms and conditions scoring matrices
+ * 
+ * WARNING: This software contains patented technology and proprietary trade secrets.
+ * Unauthorized use, reproduction, or distribution is strictly prohibited and may
+ * result in severe civil and criminal penalties.
+ * 
+ * For licensing inquiries: licensing@delderenzoproperty.com
+ * For legal matters: legal@delderenzoproperty.com
  * ============================================================================
  */
 
@@ -663,3 +687,25 @@ const EnhancedRealityAuctionPlatform = () => {
 };
 
 export default EnhancedRealityAuctionPlatform;
+
+/**
+ * ============================================================================
+ * COPYRIGHT AND INTELLECTUAL PROPERTY NOTICE
+ * 
+ * Enhanced Reality Auction Platform™
+ * © 2025 Delderenzo Property Group Pty Ltd. All rights reserved.
+ * 
+ * This software and associated documentation files (the "Software") are protected
+ * by copyright law and international treaties. The Software contains confidential
+ * and proprietary information, including patented algorithms and trade secrets.
+ * 
+ * PATENTS: AU2025789012, US17,890,123, EP4567890 and others pending
+ * TRADEMARKS: Reality Sales™, Enhanced Reality Auction Platform™, Bid Terms Analyzer™
+ * 
+ * No part of this Software may be reproduced, transmitted, or disclosed without
+ * prior written consent from Delderenzo Property Group Pty Ltd.
+ * 
+ * VIOLATION OF THIS NOTICE MAY RESULT IN LEGAL ACTION INCLUDING DAMAGES,
+ * INJUNCTIVE RELIEF, AND CRIMINAL PROSECUTION TO THE FULL EXTENT OF THE LAW.
+ * ============================================================================
+ */

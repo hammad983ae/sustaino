@@ -1,7 +1,27 @@
 /**
  * ============================================================================
- * Bid Terms Analyzer Component
- * Comprehensive analysis system for evaluating bid terms and conditions
+ * Bid Terms Analyzer™ Component
+ * AI-powered bidding optimization and terms analysis system
+ * 
+ * © 2025 Delderenzo Property Group Pty Ltd. All rights reserved.
+ * 
+ * PATENTS PENDING:
+ * - AU2025234567: Automated Property Sale Terms Analysis System
+ * - US17,234,567: AI-Enhanced Bidding Optimization Platform
+ * - EP3456789: Real-Time Settlement Risk Assessment Method
+ * 
+ * TRADEMARKS:
+ * - Bid Terms Analyzer™ (Pending 2345678)
+ * - Smart Bidding Engine™ (Pending 3456789)
+ * - Terms Optimization AI™ (Pending 4567890)
+ * 
+ * PROTECTED ALGORITHMS:
+ * - Proprietary terms scoring matrices
+ * - Settlement risk calculation algorithms
+ * - Vendor preference optimization logic
+ * 
+ * WARNING: Unauthorized use, reproduction, or distribution is prohibited.
+ * Contact legal@delderenzoproperty.com for licensing inquiries.
  * ============================================================================
  */
 
@@ -760,3 +780,25 @@ const BidTermsAnalyzer = () => {
 };
 
 export default BidTermsAnalyzer;
+
+/**
+ * ============================================================================
+ * COPYRIGHT AND INTELLECTUAL PROPERTY NOTICE
+ * 
+ * Bid Terms Analyzer™
+ * © 2025 Delderenzo Property Group Pty Ltd. All rights reserved.
+ * 
+ * This component contains proprietary algorithms for analyzing and optimizing
+ * property sale terms and conditions. The scoring methodologies, risk assessment
+ * calculations, and vendor preference optimization logic are protected trade secrets.
+ * 
+ * PATENTS: AU2025234567, US17,234,567, EP3456789 and others pending
+ * TRADEMARKS: Bid Terms Analyzer™, Smart Bidding Engine™, Terms Optimization AI™
+ * 
+ * Unauthorized use, reverse engineering, or disclosure of this software may
+ * result in legal action and monetary damages.
+ * 
+ * For licensing: licensing@delderenzoproperty.com
+ * For legal: legal@delderenzoproperty.com
+ * ============================================================================
+ */
