@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { Zap, Sparkles, Megaphone, Building2, TrendingUp, FileText, BarChart3, Database } from "lucide-react";
+import { Zap, Sparkles, Megaphone, Building2, TrendingUp, FileText, BarChart3, Database, Mail } from "lucide-react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
@@ -162,9 +162,10 @@ export default function AutomatedValuation() {
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3">
+                    <TabsList className="grid w-full grid-cols-4">
                       <TabsTrigger value="platforms">Platform Access</TabsTrigger>
                       <TabsTrigger value="tools">Data Tools</TabsTrigger>
+                      <TabsTrigger value="brochures">📋 Brochures</TabsTrigger>
                       <TabsTrigger value="advanced">Advanced Features</TabsTrigger>
                     </TabsList>
                     
@@ -293,6 +294,132 @@ export default function AutomatedValuation() {
                           </CardHeader>
                           <CardContent>
                             <ScrapedDataViewer />
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="brochures" className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Professional Brochures Section */}
+                        <Card className="border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-50">
+                          <CardHeader>
+                            <CardTitle className="text-emerald-700 flex items-center gap-2">
+                              <FileText className="h-5 w-5" />
+                              Marketing Brochures
+                            </CardTitle>
+                            <CardDescription className="text-emerald-600">
+                              Professional marketing materials and service overviews
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-3">
+                              <Link to="/brochures" className="block">
+                                <Button variant="outline" className="w-full justify-start gap-2 border-emerald-300 hover:bg-emerald-50">
+                                  📄 View All Brochures
+                                </Button>
+                              </Link>
+                              <div className="text-sm text-emerald-600 space-y-1">
+                                <p>• Platform ecosystem overview</p>
+                                <p>• Service-specific brochures</p>
+                                <p>• Professional presentations</p>
+                                <p>• PDF-ready marketing materials</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                        
+                        {/* Quick Access to Popular Brochures */}
+                        <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+                          <CardHeader>
+                            <CardTitle className="text-blue-700 flex items-center gap-2">
+                              <Sparkles className="h-5 w-5" />
+                              Featured Materials
+                            </CardTitle>
+                            <CardDescription className="text-blue-600">
+                              Most requested professional materials
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => window.open('/brochures', '_blank')}
+                                  className="text-xs hover:bg-blue-100"
+                                >
+                                  🌍 Sustaino-Sphere™
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => window.open('/brochures', '_blank')}
+                                  className="text-xs hover:bg-blue-100"
+                                >
+                                  🏛️ Auction-Sphere™
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => window.open('/brochures', '_blank')}
+                                  className="text-xs hover:bg-blue-100"
+                                >
+                                  🏠 Property Valuations
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => window.open('/brochures', '_blank')}
+                                  className="text-xs hover:bg-blue-100"
+                                >
+                                  📊 Financial Reporting
+                                </Button>
+                              </div>
+                              <div className="pt-2 border-t border-blue-200">
+                                <p className="text-xs text-blue-600">📧 Email-ready | 🖨️ PDF export | 📱 Mobile optimized</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                      
+                      {/* Quick Action Cards */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-violet-50 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                              onClick={() => window.open('/brochures', '_blank')}>
+                          <CardContent className="p-6 text-center">
+                            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                              <FileText className="h-6 w-6 text-purple-600" />
+                            </div>
+                            <h3 className="font-semibold text-purple-700 mb-2">Full Brochure Suite</h3>
+                            <p className="text-sm text-purple-600">Complete collection of professional materials</p>
+                          </CardContent>
+                        </Card>
+                        
+                        <Card className="border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                              onClick={() => window.print()}>
+                          <CardContent className="p-6 text-center">
+                            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                              <span className="text-xl">🖨️</span>
+                            </div>
+                            <h3 className="font-semibold text-orange-700 mb-2">Print This Page</h3>
+                            <p className="text-sm text-orange-600">Print current platform overview</p>
+                          </CardContent>
+                        </Card>
+                        
+                        <Card className="border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                              onClick={() => {
+                                const subject = encodeURIComponent('Sustaino World Platform Suite - Professional Overview');
+                                const body = encodeURIComponent('Please find information about our comprehensive Sustaino World platform suite at: ' + window.location.href);
+                                window.open(`mailto:?subject=${subject}&body=${body}`);
+                              }}>
+                          <CardContent className="p-6 text-center">
+                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                              <Mail className="h-6 w-6 text-green-600" />
+                            </div>
+                            <h3 className="font-semibold text-green-700 mb-2">Share Platform</h3>
+                            <p className="text-sm text-green-600">Email platform information</p>
                           </CardContent>
                         </Card>
                       </div>
