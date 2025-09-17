@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Mail, Phone, Globe, Star, Camera, BarChart3, Target, Users } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Package {
   id: string;
@@ -145,17 +146,50 @@ export default function AdvertisingPlatforms() {
   }, [searchParams]);
 
   const handleInquiry = async (packageId: string, packageName: string, platform: string) => {
-    const subject = `Inquiry for ${platform} ${packageName} Package`;
-    const body = `Hello,\n\nI'm interested in the ${packageName} advertising package for ${platform}.\n\nPackage ID: ${packageId}\n\nPlease provide more information and next steps.\n\nThank you!`;
-    
-    const mailtoLink = `mailto:advertising@realityauctions.com.au?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    window.open(mailtoLink, '_blank');
-    
-    toast({
-      title: "Email inquiry opened",
-      description: `Your email client should open with a pre-filled inquiry for the ${packageName} package.`,
-    });
+    try {
+      const pkg = packages.find(p => p.id === packageId);
+      if (!pkg) {
+        toast({
+          title: "Error",
+          description: "Package not found",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Send inquiry through our email service
+      const { data, error } = await supabase.functions.invoke('send-advertising-inquiry', {
+        body: {
+          packageId,
+          packageName,
+          platform,
+          price: pkg.price,
+          // You can add customer details here if you collect them
+        }
+      });
+
+      if (error) {
+        console.error('Error sending inquiry:', error);
+        toast({
+          title: "Error sending inquiry",
+          description: "Please try again or contact us directly at advertising@realityauctions.com.au",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Inquiry sent successfully!",
+        description: `We've received your inquiry for the ${packageName} package. Our team will contact you within 2 business hours.`,
+      });
+    } catch (error) {
+      console.error('Error sending inquiry:', error);
+      toast({
+        title: "Error sending inquiry",
+        description: "Please try again or contact us directly at advertising@realityauctions.com.au",
+        variant: "destructive",
+      });
+    }
   };
 
   const packages = selectedPlatform === "auction" ? auctionSpherePackages : sustainoSpherePackages;
