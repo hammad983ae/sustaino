@@ -17,7 +17,17 @@ serve(async (req) => {
   }
 
   try {
-    const { location, radius = 1000 } = await req.json();
+    const body = await req.json();
+    const { location, radius = 1000 } = body;
+    
+    // Input validation
+    if (!location || typeof location !== 'string' || location.trim().length === 0) {
+      throw new Error('Invalid location parameter');
+    }
+    if (typeof radius !== 'number' || radius < 100 || radius > 50000) {
+      throw new Error('Invalid radius parameter (must be between 100 and 50000)');
+    }
+    
     const apiKey = Deno.env.get('CORELOGIC_API_KEY');
 
     if (!apiKey) {

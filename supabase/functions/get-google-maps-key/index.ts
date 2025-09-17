@@ -17,6 +17,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Rate limiting check
+  const clientIP = req.headers.get('x-forwarded-for') || 'unknown';
+  console.log(`Request from IP: ${clientIP}`);
+
   try {
     // Try multiple possible secret names for Google Maps API key
     const googleMapsApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY2') ||
