@@ -45,11 +45,13 @@ import {
   CheckCircle,
   XCircle,
   Lock,
-  CreditCard
+  CreditCard,
+  Megaphone
 } from 'lucide-react';
 import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
 import DashboardQuickSearch from '@/components/DashboardQuickSearch';
 import { RevolutionarySustainoSphere } from '@/components/RevolutionarySustanoSphere';
+import AdvertisingValuationDashboard from '@/components/AdvertisingValuationDashboard';
 
 // Import professional images
 import securityAnalysisDashboard from '@/assets/security-analysis-dashboard.jpg';
@@ -167,6 +169,10 @@ const Dashboard = () => {
             <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
               <Gavel className="h-4 w-4" />
               Sustaino Sphere™
+            </TabsTrigger>
+            <TabsTrigger value="advertising" className="flex items-center gap-2">
+              <Megaphone className="h-4 w-4" />
+              Advertising
             </TabsTrigger>
             <TabsTrigger value="tools" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -760,6 +766,30 @@ const Dashboard = () => {
                 </Card>
               </Link>
 
+              <Card 
+                className="hover:shadow-lg transition-shadow cursor-pointer group"
+                onClick={() => setActiveTab('advertising')}
+              >
+                <CardContent className="p-6 text-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full blur-xl animate-pulse group-hover:scale-110 transition-transform duration-500"></div>
+                    <div className="relative p-4 bg-gradient-to-br from-orange-500/80 to-red-600/80 rounded-full shadow-xl mx-auto w-fit backdrop-blur-lg border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                      <Megaphone className="h-8 w-8 text-white drop-shadow-lg" />
+                    </div>
+                  </div>
+                  <h3 className="font-semibold mb-2 mt-4 group-hover:text-primary transition-colors">Advertising Valuations</h3>
+                  <p className="text-sm text-muted-foreground">Signage & digital platform valuations</p>
+                  <div className="flex justify-center gap-2 mt-3 flex-wrap">
+                    <Badge className="bg-gradient-to-r from-orange-500/20 to-red-500/20 text-orange-700 border-orange-200 font-bold text-xs">
+                      Billboard Analysis
+                    </Badge>
+                    <Badge className="bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-700 border-red-200 font-bold text-xs">
+                      Digital Platforms
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
               <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                 <CardContent className="p-6 text-center">
                   <Award className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
@@ -768,6 +798,10 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="advertising" className="mt-6">
+            <AdvertisingValuationDashboard />
           </TabsContent>
         </Tabs>
       </div>
