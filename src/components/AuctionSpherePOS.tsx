@@ -16,6 +16,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,6 +36,7 @@ import {
 
 const AuctionSpherePOS = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedProperty, setSelectedProperty] = useState(0);
   const [bidAmount, setBidAmount] = useState('2,650,000');
   const [deposit, setDeposit] = useState('265,000');
@@ -41,6 +44,13 @@ const AuctionSpherePOS = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [transactionComplete, setTransactionComplete] = useState(false);
+  const [pexaStatus, setPexaStatus] = useState('pending');
+  const [settlementProgress, setSettlementProgress] = useState({
+    propertySearch: 'complete',
+    workspaceCreation: 'in-progress',
+    documentLodgement: 'pending',
+    settlementCompletion: 'pending'
+  });
 
   // Demo properties for POS
   const properties = [
@@ -120,6 +130,128 @@ const AuctionSpherePOS = () => {
       currency: 'AUD',
       minimumFractionDigits: 0,
     }).format(amount);
+  };
+
+
+  // PEXA Integration Functions
+  const callPEXAFunction = async (action: string, data: any) => {
+    try {
+      const { data: result, error } = await supabase.functions.invoke('pexa-integration', {
+        body: { action, ...data }
+      });
+
+      if (error) throw error;
+
+      if (!result.success) {
+        throw new Error(result.error || 'PEXA integration failed');
+      }
+
+      return result.data;
+    } catch (error) {
+      console.error('PEXA Function Error:', error);
+      toast({
+        title: "PEXA Integration Error",
+        description: error.message || 'Failed to communicate with PEXA',
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
+  const handleCreatePEXAWorkspace = async () => {
+    try {
+      const property = properties[selectedProperty];
+      const result = await callPEXAFunction('create_workspace', {
+        propertyData: {
+          propertyId: `PROP-${property.id}`,
+          address: property.address
+        },
+        settlementData: {
+          transactionType: 'sale',
+          settlementDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(),
+          purchasePrice: property.finalBid,
+          participants: [
+            {
+              role: 'buyer',
+              name: property.buyer
+            },
+            {
+              role: 'vendor', 
+              name: property.vendor
+            },
+            {
+              role: 'auctioneer',
+              name: property.auctioneer
+            }
+          ]
+        }
+      });
+
+      setSettlementProgress(prev => ({
+        ...prev,
+        workspaceCreation: 'complete',
+        documentLodgement: 'in-progress'
+      }));
+
+      toast({
+        title: "PEXA Workspace Created",
+        description: `Workspace created successfully for ${property.address}`,
+      });
+    } catch (error) {
+      // Error already handled in callPEXAFunction
+    }
+  };
+
+  const handleSubmitValuationToPEXA = async () => {
+    try {
+      const property = properties[selectedProperty];
+      const result = await callPEXAFunction('submit_valuation', {
+        settlementData: {
+          workspaceId: `WS-${property.id}`
+        },
+        propertyData: {
+          valuationAmount: property.finalBid,
+          valuationDate: new Date().toISOString(),
+          valuerDetails: {
+            name: 'Sustaino Pro Valuations',
+            license: 'VIC12345',
+            firm: 'Sustaino Sphere Professional Services'
+          },
+          reportUrl: `${window.location.origin}/report/${property.id}`
+        }
+      });
+
+      toast({
+        title: "Valuation Submitted to PEXA",
+        description: "Valuation report successfully lodged in settlement workspace",
+      });
+    } catch (error) {
+      // Error already handled in callPEXAFunction
+    }
+  };
+
+  const handleTrackSettlement = async () => {
+    try {
+      const property = properties[selectedProperty];
+      const result = await callPEXAFunction('track_settlement', {
+        settlementData: {
+          workspaceId: `WS-${property.id}`
+        }
+      });
+
+      setSettlementProgress(prev => ({
+        ...prev,
+        documentLodgement: 'complete',
+        settlementCompletion: 'in-progress'
+      }));
+
+      toast({
+        title: "Settlement Status Updated",
+        description: "Retrieved latest settlement progress from PEXA",
+      });
+    } catch (error) {
+      // Error already handled in callPEXAFunction
+    }
   };
 
   const processTransaction = () => {
@@ -288,9 +420,10 @@ const AuctionSpherePOS = () => {
               </div>
 
               <Tabs defaultValue="transaction" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-white/50 backdrop-blur-lg">
+                <TabsList className="grid w-full grid-cols-5 bg-white/50 backdrop-blur-lg">
                   <TabsTrigger value="transaction">Transaction</TabsTrigger>
                   <TabsTrigger value="payment">Payment</TabsTrigger>
+                  <TabsTrigger value="settlement">PEXA Settlement</TabsTrigger>
                   <TabsTrigger value="contracts">Contracts</TabsTrigger>
                   <TabsTrigger value="reporting">Reporting</TabsTrigger>
                 </TabsList>
@@ -426,6 +559,147 @@ const AuctionSpherePOS = () => {
                         </Button>
                       </div>
                     )}
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="settlement" className="space-y-6">
+                  <Card className="bg-white/60 backdrop-blur-lg border-white/30 p-6">
+                    <h4 className="text-xl font-bold text-slate-700 mb-6 flex items-center gap-3">
+                      <Shield className="h-6 w-6 text-blue-600" />
+                      PEXA Electronic Settlement Tracking
+                      <Badge className="bg-blue-500 text-white">LIVE</Badge>
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                      {/* Settlement Status */}
+                      <Card className="bg-gradient-to-r from-blue-50/80 to-cyan-50/80 border-blue-200/50 p-4">
+                        <div className="flex items-center gap-3 mb-3">
+                          <Clock className="h-6 w-6 text-blue-600" />
+                          <div>
+                            <p className="text-sm text-blue-700 font-medium">Settlement Status</p>
+                            <p className="text-lg font-bold text-blue-800">Workspace Created</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                          <span className="text-sm text-green-700 font-medium">Active in PEXA</span>
+                        </div>
+                      </Card>
+
+                      {/* Settlement Timeline */}
+                      <Card className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border-green-200/50 p-4">
+                        <div className="flex items-center gap-3 mb-3">
+                          <CheckCircle className="h-6 w-6 text-green-600" />
+                          <div>
+                            <p className="text-sm text-green-700 font-medium">Settlement Date</p>
+                            <p className="text-lg font-bold text-green-800">
+                              {new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-sm text-green-600">
+                          <span>{currentProperty.settlement} from auction date</span>
+                        </div>
+                      </Card>
+                    </div>
+
+                    {/* PEXA Integration Actions */}
+                    <div className="space-y-4">
+                      <h5 className="text-lg font-semibold text-slate-700">Settlement Actions</h5>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Button 
+                          className="h-20 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white flex flex-col items-center justify-center gap-2"
+                          onClick={handleCreatePEXAWorkspace}
+                        >
+                          <Building2 className="h-6 w-6" />
+                          <span className="text-sm font-medium">Create PEXA Workspace</span>
+                        </Button>
+
+                        <Button 
+                          className="h-20 bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 text-white flex flex-col items-center justify-center gap-2"
+                          onClick={handleSubmitValuationToPEXA}
+                        >
+                          <FileText className="h-6 w-6" />
+                          <span className="text-sm font-medium">Submit Valuation</span>
+                        </Button>
+
+                        <Button 
+                          className="h-20 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white flex flex-col items-center justify-center gap-2"
+                          onClick={handleTrackSettlement}
+                        >
+                          <Activity className="h-6 w-6" />
+                          <span className="text-sm font-medium">Track Settlement</span>
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Settlement Progress */}
+                    <Card className="bg-gradient-to-r from-slate-50/80 to-gray-50/80 border-slate-200/50 p-6 mt-6">
+                      <h5 className="text-lg font-semibold text-slate-700 mb-4">Settlement Progress</h5>
+                      
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <CheckCircle className="h-5 w-5 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-slate-700">Property Search Completed</p>
+                            <p className="text-sm text-slate-500">Property verified in PEXA database</p>
+                          </div>
+                          <Badge className="bg-green-500 text-white">Complete</Badge>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center animate-pulse">
+                            <Clock className="h-5 w-5 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-slate-700">Workspace Creation</p>
+                            <p className="text-sm text-slate-500">Setting up electronic settlement workspace</p>
+                          </div>
+                          <Badge className="bg-blue-500 text-white">In Progress</Badge>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <FileText className="h-5 w-5 text-gray-600" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-slate-500">Document Lodgement</p>
+                            <p className="text-sm text-slate-400">Submit contracts and settlement documents</p>
+                          </div>
+                          <Badge variant="outline">Pending</Badge>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <Shield className="h-5 w-5 text-gray-600" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-slate-500">Settlement Completion</p>
+                            <p className="text-sm text-slate-400">Electronic settlement processing</p>
+                          </div>
+                          <Badge variant="outline">Pending</Badge>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
+                          <div>
+                            <h6 className="font-semibold text-blue-800">PEXA Integration Benefits</h6>
+                            <ul className="text-sm text-blue-700 mt-2 space-y-1">
+                              <li>• Secure electronic settlement processing</li>
+                              <li>• Real-time transaction tracking</li>
+                              <li>• Automated document verification</li>
+                              <li>• Instant fund settlement</li>
+                              <li>• Reduced settlement risk</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
                   </Card>
                 </TabsContent>
 
