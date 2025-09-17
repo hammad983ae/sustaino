@@ -292,6 +292,54 @@ export default function AutomatedValuation() {
           </div>
           
           <AIAssistantToggle context="Property Type Selection" />
+          
+          {/* Always Available Professional Services Hub */}
+          <div className="mt-16">
+            <Tabs defaultValue="scraper" className="w-full">
+              <TabsList className="grid w-full grid-cols-5">
+                <TabsTrigger value="scraper">🎯 RealCommercial Scraper</TabsTrigger>
+                <TabsTrigger value="blockchain">⚡ Blockchain Hub</TabsTrigger>
+                <TabsTrigger value="mortgage">🏠 Mortgage Broker</TabsTrigger>
+                <TabsTrigger value="sales">🏢 Reality Sales</TabsTrigger>
+                <TabsTrigger value="management">🔧 Property Management</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="scraper" className="space-y-4">
+                <RealCommercialScraper />
+              </TabsContent>
+
+              <TabsContent value="blockchain" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Zap className="h-5 w-5 text-primary" />
+                      Blockchain Hub
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">
+                      Access blockchain integrations and cryptocurrency trading tools.
+                    </p>
+                    <Link to="/crypto-trading">
+                      <Button className="w-full">Access Blockchain Hub</Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="mortgage">
+                <MortgageBrokerTab />
+              </TabsContent>
+
+              <TabsContent value="sales">
+                <RealitySalesTab />
+              </TabsContent>
+
+              <TabsContent value="management">
+                <PropertyManagementTab />
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
     );
