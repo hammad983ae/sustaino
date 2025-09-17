@@ -55,7 +55,7 @@ export const ScrapedDataViewer = () => {
   const [rentalData, setRentalData] = useState<RentalEvidence[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filterSuburb, setFilterSuburb] = useState("");
-  const [filterPropertyType, setFilterPropertyType] = useState("");
+  const [filterPropertyType, setFilterPropertyType] = useState("all");
   const [sortBy, setSortBy] = useState("created_at");
 
   const loadScrapedData = async () => {
@@ -108,14 +108,14 @@ export const ScrapedDataViewer = () => {
   const filteredSalesData = salesData.filter(item => {
     return (
       (!filterSuburb || item.suburb?.toLowerCase().includes(filterSuburb.toLowerCase())) &&
-      (!filterPropertyType || item.property_type === filterPropertyType)
+      (filterPropertyType === "all" || !filterPropertyType || item.property_type === filterPropertyType)
     );
   });
 
   const filteredRentalData = rentalData.filter(item => {
     return (
       (!filterSuburb || item.suburb?.toLowerCase().includes(filterSuburb.toLowerCase())) &&
-      (!filterPropertyType || item.property_type === filterPropertyType)
+      (filterPropertyType === "all" || !filterPropertyType || item.property_type === filterPropertyType)
     );
   });
 
@@ -240,7 +240,7 @@ export const ScrapedDataViewer = () => {
                   <SelectValue placeholder="All property types" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Types</SelectItem>
+                  <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="office">Office</SelectItem>
                   <SelectItem value="retail">Retail</SelectItem>
                   <SelectItem value="warehouse">Warehouse</SelectItem>
