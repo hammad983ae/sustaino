@@ -208,13 +208,15 @@ const PlatformEcosystemBrochure = () => {
             <CardContent className="p-6">
               <div className="text-center mb-4">
                 <BarChart3 className="h-12 w-12 text-purple-600 mx-auto mb-2" />
-                <h3 className="font-bold text-gray-900">Financial Reporting</h3>
+                <h3 className="font-bold text-gray-900">Financial Analysis & LVR</h3>
               </div>
               <div className="space-y-2 text-xs">
-                <div>• AASB Compliant Financial Statements</div>
-                <div>• AI-Enhanced Data Analytics</div>
-                <div>• Real-Time Dashboard Reporting</div>
-                <div>• Strategic Performance Insights</div>
+                <div>• Comprehensive Financial Analysis & DCF Modeling</div>
+                <div>• LVR Assessments & Mortgage Security Evaluation</div>
+                <div>• AI-Enhanced Credit Risk Assessment</div>
+                <div>• Real-Time Investment Performance Analytics</div>
+                <div>• AASB Compliant Financial Reporting</div>
+                <div>• Loan Serviceability & Affordability Analysis</div>
               </div>
             </CardContent>
           </Card>
@@ -269,7 +271,11 @@ const PlatformEcosystemBrochure = () => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-400" />
-                <span><strong>Predictive Analytics:</strong> Market trend forecasting with 95% accuracy</span>
+                <span><strong>AI-Enhanced LVR Analysis:</strong> Real-time loan-to-value ratio calculations</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-400" />
+                <span><strong>Mortgage Security Assessment:</strong> Automated property security evaluation</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-400" />
@@ -289,6 +295,14 @@ const PlatformEcosystemBrochure = () => {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-400" />
+                <span><strong>Financial Modeling & DCF Analysis:</strong> Comprehensive investment analysis</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-400" />
+                <span><strong>Credit Risk Assessment:</strong> Advanced borrower and security evaluation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-400" />
                 <span><strong>Real-Time Market Intelligence:</strong> Live data feeds and analysis</span>
               </div>
               <div className="flex items-center gap-2">
@@ -298,10 +312,6 @@ const PlatformEcosystemBrochure = () => {
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-400" />
                 <span><strong>Anomaly Detection:</strong> Automatic identification of market irregularities</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-400" />
-                <span><strong>Sentiment Analysis:</strong> Social and economic sentiment tracking</span>
               </div>
             </div>
           </div>
