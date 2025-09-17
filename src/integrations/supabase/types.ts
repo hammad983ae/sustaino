@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      aggregator_performance: {
+        Row: {
+          achievements: Json | null
+          active_representatives: number | null
+          average_transaction_value: number | null
+          compliance_score: number | null
+          created_at: string
+          crypto_volume: number | null
+          growth_rate: number | null
+          id: string
+          performance_period: string
+          performance_ranking: number | null
+          sam_tokens_distributed: number | null
+          total_commission_volume: number | null
+          total_representatives: number | null
+          total_transactions: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achievements?: Json | null
+          active_representatives?: number | null
+          average_transaction_value?: number | null
+          compliance_score?: number | null
+          created_at?: string
+          crypto_volume?: number | null
+          growth_rate?: number | null
+          id?: string
+          performance_period: string
+          performance_ranking?: number | null
+          sam_tokens_distributed?: number | null
+          total_commission_volume?: number | null
+          total_representatives?: number | null
+          total_transactions?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achievements?: Json | null
+          active_representatives?: number | null
+          average_transaction_value?: number | null
+          compliance_score?: number | null
+          created_at?: string
+          crypto_volume?: number | null
+          growth_rate?: number | null
+          id?: string
+          performance_period?: string
+          performance_ranking?: number | null
+          sam_tokens_distributed?: number | null
+          total_commission_volume?: number | null
+          total_representatives?: number | null
+          total_transactions?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       aggregator_relationships: {
         Row: {
           aggregator_afsl: string | null
@@ -54,6 +111,84 @@ export type Database = {
           obligations?: Json | null
           relationship_type?: string
           status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      aggregator_representatives: {
+        Row: {
+          business_abn: string | null
+          business_name: string | null
+          commission_structure: Json
+          compliance_score: number | null
+          created_at: string
+          crypto_wallet_address: string | null
+          id: string
+          insurance_details: Json | null
+          last_compliance_check: string | null
+          license_details: Json | null
+          onboarding_completed: boolean | null
+          performance_metrics: Json | null
+          representative_email: string | null
+          representative_id: string
+          representative_name: string
+          representative_number: string | null
+          representative_phone: string | null
+          representative_type: string
+          sam_integration_id: string | null
+          status: string
+          training_completed: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_abn?: string | null
+          business_name?: string | null
+          commission_structure?: Json
+          compliance_score?: number | null
+          created_at?: string
+          crypto_wallet_address?: string | null
+          id?: string
+          insurance_details?: Json | null
+          last_compliance_check?: string | null
+          license_details?: Json | null
+          onboarding_completed?: boolean | null
+          performance_metrics?: Json | null
+          representative_email?: string | null
+          representative_id: string
+          representative_name: string
+          representative_number?: string | null
+          representative_phone?: string | null
+          representative_type: string
+          sam_integration_id?: string | null
+          status?: string
+          training_completed?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_abn?: string | null
+          business_name?: string | null
+          commission_structure?: Json
+          compliance_score?: number | null
+          created_at?: string
+          crypto_wallet_address?: string | null
+          id?: string
+          insurance_details?: Json | null
+          last_compliance_check?: string | null
+          license_details?: Json | null
+          onboarding_completed?: boolean | null
+          performance_metrics?: Json | null
+          representative_email?: string | null
+          representative_id?: string
+          representative_name?: string
+          representative_number?: string | null
+          representative_phone?: string | null
+          representative_type?: string
+          sam_integration_id?: string | null
+          status?: string
+          training_completed?: Json | null
           updated_at?: string
           user_id?: string
         }
@@ -113,6 +248,87 @@ export type Database = {
           responsible_managers?: Json | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      commission_transactions: {
+        Row: {
+          aggregator_commission: number | null
+          aggregator_id: string
+          blockchain_confirmed: boolean | null
+          client_name: string | null
+          commission_rate: number | null
+          created_at: string
+          crypto_amount: number | null
+          crypto_currency: string | null
+          id: string
+          loan_amount: number | null
+          metadata: Json | null
+          payment_method: string | null
+          payment_status: string
+          property_address: string | null
+          property_value: number | null
+          representative_commission: number | null
+          representative_id: string
+          sale_price: number | null
+          settlement_date: string | null
+          transaction_amount: number
+          transaction_date: string
+          transaction_hash: string | null
+          transaction_type: string
+          updated_at: string
+        }
+        Insert: {
+          aggregator_commission?: number | null
+          aggregator_id: string
+          blockchain_confirmed?: boolean | null
+          client_name?: string | null
+          commission_rate?: number | null
+          created_at?: string
+          crypto_amount?: number | null
+          crypto_currency?: string | null
+          id?: string
+          loan_amount?: number | null
+          metadata?: Json | null
+          payment_method?: string | null
+          payment_status?: string
+          property_address?: string | null
+          property_value?: number | null
+          representative_commission?: number | null
+          representative_id: string
+          sale_price?: number | null
+          settlement_date?: string | null
+          transaction_amount: number
+          transaction_date?: string
+          transaction_hash?: string | null
+          transaction_type: string
+          updated_at?: string
+        }
+        Update: {
+          aggregator_commission?: number | null
+          aggregator_id?: string
+          blockchain_confirmed?: boolean | null
+          client_name?: string | null
+          commission_rate?: number | null
+          created_at?: string
+          crypto_amount?: number | null
+          crypto_currency?: string | null
+          id?: string
+          loan_amount?: number | null
+          metadata?: Json | null
+          payment_method?: string | null
+          payment_status?: string
+          property_address?: string | null
+          property_value?: number | null
+          representative_commission?: number | null
+          representative_id?: string
+          sale_price?: number | null
+          settlement_date?: string | null
+          transaction_amount?: number
+          transaction_date?: string
+          transaction_hash?: string | null
+          transaction_type?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -2136,6 +2352,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sam_token_rewards: {
+        Row: {
+          blockchain_tx_hash: string | null
+          created_at: string
+          distributed_at: string | null
+          id: string
+          performance_metrics: Json | null
+          reason: string
+          representative_id: string | null
+          reward_status: string
+          reward_type: string
+          sam_amount: number
+          updated_at: string
+          usd_equivalent: number | null
+          user_id: string
+          wallet_address: string | null
+        }
+        Insert: {
+          blockchain_tx_hash?: string | null
+          created_at?: string
+          distributed_at?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          reason: string
+          representative_id?: string | null
+          reward_status?: string
+          reward_type: string
+          sam_amount: number
+          updated_at?: string
+          usd_equivalent?: number | null
+          user_id: string
+          wallet_address?: string | null
+        }
+        Update: {
+          blockchain_tx_hash?: string | null
+          created_at?: string
+          distributed_at?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          reason?: string
+          representative_id?: string | null
+          reward_status?: string
+          reward_type?: string
+          sam_amount?: number
+          updated_at?: string
+          usd_equivalent?: number | null
+          user_id?: string
+          wallet_address?: string | null
+        }
+        Relationships: []
       }
       test_results: {
         Row: {
