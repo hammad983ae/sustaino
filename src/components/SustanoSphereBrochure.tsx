@@ -37,13 +37,13 @@ const SustanoSphereBrochure = () => {
         </p>
         <div className="flex justify-center gap-4 flex-wrap">
           <Badge className="bg-green-600 text-white px-4 py-2 text-sm font-bold">
-            🏆 World's Only ESG Auction Platform
+            🏆 World's First Combined Platform
           </Badge>
           <Badge className="bg-blue-600 text-white px-4 py-2 text-sm font-bold">
-            🎯 Digital Asset Auctions
+            🎯 SustanoVal™ Proprietary Algorithm
           </Badge>
           <Badge className="bg-purple-600 text-white px-4 py-2 text-sm font-bold">
-            📊 ESG Intelligence Integration
+            📊 Blue Ocean Market Leader
           </Badge>
         </div>
       </div>
@@ -62,24 +62,24 @@ const SustanoSphereBrochure = () => {
             <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
               <Leaf className="h-6 w-6 text-green-600 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900">ESG-Integrated Auctions</h3>
-                <p className="text-sm text-gray-700">First platform to combine digital asset auctions with ESG scoring</p>
+                <h3 className="font-bold text-gray-900">SustanoVal™ Proprietary Algorithm</h3>
+                <p className="text-sm text-gray-700">World's first integrated valuation system for digital startup assets</p>
               </div>
             </div>
             
             <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
               <Building2 className="h-6 w-6 text-blue-600 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900">Real-Time Bidding Platform</h3>
-                <p className="text-sm text-gray-700">Advanced auction technology with sustainability intelligence</p>
+                <h3 className="font-bold text-gray-900">First-Mover Market Advantage</h3>
+                <p className="text-sm text-gray-700">Creating entirely new $847B digital asset valuation industry</p>
               </div>
             </div>
             
             <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
               <Shield className="h-6 w-6 text-purple-600 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900">Digital Asset Marketplace</h3>
-                <p className="text-sm text-gray-700">Secure blockchain-enabled auction environment</p>
+                <h3 className="font-bold text-gray-900">Patent-Protected Technology</h3>
+                <p className="text-sm text-gray-700">2-3 year competitive moat through proprietary IP portfolio</p>
               </div>
             </div>
             
@@ -111,20 +111,20 @@ const SustanoSphereBrochure = () => {
           {/* Stats Grid */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-gradient-to-br from-green-600 to-green-700 text-white p-4 rounded-lg text-center">
-              <div className="text-3xl font-black">98%</div>
-              <div className="text-sm font-bold">Auction Success Rate</div>
+              <div className="text-3xl font-black">$847B</div>
+              <div className="text-sm font-bold">Market Opportunity</div>
             </div>
             <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-4 rounded-lg text-center">
-              <div className="text-3xl font-black">$2.4B</div>
-              <div className="text-sm font-bold">Assets Auctioned</div>
+              <div className="text-3xl font-black">18.5%</div>
+              <div className="text-sm font-bold">Annual Growth Rate</div>
             </div>
             <div className="bg-gradient-to-br from-purple-600 to-purple-700 text-white p-4 rounded-lg text-center">
-              <div className="text-3xl font-black">150+</div>
-              <div className="text-sm font-bold">Global Markets</div>
+              <div className="text-3xl font-black">ZERO</div>
+              <div className="text-sm font-bold">Direct Competitors</div>
             </div>
             <div className="bg-gradient-to-br from-orange-600 to-orange-700 text-white p-4 rounded-lg text-center">
-              <div className="text-3xl font-black">24/7</div>
-              <div className="text-sm font-bold">Live Auctions</div>
+              <div className="text-3xl font-black">24 Mo</div>
+              <div className="text-sm font-bold">Competitive Window</div>
             </div>
           </div>
 
@@ -133,30 +133,30 @@ const SustanoSphereBrochure = () => {
             <CardContent className="p-4">
               <h3 className="font-bold text-green-900 mb-3 flex items-center">
                 <Target className="h-5 w-5 mr-2" />
-                Auction Intelligence Framework
+                SustanoVal™ Valuation Framework
               </h3>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">ESG Integration (40%)</span>
+                  <span className="text-sm font-medium">Proprietary Algorithms (50%)</span>
                   <div className="w-24 bg-green-200 rounded-full h-2">
-                    <div className="bg-green-600 h-2 rounded-full w-4/5"></div>
+                    <div className="bg-green-600 h-2 rounded-full w-full"></div>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Market Analytics (30%)</span>
+                  <span className="text-sm font-medium">Market Intelligence (30%)</span>
                   <div className="w-24 bg-blue-200 rounded-full h-2">
                     <div className="bg-blue-600 h-2 rounded-full w-3/4"></div>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Auction Intelligence (30%)</span>
+                  <span className="text-sm font-medium">ESG Integration (20%)</span>
                   <div className="w-24 bg-purple-200 rounded-full h-2">
-                    <div className="bg-purple-600 h-2 rounded-full w-5/6"></div>
+                    <div className="bg-purple-600 h-2 rounded-full w-4/5"></div>
                   </div>
                 </div>
               </div>
               <p className="text-xs text-green-700 mt-2">
-                AI-powered auction intelligence with integrated ESG assessment
+                Proprietary algorithmic approach combining human expertise with advanced analytics
               </p>
             </CardContent>
           </Card>
@@ -194,23 +194,23 @@ const SustanoSphereBrochure = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="text-center">
             <Brain className="h-8 w-8 mx-auto mb-2 text-green-400" />
-            <div className="font-bold">AI Auction Intelligence</div>
-            <div className="text-xs opacity-90">Smart bidding algorithms</div>
+            <div className="font-bold">Collaborative AI Intelligence</div>
+            <div className="text-xs opacity-90">Human expertise + advanced algorithms</div>
           </div>
           <div className="text-center">
             <Globe className="h-8 w-8 mx-auto mb-2 text-blue-400" />
-            <div className="font-bold">Global Auction Network</div>
-            <div className="text-xs opacity-90">150+ international markets</div>
+            <div className="font-bold">Blue Ocean Strategy</div>
+            <div className="text-xs opacity-90">Creating new market category</div>
           </div>
           <div className="text-center">
             <BarChart3 className="h-8 w-8 mx-auto mb-2 text-purple-400" />
-            <div className="font-bold">ESG-Enhanced Valuations</div>
-            <div className="text-xs opacity-90">Sustainability-driven pricing</div>
+            <div className="font-bold">Industry Standard Setting</div>
+            <div className="text-xs opacity-90">First-mover advantage leveraged</div>
           </div>
           <div className="text-center">
             <Shield className="h-8 w-8 mx-auto mb-2 text-orange-400" />
-            <div className="font-bold">Blockchain Security</div>
-            <div className="text-xs opacity-90">Immutable auction records</div>
+            <div className="font-bold">Patent Protection Moat</div>
+            <div className="text-xs opacity-90">Competitive barriers established</div>
           </div>
         </div>
       </div>
@@ -223,21 +223,21 @@ const SustanoSphereBrochure = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center">
             <DollarSign className="h-12 w-12 mx-auto mb-2 text-green-600" />
-            <div className="text-2xl font-bold text-green-800">18%</div>
-            <div className="text-sm font-medium text-gray-700">Higher Sale Prices</div>
-            <div className="text-xs text-gray-600">vs traditional auctions</div>
+            <div className="text-2xl font-bold text-green-800">$847B</div>
+            <div className="text-sm font-medium text-gray-700">Total Addressable Market</div>
+            <div className="text-xs text-gray-600">digital asset valuations</div>
           </div>
           <div className="text-center">
             <TrendingUp className="h-12 w-12 mx-auto mb-2 text-blue-600" />
-            <div className="text-2xl font-bold text-blue-800">95%</div>
-            <div className="text-sm font-medium text-gray-700">Bidder Satisfaction</div>
-            <div className="text-xs text-gray-600">transparent ESG metrics</div>
+            <div className="text-2xl font-bold text-blue-800">18.5%</div>
+            <div className="text-sm font-medium text-gray-700">Annual Market Growth</div>
+            <div className="text-xs text-gray-600">outpacing traditional assets</div>
           </div>
           <div className="text-center">
             <Award className="h-12 w-12 mx-auto mb-2 text-purple-600" />
-            <div className="text-2xl font-bold text-purple-800">72hrs</div>
-            <div className="text-sm font-medium text-gray-700">Faster Settlement</div>
-            <div className="text-xs text-gray-600">automated processes</div>
+            <div className="text-2xl font-bold text-purple-800">24 Mo</div>
+            <div className="text-sm font-medium text-gray-700">First-Mover Window</div>
+            <div className="text-xs text-gray-600">before competition emerges</div>
           </div>
         </div>
       </div>
