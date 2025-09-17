@@ -23,6 +23,7 @@ import FinancialReportingBrochure from '@/components/brochures/FinancialReportin
 import ESGAssessmentBrochure from '@/components/brochures/ESGAssessmentBrochure';
 import DevelopmentSiteBrochure from '@/components/brochures/DevelopmentSiteBrochure';
 import ESDBrochure from '@/components/brochures/ESDBrochure';
+import PlatformEcosystemBrochure from '@/components/brochures/PlatformEcosystemBrochure';
 
 type BrochureType = 
   | 'auction-sphere' 
@@ -33,7 +34,8 @@ type BrochureType =
   | 'financial-reporting'
   | 'esg-assessment'
   | 'development-sites'
-  | 'esd-services';
+  | 'esd-services'
+  | 'platform-ecosystem';
 
 const BrochureViewer = () => {
   const [activeBrochure, setActiveBrochure] = useState<BrochureType | null>(null);
@@ -76,8 +78,22 @@ Professional Property Services & Valuations
 
   const brochureCategories = [
     {
-      title: "Premium Platforms",
+      title: "Complete Platform Overview",
       icon: Crown,
+      color: "from-blue-600 via-purple-600 to-green-600",
+      brochures: [
+        {
+          id: 'platform-ecosystem' as BrochureType,
+          title: 'POWERED Ecosystem',
+          description: 'Complete AI-enhanced property intelligence platform overview',
+          icon: Crown,
+          color: 'purple'
+        }
+      ]
+    },
+    {
+      title: "Premium Platforms",
+      icon: Gavel,
       color: "from-purple-600 to-blue-600",
       brochures: [
         {
@@ -170,6 +186,8 @@ Professional Property Services & Valuations
 
   const renderBrochure = () => {
     switch (activeBrochure) {
+      case 'platform-ecosystem':
+        return <PlatformEcosystemBrochure />;
       case 'auction-sphere':
         return <AuctionSphereBrochure />;
       case 'sustano-sphere':
