@@ -33,7 +33,7 @@ const SustanoSphereBrochure = () => {
           </div>
         </div>
         <p className="text-2xl text-gray-700 font-bold mb-4">
-          The World's Only ESG-Focused Digital Asset Auction Platform
+          World's Only Combined Independent Digital Asset Valuation and Auction Market Place
         </p>
         <div className="flex justify-center gap-4 flex-wrap">
           <Badge className="bg-green-600 text-white px-4 py-2 text-sm font-bold">
