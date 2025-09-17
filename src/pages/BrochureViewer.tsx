@@ -24,6 +24,7 @@ import ESGAssessmentBrochure from '@/components/brochures/ESGAssessmentBrochure'
 import DevelopmentSiteBrochure from '@/components/brochures/DevelopmentSiteBrochure';
 import ESDBrochure from '@/components/brochures/ESDBrochure';
 import PlatformEcosystemBrochure from '@/components/brochures/PlatformEcosystemBrochure';
+import PatentsAndIPBrochure from '@/components/brochures/PatentsAndIPBrochure';
 
 type BrochureType = 
   | 'auction-sphere' 
@@ -35,7 +36,8 @@ type BrochureType =
   | 'esg-assessment'
   | 'development-sites'
   | 'esd-services'
-  | 'platform-ecosystem';
+  | 'platform-ecosystem'
+  | 'patents-ip';
 
 const BrochureViewer = () => {
   const [activeBrochure, setActiveBrochure] = useState<BrochureType | null>(null);
@@ -86,6 +88,20 @@ Professional Property Services & Valuations
           id: 'platform-ecosystem' as BrochureType,
           title: 'POWERED Ecosystem',
           description: 'Complete AI-enhanced property intelligence platform overview',
+          icon: Crown,
+          color: 'purple'
+        }
+      ]
+    },
+    {
+      title: "Intellectual Property",
+      icon: Crown,
+      color: "from-yellow-600 via-orange-600 to-red-600",
+      brochures: [
+        {
+          id: 'patents-ip' as BrochureType,
+          title: 'Patents & IP Portfolio',
+          description: 'Comprehensive intellectual property protection and patent portfolio overview',
           icon: Crown,
           color: 'purple'
         }
@@ -188,6 +204,8 @@ Professional Property Services & Valuations
     switch (activeBrochure) {
       case 'platform-ecosystem':
         return <PlatformEcosystemBrochure />;
+      case 'patents-ip':
+        return <PatentsAndIPBrochure />;
       case 'auction-sphere':
         return <AuctionSphereBrochure />;
       case 'sustano-sphere':
