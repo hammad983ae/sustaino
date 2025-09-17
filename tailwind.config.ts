@@ -122,6 +122,10 @@ export default {
           "50%": {
             backgroundColor: "hsl(var(--green-glow) / 0.9)"
           }
+        },
+        "fadeIn": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
         }
       },
       animation: {
@@ -130,6 +134,10 @@ export default {
         "green-glow": "green-glow 3s ease-in-out infinite",
         "float-3d": "float-3d 4s ease-in-out infinite",
         "green-pulse": "green-pulse 2s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
+        "fade-in": "fadeIn 0.5s ease-out",
+        "bounce": "bounce 1s infinite",
+        "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       boxShadow: {
         "3d-light": "var(--shadow-3d-light)",

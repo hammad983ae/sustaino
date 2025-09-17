@@ -1,8 +1,8 @@
 import React from 'react';
-import RealityAuctionPlatform from '@/components/RealityAuctionPlatform';
+import EnhancedRealityAuctionPlatform from '@/components/EnhancedRealityAuctionPlatform';
 
 const RealitySales = () => {
-  return <RealityAuctionPlatform />;
+  return <EnhancedRealityAuctionPlatform />;
 };
 
 export default RealitySales;
