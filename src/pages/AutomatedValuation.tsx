@@ -25,6 +25,7 @@ import RealitySalesTab from "@/components/RealitySalesTab";
 import PropertyManagementTab from "@/components/PropertyManagementTab";
 import { RealCommercialScraper } from "@/components/RealCommercialScraper";
 import { ScrapedDataViewer } from "@/components/ScrapedDataViewer";
+import ComprehensiveValuationGenerator from "@/components/ComprehensiveValuationGenerator";
 import { ValuationProvider } from "@/contexts/ValuationContext";
 
 import BrandedHeader from "@/components/BrandedHeader";
@@ -742,13 +743,18 @@ export default function AutomatedValuation() {
           {/* Professional Services Hub */}
           <div className="mt-16">
             <Tabs defaultValue="scraper" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-6">
+                <TabsTrigger value="generator">📊 Full Valuation</TabsTrigger>
                 <TabsTrigger value="scraper">🎯 Commercial Data Scraper</TabsTrigger>
                 <TabsTrigger value="blockchain">⚡ Blockchain Hub</TabsTrigger>
                 <TabsTrigger value="mortgage">🏠 Mortgage Broker</TabsTrigger>
                 <TabsTrigger value="sales">🏢 Reality Sales</TabsTrigger>
                 <TabsTrigger value="management">🔧 Property Management</TabsTrigger>
               </TabsList>
+
+              <TabsContent value="generator" className="space-y-4">
+                <ComprehensiveValuationGenerator />
+              </TabsContent>
 
               <TabsContent value="scraper" className="space-y-4">
                 <RealCommercialScraper />
