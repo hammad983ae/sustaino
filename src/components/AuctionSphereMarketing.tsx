@@ -25,13 +25,15 @@ import {
   Zap, Eye, Target, Award, Shield, Sparkles, Rocket, Crown,
   BarChart3, MapPin, Camera, Activity, CheckCircle, ArrowRight,
   Layers, Globe, Brain, Lock, Wifi, Smartphone, Play, Volume2,
-  Maximize, ThumbsUp, Share2, Heart
+  Maximize, ThumbsUp, Share2, Heart, ArrowLeft, Home
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import luxuryApartment from '@/assets/luxury-apartment-demo.jpg';
 import commercialBuilding from '@/assets/commercial-building-demo.jpg';
 import auction3DInterface from '@/assets/auction-3d-interface.jpg';
 
 const AuctionSphereMarketing = () => {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [bidAmount, setBidAmount] = useState(2450000);
   const [timeLeft, setTimeLeft] = useState(323);
@@ -202,6 +204,17 @@ const AuctionSphereMarketing = () => {
       </div>
 
       <div className="relative z-10 p-6 max-w-7xl mx-auto">
+        {/* Back to Dashboard Button */}
+        <div className="mb-6">
+          <Button
+            onClick={() => navigate('/dashboard')}
+            variant="outline"
+            className="border-slate-600 text-slate-300 hover:bg-slate-700 font-bold"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </div>
         {/* Main Header with 3D Effects */}
         <div className="text-center mb-12 animate-fade-in">
           <div className="flex items-center justify-center gap-6 mb-8">
