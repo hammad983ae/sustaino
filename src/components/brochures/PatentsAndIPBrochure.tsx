@@ -64,8 +64,92 @@ const PatentsAndIPBrochure: React.FC = () => {
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-lg">
               <TrendingUp className="h-12 w-12 text-orange-600 mx-auto mb-4" />
-              <div className="text-3xl font-bold text-gray-900">$245M</div>
-              <div className="text-sm text-gray-600">Estimated Portfolio Value</div>
+              <div className="text-3xl font-bold text-gray-900">$525M</div>
+              <div className="text-sm text-gray-600">Total Portfolio Value</div>
+            </div>
+          </div>
+          
+          {/* Detailed Valuation Breakdown */}
+          <div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-xl border border-blue-200">
+            <h3 className="text-2xl font-bold text-center mb-8 text-gray-900">Comprehensive IP Valuation Analysis</h3>
+            <div className="grid md:grid-cols-2 gap-8">
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-xl text-blue-800">Patent Portfolio Valuation</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between border-b pb-2">
+                      <span>Core Technology Patents (15 Granted):</span>
+                      <span className="font-semibold text-blue-700">$125-165M</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span>AI/ML Algorithm Patents (8 Granted):</span>
+                      <span className="font-semibold text-blue-700">$65-95M</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span>Pending Applications (10 Pipeline):</span>
+                      <span className="font-semibold text-blue-700">$45-75M</span>
+                    </div>
+                    <div className="flex justify-between pt-2 font-bold text-lg text-blue-900">
+                      <span>Total Patent Value:</span>
+                      <span>$235-335M</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-xl text-purple-800">Additional IP Assets</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between border-b pb-2">
+                      <span>Proprietary Codebase & Architecture:</span>
+                      <span className="font-semibold text-purple-700">$95-125M</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span>Trade Secrets & Algorithms:</span>
+                      <span className="font-semibold text-purple-700">$75-105M</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span>Trademark Portfolio & Brand Value:</span>
+                      <span className="font-semibold text-purple-700">$35-55M</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span>Proprietary Datasets & Know-How:</span>
+                      <span className="font-semibold text-purple-700">$55-85M</span>
+                    </div>
+                    <div className="flex justify-between pt-2 font-bold text-lg text-purple-900">
+                      <span>Total Additional Assets:</span>
+                      <span>$260-370M</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="mt-8 bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-xl border border-green-300">
+              <div className="text-center">
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Total IP Portfolio Value</h3>
+                <div className="text-5xl font-bold text-green-700 mb-2">$495-705M AUD</div>
+                <p className="text-gray-600 mb-4">Conservative estimate assuming all patents granted and full codebase ownership</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="bg-white p-4 rounded-lg shadow">
+                    <div className="font-semibold text-green-700">Conservative:</div>
+                    <div className="text-xl font-bold">$495M AUD</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow">
+                    <div className="font-semibold text-blue-700">Mid-Range:</div>
+                    <div className="text-xl font-bold">$600M AUD</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg shadow">
+                    <div className="font-semibold text-purple-700">Optimistic:</div>
+                    <div className="text-xl font-bold">$705M AUD</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
