@@ -58,6 +58,7 @@ import AuctionSpherePOSPage from "./pages/AuctionSpherePOS";
 import AdvertisingPlatforms from "./pages/AdvertisingPlatforms";
 import BrochureViewer from "./pages/BrochureViewer";
 import DevelopmentSiteValuation from "./pages/DevelopmentSiteValuation";
+import NASDAQCompetitorAnalysis from "./components/NASDAQCompetitorAnalysis";
 
 const queryClient = new QueryClient();
 
@@ -106,6 +107,7 @@ const App = () => (
                 <Route path="/reality-sales" element={<RealitySales />} />
                 <Route path="/auction-sphere-pos" element={<AuctionSpherePOSPage />} />
                 <Route path="/advertising-platforms" element={<AdvertisingPlatforms />} />
+                <Route path="/nasdaq-analysis" element={<NASDAQCompetitorAnalysis />} />
                 <Route path="/brochures" element={<BrochureViewer />} />
                 <Route path="/development-site-valuation" element={<DevelopmentSiteValuation />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
