@@ -12,8 +12,9 @@ import { Badge } from '@/components/ui/badge';
 import { 
   ArrowLeft, Mail, Printer, FileText, Building, 
   TrendingUp, Settings, BarChart3, Leaf, Folder,
-  Gavel, Crown, MapPin, TreePine
+  Gavel, Crown, MapPin, TreePine, Home
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import AuctionSphereBrochure from '@/components/AuctionSphereBrochure';
 import SustanoSphereBrochure from '@/components/SustanoSphereBrochure';
 import PropertyValuationsBrochure from '@/components/brochures/PropertyValuationsBrochure';
@@ -41,6 +42,7 @@ type BrochureType =
 
 const BrochureViewer = () => {
   const [activeBrochure, setActiveBrochure] = useState<BrochureType | null>(null);
+  const navigate = useNavigate();
 
   const handlePrint = () => {
     window.print();
@@ -277,6 +279,18 @@ Professional Property Services & Valuations
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 p-6">
       <div className="max-w-7xl mx-auto">
+        {/* Back to Dashboard Button */}
+        <div className="mb-6">
+          <Button 
+            onClick={() => navigate('/dashboard')}
+            variant="outline"
+            className="flex items-center gap-2 hover:bg-blue-50"
+          >
+            <Home className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-black text-gray-900 mb-4">
