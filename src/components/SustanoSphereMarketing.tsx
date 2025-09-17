@@ -453,7 +453,7 @@ const SustanoSphereMarketing = () => {
                   <Globe className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-green-300 font-semibold text-lg">sustano@sovereignvaluations.com.au</p>
+                <p className="text-green-300 font-semibold text-lg">info@delorenzopropertygroup.com</p>
                 <p className="text-slate-400 text-sm mt-2">ESG platform inquiries</p>
               </div>
 
@@ -463,7 +463,7 @@ const SustanoSphereMarketing = () => {
                   <Smartphone className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-blue-300 font-semibold text-lg">+61 3 9016 0000</p>
+                <p className="text-blue-300 font-semibold text-lg">0417 693 838</p>
                 <p className="text-slate-400 text-sm mt-2">Sustainable asset consultations</p>
               </div>
 
@@ -473,7 +473,7 @@ const SustanoSphereMarketing = () => {
                   <Leaf className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">ESG Advisory</h3>
-                <p className="text-purple-300 font-semibold text-lg">esg@sovereignvaluations.com.au</p>
+                <p className="text-purple-300 font-semibold text-lg">info@delorenzopropertygroup.com</p>
                 <p className="text-slate-400 text-sm mt-2">Sustainability consulting</p>
               </div>
             </div>

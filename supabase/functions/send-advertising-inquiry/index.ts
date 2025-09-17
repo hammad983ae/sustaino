@@ -41,8 +41,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send inquiry to the company
     const companyEmailResponse = await resend.emails.send({
-      from: "Advertising Inquiries <inquiries@realityauctions.com.au>",
-      to: ["advertising@realityauctions.com.au"],
+      from: "Advertising Inquiries <info@delorenzopropertygroup.com>",
+      to: ["info@delorenzopropertygroup.com"],
       subject: `New ${platform} ${packageName} Package Inquiry`,
       html: `
         <!DOCTYPE html>
@@ -111,7 +111,7 @@ const handler = async (req: Request): Promise<Response> => {
     let customerEmailResponse = null;
     if (customerEmail) {
       customerEmailResponse = await resend.emails.send({
-        from: "Reality Auctions <advertising@realityauctions.com.au>",
+        from: "DeLorenzo Property Group <info@delorenzopropertygroup.com>",
         to: [customerEmail],
         subject: `Thank You for Your Interest in ${platform} ${packageName}`,
         html: `
@@ -157,15 +157,15 @@ const handler = async (req: Request): Promise<Response> => {
                 
                 <div class="contact-info">
                   <h3>Contact Information</h3>
-                  <p><strong>Email:</strong> <a href="mailto:advertising@realityauctions.com.au">advertising@realityauctions.com.au</a></p>
-                  <p><strong>Phone:</strong> <a href="tel:+61-2-8000-8000">+61 2 8000 8000</a></p>
-                  <p><strong>Business Hours:</strong> Monday - Friday, 9:00 AM - 6:00 PM AEST</p>
+                   <p><strong>Email:</strong> <a href="mailto:info@delorenzopropertygroup.com">info@delorenzopropertygroup.com</a></p>
+                   <p><strong>Phone:</strong> <a href="tel:0417693838">0417 693 838</a></p>
+                   <p><strong>Business Hours:</strong> Monday - Friday, 8:45 AM - 5:15 PM AEST</p>
                 </div>
                 
                 <p>If you have any immediate questions, please don't hesitate to contact us using the information above.</p>
                 
                 <p>Best regards,<br>
-                <strong>The Reality Auctions Advertising Team</strong></p>
+                <strong>The DeLorenzo Property Group Team</strong></p>
               </div>
             </div>
           </body>
