@@ -64,6 +64,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BidTermsAnalyzer from './BidTermsAnalyzer';
+import VendorStatementGenerator from './VendorStatementGenerator';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
@@ -497,9 +498,10 @@ const EnhancedRealityAuctionPlatform = () => {
             <Card className="backdrop-blur-xl bg-white/50 border-white/30 shadow-2xl rounded-2xl overflow-hidden">
               <CardContent className="p-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid w-full grid-cols-7 mb-8 bg-white/50 backdrop-blur-lg rounded-xl p-2 border border-white/30">
+                  <TabsList className="grid w-full grid-cols-8 mb-8 bg-white/50 backdrop-blur-lg rounded-xl p-2 border border-white/30">
                     <TabsTrigger value="overview" className="text-xs font-semibold rounded-lg">Overview</TabsTrigger>
                     <TabsTrigger value="bidding" className="text-xs font-semibold rounded-lg">Bidding</TabsTrigger>
+                    <TabsTrigger value="vendor" className="text-xs font-semibold rounded-lg">Vendor Statement</TabsTrigger>
                     <TabsTrigger value="valuation" className="text-xs font-semibold rounded-lg">Valuation</TabsTrigger>
                     <TabsTrigger value="market" className="text-xs font-semibold rounded-lg">Market</TabsTrigger>
                     <TabsTrigger value="risk" className="text-xs font-semibold rounded-lg">Risk</TabsTrigger>
@@ -634,6 +636,16 @@ const EnhancedRealityAuctionPlatform = () => {
 
                   <TabsContent value="bidding" className="space-y-6">
                     <BidTermsAnalyzer />
+                  </TabsContent>
+
+                  <TabsContent value="vendor" className="space-y-6">
+                    <VendorStatementGenerator 
+                      propertyData={currentAuction}
+                      onGenerate={(data) => {
+                        console.log('Generated vendor statement:', data);
+                        // Here you could integrate with your backend to store or process the statement
+                      }}
+                    />
                   </TabsContent>
 
                   <TabsContent value="valuation" className="space-y-6">
