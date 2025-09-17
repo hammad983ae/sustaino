@@ -207,24 +207,6 @@ export default function AdvertisingValuationDashboard() {
               </CardContent>
             </Card>
 
-            {/* Professional Note */}
-            <Card className="bg-primary/5 border-primary/20">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <MapPin className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Professional Valuation Services</h3>
-                    <p className="text-sm text-muted-foreground">
-                      We maintain extensive data on $300,000+ per annum billboard leases, 
-                      including both lease and advertising sales data. Our valuations incorporate comprehensive market 
-                      analysis, risk assessment, and industry-specific expertise for accurate investment decisions.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           <TabsContent value="signage">
