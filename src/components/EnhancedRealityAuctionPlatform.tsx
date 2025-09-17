@@ -254,23 +254,42 @@ const EnhancedRealityAuctionPlatform = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
-      {/* 3D Background Effect */}
-      <div className="fixed inset-0 opacity-10 pointer-events-none">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 relative overflow-hidden">
+      {/* Enhanced Premium Background */}
+      <div className="absolute inset-0">
+        {/* Multi-layer gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-400/5 via-cyan-300/5 to-purple-400/5"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-emerald-300/3 via-transparent to-indigo-300/3"></div>
+        
+        {/* Floating glass orbs */}
+        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-300/10 to-cyan-300/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-purple-300/10 to-violet-300/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-200/5 to-blue-200/5 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.02)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        
+        {/* Premium shine effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 animate-pulse"></div>
+      </div>
+
+      {/* 3D Background Effect with enhanced opacity */}
+      <div className="fixed inset-0 opacity-5 pointer-events-none">
         <PropertyScene />
       </div>
 
-      {/* Floating particles effect */}
+      {/* Floating particles effect with premium colors */}
       <div className="fixed inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(15)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-primary/20 rounded-full animate-float"
+            className="absolute w-1 h-1 bg-gradient-to-r from-blue-400/30 to-cyan-400/30 rounded-full animate-float shadow-lg"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${3 + Math.random() * 2}s`
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${4 + Math.random() * 3}s`,
+              boxShadow: '0 0 10px rgba(59, 130, 246, 0.3)'
             }}
           />
         ))}
@@ -288,72 +307,99 @@ const EnhancedRealityAuctionPlatform = () => {
             Back to Dashboard
           </Button>
         </div>
-        {/* Enhanced Header */}
-        <div className="text-center space-y-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 blur-3xl -z-10" />
-          <h1 className="text-5xl font-bold text-foreground flex items-center justify-center gap-4">
-            <div className="relative">
-              <Gavel className="h-12 w-12 text-primary animate-pulse" />
-              <div className="absolute inset-0 h-12 w-12 bg-primary/20 rounded-full animate-ping" />
+        {/* Enhanced Premium Header */}
+        <div className="text-center space-y-6 relative">
+          {/* Glassmorphism background for header */}
+          <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl -z-10" />
+          <div className="relative p-8">
+            <div className="flex items-center justify-center gap-6 mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 rounded-2xl blur-xl animate-pulse"></div>
+                <div className="relative p-4 bg-gradient-to-br from-blue-500/80 to-cyan-500/80 rounded-2xl shadow-2xl backdrop-blur-lg border border-white/20">
+                  <Gavel className="h-12 w-12 text-white drop-shadow-lg" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-6xl font-black bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
+                  Auction-Sphere™
+                </h1>
+                <Zap className="h-10 w-10 text-yellow-500 animate-bounce mx-auto mt-2" />
+              </div>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-violet-500/30 rounded-2xl blur-xl animate-pulse delay-500"></div>
+                <div className="relative p-4 bg-gradient-to-br from-purple-500/80 to-violet-500/80 rounded-2xl shadow-2xl backdrop-blur-lg border border-white/20">
+                  <Building2 className="h-12 w-12 text-white drop-shadow-lg" />
+                </div>
+              </div>
             </div>
-            Auction-Sphere™
-            <Zap className="h-8 w-8 text-yellow-500 animate-bounce" />
-          </h1>
-          <p className="text-xl text-muted-foreground">Advanced Off-Market Auctions with AI-Powered Analysis</p>
-          <div className="flex justify-center gap-4 text-sm">
-            <Badge variant="secondary" className="animate-fade-in">
-              <Activity className="h-3 w-3 mr-1" />
-              Live Valuations
-            </Badge>
-            <Badge variant="secondary" className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <BarChart3 className="h-3 w-3 mr-1" />
-              Market Analysis
-            </Badge>
-            <Badge variant="secondary" className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Target className="h-3 w-3 mr-1" />
-              Risk Assessment
-            </Badge>
+            <p className="text-xl text-slate-700 font-semibold mb-6">Advanced Off-Market Auctions with AI-Powered Analysis</p>
+            <div className="flex justify-center gap-4 text-sm flex-wrap">
+              <Badge className="bg-gradient-to-r from-emerald-500/90 to-green-500/90 text-white px-4 py-2 text-sm font-bold backdrop-blur-sm border border-white/20 shadow-lg">
+                <Activity className="h-4 w-4 mr-2" />
+                Live Valuations
+              </Badge>
+              <Badge className="bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white px-4 py-2 text-sm font-bold backdrop-blur-sm border border-white/20 shadow-lg">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Market Analysis
+              </Badge>
+              <Badge className="bg-gradient-to-r from-purple-500/90 to-violet-500/90 text-white px-4 py-2 text-sm font-bold backdrop-blur-sm border border-white/20 shadow-lg">
+                <Target className="h-4 w-4 mr-2" />
+                Risk Assessment
+              </Badge>
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Enhanced Auction List Sidebar */}
-          <div className="lg:col-span-1 space-y-4">
-            <Card className="backdrop-blur-lg bg-card/80 border-primary/20 shadow-2xl">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Timer className="h-5 w-5 text-primary animate-spin" />
-                  Live & Upcoming Auctions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+          {/* Enhanced Premium Auction List Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            <Card className="backdrop-blur-xl bg-white/60 border-white/30 shadow-2xl rounded-2xl overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 p-1 rounded-t-2xl">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-slate-700 font-bold">
+                    <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl text-white shadow-lg">
+                      <Timer className="h-5 w-5" />
+                    </div>
+                    Live & Upcoming Auctions
+                  </CardTitle>
+                </CardHeader>
+              </div>
+              <CardContent className="space-y-4 p-6">
                 {auctions.map((auction, idx) => (
                   <Card 
                     key={auction.id} 
-                    className={`p-3 cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 ${
-                      selectedAuction === idx ? 'ring-2 ring-primary shadow-primary/20' : ''
-                    } backdrop-blur-sm`}
+                    className={`p-4 cursor-pointer transition-all duration-500 hover:shadow-xl hover:scale-[1.02] ${
+                      selectedAuction === idx 
+                        ? 'ring-2 ring-blue-400 shadow-blue-100 bg-gradient-to-r from-blue-50/80 to-cyan-50/80 backdrop-blur-lg' 
+                        : 'bg-white/40 backdrop-blur-lg hover:bg-white/60'
+                    } rounded-xl border border-white/30`}
                     onClick={() => setSelectedAuction(idx)}
                   >
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <div className="flex items-start justify-between">
-                        <Badge variant={auction.isLive ? "destructive" : "secondary"} className="animate-pulse">
+                        <Badge 
+                          className={`px-3 py-1 text-xs font-bold ${
+                            auction.isLive 
+                              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white animate-pulse shadow-lg' 
+                              : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg'
+                          } border-white/20`}
+                        >
                           {auction.isLive ? 'LIVE NOW' : 'UPCOMING'}
                         </Badge>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1 text-sm text-slate-600 bg-white/50 px-2 py-1 rounded-lg backdrop-blur-sm">
                           <Users className="h-3 w-3" />
                           {auction.bidders}
                         </div>
                       </div>
-                      <h4 className="font-semibold text-sm">{auction.address}</h4>
-                      <p className="text-lg font-bold text-primary animate-bounce">
+                      <h4 className="font-bold text-sm text-slate-700 leading-tight">{auction.address}</h4>
+                      <p className="text-2xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                         {formatCurrency(auction.currentBid)}
                       </p>
                       <div className="flex justify-between text-xs">
-                        <span className="text-muted-foreground">
+                        <span className="text-slate-500 font-medium">
                           Reserve: {formatCurrency(auction.reserve)}
                         </span>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge className="text-xs bg-gradient-to-r from-purple-500/20 to-violet-500/20 text-purple-700 border-purple-200">
                           Score: {auction.marketScore}
                         </Badge>
                       </div>
@@ -363,72 +409,101 @@ const EnhancedRealityAuctionPlatform = () => {
               </CardContent>
             </Card>
 
-            {/* Quick Stats */}
-            <Card className="backdrop-blur-lg bg-card/80 border-primary/20">
-              <CardHeader>
-                <CardTitle className="text-sm">Market Overview</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-primary">{formatCurrency(currentAuction.instantValuation)}</p>
-                  <p className="text-xs text-muted-foreground">Instant Valuation</p>
+            {/* Enhanced Market Overview */}
+            <Card className="backdrop-blur-xl bg-white/60 border-white/30 shadow-2xl rounded-2xl overflow-hidden">
+              <div className="bg-gradient-to-r from-purple-500/10 to-violet-500/10 p-1 rounded-t-2xl">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-sm flex items-center gap-2 text-slate-700 font-bold">
+                    <div className="p-1.5 bg-gradient-to-r from-purple-500 to-violet-500 rounded-lg text-white shadow-lg">
+                      <BarChart3 className="h-4 w-4" />
+                    </div>
+                    Market Overview
+                  </CardTitle>
+                </CardHeader>
+              </div>
+              <CardContent className="space-y-4 p-6">
+                <div className="text-center bg-gradient-to-r from-blue-50/50 to-cyan-50/50 rounded-xl p-4 backdrop-blur-sm border border-white/30">
+                  <p className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                    {formatCurrency(currentAuction.instantValuation)}
+                  </p>
+                  <p className="text-xs text-slate-600 font-medium">Instant Valuation</p>
                 </div>
-                <Progress value={currentAuction.marketScore} className="h-2" />
-                <p className="text-xs text-center">Market Score: {currentAuction.marketScore}/100</p>
+                <div className="space-y-2">
+                  <Progress value={currentAuction.marketScore} className="h-3 bg-gradient-to-r from-slate-200 to-slate-300" />
+                  <p className="text-xs text-center text-slate-600 font-medium">Market Score: {currentAuction.marketScore}/100</p>
+                </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Main Content Area */}
+          {/* Enhanced Main Content Area */}
           <div className="lg:col-span-3 space-y-6">
-            {/* Property Hero Section */}
-            <Card className="backdrop-blur-lg bg-card/80 border-primary/20 shadow-2xl overflow-hidden">
+            {/* Premium Property Hero Section */}
+            <Card className="backdrop-blur-xl bg-white/50 border-white/30 shadow-2xl overflow-hidden rounded-2xl">
               <div className="relative">
-                {/* Property Image with overlay effects */}
-                <div className="w-full h-80 relative overflow-hidden">
+                {/* Enhanced Property Image with glassmorphism overlay */}
+                <div className="w-full h-80 relative overflow-hidden rounded-t-2xl">
                   <img 
                     src="/src/assets/demo-property-image.png" 
                     alt="Property exterior view"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute top-4 right-4 flex gap-2">
-                    <Badge variant={currentAuction.isLive ? "destructive" : "secondary"} className="animate-pulse">
+                  {/* Enhanced gradient overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10" />
+                  {/* Enhanced status badges */}
+                  <div className="absolute top-6 right-6 flex gap-3">
+                    <Badge 
+                      className={`px-4 py-2 text-sm font-bold ${
+                        currentAuction.isLive 
+                          ? 'bg-gradient-to-r from-red-500/90 to-orange-500/90 text-white animate-pulse shadow-xl backdrop-blur-lg border border-white/20' 
+                          : 'bg-gradient-to-r from-emerald-500/90 to-green-500/90 text-white shadow-xl backdrop-blur-lg border border-white/20'
+                      }`}
+                    >
                       {currentAuction.isLive ? 'LIVE AUCTION' : 'STARTS SOON'}
                     </Badge>
-                    <Badge variant="secondary">
-                      <Star className="h-3 w-3 mr-1" />
+                    <Badge className="bg-gradient-to-r from-yellow-400/90 to-amber-400/90 text-slate-800 px-4 py-2 text-sm font-bold shadow-xl backdrop-blur-lg border border-white/20">
+                      <Star className="h-4 w-4 mr-2" />
                       {currentAuction.marketScore}/100
                     </Badge>
                   </div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h2 className="text-2xl font-bold">{currentAuction.address}</h2>
-                    <p className="text-lg opacity-90">{currentAuction.propertyType}</p>
+                  
+                  {/* Enhanced property information */}
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <div className="bg-black/30 backdrop-blur-lg rounded-xl p-4 border border-white/20">
+                      <h2 className="text-3xl font-black drop-shadow-lg">{currentAuction.address}</h2>
+                      <p className="text-xl opacity-90 drop-shadow-lg font-semibold">{currentAuction.propertyType}</p>
+                    </div>
                   </div>
                 </div>
 
-                {/* Live bidding strip */}
+                {/* Enhanced live bidding strip */}
                 {currentAuction.isLive && (
-                  <div className="bg-destructive text-destructive-foreground p-2 text-center animate-pulse">
-                    <span className="font-semibold">LIVE BIDDING IN PROGRESS</span> • 
-                    <span className="ml-2">{formatTime(timeLeft)} remaining</span>
+                  <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-4 text-center relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-orange-600/20 animate-pulse"></div>
+                    <div className="relative flex items-center justify-center gap-4 text-lg font-bold">
+                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                      <span>LIVE BIDDING IN PROGRESS</span>
+                      <span>{formatTime(timeLeft)} remaining</span>
+                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                    </div>
                   </div>
                 )}
               </div>
             </Card>
 
-            {/* Comprehensive Analysis Tabs */}
-            <Card className="backdrop-blur-lg bg-card/80 border-primary/20 shadow-xl">
-              <CardContent className="p-6">
+            {/* Enhanced Comprehensive Analysis Tabs */}
+            <Card className="backdrop-blur-xl bg-white/50 border-white/30 shadow-2xl rounded-2xl overflow-hidden">
+              <CardContent className="p-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid w-full grid-cols-7 mb-6">
-                    <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
-                    <TabsTrigger value="bidding" className="text-xs">Bidding</TabsTrigger>
-                    <TabsTrigger value="valuation" className="text-xs">Valuation</TabsTrigger>
-                    <TabsTrigger value="market" className="text-xs">Market</TabsTrigger>
-                    <TabsTrigger value="risk" className="text-xs">Risk</TabsTrigger>
-                    <TabsTrigger value="demographics" className="text-xs">Demographics</TabsTrigger>
-                    <TabsTrigger value="financial" className="text-xs">Financial</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-7 mb-8 bg-white/50 backdrop-blur-lg rounded-xl p-2 border border-white/30">
+                    <TabsTrigger value="overview" className="text-xs font-semibold rounded-lg">Overview</TabsTrigger>
+                    <TabsTrigger value="bidding" className="text-xs font-semibold rounded-lg">Bidding</TabsTrigger>
+                    <TabsTrigger value="valuation" className="text-xs font-semibold rounded-lg">Valuation</TabsTrigger>
+                    <TabsTrigger value="market" className="text-xs font-semibold rounded-lg">Market</TabsTrigger>
+                    <TabsTrigger value="risk" className="text-xs font-semibold rounded-lg">Risk</TabsTrigger>
+                    <TabsTrigger value="demographics" className="text-xs font-semibold rounded-lg">Demographics</TabsTrigger>
+                    <TabsTrigger value="financial" className="text-xs font-semibold rounded-lg">Financial</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="overview" className="space-y-6">
