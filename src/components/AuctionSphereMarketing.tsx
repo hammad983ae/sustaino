@@ -168,6 +168,18 @@ const AuctionSphereMarketing = () => {
       badge: "AI-Powered"
     },
     {
+      title: "International FDI Platform",
+      description: "Foreign Direct Investment support with global property listings",
+      icon: <Globe className="h-8 w-8" />,
+      badge: "Global"
+    },
+    {
+      title: "Currency Exchange Calculator",
+      description: "Real-time multi-currency conversion for international transactions",
+      icon: <DollarSign className="h-8 w-8" />,
+      badge: "Multi-Currency"
+    },
+    {
       title: "Market Intelligence",
       description: "Real-time analytics with 150+ data points analysis",
       icon: <BarChart3 className="h-8 w-8" />,
@@ -281,7 +293,7 @@ const AuctionSphereMarketing = () => {
               Revolutionary real estate auction platform combining cutting-edge 3D visualization, 
               AI-powered bidder qualification, and comprehensive market intelligence.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
               <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/20 backdrop-blur-sm">
                 <Building2 className="h-12 w-12 text-blue-400 mb-4 mx-auto" />
                 <h3 className="text-xl font-bold text-white mb-2">3D Property Viewing</h3>
@@ -291,6 +303,11 @@ const AuctionSphereMarketing = () => {
                 <Brain className="h-12 w-12 text-green-400 mb-4 mx-auto" />
                 <h3 className="text-xl font-bold text-white mb-2">AI Qualification</h3>
                 <p className="text-slate-300">95% accuracy in bidder assessment</p>
+              </div>
+              <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 rounded-2xl p-6 border border-orange-500/20 backdrop-blur-sm">
+                <Globe className="h-12 w-12 text-orange-400 mb-4 mx-auto" />
+                <h3 className="text-xl font-bold text-white mb-2">Global Platform</h3>
+                <p className="text-slate-300">International FDI & currency exchange</p>
               </div>
               <div className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 rounded-2xl p-6 border border-purple-500/20 backdrop-blur-sm">
                 <BarChart3 className="h-12 w-12 text-purple-400 mb-4 mx-auto" />
@@ -543,7 +560,7 @@ const AuctionSphereMarketing = () => {
         </div>
 
         {/* Key Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {keyFeatures.map((feature, index) => (
             <Card key={index} className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-lg border-slate-700/50 hover:scale-105 transition-transform">
               <CardHeader>
@@ -558,6 +575,137 @@ const AuctionSphereMarketing = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* International Features Section */}
+        <div className="mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-black text-white mb-4">
+              🌍 Global Investment Platform
+            </h2>
+            <p className="text-xl text-slate-300 max-w-4xl mx-auto">
+              The world's first international real estate auction platform supporting FDI transactions, 
+              multi-currency operations, and overseas property listings.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Currency Exchange Calculator */}
+            <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl border-green-500/20 shadow-2xl">
+              <CardHeader>
+                <CardTitle className="text-white text-2xl flex items-center gap-3">
+                  <DollarSign className="h-8 w-8 text-green-400" />
+                  Live Currency Exchange
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-slate-300 font-bold mb-2 block">From Currency</label>
+                    <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600">
+                      <div className="text-white font-bold text-lg">AUD</div>
+                      <div className="text-green-400 text-2xl font-black">$2,650,000</div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold mb-2 block">To Currency</label>
+                    <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600">
+                      <div className="text-white font-bold text-lg">USD</div>
+                      <div className="text-green-400 text-2xl font-black">$1,764,500</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <Badge className="bg-green-500/20 text-green-300 border-green-500/30 px-4 py-2">
+                    Live Rate: 1 AUD = 0.6658 USD
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {['EUR', 'GBP', 'JPY', 'CNY'].map(currency => (
+                    <Button key={currency} variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-700">
+                      {currency}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* FDI Transaction Support */}
+            <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl border-blue-500/20 shadow-2xl">
+              <CardHeader>
+                <CardTitle className="text-white text-2xl flex items-center gap-3">
+                  <Globe className="h-8 w-8 text-blue-400" />
+                  FDI Transaction Support
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-600">
+                    <span className="text-slate-300">FIRB Compliance</span>
+                    <CheckCircle className="h-5 w-5 text-green-400" />
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-600">
+                    <span className="text-slate-300">International Banking</span>
+                    <CheckCircle className="h-5 w-5 text-green-400" />
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-600">
+                    <span className="text-slate-300">Tax Treaty Support</span>
+                    <CheckCircle className="h-5 w-5 text-green-400" />
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-600">
+                    <span className="text-slate-300">Anti-Money Laundering</span>
+                    <CheckCircle className="h-5 w-5 text-green-400" />
+                  </div>
+                </div>
+                <div className="text-center pt-4">
+                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30 px-4 py-2">
+                    Supporting 45+ Countries
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* International Property Showcase */}
+          <div className="mt-8">
+            <Card className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 backdrop-blur-xl border-purple-500/20 shadow-2xl">
+              <CardHeader>
+                <CardTitle className="text-white text-2xl flex items-center gap-3">
+                  <Building2 className="h-8 w-8 text-purple-400" />
+                  Global Property Listings
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🇦🇺</div>
+                    <h4 className="text-white font-bold text-lg">Australia</h4>
+                    <p className="text-slate-300">Premium residential & commercial</p>
+                    <Badge className="mt-2 bg-green-500/20 text-green-300">12,500+ Properties</Badge>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🇺🇸</div>
+                    <h4 className="text-white font-bold text-lg">United States</h4>
+                    <p className="text-slate-300">Commercial real estate investments</p>
+                    <Badge className="mt-2 bg-blue-500/20 text-blue-300">8,200+ Properties</Badge>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🇬🇧</div>
+                    <h4 className="text-white font-bold text-lg">United Kingdom</h4>
+                    <p className="text-slate-300">Luxury estates & developments</p>
+                    <Badge className="mt-2 bg-purple-500/20 text-purple-300">5,800+ Properties</Badge>
+                  </div>
+                </div>
+                <div className="mt-6 text-center">
+                  <p className="text-slate-300 mb-4">Also supporting: Canada, New Zealand, Singapore, Japan, Germany, France, and more</p>
+                  <Button className="bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white">
+                    Browse International Properties
+                    <Globe className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Call to Action */}
