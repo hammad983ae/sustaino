@@ -169,6 +169,52 @@ const PropertyValuationsBrochure = () => {
         </div>
       </div>
 
+      {/* Speed Advantage */}
+      <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6 rounded-lg mb-8">
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          ⚡ Revolutionary Speed Advantage
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white/10 p-4 rounded-lg">
+            <h3 className="font-bold text-green-300 mb-3 text-center">🚀 OUR DELIVERY</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span>Comprehensive Valuation:</span>
+                <span className="font-black text-green-300">SAME DAY</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Full Due Diligence:</span>
+                <span className="font-black text-green-300">SAME DAY</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Market Analysis:</span>
+                <span className="font-black text-green-300">INSTANT</span>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white/10 p-4 rounded-lg">
+            <h3 className="font-bold text-red-300 mb-3 text-center">🐌 INDUSTRY STANDARD</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span>Initial Assessment:</span>
+                <span className="font-bold text-red-300">3-5 days</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Comprehensive Report:</span>
+                <span className="font-bold text-red-300">15-20 days</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Due Diligence:</span>
+                <span className="font-bold text-red-300">5-10 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="text-center mt-4">
+          <p className="text-xl font-black text-yellow-300">UP TO 2000% FASTER</p>
+        </div>
+      </div>
+
       {/* Services Grid */}
       <div className="bg-gradient-to-r from-blue-900 to-green-900 text-white p-6 rounded-lg mb-8">
         <h2 className="text-2xl font-bold mb-4 text-center">
@@ -236,19 +282,19 @@ const PropertyValuationsBrochure = () => {
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-300" />
+                <span>INSTANT same-day valuations</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-300" />
                 <span>RICS certified professionals</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-300" />
-                <span>Fast turnaround times</span>
+                <span>Comprehensive due diligence included</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-300" />
-                <span>Comprehensive reporting</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-300" />
-                <span>Competitive pricing</span>
+                <span>AI-enhanced accuracy & insights</span>
               </div>
             </div>
           </div>

@@ -324,6 +324,10 @@ const PlatformEcosystemBrochure = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-orange-600" />
+                  <span><strong>INSTANT VALUATIONS</strong> - Same day comprehensive reports</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="h-4 w-4 text-orange-600" />
                   <span><strong>Patent-Pending 3D WebGL Auction Platform</strong></span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -346,12 +350,20 @@ const PlatformEcosystemBrochure = () => {
             <CardContent className="p-8">
               <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center">
                 <Award className="h-6 w-6 mr-2" />
-                Industry Leadership
+                Unmatched Speed & Accuracy
               </h3>
               <div className="space-y-3 text-sm">
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-emerald-600" />
+                  <span><strong>SAME DAY DELIVERY</strong> vs Industry 5-20 days</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="h-4 w-4 text-emerald-600" />
                   <span><strong>95% AI Accuracy Rate</strong> - Industry highest</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="h-4 w-4 text-emerald-600" />
+                  <span><strong>Full Due Diligence Included</strong> - Comprehensive analysis</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-emerald-600" />
@@ -361,13 +373,69 @@ const PlatformEcosystemBrochure = () => {
                   <Star className="h-4 w-4 text-emerald-600" />
                   <span><strong>24/7 Global Operations</strong> - Never offline</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-emerald-600" />
-                  <span><strong>ISO 27001 Security Certified</strong> - Bank-grade protection</span>
-                </div>
               </div>
             </CardContent>
           </Card>
+        </div>
+      </div>
+
+      {/* Speed Comparison */}
+      <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 text-white p-8 rounded-2xl mb-12">
+        <h2 className="text-3xl font-bold mb-6 text-center">
+          ⚡ Revolutionary Speed - INSTANT vs Industry Standard
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur">
+            <h3 className="text-xl font-bold mb-4 text-center text-yellow-300">
+              🔥 POWERED Platform - INSTANT DELIVERY
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center p-3 bg-green-500/20 rounded-lg">
+                <span className="font-semibold">Comprehensive Valuation Report:</span>
+                <span className="text-green-300 font-black text-lg">SAME DAY</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-green-500/20 rounded-lg">
+                <span className="font-semibold">Full Due Diligence:</span>
+                <span className="text-green-300 font-black text-lg">SAME DAY</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-green-500/20 rounded-lg">
+                <span className="font-semibold">Market Analysis:</span>
+                <span className="text-green-300 font-black text-lg">INSTANT</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-green-500/20 rounded-lg">
+                <span className="font-semibold">Risk Assessment:</span>
+                <span className="text-green-300 font-black text-lg">INSTANT</span>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur">
+            <h3 className="text-xl font-bold mb-4 text-center text-red-300">
+              🐌 Industry Standard Timeframes
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center p-3 bg-red-500/20 rounded-lg">
+                <span className="font-semibold">Initial Assessment:</span>
+                <span className="text-red-300 font-bold">3-5 days</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-red-500/20 rounded-lg">
+                <span className="font-semibold">Feasibility Study:</span>
+                <span className="text-red-300 font-bold">10-15 days</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-red-500/20 rounded-lg">
+                <span className="font-semibold">Comprehensive Report:</span>
+                <span className="text-red-300 font-bold">15-20 days</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-red-500/20 rounded-lg">
+                <span className="font-semibold">Due Diligence:</span>
+                <span className="text-red-300 font-bold">5-10 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="text-center mt-6">
+          <p className="text-2xl font-black text-yellow-300">
+            🚀 UP TO 2000% FASTER THAN INDUSTRY STANDARD
+          </p>
         </div>
       </div>
 
@@ -383,9 +451,9 @@ const PlatformEcosystemBrochure = () => {
         
         <Card className="border-2 border-green-200 text-center">
           <CardContent className="p-6">
-            <div className="text-4xl font-black text-green-600 mb-2">99.9%</div>
-            <div className="font-bold text-gray-900">Uptime Guarantee</div>
-            <div className="text-sm text-gray-600">Global infrastructure</div>
+            <div className="text-4xl font-black text-green-600 mb-2">INSTANT</div>
+            <div className="font-bold text-gray-900">Report Delivery</div>
+            <div className="text-sm text-gray-600">vs 5-20 days industry</div>
           </CardContent>
         </Card>
         
