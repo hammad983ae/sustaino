@@ -25,6 +25,9 @@ import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
 import IntelligentAssessmentAutomation from '@/components/IntelligentAssessmentAutomation';
+import SectionDataExtractor from '@/components/SectionDataExtractor';
+import ReportSectionToggler from '@/components/ReportSectionToggler';
+import DataValidationPipeline from '@/components/DataValidationPipeline';
 
 interface PropertyAssessmentFormProps {
   onComplete?: (data: any) => void;
@@ -126,7 +129,12 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     {
       title: "Report Configuration",
       subtitle: "Configure your report settings and client information",
-      component: <ReportTypeConfiguration />,
+      component: (
+        <div className="space-y-6">
+          <ReportTypeConfiguration />
+          <ReportSectionToggler />
+        </div>
+      ),
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         const hasConfig = !!(reportData.reportConfig?.reportType && reportData.reportConfig?.propertyType);
@@ -158,20 +166,23 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       title: "Review & Generate", 
       subtitle: "Review your information and generate the assessment report",
       component: (
-        <GenerateReportData
-          assessmentData={{
-            reportData,
-            addressData,
-            currentStep,
-            completedSteps
-          }}
-          onReportGenerated={(reportData) => {
-            // Report generated successfully, update data but don't navigate
-            console.log('Report generated successfully:', reportData);
-            onComplete?.(reportData);
-          }}
-          onNavigateToReport={onNavigateToReport}
-        />
+        <div className="space-y-6">
+          <DataValidationPipeline />
+          <GenerateReportData
+            assessmentData={{
+              reportData,
+              addressData,
+              currentStep,
+              completedSteps
+            }}
+            onReportGenerated={(reportData) => {
+              // Report generated successfully, update data but don't navigate
+              console.log('Report generated successfully:', reportData);
+              onComplete?.(reportData);
+            }}
+            onNavigateToReport={onNavigateToReport}
+          />
+        </div>
       ),
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);

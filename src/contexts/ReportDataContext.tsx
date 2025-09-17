@@ -58,6 +58,33 @@ export interface ReportData {
     neighbourhood?: string;
     amenities?: string;
     services?: string;
+    propertyAddress?: string;
+    lotNumber?: string;
+    planNumber?: string;
+    coordinates?: { lat: number; lng: number };
+    status?: string;
+    extractedFrom?: string;
+    [key: string]: any;
+  };
+  
+  // Market Commentary
+  marketCommentary?: {
+    analysis?: string;
+    trends?: string;
+    comparables?: string;
+    status?: string;
+    extractedFrom?: string;
+    [key: string]: any;
+  };
+  
+  // Environmental Assessment
+  environmentalAssessment?: {
+    epaData?: string;
+    sustainability?: string;
+    contamination?: string;
+    status?: string;
+    extractedFrom?: string;
+    note?: string;
     [key: string]: any;
   };
   
