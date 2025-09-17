@@ -24,6 +24,7 @@ import MortgageBrokerTab from "@/components/MortgageBrokerTab";
 import RealitySalesTab from "@/components/RealitySalesTab";
 import PropertyManagementTab from "@/components/PropertyManagementTab";
 import { RealCommercialScraper } from "@/components/RealCommercialScraper";
+import { ScrapedDataViewer } from "@/components/ScrapedDataViewer";
 import { ValuationProvider } from "@/contexts/ValuationContext";
 
 import BrandedHeader from "@/components/BrandedHeader";
@@ -278,22 +279,19 @@ export default function AutomatedValuation() {
                           </CardContent>
                         </Card>
                         
-                        {/* Additional Tools Placeholder */}
+                         {/* Scraped Data Viewer */}
                         <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
                           <CardHeader>
                             <CardTitle className="text-blue-700 flex items-center gap-2">
                               <TrendingUp className="h-5 w-5" />
-                              Market Data Tools
+                              Scraped Data Viewer
                             </CardTitle>
                             <CardDescription className="text-blue-600">
-                              Advanced market analysis and data extraction
+                              View and analyze scraped property data
                             </CardDescription>
                           </CardHeader>
-                          <CardContent className="text-center py-8">
-                            <p className="text-blue-600 mb-4">Additional data tools coming soon</p>
-                            <Button variant="outline" className="border-blue-300 text-blue-700">
-                              Request Feature
-                            </Button>
+                          <CardContent>
+                            <ScrapedDataViewer />
                           </CardContent>
                         </Card>
                       </div>
