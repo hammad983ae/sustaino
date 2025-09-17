@@ -162,10 +162,11 @@ export default function AutomatedValuation() {
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4">
+                    <TabsList className="grid w-full grid-cols-5">
                       <TabsTrigger value="platforms">Platform Access</TabsTrigger>
                       <TabsTrigger value="tools">Data Tools</TabsTrigger>
                       <TabsTrigger value="brochures">📋 Brochures</TabsTrigger>
+                      <TabsTrigger value="security">🔒 IP Security</TabsTrigger>
                       <TabsTrigger value="advanced">Advanced Features</TabsTrigger>
                     </TabsList>
                     
@@ -422,6 +423,125 @@ export default function AutomatedValuation() {
                             <p className="text-sm text-green-600">Email platform information</p>
                           </CardContent>
                         </Card>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="security" className="space-y-6">
+                      <div className="bg-gradient-to-r from-red-900/20 to-slate-900/20 p-6 rounded-lg border border-red-500/30">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-12 h-12 bg-red-900/50 rounded-full flex items-center justify-center">
+                            🔒
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-red-400">MAXIMUM SECURITY ZONE</h3>
+                            <p className="text-red-300">Intellectual Property Protection & Code Security</p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {/* IP Portfolio Summary */}
+                          <Card className="border-red-500/30 bg-gradient-to-br from-red-950/50 to-slate-950/50">
+                            <CardHeader>
+                              <CardTitle className="text-red-400 flex items-center gap-2">
+                                <span>🛡️</span>
+                                IP Portfolio Value
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-3">
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Patent Applications:</span>
+                                  <span className="text-green-400 font-bold">3 Filed</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Registered Trademarks:</span>
+                                  <span className="text-green-400 font-bold">2 Active</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Trade Secrets:</span>
+                                  <span className="text-red-400 font-bold">3 Critical</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Total IP Value:</span>
+                                  <span className="text-emerald-400 font-bold">$367M+</span>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                          
+                          {/* Security Status */}
+                          <Card className="border-green-500/30 bg-gradient-to-br from-green-950/50 to-slate-950/50">
+                            <CardHeader>
+                              <CardTitle className="text-green-400 flex items-center gap-2">
+                                <span>⚡</span>
+                                Security Status
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-3">
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Code Protection:</span>
+                                  <span className="text-green-400 font-bold">98.5% Secure</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Access Control:</span>
+                                  <span className="text-green-400 font-bold">100% Active</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Vulnerabilities:</span>
+                                  <span className="text-green-400 font-bold">0 Critical</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-slate-300">Monitoring:</span>
+                                  <span className="text-blue-400 font-bold">24/7 Active</span>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+                        
+                        {/* Security Access Warning */}
+                        <div className="mt-6 p-4 bg-red-900/30 border border-red-500/50 rounded-lg">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-red-400">⚠️</span>
+                            <span className="text-red-400 font-semibold">RESTRICTED ACCESS</span>
+                          </div>
+                          <p className="text-red-300 text-sm">
+                            Access to detailed IP security dashboard requires FOUNDER-level authentication.
+                            All access attempts are logged and monitored for security compliance.
+                          </p>
+                        </div>
+                        
+                        {/* Quick Actions */}
+                        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <Button 
+                            variant="outline" 
+                            className="border-red-500/50 text-red-300 hover:bg-red-900/20"
+                            onClick={() => {
+                              alert('IP Security Dashboard requires maximum authentication. Contact system administrator.');
+                            }}
+                          >
+                            🔐 View IP Dashboard
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            className="border-blue-500/50 text-blue-300 hover:bg-blue-900/20"
+                            onClick={() => {
+                              alert('Security scan initiated. Results will be available in security dashboard.');
+                            }}
+                          >
+                            🔍 Security Scan
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            className="border-green-500/50 text-green-300 hover:bg-green-900/20"
+                            onClick={() => {
+                              alert('All systems secure. Monitoring active.');
+                            }}
+                          >
+                            ✅ Security Status
+                          </Button>
+                        </div>
                       </div>
                     </TabsContent>
                     

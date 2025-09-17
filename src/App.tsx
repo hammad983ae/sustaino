@@ -1,8 +1,26 @@
+/**
+ * ============================================================================
+ * PROPRIETARY AND CONFIDENTIAL
+ * Copyright © 2025 DeLorenzo Property Group Pty Ltd. All Rights Reserved.
+ * 
+ * This software contains valuable trade secrets and proprietary information.
+ * Unauthorized reproduction, distribution, or reverse engineering is strictly
+ * prohibited and will be prosecuted to the full extent of the law.
+ * 
+ * PATENT PENDING: Multiple patent applications protect core algorithms
+ * TRADEMARK: Sustaino-Sphere™, Auction-Sphere™, POWERED™ are registered trademarks
+ * ============================================================================
+ */
+
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ReportDataProvider } from "@/contexts/ReportDataContext";
+import { BrandingProvider } from "@/contexts/BrandingContext";
+import { PropertyProvider } from "@/contexts/PropertyContext";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
@@ -37,13 +55,6 @@ import DataBases from "./pages/DataBases";
 import RealitySales from "./pages/RealitySales";
 import AuctionSpherePOSPage from "./pages/AuctionSpherePOS";
 import AdvertisingPlatforms from "./pages/AdvertisingPlatforms";
-import BrochureViewer from "./pages/BrochureViewer";
-import DevelopmentSiteValuation from "./pages/DevelopmentSiteValuation";
-import { BrandingProvider } from "./contexts/BrandingContext";
-import { PropertyProvider } from "./contexts/PropertyContext";
-import { ReportDataProvider } from "./contexts/ReportDataContext";
-import { ValuationProvider } from "./contexts/ValuationContext";
-import { PropertyTypeLockProvider } from "./components/PropertyTypeLockProvider";
 
 const queryClient = new QueryClient();
 
