@@ -145,38 +145,14 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="esg-calculator" className="flex items-center gap-2">
-              <Calculator className="h-4 w-4" />
-              ESG Calculator
-            </TabsTrigger>
-            <TabsTrigger value="portfolio" className="flex items-center gap-2">
-              <PieChartIcon className="h-4 w-4" />
-              Portfolio
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-            <TabsTrigger value="security" className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4" />
-              Security Analysis
-            </TabsTrigger>
-            <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
-              <Gavel className="h-4 w-4" />
-              Sustaino Sphere™
-            </TabsTrigger>
-            <TabsTrigger value="advertising" className="flex items-center gap-2">
-              <Megaphone className="h-4 w-4" />
-              Advertising
-            </TabsTrigger>
-            <TabsTrigger value="tools" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Tools
+            <TabsTrigger value="sustaino-world" className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              Sustaino World
             </TabsTrigger>
           </TabsList>
 
@@ -362,476 +338,436 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="esg-calculator" className="mt-6">
-            <ESGRiskAdjustedCalculator />
-          </TabsContent>
-
-          <TabsContent value="portfolio" className="space-y-6 mt-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>ESG Performance by Category</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={esgScoreData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="score" fill="#22c55e" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Sustaino Coin Earnings</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="text-center p-6 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/20 dark:to-green-950/20 rounded-lg">
-                    <div className="text-3xl font-bold text-emerald-600 mb-2">2,450</div>
-                    <div className="text-sm text-muted-foreground">Total Sustaino Coins</div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center p-3 border rounded-lg">
-                      <span>ESG Assessments</span>
-                      <Badge className="bg-emerald-600 text-white">+150 coins</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-3 border rounded-lg">
-                      <span>Carbon Reports</span>
-                      <Badge className="bg-emerald-600 text-white">+200 coins</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-3 border rounded-lg">
-                      <span>Efficiency Improvements</span>
-                      <Badge className="bg-emerald-600 text-white">+300 coins</Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="analytics" className="space-y-6 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Risk Assessment</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>Market Risk</span>
-                      <Badge variant="secondary">Low</Badge>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>ESG Risk</span>
-                      <Badge variant="secondary">Very Low</Badge>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Regulatory Risk</span>
-                      <Badge variant="secondary">Low</Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Market Trends</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>ESG Demand</span>
-                      <span className="text-green-600 font-medium">↗ +15%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Green Financing</span>
-                      <span className="text-green-600 font-medium">↗ +23%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Carbon Pricing</span>
-                      <span className="text-blue-600 font-medium">↗ +8%</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Predictions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>Next Quarter</span>
-                      <span className="text-green-600 font-medium">+2.1%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Greenium Growth</span>
-                      <span className="text-emerald-600 font-medium">+0.3%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>ESG Adoption</span>
-                      <span className="text-blue-600 font-medium">+18%</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="security" className="space-y-6 mt-6">
-            {/* Professional Security Visual */}
-            <Card className="overflow-hidden border-2 border-red-200">
-              <div className="relative h-64">
-                <img 
-                  src={securityAnalysisDashboard} 
-                  alt="Professional Security Analysis Dashboard" 
-                  className="w-full h-full object-cover opacity-80"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-purple-500/20" />
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-red-500 text-white">
-                    <Shield className="h-4 w-4 mr-2" />
-                    Security Analysis
-                  </Badge>
-                </div>
+          <TabsContent value="sustaino-world" className="mt-6">
+            <div className="space-y-6">
+              <div className="text-center py-8">
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-4">
+                  Welcome to Sustaino World
+                </h2>
+                <p className="text-muted-foreground text-lg">
+                  Your comprehensive ESG-powered property ecosystem
+                </p>
               </div>
-            </Card>
+              
+              <Tabs defaultValue="esg-calculator" className="w-full">
+                <TabsList className="grid w-full grid-cols-7">
+                  <TabsTrigger value="esg-calculator" className="flex items-center gap-2">
+                    <Calculator className="h-4 w-4" />
+                    ESG Calculator
+                  </TabsTrigger>
+                  <TabsTrigger value="portfolio" className="flex items-center gap-2">
+                    <PieChartIcon className="h-4 w-4" />
+                    Portfolio
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4" />
+                    Analytics
+                  </TabsTrigger>
+                  <TabsTrigger value="security" className="flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4" />
+                    Security Analysis
+                  </TabsTrigger>
+                  <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
+                    <Gavel className="h-4 w-4" />
+                    Sustaino Sphere™
+                  </TabsTrigger>
+                  <TabsTrigger value="advertising" className="flex items-center gap-2">
+                    <Megaphone className="h-4 w-4" />
+                    Advertising
+                  </TabsTrigger>
+                  <TabsTrigger value="tools" className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Tools
+                  </TabsTrigger>
+                </TabsList>
 
-            {/* Security Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {securityMetrics.map((metric, index) => (
-                <Card key={index} className="border-2 hover:border-red-300 transition-colors">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">{metric.name}</p>
-                        <p className="text-2xl font-bold">{metric.score}%</p>
-                        <Badge variant={metric.status === 'Excellent' ? 'default' : 'secondary'} className="mt-1">
-                          {metric.status}
-                        </Badge>
-                      </div>
-                      <div className={`p-2 rounded-full ${metric.score >= 90 ? 'bg-green-100' : 'bg-yellow-100'}`}>
-                        <ShieldCheck className={`h-6 w-6 ${metric.score >= 90 ? 'text-green-600' : 'text-yellow-600'}`} />
-                      </div>
-                    </div>
-                    <Progress value={metric.score} className="h-2" />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                <TabsContent value="esg-calculator" className="mt-6">
+                  <ESGRiskAdjustedCalculator />
+                </TabsContent>
 
-            {/* Vulnerability Assessment */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5 text-orange-600" />
-                    Vulnerability Assessment
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {vulnerabilities.map((vuln, index) => (
-                      <div key={index} className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          {vuln.severity === 'High' ? (
-                            <XCircle className="h-5 w-5 text-red-600" />
-                          ) : vuln.severity === 'Medium' ? (
-                            <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                          ) : (
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                          )}
-                          <div>
-                            <p className="font-medium">{vuln.severity} Severity</p>
-                            <p className="text-sm text-muted-foreground">{vuln.description}</p>
+                <TabsContent value="portfolio" className="space-y-6 mt-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>ESG Performance by Category</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ResponsiveContainer width="100%" height={300}>
+                          <BarChart data={esgScoreData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Bar dataKey="score" fill="#22c55e" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Sustaino Coin Earnings</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="text-center p-6 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/20 dark:to-green-950/20 rounded-lg">
+                          <div className="text-3xl font-bold text-emerald-600 mb-2">2,450</div>
+                          <div className="text-sm text-muted-foreground">Total Sustaino Coins</div>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center p-3 border rounded-lg">
+                            <span>ESG Assessments</span>
+                            <Badge className="bg-emerald-600 text-white">+150 coins</Badge>
+                          </div>
+                          <div className="flex justify-between items-center p-3 border rounded-lg">
+                            <span>Carbon Reports</span>
+                            <Badge className="bg-emerald-600 text-white">+200 coins</Badge>
+                          </div>
+                          <div className="flex justify-between items-center p-3 border rounded-lg">
+                            <span>Efficiency Improvements</span>
+                            <Badge className="bg-emerald-600 text-white">+300 coins</Badge>
                           </div>
                         </div>
-                        <Badge className={`${vuln.severity === 'High' ? 'bg-red-100 text-red-800' : vuln.severity === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
-                          {vuln.count} Issues
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="analytics" className="space-y-6 mt-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg">Risk Assessment</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex justify-between">
+                            <span>Market Risk</span>
+                            <Badge variant="secondary">Low</Badge>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>ESG Risk</span>
+                            <Badge variant="secondary">Very Low</Badge>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Regulatory Risk</span>
+                            <Badge variant="secondary">Low</Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg">Market Trends</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex justify-between">
+                            <span>ESG Demand</span>
+                            <span className="text-green-600 font-medium">↗ +15%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Green Financing</span>
+                            <span className="text-green-600 font-medium">↗ +23%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Carbon Pricing</span>
+                            <span className="text-blue-600 font-medium">↗ +8%</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg">Predictions</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex justify-between">
+                            <span>Next Quarter</span>
+                            <span className="text-green-600 font-medium">+2.1%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Greenium Growth</span>
+                            <span className="text-emerald-600 font-medium">+0.3%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>ESG Adoption</span>
+                            <span className="text-blue-600 font-medium">+18%</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="security" className="space-y-6 mt-6">
+                  {/* Professional Security Visual */}
+                  <Card className="overflow-hidden border-2 border-red-200">
+                    <div className="relative h-64">
+                      <img 
+                        src={securityAnalysisDashboard} 
+                        alt="Professional Security Analysis Dashboard" 
+                        className="w-full h-full object-cover opacity-80"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-purple-500/20" />
+                      <div className="absolute top-4 left-4">
+                        <Badge className="bg-red-500 text-white">
+                          <Shield className="h-4 w-4 mr-2" />
+                          Security Analysis
                         </Badge>
                       </div>
+                    </div>
+                  </Card>
+
+                  {/* Security Overview */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {securityMetrics.map((metric, index) => (
+                      <Card key={index} className="border-2 hover:border-red-300 transition-colors">
+                        <CardContent className="p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">{metric.name}</p>
+                              <p className="text-2xl font-bold">{metric.score}%</p>
+                              <Badge variant={metric.status === 'Excellent' ? 'default' : 'secondary'} className="mt-1">
+                                {metric.status}
+                              </Badge>
+                            </div>
+                            <div className={`p-2 rounded-full ${metric.score >= 90 ? 'bg-green-100' : 'bg-yellow-100'}`}>
+                              <ShieldCheck className={`h-6 w-6 ${metric.score >= 90 ? 'text-green-600' : 'text-yellow-600'}`} />
+                            </div>
+                          </div>
+                          <Progress value={metric.score} className="h-2" />
+                        </CardContent>
+                      </Card>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Lock className="h-5 w-5 text-green-600" />
-                    Security Recommendations
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                      <div>
-                        <p className="font-medium">Multi-Factor Authentication</p>
-                        <p className="text-sm text-muted-foreground">Implement MFA for all admin accounts</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
-                      <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                      <div>
-                        <p className="font-medium">Regular Security Audits</p>
-                        <p className="text-sm text-muted-foreground">Conduct quarterly penetration testing</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg">
-                      <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
-                      <div>
-                        <p className="font-medium">Encryption Upgrade</p>
-                        <p className="text-sm text-muted-foreground">Update to AES-256 encryption standards</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
-                      <CheckCircle className="h-5 w-5 text-orange-600 mt-0.5" />
-                      <div>
-                        <p className="font-medium">Staff Training</p>
-                        <p className="text-sm text-muted-foreground">Security awareness training program</p>
-                      </div>
-                    </div>
+                  {/* Vulnerability Assessment */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <AlertTriangle className="h-5 w-5 text-orange-600" />
+                          Vulnerability Assessment
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {vulnerabilities.map((vuln, index) => (
+                            <div key={index} className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                              <div className="flex items-center gap-3">
+                                {vuln.severity === 'High' ? (
+                                  <XCircle className="h-5 w-5 text-red-600" />
+                                ) : vuln.severity === 'Medium' ? (
+                                  <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                                ) : (
+                                  <CheckCircle className="h-5 w-5 text-green-600" />
+                                )}
+                                <div>
+                                  <p className="font-medium">{vuln.severity} Severity</p>
+                                  <p className="text-sm text-muted-foreground">{vuln.description}</p>
+                                </div>
+                              </div>
+                              <Badge className={`${vuln.severity === 'High' ? 'bg-red-100 text-red-800' : vuln.severity === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
+                                {vuln.count} Issues
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Lock className="h-5 w-5 text-green-600" />
+                          Security Recommendations
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
+                            <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Multi-Factor Authentication</p>
+                              <p className="text-sm text-muted-foreground">Implement MFA for all admin accounts</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
+                            <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Regular Security Audits</p>
+                              <p className="text-sm text-muted-foreground">Conduct quarterly penetration testing</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg">
+                            <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Encryption Upgrade</p>
+                              <p className="text-sm text-muted-foreground">Update to AES-256 encryption standards</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
+                            <CheckCircle className="h-5 w-5 text-orange-600 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Staff Training</p>
+                              <p className="text-sm text-muted-foreground">Security awareness training program</p>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
 
-            {/* Compliance Status */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-blue-600" />
-                  Compliance Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="text-center p-4 bg-green-50 rounded-lg">
-                    <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                    <h3 className="font-bold text-green-800">GDPR</h3>
-                    <p className="text-sm text-green-700">Compliant</p>
-                    <p className="text-xs text-green-600 mt-1">95% Score</p>
-                  </div>
-                  <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                    <AlertTriangle className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                    <h3 className="font-bold text-yellow-800">ISO 27001</h3>
-                    <p className="text-sm text-yellow-700">In Progress</p>
-                    <p className="text-xs text-yellow-600 mt-1">78% Score</p>
-                  </div>
-                  <div className="text-center p-4 bg-blue-50 rounded-lg">
-                    <CheckCircle className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                    <h3 className="font-bold text-blue-800">SOC 2</h3>
-                    <p className="text-sm text-blue-700">Certified</p>
-                    <p className="text-xs text-blue-600 mt-1">92% Score</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="sustano-sphere" className="space-y-6 mt-6">
-            <RevolutionarySustainoSphere />
-          </TabsContent>
-
-          <TabsContent value="tools" className="space-y-6 mt-6">
-            {/* Quick Property Search Tool */}
-            <div className="mb-6">
-              <DashboardQuickSearch />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Link to="/automated-valuation">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <Calculator className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">Automated Valuation</h3>
-                    <p className="text-sm text-muted-foreground">Quick property assessments</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/comprehensive-property-valuation">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <FileText className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">Comprehensive Reports</h3>
-                    <p className="text-sm text-muted-foreground">Detailed valuation reports</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/reality-sales" className="group">
-                <Card className="backdrop-blur-xl bg-gradient-to-br from-blue-500/10 via-cyan-400/10 to-purple-500/10 border-white/20 shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
-                  <CardContent className="p-8 text-center relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5"></div>
-                    <div className="relative">
-                      <div className="mb-6 relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-2xl animate-pulse"></div>
-                        <div className="relative p-6 bg-gradient-to-br from-blue-500/80 to-purple-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
-                          <Gavel className="h-12 w-12 text-white drop-shadow-lg" />
+                  {/* Compliance Status */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <ShieldCheck className="h-5 w-5 text-blue-600" />
+                        Compliance Status
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="text-center p-4 bg-green-50 rounded-lg">
+                          <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                          <h3 className="font-bold text-green-800">GDPR</h3>
+                          <p className="text-sm text-green-700">Compliant</p>
+                          <p className="text-xs text-green-600 mt-1">95% Score</p>
+                        </div>
+                        <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                          <AlertTriangle className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
+                          <h3 className="font-bold text-yellow-800">ISO 27001</h3>
+                          <p className="text-sm text-yellow-700">In Progress</p>
+                          <p className="text-xs text-yellow-600 mt-1">78% Score</p>
+                        </div>
+                        <div className="text-center p-4 bg-blue-50 rounded-lg">
+                          <CheckCircle className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                          <h3 className="font-bold text-blue-800">SOC 2</h3>
+                          <p className="text-sm text-blue-700">Certified</p>
+                          <p className="text-xs text-blue-600 mt-1">92% Score</p>
                         </div>
                       </div>
-                      <h3 className="text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                        Auction-Sphere™
-                      </h3>
-                      <p className="text-slate-600 font-semibold leading-relaxed">
-                        Revolutionary 3D auction platform with AI-powered bidder qualification
-                      </p>
-                      <div className="flex justify-center gap-2 mt-4 flex-wrap">
-                        <Badge className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 text-emerald-700 border-emerald-200 font-bold text-xs">
-                          3D WebGL
-                        </Badge>
-                        <Badge className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-200 font-bold text-xs">
-                          AI Powered
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
 
-              <Link to="/auction-sphere-pos" className="group">
-                <Card className="backdrop-blur-xl bg-gradient-to-br from-emerald-500/10 via-green-400/10 to-blue-500/10 border-white/20 shadow-2xl hover:shadow-emerald-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
-                  <CardContent className="p-8 text-center relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-blue-500/5"></div>
-                    <div className="relative">
-                      <div className="mb-6 relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-blue-400/20 rounded-full blur-2xl animate-pulse"></div>
-                        <div className="relative p-6 bg-gradient-to-br from-emerald-500/80 to-blue-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
-                          <CreditCard className="h-12 w-12 text-white drop-shadow-lg" />
-                        </div>
-                      </div>
-                      <h3 className="text-2xl font-black bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent mb-3">
-                        Auction-Sphere™ POS
-                      </h3>
-                      <p className="text-slate-600 font-semibold leading-relaxed">
-                        Professional point of sale with social media demo slides
-                      </p>
-                      <div className="flex justify-center gap-2 mt-4 flex-wrap">
-                        <Badge className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-700 border-green-200 font-bold text-xs">
-                          Real-Time POS
-                        </Badge>
-                        <Badge className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-200 font-bold text-xs">
-                          Social Media
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                <TabsContent value="sustano-sphere" className="space-y-6 mt-6">
+                  <RevolutionarySustainoSphere />
+                </TabsContent>
 
-              <Link to="/esg-strategy-analysis">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <Leaf className="h-12 w-12 text-emerald-600 mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">ESG Strategy</h3>
-                    <p className="text-sm text-muted-foreground">Sustainability analysis</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-               <Link to="/costa-group-valuations">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <Leaf className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">Costa Group Portfolio</h3>
-                    <p className="text-sm text-muted-foreground">Agricultural property valuations</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/property-valuations">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <Building className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">Property Management</h3>
-                    <p className="text-sm text-muted-foreground">Manage your portfolio</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/work-hub">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <Users className="h-12 w-12 text-orange-600 mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">Work Hub</h3>
-                    <p className="text-sm text-muted-foreground">Collaboration tools</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Card 
-                className="hover:shadow-lg transition-shadow cursor-pointer group"
-                onClick={() => setActiveTab('advertising')}
-              >
-                <CardContent className="p-6 text-center">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full blur-xl animate-pulse group-hover:scale-110 transition-transform duration-500"></div>
-                    <div className="relative p-4 bg-gradient-to-br from-orange-500/80 to-red-600/80 rounded-full shadow-xl mx-auto w-fit backdrop-blur-lg border border-white/20 group-hover:scale-110 transition-transform duration-300">
-                      <Megaphone className="h-8 w-8 text-white drop-shadow-lg" />
-                    </div>
+                <TabsContent value="tools" className="space-y-6 mt-6">
+                  {/* Quick Property Search Tool */}
+                  <div className="mb-6">
+                    <DashboardQuickSearch />
                   </div>
-                  <h3 className="font-semibold mb-2 mt-4 group-hover:text-primary transition-colors">Advertising Valuations</h3>
-                  <p className="text-sm text-muted-foreground">Signage & digital platform valuations</p>
-                  <div className="flex justify-center gap-2 mt-3 flex-wrap">
-                    <Badge className="bg-gradient-to-r from-orange-500/20 to-red-500/20 text-orange-700 border-orange-200 font-bold text-xs">
-                      Billboard Analysis
-                    </Badge>
-                    <Badge className="bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-700 border-red-200 font-bold text-xs">
-                      Digital Platforms
-                    </Badge>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <Link to="/automated-valuation">
+                      <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                        <CardContent className="p-6 text-center">
+                          <Calculator className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                          <h3 className="font-semibold mb-2">Automated Valuation</h3>
+                          <p className="text-sm text-muted-foreground">Quick property assessments</p>
+                        </CardContent>
+                      </Card>
+                    </Link>
+
+                    <Link to="/comprehensive-property-valuation">
+                      <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                        <CardContent className="p-6 text-center">
+                          <FileText className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                          <h3 className="font-semibold mb-2">Comprehensive Reports</h3>
+                          <p className="text-sm text-muted-foreground">Detailed valuation reports</p>
+                        </CardContent>
+                      </Card>
+                    </Link>
+
+                    <Link to="/reality-sales" className="group">
+                      <Card className="backdrop-blur-xl bg-gradient-to-br from-blue-500/10 via-cyan-400/10 to-purple-500/10 border-white/20 shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
+                        <CardContent className="p-8 text-center relative">
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5"></div>
+                          <div className="relative">
+                            <div className="mb-6 relative">
+                              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-2xl animate-pulse"></div>
+                              <div className="relative p-6 bg-gradient-to-br from-blue-500/80 to-purple-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
+                                <Gavel className="h-12 w-12 text-white drop-shadow-lg" />
+                              </div>
+                            </div>
+                            <h3 className="text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                              Auction-Sphere™
+                            </h3>
+                            <p className="text-slate-600 font-semibold leading-relaxed">
+                              Revolutionary 3D auction platform with AI-powered bidder qualification
+                            </p>
+                            <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                              <Badge className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 text-emerald-700 border-emerald-200 font-bold text-xs">
+                                3D WebGL
+                              </Badge>
+                              <Badge className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-200 font-bold text-xs">
+                                AI Powered
+                              </Badge>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+
+                    <Link to="/auction-sphere-pos" className="group">
+                      <Card className="backdrop-blur-xl bg-gradient-to-br from-green-500/10 via-emerald-400/10 to-teal-500/10 border-white/20 shadow-2xl hover:shadow-green-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
+                        <CardContent className="p-8 text-center relative">
+                          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-teal-500/5"></div>
+                          <div className="relative">
+                            <div className="mb-6 relative">
+                              <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-teal-400/20 rounded-full blur-2xl animate-pulse"></div>
+                              <div className="relative p-6 bg-gradient-to-br from-green-500/80 to-teal-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
+                                <CreditCard className="h-12 w-12 text-white drop-shadow-lg" />
+                              </div>
+                            </div>
+                            <h3 className="text-2xl font-black bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent mb-3">
+                              Auction-Sphere POS™
+                            </h3>
+                            <p className="text-slate-600 font-semibold leading-relaxed">
+                              Comprehensive point of sale and auction management system
+                            </p>
+                            <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                              <Badge className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-700 border-green-200 font-bold text-xs">
+                                Real-time
+                              </Badge>
+                              <Badge className="bg-gradient-to-r from-teal-500/20 to-cyan-500/20 text-teal-700 border-teal-200 font-bold text-xs">
+                                Secure
+                              </Badge>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+
+                    <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                      <CardContent className="p-6 text-center">
+                        <TrendingUp className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+                        <h3 className="font-semibold mb-2">Market Analysis</h3>
+                        <p className="text-sm text-muted-foreground">Real-time market insights</p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                      <CardContent className="p-6 text-center">
+                        <Award className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
+                        <h3 className="font-semibold mb-2">Sustaino Marketplace</h3>
+                        <p className="text-sm text-muted-foreground">Trade sustainability tokens</p>
+                      </CardContent>
+                    </Card>
                   </div>
-                </CardContent>
-              </Card>
+                </TabsContent>
 
-              <Link to="/brochures" className="group">
-                <Card className="backdrop-blur-xl bg-gradient-to-br from-pink-500/10 via-red-400/10 to-orange-500/10 border-white/20 shadow-2xl hover:shadow-pink-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
-                  <CardContent className="p-8 text-center relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-orange-500/5"></div>
-                    <div className="relative">
-                      <div className="mb-6 relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 to-orange-400/20 rounded-full blur-2xl animate-pulse"></div>
-                        <div className="relative p-6 bg-gradient-to-br from-pink-500/80 to-orange-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
-                          <FileText className="h-12 w-12 text-white drop-shadow-lg" />
-                        </div>
-                      </div>
-                      <h3 className="text-2xl font-black bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent mb-3">
-                        Marketing Brochures
-                      </h3>
-                      <p className="text-slate-600 font-semibold leading-relaxed">
-                        Professional PDF brochures for email distribution
-                      </p>
-                      <div className="flex justify-center gap-2 mt-4 flex-wrap">
-                        <Badge className="bg-gradient-to-r from-pink-500/20 to-red-500/20 text-pink-700 border-pink-200 font-bold text-xs">
-                          Auction-Sphere™
-                        </Badge>
-                        <Badge className="bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-700 border-orange-200 font-bold text-xs">
-                          Sustaino-Sphere™
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardContent className="p-6 text-center">
-                  <Award className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
-                  <h3 className="font-semibold mb-2">Sustaino Marketplace</h3>
-                  <p className="text-sm text-muted-foreground">Trade sustainability tokens</p>
-                </CardContent>
-              </Card>
+                <TabsContent value="advertising" className="mt-6">
+                  <AdvertisingValuationDashboard />
+                </TabsContent>
+              </Tabs>
             </div>
-          </TabsContent>
-
-          <TabsContent value="advertising" className="mt-6">
-            <AdvertisingValuationDashboard />
           </TabsContent>
         </Tabs>
       </div>
