@@ -33,7 +33,7 @@ const AuctionSphereBrochure = () => {
           </div>
         </div>
         <p className="text-2xl text-gray-700 font-bold mb-4">
-          The World's First International 3D Real Estate Auction Platform
+          Revolutionary International Real Estate Auction Intelligence
         </p>
         <div className="flex justify-center gap-4 flex-wrap">
           <Badge className="bg-green-600 text-white px-4 py-2 text-sm font-bold">
@@ -60,42 +60,42 @@ const AuctionSphereBrochure = () => {
           
           <div className="space-y-4">
             <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <Building2 className="h-6 w-6 text-blue-600 mt-1" />
+              <Brain className="h-6 w-6 text-blue-600 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900">3D WebGL Visualization</h3>
-                <p className="text-sm text-gray-700">Immersive property tours with real-time bidding interface</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
-              <Brain className="h-6 w-6 text-green-600 mt-1" />
-              <div>
-                <h3 className="font-bold text-gray-900">AI Bidder Qualification</h3>
+                <h3 className="font-bold text-gray-900">Qualifying Bidders</h3>
                 <p className="text-sm text-gray-700">95% accuracy in financial assessment and risk analysis</p>
               </div>
             </div>
             
-            <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
-              <Globe className="h-6 w-6 text-orange-600 mt-1" />
+            <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
+              <Award className="h-6 w-6 text-green-600 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900">International FDI Support</h3>
-                <p className="text-sm text-gray-700">FIRB compliant with multi-currency exchange</p>
+                <h3 className="font-bold text-gray-900">Qualified Property Valuations</h3>
+                <p className="text-sm text-gray-700">Ready for mortgage purposes with certified assessments</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
+              <BarChart3 className="h-6 w-6 text-orange-600 mt-1" />
+              <div>
+                <h3 className="font-bold text-gray-900">Cost Analysis with Bidders</h3>
+                <p className="text-sm text-gray-700">Real-time financial modeling and bidding cost calculations</p>
               </div>
             </div>
             
             <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
-              <BarChart3 className="h-6 w-6 text-purple-600 mt-1" />
+              <DollarSign className="h-6 w-6 text-purple-600 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900">Real-Time Market Analytics</h3>
-                <p className="text-sm text-gray-700">150+ data points with predictive intelligence</p>
+                <h3 className="font-bold text-gray-900">FDI Currency Exchanges</h3>
+                <p className="text-sm text-gray-700">FIRB compliant with multi-currency exchange support</p>
               </div>
             </div>
             
             <div className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
               <Shield className="h-6 w-6 text-red-600 mt-1" />
               <div>
-                <h3 className="font-bold text-gray-900">Enterprise Security</h3>
-                <p className="text-sm text-gray-700">Bank-grade encryption with ASIC compliance</p>
+                <h3 className="font-bold text-gray-900">Blockchain Enhanced by AI Intelligence</h3>
+                <p className="text-sm text-gray-700">Immutable records with intelligent automation and security</p>
               </div>
             </div>
           </div>
@@ -234,7 +234,7 @@ const AuctionSphereBrochure = () => {
             <div className="space-y-2 mb-4">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-300" />
-                <span className="text-sm">Free 30-day trial</span>
+                <span className="text-sm">Free 3-day trial</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-300" />
