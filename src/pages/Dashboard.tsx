@@ -44,7 +44,8 @@ import {
   AlertTriangle,
   CheckCircle,
   XCircle,
-  Lock
+  Lock,
+  CreditCard
 } from 'lucide-react';
 import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
 import DashboardQuickSearch from '@/components/DashboardQuickSearch';
@@ -655,6 +656,66 @@ const Dashboard = () => {
                     <FileText className="h-12 w-12 text-green-600 mx-auto mb-4" />
                     <h3 className="font-semibold mb-2">Comprehensive Reports</h3>
                     <p className="text-sm text-muted-foreground">Detailed valuation reports</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/reality-sales" className="group">
+                <Card className="backdrop-blur-xl bg-gradient-to-br from-blue-500/10 via-cyan-400/10 to-purple-500/10 border-white/20 shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
+                  <CardContent className="p-8 text-center relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5"></div>
+                    <div className="relative">
+                      <div className="mb-6 relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-2xl animate-pulse"></div>
+                        <div className="relative p-6 bg-gradient-to-br from-blue-500/80 to-purple-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
+                          <Gavel className="h-12 w-12 text-white drop-shadow-lg" />
+                        </div>
+                      </div>
+                      <h3 className="text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                        Auction-Sphere™
+                      </h3>
+                      <p className="text-slate-600 font-semibold leading-relaxed">
+                        Revolutionary 3D auction platform with AI-powered bidder qualification
+                      </p>
+                      <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                        <Badge className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 text-emerald-700 border-emerald-200 font-bold text-xs">
+                          3D WebGL
+                        </Badge>
+                        <Badge className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-200 font-bold text-xs">
+                          AI Powered
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link to="/auction-sphere-pos" className="group">
+                <Card className="backdrop-blur-xl bg-gradient-to-br from-emerald-500/10 via-green-400/10 to-blue-500/10 border-white/20 shadow-2xl hover:shadow-emerald-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
+                  <CardContent className="p-8 text-center relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-blue-500/5"></div>
+                    <div className="relative">
+                      <div className="mb-6 relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-blue-400/20 rounded-full blur-2xl animate-pulse"></div>
+                        <div className="relative p-6 bg-gradient-to-br from-emerald-500/80 to-blue-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
+                          <CreditCard className="h-12 w-12 text-white drop-shadow-lg" />
+                        </div>
+                      </div>
+                      <h3 className="text-2xl font-black bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent mb-3">
+                        Auction-Sphere™ POS
+                      </h3>
+                      <p className="text-slate-600 font-semibold leading-relaxed">
+                        Professional point of sale with social media demo slides
+                      </p>
+                      <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                        <Badge className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-700 border-green-200 font-bold text-xs">
+                          Real-Time POS
+                        </Badge>
+                        <Badge className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-200 font-bold text-xs">
+                          Social Media
+                        </Badge>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </Link>
