@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   ArrowLeft, Mail, Printer, FileText, Building, 
   TrendingUp, Settings, BarChart3, Leaf, Folder,
-  Gavel, Crown
+  Gavel, Crown, MapPin, TreePine
 } from 'lucide-react';
 import AuctionSphereBrochure from '@/components/AuctionSphereBrochure';
 import SustanoSphereBrochure from '@/components/SustanoSphereBrochure';
@@ -21,6 +21,8 @@ import RentReversionsBrochure from '@/components/brochures/RentReversionsBrochur
 import PlantEquipmentBrochure from '@/components/brochures/PlantEquipmentBrochure';
 import FinancialReportingBrochure from '@/components/brochures/FinancialReportingBrochure';
 import ESGAssessmentBrochure from '@/components/brochures/ESGAssessmentBrochure';
+import DevelopmentSiteBrochure from '@/components/brochures/DevelopmentSiteBrochure';
+import ESDBrochure from '@/components/brochures/ESDBrochure';
 
 type BrochureType = 
   | 'auction-sphere' 
@@ -29,7 +31,9 @@ type BrochureType =
   | 'rent-reversions'
   | 'plant-equipment'
   | 'financial-reporting'
-  | 'esg-assessment';
+  | 'esg-assessment'
+  | 'development-sites'
+  | 'esd-services';
 
 const BrochureViewer = () => {
   const [activeBrochure, setActiveBrochure] = useState<BrochureType | null>(null);
@@ -117,13 +121,41 @@ Professional Property Services & Valuations
           description: 'Specialized plant, machinery & equipment valuations',
           icon: Settings,
           color: 'orange'
+        },
+        {
+          id: 'development-sites' as BrochureType,
+          title: 'Development Sites',
+          description: 'Expert development site analysis and feasibility assessment',
+          icon: MapPin,
+          color: 'blue'
+        }
+      ]
+    },
+    {
+      title: "Environmental & Sustainability",
+      icon: TreePine,
+      color: "from-green-600 to-blue-600",
+      brochures: [
+        {
+          id: 'esg-assessment' as BrochureType,
+          title: 'ESG Assessment',
+          description: 'Environmental, social & governance property assessment',
+          icon: Leaf,
+          color: 'green'
+        },
+        {
+          id: 'esd-services' as BrochureType,
+          title: 'ESD Services',
+          description: 'Ecologically sustainable development and green building solutions',
+          icon: TreePine,
+          color: 'green'
         }
       ]
     },
     {
       title: "Advisory & Reporting",
       icon: FileText,
-      color: "from-green-600 to-purple-600",
+      color: "from-purple-600 to-blue-600",
       brochures: [
         {
           id: 'financial-reporting' as BrochureType,
@@ -131,13 +163,6 @@ Professional Property Services & Valuations
           description: 'Professional financial analysis and reporting solutions',
           icon: BarChart3,
           color: 'purple'
-        },
-        {
-          id: 'esg-assessment' as BrochureType,
-          title: 'ESG Assessment',
-          description: 'Environmental, social & governance property assessment',
-          icon: Leaf,
-          color: 'green'
         }
       ]
     }
@@ -159,6 +184,10 @@ Professional Property Services & Valuations
         return <FinancialReportingBrochure />;
       case 'esg-assessment':
         return <ESGAssessmentBrochure />;
+      case 'development-sites':
+        return <DevelopmentSiteBrochure />;
+      case 'esd-services':
+        return <ESDBrochure />;
       default:
         return null;
     }
