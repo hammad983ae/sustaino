@@ -38,6 +38,7 @@ import RealitySales from "./pages/RealitySales";
 import AuctionSpherePOSPage from "./pages/AuctionSpherePOS";
 import AdvertisingPlatforms from "./pages/AdvertisingPlatforms";
 import BrochureViewer from "./pages/BrochureViewer";
+import DevelopmentSiteValuation from "./pages/DevelopmentSiteValuation";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -91,6 +92,7 @@ const App = () => (
                 <Route path="/auction-sphere-pos" element={<AuctionSpherePOSPage />} />
                 <Route path="/advertising-platforms" element={<AdvertisingPlatforms />} />
                 <Route path="/brochures" element={<BrochureViewer />} />
+                <Route path="/development-site-valuation" element={<DevelopmentSiteValuation />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
