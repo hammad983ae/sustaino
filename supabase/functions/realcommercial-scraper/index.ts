@@ -181,8 +181,9 @@ async function performBulkScrape(
       const pageResults = await scrapeSearchPages(searchUrl, max_pages, listingType);
       results.push(...pageResults);
       
-      // Rate limiting - be respectful to the server
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Enhanced rate limiting between listing types - be very respectful
+      console.log(`Completed ${listingType}, waiting 30 seconds before next listing type...`);
+      await new Promise(resolve => setTimeout(resolve, 30000)); // 30 seconds between listing types
       
     } catch (error) {
       const errorMsg = `Failed to scrape ${listingType}: ${error instanceof Error ? error.message : String(error)}`;
@@ -229,8 +230,9 @@ async function scrapeSearchPages(baseUrl: string, maxPages: number, listingType:
       properties.push(...pageProperties);
       console.log(`Page ${page}: Found ${pageProperties.length} properties (total: ${properties.length})`);
       
-      // Rate limiting between pages
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Enhanced rate limiting between pages - much longer delay
+      console.log(`Waiting 15 seconds before next page...`);
+      await new Promise(resolve => setTimeout(resolve, 15000)); // 15 seconds between pages
       
     } catch (error) {
       console.error(`Error scraping page ${page}:`, error);
@@ -632,31 +634,96 @@ async function savePropertiesToDatabase(properties: PropertyListing[], supabase:
   return savedCount;
 }
 
-async function fetchWithRetry(url: string, maxRetries = 3): Promise<Response> {
+// Enhanced rate limiting and user agent rotation
+const USER_AGENTS = [
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0"
+];
+
+let lastRequestTime = 0;
+let requestCount = 0;
+const REQUEST_WINDOW = 60000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 5; // Very conservative
+
+function getRandomUserAgent(): string {
+  return USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
+}
+
+async function respectRateLimit(): Promise<void> {
+  const now = Date.now();
+  
+  // Reset request count if window has passed
+  if (now - lastRequestTime > REQUEST_WINDOW) {
+    requestCount = 0;
+    lastRequestTime = now;
+  }
+  
+  // Check if we've exceeded rate limit
+  if (requestCount >= MAX_REQUESTS_PER_WINDOW) {
+    const waitTime = REQUEST_WINDOW - (now - lastRequestTime) + 5000; // Extra 5 seconds
+    console.log(`Rate limit reached. Waiting ${waitTime}ms`);
+    await new Promise(resolve => setTimeout(resolve, waitTime));
+    requestCount = 0;
+    lastRequestTime = Date.now();
+  }
+  
+  requestCount++;
+  
+  // Add significant delay between requests
+  const timeSinceLastRequest = now - lastRequestTime;
+  const minimumDelay = 5000; // 5 seconds minimum
+  if (timeSinceLastRequest < minimumDelay) {
+    await new Promise(resolve => setTimeout(resolve, minimumDelay - timeSinceLastRequest));
+  }
+  
+  lastRequestTime = Date.now();
+}
+
+async function fetchWithRetry(url: string, maxRetries = 5): Promise<Response> {
   for (let i = 0; i < maxRetries; i++) {
     try {
+      // Apply rate limiting before each request
+      await respectRateLimit();
+      
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      const timeout = setTimeout(() => controller.abort(), 45000); // 45 second timeout
+      
+      console.log(`Fetch attempt ${i + 1} for ${url}`);
       
       const response = await fetch(url, {
         signal: controller.signal,
         headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          "User-Agent": getRandomUserAgent(),
           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
           "Accept-Language": "en-US,en;q=0.5",
           "Accept-Encoding": "gzip, deflate, br",
           "DNT": "1",
           "Connection": "keep-alive",
           "Upgrade-Insecure-Requests": "1",
+          "Sec-Fetch-Dest": "document",
+          "Sec-Fetch-Mode": "navigate",
+          "Sec-Fetch-Site": "none",
+          "Cache-Control": "max-age=0",
         },
       });
       
       clearTimeout(timeout);
       
+      if (response.status === 429) {
+        console.log(`Rate limited (429) on attempt ${i + 1}. Waiting longer...`);
+        const waitTime = Math.min(30000 * Math.pow(2, i), 300000); // Max 5 minutes
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+        continue;
+      }
+      
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
+      console.log(`Successfully fetched ${url} on attempt ${i + 1}`);
       return response;
       
     } catch (error) {
@@ -666,12 +733,18 @@ async function fetchWithRetry(url: string, maxRetries = 3): Promise<Response> {
         throw error;
       }
       
-      // Exponential backoff
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+      // Progressive backoff with jitter
+      const baseDelay = 5000; // 5 seconds base
+      const backoffDelay = baseDelay * Math.pow(2, i);
+      const jitter = Math.random() * 2000; // Up to 2 seconds jitter
+      const totalDelay = Math.min(backoffDelay + jitter, 60000); // Max 1 minute
+      
+      console.log(`Waiting ${totalDelay}ms before retry ${i + 2}`);
+      await new Promise(resolve => setTimeout(resolve, totalDelay));
     }
   }
   
-  throw new Error("All fetch attempts failed");
+  throw new Error("All fetch attempts failed after rate limiting and retries");
 }
 
 function extractNumericPrice(priceStr: string): number | undefined {
