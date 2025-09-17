@@ -790,6 +790,36 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
 
+              <Link to="/brochures" className="group">
+                <Card className="backdrop-blur-xl bg-gradient-to-br from-pink-500/10 via-red-400/10 to-orange-500/10 border-white/20 shadow-2xl hover:shadow-pink-500/20 transition-all duration-500 hover:scale-105 rounded-3xl overflow-hidden">
+                  <CardContent className="p-8 text-center relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-orange-500/5"></div>
+                    <div className="relative">
+                      <div className="mb-6 relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 to-orange-400/20 rounded-full blur-2xl animate-pulse"></div>
+                        <div className="relative p-6 bg-gradient-to-br from-pink-500/80 to-orange-600/80 rounded-full shadow-2xl mx-auto w-fit backdrop-blur-lg border border-white/20">
+                          <FileText className="h-12 w-12 text-white drop-shadow-lg" />
+                        </div>
+                      </div>
+                      <h3 className="text-2xl font-black bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent mb-3">
+                        Marketing Brochures
+                      </h3>
+                      <p className="text-slate-600 font-semibold leading-relaxed">
+                        Professional PDF brochures for email distribution
+                      </p>
+                      <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                        <Badge className="bg-gradient-to-r from-pink-500/20 to-red-500/20 text-pink-700 border-pink-200 font-bold text-xs">
+                          Auction-Sphere™
+                        </Badge>
+                        <Badge className="bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-700 border-orange-200 font-bold text-xs">
+                          Sustaino-Sphere™
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
               <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                 <CardContent className="p-6 text-center">
                   <Award className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
