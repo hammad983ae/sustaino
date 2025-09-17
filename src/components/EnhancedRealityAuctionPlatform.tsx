@@ -346,7 +346,12 @@ const EnhancedRealityAuctionPlatform = () => {
             <Card className="backdrop-blur-lg bg-card/80 border-primary/20 shadow-2xl overflow-hidden">
               <div className="relative">
                 {/* Property Image with overlay effects */}
-                <div className="w-full h-80 bg-gradient-to-br from-primary/30 via-primary/10 to-secondary/20 relative overflow-hidden">
+                <div className="w-full h-80 relative overflow-hidden">
+                  <img 
+                    src="/src/assets/demo-property-image.png" 
+                    alt="Property exterior view"
+                    className="w-full h-full object-cover"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute top-4 right-4 flex gap-2">
                     <Badge variant={currentAuction.isLive ? "destructive" : "secondary"} className="animate-pulse">
@@ -360,12 +365,6 @@ const EnhancedRealityAuctionPlatform = () => {
                   <div className="absolute bottom-4 left-4 text-white">
                     <h2 className="text-2xl font-bold">{currentAuction.address}</h2>
                     <p className="text-lg opacity-90">{currentAuction.propertyType}</p>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center text-white/50">
-                      <Camera className="h-16 w-16 mx-auto mb-2 animate-pulse" />
-                      <p className="text-sm">Property Images</p>
-                    </div>
                   </div>
                 </div>
 
