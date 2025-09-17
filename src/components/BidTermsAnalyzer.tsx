@@ -45,8 +45,9 @@ import { cn } from '@/lib/utils';
 import { 
   Calculator, Calendar as CalendarIcon, DollarSign, Clock, AlertTriangle, 
   TrendingUp, Shield, CheckCircle, XCircle, Star, Target, BarChart3,
-  FileText, Gavel, Users, Award, Zap
+  FileText, Gavel, Users, Award, Zap, UserCheck
 } from 'lucide-react';
+import BidderQualification from './BidderQualification';
 
 interface BidTerms {
   id: string;
@@ -318,9 +319,10 @@ const BidTermsAnalyzer = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="bids" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="bids">Current Bids</TabsTrigger>
               <TabsTrigger value="add-bid">Add New Bid</TabsTrigger>
+              <TabsTrigger value="qualification">Qualification</TabsTrigger>
               <TabsTrigger value="comparison">Comparison</TabsTrigger>
               <TabsTrigger value="analysis">Analysis</TabsTrigger>
             </TabsList>
@@ -585,6 +587,16 @@ const BidTermsAnalyzer = () => {
                   </Button>
                 </div>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="qualification" className="space-y-4">
+              <BidderQualification 
+                propertyValue={2450000}
+                minimumDeposit={245000}
+                onQualificationComplete={(qualification) => {
+                  console.log('Qualification completed:', qualification);
+                }}
+              />
             </TabsContent>
 
             <TabsContent value="comparison" className="space-y-6">
