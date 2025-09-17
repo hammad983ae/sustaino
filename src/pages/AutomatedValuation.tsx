@@ -667,38 +667,6 @@ export default function AutomatedValuation() {
                 <span>✨ Cleaner Interface • Better Organization • More Power</span>
               </div>
             </div>
-
-              <TabsContent value="blockchain" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Zap className="h-5 w-5 text-primary" />
-                      Blockchain Hub
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Access blockchain integrations and cryptocurrency trading tools.
-                    </p>
-                    <Link to="/crypto-trading">
-                      <Button className="w-full">Access Blockchain Hub</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="mortgage">
-                <MortgageBrokerTab />
-              </TabsContent>
-
-              <TabsContent value="sales">
-                <RealitySalesTab />
-              </TabsContent>
-
-              <TabsContent value="management">
-                <PropertyManagementTab />
-              </TabsContent>
-            </Tabs>
           </div>
         </div>
       </div>
