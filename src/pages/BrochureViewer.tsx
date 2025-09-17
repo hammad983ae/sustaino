@@ -8,198 +8,303 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Download, Eye, FileText, Mail } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { 
+  ArrowLeft, Mail, Printer, FileText, Building, 
+  TrendingUp, Settings, BarChart3, Leaf, Folder,
+  Gavel, Crown
+} from 'lucide-react';
 import AuctionSphereBrochure from '@/components/AuctionSphereBrochure';
 import SustanoSphereBrochure from '@/components/SustanoSphereBrochure';
+import PropertyValuationsBrochure from '@/components/brochures/PropertyValuationsBrochure';
+import RentReversionsBrochure from '@/components/brochures/RentReversionsBrochure';
+import PlantEquipmentBrochure from '@/components/brochures/PlantEquipmentBrochure';
+import FinancialReportingBrochure from '@/components/brochures/FinancialReportingBrochure';
+import ESGAssessmentBrochure from '@/components/brochures/ESGAssessmentBrochure';
+
+type BrochureType = 
+  | 'auction-sphere' 
+  | 'sustano-sphere' 
+  | 'property-valuations'
+  | 'rent-reversions'
+  | 'plant-equipment'
+  | 'financial-reporting'
+  | 'esg-assessment';
 
 const BrochureViewer = () => {
-  const navigate = useNavigate();
-  const [activeBrochure, setActiveBrochure] = useState<'auction' | 'sustaino' | null>(null);
+  const [activeBrochure, setActiveBrochure] = useState<BrochureType | null>(null);
 
   const handlePrint = () => {
     window.print();
   };
 
   const handleEmailInfo = () => {
-    const subject = activeBrochure === 'auction' 
-      ? 'Auction-Sphere™ - Revolutionary 3D Real Estate Auction Platform'
-      : 'Sustaino-Sphere™ - ESG & Climate Risk Assessment Platform';
-    
-    const body = activeBrochure === 'auction'
-      ? 'Dear Client,\n\nPlease find attached our comprehensive brochure for Auction-Sphere™, the world\'s first international 3D real estate auction platform.\n\nKey Features:\n- 3D WebGL Visualization\n- AI Bidder Qualification\n- International FDI Support\n- Multi-Currency Exchange\n- Real-Time Market Analytics\n\nWe would be delighted to schedule a demonstration at your convenience.\n\nBest regards,\nDeLorenzo Property Group'
-      : 'Dear Client,\n\nPlease find attached our comprehensive brochure for Sustaino-Sphere™, our revolutionary ESG & Climate Risk Assessment Platform.\n\nKey Features:\n- Comprehensive ESG Scoring\n- Climate Risk Analysis\n- Market Intelligence\n- Financial Impact Assessment\n- Regulatory Compliance\n\nWe would be pleased to discuss how this can transform your sustainability strategy.\n\nBest regards,\nDeLorenzo Property Group';
+    const subject = encodeURIComponent('Professional Property Services Brochures - DeLorenzo Property Group');
+    const body = encodeURIComponent(`Dear Valued Client,
 
-    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+Please find attached our comprehensive property services brochures covering:
+
+PREMIUM PLATFORMS:
+• Auction-Sphere™ - Revolutionary international real estate auction intelligence
+• Sustaino-Sphere™ - ESG and climate risk assessment platform
+
+CORE SERVICES:
+• Property Valuations - All asset classes and purposes
+• Rent Reversions - Expert rental assessment and reviews
+• Plant & Equipment - Specialized industrial equipment valuations
+• Financial Reporting - Professional AASB compliant reporting
+• ESG Assessment - Environmental, social & governance analysis
+
+Each brochure contains detailed information about our services, methodologies, and professional standards.
+
+For more information or to schedule a consultation, please contact us:
+📧 info@delorenzopropertygroup.com
+📞 0417 693 838
+
+Best regards,
+DeLorenzo Property Group
+Professional Property Services & Valuations
+
+© 2025 DeLorenzo Property Group Pty Ltd. All rights reserved.`);
+    
+    window.open(`mailto:?subject=${subject}&body=${body}`);
+  };
+
+  const brochureCategories = [
+    {
+      title: "Premium Platforms",
+      icon: Crown,
+      color: "from-purple-600 to-blue-600",
+      brochures: [
+        {
+          id: 'auction-sphere' as BrochureType,
+          title: 'Auction-Sphere™',
+          description: 'Revolutionary international real estate auction intelligence',
+          icon: Gavel,
+          color: 'blue'
+        },
+        {
+          id: 'sustano-sphere' as BrochureType,
+          title: 'Sustaino-Sphere™',
+          description: 'ESG and climate risk assessment platform',
+          icon: Leaf,
+          color: 'green'
+        }
+      ]
+    },
+    {
+      title: "Core Valuation Services",
+      icon: Building,
+      color: "from-blue-600 to-green-600",
+      brochures: [
+        {
+          id: 'property-valuations' as BrochureType,
+          title: 'Property Valuations',
+          description: 'Comprehensive valuations across all property types',
+          icon: Building,
+          color: 'blue'
+        },
+        {
+          id: 'rent-reversions' as BrochureType,
+          title: 'Rent Reversions',
+          description: 'Expert rental valuation and market review services',
+          icon: TrendingUp,
+          color: 'green'
+        },
+        {
+          id: 'plant-equipment' as BrochureType,
+          title: 'Plant & Equipment',
+          description: 'Specialized plant, machinery & equipment valuations',
+          icon: Settings,
+          color: 'orange'
+        }
+      ]
+    },
+    {
+      title: "Advisory & Reporting",
+      icon: FileText,
+      color: "from-green-600 to-purple-600",
+      brochures: [
+        {
+          id: 'financial-reporting' as BrochureType,
+          title: 'Financial Reporting',
+          description: 'Professional financial analysis and reporting solutions',
+          icon: BarChart3,
+          color: 'purple'
+        },
+        {
+          id: 'esg-assessment' as BrochureType,
+          title: 'ESG Assessment',
+          description: 'Environmental, social & governance property assessment',
+          icon: Leaf,
+          color: 'green'
+        }
+      ]
+    }
+  ];
+
+  const renderBrochure = () => {
+    switch (activeBrochure) {
+      case 'auction-sphere':
+        return <AuctionSphereBrochure />;
+      case 'sustano-sphere':
+        return <SustanoSphereBrochure />;
+      case 'property-valuations':
+        return <PropertyValuationsBrochure />;
+      case 'rent-reversions':
+        return <RentReversionsBrochure />;
+      case 'plant-equipment':
+        return <PlantEquipmentBrochure />;
+      case 'financial-reporting':
+        return <FinancialReportingBrochure />;
+      case 'esg-assessment':
+        return <ESGAssessmentBrochure />;
+      default:
+        return null;
+    }
+  };
+
+  const getColorClasses = (color: string) => {
+    const colors = {
+      blue: 'from-blue-500/10 to-blue-600/10 border-blue-200 text-blue-700',
+      green: 'from-green-500/10 to-green-600/10 border-green-200 text-green-700',
+      orange: 'from-orange-500/10 to-orange-600/10 border-orange-200 text-orange-700',
+      purple: 'from-purple-500/10 to-purple-600/10 border-purple-200 text-purple-700',
+      red: 'from-red-500/10 to-red-600/10 border-red-200 text-red-700'
+    };
+    return colors[color as keyof typeof colors] || colors.blue;
   };
 
   if (activeBrochure) {
     return (
       <div className="min-h-screen bg-gray-50">
-        {/* Print Controls - Hidden in print */}
-        <div className="print:hidden bg-white shadow-sm border-b p-4 sticky top-0 z-10">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <Button
-              onClick={() => setActiveBrochure(null)}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Selection
+        {/* Header Controls */}
+        <div className="bg-white shadow-sm border-b p-4 flex items-center justify-between print:hidden">
+          <Button 
+            onClick={() => setActiveBrochure(null)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Brochures
+          </Button>
+          
+          <div className="flex items-center gap-3">
+            <Button onClick={handleEmailInfo} variant="outline" size="sm">
+              <Mail className="h-4 w-4 mr-2" />
+              Email Info
             </Button>
-            
-            <div className="flex items-center gap-4">
-              <span className="font-semibold text-gray-700">
-                {activeBrochure === 'auction' ? 'Auction-Sphere™' : 'Sustaino-Sphere™'} Brochure
-              </span>
-              
-              <div className="flex gap-2">
-                <Button onClick={handleEmailInfo} className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  Email Template
-                </Button>
-                <Button onClick={handlePrint} className="flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  Print/Save PDF
-                </Button>
-              </div>
-            </div>
+            <Button onClick={handlePrint} variant="default" size="sm">
+              <Printer className="h-4 w-4 mr-2" />
+              Print/Save PDF
+            </Button>
           </div>
         </div>
-
+        
         {/* Brochure Content */}
         <div className="print:p-0">
-          {activeBrochure === 'auction' ? <AuctionSphereBrochure /> : <SustanoSphereBrochure />}
+          {renderBrochure()}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 p-6">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <Button
-            onClick={() => navigate('/dashboard')}
-            variant="outline"
-            className="border-slate-600 text-slate-300 hover:bg-slate-700 mb-6"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
-          </Button>
-          
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">Professional Marketing Brochures</h1>
-            <p className="text-xl text-slate-300">
-              Download PDF-ready brochures for email distribution
-            </p>
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-black text-gray-900 mb-4">
+            Professional Brochure Library
+          </h1>
+          <p className="text-xl text-gray-600 mb-6">
+            Comprehensive property services documentation for client distribution
+          </p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <Badge className="bg-blue-600 text-white px-4 py-2">
+              📄 PDF Ready
+            </Badge>
+            <Badge className="bg-green-600 text-white px-4 py-2">
+              📧 Email Distribution
+            </Badge>
+            <Badge className="bg-purple-600 text-white px-4 py-2">
+              🖨️ Print Optimized
+            </Badge>
           </div>
         </div>
 
-        {/* Brochure Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
-          {/* Auction-Sphere Brochure */}
-          <Card className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border-slate-700/50 shadow-2xl hover:scale-105 transition-transform">
-            <CardHeader>
-              <CardTitle className="text-white text-2xl flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
-                  <FileText className="h-6 w-6 text-white" />
+        {/* Brochure Categories */}
+        <div className="space-y-12">
+          {brochureCategories.map((category, categoryIndex) => (
+            <div key={categoryIndex}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-full flex items-center justify-center`}>
+                  <category.icon className="h-6 w-6 text-white" />
                 </div>
-                Auction-Sphere™
-              </CardTitle>
-              <p className="text-slate-300">
-                Revolutionary 3D Real Estate Auction Platform
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="bg-slate-700/50 rounded-lg p-4">
-                <h4 className="font-bold text-white mb-2">Brochure Contents:</h4>
-                <ul className="text-sm text-slate-300 space-y-1">
-                  <li>• 3D WebGL Visualization Technology</li>
-                  <li>• AI-Powered Bidder Qualification</li>
-                  <li>• International FDI Support</li>
-                  <li>• Multi-Currency Exchange</li>
-                  <li>• Global Platform Statistics</li>
-                  <li>• Contact Information & CTA</li>
-                </ul>
+                <h2 className="text-3xl font-bold text-gray-900">{category.title}</h2>
               </div>
               
-              <div className="flex gap-2">
-                <Button 
-                  onClick={() => setActiveBrochure('auction')}
-                  className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                >
-                  <Eye className="h-4 w-4 mr-2" />
-                  View & Download
-                </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.brochures.map((brochure) => (
+                  <Card 
+                    key={brochure.id}
+                    className={`hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105 bg-gradient-to-br ${getColorClasses(brochure.color)} border-2`}
+                    onClick={() => setActiveBrochure(brochure.id)}
+                  >
+                    <CardHeader className="text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-white/80 rounded-full flex items-center justify-center shadow-lg">
+                        <brochure.icon className={`h-8 w-8 text-${brochure.color}-600`} />
+                      </div>
+                      <CardTitle className="text-xl font-bold text-gray-900">
+                        {brochure.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-center">
+                      <p className="text-gray-700 mb-4 leading-relaxed">
+                        {brochure.description}
+                      </p>
+                      <Button className="w-full">
+                        <FileText className="w-4 h-4 mr-2" />
+                        View & Download
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Sustaino-Sphere Brochure */}
-          <Card className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border-slate-700/50 shadow-2xl hover:scale-105 transition-transform">
-            <CardHeader>
-              <CardTitle className="text-white text-2xl flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-blue-600 rounded-full flex items-center justify-center">
-                  <FileText className="h-6 w-6 text-white" />
-                </div>
-                Sustaino-Sphere™
-              </CardTitle>
-              <p className="text-slate-300">
-                ESG & Climate Risk Assessment Platform
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="bg-slate-700/50 rounded-lg p-4">
-                <h4 className="font-bold text-white mb-2">Brochure Contents:</h4>
-                <ul className="text-sm text-slate-300 space-y-1">
-                  <li>• Comprehensive ESG Scoring</li>
-                  <li>• Climate Risk Analysis</li>
-                  <li>• Market Intelligence & Analytics</li>
-                  <li>• Financial Impact Assessment</li>
-                  <li>• Regulatory Compliance Features</li>
-                  <li>• Contact Information & CTA</li>
-                </ul>
-              </div>
-              
-              <div className="flex gap-2">
-                <Button 
-                  onClick={() => setActiveBrochure('sustaino')}
-                  className="flex-1 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700"
-                >
-                  <Eye className="h-4 w-4 mr-2" />
-                  View & Download
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          ))}
         </div>
 
         {/* Instructions */}
-        <Card className="mt-8 bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-xl border-blue-500/20 shadow-2xl">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-white mb-4">How to Create PDF Brochures:</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
-              <div className="text-center">
-                <div className="text-2xl mb-2">1️⃣</div>
-                <h4 className="font-bold mb-2">Select Brochure</h4>
-                <p className="text-sm">Choose either Auction-Sphere or Sustaino-Sphere brochure</p>
+        <div className="mt-16 bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+            <Folder className="h-6 w-6 text-blue-600" />
+            How to Use Professional Brochures
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-blue-600 font-bold text-lg">1</span>
               </div>
-              <div className="text-center">
-                <div className="text-2xl mb-2">2️⃣</div>
-                <h4 className="font-bold mb-2">Print to PDF</h4>
-                <p className="text-sm">Click "Print/Save PDF" and select "Save as PDF" in your browser</p>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl mb-2">3️⃣</div>
-                <h4 className="font-bold mb-2">Email to Clients</h4>
-                <p className="text-sm">Use the email template button for professional outreach</p>
-              </div>
+              <h4 className="font-semibold text-gray-900 mb-2">Select Brochure</h4>
+              <p className="text-sm text-gray-600">Choose the appropriate service brochure from the categories above</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-green-600 font-bold text-lg">2</span>
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-2">Generate PDF</h4>
+              <p className="text-sm text-gray-600">Use "Print/Save PDF" to create professional documents for distribution</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-purple-600 font-bold text-lg">3</span>
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-2">Email Distribution</h4>
+              <p className="text-sm text-gray-600">Use "Email Info" for pre-formatted client communication templates</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
