@@ -23,6 +23,7 @@ import MortgageBrokerTab from "@/components/MortgageBrokerTab";
 import RealitySalesTab from "@/components/RealitySalesTab";
 import PropertyManagementTab from "@/components/PropertyManagementTab";
 import { RealCommercialScraper } from "@/components/RealCommercialScraper";
+import { ValuationProvider } from "@/contexts/ValuationContext";
 
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
@@ -579,13 +580,15 @@ export default function AutomatedValuation() {
     case "streamlinedAssessment":
       const quickSetupData = JSON.parse(localStorage.getItem('quickSetupData') || '{}');
       return (
-        <div className="min-h-screen">
-          <StreamlinedPropertyAssessment
-            onComplete={handleStreamlinedComplete}
-            initialData={quickSetupData}
-          />
-          <AIAssistantToggle context="Streamlined Assessment" />
-        </div>
+        <ValuationProvider>
+          <div className="min-h-screen">
+            <StreamlinedPropertyAssessment
+              onComplete={handleStreamlinedComplete}
+              initialData={quickSetupData}
+            />
+            <AIAssistantToggle context="Streamlined Assessment" />
+          </div>
+        </ValuationProvider>
       );
 
     case "propertyDetails":
