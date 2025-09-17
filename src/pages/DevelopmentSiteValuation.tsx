@@ -1,25 +1,21 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, MapPin, Building, TrendingUp, FileText, Shield } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calculator, MapPin, Building, TrendingUp, FileText, Shield, Leaf, BarChart3 } from "lucide-react";
+import SiteDetailsForm from "@/components/development/SiteDetailsForm";
+import ValuationMethodologies from "@/components/development/ValuationMethodologies";
+import ESGClimateRiskAssessment from "@/components/development/ESGClimateRiskAssessment";
+import FeasibilityStudy from "@/components/development/FeasibilityStudy";
+import ComparableEvidence from "@/components/development/ComparableEvidence";
 
 const DevelopmentSiteValuation = () => {
-  const [siteData, setSiteData] = useState({
-    address: '',
-    area: '',
-    zoning: '',
-    developmentPotential: '',
-    marketValue: 0,
-    estimatedCosts: 0
-  });
+  const [siteData, setSiteData] = useState(null);
+  const [activeTab, setActiveTab] = useState("site-details");
 
-  const [activeTab, setActiveTab] = useState("overview");
+  const handleSiteDataChange = (data: any) => {
+    setSiteData(data);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 p-6">
@@ -41,195 +37,60 @@ const DevelopmentSiteValuation = () => {
 
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="site-details">Site Details</TabsTrigger>
             <TabsTrigger value="valuation">Valuation</TabsTrigger>
             <TabsTrigger value="feasibility">Feasibility</TabsTrigger>
+            <TabsTrigger value="esg-climate">ESG & Climate</TabsTrigger>
+            <TabsTrigger value="comparable">Comparables</TabsTrigger>
+            <TabsTrigger value="risk">Risk Analysis</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           </TabsList>
-
-          {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Quick Start</CardTitle>
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="quick-address">Site Address</Label>
-                      <Input 
-                        id="quick-address"
-                        placeholder="Enter development site address"
-                        value={siteData.address}
-                        onChange={(e) => setSiteData(prev => ({...prev, address: e.target.value}))}
-                      />
-                    </div>
-                    <Button className="w-full">
-                      <Calculator className="w-4 h-4 mr-2" />
-                      Start Analysis
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Platform Features</CardTitle>
-                  <Building className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="flex items-center text-sm">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-2" />
-                      Automated site analysis
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-2" />
-                      Development feasibility
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-2" />
-                      Market valuation tools
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-2" />
-                      Comprehensive reporting
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="text-sm text-muted-foreground">
-                      No recent valuations
-                    </div>
-                    <Button variant="outline" size="sm" className="w-full">
-                      View History
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
 
           {/* Site Details Tab */}
           <TabsContent value="site-details" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Development Site Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="site-address">Site Address</Label>
-                    <Input 
-                      id="site-address"
-                      placeholder="Full site address"
-                      value={siteData.address}
-                      onChange={(e) => setSiteData(prev => ({...prev, address: e.target.value}))}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="site-area">Site Area (sqm)</Label>
-                    <Input 
-                      id="site-area"
-                      placeholder="Total site area"
-                      value={siteData.area}
-                      onChange={(e) => setSiteData(prev => ({...prev, area: e.target.value}))}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="zoning">Current Zoning</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select zoning" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="residential">Residential</SelectItem>
-                        <SelectItem value="commercial">Commercial</SelectItem>
-                        <SelectItem value="industrial">Industrial</SelectItem>
-                        <SelectItem value="mixed-use">Mixed Use</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="development-type">Development Type</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select development type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="residential-subdivision">Residential Subdivision</SelectItem>
-                        <SelectItem value="apartment-complex">Apartment Complex</SelectItem>
-                        <SelectItem value="commercial-development">Commercial Development</SelectItem>
-                        <SelectItem value="mixed-use-development">Mixed Use Development</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="development-notes">Development Notes</Label>
-                  <Textarea 
-                    id="development-notes"
-                    placeholder="Additional notes about the development potential"
-                    value={siteData.developmentPotential}
-                    onChange={(e) => setSiteData(prev => ({...prev, developmentPotential: e.target.value}))}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            <SiteDetailsForm onSiteDataChange={handleSiteDataChange} />
           </TabsContent>
 
           {/* Valuation Tab */}
           <TabsContent value="valuation" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Site Valuation Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <Calculator className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-semibold mb-2">Valuation Engine Ready</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Complete site details to begin automated valuation analysis
-                  </p>
-                  <Button>
-                    <TrendingUp className="w-4 h-4 mr-2" />
-                    Calculate Valuation
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <ValuationMethodologies siteData={siteData} />
           </TabsContent>
 
           {/* Feasibility Tab */}
           <TabsContent value="feasibility" className="space-y-6">
+            <FeasibilityStudy siteData={siteData} />
+          </TabsContent>
+
+          {/* ESG & Climate Tab */}
+          <TabsContent value="esg-climate" className="space-y-6">
+            <ESGClimateRiskAssessment />
+          </TabsContent>
+
+          {/* Comparable Evidence Tab */}
+          <TabsContent value="comparable" className="space-y-6">
+            <ComparableEvidence />
+          </TabsContent>
+
+          {/* Risk Analysis Tab */}
+          <TabsContent value="risk" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Development Feasibility Study</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  Comprehensive Risk Assessment
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-12">
-                  <Building className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-semibold mb-2">Feasibility Analysis</h3>
+                  <Shield className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold mb-2">Risk Analysis Engine</h3>
                   <p className="text-muted-foreground mb-4">
-                    Comprehensive development feasibility assessment tools
+                    Comprehensive development risk assessment including market, regulatory, environmental, and financial risks
                   </p>
-                  <Button variant="outline">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Generate Feasibility Report
-                  </Button>
+                  <Badge variant="outline" className="mb-4">
+                    Coming Soon
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -239,40 +100,23 @@ const DevelopmentSiteValuation = () => {
           <TabsContent value="reports" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Development Reports</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  Professional Valuation Reports
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-12">
                   <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
                   <h3 className="text-lg font-semibold mb-2">Report Generation</h3>
                   <p className="text-muted-foreground mb-4">
-                    Professional development site valuation reports
+                    Generate comprehensive development site valuation reports compliant with Australian valuation standards
                   </p>
-                  <Button variant="outline">
-                    <Shield className="w-4 h-4 mr-2" />
-                    Create Report
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Dashboard Tab */}
-          <TabsContent value="dashboard" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Development Site Dashboard</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <TrendingUp className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-semibold mb-2">Analytics Dashboard</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Track development site performance and market trends
-                  </p>
-                  <Button variant="outline">
-                    View Analytics
-                  </Button>
+                  <div className="space-y-2">
+                    <Badge variant="outline">AASB Compliant</Badge>
+                    <Badge variant="outline">GST Inc/Exc</Badge>
+                    <Badge variant="outline">ESG Integrated</Badge>
+                  </div>
                 </div>
               </CardContent>
             </Card>
