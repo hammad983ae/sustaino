@@ -356,6 +356,29 @@ export const ReportDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   }, []);
 
+  // Listen for address changes and clear report data when address changes
+  useEffect(() => {
+    const handleAddressChange = (event: CustomEvent) => {
+      console.log('Address changed detected in ReportData - clearing report data');
+      setReportData({});
+      localStorage.removeItem('reportData');
+    };
+
+    const handleDataClear = (event: CustomEvent) => {
+      console.log('Data clear event detected in ReportData - clearing report data');
+      setReportData({});
+      localStorage.removeItem('reportData');
+    };
+
+    window.addEventListener('addressChanged', handleAddressChange as EventListener);
+    window.addEventListener('dataCleared', handleDataClear as EventListener);
+
+    return () => {
+      window.removeEventListener('addressChanged', handleAddressChange as EventListener);
+      window.removeEventListener('dataCleared', handleDataClear as EventListener);
+    };
+  }, []);
+
   // Save data to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('reportData', JSON.stringify(reportData));

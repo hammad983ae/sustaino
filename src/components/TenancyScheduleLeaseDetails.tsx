@@ -19,7 +19,21 @@ const TenancyScheduleLeaseDetails = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
   const { reportData, updateReportData } = useReportData();
-  const { isLeaseholdValuation, valuationType } = useValuation();
+  
+  // Add fallback handling for useValuation
+  let isLeaseholdValuation = false;
+  let valuationType = '';
+  
+  try {
+    const valuationContext = useValuation();
+    isLeaseholdValuation = valuationContext.isLeaseholdValuation;
+    valuationType = valuationContext.valuationType;
+  } catch (error) {
+    console.warn('ValuationProvider not available, using defaults:', error);
+    // Use defaults when ValuationProvider is not available
+    isLeaseholdValuation = false;
+    valuationType = '';
+  }
   
   // Form state for ground lease
   const [groundLeaseData, setGroundLeaseData] = useState({

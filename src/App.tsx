@@ -42,6 +42,7 @@ import DevelopmentSiteValuation from "./pages/DevelopmentSiteValuation";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
+import { ValuationProvider } from "./contexts/ValuationContext";
 import { PropertyTypeLockProvider } from "./components/PropertyTypeLockProvider";
 
 const queryClient = new QueryClient();
@@ -51,8 +52,9 @@ const App = () => (
     <BrandingProvider>
       <PropertyProvider>
         <ReportDataProvider>
-          <PropertyTypeLockProvider>
-            <TooltipProvider>
+          <ValuationProvider>
+            <PropertyTypeLockProvider>
+              <TooltipProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter>
@@ -99,9 +101,10 @@ const App = () => (
             </BrowserRouter>
           </TooltipProvider>
         </PropertyTypeLockProvider>
-      </ReportDataProvider>
-    </PropertyProvider>
-  </BrandingProvider>
+      </ValuationProvider>
+    </ReportDataProvider>
+  </PropertyProvider>
+</BrandingProvider>
 </QueryClientProvider>
 );
 

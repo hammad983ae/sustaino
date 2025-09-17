@@ -153,7 +153,20 @@ const WorldClassRiskAssessment: React.FC = () => {
       });
 
       if (error) {
-        throw error;
+        console.warn('Edge function error, using fallback assessment:', error);
+        // Use fallback assessment instead of failing completely
+        const fallbackData = generateFallbackRiskAssessment(propertyData);
+        setAssessmentData(fallbackData);
+        setProgress(100);
+        setCurrentStage('Assessment completed (fallback mode)');
+        
+        toast({
+          title: "Assessment Completed",
+          description: "Risk assessment completed using fallback analysis. For detailed AI analysis, please try again later.",
+          variant: "default"
+        });
+        
+        return;
       }
 
       // Stage 4: Processing results
@@ -550,6 +563,64 @@ const WorldClassRiskAssessment: React.FC = () => {
       )}
     </div>
   );
+};
+
+// Fallback risk assessment when Edge function fails
+const generateFallbackRiskAssessment = (propertyData: any) => {
+  return {
+    riskCategories: [
+      {
+        category: "Location & Neighbourhood Risk",
+        rating: 3,
+        explanation: "Moderate risk based on available property data. Professional assessment recommended for detailed analysis.",
+        keyFactors: ["Standard suburban location", "Established neighbourhood", "Local amenity access"],
+        mitigationStrategies: ["Research local market trends", "Verify infrastructure developments"]
+      },
+      {
+        category: "Market Activity Risk", 
+        rating: 3,
+        explanation: "Moderate market activity expected based on property type and location.",
+        keyFactors: ["Standard market conditions", "Property type demand", "Location desirability"],
+        mitigationStrategies: ["Monitor recent sales", "Track market indicators"]
+      },
+      {
+        category: "Environmental Risk",
+        rating: 2,
+        explanation: "Low to moderate environmental risk assumed for standard residential properties.",
+        keyFactors: ["Standard environmental conditions", "No known major hazards", "Typical urban/suburban setting"],
+        mitigationStrategies: ["Conduct environmental assessment", "Check council records"]
+      }
+    ],
+    marketIndicators: {
+      marketCyclePhase: "Stable",
+      priceTrendPrediction: "Market conditions require professional analysis for accurate prediction",
+      rentalOutlook: "Consult local rental market data for current trends",
+      supplyDemandDynamics: "Property-specific analysis required",
+      comparableSalesInsights: "Recent comparable sales analysis recommended"
+    },
+    overallAssessment: {
+      overallRisk: 3,
+      investmentRecommendation: "Seek Professional Valuation",
+      keyOpportunities: ["Standard investment potential", "Professional assessment recommended"],
+      keyThreats: ["Market volatility", "Economic factors"],
+      riskAdjustedReturn: "Detailed financial analysis required"
+    },
+    predictiveInsights: {
+      fiveYearForecast: "Long-term forecasting requires detailed market analysis",
+      volatilityAssessment: "Moderate volatility expected based on property type",
+      economicFactorsImpact: "Standard economic sensitivity for property investments",
+      climateRegulatory: "Monitor regulatory changes affecting property sector"
+    },
+    automationConfidence: "Low",
+    lastUpdated: new Date().toISOString(),
+    processingMetadata: {
+      assessmentType: 'fallback',
+      propertyAddress: propertyData.address,
+      generatedAt: new Date().toISOString(),
+      confidence: 'Low',
+      dataSource: 'Fallback Analysis'
+    }
+  };
 };
 
 export default WorldClassRiskAssessment;
