@@ -13,8 +13,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
+import BidTermsAnalyzer from './BidTermsAnalyzer';
 import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
 import { 
   Gavel, Users, Timer, DollarSign, Heart, Eye, TrendingUp, Building2, 
   BarChart3, Map, PieChart, Calculator, Target, AlertTriangle, MapPin,
@@ -358,8 +359,9 @@ const EnhancedRealityAuctionPlatform = () => {
             <Card className="backdrop-blur-lg bg-card/80 border-primary/20 shadow-xl">
               <CardContent className="p-6">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid w-full grid-cols-6 mb-6">
+                  <TabsList className="grid w-full grid-cols-7 mb-6">
                     <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
+                    <TabsTrigger value="bidding" className="text-xs">Bidding</TabsTrigger>
                     <TabsTrigger value="valuation" className="text-xs">Valuation</TabsTrigger>
                     <TabsTrigger value="market" className="text-xs">Market</TabsTrigger>
                     <TabsTrigger value="risk" className="text-xs">Risk</TabsTrigger>
@@ -490,6 +492,10 @@ const EnhancedRealityAuctionPlatform = () => {
                         </div>
                       </Card>
                     </div>
+                  </TabsContent>
+
+                  <TabsContent value="bidding" className="space-y-6">
+                    <BidTermsAnalyzer />
                   </TabsContent>
 
                   <TabsContent value="valuation" className="space-y-6">
