@@ -93,7 +93,7 @@ export default function AutomatedValuation() {
   };
 
   // Show property valuation as primary feature
-  if (currentStep === "propertyType") {
+  if (currentStep === "propertyType" || currentStep === "default") {
     return (
       <div className="min-h-screen hero-green-background relative overflow-hidden">
         {/* Professional Platform Visual */}
@@ -408,6 +408,7 @@ export default function AutomatedValuation() {
               </TabsContent>
             </Tabs>
           </div>
+
         </>
       );
   }
