@@ -21,6 +21,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ReportDataProvider } from "@/contexts/ReportDataContext";
 import { BrandingProvider } from "@/contexts/BrandingContext";
 import { PropertyProvider } from "@/contexts/PropertyContext";
+import { ValuationProvider } from "@/contexts/ValuationContext";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
@@ -55,6 +56,8 @@ import DataBases from "./pages/DataBases";
 import RealitySales from "./pages/RealitySales";
 import AuctionSpherePOSPage from "./pages/AuctionSpherePOS";
 import AdvertisingPlatforms from "./pages/AdvertisingPlatforms";
+import BrochureViewer from "./pages/BrochureViewer";
+import DevelopmentSiteValuation from "./pages/DevelopmentSiteValuation";
 
 const queryClient = new QueryClient();
 
@@ -64,8 +67,7 @@ const App = () => (
       <PropertyProvider>
         <ReportDataProvider>
           <ValuationProvider>
-            <PropertyTypeLockProvider>
-              <TooltipProvider>
+            <TooltipProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter>
@@ -111,7 +113,6 @@ const App = () => (
               </Routes>
             </BrowserRouter>
           </TooltipProvider>
-        </PropertyTypeLockProvider>
       </ValuationProvider>
     </ReportDataProvider>
   </PropertyProvider>
