@@ -36,6 +36,7 @@ import SAMPlatform from "./pages/SAMPlatform";
 import DataBases from "./pages/DataBases";
 import RealitySales from "./pages/RealitySales";
 import AuctionSpherePOSPage from "./pages/AuctionSpherePOS";
+import AdvertisingPlatforms from "./pages/AdvertisingPlatforms";
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { PropertyProvider } from "./contexts/PropertyContext";
 import { ReportDataProvider } from "./contexts/ReportDataContext";
@@ -87,6 +88,7 @@ const App = () => (
                 <Route path="/databases" element={<DataBases />} />
                 <Route path="/reality-sales" element={<RealitySales />} />
                 <Route path="/auction-sphere-pos" element={<AuctionSpherePOSPage />} />
+                <Route path="/advertising-platforms" element={<AdvertisingPlatforms />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
