@@ -249,59 +249,9 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Charts Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    Portfolio Performance vs Greenium
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={portfolioData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="traditional" stroke="#6b7280" name="Traditional %" />
-                      <Line type="monotone" dataKey="esg" stroke="#22c55e" name="ESG-Enhanced %" />
-                      <Line type="monotone" dataKey="greenium" stroke="#059669" name="Greenium Premium %" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <PieChartIcon className="h-5 w-5" />
-                    Property Type Distribution
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={propertyTypeData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, value }) => `${name}: ${value}%`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {propertyTypeData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+            {/* Enhanced Property Updates Section - Full Width */}
+            <div className="space-y-6">
+              <EnhancedPropertyUpdates />
             </div>
 
             {/* Recent Activity */}
@@ -740,7 +690,7 @@ const Dashboard = () => {
         <EnhancedPropertyUpdates />
       </div>
 
-      {/* Bottom Chat Assistant */}
+      {/* Bottom Left Chat Assistant */}
       <BottomChatAssistant />
     </div>
   );

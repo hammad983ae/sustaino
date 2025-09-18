@@ -42,10 +42,10 @@ const BottomChatAssistant = () => {
 
   return (
     <>
-      {/* Chat Toggle Button - Fixed position */}
+      {/* Chat Toggle Button - Fixed position bottom left */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 rounded-full w-14 h-14 bg-primary hover:bg-primary/90 shadow-lg"
+        className="fixed bottom-6 left-6 z-50 rounded-full w-14 h-14 bg-primary hover:bg-primary/90 shadow-lg"
         size="icon"
       >
         {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
