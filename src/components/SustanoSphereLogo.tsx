@@ -5,12 +5,14 @@ interface SustanoSphereLogoProps {
   variant?: 'default' | 'white' | 'dark';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showSubtitle?: boolean;
+  showText?: boolean;
 }
 
 const SustanoSphereLogo: React.FC<SustanoSphereLogoProps> = ({ 
   variant = 'default', 
   size = 'md',
-  showSubtitle = true 
+  showSubtitle = true,
+  showText = true
 }) => {
   const sizeClasses = {
     sm: { text: 'text-lg', subtitle: 'text-xs', icon: 'h-6 w-6', container: 'gap-2' },
@@ -39,6 +41,14 @@ const SustanoSphereLogo: React.FC<SustanoSphereLogoProps> = ({
 
   const currentSize = sizeClasses[size];
   const currentVariant = variantClasses[variant];
+
+  if (!showText) {
+    return (
+      <div className={`${currentSize.icon} ${currentVariant.icon} rounded-full p-2 flex items-center justify-center shadow-lg`}>
+        <Globe className="h-full w-full" strokeWidth={1.5} />
+      </div>
+    );
+  }
 
   return (
     <div className={`flex items-center ${currentSize.container}`}>

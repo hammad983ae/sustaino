@@ -17,6 +17,8 @@ import GradientLogos from '@/components/GradientLogos';
 import PDFWebExtractorComparison from '@/components/PDFWebExtractorComparison';
 import PerfectSustanoLogo from '@/components/PerfectSustanoLogo';
 import LogoDownloader from '@/components/LogoDownloader';
+import SustanoSphereLogo from '@/components/SustanoSphereLogo';
+import PoweredByLogo from '@/components/PoweredByLogo';
 
 const Marketing = () => {
   const brochures = [
@@ -82,29 +84,29 @@ const Marketing = () => {
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Brochures Section */}
-          <Card>
-            <CardHeader>
+          <Card className="bg-gradient-to-br from-white to-gray-50 border-2">
+            <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
                 Marketing Brochures
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 p-6">
               {brochures.map((brochure, index) => (
-                <div key={index} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50">
+                <div key={index} className="flex items-center justify-between p-4 bg-white border-2 border-gray-100 rounded-lg hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:border-blue-200 transition-all duration-200 shadow-sm">
                   <div>
-                    <h4 className="font-medium">{brochure.name}</h4>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Badge variant="outline">{brochure.type}</Badge>
-                      <span>{brochure.size}</span>
+                    <h4 className="font-semibold text-gray-900">{brochure.name}</h4>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-blue-200">{brochure.type}</Badge>
+                      <span className="font-medium">{brochure.size}</span>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" className="border-gray-300 hover:bg-gray-50">
                       <Eye className="h-4 w-4 mr-1" />
                       View
                     </Button>
-                    <Button size="sm">
+                    <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                       <Download className="h-4 w-4 mr-1" />
                       Download
                     </Button>
@@ -115,30 +117,30 @@ const Marketing = () => {
           </Card>
 
           {/* Traditional Logos Section */}
-          <Card>
-            <CardHeader>
+          <Card className="bg-gradient-to-br from-white to-gray-50 border-2">
+            <CardHeader className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white rounded-t-lg">
               <CardTitle className="flex items-center gap-2">
                 <ImageIcon className="h-5 w-5" />
                 Standard Logos
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 p-6">
               {logos.map((logo, index) => (
-                <div key={index} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50">
+                <div key={index} className="flex items-center justify-between p-4 bg-white border-2 border-gray-100 rounded-lg hover:bg-gradient-to-r hover:from-emerald-50 hover:to-blue-50 hover:border-emerald-200 transition-all duration-200 shadow-sm">
                   <div>
-                    <h4 className="font-medium">{logo.name}</h4>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Badge variant="outline">{logo.format}</Badge>
-                      <Badge variant="secondary">{logo.type}</Badge>
-                      <span>{logo.color}</span>
+                    <h4 className="font-semibold text-gray-900">{logo.name}</h4>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
+                      <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 border-emerald-200">{logo.format}</Badge>
+                      <Badge variant="outline" className="border-blue-200 text-blue-700">{logo.type}</Badge>
+                      <span className="font-medium">{logo.color}</span>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" className="border-gray-300 hover:bg-gray-50">
                       <Eye className="h-4 w-4 mr-1" />
                       Preview
                     </Button>
-                    <Button size="sm">
+                    <Button size="sm" className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700">
                       <Download className="h-4 w-4 mr-1" />
                       Download
                     </Button>
@@ -160,7 +162,22 @@ const Marketing = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Default Logo */}
+              {/* Dashboard Gradient Logo */}
+              <Card>
+                <CardContent className="p-6 text-center bg-gradient-to-br from-blue-500 via-cyan-500 to-emerald-500">
+                  <div className="mb-4 flex justify-center">
+                    <PerfectSustanoLogo size="lg" variant="white" />
+                  </div>
+                  <h4 className="font-semibold mb-2 text-white">Dashboard Gradient</h4>
+                  <LogoDownloader
+                    logoComponent={<PerfectSustanoLogo size="xl" variant="white" />}
+                    filename="sustaino-pro-dashboard-gradient"
+                    backgroundColor="linear-gradient(135deg, #3b82f6, #06b6d4, #10b981)"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Standard Logo */}
               <Card>
                 <CardContent className="p-6 text-center">
                   <div className="mb-4 flex justify-center">
@@ -190,17 +207,32 @@ const Marketing = () => {
                 </CardContent>
               </Card>
 
-              {/* Dark Logo */}
+              {/* Sustaino Sphere Logo */}
               <Card>
-                <CardContent className="p-6 text-center bg-gray-100">
+                <CardContent className="p-6 text-center bg-gradient-to-br from-blue-600 to-emerald-600">
                   <div className="mb-4 flex justify-center">
-                    <PerfectSustanoLogo size="lg" variant="dark" />
+                    <SustanoSphereLogo size="lg" variant="white" />
                   </div>
-                  <h4 className="font-semibold mb-2">Dark Logo</h4>
+                  <h4 className="font-semibold mb-2 text-white">Sustaino Sphere</h4>
                   <LogoDownloader
-                    logoComponent={<PerfectSustanoLogo size="xl" variant="dark" />}
-                    filename="sustaino-pro-dark"
-                    backgroundColor="#f3f4f6"
+                    logoComponent={<SustanoSphereLogo size="xl" variant="white" />}
+                    filename="sustaino-sphere-logo"
+                    backgroundColor="linear-gradient(135deg, #2563eb, #10b981)"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Powered By Logo */}
+              <Card>
+                <CardContent className="p-6 text-center bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600">
+                  <div className="mb-4 flex justify-center">
+                    <PoweredByLogo size="lg" variant="white" />
+                  </div>
+                  <h4 className="font-semibold mb-2 text-white">Powered By</h4>
+                  <LogoDownloader
+                    logoComponent={<PoweredByLogo size="xl" variant="white" />}
+                    filename="powered-by-sustaino-pro"
+                    backgroundColor="linear-gradient(135deg, #9333ea, #2563eb, #0891b2)"
                   />
                 </CardContent>
               </Card>
@@ -222,34 +254,53 @@ const Marketing = () => {
                 </CardContent>
               </Card>
 
-              {/* Vertical Layout */}
+              {/* Sustaino Sphere Icon Only */}
               <Card>
-                <CardContent className="p-6 text-center">
+                <CardContent className="p-6 text-center bg-gradient-to-br from-emerald-500 to-blue-500">
                   <div className="mb-4 flex justify-center">
-                    <PerfectSustanoLogo size="md" variant="default" textPosition="bottom" />
+                    <SustanoSphereLogo size="lg" variant="white" showText={false} />
                   </div>
-                  <h4 className="font-semibold mb-2">Vertical Layout</h4>
+                  <h4 className="font-semibold mb-2 text-white">Sphere Icon</h4>
                   <LogoDownloader
-                    logoComponent={<PerfectSustanoLogo size="xl" variant="default" textPosition="bottom" />}
-                    filename="sustaino-pro-vertical"
-                    backgroundColor="#ffffff"
-                    width={600}
-                    height={800}
+                    logoComponent={<SustanoSphereLogo size="xl" variant="white" showText={false} />}
+                    filename="sustaino-sphere-icon"
+                    backgroundColor="linear-gradient(135deg, #10b981, #3b82f6)"
+                    width={400}
+                    height={400}
                   />
                 </CardContent>
               </Card>
 
-              {/* Purple Theme */}
+              {/* Vertical Powered By */}
               <Card>
-                <CardContent className="p-6 text-center bg-gradient-to-br from-purple-500 to-purple-700">
+                <CardContent className="p-6 text-center bg-gradient-to-br from-gray-800 to-gray-900">
                   <div className="mb-4 flex justify-center">
-                    <PerfectSustanoLogo size="lg" variant="purple" />
+                    <div className="flex flex-col items-center gap-2">
+                      <PoweredByLogo size="md" variant="white" showIcon={false} />
+                    </div>
                   </div>
-                  <h4 className="font-semibold mb-2 text-white">Purple Theme</h4>
+                  <h4 className="font-semibold mb-2 text-white">Powered Text</h4>
                   <LogoDownloader
-                    logoComponent={<PerfectSustanoLogo size="xl" variant="purple" />}
-                    filename="sustaino-pro-purple"
-                    backgroundColor="#8b5cf6"
+                    logoComponent={<PoweredByLogo size="xl" variant="white" showIcon={false} />}
+                    filename="powered-by-text-only"
+                    backgroundColor="#1f2937"
+                    width={600}
+                    height={400}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Gradient Powered By */}
+              <Card>
+                <CardContent className="p-6 text-center bg-white">
+                  <div className="mb-4 flex justify-center">
+                    <PoweredByLogo size="lg" variant="gradient" />
+                  </div>
+                  <h4 className="font-semibold mb-2">Gradient Powered</h4>
+                  <LogoDownloader
+                    logoComponent={<PoweredByLogo size="xl" variant="gradient" />}
+                    filename="powered-by-gradient"
+                    backgroundColor="#ffffff"
                   />
                 </CardContent>
               </Card>
