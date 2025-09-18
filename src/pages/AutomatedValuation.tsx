@@ -682,18 +682,21 @@ export default function AutomatedValuation() {
               </Card>
             </div>
             
-            {/* Professional Services Tabs with 3D effects */}
-            <Card className="card-3d-medium bg-purple-800/40 backdrop-blur-sm border-purple-700/50">
+            {/* Professional Services Tabs with High Contrast */}
+            <Card className="toolbar-high-contrast">
               <CardHeader>
-                <CardTitle className="text-purple-300 text-center">Professional Services Hub</CardTitle>
-                <p className="text-purple-200 text-center">Comprehensive real estate and valuation services</p>
+                <CardTitle className="text-center flex items-center justify-center gap-2">
+                  Professional Services Hub
+                </CardTitle>
+                <p className="text-toolbar-muted text-center">Comprehensive real estate and valuation services</p>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="mortgage" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 bg-purple-900/50">
-                    <TabsTrigger value="mortgage">🏠 Mortgage Broker</TabsTrigger>
-                    <TabsTrigger value="sales">🏢 Reality Sales</TabsTrigger>
-                    <TabsTrigger value="management">🔧 Property Management</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-4 toolbar-high-contrast">
+                    <TabsTrigger value="mortgage" className="toolbar-item">🏠 Mortgage Broker</TabsTrigger>
+                    <TabsTrigger value="sales" className="toolbar-item">🏢 Reality Sales</TabsTrigger>
+                    <TabsTrigger value="management" className="toolbar-item">🔧 Property Management</TabsTrigger>
+                    <TabsTrigger value="marketing" className="toolbar-item">📱 Marketing</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="mortgage">
@@ -706,6 +709,16 @@ export default function AutomatedValuation() {
                   
                   <TabsContent value="management">
                     <PropertyManagementTab />
+                  </TabsContent>
+
+                  <TabsContent value="marketing">
+                    <div className="p-4 text-center">
+                      <h3 className="text-lg font-semibold mb-2">Marketing Hub</h3>
+                      <p className="text-muted-foreground mb-4">Access all marketing materials and brochures</p>
+                      <Button asChild>
+                        <a href="/marketing">Open Marketing Hub</a>
+                      </Button>
+                    </div>
                   </TabsContent>
                 </Tabs>
               </CardContent>

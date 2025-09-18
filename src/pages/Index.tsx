@@ -245,9 +245,25 @@ const Index = () => {
                                 </CardTitle>
                               </CardHeader>
                               <CardContent>
-                                <p className="text-sm text-slate-600">
-                                  Generate professional investment property memorandums with white label branding
-                                </p>
+                                 <p className="text-sm text-slate-600">
+                                   Generate professional investment property memorandums with white label branding
+                                 </p>
+                               </CardContent>
+                             </Card>
+                           </Link>
+
+                           <Link to="/marketing">
+                             <Card className="bg-gradient-to-br from-white to-pink-50/50 border border-pink-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                               <CardHeader>
+                                 <CardTitle className="flex items-center gap-2 text-pink-700">
+                                   <FileText className="h-5 w-5" />
+                                   Marketing Hub
+                                 </CardTitle>
+                               </CardHeader>
+                               <CardContent>
+                                 <p className="text-sm text-slate-600">
+                                   Access all brochures, logos, and marketing materials
+                                 </p>
                               </CardContent>
                             </Card>
                           </Link>

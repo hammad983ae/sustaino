@@ -249,10 +249,8 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Enhanced Property Updates Section - Full Width */}
-            <div className="space-y-6">
-              <EnhancedPropertyUpdates />
-            </div>
+            {/* Property Updates - Full Width */}
+            <EnhancedPropertyUpdates />
 
             {/* Recent Activity */}
             <Card>
@@ -685,10 +683,8 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Enhanced Property Updates - Full Width */}
-      <div className="mb-8">
-        <EnhancedPropertyUpdates />
-      </div>
+      {/* Property Updates - Full Width */}
+      <EnhancedPropertyUpdates />
 
       {/* Bottom Left Chat Assistant */}
       <BottomChatAssistant />
