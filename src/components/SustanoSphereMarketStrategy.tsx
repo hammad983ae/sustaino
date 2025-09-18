@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -7,11 +7,19 @@ import { Progress } from '@/components/ui/progress';
 import { 
   Target, Users, TrendingUp, Lightbulb, Rocket, Brain,
   Globe, DollarSign, Zap, Star, Trophy, Map, Shield,
-  Building, Code, Megaphone, UserCheck, PieChart, BarChart3
+  Building, Code, Megaphone, UserCheck, PieChart, BarChart3,
+  ArrowLeft, Download, FileText
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { toast } from 'sonner';
 
 const SustanoSphereMarketStrategy = () => {
   const [selectedStrategy, setSelectedStrategy] = useState('market-creation');
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const navigate = useNavigate();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Market Creation Analysis
   const marketGaps = {
@@ -188,32 +196,103 @@ const SustanoSphereMarketStrategy = () => {
     return 'text-red-600';
   };
 
+  const generatePDF = async () => {
+    if (!contentRef.current) return;
+    
+    setIsGeneratingPDF(true);
+    toast("Generating PDF report...", { description: "This may take a few moments" });
+
+    try {
+      const canvas = await html2canvas(contentRef.current, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff'
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 10;
+
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      
+      const filename = `Sustaino-Sphere-Market-Strategy-${new Date().toISOString().split('T')[0]}.pdf`;
+      pdf.save(filename);
+      
+      toast.success("PDF generated successfully!", { description: `Downloaded as ${filename}` });
+    } catch (error) {
+      toast.error("Failed to generate PDF", { description: "Please try again" });
+      console.error('PDF generation error:', error);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-            Sustaino-Sphere™ Market Creation Strategy
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Creating the "Digital Business Valuation as a Service" Category
-          </p>
-          <div className="flex justify-center gap-4">
-            <Badge variant="secondary" className="text-lg px-4 py-2">
-              <Target className="h-4 w-4 mr-2" />
-              Category Creator
-            </Badge>
-            <Badge variant="secondary" className="text-lg px-4 py-2">
-              <Rocket className="h-4 w-4 mr-2" />
-              First Mover
-            </Badge>
-            <Badge variant="secondary" className="text-lg px-4 py-2">
-              <Trophy className="h-4 w-4 mr-2" />
-              Market Leader
-            </Badge>
-          </div>
+        {/* Action Bar */}
+        <div className="flex items-center justify-between mb-6">
+          <Button 
+            onClick={() => navigate('/dashboard')} 
+            variant="outline" 
+            className="flex items-center gap-2 hover:bg-primary/10 border-primary/20"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+          
+          <Button
+            onClick={generatePDF}
+            disabled={isGeneratingPDF}
+            className="flex items-center gap-2 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 shadow-lg"
+          >
+            {isGeneratingPDF ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4" />
+                Download PDF Report
+              </>
+            )}
+          </Button>
         </div>
+
+        <div ref={contentRef} className="space-y-6">
+          {/* Header */}
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              Sustaino-Sphere™ Market Creation Strategy
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              Creating the "Digital Business Valuation as a Service" Category
+            </p>
+            <div className="flex justify-center gap-4">
+              <Badge variant="secondary" className="text-lg px-4 py-2 bg-gradient-to-r from-primary/10 to-purple-600/10 border-primary/20">
+                <Target className="h-4 w-4 mr-2" />
+                Category Creator
+              </Badge>
+              <Badge variant="secondary" className="text-lg px-4 py-2 bg-gradient-to-r from-green-500/10 to-blue-500/10 border-green-500/20">
+                <Rocket className="h-4 w-4 mr-2" />
+                First Mover
+              </Badge>
+              <Badge variant="secondary" className="text-lg px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border-yellow-500/20">
+                <Trophy className="h-4 w-4 mr-2" />
+                Market Leader
+              </Badge>
+            </div>
+          </div>
 
         {/* Innovation Assessment */}
         <Card className="border-primary/20 shadow-lg">
@@ -588,6 +667,7 @@ const SustanoSphereMarketStrategy = () => {
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   );
