@@ -972,14 +972,25 @@ export const RevolutionarySustainoSphere = () => {
                   </Card>
                 </div>
 
-                <Button 
-                  size="lg" 
-                  className="bg-gradient-to-r from-emerald-500 to-green-600 text-lg px-8 py-4 hover-scale"
-                  onClick={() => toast({ title: "SustainoVal™ Engine Activated", description: "Processing valuation algorithms..." })}
-                >
-                  <Diamond className="h-5 w-5 mr-2" />
-                  Activate SustainoVal™ Engine
-                </Button>
+                <div className="flex gap-4">
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-to-r from-emerald-500 to-green-600 text-lg px-8 py-4 hover-scale"
+                    onClick={() => toast({ title: "SustainoVal™ Engine Activated", description: "Processing valuation algorithms..." })}
+                  >
+                    <Diamond className="h-5 w-5 mr-2" />
+                    Activate SustainoVal™ Engine
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="text-lg px-8 py-4 hover-scale border-primary"
+                    onClick={() => window.open('/sustano-sphere-digital-assets', '_blank')}
+                  >
+                    <Cpu className="h-5 w-5 mr-2" />
+                    Digital Asset Valuation
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

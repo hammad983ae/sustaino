@@ -63,6 +63,7 @@ import NASDAQCompetitorAnalysis from "./components/NASDAQCompetitorAnalysis";
 import DigitalAssetValuationEngine from "./components/DigitalAssetValuationEngine";
 import ComprehensivePlatformValuation from "./components/ComprehensivePlatformValuation";
 import SustanoSphereMarketStrategy from "./components/SustanoSphereMarketStrategy";
+import SustanoSphereDigitalAssetValuation from "./components/SustanoSphereDigitalAssetValuation";
 import LovablePartnershipProposal from "./components/LovablePartnershipProposal";
 import SocialMediaAssets from "./pages/SocialMediaAssets";
 
@@ -118,6 +119,7 @@ const App = () => (
                 <Route path="/digital-valuation" element={<DigitalAssetValuationEngine />} />
                 <Route path="/platform-valuation" element={<ComprehensivePlatformValuation />} />
                 <Route path="/market-strategy" element={<SustanoSphereMarketStrategy />} />
+                <Route path="/sustano-sphere-digital-assets" element={<SustanoSphereDigitalAssetValuation />} />
                 <Route path="/lovable-partnership" element={<LovablePartnershipProposal />} />
                 <Route path="/brochures" element={<BrochureViewer />} />
                 <Route path="/development-site-valuation" element={<DevelopmentSiteValuation />} />
