@@ -154,10 +154,10 @@ export default function AutomatedValuation() {
         <div className="relative z-10">
           <div className="text-center py-8">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              ICR (Instant Comprehensive Reporting)™
+              ICV (Instant Comprehensive Valuation)™
             </h1>
             <p className="text-xl text-white/90 mb-2">
-              Professional Property Valuations and ESG Assessments
+              AI-powered property valuation and assessment technology
             </p>
             <p className="text-sm text-white/70">
               Patent Pending • IP Protected • Trademark © • Copyright Protected
@@ -177,7 +177,7 @@ export default function AutomatedValuation() {
 
                 {/* Main heading with blue theme */}
                 <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-300/50 rounded-lg px-6 py-2">
-                  <span className="text-white font-semibold text-lg">⚡ Instant Comprehensive Reporting</span>
+                  <span className="text-white font-semibold text-lg">⚡ Automated Valuation Platform</span>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -193,9 +193,9 @@ export default function AutomatedValuation() {
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center">
                       ⚡
                     </div>
-                    Instant Comprehensive Reporting
+                    Automated Valuation Platform
                   </CardTitle>
-                  <p className="text-cyan-200">Professional Property Valuations and ESG Assessment Platform</p>
+                  <p className="text-cyan-200">AI-powered property valuation and assessment technology</p>
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">
