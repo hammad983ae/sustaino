@@ -78,7 +78,7 @@ const BlockchainBrochure = () => {
               <div>
                 <h3 className="font-bold text-white text-lg mb-2">Lightning Network Integration</h3>
                 <p className="text-purple-100 mb-2">Sub-second transactions with minimal energy consumption</p>
-                <p className="text-xs text-purple-300 font-semibold">• 100,000+ TPS • <$0.001 fees • Instant finality</p>
+                <p className="text-xs text-purple-300 font-semibold">• 100,000+ TPS • Less than $0.001 fees • Instant finality</p>
               </div>
             </div>
             
