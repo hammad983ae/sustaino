@@ -311,36 +311,6 @@ export default function AutomatedValuation() {
                     
                     <TabsContent value="tools" className="space-y-6">
                       <WebDataUploadInterface />
-                          <CardHeader>
-                            <CardTitle className="text-purple-300 flex items-center gap-2">
-                              <Database className="h-5 w-5" />
-                              Commercial Data Scraper
-                            </CardTitle>
-                            <CardDescription className="text-purple-200">
-                              Extract property data from URLs and documents
-                            </CardDescription>
-                          </CardHeader>
-                          <CardContent>
-                            <RealCommercialScraper />
-                          </CardContent>
-                        </Card>
-                        
-                         {/* Scraped Data Viewer with 3D effects */}
-                        <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
-                          <CardHeader>
-                            <CardTitle className="text-purple-300 flex items-center gap-2">
-                              <TrendingUp className="h-5 w-5" />
-                              Scraped Data Viewer
-                            </CardTitle>
-                            <CardDescription className="text-purple-200">
-                              View and analyze scraped property data
-                            </CardDescription>
-                          </CardHeader>
-                          <CardContent>
-                            <ScrapedDataViewer />
-                          </CardContent>
-                        </Card>
-                      </div>
                     </TabsContent>
                      
                     <TabsContent value="marketing" className="space-y-6">
