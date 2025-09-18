@@ -60,8 +60,8 @@ export default function FinancialReporting() {
 
   return (
     <BrochureStyleLayout
-      title="Financial Reporting Hub"
-      subtitle="Advanced financial analysis and reporting for investment decisions"
+      title="ICR (Instant Comprehensive Reporting)™"
+      subtitle="Advanced Financial Analysis And Reporting For Investment Decisions"
       sections={sections}
       className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-700"
     />

@@ -153,11 +153,21 @@ export default function AutomatedValuation() {
         
         <div className="relative z-10">
           <div className="text-center py-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <h1 className="text-5xl md:text-6xl font-bold text-white">
+                Sustano Pro
+              </h1>
+              <div className="relative">
+                {/* Simple distinctive logo - geometric arc */}
+                <div className="w-12 h-12 border-4 border-white rounded-full border-t-transparent border-r-transparent rotate-45 transform"></div>
+                <div className="absolute inset-0 w-8 h-8 bg-white rounded-full m-2 opacity-80"></div>
+              </div>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-semibold text-white/95 mb-3">
               ICV (Instant Comprehensive Valuation)™
-            </h1>
+            </h2>
             <p className="text-xl text-white/90 mb-2">
-              AI-powered property valuation and assessment technology
+              AI-Powered Property Valuation And Assessment Technology
             </p>
             <p className="text-sm text-white/70">
               Patent Pending • IP Protected • Trademark © • Copyright Protected
