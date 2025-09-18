@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Download, Eye } from 'lucide-react';
 import sustanoIcon from '@/assets/sustano-icon.png';
 import sustanoProLogo from '@/assets/sustano-pro-logo.jpg';
+import SustanoSphereLogo from './SustanoSphereLogo';
 
 const GradientLogos = () => {
   return (
@@ -72,6 +73,29 @@ const GradientLogos = () => {
                 </div>
                 <h2 className="text-2xl font-bold text-white">Auction Sphere</h2>
                 <p className="text-white/80 text-sm">™ Premium Logo</p>
+              </div>
+            </div>
+            <div className="p-4 flex gap-2">
+              <Button size="sm" variant="outline" className="flex-1">
+                <Eye className="w-4 h-4 mr-1" />
+                Preview
+              </Button>
+              <Button size="sm" className="flex-1">
+                <Download className="w-4 h-4 mr-1" />
+                Download
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Sustaino Sphere Data Analysis Platform */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-0">
+            <div className="bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 p-8 flex items-center justify-center min-h-[200px]">
+              <div className="text-center">
+                <div className="mb-4">
+                  <SustanoSphereLogo variant="white" size="md" />
+                </div>
               </div>
             </div>
             <div className="p-4 flex gap-2">

@@ -13,6 +13,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import GradientLogos from '@/components/GradientLogos';
+import PDFWebExtractorComparison from '@/components/PDFWebExtractorComparison';
 
 const Marketing = () => {
   const brochures = [
@@ -163,6 +164,20 @@ const Marketing = () => {
           </CardHeader>
           <CardContent>
             <GradientLogos />
+          </CardContent>
+        </Card>
+
+        {/* NEW: PDF & Web Extractor Comparison */}
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Our PDF & Web Extractors vs Competition
+            </CardTitle>
+            <p className="text-muted-foreground">Why our patent-protected technology dominates standard extractors</p>
+          </CardHeader>
+          <CardContent>
+            <PDFWebExtractorComparison />
           </CardContent>
         </Card>
 
