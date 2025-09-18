@@ -89,7 +89,7 @@ const BlockchainBrochure = () => {
               <div>
                 <h3 className="font-bold text-white text-lg mb-2">Smart Contract Platform</h3>
                 <p className="text-cyan-100 mb-2">Advanced property and ESG application framework</p>
-                <p className="text-xs text-cyan-300 font-semibold">• Automated valuations • Compliance tracking • Audit trails</p>
+                <p className="text-xs text-cyan-300 font-semibold">• ICV (Instant Comprehensive Valuation)™ • Compliance tracking • Audit trails</p>
               </div>
             </div>
             

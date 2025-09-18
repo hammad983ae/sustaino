@@ -170,7 +170,7 @@ export default function FullScreenDemo() {
                 Automated Property Valuations with ESG Intelligence
               </p>
               <p className="text-lg text-gray-500 mt-4 max-w-6xl mx-auto">
-                Select your property type to begin an automated valuation powered by AI market analysis, comparable sales 
+                Select your property type to begin an ICV (Instant Comprehensive Valuation)™ powered by AI market analysis, comparable sales 
                 data, and comprehensive ESG assessment.
               </p>
             </div>

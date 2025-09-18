@@ -187,7 +187,7 @@ export default function AutomatedValuation() {
 
                 {/* Main heading with blue theme */}
                 <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-300/50 rounded-lg px-6 py-2">
-                  <span className="text-white font-semibold text-lg">⚡ Automated Valuation Platform</span>
+                  <span className="text-white font-semibold text-lg">⚡ ICV (Instant Comprehensive Valuation)™ Platform</span>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -203,7 +203,7 @@ export default function AutomatedValuation() {
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center">
                       ⚡
                     </div>
-                    Automated Valuation Platform
+                    ICV (Instant Comprehensive Valuation)™ Platform
                   </CardTitle>
                   <p className="text-cyan-200">AI-powered property valuation and assessment technology</p>
                 </CardHeader>
@@ -452,7 +452,7 @@ export default function AutomatedValuation() {
                   <ThunderboltIcon />
                   Start Property Valuation
                 </CardTitle>
-                <p className="text-purple-200">Select property type to begin automated valuation process</p>
+                <p className="text-purple-200">Select property type to begin ICV (Instant Comprehensive Valuation)™ process</p>
               </CardHeader>
               <CardContent>
                 <PropertyTypeSelector 
@@ -604,7 +604,7 @@ export default function AutomatedValuation() {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Automated Valuation Platform</h1>
+        <h1 className="text-3xl font-bold mb-6">ICV (Instant Comprehensive Valuation)™ Platform</h1>
         <p>Loading...</p>
       </div>
     </div>
