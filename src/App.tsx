@@ -64,6 +64,7 @@ import DigitalAssetValuationEngine from "./components/DigitalAssetValuationEngin
 import ComprehensivePlatformValuation from "./components/ComprehensivePlatformValuation";
 import SustanoSphereMarketStrategy from "./components/SustanoSphereMarketStrategy";
 import LovablePartnershipProposal from "./components/LovablePartnershipProposal";
+import SocialMediaAssets from "./pages/SocialMediaAssets";
 
 const queryClient = new QueryClient();
 
@@ -120,6 +121,7 @@ const App = () => (
                 <Route path="/lovable-partnership" element={<LovablePartnershipProposal />} />
                 <Route path="/brochures" element={<BrochureViewer />} />
                 <Route path="/development-site-valuation" element={<DevelopmentSiteValuation />} />
+                <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

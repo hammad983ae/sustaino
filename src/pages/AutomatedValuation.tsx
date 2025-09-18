@@ -420,6 +420,15 @@ export default function AutomatedValuation() {
                                 >
                                   📊 ESG Assessments
                                 </Button>
+                                <Link to="/social-media-assets">
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    className="text-xs hover:bg-purple-700/30 text-purple-200 w-full"
+                                  >
+                                    📱 Social Media Assets
+                                  </Button>
+                                </Link>
                               </div>
                             </div>
                           </CardContent>
