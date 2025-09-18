@@ -304,7 +304,7 @@ export const SustanoSphere = () => {
         <TabsContent value="browse" className="space-y-6">
           {/* Stats Dashboard */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card>
+            <Card className="card-3d-light">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-2">
                   <Gavel className="h-5 w-5 text-primary" />
@@ -315,7 +315,7 @@ export const SustanoSphere = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="card-3d-light">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-green-600" />
@@ -326,7 +326,7 @@ export const SustanoSphere = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="card-3d-light">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
@@ -337,7 +337,7 @@ export const SustanoSphere = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="card-3d-light">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-purple-600" />
@@ -353,7 +353,7 @@ export const SustanoSphere = () => {
           {/* Featured Auctions Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {FEATURED_AUCTIONS.map((asset) => (
-              <Card key={asset.id} className="group hover:shadow-lg transition-all duration-300">
+              <Card key={asset.id} className="group card-3d-light hover:shadow-lg transition-all duration-500">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">

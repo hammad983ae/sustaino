@@ -38,6 +38,7 @@ import ConstructionCostIndex from "@/components/ConstructionCostIndex";
 import DevelopmentCalculator from "@/components/DevelopmentCalculator";
 import PEXAIntegration from "@/components/PEXAIntegration";
 import AdvertisingValuationDashboard from "@/components/AdvertisingValuationDashboard";
+import Enhanced3DCard from "@/components/Enhanced3DCard";
 
 // Import professional images
 import automatedValuationPlatform from '@/assets/automated-valuation-platform.jpg';
@@ -173,52 +174,40 @@ export default function AutomatedValuation() {
                     <TabsContent value="platforms" className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         {/* Core Platforms */}
-                        <Link to="/dashboard" className="block group">
-                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
-                            <CardContent className="p-6 text-center">
-                              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-200 transition-colors">
-                                <span className="text-xl">📊</span>
-                              </div>
-                              <h3 className="font-semibold text-blue-700 mb-2">Analytics Dashboard</h3>
-                              <p className="text-sm text-blue-600">Comprehensive analytics and reporting</p>
-                            </CardContent>
-                          </Card>
+                        <Link to="/dashboard" className="block">
+                          <Enhanced3DCard
+                            title="Analytics Dashboard"
+                            description="Comprehensive analytics and reporting"
+                            icon={<span className="text-xl">📊</span>}
+                            primaryColor="blue"
+                          />
                         </Link>
                         
-                        <Link to="/index" className="block group">
-                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
-                            <CardContent className="p-6 text-center">
-                              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-green-200 transition-colors">
-                                <span className="text-xl">🌱</span>
-                              </div>
-                              <h3 className="font-semibold text-green-700 mb-2">ESG Platform</h3>
-                              <p className="text-sm text-green-600">Environmental & sustainability analysis</p>
-                            </CardContent>
-                          </Card>
+                        <Link to="/index" className="block">
+                          <Enhanced3DCard
+                            title="ESG Platform"
+                            description="Environmental & sustainability analysis"
+                            icon={<span className="text-xl">🌱</span>}
+                            primaryColor="green"
+                          />
                         </Link>
                         
-                        <Link to="/sam-platform" className="block group">
-                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-purple-200 bg-gradient-to-br from-purple-50 to-violet-50">
-                            <CardContent className="p-6 text-center">
-                              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-200 transition-colors">
-                                <span className="text-xl">🎯</span>
-                              </div>
-                              <h3 className="font-semibold text-purple-700 mb-2">SAM Platform</h3>
-                              <p className="text-sm text-purple-600">Strategic Asset Management</p>
-                            </CardContent>
-                          </Card>
+                        <Link to="/sam-platform" className="block">
+                          <Enhanced3DCard
+                            title="SAM Platform"
+                            description="Strategic Asset Management"
+                            icon={<span className="text-xl">🎯</span>}
+                            primaryColor="purple"
+                          />
                         </Link>
                         
-                        <Link to="/crypto-trading" className="block group">
-                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50">
-                            <CardContent className="p-6 text-center">
-                              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-orange-200 transition-colors">
-                                <span className="text-xl">⚡</span>
-                              </div>
-                              <h3 className="font-semibold text-orange-700 mb-2">Blockchain Hub</h3>
-                              <p className="text-sm text-orange-600">Cryptocurrency & blockchain tools</p>
-                            </CardContent>
-                          </Card>
+                        <Link to="/crypto-trading" className="block">
+                          <Enhanced3DCard
+                            title="Blockchain Hub"
+                            description="Cryptocurrency & blockchain tools"
+                            icon={<span className="text-xl">⚡</span>}
+                            primaryColor="orange"
+                          />
                         </Link>
                       </div>
                       
@@ -226,40 +215,31 @@ export default function AutomatedValuation() {
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {/* Professional Services */}
-                        <Link to="/work-hub" className="block group">
-                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50">
-                            <CardContent className="p-6 text-center">
-                              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-teal-200 transition-colors">
-                                <span className="text-xl">🏠</span>
-                              </div>
-                              <h3 className="font-semibold text-teal-700 mb-2">Mortgage Broker</h3>
-                              <p className="text-sm text-teal-600">Mortgage and finance services</p>
-                            </CardContent>
-                          </Card>
+                        <Link to="/work-hub" className="block">
+                          <Enhanced3DCard
+                            title="Mortgage Broker"
+                            description="Mortgage and finance services"
+                            icon={<span className="text-xl">🏠</span>}
+                            primaryColor="teal"
+                          />
                         </Link>
                         
-                        <Link to="/reality-sales" className="block group">
-                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50">
-                            <CardContent className="p-6 text-center">
-                              <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-rose-200 transition-colors">
-                                <span className="text-xl">🏢</span>
-                              </div>
-                              <h3 className="font-semibold text-rose-700 mb-2">Reality Sales</h3>
-                              <p className="text-sm text-rose-600">Real estate sales platform</p>
-                            </CardContent>
-                          </Card>
+                        <Link to="/reality-sales" className="block">
+                          <Enhanced3DCard
+                            title="Reality Sales"
+                            description="Real estate sales platform"
+                            icon={<span className="text-xl">🏢</span>}
+                            primaryColor="pink"
+                          />
                         </Link>
                         
-                        <Link to="/work-hub" className="block group">
-                          <Card className="h-full hover:shadow-lg transition-all duration-300 group-hover:scale-105 border-slate-200 bg-gradient-to-br from-slate-50 to-gray-50">
-                            <CardContent className="p-6 text-center">
-                              <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-slate-200 transition-colors">
-                                <span className="text-xl">🔧</span>
-                              </div>
-                              <h3 className="font-semibold text-slate-700 mb-2">Property Management</h3>
-                              <p className="text-sm text-slate-600">Property management tools</p>
-                            </CardContent>
-                          </Card>
+                        <Link to="/work-hub" className="block">
+                          <Enhanced3DCard
+                            title="Property Management"
+                            description="Property management tools"
+                            icon={<span className="text-xl">🔧</span>}
+                            primaryColor="indigo"
+                          />
                         </Link>
                       </div>
                     </TabsContent>

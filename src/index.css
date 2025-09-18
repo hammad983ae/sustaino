@@ -46,8 +46,12 @@ All colors MUST be HSL.
     --green-shadow: 158 80% 25%;
     
     /* 3D Effect Variables */
-    --shadow-3d-light: 0 4px 12px hsl(158 30% 85% / 0.4);
-    --shadow-3d-medium: 0 8px 25px hsl(158 40% 75% / 0.5);
+    --shadow-3d-light: 0 4px 15px rgba(0, 0, 0, 0.1), 0 2px 5px rgba(0, 0, 0, 0.08);
+    --shadow-3d-medium: 0 8px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+    --shadow-3d-heavy: 0 15px 35px rgba(0, 0, 0, 0.2), 0 8px 15px rgba(0, 0, 0, 0.12);
+    --transform-3d-hover: perspective(1000px) rotateX(5deg) translateY(-5px);
+    --transform-3d-card: perspective(1000px) translateZ(0);
+    --gradient-3d-overlay: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
     --shadow-3d-strong: 0 12px 40px hsl(158 50% 65% / 0.6);
     --shadow-3d-glow: 0 0 30px hsl(158 64% 52% / 0.3);
     
@@ -167,16 +171,59 @@ All colors MUST be HSL.
     min-height: 100vh;
   }
   
+  /* Enhanced 3D Effects */
+  .card-3d-light {
+    background: var(--gradient-3d-overlay), linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+    box-shadow: var(--shadow-3d-light);
+    transform: var(--transform-3d-card);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .card-3d-light:hover {
+    transform: var(--transform-3d-hover);
+    box-shadow: var(--shadow-3d-medium);
+  }
+
+  .card-3d-medium {
+    background: var(--gradient-3d-overlay), linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    box-shadow: var(--shadow-3d-medium);
+    transform: var(--transform-3d-card);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+  }
+
+  .card-3d-medium:hover {
+    transform: var(--transform-3d-hover);
+    box-shadow: var(--shadow-3d-heavy);
+  }
+
+  .card-3d-heavy {
+    background: var(--gradient-3d-overlay), linear-gradient(145deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+    box-shadow: var(--shadow-3d-heavy);
+    transform: var(--transform-3d-card);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+  }
+
+  .card-3d-heavy:hover {
+    transform: perspective(1000px) rotateX(8deg) translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+
   /* Enhanced 3D Green Effects */
   .green-3d-card {
     background: var(--gradient-green-medium);
     box-shadow: var(--shadow-3d-medium), var(--shadow-3d-glow);
-    transform: translateZ(0);
+    transform: var(--transform-3d-card);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .green-3d-card:hover {
-    transform: translateY(-4px) translateZ(0);
+    transform: var(--transform-3d-hover);
     box-shadow: var(--shadow-3d-strong), var(--shadow-3d-glow);
   }
   
