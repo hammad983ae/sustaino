@@ -74,6 +74,16 @@ All colors MUST be HSL.
     --risk-moderate: 43 96% 56%;
     --risk-high: 0 84% 60%;
 
+    /* High Contrast Toolbar Colors - Always readable */
+    --toolbar-background: 0 0% 100%;
+    --toolbar-foreground: 222.2 84% 4.9%;
+    --toolbar-border: 214.3 31.8% 91.4%;
+    --toolbar-hover: 210 40% 98%;
+    --toolbar-active: 158 64% 52%;
+    --toolbar-active-foreground: 0 0% 100%;
+    --toolbar-secondary: 210 40% 95%;
+    --toolbar-muted: 215.4 16.3% 46.9%;
+
     --sidebar-background: 120 25% 97%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 158 64% 52%;
@@ -135,6 +145,16 @@ All colors MUST be HSL.
     --gradient-green-medium: linear-gradient(135deg, hsl(38 20% 9%) 0%, hsl(158 20% 12%) 50%, hsl(158 25% 15%) 100%);
     --gradient-green-strong: linear-gradient(135deg, hsl(38 25% 10%) 0%, hsl(158 25% 14%) 40%, hsl(158 30% 18%) 100%);
     --gradient-green-glow: linear-gradient(135deg, hsl(38 30% 12%) 0%, hsl(158 30% 17%) 30%, hsl(158 35% 22%) 100%);
+    
+    /* High Contrast Toolbar Colors - Dark Mode */
+    --toolbar-background: 158 15% 15%;
+    --toolbar-foreground: 0 0% 95%;
+    --toolbar-border: 158 20% 25%;
+    --toolbar-hover: 158 15% 20%;
+    --toolbar-active: 158 64% 52%;
+    --toolbar-active-foreground: 0 0% 100%;
+    --toolbar-secondary: 158 15% 18%;
+    --toolbar-muted: 120 15% 65%;
     
     --sidebar-background: 158 20% 12%;
     --sidebar-foreground: 120 25% 90%;
@@ -354,5 +374,53 @@ All colors MUST be HSL.
   
   .animate-glow-pulse {
     animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  /* High Contrast Toolbar Styles */
+  .toolbar-high-contrast {
+    background: hsl(var(--toolbar-background)) !important;
+    color: hsl(var(--toolbar-foreground)) !important;
+    border: 1px solid hsl(var(--toolbar-border)) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .toolbar-high-contrast .toolbar-item {
+    color: hsl(var(--toolbar-foreground)) !important;
+    background: transparent !important;
+    transition: all 0.2s ease;
+  }
+
+  .toolbar-high-contrast .toolbar-item:hover {
+    background: hsl(var(--toolbar-hover)) !important;
+    color: hsl(var(--toolbar-foreground)) !important;
+  }
+
+  .toolbar-high-contrast .toolbar-item.active {
+    background: hsl(var(--toolbar-active)) !important;
+    color: hsl(var(--toolbar-active-foreground)) !important;
+  }
+
+  .toolbar-high-contrast .toolbar-muted {
+    color: hsl(var(--toolbar-muted)) !important;
+  }
+
+  /* Navigation breadcrumbs high contrast */
+  .nav-high-contrast {
+    background: hsl(var(--toolbar-background) / 0.95) !important;
+    color: hsl(var(--toolbar-foreground)) !important;
+    border: 1px solid hsl(var(--toolbar-border)) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .nav-high-contrast a,
+  .nav-high-contrast span {
+    color: hsl(var(--toolbar-foreground)) !important;
+  }
+
+  .nav-high-contrast a:hover {
+    color: hsl(var(--toolbar-active)) !important;
   }
 }

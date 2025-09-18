@@ -112,32 +112,32 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-card/50">
+      {/* Header with High Contrast */}
+      <div className="border-b toolbar-high-contrast">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+              <Link to="/" className="nav-high-contrast rounded-lg px-3 py-2 flex items-center gap-2 text-sm hover:no-underline">
                 <Home className="h-4 w-4" />
                 Back to Main Platform
               </Link>
-              <div className="h-6 w-px bg-border" />
+              <div className="h-6 w-px bg-toolbar-border" />
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600">
                   <BarChart3 className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-foreground">Property Analytics Dashboard</h1>
-                  <p className="text-sm text-muted-foreground">ESG-Enhanced Property Valuation Platform</p>
+                  <h1 className="text-2xl font-bold text-toolbar-foreground">Property Analytics Dashboard</h1>
+                  <p className="text-sm text-toolbar-muted">ESG-Enhanced Property Valuation Platform</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="px-3 py-1">
+              <Badge variant="secondary" className="px-3 py-1 toolbar-high-contrast">
                 <Leaf className="h-3 w-3 mr-1" />
                 Greenium Active
               </Badge>
-              <Badge variant="secondary" className="px-3 py-1">
+              <Badge variant="secondary" className="px-3 py-1 toolbar-high-contrast">
                 <Award className="h-3 w-3 mr-1" />
                 Sustaino Coins: 2,450
               </Badge>
@@ -149,12 +149,12 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-2 toolbar-high-contrast">
+            <TabsTrigger value="overview" className="toolbar-item flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="icv-platform" className="flex items-center gap-2">
+            <TabsTrigger value="icv-platform" className="toolbar-item flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               ICV Platform
             </TabsTrigger>

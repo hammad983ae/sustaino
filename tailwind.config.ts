@@ -76,6 +76,16 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        toolbar: {
+          DEFAULT: "hsl(var(--toolbar-background))",
+          foreground: "hsl(var(--toolbar-foreground))",
+          border: "hsl(var(--toolbar-border))",
+          hover: "hsl(var(--toolbar-hover))",
+          active: "hsl(var(--toolbar-active))",
+          "active-foreground": "hsl(var(--toolbar-active-foreground))",
+          secondary: "hsl(var(--toolbar-secondary))",
+          muted: "hsl(var(--toolbar-muted))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
