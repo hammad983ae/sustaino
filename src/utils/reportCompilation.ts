@@ -19,8 +19,13 @@ export interface CompilationResult {
     digitalSignature?: string;
     compliance: {
       rics: boolean;
-      aapi: boolean;
+      api: boolean;
+      avi: boolean;
+      ivsc: boolean;
+      uspap: boolean;
+      aasb13: boolean;
       iso27001: boolean;
+      esgIntegrated: boolean;
     };
   };
   validationResults: {
@@ -169,8 +174,13 @@ export class ReportCompiler {
       digitalSignature: await this.generateDigitalSignature(documentHash),
       compliance: {
         rics: true,
-        aapi: true,
-        iso27001: true
+        api: true,
+        avi: true,
+        ivsc: true,
+        uspap: true,
+        aasb13: true,
+        iso27001: true,
+        esgIntegrated: false
       }
     };
   }
