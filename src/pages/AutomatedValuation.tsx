@@ -154,13 +154,13 @@ export default function AutomatedValuation() {
         <div className="relative z-10">
           <div className="text-center py-8">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              ICV (Instant Comprehensive Valuation)™
+              ICR (Instant Comprehensive Reporting)™
             </h1>
             <p className="text-xl text-white/90 mb-2">
-              AI-powered property valuation and assessment technology
+              Professional Property Valuations and ESG Assessments
             </p>
             <p className="text-sm text-white/70">
-              Patent Pending • IP Protected • Trademark ©
+              Patent Pending • IP Protected • Trademark © • Copyright Protected
             </p>
           </div>
           
@@ -177,7 +177,7 @@ export default function AutomatedValuation() {
 
                 {/* Main heading with blue theme */}
                 <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-300/50 rounded-lg px-6 py-2">
-                  <span className="text-white font-semibold text-lg">⚡ Automated Valuation Platform</span>
+                  <span className="text-white font-semibold text-lg">⚡ Instant Comprehensive Reporting</span>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -193,9 +193,9 @@ export default function AutomatedValuation() {
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center">
                       ⚡
                     </div>
-                    Automated Valuation Platform
+                    Instant Comprehensive Reporting
                   </CardTitle>
-                  <p className="text-cyan-200">AI-powered property valuation and assessment technology</p>
+                  <p className="text-cyan-200">Professional Property Valuations and ESG Assessment Platform</p>
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">
