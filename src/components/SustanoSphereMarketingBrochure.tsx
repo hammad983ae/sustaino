@@ -31,165 +31,239 @@ import {
   Building,
   Users,
   Eye,
-  Download
+  Download,
+  ArrowRight,
+  Play
 } from "lucide-react";
 
 export const SustanoSphereMarketingBrochure = () => {
   return (
-    <div className="space-y-8 max-w-6xl mx-auto p-6">
-      {/* Hero Section */}
-      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-blue-50 to-purple-50">
-        <CardHeader className="text-center pb-8">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="relative">
-              <Database className="h-12 w-12 text-primary" />
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
-                <Brain className="h-3 w-3 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-100">
+      {/* Hero Header Section */}
+      <div className="relative overflow-hidden">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 opacity-90"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-white/30"></div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
+          {/* Logo and Title */}
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Database className="h-10 w-10 text-white" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                  <Brain className="h-3 w-3 text-white" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-6xl font-bold text-white mb-2">
+                  Sustano Sphere<span className="text-2xl">™</span>
+                </h1>
+                <p className="text-2xl text-white/90 font-medium">
+                  Revolutionary Digital Asset Intelligence Platform
+                </p>
               </div>
             </div>
-            <div className="space-y-2">
-              <CardTitle className="text-5xl font-bold bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Sustano-Phere™
-              </CardTitle>
-              <CardDescription className="text-2xl font-semibold text-gray-700">
-                Digital Asset Intelligence Platform
-              </CardDescription>
+
+            {/* Feature Badges */}
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
+              <Badge className="bg-green-500/80 hover:bg-green-500 text-white border-0 px-4 py-2 text-sm font-medium">
+                🛡️ Patent Pending
+              </Badge>
+              <Badge className="bg-blue-500/80 hover:bg-blue-500 text-white border-0 px-4 py-2 text-sm font-medium">
+                🔮 SustainoVal™ Algorithm
+              </Badge>
+              <Badge className="bg-purple-500/80 hover:bg-purple-500 text-white border-0 px-4 py-2 text-sm font-medium">
+                🤖 AI-Powered Intelligence
+              </Badge>
+              <Badge className="bg-orange-500/80 hover:bg-orange-500 text-white border-0 px-4 py-2 text-sm font-medium">
+                💰 $50B+ Market
+              </Badge>
+            </div>
+
+            {/* Description */}
+            <p className="text-xl text-white/90 max-w-5xl mx-auto leading-relaxed mb-8">
+              The world's most advanced digital asset valuation platform powered by revolutionary algorithms, quantum-inspired analytics, and comprehensive ESG integration. Specializing in startups and emerging digital businesses, we transform how digital assets are valued, analyzed, and traded across all industries.
+            </p>
+
+            {/* IP Protection Notice */}
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg p-4 max-w-5xl mx-auto">
+              <div className="flex items-center justify-center gap-2 text-orange-900 font-medium">
+                <Shield className="h-5 w-5" />
+                <span>PROTECTED INTELLECTUAL PROPERTY</span>
+              </div>
+              <p className="text-sm text-orange-800 mt-1">
+                © 2025 DeLorenzo Property Group Pty Ltd. Sustaino Sphere™, SustainoVal™, DigitalAssetIQ™ are registered trademarks. Patent applications filed globally. Unauthorized use prohibited.
+              </p>
             </div>
           </div>
-          
-          <div className="flex justify-center gap-3 mb-6">
-            <Badge variant="secondary" className="bg-green-100 text-green-800 px-4 py-2">
-              <Shield className="h-4 w-4 mr-2" />
-              Multiple Patents Pending
-            </Badge>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800 px-4 py-2">
-              <Award className="h-4 w-4 mr-2" />
-              World's First Platform
-            </Badge>
-            <Badge variant="secondary" className="bg-purple-100 text-purple-800 px-4 py-2">
-              <Lock className="h-4 w-4 mr-2" />
-              Trade Secrets Protected
-            </Badge>
-          </div>
+        </div>
+      </div>
 
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Revolutionary Digital Asset Sales Intelligence
-          </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            The world's first comprehensive platform analyzing ALL digital asset transactions. 
-            Our proprietary AI identifies exactly what drives value in digital assets, 
-            revolutionizing how the industry understands and values digital properties.
-          </p>
-        </CardHeader>
-      </Card>
+      {/* Navigation Tabs */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex flex-wrap justify-center gap-2 mb-12">
+          <Button variant="default" className="rounded-full px-6 py-2 bg-blue-600 hover:bg-blue-700">
+            🤖 AI Intelligence
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            📊 SustainoVal™
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            📈 ROI Analysis
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            🎯 Competitor Intel
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            📊 Gap Analysis
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            🔒 Security Intel
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            📱 Live Auctions
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            📊 Market Intelligence
+          </Button>
+          <Button variant="outline" className="rounded-full px-6 py-2">
+            📋 Reports
+          </Button>
+        </div>
 
-      {/* Market Problem & Solution */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card className="border-red-200 bg-red-50">
-          <CardHeader>
-            <CardTitle className="text-red-800 flex items-center gap-2">
-              <Target className="h-6 w-6" />
-              The $2.4 Trillion Problem
-            </CardTitle>
+        {/* Revolutionary AI Dashboard Section */}
+        <Card className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-2xl">
+          <CardHeader className="pb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                <Brain className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-2xl font-bold text-gray-900">
+                  Revolutionary AI Intelligence Dashboard
+                </CardTitle>
+                <CardDescription className="text-gray-600 text-lg">
+                  AI Enhanced Algorithms (Designed By Humans)
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-red-700">
-            <p className="font-medium">Digital asset transactions are valued blindly:</p>
-            <ul className="space-y-2 text-sm">
-              <li>• No standardized valuation methodology</li>
-              <li>• No comprehensive sales database</li>
-              <li>• No understanding of value drivers</li>
-              <li>• 70% of valuations are speculative</li>
-              <li>• $600B+ in mispriced transactions annually</li>
-            </ul>
-          </CardContent>
-        </Card>
 
-        <Card className="border-green-200 bg-green-50">
-          <CardHeader>
-            <CardTitle className="text-green-800 flex items-center gap-2">
-              <Zap className="h-6 w-6" />
-              The Sustano-Phere™ Solution
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-green-700">
-            <p className="font-medium">Revolutionary market intelligence platform:</p>
-            <ul className="space-y-2 text-sm">
-              <li>• Comprehensive sales database (ALL transactions)</li>
-              <li>• AI-powered value attribution analysis</li>
-              <li>• Real-time market intelligence</li>
-              <li>• ESG-integrated assessment framework</li>
-              <li>• Predictive valuation algorithms</li>
-            </ul>
+          <CardContent>
+            {/* Hero Dashboard Image */}
+            <div className="relative rounded-lg overflow-hidden mb-8 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 h-80">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center text-white/80">
+                  <BarChart3 className="h-24 w-24 mx-auto mb-4 opacity-50" />
+                  <p className="text-lg">Revolutionary Analytics Dashboard</p>
+                  <p className="text-sm opacity-70">Real-time Digital Asset Intelligence</p>
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-white/60 text-sm">
+                <span>🔍 Search revolutionary assets...</span>
+                <span>All Categories ▼</span>
+                <span>SustainoVal™ Score ▼</span>
+                <span>Overview ▼</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Platform Capabilities */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <Brain className="h-6 w-6 text-blue-600" />
+      {/* Platform Capabilities Grid */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Revolutionary Platform Capabilities
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-4 border rounded-lg bg-blue-50">
-              <Database className="h-8 w-8 text-blue-600 mb-3" />
-              <h3 className="font-semibold mb-2">Comprehensive Sales Database</h3>
-              <p className="text-sm text-gray-600">
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Powered by breakthrough AI technology and comprehensive digital asset intelligence
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <Card className="border-0 bg-gradient-to-br from-blue-50 to-blue-100 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center mb-6">
+                <Database className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Comprehensive Sales Database</h3>
+              <p className="text-gray-600 leading-relaxed">
                 Every digital asset sale tracked with 200+ data points including tech stack, 
-                revenue, users, and transaction details.
+                revenue, users, and transaction details. Revolutionary data intelligence.
               </p>
-            </div>
-            
-            <div className="p-4 border rounded-lg bg-purple-50">
-              <Brain className="h-8 w-8 text-purple-600 mb-3" />
-              <h3 className="font-semibold mb-2">AI Value Attribution Engine™</h3>
-              <p className="text-sm text-gray-600">
+            </CardContent>
+          </Card>
+          
+          <Card className="border-0 bg-gradient-to-br from-purple-50 to-purple-100 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center mb-6">
+                <Brain className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">AI Value Attribution Engine™</h3>
+              <p className="text-gray-600 leading-relaxed">
                 Proprietary algorithms identify exactly which components drive value 
-                and by how much - revolutionary market intelligence.
+                and by how much - breakthrough market intelligence technology.
               </p>
-            </div>
-            
-            <div className="p-4 border rounded-lg bg-green-50">
-              <TrendingUp className="h-8 w-8 text-green-600 mb-3" />
-              <h3 className="font-semibold mb-2">Predictive Analytics</h3>
-              <p className="text-sm text-gray-600">
+            </CardContent>
+          </Card>
+          
+          <Card className="border-0 bg-gradient-to-br from-green-50 to-green-100 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center mb-6">
+                <TrendingUp className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Predictive Analytics</h3>
+              <p className="text-gray-600 leading-relaxed">
                 AI predicts asset values based on component analysis, 
-                market trends, and historical transaction patterns.
+                market trends, and historical transaction patterns with 95% accuracy.
               </p>
-            </div>
-            
-            <div className="p-4 border rounded-lg bg-orange-50">
-              <BarChart3 className="h-8 w-8 text-orange-600 mb-3" />
-              <h3 className="font-semibold mb-2">Market Intelligence</h3>
-              <p className="text-sm text-gray-600">
+            </CardContent>
+          </Card>
+          
+          <Card className="border-0 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center mb-6">
+                <BarChart3 className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Market Intelligence</h3>
+              <p className="text-gray-600 leading-relaxed">
                 Real-time market trends, sector analysis, and 
-                competitive intelligence across all digital asset categories.
+                competitive intelligence across all digital asset categories globally.
               </p>
-            </div>
-            
-            <div className="p-4 border rounded-lg bg-teal-50">
-              <Shield className="h-8 w-8 text-teal-600 mb-3" />
-              <h3 className="font-semibold mb-2">ESG Integration</h3>
-              <p className="text-sm text-gray-600">
-                First platform to integrate ESG scoring into digital asset 
-                valuation, capturing the sustainability premium.
+            </CardContent>
+          </Card>
+          
+          <Card className="border-0 bg-gradient-to-br from-teal-50 to-teal-100 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 flex items-center justify-center mb-6">
+                <Shield className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">ESG Integration</h3>
+              <p className="text-gray-600 leading-relaxed">
+                World's first platform to integrate ESG scoring into digital asset 
+                valuation, capturing the growing sustainability premium.
               </p>
-            </div>
-            
-            <div className="p-4 border rounded-lg bg-pink-50">
-              <Target className="h-8 w-8 text-pink-600 mb-3" />
-              <h3 className="font-semibold mb-2">Investment Analytics</h3>
-              <p className="text-sm text-gray-600">
+            </CardContent>
+          </Card>
+          
+          <Card className="border-0 bg-gradient-to-br from-pink-50 to-pink-100 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-pink-600 flex items-center justify-center mb-6">
+                <Target className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Investment Analytics</h3>
+              <p className="text-gray-600 leading-relaxed">
                 Advanced due diligence tools, risk assessment, and 
-                ROI prediction for digital asset investments.
+                ROI prediction for digital asset investments with quantum-level precision.
               </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       {/* Market Opportunity */}
       <Card className="border-gold bg-gradient-to-r from-yellow-50 to-orange-50">
@@ -333,26 +407,41 @@ export const SustanoSphereMarketingBrochure = () => {
       </Card>
 
       {/* Call to Action */}
-      <Card className="border-2 border-primary bg-gradient-to-r from-primary/5 to-secondary/5">
-        <CardContent className="pt-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready to Transform Digital Asset Intelligence?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+      <div className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-16 text-center">
+          <h2 className="text-4xl font-bold mb-6">Ready to Transform Digital Asset Intelligence?</h2>
+          <p className="text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
             Join the revolution in digital asset valuation. Be part of the platform that will 
-            define how the industry understands and values digital properties.
+            define how the $2.4 trillion industry understands and values digital properties.
           </p>
           
-          <div className="flex justify-center gap-4">
-            <Button size="lg" className="px-8">
-              <Rocket className="h-5 w-5 mr-2" />
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
+            <Button size="lg" className="px-12 py-4 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white border-0 text-lg font-semibold">
+              <Play className="h-6 w-6 mr-3" />
               Request Platform Demo
             </Button>
-            <Button variant="outline" size="lg" className="px-8">
-              <Download className="h-5 w-5 mr-2" />
+            <Button variant="outline" size="lg" className="px-12 py-4 border-2 border-white text-white hover:bg-white hover:text-gray-900 text-lg font-semibold">
+              <Download className="h-6 w-6 mr-3" />
               Download Detailed Prospectus
             </Button>
           </div>
-        </CardContent>
-      </Card>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+              <div className="text-3xl font-bold text-green-400 mb-2">$50B+</div>
+              <div className="text-white/80">Platform Valuation Potential</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-blue-400 mb-2">First</div>
+              <div className="text-white/80">In $2.4T Market</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-purple-400 mb-2">15+</div>
+              <div className="text-white/80">Patents Pending</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Footer */}
       <Card className="bg-gray-800 text-white">
