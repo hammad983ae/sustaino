@@ -12,8 +12,11 @@ import {
   Palette,
   Sparkles
 } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
 import GradientLogos from '@/components/GradientLogos';
 import PDFWebExtractorComparison from '@/components/PDFWebExtractorComparison';
+import PerfectSustanoLogo from '@/components/PerfectSustanoLogo';
+import LogoDownloader from '@/components/LogoDownloader';
 
 const Marketing = () => {
   const brochures = [
@@ -36,20 +39,13 @@ const Marketing = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Simple Header */}
-      <div className="toolbar-high-contrast border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600">
-              <Megaphone className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">Marketing Hub</h1>
-              <p className="text-sm text-muted-foreground">Brochures, logos, and marketing materials</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Perfect Page Header with Navigation */}
+      <PageHeader 
+        title="Marketing Hub"
+        subtitle="Brochures, logos, and marketing materials"
+        icon={<Megaphone className="h-6 w-6 text-white" />}
+        gradient="from-purple-500 to-pink-600"
+      />
 
       <div className="container mx-auto px-4 py-6">
         {/* Quick Stats */}
@@ -153,17 +149,111 @@ const Marketing = () => {
           </Card>
         </div>
 
-        {/* NEW: Gradient Logos Section */}
+        {/* NEW: Perfect Logo Downloads */}
         <Card className="mt-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5" />
-              Gradient Logos (Dashboard Style)
+              Perfect Logo Downloads
             </CardTitle>
-            <p className="text-muted-foreground">Sexy gradient logos matching your dashboard theme</p>
+            <p className="text-muted-foreground">High-quality, pixel-perfect logos with proper proportions</p>
           </CardHeader>
           <CardContent>
-            <GradientLogos />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Default Logo */}
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="mb-4 flex justify-center">
+                    <PerfectSustanoLogo size="lg" variant="default" />
+                  </div>
+                  <h4 className="font-semibold mb-2">Standard Logo</h4>
+                  <LogoDownloader
+                    logoComponent={<PerfectSustanoLogo size="xl" variant="default" />}
+                    filename="sustaino-pro-standard"
+                    backgroundColor="#ffffff"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* White Logo */}
+              <Card>
+                <CardContent className="p-6 text-center bg-gradient-to-br from-purple-600 to-blue-700">
+                  <div className="mb-4 flex justify-center">
+                    <PerfectSustanoLogo size="lg" variant="white" />
+                  </div>
+                  <h4 className="font-semibold mb-2 text-white">White Logo</h4>
+                  <LogoDownloader
+                    logoComponent={<PerfectSustanoLogo size="xl" variant="white" />}
+                    filename="sustaino-pro-white"
+                    backgroundColor="#8b5cf6"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Dark Logo */}
+              <Card>
+                <CardContent className="p-6 text-center bg-gray-100">
+                  <div className="mb-4 flex justify-center">
+                    <PerfectSustanoLogo size="lg" variant="dark" />
+                  </div>
+                  <h4 className="font-semibold mb-2">Dark Logo</h4>
+                  <LogoDownloader
+                    logoComponent={<PerfectSustanoLogo size="xl" variant="dark" />}
+                    filename="sustaino-pro-dark"
+                    backgroundColor="#f3f4f6"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Icon Only */}
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="mb-4 flex justify-center">
+                    <PerfectSustanoLogo size="lg" variant="default" showText={false} />
+                  </div>
+                  <h4 className="font-semibold mb-2">Icon Only</h4>
+                  <LogoDownloader
+                    logoComponent={<PerfectSustanoLogo size="xl" variant="default" showText={false} />}
+                    filename="sustaino-pro-icon"
+                    backgroundColor="#ffffff"
+                    width={400}
+                    height={400}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Vertical Layout */}
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="mb-4 flex justify-center">
+                    <PerfectSustanoLogo size="md" variant="default" textPosition="bottom" />
+                  </div>
+                  <h4 className="font-semibold mb-2">Vertical Layout</h4>
+                  <LogoDownloader
+                    logoComponent={<PerfectSustanoLogo size="xl" variant="default" textPosition="bottom" />}
+                    filename="sustaino-pro-vertical"
+                    backgroundColor="#ffffff"
+                    width={600}
+                    height={800}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Purple Theme */}
+              <Card>
+                <CardContent className="p-6 text-center bg-gradient-to-br from-purple-500 to-purple-700">
+                  <div className="mb-4 flex justify-center">
+                    <PerfectSustanoLogo size="lg" variant="purple" />
+                  </div>
+                  <h4 className="font-semibold mb-2 text-white">Purple Theme</h4>
+                  <LogoDownloader
+                    logoComponent={<PerfectSustanoLogo size="xl" variant="purple" />}
+                    filename="sustaino-pro-purple"
+                    backgroundColor="#8b5cf6"
+                  />
+                </CardContent>
+              </Card>
+            </div>
           </CardContent>
         </Card>
 
