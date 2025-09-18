@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { BlockchainIntegration } from '@/components/BlockchainIntegration';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import BottomChatAssistant from '@/components/BottomChatAssistant';
+import EnhancedPropertyUpdates from '@/components/EnhancedPropertyUpdates';
 import { 
   BarChart, 
   Bar, 
@@ -46,7 +48,8 @@ import {
   XCircle,
   Lock,
   CreditCard,
-  Megaphone
+  Megaphone,
+  Play
 } from 'lucide-react';
 import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
 import DashboardQuickSearch from '@/components/DashboardQuickSearch';
@@ -698,6 +701,47 @@ const Dashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* AI Assistant Video Section */}
+      <div className="mb-8">
+        <Card className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white">
+          <CardHeader>
+            <CardTitle className="text-2xl flex items-center gap-3">
+              <Play className="w-8 h-8" />
+              Sustaino Pro AI Platform Demo
+            </CardTitle>
+            <p className="text-emerald-100 text-lg">
+              Watch the revolutionary AI-powered property analysis platform in action
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="relative aspect-video bg-black/20 rounded-lg overflow-hidden">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Button size="lg" className="bg-white/20 hover:bg-white/30 text-white border-white/30">
+                  <Play className="w-6 h-6 mr-2" />
+                  Play Sustaino Pro Demo
+                </Button>
+              </div>
+              <div className="absolute bottom-4 left-4 right-4">
+                <div className="bg-black/40 p-3 rounded">
+                  <h4 className="font-semibold">Featured: Revolutionary Property Analysis</h4>
+                  <p className="text-sm text-emerald-100">
+                    See how Sustaino Pro transforms property valuations with AI-powered insights
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Enhanced Property Updates - Full Width */}
+      <div className="mb-8">
+        <EnhancedPropertyUpdates />
+      </div>
+
+      {/* Bottom Chat Assistant */}
+      <BottomChatAssistant />
     </div>
   );
 };
