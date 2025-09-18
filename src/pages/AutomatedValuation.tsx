@@ -102,7 +102,7 @@ export default function AutomatedValuation() {
   if (currentStep === "propertyType" || currentStep === "default") {
     return (
       <div className="min-h-screen" style={{
-        background: 'linear-gradient(135deg, #6b46c1 0%, #7c3aed 25%, #8b5cf6 50%, #a78bfa 75%, #c4b5fd 100%)'
+        background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #60a5fa 75%, #93c5fd 100%)'
       }}>
         {/* Professional Platform Visual */}
         <div className="absolute inset-0 opacity-20">
@@ -122,10 +122,10 @@ export default function AutomatedValuation() {
         {/* Enhanced purple gradient background */}
         <div className="absolute inset-0 backdrop-blur-sm" />
         
-        {/* Floating orbs for extra ambiance with purple tinge */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-purple-400/30 to-violet-400/30 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-48 h-48 bg-gradient-to-r from-violet-400/25 to-purple-400/25 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-r from-purple-300/35 to-violet-300/35 rounded-full blur-lg animate-float-3d" style={{ animationDelay: '4s' }} />
+        {/* Floating orbs for extra ambiance with blue tinge */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-400/30 to-cyan-400/30 rounded-full blur-xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-48 h-48 bg-gradient-to-r from-cyan-400/25 to-blue-400/25 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-r from-blue-300/35 to-cyan-300/35 rounded-full blur-lg animate-float-3d" style={{ animationDelay: '4s' }} />
         
         <div className="relative z-10">
           <BrandedHeader />
@@ -141,8 +141,8 @@ export default function AutomatedValuation() {
                   🏠 Back to Dashboard
                 </Link>
 
-                {/* New Sustaino World Tab - Primary Platform Access */}
-                <div className="bg-gradient-to-r from-purple-500/20 to-violet-500/20 backdrop-blur-sm border border-purple-300/50 rounded-lg px-6 py-2">
+                {/* Main heading with blue theme */}
+                <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-300/50 rounded-lg px-6 py-2">
                   <span className="text-white font-semibold text-lg">⚡ Automated Valuation Platform</span>
                 </div>
               </div>
@@ -153,19 +153,19 @@ export default function AutomatedValuation() {
             
             {/* Sustaino World Platform Hub */}
             <div className="mb-12">
-              <Card className="card-3d-medium bg-slate-800/40 backdrop-blur-sm border-purple-700/50">
+              <Card className="card-3d-medium bg-slate-800/40 backdrop-blur-sm border-blue-700/50">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-2xl text-purple-300 flex items-center justify-center gap-2">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                  <CardTitle className="text-2xl text-cyan-300 flex items-center justify-center gap-2">
+                    <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center">
                       ⚡
                     </div>
                     Automated Valuation Platform
                   </CardTitle>
-                  <p className="text-purple-200">AI-powered property valuation and assessment technology</p>
+                  <p className="text-cyan-200">AI-powered property valuation and assessment technology</p>
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">
-                    <TabsList className="grid w-full grid-cols-5 bg-purple-900/50">
+                    <TabsList className="grid w-full grid-cols-5 bg-blue-900/50">
                       <TabsTrigger value="platforms">Platform Access</TabsTrigger>
                       <TabsTrigger value="tools">Data Tools</TabsTrigger>
                       <TabsTrigger value="brochures">📋 Brochures</TabsTrigger>
@@ -401,8 +401,7 @@ export default function AutomatedValuation() {
               </CardHeader>
               <CardContent>
                 <PropertyTypeSelector 
-                  onPropertyTypeSelect={handlePropertyTypeSelect}
-                  selectedPropertyType={selectedPropertyType}
+                  onSelect={handlePropertyTypeSelect}
                 />
               </CardContent>
             </Card>
@@ -477,8 +476,8 @@ export default function AutomatedValuation() {
             ← Back
           </Button>
           <SetupFlowSelector 
-            onSetupMethodSelect={handleSetupMethodSelect}
-            propertyType={selectedPropertyType}
+            onQuickSetup={() => handleSetupMethodSelect("quick")}
+            onAdvancedSetup={() => handleSetupMethodSelect("advanced")}
           />
         </div>
       </div>
@@ -493,8 +492,8 @@ export default function AutomatedValuation() {
             ← Back
           </Button>
           <QuickSetupForm 
-            propertyType={selectedPropertyType}
             onComplete={handleQuickSetupComplete}
+            onAdvancedSetup={() => handleSetupMethodSelect("advanced")}
           />
         </div>
       </div>
@@ -524,6 +523,7 @@ export default function AutomatedValuation() {
           <AutomatedPropertyDetails 
             propertyType={selectedPropertyType}
             onNext={handlePropertyDetailsNext}
+            onBack={handleBack}
           />
         </div>
       </div>
