@@ -12,6 +12,7 @@ import {
   Palette,
   Sparkles
 } from 'lucide-react';
+import GradientLogos from '@/components/GradientLogos';
 
 const Marketing = () => {
   const brochures = [
@@ -116,12 +117,12 @@ const Marketing = () => {
             </CardContent>
           </Card>
 
-          {/* Logos Section */}
+          {/* Traditional Logos Section */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <ImageIcon className="h-5 w-5" />
-                Brand Logos
+                Standard Logos
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -150,6 +151,20 @@ const Marketing = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* NEW: Gradient Logos Section */}
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              Gradient Logos (Dashboard Style)
+            </CardTitle>
+            <p className="text-muted-foreground">Sexy gradient logos matching your dashboard theme</p>
+          </CardHeader>
+          <CardContent>
+            <GradientLogos />
+          </CardContent>
+        </Card>
 
         {/* Brand Colors */}
         <Card className="mt-6">
