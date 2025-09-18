@@ -259,6 +259,16 @@ export default function AutomatedValuation() {
                             className="border-purple-700/50 bg-purple-800/40"
                           />
                         </Link>
+                        
+                        <Link to="/market-strategy" className="block">
+                          <Enhanced3DCard
+                            title="Sustano Sphere™"
+                            description="Revolutionary platform ecosystem"
+                            icon={<span className="text-xl">🌍</span>}
+                            primaryColor="green"
+                            className="border-purple-700/50 bg-purple-800/40"
+                          />
+                        </Link>
                       </div>
                       
                       <Separator className="bg-purple-600/30" />
@@ -377,14 +387,15 @@ export default function AutomatedValuation() {
                           <CardContent>
                             <div className="space-y-2">
                               <div className="grid grid-cols-2 gap-2">
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  onClick={() => window.open('/brochures', '_blank')}
-                                  className="text-xs hover:bg-purple-700/30 text-purple-200"
-                                >
-                                  🌍 Sustaino-Sphere™
-                                </Button>
+                                <Link to="/market-strategy">
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    className="text-xs hover:bg-purple-700/30 text-purple-200 w-full"
+                                  >
+                                    🌍 Sustano Sphere™
+                                  </Button>
+                                </Link>
                                 <Button 
                                   variant="ghost" 
                                   size="sm"
