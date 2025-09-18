@@ -87,6 +87,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SustanoSphereMarketAnalysisReport } from "./SustanoSphereMarketAnalysisReport";
+import SustanoSphereDataCentre from "./SustanoSphereDataCentre";
 
 import sustainoSphereDashboard from "@/assets/sustano-sphere-dashboard.jpg";
 import roiAnalysisVisual from "@/assets/roi-analysis-visual.jpg";
@@ -703,7 +704,7 @@ export const RevolutionarySustainoSphere = () => {
 
       {/* Revolutionary Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-9 bg-gradient-to-r from-slate-100 to-blue-100 p-2 rounded-xl">
+        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 bg-gradient-to-r from-slate-100 to-blue-100 p-2 rounded-xl gap-1">
           <TabsTrigger value="intelligence" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white">
             <Brain className="h-4 w-4" />
             AI Intelligence
@@ -712,9 +713,15 @@ export const RevolutionarySustainoSphere = () => {
             <Diamond className="h-4 w-4" />
             SustainoVal™
           </TabsTrigger>
-          <TabsTrigger value="roi" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white">
-            <Calculator className="h-4 w-4" />
-            ROI Analysis
+          <TabsTrigger value="roi" className="flex items-center gap-1 lg:gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white text-xs lg:text-sm">
+            <Calculator className="h-3 w-3 lg:h-4 lg:w-4" />
+            <span className="hidden lg:inline">ROI Analysis</span>
+            <span className="lg:hidden">ROI</span>
+          </TabsTrigger>
+          <TabsTrigger value="datacentre" className="flex items-center gap-1 lg:gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-600 data-[state=active]:text-white text-xs lg:text-sm">
+            <Database className="h-3 w-3 lg:h-4 lg:w-4" />
+            <span className="hidden lg:inline">Data Centre</span>
+            <span className="lg:hidden">Data</span>
           </TabsTrigger>
           <TabsTrigger value="competitor" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-600 data-[state=active]:text-white">
             <Crosshair className="h-4 w-4" />
@@ -976,6 +983,11 @@ export const RevolutionarySustainoSphere = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Data Centre Tab */}
+        <TabsContent value="datacentre" className="space-y-6 animate-fade-in">
+          <SustanoSphereDataCentre />
         </TabsContent>
 
         {/* Competitor Analysis Tab */}
