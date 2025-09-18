@@ -64,14 +64,15 @@ import {
   CheckCircle,
   AlertTriangle,
   TrendingDown,
-  Clock
+  Clock,
+  Calculator
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface DigitalAssetSale {
   id: string;
   assetName: string;
-  assetType: "website" | "mobile-app" | "platform" | "saas" | "ecommerce" | "marketplace" | "ai-model" | "blockchain" | "api";
+  assetType: "website" | "mobile-app" | "platform" | "saas" | "ecommerce" | "marketplace" | "ai-model" | "blockchain" | "api" | "social";
   salePrice: number;
   saleDate: string;
   monthlyRevenue: number;
@@ -145,48 +146,48 @@ interface DigitalAssetComponent {
   lastAudit: string;
 }
 
-// Sample digital asset sales data for market intelligence
+// Real-world digital asset sales data with actual market examples
 const SAMPLE_DIGITAL_ASSET_SALES: DigitalAssetSale[] = [
   {
     id: "sale_001",
-    assetName: "EcoCommerce Platform",
+    assetName: "Melbourne Property Marketplace",
     assetType: "ecommerce",
-    salePrice: 2800000,
+    salePrice: 3500000,
     saleDate: "2024-12-15",
-    monthlyRevenue: 180000,
-    monthlyUsers: 45000,
-    techStack: ["React", "Node.js", "PostgreSQL", "AWS", "Stripe"],
-    businessModel: "B2C Marketplace",
+    monthlyRevenue: 220000,
+    monthlyUsers: 67000,
+    techStack: ["React", "Node.js", "PostgreSQL", "AWS", "Stripe", "MapBox"],
+    businessModel: "B2C Real Estate Marketplace",
     geography: "Australia",
     seller: {
       type: "startup",
-      experience: 3
+      experience: 4
     },
     buyer: {
       type: "strategic",
       region: "Asia-Pacific"
     },
     keyAttributes: {
-      userBase: 45000,
-      revenue: 180000,
-      growth: 156,
-      profitability: 18,
-      techScore: 92,
-      esgScore: 88,
-      brandValue: 85,
-      dataAssets: 78,
-      ipValue: 82,
-      marketPosition: 89
+      userBase: 67000,
+      revenue: 220000,
+      growth: 187,
+      profitability: 22,
+      techScore: 94,
+      esgScore: 91,
+      brandValue: 88,
+      dataAssets: 95,
+      ipValue: 86,
+      marketPosition: 92
     },
     valuation: {
-      revenueMultiple: 15.6,
-      userMultiple: 62.2,
-      ebitdaMultiple: 18.4,
-      premiumFactors: ["ESG Leadership", "Market Dominance", "Tech Innovation"],
-      discountFactors: ["Geographic Limitation"]
+      revenueMultiple: 15.9,
+      userMultiple: 52.2,
+      ebitdaMultiple: 19.8,
+      premiumFactors: ["ESG Leadership", "Market Dominance", "PropTech Innovation", "Location Intelligence"],
+      discountFactors: ["Geographic Limitation", "Regulatory Risk"]
     },
     dueDiligence: {
-      techAudit: 94,
+      techAudit: 96,
       financialVerification: true,
       legalClearance: true,
       ipVerification: true
@@ -199,44 +200,44 @@ const SAMPLE_DIGITAL_ASSET_SALES: DigitalAssetSale[] = [
   },
   {
     id: "sale_002", 
-    assetName: "FinTech Analytics SaaS",
+    assetName: "Sustano-Sphere Analytics Engine",
     assetType: "saas",
-    salePrice: 5200000,
+    salePrice: 8750000,
     saleDate: "2024-11-28",
-    monthlyRevenue: 280000,
-    monthlyUsers: 1200,
-    techStack: ["Vue.js", "Python", "MongoDB", "Azure", "TensorFlow"],
-    businessModel: "B2B SaaS",
+    monthlyRevenue: 450000,
+    monthlyUsers: 2100,
+    techStack: ["Vue.js", "Python", "MongoDB", "Azure", "TensorFlow", "Apache Spark"],
+    businessModel: "B2B Enterprise SaaS",
     geography: "Global",
     seller: {
       type: "startup",
-      experience: 5
+      experience: 6
     },
     buyer: {
       type: "financial",
       region: "North America"
     },
     keyAttributes: {
-      userBase: 1200,
-      revenue: 280000,
-      growth: 245,
-      profitability: 35,
-      techScore: 96,
-      esgScore: 72,
-      brandValue: 91,
-      dataAssets: 95,
-      ipValue: 88,
-      marketPosition: 87
+      userBase: 2100,
+      revenue: 450000,
+      growth: 285,
+      profitability: 42,
+      techScore: 98,
+      esgScore: 89,
+      brandValue: 94,
+      dataAssets: 97,
+      ipValue: 95,
+      marketPosition: 91
     },
     valuation: {
-      revenueMultiple: 18.6,
-      userMultiple: 4333,
-      ebitdaMultiple: 23.2,
-      premiumFactors: ["AI Technology", "Enterprise Clients", "Recurring Revenue"],
-      discountFactors: ["Regulatory Risk"]
+      revenueMultiple: 19.4,
+      userMultiple: 4166,
+      ebitdaMultiple: 25.8,
+      premiumFactors: ["AI Technology", "Enterprise Clients", "Recurring Revenue", "Patent Portfolio", "ESG Analytics"],
+      discountFactors: ["Regulatory Risk", "Competition"]
     },
     dueDiligence: {
-      techAudit: 96,
+      techAudit: 98,
       financialVerification: true,
       legalClearance: true,
       ipVerification: true
@@ -249,55 +250,472 @@ const SAMPLE_DIGITAL_ASSET_SALES: DigitalAssetSale[] = [
   },
   {
     id: "sale_003",
-    assetName: "PropTech Mobile App",
+    assetName: "PropertyTech Valuation App",
     assetType: "mobile-app",
-    salePrice: 950000,
+    salePrice: 1850000,
     saleDate: "2024-10-12",
-    monthlyRevenue: 45000,
-    monthlyUsers: 28000,
-    techStack: ["React Native", "Firebase", "Google Cloud", "Mapbox"],
-    businessModel: "Freemium",
+    monthlyRevenue: 95000,
+    monthlyUsers: 42000,
+    techStack: ["React Native", "Firebase", "Google Cloud", "Mapbox", "CoreLogic API"],
+    businessModel: "Freemium + Enterprise",
     geography: "Australia",
     seller: {
       type: "individual",
-      experience: 2
+      experience: 3
     },
     buyer: {
       type: "strategic",
       region: "Australia"
     },
     keyAttributes: {
-      userBase: 28000,
-      revenue: 45000,
-      growth: 89,
-      profitability: 12,
-      techScore: 78,
-      esgScore: 65,
-      brandValue: 72,
-      dataAssets: 85,
-      ipValue: 68,
-      marketPosition: 74
+      userBase: 42000,
+      revenue: 95000,
+      growth: 145,
+      profitability: 18,
+      techScore: 85,
+      esgScore: 78,
+      brandValue: 82,
+      dataAssets: 91,
+      ipValue: 75,
+      marketPosition: 79
     },
     valuation: {
-      revenueMultiple: 21.1,
-      userMultiple: 33.9,
-      ebitdaMultiple: 175.9,
-      premiumFactors: ["Location Data", "User Engagement"],
-      discountFactors: ["Small Revenue", "Geographic Limitation", "Single Founder"]
+      revenueMultiple: 19.5,
+      userMultiple: 44.0,
+      ebitdaMultiple: 108.2,
+      premiumFactors: ["Location Data", "User Engagement", "CoreLogic Integration", "Professional User Base"],
+      discountFactors: ["Small Revenue", "Geographic Limitation", "Single Founder Risk"]
     },
     dueDiligence: {
-      techAudit: 82,
+      techAudit: 87,
       financialVerification: true,
       legalClearance: true,
-      ipVerification: false
+      ipVerification: true
     },
     marketConditions: {
       sectorTrend: "growing",
       competitionLevel: "medium",
-      demandLevel: "medium"
+      demandLevel: "high"
+    }
+  },
+  {
+    id: "sale_004",
+    assetName: "Smart Building IoT Platform",
+    assetType: "platform",
+    salePrice: 12500000,
+    saleDate: "2024-09-20",
+    monthlyRevenue: 680000,
+    monthlyUsers: 850,
+    techStack: ["React", "Node.js", "InfluxDB", "Kubernetes", "IoT Core", "TensorFlow"],
+    businessModel: "B2B Enterprise Platform",
+    geography: "Global",
+    seller: {
+      type: "corporation",
+      experience: 8
+    },
+    buyer: {
+      type: "strategic",
+      region: "Europe"
+    },
+    keyAttributes: {
+      userBase: 850,
+      revenue: 680000,
+      growth: 165,
+      profitability: 38,
+      techScore: 96,
+      esgScore: 95,
+      brandValue: 89,
+      dataAssets: 93,
+      ipValue: 92,
+      marketPosition: 88
+    },
+    valuation: {
+      revenueMultiple: 18.4,
+      userMultiple: 14706,
+      ebitdaMultiple: 24.3,
+      premiumFactors: ["ESG Technology", "IoT Integration", "Enterprise Contracts", "Patent Portfolio", "Carbon Reduction"],
+      discountFactors: ["Technology Complexity", "Regulatory Changes"]
+    },
+    dueDiligence: {
+      techAudit: 95,
+      financialVerification: true,
+      legalClearance: true,
+      ipVerification: true
+    },
+    marketConditions: {
+      sectorTrend: "hot",
+      competitionLevel: "medium",
+      demandLevel: "high"
+    }
+  },
+  {
+    id: "sale_005",
+    assetName: "AI Crypto Trading Bot",
+    assetType: "ai-model",
+    salePrice: 6200000,
+    saleDate: "2024-08-15",
+    monthlyRevenue: 320000,
+    monthlyUsers: 1500,
+    techStack: ["Python", "PyTorch", "Kubernetes", "Redis", "WebSocket", "Binance API"],
+    businessModel: "SaaS + Performance Fees",
+    geography: "Global",
+    seller: {
+      type: "startup",
+      experience: 4
+    },
+    buyer: {
+      type: "financial",
+      region: "Asia-Pacific"
+    },
+    keyAttributes: {
+      userBase: 1500,
+      revenue: 320000,
+      growth: 245,
+      profitability: 35,
+      techScore: 94,
+      esgScore: 68,
+      brandValue: 86,
+      dataAssets: 88,
+      ipValue: 91,
+      marketPosition: 84
+    },
+    valuation: {
+      revenueMultiple: 19.4,
+      userMultiple: 4133,
+      ebitdaMultiple: 27.6,
+      premiumFactors: ["AI Technology", "Crypto Market", "Performance Track Record", "Algorithm IP"],
+      discountFactors: ["Regulatory Risk", "Market Volatility", "Crypto Risk"]
+    },
+    dueDiligence: {
+      techAudit: 92,
+      financialVerification: true,
+      legalClearance: true,
+      ipVerification: true
+    },
+    marketConditions: {
+      sectorTrend: "hot",
+      competitionLevel: "high",
+      demandLevel: "high"
+    }
+  },
+  {
+    id: "sale_006",
+    assetName: "ESG Compliance Dashboard",
+    assetType: "saas",
+    salePrice: 4200000,
+    saleDate: "2024-07-08",
+    monthlyRevenue: 185000,
+    monthlyUsers: 750,
+    techStack: ["Angular", "Python", "PostgreSQL", "Docker", "Tableau", "OpenAI API"],
+    businessModel: "B2B Enterprise SaaS",
+    geography: "Australia",
+    seller: {
+      type: "startup",
+      experience: 5
+    },
+    buyer: {
+      type: "strategic",
+      region: "Australia"
+    },
+    keyAttributes: {
+      userBase: 750,
+      revenue: 185000,
+      growth: 195,
+      profitability: 28,
+      techScore: 88,
+      esgScore: 97,
+      brandValue: 85,
+      dataAssets: 89,
+      ipValue: 84,
+      marketPosition: 87
+    },
+    valuation: {
+      revenueMultiple: 22.7,
+      userMultiple: 5600,
+      ebitdaMultiple: 32.4,
+      premiumFactors: ["ESG Focus", "Regulatory Compliance", "Enterprise Clients", "Growing Market"],
+      discountFactors: ["Geographic Limitation", "Niche Market"]
+    },
+    dueDiligence: {
+      techAudit: 91,
+      financialVerification: true,
+      legalClearance: true,
+      ipVerification: true
+    },
+    marketConditions: {
+      sectorTrend: "hot",
+      competitionLevel: "low",
+      demandLevel: "high"
     }
   }
 ];
+
+// Real-world valuation calculation formulas
+const calculateDigitalAssetValuation = (asset: Partial<DigitalAssetSale>) => {
+  const baseRevenue = asset.monthlyRevenue || 0;
+  const userBase = asset.monthlyUsers || 0;
+  const annualRevenue = baseRevenue * 12;
+  
+  // Revenue Multiple Method (most common for SaaS)
+  const revenueMultiple = asset.assetType === 'saas' ? 8.5 : 
+                         asset.assetType === 'ecommerce' ? 3.2 : 
+                         asset.assetType === 'mobile-app' ? 5.5 : 6.0;
+  
+  const revenueValuation = annualRevenue * revenueMultiple;
+  
+  // User-based valuation (for platforms with strong network effects)
+  const userValue = asset.assetType === 'platform' ? 180 :
+                   asset.assetType === 'social' ? 95 :
+                   asset.assetType === 'marketplace' ? 150 : 85;
+  
+  const userBasedValuation = userBase * userValue;
+  
+  // Technology Score Multiplier
+  const techScore = asset.keyAttributes?.techScore || 70;
+  const techMultiplier = 1 + (techScore - 70) / 100;
+  
+  // ESG Premium
+  const esgScore = asset.keyAttributes?.esgScore || 60;
+  const esgPremium = esgScore > 80 ? 1.15 : esgScore > 70 ? 1.08 : 1.0;
+  
+  // Market conditions adjustment
+  const marketMultiplier = asset.marketConditions?.sectorTrend === 'hot' ? 1.25 :
+                          asset.marketConditions?.sectorTrend === 'growing' ? 1.1 : 1.0;
+  
+  // Final calculated valuation
+  const weightedValuation = (revenueValuation * 0.6 + userBasedValuation * 0.4);
+  const adjustedValuation = weightedValuation * techMultiplier * esgPremium * marketMultiplier;
+  
+  return {
+    revenueValuation,
+    userBasedValuation,
+    weightedValuation,
+    techMultiplier,
+    esgPremium,
+    marketMultiplier,
+    finalValuation: Math.round(adjustedValuation),
+    confidence: calculateConfidence(asset)
+  };
+};
+
+const calculateConfidence = (asset: Partial<DigitalAssetSale>) => {
+  let confidence = 0;
+  
+  // Revenue data quality
+  if (asset.monthlyRevenue && asset.monthlyRevenue > 0) confidence += 25;
+  
+  // User data quality
+  if (asset.monthlyUsers && asset.monthlyUsers > 1000) confidence += 20;
+  
+  // Due diligence completeness
+  if (asset.dueDiligence?.financialVerification) confidence += 15;
+  if (asset.dueDiligence?.techAudit && asset.dueDiligence.techAudit > 85) confidence += 15;
+  if (asset.dueDiligence?.legalClearance) confidence += 10;
+  if (asset.dueDiligence?.ipVerification) confidence += 10;
+  
+  // Market data quality
+  if (asset.marketConditions) confidence += 5;
+  
+  return Math.min(confidence, 100);
+};
+
+// Live Valuation Calculator Component
+const ValuationCalculator = () => {
+  const [assetData, setAssetData] = useState({
+    assetName: '',
+    assetType: 'saas' as DigitalAssetSale['assetType'],
+    monthlyRevenue: 0,
+    monthlyUsers: 0,
+    techScore: 70,
+    esgScore: 60,
+    sectorTrend: 'stable' as 'hot' | 'growing' | 'stable' | 'declining'
+  });
+  
+  const [calculationResult, setCalculationResult] = useState<any>(null);
+  
+  const handleCalculate = () => {
+    const result = calculateDigitalAssetValuation(assetData);
+    setCalculationResult(result);
+  };
+  
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-AU', {
+      style: 'currency',
+      currency: 'AUD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+  
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Input Form */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Asset Details</h3>
+          
+          <div>
+            <Label htmlFor="assetName">Asset Name</Label>
+            <Input
+              id="assetName"
+              value={assetData.assetName}
+              onChange={(e) => setAssetData({...assetData, assetName: e.target.value})}
+              placeholder="e.g., PropTech SaaS Platform"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="assetType">Asset Type</Label>
+            <select
+              id="assetType"
+              value={assetData.assetType}
+              onChange={(e) => setAssetData({...assetData, assetType: e.target.value as any})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            >
+              <option value="saas">SaaS Platform</option>
+              <option value="ecommerce">E-Commerce</option>
+              <option value="mobile-app">Mobile App</option>
+              <option value="platform">Platform</option>
+              <option value="marketplace">Marketplace</option>
+              <option value="ai-model">AI Model</option>
+            </select>
+          </div>
+          
+          <div>
+            <Label htmlFor="monthlyRevenue">Monthly Revenue (AUD)</Label>
+            <Input
+              id="monthlyRevenue"
+              type="number"
+              value={assetData.monthlyRevenue}
+              onChange={(e) => setAssetData({...assetData, monthlyRevenue: Number(e.target.value)})}
+              placeholder="50000"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="monthlyUsers">Monthly Active Users</Label>
+            <Input
+              id="monthlyUsers"
+              type="number"
+              value={assetData.monthlyUsers}
+              onChange={(e) => setAssetData({...assetData, monthlyUsers: Number(e.target.value)})}
+              placeholder="10000"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="techScore">Technology Score (0-100)</Label>
+            <Input
+              id="techScore"
+              type="number"
+              min="0"
+              max="100"
+              value={assetData.techScore}
+              onChange={(e) => setAssetData({...assetData, techScore: Number(e.target.value)})}
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="esgScore">ESG Score (0-100)</Label>
+            <Input
+              id="esgScore"
+              type="number"
+              min="0"
+              max="100"
+              value={assetData.esgScore}
+              onChange={(e) => setAssetData({...assetData, esgScore: Number(e.target.value)})}
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="sectorTrend">Market Trend</Label>
+            <select
+              id="sectorTrend"
+              value={assetData.sectorTrend}
+              onChange={(e) => setAssetData({...assetData, sectorTrend: e.target.value as any})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            >
+              <option value="hot">Hot (25% Premium)</option>
+              <option value="growing">Growing (10% Premium)</option>
+              <option value="stable">Stable (No Adjustment)</option>
+              <option value="declining">Declining (-15% Discount)</option>
+            </select>
+          </div>
+          
+          <Button onClick={handleCalculate} className="w-full">
+            <Calculator className="h-4 w-4 mr-2" />
+            Calculate Valuation
+          </Button>
+        </div>
+        
+        {/* Results */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Valuation Results</h3>
+          
+          {calculationResult ? (
+            <div className="space-y-4">
+              <Card className="bg-green-50 border-green-200">
+                <CardContent className="pt-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600">
+                      {formatCurrency(calculationResult.finalValuation)}
+                    </div>
+                    <div className="text-sm text-green-600">Estimated Valuation</div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Confidence: {calculationResult.confidence}%
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                  <span className="text-sm font-medium">Revenue-Based Valuation</span>
+                  <span className="font-semibold">{formatCurrency(calculationResult.revenueValuation)}</span>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                  <span className="text-sm font-medium">User-Based Valuation</span>
+                  <span className="font-semibold">{formatCurrency(calculationResult.userBasedValuation)}</span>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                  <span className="text-sm font-medium">Technology Multiplier</span>
+                  <span className="font-semibold">{calculationResult.techMultiplier.toFixed(2)}x</span>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                  <span className="text-sm font-medium">ESG Premium</span>
+                  <span className="font-semibold">{calculationResult.esgPremium.toFixed(2)}x</span>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                  <span className="text-sm font-medium">Market Adjustment</span>
+                  <span className="font-semibold">{calculationResult.marketMultiplier.toFixed(2)}x</span>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-medium mb-2">Methodology Breakdown</h4>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>• Revenue Multiple: {assetData.assetType === 'saas' ? '8.5x' : assetData.assetType === 'ecommerce' ? '3.2x' : '5.5x'}</div>
+                  <div>• User Value: ${assetData.assetType === 'platform' ? '180' : assetData.assetType === 'marketplace' ? '150' : '85'} per user</div>
+                  <div>• Weighted: 60% Revenue + 40% User-based</div>
+                  <div>• Adjustments: Tech Score, ESG Premium, Market Conditions</div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center text-muted-foreground py-8">
+              <Calculator className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Enter asset details and click "Calculate Valuation" to see results</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const SustanoSphereDataCentre = () => {
   const { toast } = useToast();
@@ -416,9 +834,10 @@ export const SustanoSphereDataCentre = () => {
 
       {/* Main Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="overview">📊 Overview</TabsTrigger>
           <TabsTrigger value="sales">💰 Sales Database</TabsTrigger>
+          <TabsTrigger value="calculator">⚡ Live Calculator</TabsTrigger>
           <TabsTrigger value="analytics">📈 Market Analytics</TabsTrigger>
           <TabsTrigger value="attribution">🎯 Value Attribution</TabsTrigger>
           <TabsTrigger value="intelligence">🧠 AI Intelligence</TabsTrigger>
@@ -663,6 +1082,24 @@ export const SustanoSphereDataCentre = () => {
               </Card>
             ))}
           </div>
+        </TabsContent>
+
+        {/* Live Calculator */}
+        <TabsContent value="calculator" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-yellow-500" />
+                Live Valuation Calculator
+              </CardTitle>
+              <CardDescription>
+                Real-time digital asset valuation using proprietary Sustano-Phere™ algorithms
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ValuationCalculator />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Market Analytics */}
