@@ -26,6 +26,7 @@ import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
+import RenewableEnergyValuations from "./components/RenewableEnergyValuations";
 import PropertyValuations from "./pages/PropertyValuations";
 import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
@@ -81,7 +82,8 @@ const App = () => (
                 <Route path="/automated-valuation" element={<AutomatedValuation />} />
                 <Route path="/index" element={<Index />} />
                 <Route path="/report" element={<Report />} />
-        <Route path="/property-assessment" element={<PropertyAssessment />} />
+                <Route path="/renewable-energy" element={<RenewableEnergyValuations />} />
+                <Route path="/property-assessment" element={<PropertyAssessment />} />
         <Route path="/automated-report" element={<AutomatedReport propertyType="commercial" />} />
                 <Route path="/property-valuations" element={<PropertyValuations />} />
                 <Route path="/work-hub" element={<WorkHubPage />} />

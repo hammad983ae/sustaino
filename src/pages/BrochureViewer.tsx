@@ -1,91 +1,150 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { FileText, Download, Eye } from 'lucide-react';
+import { ArrowLeft, Download, Eye } from 'lucide-react';
 
-// Import all the actual brochures
+// Import all brochure components
 import PropertyValuationsBrochure from '@/components/brochures/PropertyValuationsBrochure';
-import FinancialReportingBrochure from '@/components/brochures/FinancialReportingBrochure';
 import ESGAssessmentBrochure from '@/components/brochures/ESGAssessmentBrochure';
+import FinancialReportingBrochure from '@/components/brochures/FinancialReportingBrochure';
 import DevelopmentSiteBrochure from '@/components/brochures/DevelopmentSiteBrochure';
 import PlantEquipmentBrochure from '@/components/brochures/PlantEquipmentBrochure';
+import PatentsAndIPBrochure from '@/components/brochures/PatentsAndIPBrochure';
+import PlatformEcosystemBrochure from '@/components/brochures/PlatformEcosystemBrochure';
 import RentReversionsBrochure from '@/components/brochures/RentReversionsBrochure';
 import ESDBrochure from '@/components/brochures/ESDBrochure';
-import PlatformEcosystemBrochure from '@/components/brochures/PlatformEcosystemBrochure';
-import PatentsAndIPBrochure from '@/components/brochures/PatentsAndIPBrochure';
 import { BrickByBrickProBrochure } from '@/components/brochures/BrickByBrickProBrochure';
 
+// Import new revolutionary brochures
+import SustanoSphereBrochure from '@/components/SustanoSphereBrochure';
+import AuctionSphereBrochure from '@/components/AuctionSphereBrochure';
+import SustanoCoinBrochure from '@/components/brochures/SustanoCoinBrochure';
+import GreeniumBrochure from '@/components/brochures/GreeniumBrochure';
+import BlockchainBrochure from '@/components/brochures/BlockchainBrochure';
+import SAMPlatformBrochure from '@/components/brochures/SAMPlatformBrochure';
+
 const brochures = [
+  // Core Services
   {
     id: 'property-valuations',
     title: 'Property Valuations',
-    description: 'Comprehensive valuation services across all property types',
+    description: 'Professional property assessment services across all asset classes with AI-enhanced analytics',
     component: PropertyValuationsBrochure,
-    category: 'Core Services'
-  },
-  {
-    id: 'financial-reporting', 
-    title: 'Financial Reporting',
-    description: 'Comprehensive financial reporting and accounting services',
-    component: FinancialReportingBrochure,
     category: 'Core Services'
   },
   {
     id: 'esg-assessment',
     title: 'ESG Assessment',
-    description: 'Environmental, Social & Governance assessment services',
+    description: 'Comprehensive environmental, social, and governance assessment including Agri Hub and Property Hub',
     component: ESGAssessmentBrochure,
-    category: 'Sustainability'
+    category: 'Core Services'
   },
   {
-    id: 'development-site',
-    title: 'Development Site Analysis',
-    description: 'Comprehensive development site analysis and feasibility services',
+    id: 'financial-reporting',
+    title: 'Financial Reporting',
+    description: 'Advanced financial analysis and reporting for investment decisions',
+    component: FinancialReportingBrochure,
+    category: 'Core Services'
+  },
+  
+  // Revolutionary Platforms
+  {
+    id: 'sustano-sphere',
+    title: 'Sustaino-Sphere™',
+    description: 'World\'s only combined independent digital asset valuation and auction marketplace',
+    component: SustanoSphereBrochure,
+    category: 'Revolutionary Platforms'
+  },
+  {
+    id: 'auction-sphere',
+    title: 'Auction-Sphere™',
+    description: 'Revolutionary international real estate auction intelligence platform',
+    component: AuctionSphereBrochure,
+    category: 'Revolutionary Platforms'
+  },
+  {
+    id: 'sam-platform',
+    title: 'SAM Platform™',
+    description: 'Strategic Asset Management: Revolutionary portfolio intelligence platform',
+    component: SAMPlatformBrochure,
+    category: 'Revolutionary Platforms'
+  },
+  
+  // Blockchain & Innovation
+  {
+    id: 'sustano-coin',
+    title: 'SustanoCoin™',
+    description: 'World\'s first ESG-focused cryptocurrency for sustainable property investment',
+    component: SustanoCoinBrochure,
+    category: 'Blockchain & Innovation'
+  },
+  {
+    id: 'greenium',
+    title: 'Greenium™',
+    description: 'World\'s first quantified green premium valuation methodology',
+    component: GreeniumBrochure,
+    category: 'Blockchain & Innovation'
+  },
+  {
+    id: 'blockchain-platform',
+    title: 'Blockchain Platform™',
+    description: 'Next-generation blockchain infrastructure for property & ESG applications',
+    component: BlockchainBrochure,
+    category: 'Blockchain & Innovation'
+  },
+  
+  // Development & Construction
+  {
+    id: 'development-sites',
+    title: 'Development Sites',
+    description: 'Comprehensive development site analysis and feasibility studies',
     component: DevelopmentSiteBrochure,
-    category: 'Development'
+    category: 'Development & Construction'
   },
   {
     id: 'plant-equipment',
     title: 'Plant & Equipment',
-    description: 'Specialized plant, machinery & equipment valuation services',
+    description: 'Specialized plant and equipment valuations for industrial assets',
     component: PlantEquipmentBrochure,
-    category: 'Specialized'
+    category: 'Development & Construction'
   },
   {
-    id: 'rent-reversions',
-    title: 'Rent Reversions',
-    description: 'Specialized rental valuation and review services',
-    component: RentReversionsBrochure,
-    category: 'Specialized'
+    id: 'brick-by-brick-pro',
+    title: 'Brick by Brick Pro',
+    description: 'Advanced construction and renovation cost analysis platform',
+    component: BrickByBrickProBrochure,
+    category: 'Development & Construction'
   },
+  
+  // Innovation & IP
   {
-    id: 'esd',
-    title: 'ESD Services',
-    description: 'Ecologically Sustainable Development services',
-    component: ESDBrochure,
-    category: 'Sustainability'
+    id: 'patents-ip',
+    title: 'Patents & IP',
+    description: 'Comprehensive intellectual property protection and patent portfolio',
+    component: PatentsAndIPBrochure,
+    category: 'Innovation & IP'
   },
   {
     id: 'platform-ecosystem',
     title: 'Platform Ecosystem',
-    description: 'Complete property services platform overview',
+    description: 'Complete technology ecosystem overview and integration capabilities',
     component: PlatformEcosystemBrochure,
-    category: 'Platform'
+    category: 'Innovation & IP'
+  },
+  
+  // Specialized Services
+  {
+    id: 'rent-reversions',
+    title: 'Rent Reversions',
+    description: 'Advanced rental analysis and reversion modeling for commercial properties',
+    component: RentReversionsBrochure,
+    category: 'Specialized Services'
   },
   {
-    id: 'patents-ip',
-    title: 'Patents & IP Portfolio',
-    description: 'Intellectual property and patent portfolio overview',
-    component: PatentsAndIPBrochure,
-    category: 'Innovation'
-  },
-  {
-    id: 'brick-by-brick',
-    title: 'Brick by Brick Pro',
-    description: 'Advanced property development and construction analysis',
-    component: BrickByBrickProBrochure,
-    category: 'Development'
+    id: 'esd',
+    title: 'ESD (Environmental Sustainable Design)',
+    description: 'Environmental sustainable design assessment and certification',
+    component: ESDBrochure,
+    category: 'Specialized Services'
   }
 ];
 
@@ -97,173 +156,158 @@ const BrochureViewer = () => {
   if (selectedBrochure && selectedBrochureData) {
     const BrochureComponent = selectedBrochureData.component;
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        {/* Enhanced header with 3D effects */}
-        <div className="relative bg-slate-800/90 backdrop-blur-xl border-b border-slate-700/50 shadow-2xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-purple-400/10"></div>
-          <div className="relative p-6">
-            <button 
-              onClick={() => setSelectedBrochure(null)}
-              className="group mb-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-xl transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25"
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-emerald-900 relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-emerald-400 to-green-600 rounded-full blur-3xl animate-pulse delay-700"></div>
+        </div>
+        
+        {/* Back Buttons */}
+        <div className="relative z-10 p-6">
+          <div className="flex gap-4">
+            <Button 
+              onClick={() => setSelectedBrochure(null)} 
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white shadow-lg shadow-cyan-500/30 transition-all duration-300 hover:scale-105"
             >
-              <div className="flex items-center gap-2">
-                <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span>
-                <span>Back to Brochures</span>
-              </div>
-            </button>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
-                <FileText className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  {selectedBrochureData.title}
-                </h1>
-                <p className="text-gray-300">{selectedBrochureData.description}</p>
-              </div>
-            </div>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Brochures
+            </Button>
+            <Button 
+              onClick={() => window.location.href = '/dashboard'} 
+              className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105"
+            >
+              🏠 Back to Dashboard
+            </Button>
           </div>
         </div>
         
-        {/* Brochure content with enhanced styling */}
-        <div className="relative">
+        <div className="relative z-10">
           <BrochureComponent />
         </div>
       </div>
     );
   }
 
-  const categories = Array.from(new Set(brochures.map(b => b.category)));
+  // Group brochures by category
+  const groupedBrochures = brochures.reduce((acc, brochure) => {
+    if (!acc[brochure.category]) {
+      acc[brochure.category] = [];
+    }
+    acc[brochure.category].push(brochure);
+    return acc;
+  }, {} as Record<string, typeof brochures>);
+
+  const handleViewBrochure = (brochureId: string) => {
+    setSelectedBrochure(brochureId);
+  };
+
+  const handleDownloadBrochure = (brochureId: string) => {
+    setSelectedBrochure(brochureId);
+    setTimeout(() => {
+      window.print();
+    }, 1000);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-72 h-72 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-40 w-72 h-72 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-emerald-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-purple-400 to-pink-600 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full blur-3xl animate-pulse delay-500"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-full blur-3xl animate-pulse delay-700"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-orange-400 to-red-600 rounded-full blur-3xl animate-pulse delay-1500"></div>
       </div>
 
-      <div className="relative z-10 p-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Hero Header with 3D effect */}
-          <div className="text-center mb-16 animate-fade-in">
-            <div className="relative inline-block">
-              <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-6 transform hover:scale-105 transition-all duration-500">
-                Professional Marketing
-              </h1>
-              <h2 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-pink-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-8 transform hover:scale-105 transition-all duration-500">
-                Brochures
-              </h2>
-              <div className="absolute -inset-2 bg-gradient-to-r from-cyan-400 to-pink-400 rounded-lg blur opacity-20 animate-pulse"></div>
-            </div>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Access our revolutionary collection of professional service brochures - 
-              engineered for maximum impact and conversion
-            </p>
+      <div className="relative z-10 max-w-7xl mx-auto p-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="flex justify-center mb-6">
+            <Button 
+              onClick={() => window.location.href = '/dashboard'} 
+              className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105"
+            >
+              🏠 Back to Dashboard
+            </Button>
           </div>
+          <h1 className="text-6xl font-black bg-gradient-to-r from-cyan-300 via-white to-emerald-300 bg-clip-text text-transparent drop-shadow-2xl mb-6">
+            Professional Brochures
+          </h1>
+          <p className="text-xl text-white/80 mb-8">
+            Comprehensive collection of our revolutionary platforms and services
+          </p>
+        </div>
 
-          {categories.map((category, categoryIndex) => (
-            <div key={category} className="mb-20 animate-fade-in" style={{ animationDelay: `${categoryIndex * 200}ms` }}>
-              <div className="flex items-center mb-12">
-                <div className="relative">
-                  <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                    {category}
-                  </h2>
-                  <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                </div>
-                <div className="flex-1 ml-8 h-px bg-gradient-to-r from-purple-400/50 to-transparent"></div>
-              </div>
+        {/* Brochure Categories */}
+        <div className="space-y-12">
+          {Object.entries(groupedBrochures).map(([category, categoryBrochures]) => (
+            <div key={category} className="space-y-6">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent text-center mb-8">
+                {category}
+              </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {brochures
-                  .filter(brochure => brochure.category === category)
-                  .map((brochure, index) => (
-                    <div 
-                      key={brochure.id} 
-                      className="group relative"
-                      style={{ animationDelay: `${(categoryIndex * 200) + (index * 100)}ms` }}
-                    >
-                      {/* Glowing border effect */}
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-all duration-500 animate-pulse"></div>
+                {categoryBrochures.map((brochure) => (
+                  <div 
+                    key={brochure.id}
+                    className="group relative p-8 bg-gradient-to-br from-slate-800/80 to-blue-900/80 backdrop-blur-sm rounded-2xl border border-cyan-400/30 shadow-2xl shadow-cyan-500/20 hover:scale-105 transition-all duration-500 hover:shadow-emerald-500/30"
+                  >
+                    {/* Animated border */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/50 to-emerald-400/50 rounded-2xl blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <div className="relative z-10">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-500/30 group-hover:shadow-emerald-500/50 transition-all duration-300">
+                          <span className="text-2xl">📄</span>
+                        </div>
+                        
+                        <h3 className="text-2xl font-bold text-white mb-3 group-hover:bg-gradient-to-r group-hover:from-cyan-300 group-hover:to-emerald-300 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                          {brochure.title}
+                        </h3>
+                        
+                        <p className="text-white/70 text-sm leading-relaxed mb-6">
+                          {brochure.description}
+                        </p>
+                      </div>
                       
-                      {/* Main card */}
-                      <div className="relative bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 transform hover:scale-105 hover:rotate-1 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/25">
-                        {/* Floating icon */}
-                        <div className="relative mb-6">
-                          <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-all duration-500 shadow-lg">
-                            <FileText className="h-8 w-8 text-white" />
-                          </div>
-                          <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-pink-400 to-orange-400 rounded-full animate-bounce"></div>
-                        </div>
-
-                        {/* Content */}
-                        <div className="space-y-4">
-                          <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors duration-300">
-                            {brochure.title}
-                          </h3>
-                          <p className="text-gray-300 leading-relaxed">
-                            {brochure.description}
-                          </p>
-                        </div>
-
-                        {/* Action buttons with 3D effect */}
-                        <div className="flex gap-4 mt-8">
-                          <button 
-                            onClick={() => setSelectedBrochure(brochure.id)}
-                            className="relative group/btn flex-1 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-xl transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25"
-                          >
-                            <div className="flex items-center justify-center gap-2">
-                              <Eye className="h-5 w-5 group-hover/btn:rotate-12 transition-transform duration-300" />
-                              <span>View</span>
-                            </div>
-                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-xl opacity-0 group-hover/btn:opacity-20 transition-opacity duration-300"></div>
-                          </button>
-                          
-                          <button 
-                            onClick={() => {
-                              setSelectedBrochure(brochure.id);
-                              setTimeout(() => window.print(), 500);
-                            }}
-                            className="relative group/btn bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-xl transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25"
-                          >
-                            <div className="flex items-center gap-2">
-                              <Download className="h-5 w-5 group-hover/btn:translate-y-1 transition-transform duration-300" />
-                            </div>
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl opacity-0 group-hover/btn:opacity-20 transition-opacity duration-300"></div>
-                          </button>
-                        </div>
-
-                        {/* Floating particles effect */}
-                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
-                        </div>
-                        <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                          <div className="w-1 h-1 bg-purple-400 rounded-full animate-ping animation-delay-200"></div>
-                        </div>
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => handleViewBrochure(brochure.id)}
+                          className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white shadow-lg shadow-cyan-500/30 transition-all duration-300 hover:scale-105"
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          View
+                        </Button>
+                        
+                        <Button
+                          onClick={() => handleDownloadBrochure(brochure.id)}
+                          className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105"
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Print
+                        </Button>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             </div>
           ))}
+        </div>
 
-          {/* Bottom CTA with 3D effect */}
-          <div className="text-center mt-20 animate-fade-in">
-            <div className="relative inline-block">
-              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-400 rounded-2xl blur opacity-30 animate-pulse"></div>
-              <div className="relative bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8">
-                <h3 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                  Need a Custom Brochure?
-                </h3>
-                <p className="text-gray-300 mb-6">
-                  Our design team can create bespoke marketing materials tailored to your brand
-                </p>
-                <button className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold py-4 px-8 rounded-xl transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25">
-                  Contact Our Designers
-                </button>
-              </div>
-            </div>
+        {/* Call to Action */}
+        <div className="mt-16 text-center">
+          <div className="bg-gradient-to-r from-slate-800/80 to-emerald-900/80 backdrop-blur-sm rounded-2xl border border-emerald-400/30 shadow-2xl shadow-emerald-500/20 p-8">
+            <h3 className="text-3xl font-bold bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent mb-4">
+              Contact Our Designers
+            </h3>
+            <p className="text-white/80 mb-6">
+              Need custom brochures or additional marketing materials? Our design team can create tailored solutions for your specific needs.
+            </p>
+            <Button className="bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-600 hover:to-cyan-700 text-white px-8 py-3 text-lg shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105">
+              Get Custom Design
+            </Button>
           </div>
         </div>
       </div>
