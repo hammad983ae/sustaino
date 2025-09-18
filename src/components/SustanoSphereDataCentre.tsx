@@ -1,22 +1,26 @@
 /**
  * ============================================================================
- * SUSTANO-PHERE™ DATA CENTRE - STARTUP INTELLIGENCE REPOSITORY
+ * SUSTANO-PHERE™ DIGITAL ASSET INTELLIGENCE DATABASE
  * Copyright © 2025 DeLorenzo Property Group Pty Ltd. All Rights Reserved.
  * 
- * PATENT PENDING: AI-Enhanced Startup Valuation & Intelligence System
- * TRADEMARK: Sustano-Phere™ Data Centre - Registered Trademark
- * TRADE SECRET: Proprietary startup analysis algorithms and valuation methodologies
+ * PATENT PENDING: Comprehensive Digital Asset Sales Intelligence System™
+ * PATENT PENDING: AI-Enhanced Digital Asset Valuation Attribution Engine™
+ * PATENT PENDING: Automated Digital Asset Component Analysis System™
+ * TRADEMARK: Sustano-Phere™ Digital Asset Intelligence Database - Registered
+ * TRADE SECRETS: Proprietary attribution algorithms and valuation methodologies
  * 
  * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * This software contains proprietary trade secrets and confidential information.
+ * This software contains revolutionary trade secrets and confidential information.
  * Unauthorized copying, distribution, or use is strictly prohibited.
  * 
- * KEY IP COMPONENTS:
- * - AI-Enhanced Startup Scoring Algorithm™
- * - Digital Asset Component Analysis Engine™ 
- * - Automated Due Diligence Framework™
- * - Real-Time Market Intelligence System™
- * - ESG-Integrated Startup Assessment™
+ * REVOLUTIONARY IP COMPONENTS:
+ * - Digital Asset Sales Intelligence Database™ (PATENT PENDING)
+ * - AI-Enhanced Value Attribution Engine™ (PATENT PENDING) 
+ * - Automated Component Analysis Framework™ (PATENT PENDING)
+ * - Real-Time Market Intelligence System™ (PATENT PENDING)
+ * - ESG-Integrated Digital Asset Assessment™ (PATENT PENDING)
+ * - Predictive Valuation Algorithms™ (TRADE SECRET)
+ * - Comparative Analysis Engine™ (TRADE SECRET)
  * ============================================================================
  */
 
@@ -64,35 +68,55 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-interface StartupProfile {
+interface DigitalAssetSale {
   id: string;
-  name: string;
-  description: string;
-  stage: "idea" | "mvp" | "early" | "growth" | "scale" | "mature";
-  sector: "fintech" | "proptech" | "healthtech" | "edtech" | "cleantech" | "retail" | "saas" | "marketplace";
-  founded: string;
-  team: number;
-  funding: {
-    raised: number;
-    round: string;
-    valuation: number;
+  assetName: string;
+  assetType: "website" | "mobile-app" | "platform" | "saas" | "ecommerce" | "marketplace" | "ai-model" | "blockchain" | "api";
+  salePrice: number;
+  saleDate: string;
+  monthlyRevenue: number;
+  monthlyUsers: number;
+  techStack: string[];
+  businessModel: string;
+  geography: string;
+  seller: {
+    type: "individual" | "startup" | "corporation";
+    experience: number;
   };
-  metrics: {
+  buyer: {
+    type: "individual" | "strategic" | "financial" | "corporation";
+    region: string;
+  };
+  keyAttributes: {
+    userBase: number;
     revenue: number;
-    users: number;
     growth: number;
-    burn: number;
+    profitability: number;
+    techScore: number;
+    esgScore: number;
+    brandValue: number;
+    dataAssets: number;
+    ipValue: number;
+    marketPosition: number;
   };
-  digitalAssets: DigitalAssetComponent[];
-  esgScore: number;
-  aiScore: number;
-  marketScore: number;
-  techScore: number;
-  overallScore: number;
-  riskLevel: "low" | "medium" | "high";
-  lastUpdated: string;
-  documents: string[];
-  tags: string[];
+  valuation: {
+    revenueMultiple: number;
+    userMultiple: number;
+    ebitdaMultiple: number;
+    premiumFactors: string[];
+    discountFactors: string[];
+  };
+  dueDiligence: {
+    techAudit: number;
+    financialVerification: boolean;
+    legalClearance: boolean;
+    ipVerification: boolean;
+  };
+  marketConditions: {
+    sectorTrend: "hot" | "growing" | "stable" | "declining";
+    competitionLevel: "low" | "medium" | "high";
+    demandLevel: "low" | "medium" | "high";
+  };
 }
 
 interface DigitalAssetComponent {
@@ -121,130 +145,168 @@ interface DigitalAssetComponent {
   lastAudit: string;
 }
 
-// Sample data for demonstration
-const SAMPLE_STARTUPS: StartupProfile[] = [
+// Sample digital asset sales data for market intelligence
+const SAMPLE_DIGITAL_ASSET_SALES: DigitalAssetSale[] = [
   {
-    id: "1",
-    name: "PropVault AI",
-    description: "AI-powered property investment platform with predictive analytics",
-    stage: "growth",
-    sector: "proptech",
-    founded: "2022",
-    team: 15,
-    funding: {
-      raised: 2500000,
-      round: "Series A",
-      valuation: 12000000
+    id: "sale_001",
+    assetName: "EcoCommerce Platform",
+    assetType: "ecommerce",
+    salePrice: 2800000,
+    saleDate: "2024-12-15",
+    monthlyRevenue: 180000,
+    monthlyUsers: 45000,
+    techStack: ["React", "Node.js", "PostgreSQL", "AWS", "Stripe"],
+    businessModel: "B2C Marketplace",
+    geography: "Australia",
+    seller: {
+      type: "startup",
+      experience: 3
     },
-    metrics: {
-      revenue: 45000,
-      users: 2800,
+    buyer: {
+      type: "strategic",
+      region: "Asia-Pacific"
+    },
+    keyAttributes: {
+      userBase: 45000,
+      revenue: 180000,
       growth: 156,
-      burn: 85000
+      profitability: 18,
+      techScore: 92,
+      esgScore: 88,
+      brandValue: 85,
+      dataAssets: 78,
+      ipValue: 82,
+      marketPosition: 89
     },
-    digitalAssets: [
-      {
-        id: "da1",
-        type: "platform",
-        name: "Core Investment Platform",
-        description: "Main web platform with AI analytics",
-        techStack: ["React", "Python", "TensorFlow", "AWS"],
-        value: 8500000,
-        performance: {
-          uptime: 99.8,
-          users: 2800,
-          transactions: 12500,
-          revenue: 45000
-        },
-        security: {
-          score: 94,
-          vulnerabilities: 2,
-          compliance: ["SOC2", "GDPR", "PCI-DSS"]
-        },
-        ip: {
-          patents: 3,
-          trademarks: 2,
-          copyrights: 15
-        },
-        lastAudit: "2025-01-10"
-      }
-    ],
-    esgScore: 88,
-    aiScore: 92,
-    marketScore: 86,
-    techScore: 91,
-    overallScore: 89,
-    riskLevel: "low",
-    lastUpdated: "2025-01-15",
-    documents: ["pitch_deck.pdf", "financial_model.xlsx", "tech_audit.pdf"],
-    tags: ["AI", "Property", "Growth", "B2B"]
+    valuation: {
+      revenueMultiple: 15.6,
+      userMultiple: 62.2,
+      ebitdaMultiple: 18.4,
+      premiumFactors: ["ESG Leadership", "Market Dominance", "Tech Innovation"],
+      discountFactors: ["Geographic Limitation"]
+    },
+    dueDiligence: {
+      techAudit: 94,
+      financialVerification: true,
+      legalClearance: true,
+      ipVerification: true
+    },
+    marketConditions: {
+      sectorTrend: "hot",
+      competitionLevel: "medium",
+      demandLevel: "high"
+    }
   },
   {
-    id: "2", 
-    name: "GreenChain Solutions",
-    description: "Blockchain-based carbon credit marketplace with IoT monitoring",
-    stage: "early",
-    sector: "cleantech",
-    founded: "2023",
-    team: 8,
-    funding: {
-      raised: 850000,
-      round: "Seed",
-      valuation: 4200000
+    id: "sale_002", 
+    assetName: "FinTech Analytics SaaS",
+    assetType: "saas",
+    salePrice: 5200000,
+    saleDate: "2024-11-28",
+    monthlyRevenue: 280000,
+    monthlyUsers: 1200,
+    techStack: ["Vue.js", "Python", "MongoDB", "Azure", "TensorFlow"],
+    businessModel: "B2B SaaS",
+    geography: "Global",
+    seller: {
+      type: "startup",
+      experience: 5
     },
-    metrics: {
-      revenue: 12000,
-      users: 450,
+    buyer: {
+      type: "financial",
+      region: "North America"
+    },
+    keyAttributes: {
+      userBase: 1200,
+      revenue: 280000,
       growth: 245,
-      burn: 35000
+      profitability: 35,
+      techScore: 96,
+      esgScore: 72,
+      brandValue: 91,
+      dataAssets: 95,
+      ipValue: 88,
+      marketPosition: 87
     },
-    digitalAssets: [
-      {
-        id: "da2",
-        type: "blockchain",
-        name: "Carbon Credit Exchange",
-        description: "Decentralized marketplace for carbon credits",
-        techStack: ["Solidity", "Web3", "Node.js", "MongoDB"],
-        value: 2800000,
-        performance: {
-          uptime: 99.5,
-          users: 450,
-          transactions: 2850,
-          revenue: 12000
-        },
-        security: {
-          score: 87,
-          vulnerabilities: 5,
-          compliance: ["ISO27001", "GDPR"]
-        },
-        ip: {
-          patents: 1,
-          trademarks: 1,
-          copyrights: 8
-        },
-        lastAudit: "2025-01-08"
-      }
-    ],
-    esgScore: 96,
-    aiScore: 75,
-    marketScore: 82,
-    techScore: 85,
-    overallScore: 84,
-    riskLevel: "medium",
-    lastUpdated: "2025-01-14",
-    documents: ["whitepaper.pdf", "tokenomics.pdf", "roadmap.pdf"],
-    tags: ["Blockchain", "ESG", "Carbon", "IoT"]
+    valuation: {
+      revenueMultiple: 18.6,
+      userMultiple: 4333,
+      ebitdaMultiple: 23.2,
+      premiumFactors: ["AI Technology", "Enterprise Clients", "Recurring Revenue"],
+      discountFactors: ["Regulatory Risk"]
+    },
+    dueDiligence: {
+      techAudit: 96,
+      financialVerification: true,
+      legalClearance: true,
+      ipVerification: true
+    },
+    marketConditions: {
+      sectorTrend: "hot",
+      competitionLevel: "high",
+      demandLevel: "high"
+    }
+  },
+  {
+    id: "sale_003",
+    assetName: "PropTech Mobile App",
+    assetType: "mobile-app",
+    salePrice: 950000,
+    saleDate: "2024-10-12",
+    monthlyRevenue: 45000,
+    monthlyUsers: 28000,
+    techStack: ["React Native", "Firebase", "Google Cloud", "Mapbox"],
+    businessModel: "Freemium",
+    geography: "Australia",
+    seller: {
+      type: "individual",
+      experience: 2
+    },
+    buyer: {
+      type: "strategic",
+      region: "Australia"
+    },
+    keyAttributes: {
+      userBase: 28000,
+      revenue: 45000,
+      growth: 89,
+      profitability: 12,
+      techScore: 78,
+      esgScore: 65,
+      brandValue: 72,
+      dataAssets: 85,
+      ipValue: 68,
+      marketPosition: 74
+    },
+    valuation: {
+      revenueMultiple: 21.1,
+      userMultiple: 33.9,
+      ebitdaMultiple: 175.9,
+      premiumFactors: ["Location Data", "User Engagement"],
+      discountFactors: ["Small Revenue", "Geographic Limitation", "Single Founder"]
+    },
+    dueDiligence: {
+      techAudit: 82,
+      financialVerification: true,
+      legalClearance: true,
+      ipVerification: false
+    },
+    marketConditions: {
+      sectorTrend: "growing",
+      competitionLevel: "medium",
+      demandLevel: "medium"
+    }
   }
 ];
 
 export const SustanoSphereDataCentre = () => {
   const { toast } = useToast();
-  const [startups, setStartups] = useState<StartupProfile[]>(SAMPLE_STARTUPS);
-  const [selectedStartup, setSelectedStartup] = useState<StartupProfile | null>(null);
+  const [digitalAssetSales, setDigitalAssetSales] = useState<DigitalAssetSale[]>(SAMPLE_DIGITAL_ASSET_SALES);
+  const [selectedSale, setSelectedSale] = useState<DigitalAssetSale | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStage, setFilterStage] = useState<string>("all");
-  const [filterSector, setFilterSector] = useState<string>("all");
+  const [filterType, setFilterType] = useState<string>("all");
+  const [filterPriceRange, setFilterPriceRange] = useState<string>("all");
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-AU', {
@@ -276,13 +338,27 @@ export const SustanoSphereDataCentre = () => {
     }
   };
 
-  const filteredStartups = startups.filter(startup => {
-    const matchesSearch = startup.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         startup.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStage = filterStage === "all" || startup.stage === filterStage;
-    const matchesSector = filterSector === "all" || startup.sector === filterSector;
-    return matchesSearch && matchesStage && matchesSector;
+  const filteredSales = digitalAssetSales.filter(sale => {
+    const matchesSearch = sale.assetName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         sale.assetType.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = filterType === "all" || sale.assetType === filterType;
+    const matchesPrice = filterPriceRange === "all" || 
+      (filterPriceRange === "under1m" && sale.salePrice < 1000000) ||
+      (filterPriceRange === "1m-5m" && sale.salePrice >= 1000000 && sale.salePrice < 5000000) ||
+      (filterPriceRange === "over5m" && sale.salePrice >= 5000000);
+    return matchesSearch && matchesType && matchesPrice;
   });
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case "ecommerce": return "bg-green-100 text-green-800";
+      case "saas": return "bg-blue-100 text-blue-800";
+      case "mobile-app": return "bg-purple-100 text-purple-800";
+      case "platform": return "bg-orange-100 text-orange-800";
+      case "marketplace": return "bg-pink-100 text-pink-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -298,10 +374,10 @@ export const SustanoSphereDataCentre = () => {
             </div>
             <div className="space-y-1">
               <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                Sustano-Phere™ Data Centre
+                Sustano-Phere™ Intelligence Database
               </CardTitle>
               <CardDescription className="text-lg font-medium">
-                AI-Enhanced Startup Intelligence Repository
+                Digital Asset Sales Intelligence & Market Analysis
               </CardDescription>
             </div>
           </div>
@@ -322,9 +398,9 @@ export const SustanoSphereDataCentre = () => {
           </div>
 
           <p className="text-muted-foreground max-w-3xl mx-auto">
-            Revolutionary startup intelligence platform powered by proprietary AI algorithms. 
-            Comprehensive analysis of digital assets, market positioning, and growth potential 
-            with integrated ESG scoring and risk assessment.
+            Revolutionary digital asset sales intelligence platform. The world's first comprehensive 
+            database analyzing ALL digital asset transactions with AI-powered attribution analysis 
+            to identify value-driving components and market patterns.
           </p>
 
           {/* IP Protection Notice */}
@@ -342,10 +418,10 @@ export const SustanoSphereDataCentre = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview">📊 Overview</TabsTrigger>
-          <TabsTrigger value="startups">🚀 Startups</TabsTrigger>
-          <TabsTrigger value="assets">💎 Digital Assets</TabsTrigger>
+          <TabsTrigger value="sales">💰 Sales Database</TabsTrigger>
+          <TabsTrigger value="analytics">📈 Market Analytics</TabsTrigger>
+          <TabsTrigger value="attribution">🎯 Value Attribution</TabsTrigger>
           <TabsTrigger value="intelligence">🧠 AI Intelligence</TabsTrigger>
-          <TabsTrigger value="reports">📈 Reports</TabsTrigger>
           <TabsTrigger value="ip-tracker">🔒 IP Tracker</TabsTrigger>
         </TabsList>
 
@@ -357,8 +433,8 @@ export const SustanoSphereDataCentre = () => {
                 <div className="flex items-center gap-2">
                   <Rocket className="h-5 w-5 text-primary" />
                   <div>
-                    <div className="text-2xl font-bold">{startups.length}</div>
-                    <div className="text-sm text-muted-foreground">Tracked Startups</div>
+                    <div className="text-2xl font-bold">{digitalAssetSales.length}</div>
+                    <div className="text-sm text-muted-foreground">Asset Sales Tracked</div>
                   </div>
                 </div>
               </CardContent>
@@ -369,9 +445,9 @@ export const SustanoSphereDataCentre = () => {
                   <DollarSign className="h-5 w-5 text-green-600" />
                   <div>
                     <div className="text-2xl font-bold">
-                      {formatCurrency(startups.reduce((sum, s) => sum + s.funding.valuation, 0))}
+                      {formatCurrency(digitalAssetSales.reduce((sum, s) => sum + s.salePrice, 0))}
                     </div>
-                    <div className="text-sm text-muted-foreground">Total Valuation</div>
+                    <div className="text-sm text-muted-foreground">Total Sales Volume</div>
                   </div>
                 </div>
               </CardContent>
@@ -382,9 +458,9 @@ export const SustanoSphereDataCentre = () => {
                   <Brain className="h-5 w-5 text-blue-600" />
                   <div>
                     <div className="text-2xl font-bold">
-                      {Math.round(startups.reduce((sum, s) => sum + s.aiScore, 0) / startups.length)}
+                      {Math.round(digitalAssetSales.reduce((sum, s) => sum + s.keyAttributes.techScore, 0) / digitalAssetSales.length)}
                     </div>
-                    <div className="text-sm text-muted-foreground">Avg AI Score</div>
+                    <div className="text-sm text-muted-foreground">Avg Tech Score</div>
                   </div>
                 </div>
               </CardContent>
@@ -395,9 +471,9 @@ export const SustanoSphereDataCentre = () => {
                   <Target className="h-5 w-5 text-purple-600" />
                   <div>
                     <div className="text-2xl font-bold">
-                      {startups.reduce((sum, s) => sum + s.digitalAssets.length, 0)}
+                      {digitalAssetSales.reduce((sum, s) => sum + s.valuation.premiumFactors.length, 0)}
                     </div>
-                    <div className="text-sm text-muted-foreground">Digital Assets</div>
+                    <div className="text-sm text-muted-foreground">Value Drivers</div>
                   </div>
                 </div>
               </CardContent>
@@ -411,25 +487,25 @@ export const SustanoSphereDataCentre = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {startups.slice(0, 3).map((startup) => (
-                  <div key={startup.id} className="flex items-center justify-between p-3 border rounded-lg">
+                {digitalAssetSales.slice(0, 3).map((sale) => (
+                  <div key={sale.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                        <Rocket className="h-5 w-5 text-primary" />
+                        <DollarSign className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <div className="font-medium">{startup.name}</div>
+                        <div className="font-medium">{sale.assetName}</div>
                         <div className="text-sm text-muted-foreground">
-                          Updated {startup.lastUpdated}
+                          Sold {sale.saleDate} - {formatCurrency(sale.salePrice)}
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge className={getStageColor(startup.stage)}>
-                        {startup.stage.toUpperCase()}
+                      <Badge className={getTypeColor(sale.assetType)}>
+                        {sale.assetType.toUpperCase()}
                       </Badge>
-                      <div className={`text-sm font-medium ${getRiskColor(startup.riskLevel)}`}>
-                        {startup.riskLevel.toUpperCase()} RISK
+                      <div className="text-sm font-medium text-green-600">
+                        {sale.valuation.revenueMultiple}x Revenue
                       </div>
                     </div>
                   </div>
@@ -439,19 +515,19 @@ export const SustanoSphereDataCentre = () => {
           </Card>
         </TabsContent>
 
-        {/* Startups Directory */}
-        <TabsContent value="startups" className="space-y-6">
+        {/* Sales Directory */}
+        <TabsContent value="sales" className="space-y-6">
           {/* Search and Filter */}
           <Card>
             <CardContent className="pt-6">
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <Label htmlFor="search">Search Startups</Label>
+                  <Label htmlFor="search">Search Digital Asset Sales</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="search"
-                      placeholder="Search by name or description..."
+                      placeholder="Search by asset name or type..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
@@ -459,62 +535,58 @@ export const SustanoSphereDataCentre = () => {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="stage">Stage</Label>
+                  <Label htmlFor="type">Asset Type</Label>
                   <select
-                    id="stage"
-                    value={filterStage}
-                    onChange={(e) => setFilterStage(e.target.value)}
+                    id="type"
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   >
-                    <option value="all">All Stages</option>
-                    <option value="idea">Idea</option>
-                    <option value="mvp">MVP</option>
-                    <option value="early">Early</option>
-                    <option value="growth">Growth</option>
-                    <option value="scale">Scale</option>
-                    <option value="mature">Mature</option>
+                    <option value="all">All Types</option>
+                    <option value="ecommerce">E-commerce</option>
+                    <option value="saas">SaaS</option>
+                    <option value="mobile-app">Mobile App</option>
+                    <option value="platform">Platform</option>
+                    <option value="marketplace">Marketplace</option>
+                    <option value="ai-model">AI Model</option>
+                    <option value="blockchain">Blockchain</option>
                   </select>
                 </div>
                 <div>
-                  <Label htmlFor="sector">Sector</Label>
+                  <Label htmlFor="price">Price Range</Label>
                   <select
-                    id="sector"
-                    value={filterSector}
-                    onChange={(e) => setFilterSector(e.target.value)}
+                    id="price"
+                    value={filterPriceRange}
+                    onChange={(e) => setFilterPriceRange(e.target.value)}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   >
-                    <option value="all">All Sectors</option>
-                    <option value="fintech">FinTech</option>
-                    <option value="proptech">PropTech</option>
-                    <option value="healthtech">HealthTech</option>
-                    <option value="edtech">EdTech</option>
-                    <option value="cleantech">CleanTech</option>
-                    <option value="retail">Retail</option>
-                    <option value="saas">SaaS</option>
-                    <option value="marketplace">Marketplace</option>
+                    <option value="all">All Prices</option>
+                    <option value="under1m">Under $1M</option>
+                    <option value="1m-5m">$1M - $5M</option>
+                    <option value="over5m">Over $5M</option>
                   </select>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Startups Grid */}
+          {/* Sales Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredStartups.map((startup) => (
-              <Card key={startup.id} className="group hover:shadow-lg transition-all duration-300">
+            {filteredSales.map((sale) => (
+              <Card key={sale.id} className="group hover:shadow-lg transition-all duration-300">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
                       <CardTitle className="group-hover:text-primary transition-colors">
-                        {startup.name}
+                        {sale.assetName}
                       </CardTitle>
                       <CardDescription className="mt-1">
-                        {startup.description}
+                        {sale.assetType} • {sale.businessModel} • {sale.geography}
                       </CardDescription>
                     </div>
                     <div className="flex gap-1">
-                      <Badge className={getStageColor(startup.stage)}>
-                        {startup.stage}
+                      <Badge className={getTypeColor(sale.assetType)}>
+                        {sale.assetType}
                       </Badge>
                     </div>
                   </div>
@@ -524,15 +596,15 @@ export const SustanoSphereDataCentre = () => {
                   {/* Key Metrics */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <div className="text-sm text-muted-foreground">Valuation</div>
+                      <div className="text-sm text-muted-foreground">Sale Price</div>
                       <div className="text-lg font-semibold">
-                        {formatCurrency(startup.funding.valuation)}
+                        {formatCurrency(sale.salePrice)}
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm text-muted-foreground">AI Score</div>
+                      <div className="text-sm text-muted-foreground">Revenue Multiple</div>
                       <div className="text-lg font-semibold text-blue-600">
-                        {startup.aiScore}/100
+                        {sale.valuation.revenueMultiple}x
                       </div>
                     </div>
                   </div>
@@ -540,36 +612,42 @@ export const SustanoSphereDataCentre = () => {
                   {/* Score Breakdown */}
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span>Overall Score</span>
-                      <span className="font-medium">{startup.overallScore}/100</span>
+                      <span>Tech Score</span>
+                      <span className="font-medium">{sale.keyAttributes.techScore}/100</span>
                     </div>
-                    <Progress value={startup.overallScore} className="h-2" />
+                    <Progress value={sale.keyAttributes.techScore} className="h-2" />
                   </div>
 
-                  {/* Risk & Team */}
+                  {/* Revenue & Users */}
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{startup.team} team members</span>
+                      <span className="text-sm">{sale.monthlyUsers.toLocaleString()} users</span>
                     </div>
-                    <div className={`text-sm font-medium ${getRiskColor(startup.riskLevel)}`}>
-                      {startup.riskLevel.toUpperCase()} RISK
+                    <div className="text-sm font-medium text-green-600">
+                      {formatCurrency(sale.monthlyRevenue)}/mo
                     </div>
                   </div>
 
-                  {/* Tags */}
+                  {/* Tech Stack */}
                   <div className="flex flex-wrap gap-1">
-                    {startup.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
+                    {sale.techStack.slice(0, 3).map((tech) => (
+                      <Badge key={tech} variant="secondary" className="text-xs">
+                        {tech}
                       </Badge>
                     ))}
+                    {sale.techStack.length > 3 && (
+                      <Badge variant="secondary" className="text-xs">
+                        +{sale.techStack.length - 3}
+
+                      </Badge>
+                    )}
                   </div>
 
                   {/* Actions */}
                   <div className="flex gap-2 pt-2">
                     <Button 
-                      onClick={() => setSelectedStartup(startup)}
+                      onClick={() => setSelectedSale(sale)}
                       className="flex-1"
                       size="sm"
                     >
@@ -578,7 +656,7 @@ export const SustanoSphereDataCentre = () => {
                     </Button>
                     <Button variant="outline" size="sm">
                       <BarChart3 className="h-4 w-4 mr-1" />
-                      Analytics
+                      Analysis
                     </Button>
                   </div>
                 </CardContent>
@@ -587,18 +665,35 @@ export const SustanoSphereDataCentre = () => {
           </div>
         </TabsContent>
 
-        {/* Digital Assets */}
-        <TabsContent value="assets" className="space-y-6">
+        {/* Market Analytics */}
+        <TabsContent value="analytics" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Digital Asset Portfolio</CardTitle>
+              <CardTitle>Market Analytics Dashboard</CardTitle>
               <CardDescription>
-                Comprehensive analysis of startup digital assets and IP components
+                Comprehensive market intelligence and trend analysis
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center text-muted-foreground py-8">
-                Coming Soon: Digital Asset Analysis Engine
+                Coming Soon: Advanced Market Analytics
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Value Attribution */}
+        <TabsContent value="attribution" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>AI Value Attribution Engine</CardTitle>
+              <CardDescription>
+                Proprietary analysis of what drives value in digital assets
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center text-muted-foreground py-8">
+                Coming Soon: Revolutionary Value Attribution Analysis
               </div>
             </CardContent>
           </Card>
@@ -610,29 +705,12 @@ export const SustanoSphereDataCentre = () => {
             <CardHeader>
               <CardTitle>AI Intelligence Dashboard</CardTitle>
               <CardDescription>
-                Proprietary AI-powered startup analysis and market intelligence
+                Advanced AI-powered market intelligence and predictive analytics
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center text-muted-foreground py-8">
-                Coming Soon: AI Intelligence Engine
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Reports */}
-        <TabsContent value="reports" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Intelligence Reports</CardTitle>
-              <CardDescription>
-                Automated reports and market analysis
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center text-muted-foreground py-8">
-                Coming Soon: Automated Reporting System
+                Coming Soon: Revolutionary AI Intelligence Platform
               </div>
             </CardContent>
           </Card>
@@ -692,20 +770,20 @@ export const SustanoSphereDataCentre = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Selected Startup Modal/Details would go here */}
-      {selectedStartup && (
+      {/* Selected Sale Modal/Details would go here */}
+      {selectedSale && (
         <Card className="fixed inset-4 z-50 bg-background border shadow-lg overflow-auto">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>{selectedStartup.name} - Detailed Analysis</CardTitle>
-              <Button variant="ghost" onClick={() => setSelectedStartup(null)}>
+              <CardTitle>{selectedSale.assetName} - Detailed Analysis</CardTitle>
+              <Button variant="ghost" onClick={() => setSelectedSale(null)}>
                 ×
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-center text-muted-foreground py-8">
-              Detailed startup analysis view coming soon...
+              Detailed sale analysis view coming soon...
             </div>
           </CardContent>
         </Card>
