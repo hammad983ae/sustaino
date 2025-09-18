@@ -1,80 +1,45 @@
 import React from 'react';
-import UnifiedPlatformLayout from '@/components/UnifiedPlatformLayout';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import PropertyValuationManagement from '@/components/PropertyValuationManagement';
 
+// Import professional images
+import propertyValuationDashboard from '@/assets/property-valuation-dashboard.jpg';
+
 const PropertyValuations = () => {
-  const platformSections = [
-    {
-      title: "Core Services",
-      cards: [
-        {
-          id: "residential-valuations",
-          title: "Residential Valuations",
-          description: "Professional residential property assessment services with market analysis",
-          icon: "🏠",
-          onView: () => console.log("View residential valuations"),
-          onPrint: () => window.print()
-        },
-        {
-          id: "commercial-valuations", 
-          title: "Commercial Valuations",
-          description: "Comprehensive commercial property valuations and investment analysis",
-          icon: "🏢",
-          onView: () => console.log("View commercial valuations"),
-          onPrint: () => window.print()
-        },
-        {
-          id: "industrial-valuations",
-          title: "Industrial Valuations", 
-          description: "Specialized industrial property and equipment valuations",
-          icon: "🏭",
-          onView: () => console.log("View industrial valuations"),
-          onPrint: () => window.print()
-        }
-      ]
-    },
-    {
-      title: "Revolutionary Platforms",
-      cards: [
-        {
-          id: "automated-valuation",
-          title: "Automated Valuation",
-          description: "AI-powered automated property valuation with instant results",
-          icon: "🤖",
-          onView: () => console.log("View automated valuation"),
-          onPrint: () => window.print()
-        },
-        {
-          id: "esg-integration",
-          title: "ESG Integration", 
-          description: "Environmental, social, and governance factors in property valuation",
-          icon: "🌱",
-          onView: () => console.log("View ESG integration"),
-          onPrint: () => window.print()
-        },
-        {
-          id: "blockchain-verification",
-          title: "Blockchain Verification",
-          description: "Secure blockchain-based property record verification and audit trails",
-          icon: "🔗",
-          onView: () => console.log("View blockchain verification"),
-          onPrint: () => window.print()
-        }
-      ]
-    }
-  ];
+  const navigate = useNavigate();
 
   return (
-    <UnifiedPlatformLayout
-      title="Property Valuations Platform"
-      subtitle="Professional property assessment services across all asset classes with AI-enhanced analytics"
-      colorTheme="green"
-      sections={platformSections}
-    >
-      <div className="bg-gradient-to-r from-emerald-800/80 to-green-900/80 backdrop-blur-sm rounded-2xl border border-emerald-400/30 shadow-2xl shadow-emerald-500/20 p-8">
+    <div className="min-h-screen bg-background">
+      {/* Professional Visual Header */}
+      <div className="relative h-64 overflow-hidden">
+        <img 
+          src={propertyValuationDashboard} 
+          alt="Professional Property Valuation Platform" 
+          className="w-full h-full object-cover opacity-80"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-purple-900/70" />
+        <div className="absolute bottom-4 left-4 text-white">
+          <h1 className="text-3xl font-bold">Property Valuations Platform</h1>
+          <p className="text-lg opacity-90">Professional-grade valuation management</p>
+        </div>
+      </div>
+      
+      <div className="container mx-auto py-8">
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
         <PropertyValuationManagement />
       </div>
-    </UnifiedPlatformLayout>
+    </div>
   );
 };
 
