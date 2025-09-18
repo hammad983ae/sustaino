@@ -126,11 +126,9 @@ export default function AutomatedValuation() {
           />
         </div>
         
-        {/* Enhanced 3D Background Effect */}
+        {/* Enhanced 3D Background Effect - Temporarily disabled to fix WebGL error */}
         <div className="absolute inset-0 green-glow-effect opacity-40"></div>
-        <div className="absolute inset-0">
-          <PropertyValuation3DBackground />
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-blue-500/10 to-purple-500/10"></div>
         
         {/* Enhanced purple gradient background */}
         <div className="absolute inset-0 backdrop-blur-sm" />
