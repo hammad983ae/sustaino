@@ -52,6 +52,7 @@ import ESGRiskAdjustedCalculator from '@/components/ESGRiskAdjustedCalculator';
 import DashboardQuickSearch from '@/components/DashboardQuickSearch';
 import { RevolutionarySustainoSphere } from '@/components/RevolutionarySustanoSphere';
 import AdvertisingValuationDashboard from '@/components/AdvertisingValuationDashboard';
+import ICVDashboard from '@/components/ICVDashboard';
 
 // Import professional images
 import securityAnalysisDashboard from '@/assets/security-analysis-dashboard.jpg';
@@ -150,9 +151,9 @@ const Dashboard = () => {
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="sustaino-world" className="flex items-center gap-2">
-              <Globe className="h-4 w-4" />
-              Sustaino World
+            <TabsTrigger value="icv-platform" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              ICV Platform
             </TabsTrigger>
           </TabsList>
 
@@ -438,10 +439,6 @@ const Dashboard = () => {
                     <ShieldCheck className="h-4 w-4" />
                     Security
                   </TabsTrigger>
-                  <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
-                    <Globe className="h-4 w-4" />
-                    Sustaino Sphere™
-                  </TabsTrigger>
                   <TabsTrigger value="advertising" className="flex items-center gap-2">
                     <Megaphone className="h-4 w-4" />
                     Advertising
@@ -692,9 +689,6 @@ const Dashboard = () => {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="sustano-sphere" className="mt-6">
-                  <RevolutionarySustainoSphere />
-                </TabsContent>
 
                 <TabsContent value="advertising" className="mt-6">
                   <AdvertisingValuationDashboard />

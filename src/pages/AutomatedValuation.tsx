@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { Zap, Sparkles, Megaphone, Building2, TrendingUp, FileText, BarChart3, Database, Mail } from "lucide-react";
+import { Zap, Sparkles, Megaphone, Building2, TrendingUp, FileText, BarChart3, Database, Mail, Globe } from "lucide-react";
 import PropertyTypeSelector from "@/components/PropertyTypeSelector";
 import AutomatedPropertyDetails from "@/components/AutomatedPropertyDetails";
 import AutomatedReport from "./AutomatedReport";
@@ -212,7 +212,7 @@ export default function AutomatedValuation() {
                     <TabsList className="grid w-full grid-cols-5 bg-blue-900/50">
                       <TabsTrigger value="platforms">Platform Access</TabsTrigger>
                       <TabsTrigger value="tools">Data Tools</TabsTrigger>
-                      <TabsTrigger value="brochures">📋 Brochures</TabsTrigger>
+                      <TabsTrigger value="brochures">📋 Platform Marketing</TabsTrigger>
                       <TabsTrigger value="security">🔒 IP Security</TabsTrigger>
                       <TabsTrigger value="advanced">Advanced Features</TabsTrigger>
                     </TabsList>
@@ -344,8 +344,36 @@ export default function AutomatedValuation() {
                     </TabsContent>
                     
                     <TabsContent value="brochures" className="space-y-6">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* Professional Brochures Section with 3D effects */}
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Sustaino Sphere Platform */}
+                        <Card className="card-3d-light border-green-200/60 bg-green-800/40 backdrop-blur-sm">
+                          <CardHeader>
+                            <CardTitle className="text-green-300 flex items-center gap-2">
+                              <Globe className="h-5 w-5" />
+                              Sustaino Sphere™ Platform
+                            </CardTitle>
+                            <CardDescription className="text-green-200">
+                              Revolutionary digital asset intelligence platform
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-3">
+                              <Link to="/dashboard" className="block">
+                                <Button variant="outline" className="w-full justify-start gap-2 border-green-300/50 hover:bg-green-700/30 text-green-200">
+                                  🌐 Access Sustaino Sphere™
+                                </Button>
+                              </Link>
+                              <div className="text-sm text-green-200 space-y-1">
+                                <p>• Digital asset valuation</p>
+                                <p>• AI-powered intelligence</p>
+                                <p>• Revolutionary platform ecosystem</p>
+                                <p>• Comprehensive market analysis</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Marketing Brochures Section */}
                         <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
                           <CardHeader>
                             <CardTitle className="text-purple-300 flex items-center gap-2">
