@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
+import SustanoSphereLogo from './SustanoSphereLogo';
 
 const SustanoSphereMarketStrategy = () => {
   const [selectedStrategy, setSelectedStrategy] = useState('market-creation');
@@ -272,8 +273,11 @@ const SustanoSphereMarketStrategy = () => {
         <div ref={contentRef} className="space-y-6">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-              Sustaino-Sphere™ Market Creation Strategy
+            <div className="flex justify-center mb-4">
+              <SustanoSphereLogo size="xl" />
+            </div>
+            <h1 className="text-3xl font-bold text-foreground">
+              Market Creation Strategy
             </h1>
             <p className="text-xl text-muted-foreground">
               Creating the "Digital Business Valuation as a Service" Category
