@@ -29,6 +29,11 @@ serve(async (req) => {
       throw new Error('OpenAI API key not configured');
     }
 
+    if (openAIApiKey === 'Secrets') {
+      console.error('OpenAI API key appears to be placeholder value');
+      throw new Error('Please configure a valid OpenAI API key in Supabase secrets');
+    }
+
     const systemPrompt = `You are an expert Property Analysis AI Assistant for DeLorenzo Property Group. You specialize in:
 
 - Property valuations and market analysis

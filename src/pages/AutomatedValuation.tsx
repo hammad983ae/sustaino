@@ -8,6 +8,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import WebDataUploadInterface from '@/components/WebDataUploadInterface';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -309,9 +310,7 @@ export default function AutomatedValuation() {
                     </TabsContent>
                     
                     <TabsContent value="tools" className="space-y-6">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* Web Scraper Tool with 3D effects */}
-                        <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
+                      <WebDataUploadInterface />
                           <CardHeader>
                             <CardTitle className="text-purple-300 flex items-center gap-2">
                               <Database className="h-5 w-5" />
