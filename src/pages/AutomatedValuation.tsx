@@ -49,11 +49,11 @@ export default function AutomatedValuation() {
   const [setupMethod, setSetupMethod] = useState<"quick" | "advanced" | null>(null);
   const [isGreenTheme, setIsGreenTheme] = useState(false);
 
-  // Background alternation effect - switches every 10 minutes (600000ms)
+  // Background alternation effect - switches every 3 minutes (180000ms)
   useEffect(() => {
     const interval = setInterval(() => {
       setIsGreenTheme(prev => !prev);
-    }, 600000); // 10 minutes
+    }, 180000); // 3 minutes
 
     return () => clearInterval(interval);
   }, []);
@@ -152,10 +152,17 @@ export default function AutomatedValuation() {
         }`} style={{ animationDelay: '4s' }} />
         
         <div className="relative z-10">
-          <BrandedHeader 
-            title="Professional Property Valuations and ESG Assessments"
-            subtitle="Comprehensive property assessment services across all asset classes with AI-enhanced analytics"
-          />
+          <div className="text-center py-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              ICV (Instant Comprehensive Valuation)™
+            </h1>
+            <p className="text-xl text-white/90 mb-2">
+              AI-powered property valuation and assessment technology
+            </p>
+            <p className="text-sm text-white/70">
+              Patent Pending • IP Protected • Trademark ©
+            </p>
+          </div>
           
           {/* Clean Navigation - Only Essential Links */}
           <div className="container mx-auto px-4 py-4">
