@@ -209,10 +209,11 @@ export default function AutomatedValuation() {
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">
-                    <TabsList className="grid w-full grid-cols-5 bg-blue-900/50">
+                    <TabsList className="grid w-full grid-cols-6 bg-blue-900/50">
                       <TabsTrigger value="platforms">Platform Access</TabsTrigger>
                       <TabsTrigger value="tools">Data Tools</TabsTrigger>
-                      <TabsTrigger value="brochures">📋 Platform Marketing</TabsTrigger>
+                      <TabsTrigger value="marketing">🎯 Marketing Hub</TabsTrigger>
+                      <TabsTrigger value="brochures">📋 Brochures</TabsTrigger>
                       <TabsTrigger value="security">🔒 IP Security</TabsTrigger>
                       <TabsTrigger value="advanced">Advanced Features</TabsTrigger>
                     </TabsList>
@@ -338,6 +339,193 @@ export default function AutomatedValuation() {
                           </CardHeader>
                           <CardContent>
                             <ScrapedDataViewer />
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+                     
+                    <TabsContent value="marketing" className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {/* Social Media Assets */}
+                        <Card className="card-3d-light border-pink-200/60 bg-pink-800/40 backdrop-blur-sm">
+                          <CardHeader>
+                            <CardTitle className="text-pink-300 flex items-center gap-2">
+                              <Sparkles className="h-5 w-5" />
+                              Social Media Logos
+                            </CardTitle>
+                            <CardDescription className="text-pink-200">
+                              Download-ready logos for all your social media platforms
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-3">
+                              <Link to="/social-media-assets" className="block">
+                                <Button variant="outline" className="w-full justify-start gap-2 border-pink-300/50 hover:bg-pink-700/30 text-pink-200">
+                                  📱 Get Social Media Logos
+                                </Button>
+                              </Link>
+                              <div className="text-sm text-pink-200 space-y-1">
+                                <p>• Sustaino Pro logos (5 variants)</p>
+                                <p>• Multiple background options</p>
+                                <p>• Perfect for social media</p>
+                                <p>• PNG format, 800x320px</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Marketing Strategy */}
+                        <Card className="card-3d-light border-blue-200/60 bg-blue-800/40 backdrop-blur-sm">
+                          <CardHeader>
+                            <CardTitle className="text-blue-300 flex items-center gap-2">
+                              <TrendingUp className="h-5 w-5" />
+                              Market Strategy
+                            </CardTitle>
+                            <CardDescription className="text-blue-200">
+                              Comprehensive market creation strategy and analysis
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-3">
+                              <Link to="/market-strategy" className="block">
+                                <Button variant="outline" className="w-full justify-start gap-2 border-blue-300/50 hover:bg-blue-700/30 text-blue-200">
+                                  📈 View Market Strategy
+                                </Button>
+                              </Link>
+                              <div className="text-sm text-blue-200 space-y-1">
+                                <p>• Digital Business Valuation category</p>
+                                <p>• Global economic impact</p>
+                                <p>• Strategic partnerships</p>
+                                <p>• PDF download available</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Professional Brochures */}
+                        <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
+                          <CardHeader>
+                            <CardTitle className="text-purple-300 flex items-center gap-2">
+                              <FileText className="h-5 w-5" />
+                              Professional Brochures
+                            </CardTitle>
+                            <CardDescription className="text-purple-200">
+                              Complete collection of service brochures
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-3">
+                              <Link to="/brochures" className="block">
+                                <Button variant="outline" className="w-full justify-start gap-2 border-purple-300/50 hover:bg-purple-700/30 text-purple-200">
+                                  📄 View All Brochures
+                                </Button>
+                              </Link>
+                              <div className="text-sm text-purple-200 space-y-1">
+                                <p>• Platform ecosystem overview</p>
+                                <p>• Service-specific materials</p>
+                                <p>• PDF presentations</p>
+                                <p>• Client-ready documents</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Platform Access */}
+                        <Card className="card-3d-light border-green-200/60 bg-green-800/40 backdrop-blur-sm">
+                          <CardHeader>
+                            <CardTitle className="text-green-300 flex items-center gap-2">
+                              <Globe className="h-5 w-5" />
+                              Platform Showcases
+                            </CardTitle>
+                            <CardDescription className="text-green-200">
+                              Live platform demonstrations and access
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-2">
+                              <Link to="/dashboard" className="block">
+                                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-green-700/30 text-green-200">
+                                  🌐 Sustaino Sphere™
+                                </Button>
+                              </Link>
+                              <Link to="/auction-sphere-pos" className="block">
+                                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-green-700/30 text-green-200">
+                                  🏛️ Auction-Sphere™
+                                </Button>
+                              </Link>
+                              <Link to="/advertising-platforms" className="block">
+                                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-green-700/30 text-green-200">
+                                  📺 Advertising Platform
+                                </Button>
+                              </Link>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Quick Marketing Actions */}
+                        <Card className="card-3d-light border-orange-200/60 bg-orange-800/40 backdrop-blur-sm">
+                          <CardHeader>
+                            <CardTitle className="text-orange-300 flex items-center gap-2">
+                              <Zap className="h-5 w-5" />
+                              Quick Actions
+                            </CardTitle>
+                            <CardDescription className="text-orange-200">
+                              Fast access to marketing essentials
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-2">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200"
+                                onClick={() => window.open('/social-media-assets', '_blank')}
+                              >
+                                📱 Download Logos
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200"
+                                onClick={() => window.open('/market-strategy', '_blank')}
+                              >
+                                📊 Strategy PDF
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200"
+                                onClick={() => window.open('/brochures', '_blank')}
+                              >
+                                📋 All Materials
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Email Templates */}
+                        <Card className="card-3d-light border-cyan-200/60 bg-cyan-800/40 backdrop-blur-sm">
+                          <CardHeader>
+                            <CardTitle className="text-cyan-300 flex items-center gap-2">
+                              <Mail className="h-5 w-5" />
+                              Email & Communications
+                            </CardTitle>
+                            <CardDescription className="text-cyan-200">
+                              Professional email templates and signatures
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-3">
+                              <div className="text-sm text-cyan-200 space-y-1">
+                                <p>• Professional email signatures</p>
+                                <p>• Client communication templates</p>
+                                <p>• Presentation templates</p>
+                                <p>• Partnership proposals</p>
+                              </div>
+                              <Button variant="outline" className="w-full justify-start gap-2 border-cyan-300/50 hover:bg-cyan-700/30 text-cyan-200 text-xs">
+                                📧 Coming Soon
+                              </Button>
+                            </div>
                           </CardContent>
                         </Card>
                       </div>
