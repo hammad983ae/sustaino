@@ -167,26 +167,26 @@ const ProfessionalComplianceFramework = ({
       nextReview: '2024-08-10'
     },
     {
-      id: 'aasb13',
-      name: 'AASB 13',
-      fullName: 'Fair Value Measurement',
-      organization: 'Australian Accounting Standards Board',
-      jurisdiction: 'Australia',
-      version: 'AASB 13 2023',
-      icon: TrendingUp,
+      id: 'red_book',
+      name: 'RICS Red Book',
+      fullName: 'RICS Valuation - Global Standards',
+      organization: 'RICS',
+      jurisdiction: 'International',
+      version: 'Red Book Global 2022',
+      icon: BookOpen,
       requirements: [
-        'Fair value hierarchy compliance',
-        'Market participant assumptions',
-        'Highest and best use determination',
-        'Valuation technique consistency',
-        'Input categorization (Level 1, 2, 3)',
-        'Disclosure requirements',
-        'Sensitivity analysis',
-        'Valuation uncertainty quantification'
+        'Terms of engagement compliance',
+        'Valuation approach selection justification', 
+        'Market value definition adherence',
+        'Valuation uncertainty assessment',
+        'Professional competence verification',
+        'Independence and objectivity',
+        'Inspection requirements',
+        'Reporting standards compliance'
       ],
       status: 'compliant',
-      lastReviewed: '2024-01-25',
-      nextReview: '2024-07-25'
+      lastReviewed: '2024-02-15',
+      nextReview: '2024-08-15'
     }
   ];
 
