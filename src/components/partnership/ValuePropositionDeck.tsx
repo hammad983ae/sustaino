@@ -510,7 +510,7 @@ const ValuePropositionDeck = () => {
                       <h4 className="font-semibold">Technical KPIs:</h4>
                       <div className="space-y-2 text-sm">
                         <div>Platform uptime: 99.9%+</div>
-                        <div>Response time: <2s</div>
+                        <div>Response time: &lt;2s</div>
                         <div>User satisfaction: 90%+</div>
                         <div>Feature velocity: 2x industry</div>
                       </div>
