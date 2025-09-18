@@ -5,7 +5,7 @@
  * Property Pro™ - Registered Trademark - Licensed Software
  * ============================================================================
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -47,6 +47,16 @@ export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [setupMethod, setSetupMethod] = useState<"quick" | "advanced" | null>(null);
+  const [isGreenTheme, setIsGreenTheme] = useState(false);
+
+  // Background alternation effect - switches every 10 minutes (600000ms)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsGreenTheme(prev => !prev);
+    }, 600000); // 10 minutes
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handlePropertyTypeSelect = (type: string) => {
     setSelectedPropertyType(type);
@@ -102,7 +112,9 @@ export default function AutomatedValuation() {
   if (currentStep === "propertyType" || currentStep === "default") {
     return (
       <div className="min-h-screen" style={{
-        background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #60a5fa 75%, #93c5fd 100%)'
+        background: isGreenTheme 
+          ? 'linear-gradient(135deg, #059669 0%, #10b981 25%, #34d399 50%, #6ee7b7 75%, #a7f3d0 100%)'
+          : 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #60a5fa 75%, #93c5fd 100%)'
       }}>
         {/* Professional Platform Visual */}
         <div className="absolute inset-0 opacity-20">
@@ -122,13 +134,28 @@ export default function AutomatedValuation() {
         {/* Enhanced purple gradient background */}
         <div className="absolute inset-0 backdrop-blur-sm" />
         
-        {/* Floating orbs for extra ambiance with blue tinge */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-400/30 to-cyan-400/30 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-48 h-48 bg-gradient-to-r from-cyan-400/25 to-blue-400/25 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-r from-blue-300/35 to-cyan-300/35 rounded-full blur-lg animate-float-3d" style={{ animationDelay: '4s' }} />
+        {/* Floating orbs for extra ambiance with theme-based colors */}
+        <div className={`absolute top-20 left-10 w-32 h-32 rounded-full blur-xl animate-pulse ${
+          isGreenTheme 
+            ? 'bg-gradient-to-r from-emerald-400/30 to-green-400/30' 
+            : 'bg-gradient-to-r from-blue-400/30 to-cyan-400/30'
+        }`} />
+        <div className={`absolute bottom-20 right-10 w-48 h-48 rounded-full blur-2xl animate-pulse ${
+          isGreenTheme 
+            ? 'bg-gradient-to-r from-green-400/25 to-emerald-400/25' 
+            : 'bg-gradient-to-r from-cyan-400/25 to-blue-400/25'
+        }`} style={{ animationDelay: '2s' }} />
+        <div className={`absolute top-1/2 left-1/3 w-24 h-24 rounded-full blur-lg animate-float-3d ${
+          isGreenTheme 
+            ? 'bg-gradient-to-r from-emerald-300/35 to-green-300/35' 
+            : 'bg-gradient-to-r from-blue-300/35 to-cyan-300/35'
+        }`} style={{ animationDelay: '4s' }} />
         
         <div className="relative z-10">
-          <BrandedHeader />
+          <BrandedHeader 
+            title="Professional Property Valuations and ESG Assessments"
+            subtitle="Comprehensive property assessment services across all asset classes with AI-enhanced analytics"
+          />
           
           {/* Clean Navigation - Only Essential Links */}
           <div className="container mx-auto px-4 py-4">
