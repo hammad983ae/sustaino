@@ -291,13 +291,13 @@ export const SustanoSphere = () => {
 
       {/* Main Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="browse">🔍 Browse Auctions</TabsTrigger>
-          <TabsTrigger value="featured">⭐ Featured</TabsTrigger>
-          <TabsTrigger value="watchlist">❤️ Watchlist</TabsTrigger>
-          <TabsTrigger value="vendor">📄 Vendor Statements</TabsTrigger>
-          <TabsTrigger value="sell">💼 List Asset</TabsTrigger>
-          <TabsTrigger value="datacentre">🏛️ Data Centre</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 gap-1">
+          <TabsTrigger value="browse" className="text-xs lg:text-sm">🔍 Browse</TabsTrigger>
+          <TabsTrigger value="featured" className="text-xs lg:text-sm">⭐ Featured</TabsTrigger>
+          <TabsTrigger value="datacentre" className="text-xs lg:text-sm">🏛️ Data Centre</TabsTrigger>
+          <TabsTrigger value="watchlist" className="text-xs lg:text-sm">❤️ Watchlist</TabsTrigger>
+          <TabsTrigger value="vendor" className="text-xs lg:text-sm">📄 Vendor</TabsTrigger>
+          <TabsTrigger value="sell" className="text-xs lg:text-sm">💼 List Asset</TabsTrigger>
         </TabsList>
 
         {/* Browse Auctions */}
