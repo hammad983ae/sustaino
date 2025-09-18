@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import VendorStatementGenerator from './VendorStatementGenerator';
+import SustanoSphereDataCentre from './SustanoSphereDataCentre';
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -290,12 +291,13 @@ export const SustanoSphere = () => {
 
       {/* Main Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="browse">🔍 Browse Auctions</TabsTrigger>
           <TabsTrigger value="featured">⭐ Featured</TabsTrigger>
           <TabsTrigger value="watchlist">❤️ Watchlist</TabsTrigger>
           <TabsTrigger value="vendor">📄 Vendor Statements</TabsTrigger>
           <TabsTrigger value="sell">💼 List Asset</TabsTrigger>
+          <TabsTrigger value="datacentre">🏛️ Data Centre</TabsTrigger>
         </TabsList>
 
         {/* Browse Auctions */}
@@ -698,6 +700,11 @@ export const SustanoSphere = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Data Centre */}
+      <TabsContent value="datacentre" className="space-y-6">
+        <SustanoSphereDataCentre />
+      </TabsContent>
 
       {/* Footer with Additional IP Protection */}
       <Card className="bg-muted/50">
