@@ -209,13 +209,13 @@ export default function AutomatedValuation() {
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">
-                    <TabsList className="grid w-full grid-cols-6 bg-blue-900/50">
-                      <TabsTrigger value="platforms">Platform Access</TabsTrigger>
-                      <TabsTrigger value="tools">Data Tools</TabsTrigger>
-                      <TabsTrigger value="marketing">🎯 Marketing Hub</TabsTrigger>
-                      <TabsTrigger value="brochures">📋 Brochures</TabsTrigger>
-                      <TabsTrigger value="security">🔒 IP Security</TabsTrigger>
-                      <TabsTrigger value="advanced">Advanced Features</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-6 bg-slate-800/90 border border-slate-600">
+                      <TabsTrigger value="platforms" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900 hover:bg-slate-700 hover:text-white">Platform Access</TabsTrigger>
+                      <TabsTrigger value="tools" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900 hover:bg-slate-700 hover:text-white">Data Tools</TabsTrigger>
+                      <TabsTrigger value="marketing" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900 hover:bg-slate-700 hover:text-white">🎯 Marketing Hub</TabsTrigger>
+                      <TabsTrigger value="brochures" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900 hover:bg-slate-700 hover:text-white">📋 Brochures</TabsTrigger>
+                      <TabsTrigger value="security" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900 hover:bg-slate-700 hover:text-white">🔒 IP Security</TabsTrigger>
+                      <TabsTrigger value="advanced" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900 hover:bg-slate-700 hover:text-white">Advanced Features</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="platforms" className="space-y-6">
