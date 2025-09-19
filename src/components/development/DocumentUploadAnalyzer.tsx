@@ -212,24 +212,45 @@ const DocumentUploadAnalyzer: React.FC<DocumentUploadAnalyzerProps> = ({
       } else if (file.type.startsWith('image/')) {
         // For image files, use Tesseract OCR
         console.log('Processing image file with OCR...');
+        setProgress(10);
         
-        const { data } = await Tesseract.recognize(file, 'eng', {
-          logger: (m: any) => {
-            console.log('OCR Progress:', m);
-            if (m.status === 'recognizing text') {
-              setProgress(Math.round(m.progress * 100));
+        try {
+          // Initialize Tesseract worker with proper configuration
+          const worker = await Tesseract.createWorker('eng', 1, {
+            logger: (m: any) => {
+              console.log('OCR Progress:', m);
+              if (m.status === 'recognizing text') {
+                setProgress(Math.round(10 + m.progress * 80)); // 10% to 90%
+              } else if (m.status === 'loading tesseract core') {
+                setProgress(5);
+              } else if (m.status === 'initializing tesseract') {
+                setProgress(8);
+              }
+            },
+            errorHandler: (err: any) => {
+              console.error('Tesseract Error:', err);
             }
-          },
-          errorHandler: (err: any) => {
-            console.error('Tesseract Error:', err);
-          }
-        });
+          });
 
-        text = data.text.trim();
-        confidence = data.confidence;
-        
-        console.log('OCR completed. Text length:', text.length);
-        console.log('OCR confidence:', confidence);
+          setProgress(15);
+          
+          // Recognize text with enhanced options for better accuracy
+          const { data } = await worker.recognize(file);
+
+          await worker.terminate();
+
+          text = data.text?.trim() || '';
+          confidence = data.confidence || 0;
+          
+          console.log('OCR completed. Text length:', text.length);
+          console.log('OCR confidence:', confidence);
+          
+          setProgress(100);
+          
+        } catch (ocrError: any) {
+          console.error('OCR Error:', ocrError);
+          throw new Error(`OCR processing failed: ${ocrError.message}. Please ensure the image is clear and contains readable text.`);
+        }
       } else {
         throw new Error(`Unsupported file type: ${file.type}. Please upload an image (JPG, PNG) or PDF file.`);
       }

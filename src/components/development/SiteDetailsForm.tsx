@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MapPin, Building, Calculator } from "lucide-react";
+import { MapPin, Building, Calculator, Save, Loader2 } from "lucide-react";
+import { useUniversalSave } from "@/hooks/useUniversalSave";
+import { useToast } from "@/hooks/use-toast";
 import AddressVerificationService from "./AddressVerificationService";
 import DataSourcesConfig from "./DataSourcesConfig";
 import AutoPopulationService from "./AutoPopulationService";
@@ -71,11 +73,69 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
   const [addressVerified, setAddressVerified] = useState(false);
   const [verifiedAddressData, setVerifiedAddressData] = useState<any>(null);
   const [enabledDataSources, setEnabledDataSources] = useState<any[]>([]);
+  
+  // Save system implementation
+  const { saveData, loadData, isSaving } = useUniversalSave('development-site-details');
+  const { toast } = useToast();
+
+  // Auto-save functionality
+  useEffect(() => {
+    const autoSave = async () => {
+      if (siteData.address || siteData.clientName || siteData.description) {
+        try {
+          await saveData(siteData);
+        } catch (error) {
+          console.error('Auto-save failed:', error);
+        }
+      }
+    };
+
+    const debounceTimer = setTimeout(autoSave, 2000);
+    return () => clearTimeout(debounceTimer);
+  }, [siteData, saveData]);
+
+  // Load saved data on component mount
+  useEffect(() => {
+    const loadSavedData = async () => {
+      try {
+        const savedData = await loadData();
+        if (savedData && savedData.address) {
+          const typedData = savedData as SiteData;
+          setSiteData(typedData);
+          onSiteDataChange(typedData);
+          toast({
+            title: "Data Loaded",
+            description: "Previously saved site details have been restored.",
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load saved data:', error);
+      }
+    };
+
+    loadSavedData();
+  }, [loadData, onSiteDataChange, toast]);
 
   const handleInputChange = (field: keyof SiteData, value: any) => {
     const updatedData = { ...siteData, [field]: value };
     setSiteData(updatedData);
     onSiteDataChange(updatedData);
+  };
+
+  const handleManualSave = async () => {
+    try {
+      await saveData(siteData);
+      toast({
+        title: "Data Saved",
+        description: "Site details have been saved successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Save Failed",
+        description: "Failed to save site details. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleAddressVerified = (addressData: any) => {
@@ -184,9 +244,19 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
       {/* Valuation Details */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MapPin className="w-5 h-5" />
-            Valuation Details
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-5 h-5" />
+              Valuation Details
+            </div>
+            <Button onClick={handleManualSave} disabled={isSaving} size="sm">
+              {isSaving ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
+              Save Data
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
