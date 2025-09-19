@@ -39,9 +39,11 @@ import {
 } from 'lucide-react';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
+import PerfectSustanoLogo from '@/components/PerfectSustanoLogo';
 
 const SustanoProDashboard = () => {
   const [activeTab, setActiveTab] = useState('valuation');
+  const [colorTheme, setColorTheme] = useState<'green' | 'blue'>('green');
 
   const platforms = [
     // Valuation & Assessment Platforms
@@ -306,36 +308,60 @@ const SustanoProDashboard = () => {
 
   const filteredPlatforms = platforms.filter(platform => platform.category === activeTab);
 
+  const backgroundGradients = {
+    green: "bg-gradient-to-br from-emerald-400/90 via-teal-500/80 to-green-600/70",
+    blue: "bg-gradient-to-br from-blue-500/90 via-indigo-600/80 to-purple-700/70"
+  };
+
+  const overlayGradients = {
+    green: "from-emerald-50/80 via-teal-50/60 to-green-50/70",
+    blue: "from-blue-50/80 via-indigo-50/60 to-purple-50/70"
+  };
+
+  const accentColors = {
+    green: { primary: 'emerald-600', secondary: 'teal-600', tertiary: 'green-600' },
+    blue: { primary: 'blue-600', secondary: 'indigo-600', tertiary: 'purple-600' }
+  };
+
   return (
     <div className="min-h-screen relative">
       {/* 3D Background */}
       <PropertyValuation3DBackground />
       
-      {/* Green/teal glowing background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/80 via-teal-50/60 to-green-50/70" />
+      {/* Dynamic background overlay */}
+      <div className={`absolute inset-0 ${backgroundGradients[colorTheme]}`} />
+      <div className={`absolute inset-0 bg-gradient-to-br ${overlayGradients[colorTheme]}`} />
       
       <div className="relative z-10 container mx-auto px-4 py-12">
         
         {/* Header */}
         <div className="text-center space-y-6 mb-12">
-          <div className="inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-emerald-600 rounded-full text-sm font-medium shadow-sm border border-emerald-200/50">
-            🚀 Sustaino Pro - Complete Platform Ecosystem
+          <div className="flex justify-between items-center mb-4">
+            <div className={`inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-${accentColors[colorTheme].primary} rounded-full text-sm font-medium shadow-sm border border-${accentColors[colorTheme].primary}/20`}>
+              🚀 Sustaino Pro - Complete Platform Ecosystem
+            </div>
+            <Button 
+              onClick={() => setColorTheme(colorTheme === 'green' ? 'blue' : 'green')}
+              variant="outline"
+              size="sm"
+              className="bg-white/80 backdrop-blur-sm"
+            >
+              Switch Theme
+            </Button>
           </div>
           
           {/* Main Branding */}
-          <div className="flex items-center justify-center gap-4">
-            <ThunderboltIcon className="h-20 w-20" />
-            <div className="text-left">
-              <h1 className="text-7xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                Sustaino Pro
-              </h1>
-              <p className="text-2xl text-slate-600 font-medium">
-                Unified Platform Dashboard
-              </p>
-            </div>
+          <div className="flex items-center justify-center">
+            <PerfectSustanoLogo 
+              size="xl" 
+              variant={colorTheme === 'green' ? 'emerald' : 'blue'}
+              showText={true}
+              textPosition="right"
+              className="scale-125"
+            />
           </div>
           
-          <p className="text-lg text-emerald-600 max-w-3xl mx-auto leading-relaxed">
+          <p className={`text-lg text-${accentColors[colorTheme].primary} max-w-3xl mx-auto leading-relaxed`}>
             Access all Sustaino Pro platforms, tools, and services from one centralized dashboard. 
             Choose your category to explore our comprehensive suite of property and investment solutions.
           </p>

@@ -2,7 +2,7 @@ import React from 'react';
 
 interface PerfectSustanoLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'default' | 'white' | 'purple' | 'dark';
+  variant?: 'default' | 'white' | 'purple' | 'dark' | 'emerald' | 'blue';
   showText?: boolean;
   textPosition?: 'right' | 'bottom';
   className?: string;
@@ -64,6 +64,16 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
       outerCircle: 'stroke-gray-600',
       innerCircle: 'fill-gray-800',
       text: 'text-gray-800'
+    },
+    emerald: {
+      outerCircle: 'stroke-white/60',
+      innerCircle: 'fill-white',
+      text: 'text-white'
+    },
+    blue: {
+      outerCircle: 'stroke-white/60', 
+      innerCircle: 'fill-white',
+      text: 'text-white'
     }
   };
 
