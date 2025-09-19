@@ -30,6 +30,16 @@ interface ExtractedPropertyData {
   price?: number;
   rental_amount?: number;
   rental_period?: string;
+  lease_term_months?: number;
+  lease_start_date?: string;
+  lease_end_date?: string;
+  review_mechanism?: string;
+  review_percentage?: number;
+  cpi_adjustment_rate?: number;
+  fixed_increase_rate?: number;
+  net_rent?: number;
+  outgoings?: number;
+  gross_rent?: number;
   date?: string;
   bedrooms?: number;
   bathrooms?: number;
@@ -204,6 +214,13 @@ Deno.serve(async (req) => {
             rental_period: extracted.rental_period || "weekly",
             lease_date: extracted.date || new Date().toISOString().slice(0, 10),
             property_type: extracted.property_type || "mixed",
+            review_mechanism: extracted.review_mechanism,
+            review_percentage: extracted.fixed_increase_rate || extracted.cpi_adjustment_rate,
+            cpi_adjustment_rate: extracted.cpi_adjustment_rate,
+            fixed_increase_rate: extracted.fixed_increase_rate,
+            net_rent: extracted.net_rent,
+            outgoings: extracted.outgoings,
+            gross_rent: extracted.gross_rent,
             unit_number: extracted.unit_number ?? null,
             street_number: extracted.street_number ?? null,
             street_name: extracted.street_name ?? null,
@@ -388,6 +405,49 @@ function extractPropertyData(html: string): ExtractedPropertyData {
         out.rental_period = "weekly";
       }
     }
+  }
+
+  // Extract net rent specifically
+  const netRentMatch = text.match(/net\s+(?:income|rent)[\s:]*\$?([\d,]+)/i);
+  if (netRentMatch) {
+    out.net_rent = parseInt(netRentMatch[1].replace(/[^\d]/g, ""));
+  }
+
+  // Extract outgoings
+  const outgoingsMatch = text.match(/outgoings[\s:]*\$?([\d,]+)/i);
+  if (outgoingsMatch) {
+    out.outgoings = parseInt(outgoingsMatch[1].replace(/[^\d]/g, ""));
+  }
+
+  // Extract gross rent
+  const grossRentMatch = text.match(/gross\s+rent[\s:]*\$?([\d,]+)/i);
+  if (grossRentMatch) {
+    out.gross_rent = parseInt(grossRentMatch[1].replace(/[^\d]/g, ""));
+  }
+
+  // Extract review mechanism and rates
+  const cpiMatch = text.match(/(?:cpi|consumer\s+price\s+index)(?:\s+(?:increase|review|adjustment))?/i);
+  const fixedPercentMatch = text.match(/(?:fixed\s+)?(\d+(?:\.\d+)?)%\s*(?:annual\s+)?(?:increase|review|adjustment)/i);
+  const marketReviewMatch = text.match(/market\s+review/i);
+
+  if (cpiMatch) {
+    out.review_mechanism = 'cpi';
+    // Try to extract CPI rate if specified
+    const cpiRateMatch = text.match(/cpi[\s+]*(\d+(?:\.\d+)?)%/i);
+    if (cpiRateMatch) {
+      out.cpi_adjustment_rate = parseFloat(cpiRateMatch[1]);
+    }
+  } else if (fixedPercentMatch) {
+    out.review_mechanism = 'fixed_percentage';
+    out.fixed_increase_rate = parseFloat(fixedPercentMatch[1]);
+  } else if (marketReviewMatch) {
+    out.review_mechanism = 'market_review';
+  }
+
+  // Extract lease term
+  const leaseTermMatch = text.match(/(\d+)\s*year(?:s)?\s*lease/i);
+  if (leaseTermMatch) {
+    out.lease_term_months = parseInt(leaseTermMatch[1]) * 12;
   }
 
   // Basic property details

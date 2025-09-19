@@ -1143,6 +1143,72 @@ export type Database = {
           },
         ]
       }
+      jobs: {
+        Row: {
+          actual_completion: string | null
+          allowed_users: string[] | null
+          assigned_to: string | null
+          client_name: string
+          client_type: string
+          confidentiality_level: string
+          created_at: string
+          description: string | null
+          estimated_completion: string | null
+          id: string
+          job_data: Json | null
+          job_title: string
+          job_type: string
+          priority: string
+          property_address: string | null
+          property_type: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actual_completion?: string | null
+          allowed_users?: string[] | null
+          assigned_to?: string | null
+          client_name: string
+          client_type?: string
+          confidentiality_level?: string
+          created_at?: string
+          description?: string | null
+          estimated_completion?: string | null
+          id?: string
+          job_data?: Json | null
+          job_title: string
+          job_type: string
+          priority?: string
+          property_address?: string | null
+          property_type?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actual_completion?: string | null
+          allowed_users?: string[] | null
+          assigned_to?: string | null
+          client_name?: string
+          client_type?: string
+          confidentiality_level?: string
+          created_at?: string
+          description?: string | null
+          estimated_completion?: string | null
+          id?: string
+          job_data?: Json | null
+          job_title?: string
+          job_type?: string
+          priority?: string
+          property_address?: string | null
+          property_type?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       market_summaries: {
         Row: {
           created_at: string
@@ -1419,6 +1485,7 @@ export type Database = {
           air_conditioning: string | null
           asking_rent: number | null
           aspect: string | null
+          auto_adjustment_enabled: boolean | null
           balcony_area: number | null
           bathrooms: number | null
           bedrooms: number | null
@@ -1439,6 +1506,7 @@ export type Database = {
           contamination_risk: string | null
           county: string | null
           courtyard_area: number | null
+          cpi_adjustment_rate: number | null
           created_at: string
           data_quality_score: number | null
           data_source_verified: boolean | null
@@ -1449,12 +1517,14 @@ export type Database = {
           exclusive_use_areas: string | null
           external_walls: string | null
           extraction_confidence: number | null
+          fixed_increase_rate: number | null
           flooding_risk: string | null
           furnished: boolean | null
           garden_area: number | null
           garden_maintenance: boolean | null
           green_star_rating: string | null
           greywater_system: boolean | null
+          gross_rent: number | null
           gym: boolean | null
           heating: string | null
           heritage_listing: boolean | null
@@ -1465,6 +1535,7 @@ export type Database = {
           is_strata: boolean | null
           land_area: number | null
           landlord_type: string | null
+          last_review_date: string | null
           last_verified_date: string | null
           lease_conditions: string | null
           lease_date: string
@@ -1478,12 +1549,16 @@ export type Database = {
           local_government_area: string | null
           location_benefits: string | null
           location_detriments: string | null
+          location_map_url: string | null
           lot_number: string | null
           management_rights: boolean | null
           market_commentary: string | null
           marketing_period_days: number | null
           nbers_rating: string | null
+          net_rent: number | null
+          next_review_date: string | null
           notes: string | null
+          outgoings: number | null
           parish: string | null
           parking_included: boolean | null
           parking_spaces: number | null
@@ -1497,6 +1572,7 @@ export type Database = {
           previous_rentals: Json | null
           property_description: string | null
           property_id: string | null
+          property_image_url: string | null
           property_type: string
           quality_rating: string | null
           rainwater_tank: boolean | null
@@ -1510,6 +1586,9 @@ export type Database = {
           rental_guarantees: string | null
           rental_incentives: string | null
           rental_period: string
+          review_frequency_months: number | null
+          review_mechanism: string | null
+          review_percentage: number | null
           roof_type: string | null
           sales_history: Json | null
           security_features: string | null
@@ -1561,6 +1640,7 @@ export type Database = {
           air_conditioning?: string | null
           asking_rent?: number | null
           aspect?: string | null
+          auto_adjustment_enabled?: boolean | null
           balcony_area?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
@@ -1581,6 +1661,7 @@ export type Database = {
           contamination_risk?: string | null
           county?: string | null
           courtyard_area?: number | null
+          cpi_adjustment_rate?: number | null
           created_at?: string
           data_quality_score?: number | null
           data_source_verified?: boolean | null
@@ -1591,12 +1672,14 @@ export type Database = {
           exclusive_use_areas?: string | null
           external_walls?: string | null
           extraction_confidence?: number | null
+          fixed_increase_rate?: number | null
           flooding_risk?: string | null
           furnished?: boolean | null
           garden_area?: number | null
           garden_maintenance?: boolean | null
           green_star_rating?: string | null
           greywater_system?: boolean | null
+          gross_rent?: number | null
           gym?: boolean | null
           heating?: string | null
           heritage_listing?: boolean | null
@@ -1607,6 +1690,7 @@ export type Database = {
           is_strata?: boolean | null
           land_area?: number | null
           landlord_type?: string | null
+          last_review_date?: string | null
           last_verified_date?: string | null
           lease_conditions?: string | null
           lease_date: string
@@ -1620,12 +1704,16 @@ export type Database = {
           local_government_area?: string | null
           location_benefits?: string | null
           location_detriments?: string | null
+          location_map_url?: string | null
           lot_number?: string | null
           management_rights?: boolean | null
           market_commentary?: string | null
           marketing_period_days?: number | null
           nbers_rating?: string | null
+          net_rent?: number | null
+          next_review_date?: string | null
           notes?: string | null
+          outgoings?: number | null
           parish?: string | null
           parking_included?: boolean | null
           parking_spaces?: number | null
@@ -1639,6 +1727,7 @@ export type Database = {
           previous_rentals?: Json | null
           property_description?: string | null
           property_id?: string | null
+          property_image_url?: string | null
           property_type: string
           quality_rating?: string | null
           rainwater_tank?: boolean | null
@@ -1652,6 +1741,9 @@ export type Database = {
           rental_guarantees?: string | null
           rental_incentives?: string | null
           rental_period: string
+          review_frequency_months?: number | null
+          review_mechanism?: string | null
+          review_percentage?: number | null
           roof_type?: string | null
           sales_history?: Json | null
           security_features?: string | null
@@ -1703,6 +1795,7 @@ export type Database = {
           air_conditioning?: string | null
           asking_rent?: number | null
           aspect?: string | null
+          auto_adjustment_enabled?: boolean | null
           balcony_area?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
@@ -1723,6 +1816,7 @@ export type Database = {
           contamination_risk?: string | null
           county?: string | null
           courtyard_area?: number | null
+          cpi_adjustment_rate?: number | null
           created_at?: string
           data_quality_score?: number | null
           data_source_verified?: boolean | null
@@ -1733,12 +1827,14 @@ export type Database = {
           exclusive_use_areas?: string | null
           external_walls?: string | null
           extraction_confidence?: number | null
+          fixed_increase_rate?: number | null
           flooding_risk?: string | null
           furnished?: boolean | null
           garden_area?: number | null
           garden_maintenance?: boolean | null
           green_star_rating?: string | null
           greywater_system?: boolean | null
+          gross_rent?: number | null
           gym?: boolean | null
           heating?: string | null
           heritage_listing?: boolean | null
@@ -1749,6 +1845,7 @@ export type Database = {
           is_strata?: boolean | null
           land_area?: number | null
           landlord_type?: string | null
+          last_review_date?: string | null
           last_verified_date?: string | null
           lease_conditions?: string | null
           lease_date?: string
@@ -1762,12 +1859,16 @@ export type Database = {
           local_government_area?: string | null
           location_benefits?: string | null
           location_detriments?: string | null
+          location_map_url?: string | null
           lot_number?: string | null
           management_rights?: boolean | null
           market_commentary?: string | null
           marketing_period_days?: number | null
           nbers_rating?: string | null
+          net_rent?: number | null
+          next_review_date?: string | null
           notes?: string | null
+          outgoings?: number | null
           parish?: string | null
           parking_included?: boolean | null
           parking_spaces?: number | null
@@ -1781,6 +1882,7 @@ export type Database = {
           previous_rentals?: Json | null
           property_description?: string | null
           property_id?: string | null
+          property_image_url?: string | null
           property_type?: string
           quality_rating?: string | null
           rainwater_tank?: boolean | null
@@ -1794,6 +1896,9 @@ export type Database = {
           rental_guarantees?: string | null
           rental_incentives?: string | null
           rental_period?: string
+          review_frequency_months?: number | null
+          review_mechanism?: string | null
+          review_percentage?: number | null
           roof_type?: string | null
           sales_history?: Json | null
           security_features?: string | null
@@ -2784,6 +2889,16 @@ export type Database = {
       analyze_sales_evidence: {
         Args: { comparable_sales: Json[]; subject_property: Json }
         Returns: Json
+      }
+      calculate_adjusted_rental: {
+        Args: {
+          base_rental: number
+          current_cpi_rate?: number
+          months_since_last_review?: number
+          review_mechanism: string
+          review_percentage: number
+        }
+        Returns: number
       }
       calculate_esg_score: {
         Args: {
