@@ -206,12 +206,15 @@ export default function AdvertisingPlatforms() {
         icon={<Megaphone className="h-6 w-6 text-white" />}
         gradient="from-emerald-500 to-blue-600"
       />
-      {/* Floating 3D Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full animate-[float_6s_ease-in-out_infinite] blur-sm" />
-        <div className="absolute top-40 right-20 w-16 h-16 bg-accent/10 rounded-full animate-[float_8s_ease-in-out_infinite_reverse] blur-sm" />
-        <div className="absolute bottom-40 left-20 w-24 h-24 bg-primary/5 rounded-full animate-[float_10s_ease-in-out_infinite] blur-sm" />
-      </div>
+      
+      {/* Main Content */}
+      <div className="relative">
+        {/* Floating 3D Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full animate-[float_6s_ease-in-out_infinite] blur-sm" />
+          <div className="absolute top-40 right-20 w-16 h-16 bg-accent/10 rounded-full animate-[float_8s_ease-in-out_infinite_reverse] blur-sm" />
+          <div className="absolute bottom-40 left-20 w-24 h-24 bg-primary/5 rounded-full animate-[float_10s_ease-in-out_infinite] blur-sm" />
+        </div>
       
       {/* Hero Section */}
       <div className="relative py-12 px-4">
@@ -409,6 +412,7 @@ export default function AdvertisingPlatforms() {
             </p>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
