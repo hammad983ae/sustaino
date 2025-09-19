@@ -25,6 +25,7 @@ import { ValuationProvider } from "@/contexts/ValuationContext";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
+import SustanoProDashboard from "./pages/SustanoProDashboard";
 import AutomatedValuation from "./pages/AutomatedValuation";
 import RenewableEnergyValuations from "./components/RenewableEnergyValuations";
 import PropertyValuations from "./pages/PropertyValuations";
@@ -82,9 +83,9 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<SustanoProDashboard />} />
                 <Route path="/automated-valuation" element={<AutomatedValuation />} />
-                <Route path="/index" element={<Index />} />
+                <Route path="/sustaino-pro" element={<SustanoProDashboard />} />
                 <Route path="/report" element={<Report />} />
                 <Route path="/renewable-energy" element={<RenewableEnergyValuations />} />
                 <Route path="/property-assessment" element={<PropertyAssessment />} />
