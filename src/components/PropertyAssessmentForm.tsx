@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText, Building2, MapPin, Camera, Settings, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText, Building2, MapPin, Camera, Settings, Play, Home } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
@@ -38,6 +39,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   onComplete,
   onNavigateToReport
 }) => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
   const [includeDetailedRentalConfig, setIncludeDetailedRentalConfig] = useState(false);
@@ -491,11 +493,22 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       {/* Header with progress */}
       <div className="sticky top-0 z-20 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold">Property Assessment Form</h1>
-            <p className="text-sm text-muted-foreground">
-              Step {currentStep + 1}: {steps[currentStep].title}
-            </p>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2"
+            >
+              <Home className="h-4 w-4" />
+              Back to Dashboard
+            </Button>
+            <div>
+              <h1 className="text-xl font-bold">Property Assessment Form</h1>
+              <p className="text-sm text-muted-foreground">
+                Step {currentStep + 1}: {steps[currentStep].title}
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <Button
