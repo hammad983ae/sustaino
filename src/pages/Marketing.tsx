@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import PDFWebExtractorComparison from '@/components/PDFWebExtractorComparison';
+import PerfectSustanoLogo from '@/components/PerfectSustanoLogo';
+import LogoDownloader from '@/components/LogoDownloader';
 
 const Marketing = () => {
   const brochures = [
@@ -57,7 +59,7 @@ const Marketing = () => {
           <Card>
             <CardContent className="p-4 text-center">
               <ImageIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">5</div>
               <div className="text-sm text-muted-foreground">Logos</div>
             </CardContent>
           </Card>
@@ -111,17 +113,92 @@ const Marketing = () => {
             </CardContent>
           </Card>
 
-          {/* Resources Section */}
+          {/* Logo Collection */}
           <Card className="bg-gradient-to-br from-white to-gray-50 border-2">
             <CardHeader className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white rounded-t-lg">
               <CardTitle className="flex items-center gap-2">
                 <ImageIcon className="h-5 w-5" />
-                Resources
+                Gradient Logo Collection
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 p-6">
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">Resources and assets available upon request</p>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Dark Navy Logo */}
+                <Card>
+                  <CardContent className="p-6 text-center bg-gradient-to-br from-slate-800 to-slate-900">
+                    <div className="mb-4 flex justify-center">
+                      <PerfectSustanoLogo size="lg" variant="white" />
+                    </div>
+                    <h4 className="font-semibold mb-2 text-white">Dark Navy</h4>
+                    <LogoDownloader
+                      logoComponent={<PerfectSustanoLogo size="xl" variant="white" />}
+                      filename="sustaino-pro-dark-navy"
+                      backgroundColor="linear-gradient(135deg, #334155, #1e293b)"
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* Light Blue Logo */}
+                <Card>
+                  <CardContent className="p-6 text-center bg-gradient-to-br from-blue-400 to-blue-600">
+                    <div className="mb-4 flex justify-center">
+                      <PerfectSustanoLogo size="lg" variant="white" />
+                    </div>
+                    <h4 className="font-semibold mb-2 text-white">Light Blue</h4>
+                    <LogoDownloader
+                      logoComponent={<PerfectSustanoLogo size="xl" variant="white" />}
+                      filename="sustaino-pro-light-blue"
+                      backgroundColor="linear-gradient(135deg, #60a5fa, #2563eb)"
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* Purple Logo */}
+                <Card>
+                  <CardContent className="p-6 text-center bg-gradient-to-br from-purple-500 to-purple-700">
+                    <div className="mb-4 flex justify-center">
+                      <PerfectSustanoLogo size="lg" variant="white" />
+                    </div>
+                    <h4 className="font-semibold mb-2 text-white">Purple</h4>
+                    <LogoDownloader
+                      logoComponent={<PerfectSustanoLogo size="xl" variant="white" />}
+                      filename="sustaino-pro-purple"
+                      backgroundColor="linear-gradient(135deg, #a855f7, #7c3aed)"
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* Green Icon Only */}
+                <Card>
+                  <CardContent className="p-6 text-center bg-gradient-to-br from-emerald-400 to-teal-600">
+                    <div className="mb-4 flex justify-center">
+                      <PerfectSustanoLogo size="lg" variant="white" showText={false} />
+                    </div>
+                    <h4 className="font-semibold mb-2 text-white">Green Icon</h4>
+                    <LogoDownloader
+                      logoComponent={<PerfectSustanoLogo size="xl" variant="white" showText={false} />}
+                      filename="sustaino-pro-green-icon"
+                      backgroundColor="linear-gradient(135deg, #34d399, #0d9488)"
+                      width={400}
+                      height={400}
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* Light Gray Logo */}
+                <Card>
+                  <CardContent className="p-6 text-center bg-gradient-to-br from-gray-100 to-gray-200">
+                    <div className="mb-4 flex justify-center">
+                      <PerfectSustanoLogo size="lg" variant="dark" />
+                    </div>
+                    <h4 className="font-semibold mb-2">Light Gray</h4>
+                    <LogoDownloader
+                      logoComponent={<PerfectSustanoLogo size="xl" variant="dark" />}
+                      filename="sustaino-pro-light-gray"
+                      backgroundColor="linear-gradient(135deg, #f3f4f6, #e5e7eb)"
+                    />
+                  </CardContent>
+                </Card>
               </div>
             </CardContent>
           </Card>
