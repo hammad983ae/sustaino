@@ -87,7 +87,7 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Simple circle outline */}
+        {/* Large circle outline */}
         <circle
           cx="50"
           cy="50"
@@ -95,6 +95,13 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
           fill="none"
           stroke={variant === 'white' ? 'white' : variant === 'dark' ? '#1f2937' : '#000000'}
           strokeWidth="6"
+        />
+        {/* Smaller filled circle in lower-right area */}
+        <circle
+          cx="65"
+          cy="65"
+          r="8"
+          fill={variant === 'white' ? 'white' : variant === 'dark' ? '#1f2937' : '#000000'}
         />
       </svg>
     </div>
