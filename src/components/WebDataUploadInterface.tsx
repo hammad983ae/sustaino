@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Link, FileText, Globe, Download } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const WebDataUploadInterface = () => {
   const { toast } = useToast();
@@ -45,14 +46,36 @@ const WebDataUploadInterface = () => {
     const urlList = bulkUrls.split('\n').filter(url => url.trim());
     
     try {
-      // Simulate processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      let successCount = 0;
+      let errorCount = 0;
+      
+      for (const url of urlList) {
+        try {
+          const { data, error } = await supabase.functions.invoke('web-data-scraper', {
+            body: { 
+              url: url.trim(), 
+              data_type: 'sales' // Default to sales, could be made configurable
+            }
+          });
+          
+          if (error) throw error;
+          if (data?.success) {
+            successCount++;
+          } else {
+            errorCount++;
+          }
+        } catch (err) {
+          console.error(`Error processing ${url}:`, err);
+          errorCount++;
+        }
+      }
       
       toast({
         title: "Bulk Processing Complete",
-        description: `Successfully processed ${urlList.length} URLs`,
+        description: `Successfully processed ${successCount} URLs${errorCount > 0 ? `, ${errorCount} failed` : ''}`,
       });
     } catch (error) {
+      console.error('Bulk processing error:', error);
       toast({
         title: "Processing Error",
         description: "Failed to process some URLs",
@@ -156,16 +179,55 @@ const WebDataUploadInterface = () => {
                   Add Another URL
                 </Button>
                 <Button 
-                  onClick={() => {
-                    // Process individual URLs
-                    toast({
-                      title: "Processing URLs",
-                      description: `Processing ${urls.filter(url => url.trim()).length} URLs...`,
-                    });
+                  onClick={async () => {
+                    const validUrls = urls.filter(url => url.trim());
+                    if (validUrls.length === 0) return;
+                    
+                    setIsProcessing(true);
+                    
+                    try {
+                      let successCount = 0;
+                      let errorCount = 0;
+                      
+                      for (const url of validUrls) {
+                        try {
+                          const { data, error } = await supabase.functions.invoke('web-data-scraper', {
+                            body: { 
+                              url: url.trim(), 
+                              data_type: 'sales' // Default to sales, could be made configurable
+                            }
+                          });
+                          
+                          if (error) throw error;
+                          if (data?.success) {
+                            successCount++;
+                          } else {
+                            errorCount++;
+                          }
+                        } catch (err) {
+                          console.error(`Error processing ${url}:`, err);
+                          errorCount++;
+                        }
+                      }
+                      
+                      toast({
+                        title: "Processing Complete",
+                        description: `Successfully processed ${successCount} URLs${errorCount > 0 ? `, ${errorCount} failed` : ''}`,
+                      });
+                    } catch (error) {
+                      console.error('Processing error:', error);
+                      toast({
+                        title: "Processing Error",
+                        description: "Failed to process URLs",
+                        variant: "destructive",
+                      });
+                    } finally {
+                      setIsProcessing(false);
+                    }
                   }}
                   disabled={isProcessing}
                 >
-                  Process URLs
+                  {isProcessing ? 'Processing...' : 'Process URLs'}
                 </Button>
               </div>
             </CardContent>
