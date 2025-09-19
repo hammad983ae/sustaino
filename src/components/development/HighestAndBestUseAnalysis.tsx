@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { 
   Building, 
   TrendingUp, 
@@ -19,7 +21,9 @@ import {
   TreePine,
   Home,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
+  BarChart2,
+  Target
 } from "lucide-react";
 
 interface SiteData {
@@ -40,6 +44,8 @@ const HighestAndBestUseAnalysis: React.FC<HighestAndBestUseAnalysisProps> = ({ s
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const [activeScenario, setActiveScenario] = useState("subdivision");
+  const [includeProposedDevelopment, setIncludeProposedDevelopment] = useState(false);
+  const [includeComparativeAnalysis, setIncludeComparativeAnalysis] = useState(false);
 
   const runAnalysis = async () => {
     setIsAnalyzing(true);
@@ -186,6 +192,47 @@ const HighestAndBestUseAnalysis: React.FC<HighestAndBestUseAnalysisProps> = ({ s
             </Button>
           </div>
         </CardHeader>
+
+        {/* Optional Analysis Configuration */}
+        <CardContent className="border-t">
+          <div className="space-y-4">
+            <h4 className="font-medium text-sm">Analysis Options</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center justify-between space-x-2">
+                <div className="space-y-0.5">
+                  <Label htmlFor="proposed-development" className="text-sm font-medium">
+                    Include Proposed Development Analysis
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Analyze specific proposed development scenario in detail
+                  </p>
+                </div>
+                <Switch
+                  id="proposed-development"
+                  checked={includeProposedDevelopment}
+                  onCheckedChange={setIncludeProposedDevelopment}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between space-x-2">
+                <div className="space-y-0.5">
+                  <Label htmlFor="comparative-analysis" className="text-sm font-medium">
+                    Comparative Analysis Against Other Uses
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Compare development options against alternative land uses
+                  </p>
+                </div>
+                <Switch
+                  id="comparative-analysis"
+                  checked={includeComparativeAnalysis}
+                  onCheckedChange={setIncludeComparativeAnalysis}
+                />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+
         {isAnalyzing && (
           <CardContent>
             <Progress value={analysisProgress} className="w-full" />
@@ -198,8 +245,10 @@ const HighestAndBestUseAnalysis: React.FC<HighestAndBestUseAnalysisProps> = ({ s
 
       {analysisComplete && (
         <Tabs defaultValue="scenarios" className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
+            {includeProposedDevelopment && <TabsTrigger value="proposed">Proposed</TabsTrigger>}
+            {includeComparativeAnalysis && <TabsTrigger value="comparative">Comparative</TabsTrigger>}
             <TabsTrigger value="compliance">Compliance</TabsTrigger>
             <TabsTrigger value="costs">Costs</TabsTrigger>
             <TabsTrigger value="demographics">Demographics</TabsTrigger>
@@ -277,6 +326,202 @@ const HighestAndBestUseAnalysis: React.FC<HighestAndBestUseAnalysisProps> = ({ s
               </AlertDescription>
             </Alert>
           </TabsContent>
+
+          {/* Proposed Development Analysis (Optional) */}
+          {includeProposedDevelopment && (
+            <TabsContent value="proposed" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="w-5 h-5" />
+                    Proposed Development Analysis
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Development Specifications</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Proposed Use:</span>
+                          <span className="font-medium">Mixed-Use Development</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Total Units:</span>
+                          <span className="font-medium">42 apartments + 3 commercial</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Building Height:</span>
+                          <span className="font-medium">8 storeys</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Site Coverage:</span>
+                          <span className="font-medium">65%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Plot Ratio:</span>
+                          <span className="font-medium">3.2:1</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Financial Projections</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Total Development Cost:</span>
+                          <span className="font-medium">$8.2M</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Gross Realization:</span>
+                          <span className="font-medium">$13.5M</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Net Profit:</span>
+                          <span className="font-medium text-green-600">$5.3M</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Profit Margin:</span>
+                          <span className="font-medium">39.3%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Development Timeline:</span>
+                          <span className="font-medium">32 months</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Alert className="mt-6">
+                    <Target className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Proposed Development Assessment:</strong> The proposed mixed-use development shows strong financial viability 
+                      with a 39.3% profit margin, exceeding industry benchmarks. Key success factors include optimal unit mix and 
+                      commercial component addressing local retail demand.
+                    </AlertDescription>
+                  </Alert>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
+
+          {/* Comparative Analysis Against Other Uses (Optional) */}
+          {includeComparativeAnalysis && (
+            <TabsContent value="comparative" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart2 className="w-5 h-5" />
+                    Comparative Analysis Against Alternative Uses
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {/* Commercial Office Development */}
+                    <div className="border rounded-lg p-4">
+                      <h4 className="font-medium mb-3">Commercial Office Development</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Development Cost:</span>
+                          <p className="font-medium">$7.8M</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Annual Rental Income:</span>
+                          <p className="font-medium">$980,000</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Capitalization Value:</span>
+                          <p className="font-medium">$14.0M</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Badge variant="secondary">ROI: 79.5%</Badge>
+                        <Badge variant="outline" className="ml-2">Risk: Medium-High</Badge>
+                      </div>
+                    </div>
+
+                    {/* Retail Shopping Center */}
+                    <div className="border rounded-lg p-4">
+                      <h4 className="font-medium mb-3">Retail Shopping Center</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Development Cost:</span>
+                          <p className="font-medium">$6.5M</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Annual Rental Income:</span>
+                          <p className="font-medium">$720,000</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Capitalization Value:</span>
+                          <p className="font-medium">$10.3M</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Badge variant="outline">ROI: 58.5%</Badge>
+                        <Badge variant="secondary" className="ml-2">Risk: Medium</Badge>
+                      </div>
+                    </div>
+
+                    {/* Industrial/Warehouse */}
+                    <div className="border rounded-lg p-4">
+                      <h4 className="font-medium mb-3">Industrial/Warehouse Development</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Development Cost:</span>
+                          <p className="font-medium">$4.2M</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Annual Rental Income:</span>
+                          <p className="font-medium">$420,000</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Capitalization Value:</span>
+                          <p className="font-medium">$6.0M</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Badge variant="outline">ROI: 42.9%</Badge>
+                        <Badge variant="default" className="ml-2">Risk: Low</Badge>
+                      </div>
+                    </div>
+
+                    {/* Current Use (No Development) */}
+                    <div className="border rounded-lg p-4 bg-muted/50">
+                      <h4 className="font-medium mb-3">Current Use (No Development)</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Land Value:</span>
+                          <p className="font-medium">$2.8M</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Annual Rental Income:</span>
+                          <p className="font-medium">$85,000</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Yield:</span>
+                          <p className="font-medium">3.0%</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Badge variant="outline">ROI: 3.0%</Badge>
+                        <Badge variant="default" className="ml-2">Risk: Very Low</Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Alert className="mt-6">
+                    <BarChart2 className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Comparative Analysis Summary:</strong> Mixed-use residential development (58% ROI) provides optimal 
+                      risk-adjusted returns compared to alternatives. Commercial office shows highest returns (79.5%) but carries 
+                      significantly higher market risk in current economic conditions.
+                    </AlertDescription>
+                  </Alert>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
 
           {/* Compliance Checklist */}
           <TabsContent value="compliance" className="space-y-6">
