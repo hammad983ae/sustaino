@@ -65,6 +65,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BidTermsAnalyzer from './BidTermsAnalyzer';
 import VendorStatementGenerator from './VendorStatementGenerator';
+import DigitalContractSigning from './DigitalContractSigning';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
