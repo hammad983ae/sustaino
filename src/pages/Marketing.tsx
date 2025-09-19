@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Download, 
   Eye, 
@@ -19,9 +20,12 @@ import PerfectSustanoLogo from '@/components/PerfectSustanoLogo';
 import LogoDownloader from '@/components/LogoDownloader';
 import SustanoSphereLogo from '@/components/SustanoSphereLogo';
 import PoweredByLogo from '@/components/PoweredByLogo';
+import SustanoProInvestorBrochure from '@/components/brochures/SustanoProInvestorBrochure';
 
 const Marketing = () => {
+  const [selectedBrochure, setSelectedBrochure] = useState<string | null>(null);
   const brochures = [
+    { name: 'Sustano Pro Investor Analysis', type: 'PDF', size: '1.2 MB', preview: true, component: 'SustanoProInvestorBrochure' },
     { name: 'Sustaino Sphere Marketing', type: 'PDF', size: '2.4 MB', preview: true },
     { name: 'Auction Sphere Brochure', type: 'PDF', size: '1.8 MB', preview: true },
     { name: 'ESG Assessment Guide', type: 'PDF', size: '3.1 MB', preview: true },
@@ -102,10 +106,27 @@ const Marketing = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="border-gray-300 hover:bg-gray-50">
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </Button>
+                    {brochure.component ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="outline" className="border-gray-300 hover:bg-gray-50">
+                            <Eye className="h-4 w-4 mr-1" />
+                            View
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>{brochure.name}</DialogTitle>
+                          </DialogHeader>
+                          <SustanoProInvestorBrochure />
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <Button size="sm" variant="outline" className="border-gray-300 hover:bg-gray-50">
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
+                      </Button>
+                    )}
                     <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                       <Download className="h-4 w-4 mr-1" />
                       Download
