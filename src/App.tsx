@@ -83,7 +83,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<SustanoProDashboard />} />
+                <Route path="/" element={<AutomatedValuation />} />
                 <Route path="/automated-valuation" element={<AutomatedValuation />} />
                 <Route path="/sustaino-pro" element={<SustanoProDashboard />} />
                 <Route path="/report" element={<Report />} />
