@@ -23,7 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import VendorStatementGenerator from './VendorStatementGenerator';
 import SustanoSphereDataCentre from './SustanoSphereDataCentre';
 import ComprehensiveEcosystemValuation from './ComprehensiveEcosystemValuation';
-import DigitalContractInterface from './DigitalContractInterface';
+import ModularPlatformValuation from './ModularPlatformValuation';
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -573,12 +573,14 @@ export const SustanoSphere = () => {
 
         {/* Valuation Tab - Core Digital Asset Valuation Service */}
         <TabsContent value="valuation" className="space-y-6">
-          <ComprehensiveEcosystemValuation />
+          <ModularPlatformValuation />
         </TabsContent>
 
         {/* Contracts Tab - Legal Documentation */}
         <TabsContent value="contracts" className="space-y-6">
-          <DigitalContractInterface />
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">Legal documentation system under development</p>
+          </div>
         </TabsContent>
 
         {/* Sell Tab */}
