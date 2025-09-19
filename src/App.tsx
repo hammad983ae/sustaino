@@ -67,6 +67,7 @@ import SustanoSphereDigitalAssetValuation from "./components/SustanoSphereDigita
 import LovablePartnershipProposal from "./components/LovablePartnershipProposal";
 import SocialMediaAssets from "./pages/SocialMediaAssets";
 import ConceptsAndPlans from "./pages/ConceptsAndPlans";
+import DigitalContracts from "./pages/DigitalContracts";
 import Marketing from "./pages/Marketing";
 
 const queryClient = new QueryClient();
@@ -117,6 +118,7 @@ const App = () => (
                 <Route path="/reality-sales" element={<RealitySales />} />
                 <Route path="/auction-sphere-pos" element={<AuctionSpherePOSPage />} />
                 <Route path="/advertising-platforms" element={<AdvertisingPlatforms />} />
+                <Route path="/digital-contracts" element={<DigitalContracts />} />
                 <Route path="/nasdaq-analysis" element={<NASDAQCompetitorAnalysis />} />
                 <Route path="/digital-valuation" element={<DigitalAssetValuationEngine />} />
                 <Route path="/platform-valuation" element={<ComprehensivePlatformValuation />} />
