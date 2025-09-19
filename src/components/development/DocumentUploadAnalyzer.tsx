@@ -18,6 +18,7 @@ import {
   Calculator
 } from 'lucide-react';
 import Tesseract from 'tesseract.js';
+import DataExtractionSummary from './DataExtractionSummary';
 
 interface ExtractedPropertyData {
   text: string;
@@ -464,6 +465,12 @@ const DocumentUploadAnalyzer: React.FC<DocumentUploadAnalyzerProps> = ({
 
       {extractedData && (
         <div className="space-y-4">
+          {/* Data Extraction Summary */}
+          <DataExtractionSummary 
+            extractedData={extractedData}
+            fileName={uploadedFiles[uploadedFiles.length - 1]?.name || 'Document'}
+          />
+
           {/* Property Details */}
           {Object.keys(extractedData.propertyDetails).length > 0 && (
             <Card>
