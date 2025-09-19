@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calculator, MapPin, Building, TrendingUp, FileText, Shield, Leaf, BarChart3, ArrowLeft, Home } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Calculator, MapPin, Building, TrendingUp, FileText, Shield, Leaf, BarChart3 } from "lucide-react";
 import SiteDetailsForm from "@/components/development/SiteDetailsForm";
 import ValuationMethodologies from "@/components/development/ValuationMethodologies";
 import ESGClimateRiskAssessment from "@/components/development/ESGClimateRiskAssessment";
 import FeasibilityStudy from "@/components/development/FeasibilityStudy";
 import ComparableEvidence from "@/components/development/ComparableEvidence";
-import HighestAndBestUseAnalysis from "@/components/development/HighestAndBestUseAnalysis";
 
 const DevelopmentSiteValuation = () => {
-  const navigate = useNavigate();
   const [siteData, setSiteData] = useState(null);
   const [activeTab, setActiveTab] = useState("site-details");
 
@@ -24,20 +20,6 @@ const DevelopmentSiteValuation = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Back Navigation */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate('/')}>
-              <Home className="h-4 w-4 mr-2" />
-              Dashboard
-            </Button>
-            <Button variant="outline" onClick={() => navigate('/workhub')}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Work Hub
-            </Button>
-          </div>
-        </div>
-
         {/* Header */}
         <div className="text-center space-y-4">
           <Badge variant="outline" className="px-4 py-2">
@@ -55,9 +37,8 @@ const DevelopmentSiteValuation = () => {
 
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="site-details">Site Details</TabsTrigger>
-            <TabsTrigger value="best-use">Best Use</TabsTrigger>
             <TabsTrigger value="valuation">Valuation</TabsTrigger>
             <TabsTrigger value="feasibility">Feasibility</TabsTrigger>
             <TabsTrigger value="esg-climate">ESG & Climate</TabsTrigger>
@@ -69,11 +50,6 @@ const DevelopmentSiteValuation = () => {
           {/* Site Details Tab */}
           <TabsContent value="site-details" className="space-y-6">
             <SiteDetailsForm onSiteDataChange={handleSiteDataChange} />
-          </TabsContent>
-
-          {/* Highest and Best Use Tab */}
-          <TabsContent value="best-use" className="space-y-6">
-            <HighestAndBestUseAnalysis siteData={siteData} />
           </TabsContent>
 
           {/* Valuation Tab */}

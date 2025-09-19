@@ -17,8 +17,7 @@ import {
   Archive,
   Filter,
   ArrowLeft,
-  Home,
-  Plus
+  Home
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
@@ -71,7 +70,7 @@ interface Job {
   created_at: string;
 }
 
-const WorkHub: React.FC = () => {
+export default function WorkHub() {
   const [searchTerm, setSearchTerm] = useState("");
   const [valuations, setValuations] = useState<Valuation[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
@@ -304,22 +303,13 @@ const WorkHub: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <Button
-            variant="default"
-            size="sm"
-            onClick={() => navigate('/property-assessment-form')}
-            className="flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            New Job (PAF)
-          </Button>
-          <Button
             variant="outline"
             size="sm"
             onClick={() => navigate('/comprehensive-valuation')}
             className="flex items-center gap-2"
           >
             <Building className="h-4 w-4" />
-            Quick Valuation
+            New Valuation
           </Button>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -781,6 +771,4 @@ const WorkHub: React.FC = () => {
       </Dialog>
     </div>
   );
-};
-
-export default WorkHub;
+}

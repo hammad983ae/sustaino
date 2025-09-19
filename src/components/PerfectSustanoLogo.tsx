@@ -2,7 +2,7 @@ import React from 'react';
 
 interface PerfectSustanoLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'default' | 'white' | 'purple' | 'dark' | 'emerald' | 'blue';
+  variant?: 'default' | 'white' | 'purple' | 'dark';
   showText?: boolean;
   textPosition?: 'right' | 'bottom';
   className?: string;
@@ -46,9 +46,9 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
   // Color variants
   const colorConfig = {
     default: {
-      outerCircle: 'stroke-gray-800',
-      innerCircle: 'fill-black',
-      text: 'text-black'
+      outerCircle: 'stroke-gray-300',
+      innerCircle: 'fill-emerald-500',
+      text: 'text-gray-800'
     },
     white: {
       outerCircle: 'stroke-white/60',
@@ -56,24 +56,14 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
       text: 'text-white'
     },
     purple: {
-      outerCircle: 'stroke-black',
-      innerCircle: 'fill-black',
-      text: 'text-black'
+      outerCircle: 'stroke-white/60',
+      innerCircle: 'fill-white',
+      text: 'text-white'
     },
     dark: {
-      outerCircle: 'stroke-black',
-      innerCircle: 'fill-black',
-      text: 'text-black'
-    },
-    emerald: {
-      outerCircle: 'stroke-black',
-      innerCircle: 'fill-black',
-      text: 'text-black'
-    },
-    blue: {
-      outerCircle: 'stroke-black', 
-      innerCircle: 'fill-black',
-      text: 'text-black'
+      outerCircle: 'stroke-gray-600',
+      innerCircle: 'fill-gray-800',
+      text: 'text-gray-800'
     }
   };
 
@@ -81,27 +71,36 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
   const colors = colorConfig[variant];
 
   const logoSvg = (
-    <div className={`${config.container} flex items-center justify-center`}>
+    <div className={`${config.container} ${className} flex items-center justify-center`}>
       <svg 
         viewBox="0 0 100 100" 
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Large circle outline */}
+        {/* Outer semi-circle (thinner stroke) */}
+        <path
+          d="M 12 50 A 38 38 0 0 1 88 50"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className={colors.outerCircle}
+        />
+        
+        {/* Inner filled circle (larger) */}
         <circle
           cx="50"
           cy="50"
-          r="35"
-          fill="none"
-          stroke={variant === 'white' ? 'white' : variant === 'dark' ? '#1f2937' : '#000000'}
-          strokeWidth="6"
+          r="28"
+          className={colors.innerCircle}
         />
-        {/* Smaller filled circle in lower-right area */}
-        <circle
-          cx="65"
-          cy="65"
-          r="8"
-          fill={variant === 'white' ? 'white' : variant === 'dark' ? '#1f2937' : '#000000'}
+        
+        {/* Inner semi-circle cutout (for the "C" shape) */}
+        <path
+          d="M 32 50 A 18 18 0 0 1 68 50"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          className={variant === 'white' || variant === 'purple' ? 'stroke-gray-400' : 'stroke-white'}
         />
       </svg>
     </div>
@@ -113,10 +112,17 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
 
   return (
     <div className={`flex ${config.textContainer} ${config.spacing}`}>
-      <div className={`font-bold ${config.text} ${colors.text} tracking-wide`}>
-        Sustaino Pro
-      </div>
       {logoSvg}
+      <div className={textPosition === 'bottom' ? 'text-center' : ''}>
+        <div className={`font-bold ${config.text} ${colors.text}`}>
+          Sustaino Pro
+        </div>
+        {size !== 'sm' && (
+          <div className={`text-xs ${colors.text} opacity-80`}>
+            Property Intelligence
+          </div>
+        )}
+      </div>
     </div>
   );
 };

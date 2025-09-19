@@ -25,8 +25,6 @@ import { ValuationProvider } from "@/contexts/ValuationContext";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
-import SustanoProDashboard from "./pages/SustanoProDashboard";
-import ICVDashboard from "./components/ICVDashboard";
 import AutomatedValuation from "./pages/AutomatedValuation";
 import RenewableEnergyValuations from "./components/RenewableEnergyValuations";
 import PropertyValuations from "./pages/PropertyValuations";
@@ -70,7 +68,6 @@ import LovablePartnershipProposal from "./components/LovablePartnershipProposal"
 import SocialMediaAssets from "./pages/SocialMediaAssets";
 import ConceptsAndPlans from "./pages/ConceptsAndPlans";
 import Marketing from "./pages/Marketing";
-import PropertyAssessmentFormPage from "./pages/PropertyAssessmentForm";
 
 const queryClient = new QueryClient();
 
@@ -85,16 +82,15 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<ICVDashboard />} />
+                <Route path="/" element={<Index />} />
                 <Route path="/automated-valuation" element={<AutomatedValuation />} />
-                <Route path="/sustaino-pro-legacy" element={<SustanoProDashboard />} />
+                <Route path="/index" element={<Index />} />
                 <Route path="/report" element={<Report />} />
                 <Route path="/renewable-energy" element={<RenewableEnergyValuations />} />
                 <Route path="/property-assessment" element={<PropertyAssessment />} />
         <Route path="/automated-report" element={<AutomatedReport propertyType="commercial" />} />
                 <Route path="/property-valuations" element={<PropertyValuations />} />
-                <Route path="/workhub" element={<WorkHubPage />} />
-                <Route path="/property-assessment-form" element={<PropertyAssessmentFormPage />} />
+                <Route path="/work-hub" element={<WorkHubPage />} />
                 <Route path="/white-label" element={<WhiteLabelConfig />} />
                 <Route path="/client-demo" element={<ClientDemo />} />
                 <Route path="/auth" element={<AuthPage />} />

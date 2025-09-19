@@ -67,8 +67,8 @@ const Index = () => {
         {/* 3D Background */}
         <PropertyValuation3DBackground />
         
-        {/* Clean minimal background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50/90 via-white/95 to-gray-100/80" />
+        {/* Blue/purple glowing background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-purple-50/60 to-indigo-50/70" />
         
         <div className="relative z-10 container mx-auto px-4 py-12">
           {currentStep === 'form' ? (
@@ -76,7 +76,7 @@ const Index = () => {
               {/* Navigation Buttons */}
               <div className="flex justify-between">
                 <Link to="/automated-valuation">
-                  <Button variant="outline" className="bg-white/90 backdrop-blur-sm border-gray-300 text-gray-700 hover:bg-gray-50">
+                  <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-purple-200 text-purple-700 hover:bg-purple-50">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to Main Dashboard
                   </Button>
@@ -84,14 +84,14 @@ const Index = () => {
                 
                 <div className="flex gap-3">
                   <Link to="/report">
-                    <Button className="bg-gray-800 hover:bg-gray-900 text-white">
+                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
                       <FileText className="w-4 h-4 mr-2" />
                       View Table of Contents
                     </Button>
                   </Link>
                   
                   <Link to="/client-demo">
-                    <Button variant="outline" className="bg-white/90 backdrop-blur-sm border-gray-300 text-gray-700 hover:bg-gray-50">
+                    <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-emerald-200 text-emerald-700 hover:bg-emerald-50">
                       <Shield className="w-4 h-4 mr-2" />
                       Client Demo
                     </Button>
@@ -101,44 +101,24 @@ const Index = () => {
               
               {/* Clean Header */}
               <div className="text-center space-y-6">
-                <div className="inline-flex items-center px-6 py-3 bg-white/90 backdrop-blur-sm text-gray-700 rounded-full text-sm font-medium shadow-sm border border-gray-200">
+                <div className="inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-purple-600 rounded-full text-sm font-medium shadow-sm border border-purple-200/50">
                   🌍 Professional Property Assessment Platform
                 </div>
                 
-                {/* Sustaino Pro Branding */}
-                <div className="flex items-center justify-center">
-                  <div className="w-80 h-80 bg-emerald-500 rounded-lg flex flex-col items-center justify-center gap-4 shadow-xl">
-                    <h1 className="text-4xl font-bold text-white tracking-wide">
-                      Sustano Pro
+                {/* Powered Branding */}
+                <div className="flex items-center justify-center gap-4">
+                  <ThunderboltIcon className="h-16 w-16" />
+                  <div className="text-left">
+                    <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                      Powered
                     </h1>
-                    <div className="w-16 h-16 flex items-center justify-center">
-                      <svg 
-                        viewBox="0 0 100 100" 
-                        className="w-full h-full"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        {/* Large circle outline */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="35"
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="6"
-                        />
-                        {/* Smaller filled circle in lower-right area */}
-                        <circle
-                          cx="65"
-                          cy="65"
-                          r="8"
-                          fill="white"
-                        />
-                      </svg>
-                    </div>
+                    <p className="text-xl text-slate-600 font-medium">
+                      A Sustaino Pro Product
+                    </p>
                   </div>
                 </div>
                 
-                <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-lg text-purple-600 max-w-2xl mx-auto leading-relaxed">
                   Complete your property assessment form to receive a comprehensive ESG-integrated valuation report.
                 </p>
               </div>
@@ -148,7 +128,7 @@ const Index = () => {
                 <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
                   <div className="space-y-4">
                     {/* First row of tabs */}
-                    <TabsList className="grid w-full grid-cols-4 bg-white/90 backdrop-blur-sm shadow-sm border border-gray-200 rounded-xl p-1">
+                    <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                       <TabsTrigger value="assessment" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <Building className="h-4 w-4" />
                         Property Assessment
@@ -168,7 +148,7 @@ const Index = () => {
                     </TabsList>
                     
                     {/* Second row of tabs */}
-                    <TabsList className="grid w-full grid-cols-1 max-w-xs mx-auto bg-white/90 backdrop-blur-sm shadow-sm border border-gray-200 rounded-xl p-1">
+                    <TabsList className="grid w-full grid-cols-1 max-w-xs mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                       <TabsTrigger value="professional-declarations" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <FileCheck className="h-4 w-4" />
                         Professional Declarations
@@ -178,31 +158,31 @@ const Index = () => {
 
                   <TabsContent value="assessment" className="mt-8">
                     <div className="max-w-7xl mx-auto">
-                      <Card className="card-3d-medium bg-white/95 backdrop-blur-sm shadow-xl border border-gray-200">
-                        <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50/80 to-white">
-                          <CardTitle className="text-2xl flex items-center gap-3 text-gray-800">
-                            <Building className="h-6 w-6 text-gray-700" />
+                      <Card className="card-3d-medium bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                        <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                          <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                            <Building className="h-6 w-6 text-purple-700" />
                             Property Assessment Form
                           </CardTitle>
-                          <p className="text-gray-700">
+                          <p className="text-purple-700">
                             Complete all steps to generate your comprehensive property report
                           </p>
                         </CardHeader>
                         <CardContent className="p-8">
-                          <PropertyAssessmentForm />
+                          <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/report')} />
                         </CardContent>
                       </Card>
                     </div>
                   </TabsContent>
 
                   <TabsContent value="tools" className="mt-8">
-                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-gray-200">
-                      <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50/80 to-white">
-                        <CardTitle className="text-2xl flex items-center gap-3 text-gray-800">
-                          <Settings className="h-6 w-6 text-gray-700" />
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <Settings className="h-6 w-6 text-purple-700" />
                           Additional Tools
                         </CardTitle>
-                        <p className="text-gray-700">
+                        <p className="text-purple-700">
                           Access specialized valuation and assessment tools
                         </p>
                       </CardHeader>

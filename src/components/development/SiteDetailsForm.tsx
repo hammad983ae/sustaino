@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,20 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MapPin, Building, Calculator, Save, Loader2 } from "lucide-react";
-import { useManualSave } from "@/hooks/useManualSave";
-import { SectionSaveButton } from "@/components/ui/section-save-button";
-import { useToast } from "@/hooks/use-toast";
-import AddressVerificationService from "./AddressVerificationService";
-import DataSourcesConfig from "./DataSourcesConfig";
-import AutoPopulationService from "./AutoPopulationService";
-import DocumentUploadAnalyzer from "./DocumentUploadAnalyzer";
-import DevelopmentProposalGenerator from "./DevelopmentProposalGenerator";
+import { MapPin, Building, Calculator } from "lucide-react";
 
 interface SiteData {
   address: string;
-  lotNumber: string;
-  planNumber: string;
   landArea: number;
   currentZoning: string;
   proposedZoning: string;
@@ -36,12 +26,6 @@ interface SiteData {
   valuationDate: string;
   clientName: string;
   clientCompany: string;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
-  autoPopulated?: boolean;
-  extractedDocumentData?: any;
 }
 
 interface SiteDetailsFormProps {
@@ -50,57 +34,24 @@ interface SiteDetailsFormProps {
 
 export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormProps) {
   const [siteData, setSiteData] = useState<SiteData>({
-    address: '',
-    lotNumber: '',
-    planNumber: '',
-    landArea: 0,
-    currentZoning: '',
-    proposedZoning: '',
-    fsr: 0,
-    proposedGFA: 0,
-    estimatedUnits: 0,
-    hdaSupport: false,
+    address: '95 Epping Road, Macquarie Park, NSW 2113',
+    landArea: 14561,
+    currentZoning: 'Commercial',
+    proposedZoning: 'MU1 Mixed Use',
+    fsr: 3.3,
+    proposedGFA: 48051,
+    estimatedUnits: 500,
+    hdaSupport: true,
     ssdaApproval: false,
-    heightLimit: 0,
-    state: 'VIC',
-    council: '',
-    description: '',
+    heightLimit: 120,
+    state: 'NSW',
+    council: 'Ryde City Council',
+    description: 'Scalable Mixed-Use Development Site within a Transformative Precinct. HDA declared SSD project with proposed GFA of 48,051m² and indicative yield of 500 apartments.',
     valuationPurpose: '',
     valuationDate: new Date().toISOString().split('T')[0],
     clientName: '',
-    clientCompany: '',
-    autoPopulated: false
+    clientCompany: ''
   });
-
-  const [addressVerified, setAddressVerified] = useState(false);
-  const [verifiedAddressData, setVerifiedAddressData] = useState<any>(null);
-  const [enabledDataSources, setEnabledDataSources] = useState<any[]>([]);
-  
-  // Save system implementation
-  const { saveData, loadData, isSaving, lastSaved } = useManualSave();
-  const { toast } = useToast();
-
-  // Load saved data on component mount
-  useEffect(() => {
-    const loadSavedData = async () => {
-      try {
-        const savedData = await loadData('development-site-details');
-        if (savedData && savedData.address) {
-          const typedData = savedData as SiteData;
-          setSiteData(typedData);
-          onSiteDataChange(typedData);
-          toast({
-            title: "Data Loaded",
-            description: "Previously saved site details have been restored.",
-          });
-        }
-      } catch (error) {
-        console.error('Failed to load saved data:', error);
-      }
-    };
-
-    loadSavedData();
-  }, [loadData, onSiteDataChange, toast]);
 
   const handleInputChange = (field: keyof SiteData, value: any) => {
     const updatedData = { ...siteData, [field]: value };
@@ -108,166 +59,28 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     onSiteDataChange(updatedData);
   };
 
-  const handleAddressVerified = (addressData: any) => {
-    setAddressVerified(true);
-    setVerifiedAddressData(addressData);
-    
-    // Update site data with verified address information
-    const updatedData = {
-      ...siteData,
-      address: addressData.fullAddress,
-      lotNumber: addressData.lotNumber,
-      planNumber: addressData.planNumber,
-      landArea: addressData.landArea,
-      currentZoning: addressData.zoning,
-      state: addressData.state,
-      council: addressData.council,
-      coordinates: addressData.coordinates
-    };
-    
-    setSiteData(updatedData);
-    onSiteDataChange(updatedData);
-  };
-
-  const handleDataPopulated = (populatedData: any) => {
-    console.log('handleDataPopulated called with:', populatedData);
-    const updatedData = { ...siteData };
-    
-    // Merge populated data
-    if (populatedData['planning-data']) {
-      const planningData = populatedData['planning-data'];
-      console.log('Planning data:', planningData);
-      updatedData.currentZoning = planningData.currentZoning;
-      updatedData.heightLimit = planningData.heightLimit;
-      updatedData.fsr = planningData.floorSpaceRatio;
-    }
-    
-    if (populatedData['title-data']) {
-      const titleData = populatedData['title-data'];
-      console.log('Title data:', titleData);
-      updatedData.lotNumber = titleData.lotNumber;
-      updatedData.planNumber = titleData.planNumber;
-      updatedData.landArea = titleData.landArea;
-    }
-    
-    if (populatedData['council-data']) {
-      const councilData = populatedData['council-data'];
-      console.log('Council data:', councilData);
-      updatedData.council = councilData.localGovernmentArea;
-    }
-    
-    if (populatedData['development-data']) {
-      const devData = populatedData['development-data'];
-      console.log('Development data:', devData);
-      updatedData.proposedGFA = devData.developmentPotential.maximumGFA;
-      updatedData.estimatedUnits = devData.developmentPotential.estimatedUnits;
-    }
-    
-    updatedData.autoPopulated = true;
-    console.log('Updated site data:', updatedData);
-    setSiteData(updatedData);
-    onSiteDataChange(updatedData);
-    
-    // Show toast to confirm data update
-    toast({
-      title: "Site Information Updated",
-      description: "Auto-populated data has been applied to the form fields.",
-    });
-  };
-
-  const handleProposalGenerated = (proposal: any) => {
-    // Optional: Handle the generated proposal data
-    console.log('Development proposal generated:', proposal);
-  };
-
-  const handleFieldsUpdated = (updates: Partial<SiteData>) => {
-    const updatedData = { ...siteData, ...updates };
-    setSiteData(updatedData);
-    onSiteDataChange(updatedData);
-  };
-
-  const handleDocumentDataExtracted = (extractedData: any) => {
-    const updatedData = { ...siteData };
-    
-    // Merge extracted property details
-    if (extractedData.propertyDetails) {
-      const propDetails = extractedData.propertyDetails;
-      if (propDetails.address && !updatedData.address) updatedData.address = propDetails.address;
-      if (propDetails.landArea && !updatedData.landArea) updatedData.landArea = propDetails.landArea;
-      if (propDetails.zoning && !updatedData.currentZoning) updatedData.currentZoning = propDetails.zoning;
-      if (propDetails.lotNumber && !updatedData.lotNumber) updatedData.lotNumber = propDetails.lotNumber;
-      if (propDetails.planNumber && !updatedData.planNumber) updatedData.planNumber = propDetails.planNumber;
-      if (propDetails.council && !updatedData.council) updatedData.council = propDetails.council;
-    }
-    
-    // Store the extracted document data for use in highest and best use analysis
-    updatedData.extractedDocumentData = extractedData;
-    
-    setSiteData(updatedData);
-    onSiteDataChange(updatedData);
-  };
-
   return (
     <div className="space-y-6">
-      {/* Document Upload & Analysis */}
-      <DocumentUploadAnalyzer 
-        onDataExtracted={handleDocumentDataExtracted}
-      />
-
-      {/* Address Verification */}
-      <AddressVerificationService 
-        onAddressVerified={handleAddressVerified}
-        initialAddress={siteData.address}
-      />
-
-      {/* Data Sources Configuration */}
-      <DataSourcesConfig 
-        selectedState={siteData.state}
-        onSourcesChange={setEnabledDataSources}
-      />
-
-      {/* Auto-Population Service */}
-      <AutoPopulationService
-        addressData={verifiedAddressData}
-        selectedState={siteData.state}
-        enabledSources={enabledDataSources}
-        onDataPopulated={handleDataPopulated}
-      />
-
       {/* Valuation Details */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Valuation Details
-            </div>
-            <SectionSaveButton
-              onSave={() => saveData('development-valuation-details', siteData)}
-              isSaving={isSaving}
-              lastSaved={lastSaved}
-              sectionName="Valuation Details"
-            />
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="w-5 h-5" />
+            Valuation Details
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="valuationPurpose">Purpose of Valuation</Label>
-              <Select 
-                value={siteData.valuationPurpose} 
-                onValueChange={(value) => {
-                  console.log('Purpose of valuation changed to:', value);
-                  handleInputChange('valuationPurpose', value);
-                }}
-              >
-                <SelectTrigger className="w-full">
+              <Select value={siteData.valuationPurpose} onValueChange={(value) => handleInputChange('valuationPurpose', value)}>
+                <SelectTrigger>
                   <SelectValue placeholder="Select valuation purpose" />
                 </SelectTrigger>
-                <SelectContent className="max-h-60 overflow-y-auto">
-                  <SelectItem value="development-feasibility">Development Feasibility</SelectItem>
+                <SelectContent>
                   <SelectItem value="mortgage-security">Mortgage/Security Purposes</SelectItem>
                   <SelectItem value="sale-purchase">Sale/Purchase</SelectItem>
+                  <SelectItem value="development-feasibility">Development Feasibility</SelectItem>
                   <SelectItem value="investment-analysis">Investment Analysis</SelectItem>
                   <SelectItem value="compulsory-acquisition">Compulsory Acquisition</SelectItem>
                   <SelectItem value="insurance">Insurance Purposes</SelectItem>
@@ -393,9 +206,8 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Label htmlFor="address">Property Address</Label>
               <Input
                 id="address"
-                value={siteData.address || ''}
+                value={siteData.address}
                 onChange={(e) => handleInputChange('address', e.target.value)}
-                placeholder="Enter property address"
               />
             </div>
             
@@ -404,12 +216,8 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Input
                 id="landArea"
                 type="number"
-                value={siteData.landArea || ''}
-                onChange={(e) => {
-                  const value = e.target.value === '' ? 0 : Number(e.target.value);
-                  handleInputChange('landArea', value);
-                }}
-                placeholder="Enter land area in square meters"
+                value={siteData.landArea}
+                onChange={(e) => handleInputChange('landArea', Number(e.target.value))}
               />
             </div>
             
@@ -436,9 +244,8 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Label htmlFor="council">Local Council</Label>
               <Input
                 id="council"
-                value={siteData.council || ''}
+                value={siteData.council}
                 onChange={(e) => handleInputChange('council', e.target.value)}
-                placeholder="Enter local council name"
               />
             </div>
             
@@ -446,9 +253,8 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Label htmlFor="currentZoning">Current Zoning</Label>
               <Input
                 id="currentZoning"
-                value={siteData.currentZoning || ''}
+                value={siteData.currentZoning}
                 onChange={(e) => handleInputChange('currentZoning', e.target.value)}
-                placeholder="Enter current zoning classification"
               />
             </div>
           </div>
@@ -463,13 +269,6 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Development Proposal Generator */}
-          <DevelopmentProposalGenerator
-            siteData={siteData}
-            onProposalGenerated={handleProposalGenerated}
-            onFieldsUpdated={handleFieldsUpdated}
-          />
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="proposedZoning">Proposed Zoning</Label>
