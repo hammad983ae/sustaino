@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/dashboard-3d.css';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import PerfectSustanoLogo from '@/components/PerfectSustanoLogo';
 import {
   BarChart3,
   Leaf,
@@ -12,618 +11,412 @@ import {
   Zap,
   Globe,
   Building,
-  Gavel,
   Users,
   Moon,
   Calculator,
-  FileText,
-  ShieldCheck,
-  Megaphone,
-  Palette,
-  BookOpen,
-  Lock,
-  TrendingUp,
   DollarSign,
   Shield,
-  Award,
   Sparkles,
-  Database,
-  ChartLine,
-  ArrowRight
+  ChartLine
 } from 'lucide-react';
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('platform-access');
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 relative overflow-hidden">
-      {/* Enhanced 3D Background Elements */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-white to-blue-200 rounded-full blur-3xl animate-pulse" style={{
-          transform: 'perspective(1000px) rotateX(45deg) rotateY(45deg)',
-          animation: 'pulse 3s ease-in-out infinite, float 6s ease-in-out infinite',
-        }}></div>
-        <div className="absolute top-40 right-32 w-24 h-24 bg-gradient-to-r from-purple-300 to-pink-300 rounded-full blur-2xl" style={{
-          transform: 'perspective(1000px) rotateX(-30deg) rotateZ(30deg)',
-          animation: 'bounce 4s ease-in-out infinite, float 8s ease-in-out infinite reverse',
-        }}></div>
-        <div className="absolute bottom-20 left-32 w-40 h-40 bg-gradient-to-r from-emerald-300 to-teal-300 rounded-full blur-3xl animate-pulse delay-1000" style={{
-          transform: 'perspective(1000px) rotateY(-45deg) rotateX(30deg)',
-          animation: 'pulse 4s ease-in-out infinite 1s, float 10s ease-in-out infinite',
-        }}></div>
-        <div className="absolute bottom-40 right-20 w-28 h-28 bg-gradient-to-r from-orange-300 to-yellow-300 rounded-full blur-2xl" style={{
-          transform: 'perspective(1000px) rotateX(60deg) rotateZ(-30deg)',
-          animation: 'bounce 5s ease-in-out infinite 0.5s, float 7s ease-in-out infinite reverse',
-        }}></div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 relative overflow-hidden">
+      {/* Enhanced 3D Background with Cloud-like Effects */}
+      <div className="absolute inset-0">
+        {/* Animated cloud-like shapes */}
+        <div 
+          className="absolute top-10 left-10 w-96 h-96 bg-gradient-to-r from-white/10 to-blue-200/20 rounded-full blur-3xl animate-pulse" 
+          style={{
+            transform: 'perspective(1000px) rotateX(45deg) rotateY(45deg)',
+            animation: 'float 8s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className="absolute top-32 right-20 w-80 h-80 bg-gradient-to-r from-blue-300/15 to-purple-300/20 rounded-full blur-3xl" 
+          style={{
+            transform: 'perspective(1000px) rotateX(-30deg) rotateZ(30deg)',
+            animation: 'float 10s ease-in-out infinite reverse',
+          }}
+        />
+        <div 
+          className="absolute bottom-20 left-32 w-72 h-72 bg-gradient-to-r from-emerald-300/15 to-teal-300/20 rounded-full blur-3xl animate-pulse delay-1000" 
+          style={{
+            transform: 'perspective(1000px) rotateY(-45deg) rotateX(30deg)',
+            animation: 'float 12s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className="absolute bottom-40 right-40 w-64 h-64 bg-gradient-to-r from-orange-300/15 to-yellow-300/20 rounded-full blur-3xl" 
+          style={{
+            transform: 'perspective(1000px) rotateX(60deg) rotateZ(-30deg)',
+            animation: 'float 9s ease-in-out infinite reverse',
+          }}
+        />
       </div>
 
-      {/* 3D Grid Background */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-        `,
-        backgroundSize: '50px 50px',
-        transform: 'perspective(1000px) rotateX(60deg)',
-        transformOrigin: 'center bottom',
-      }}></div>
+      {/* 3D Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-10" 
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+          transform: 'perspective(1000px) rotateX(60deg)',
+          transformOrigin: 'center bottom',
+        }}
+      />
 
-      {/* Header with Enhanced 3D Logo */}
-      <div className="relative z-10 text-center py-12 px-4"
-           style={{
-             transform: 'perspective(1000px)',
-           }}>
-        <div className="mb-8">
-          <Badge variant="secondary" className="mb-6 bg-white/25 text-white border-white/40 hover:bg-white/35 transition-all duration-300 backdrop-blur-sm" style={{
-            transform: 'perspective(1000px) rotateX(-5deg)',
-            boxShadow: '0 10px 25px rgba(0,0,0,0.2), 0 0 20px rgba(255,255,255,0.1)',
-          }}>
-            <Sparkles className="h-4 w-4 mr-2" />
-            Sustaino Pro - Complete Platform Ecosystem
-          </Badge>
+      {/* Header with Sustano Pro Branding */}
+      <div className="relative z-10 text-center py-8 px-4">
+        {/* Sustano Pro Logo and Title */}
+        <div className="mb-6">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-blue-200/30 rounded-full blur-2xl opacity-60 animate-pulse" />
+              <Moon 
+                className="relative h-16 w-16 text-white" 
+                style={{
+                  filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.8))',
+                  transform: 'perspective(1000px) rotateY(-15deg)',
+                }} 
+              />
+            </div>
+            <h1 
+              className="text-6xl font-bold text-white" 
+              style={{
+                textShadow: '0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(59,130,246,0.3)',
+                transform: 'perspective(1000px) rotateX(5deg)',
+              }}
+            >
+              Sustano Pro
+            </h1>
+            <Moon className="h-8 w-8 text-white/60" />
+          </div>
+          
+          <h2 
+            className="text-4xl font-semibold text-white mb-3" 
+            style={{
+              textShadow: '0 0 20px rgba(255,255,255,0.3)',
+              transform: 'perspective(1000px) rotateX(2deg)',
+            }}
+          >
+            ICV (Instant Comprehensive Valuation)™
+          </h2>
+          
+          <p 
+            className="text-xl text-white/90 font-medium" 
+            style={{
+              textShadow: '0 0 15px rgba(255,255,255,0.2)',
+            }}
+          >
+            AI-Powered Property Valuation And Assessment Technology
+          </p>
+          
+          <p className="text-white/75 text-sm mt-2">
+            Trademarked • Patented • IP Protected • Copyright Protected
+          </p>
         </div>
-        
-        {/* Enhanced Logo Section */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-600 rounded-full blur-xl opacity-30 animate-pulse"></div>
-            <div className="relative z-10 transform hover:scale-105 transition-transform duration-300">
-              <div className="flex items-center justify-center gap-4">
-                <h1 className="text-7xl font-bold text-white drop-shadow-2xl" style={{
-                  textShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(59,130,246,0.3), 0 0 60px rgba(139,92,246,0.2)',
-                  transform: 'perspective(1000px) rotateX(5deg)',
-                }}>
-                  Sustaino Pro
-                </h1>
-                <div className="relative">
-                  <div className="absolute inset-0 bg-blue-400 rounded-full blur-lg opacity-50 animate-pulse"></div>
-                  <Moon className="relative h-12 w-12 text-blue-200 animate-pulse" style={{
-                    filter: 'drop-shadow(0 0 10px rgba(59,130,246,0.8))',
-                    transform: 'perspective(1000px) rotateY(-15deg)',
-                  }} />
-                </div>
+
+        {/* Platform Status Buttons */}
+        <div className="flex justify-center gap-4 mb-8">
+          <div className="bg-gradient-to-r from-green-500/30 to-emerald-500/30 backdrop-blur-lg rounded-full px-6 py-2 border border-green-400/50">
+            <span className="text-green-200 font-medium">🔋 ICV Platform Operational</span>
+          </div>
+          <div className="bg-gradient-to-r from-blue-500/30 to-cyan-500/30 backdrop-blur-lg rounded-full px-6 py-2 border border-blue-400/50">
+            <span className="text-blue-200 font-medium">🔮 CV3 Automated Comprehensive Platform</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Platform Grid */}
+      <div className="relative z-10 px-6 pb-12">
+        <div className="max-w-7xl mx-auto">
+          {/* Platform Navigation */}
+          <div 
+            className="bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/30 mb-8"
+            style={{
+              transform: 'perspective(1000px) rotateX(-1deg)',
+              boxShadow: '0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
+            }}
+          >
+            
+            {/* Main Platform Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {/* Analytics Dashboard */}
+              <Link to="/icv-dashboard">
+                <Card 
+                  className="bg-gradient-to-br from-blue-400/30 to-indigo-500/30 backdrop-blur-lg border-blue-300/50 hover:border-blue-300/80 transition-all duration-500 cursor-pointer group hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateY(-2deg) rotateX(3deg)',
+                    boxShadow: '0 15px 30px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <CardContent className="p-6 text-center">
+                    <BarChart3 
+                      className="h-12 w-12 mx-auto text-blue-200 mb-3 group-hover:scale-110 transition-transform"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(59,130,246,0.5))' }} 
+                    />
+                    <h4 className="text-lg font-semibold text-white mb-2">Analytics Dashboard</h4>
+                    <p className="text-blue-100 text-sm">Comprehensive analytics and reporting</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* ESG Platform */}
+              <Link to="/esg-climate-assessment">
+                <Card 
+                  className="bg-gradient-to-br from-emerald-400/30 to-green-500/30 backdrop-blur-lg border-emerald-300/50 hover:border-emerald-300/80 transition-all duration-500 cursor-pointer group hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateY(-1deg) rotateX(3deg)',
+                    boxShadow: '0 15px 30px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <CardContent className="p-6 text-center">
+                    <Leaf 
+                      className="h-12 w-12 mx-auto text-emerald-200 mb-3 group-hover:scale-110 transition-transform"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(16,185,129,0.5))' }} 
+                    />
+                    <h4 className="text-lg font-semibold text-white mb-2">ESG Platform</h4>
+                    <p className="text-emerald-100 text-sm">Environmental analysis and reporting</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* SAM Platform */}
+              <Link to="/sam-platform">
+                <Card 
+                  className="bg-gradient-to-br from-purple-400/30 to-violet-500/30 backdrop-blur-lg border-purple-300/50 hover:border-purple-300/80 transition-all duration-500 cursor-pointer group hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateY(0deg) rotateX(3deg)',
+                    boxShadow: '0 15px 30px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <CardContent className="p-6 text-center">
+                    <Target 
+                      className="h-12 w-12 mx-auto text-purple-200 mb-3 group-hover:scale-110 transition-transform"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(139,92,246,0.5))' }} 
+                    />
+                    <h4 className="text-lg font-semibold text-white mb-2">SAM Platform</h4>
+                    <p className="text-purple-100 text-sm">Strategic Asset Management</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* Blockchain Hub */}
+              <Link to="/crypto-trading-dashboard">
+                <Card 
+                  className="bg-gradient-to-br from-orange-400/30 to-red-500/30 backdrop-blur-lg border-orange-300/50 hover:border-orange-300/80 transition-all duration-500 cursor-pointer group hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateY(1deg) rotateX(3deg)',
+                    boxShadow: '0 15px 30px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <CardContent className="p-6 text-center">
+                    <Zap 
+                      className="h-12 w-12 mx-auto text-orange-200 mb-3 group-hover:scale-110 transition-transform"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(251,146,60,0.5))' }} 
+                    />
+                    <h4 className="text-lg font-semibold text-white mb-2">Blockchain Hub</h4>
+                    <p className="text-orange-100 text-sm">Crypto and digital assets</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+
+            {/* Sustano Sphere Platform */}
+            <div className="mb-8">
+              <Link to="/sustano-sphere">
+                <Card 
+                  className="bg-gradient-to-br from-cyan-400/25 to-teal-500/25 backdrop-blur-lg border-cyan-300/40 hover:border-cyan-300/70 transition-all duration-500 cursor-pointer group hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(2deg)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <CardContent className="p-6 text-center">
+                    <div className="flex items-center justify-center gap-3 mb-3">
+                      <Globe 
+                        className="h-10 w-10 text-cyan-200"
+                        style={{ filter: 'drop-shadow(0 0 15px rgba(6,182,212,0.5))' }} 
+                      />
+                      <h4 className="text-2xl font-bold text-white">Sustano Sphere™</h4>
+                    </div>
+                    <p className="text-cyan-100">Revolutionary platform ecosystem</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+
+            {/* Secondary Platforms Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Mortgage Broker */}
+              <Link to="/investment-platform">
+                <Card className="bg-gradient-to-br from-teal-400/25 to-cyan-500/25 backdrop-blur-lg border-teal-300/40 hover:border-teal-300/70 transition-all duration-500 cursor-pointer group hover:scale-105">
+                  <CardContent className="p-6 text-center">
+                    <DollarSign 
+                      className="h-10 w-10 mx-auto text-teal-200 mb-3"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(20,184,166,0.5))' }} 
+                    />
+                    <h4 className="text-lg font-semibold text-white mb-2">Mortgage Broker</h4>
+                    <p className="text-teal-100 text-sm">Mortgage and finance platform</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* Reality Sales */}
+              <Link to="/reality-sales">
+                <Card className="bg-gradient-to-br from-pink-400/25 to-rose-500/25 backdrop-blur-lg border-pink-300/40 hover:border-pink-300/70 transition-all duration-500 cursor-pointer group hover:scale-105">
+                  <CardContent className="p-6 text-center">
+                    <Building 
+                      className="h-10 w-10 mx-auto text-pink-200 mb-3"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(236,72,153,0.5))' }} 
+                    />
+                    <h4 className="text-lg font-semibold text-white mb-2">Reality Sales</h4>
+                    <p className="text-pink-100 text-sm">Real estate sales platform</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* Property Management */}
+              <Link to="/work-hub">
+                <Card className="bg-gradient-to-br from-indigo-400/25 to-blue-500/25 backdrop-blur-lg border-indigo-300/40 hover:border-indigo-300/70 transition-all duration-500 cursor-pointer group hover:scale-105">
+                  <CardContent className="p-6 text-center">
+                    <Building 
+                      className="h-10 w-10 mx-auto text-indigo-200 mb-3"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(99,102,241,0.5))' }} 
+                    />
+                    <h4 className="text-lg font-semibold text-white mb-2">Property Management</h4>
+                    <p className="text-indigo-100 text-sm">Property management hub</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+
+            {/* Property Valuation Section */}
+            <div className="bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-lg rounded-2xl p-6 border border-purple-300/30">
+              <h3 className="text-2xl font-bold text-white text-center mb-6">Start Property Valuation</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                {/* Commercial Property */}
+                <Link to="/property-valuations?type=commercial">
+                  <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-105">
+                    <CardContent className="p-6 text-center">
+                      <Building className="h-8 w-8 mx-auto text-green-600 mb-3" />
+                      <h4 className="text-lg font-semibold text-gray-800 mb-2">Commercial Property</h4>
+                      <p className="text-gray-600 text-sm mb-4">AUTOMATED ANALYTICS INCLUDED</p>
+                      <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                        <li>• Income analysis</li>
+                        <li>• Market assessment</li>
+                        <li>• Yield analysis</li>
+                        <li>• ROI calculations</li>
+                      </ul>
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        Start Commercial Property Valuation
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+
+                {/* Residential Property */}
+                <Link to="/property-valuations?type=residential">
+                  <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-105">
+                    <CardContent className="p-6 text-center">
+                      <Building className="h-8 w-8 mx-auto text-green-600 mb-3" />
+                      <h4 className="text-lg font-semibold text-gray-800 mb-2">Residential Property</h4>
+                      <p className="text-gray-600 text-sm mb-4">AUTOMATED ANALYTICS INCLUDED</p>
+                      <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                        <li>• Comparable sales</li>
+                        <li>• Market trends</li>
+                        <li>• Price analysis</li>
+                        <li>• Growth forecasts</li>
+                      </ul>
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        Start Residential Property Valuation
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+
+                {/* Agricultural Property */}
+                <Link to="/property-valuations?type=agricultural">
+                  <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-105">
+                    <CardContent className="p-6 text-center">
+                      <Leaf className="h-8 w-8 mx-auto text-green-600 mb-3" />
+                      <h4 className="text-lg font-semibold text-gray-800 mb-2">Agricultural Property</h4>
+                      <p className="text-gray-600 text-sm mb-4">AUTOMATED ANALYTICS INCLUDED</p>
+                      <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                        <li>• Soil analysis</li>
+                        <li>• Water rights</li>
+                        <li>• Farming zones</li>
+                        <li>• Productivity metrics</li>
+                      </ul>
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        Start Agricultural Property Valuation
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+
+                {/* Specialised Property */}
+                <Link to="/property-valuations?type=specialised">
+                  <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-105">
+                    <CardContent className="p-6 text-center">
+                      <Target className="h-8 w-8 mx-auto text-green-600 mb-3" />
+                      <h4 className="text-lg font-semibold text-gray-800 mb-2">Specialised Property</h4>
+                      <p className="text-gray-600 text-sm mb-4">AUTOMATED ANALYTICS INCLUDED</p>
+                      <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                        <li>• Plant & equipment</li>
+                        <li>• Industry analysis</li>
+                        <li>• Special considerations</li>
+                        <li>• Custom methodologies</li>
+                      </ul>
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        Start Specialised Property Valuation
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+
+                {/* Development Site */}
+                <Link to="/development-site-valuation">
+                  <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-105">
+                    <CardContent className="p-6 text-center">
+                      <Calculator className="h-8 w-8 mx-auto text-green-600 mb-3" />
+                      <h4 className="text-lg font-semibold text-gray-800 mb-2">Development Site</h4>
+                      <p className="text-gray-600 text-sm mb-4">AUTOMATED ANALYTICS INCLUDED</p>
+                      <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                        <li>• Site assessment</li>
+                        <li>• Planning approval</li>
+                        <li>• Feasibility studies</li>
+                        <li>• Development potential</li>
+                      </ul>
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        Start Development Site Valuation
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Add CSS animations */}
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(1deg); }
+        }
         
-        <h2 className="text-5xl font-semibold text-white/95 mb-6" style={{
-          textShadow: '0 0 15px rgba(255,255,255,0.3), 0 0 30px rgba(59,130,246,0.2)',
-          transform: 'perspective(1000px) rotateX(2deg)',
-        }}>
-          ICV (Instant Comprehensive Valuation)™
-        </h2>
-        
-        <p className="text-2xl text-white/85 mb-4 font-medium" style={{
-          textShadow: '0 0 10px rgba(255,255,255,0.2)',
-          transform: 'perspective(1000px) rotateX(1deg)',
-        }}>
-          AI-Powered Property Valuation And Assessment Technology
-        </p>
-        
-        <p className="text-white/75 text-base mb-8" style={{
-          textShadow: '0 0 8px rgba(255,255,255,0.1)',
-        }}>
-          Patent Pending • IP Protected • Trademark © • Copyright Protected
-        </p>
-
-        {/* Enhanced 3D Stats with Floating Animation */}
-        <div className="flex justify-center gap-8 mt-12 mb-12 flex-wrap">
-          <div className="bg-gradient-to-br from-white/25 to-white/15 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-white/30 hover:border-white/50 transition-all duration-500 group"
-               style={{
-                 transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
-                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(59,130,246,0.2)',
-                 animation: 'float 6s ease-in-out infinite',
-               }}>
-            <div className="flex items-center justify-center mb-3">
-              <Building className="h-8 w-8 text-blue-200 mr-3" style={{
-                filter: 'drop-shadow(0 0 10px rgba(59,130,246,0.5))',
-              }} />
-              <div className="text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-300" style={{
-                textShadow: '0 0 15px rgba(255,255,255,0.5)',
-              }}>28</div>
-            </div>
-            <div className="text-white/90 text-base font-medium">Total Platforms</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-white/25 to-white/15 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-white/30 hover:border-white/50 transition-all duration-500 group"
-               style={{
-                 transform: 'perspective(1000px) rotateY(0deg) rotateX(5deg)',
-                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(16,185,129,0.2)',
-                 animation: 'float 6s ease-in-out infinite 1s',
-               }}>
-            <div className="flex items-center justify-center mb-3">
-              <BarChart3 className="h-8 w-8 text-emerald-200 mr-3" style={{
-                filter: 'drop-shadow(0 0 10px rgba(16,185,129,0.5))',
-              }} />
-              <div className="text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-300" style={{
-                textShadow: '0 0 15px rgba(255,255,255,0.5)',
-              }}>8</div>
-            </div>
-            <div className="text-white/90 text-base font-medium">Categories</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-white/25 to-white/15 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-white/30 hover:border-white/50 transition-all duration-500 group"
-               style={{
-                 transform: 'perspective(1000px) rotateY(5deg) rotateX(5deg)',
-                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(139,92,246,0.2)',
-                 animation: 'float 6s ease-in-out infinite 2s',
-               }}>
-            <div className="flex items-center justify-center mb-3">
-              <Globe className="h-8 w-8 text-purple-200 mr-3" style={{
-                filter: 'drop-shadow(0 0 10px rgba(139,92,246,0.5))',
-              }} />
-              <div className="text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-300" style={{
-                textShadow: '0 0 15px rgba(255,255,255,0.5)',
-              }}>24/7</div>
-            </div>
-            <div className="text-white/90 text-base font-medium">Availability</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-orange-400/30 to-red-400/30 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-orange-300/40 hover:border-orange-300/70 transition-all duration-500 group"
-               style={{
-                 transform: 'perspective(1000px) rotateY(10deg) rotateX(5deg)',
-                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(251,146,60,0.3)',
-                 animation: 'float 6s ease-in-out infinite 3s',
-               }}>
-            <div className="flex items-center justify-center mb-3">
-              <Zap className="h-8 w-8 text-orange-200 mr-3" style={{
-                filter: 'drop-shadow(0 0 10px rgba(251,146,60,0.7))',
-              }} />
-              <div className="text-4xl font-bold text-orange-100 group-hover:scale-110 transition-transform duration-300" style={{
-                textShadow: '0 0 15px rgba(255,255,255,0.5)',
-              }}>AI</div>
-            </div>
-            <div className="text-orange-200 text-base font-medium">Powered</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced 3D Navigation Tabs */}
-      <div className="relative z-10 px-4 mb-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-gradient-to-r from-white/20 to-white/15 backdrop-blur-xl rounded-3xl p-4 border border-white/30 shadow-2xl"
-               style={{
-                 transform: 'perspective(1000px) rotateX(-2deg)',
-                 boxShadow: '0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
-               }}>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-6 bg-transparent space-x-2">
-                <TabsTrigger 
-                  value="platform-access" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/40 data-[state=active]:to-purple-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
-                  style={{
-                    transform: 'perspective(1000px) rotateX(5deg)',
-                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <Building className="h-4 w-4 mr-1" />
-                  Platform Access
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="data-tools" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500/40 data-[state=active]:to-teal-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
-                  style={{
-                    transform: 'perspective(1000px) rotateX(5deg)',
-                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <Database className="h-4 w-4 mr-1" />
-                  Data Tools
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="marketing-hub" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/40 data-[state=active]:to-rose-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
-                  style={{
-                    transform: 'perspective(1000px) rotateX(5deg)',
-                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <Megaphone className="h-4 w-4 mr-1" />
-                  Marketing Hub
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="brochures" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500/40 data-[state=active]:to-amber-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
-                  style={{
-                    transform: 'perspective(1000px) rotateX(5deg)',
-                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <BookOpen className="h-4 w-4 mr-1" />
-                  Brochures
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="ip-security" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-500/40 data-[state=active]:to-pink-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
-                  style={{
-                    transform: 'perspective(1000px) rotateX(5deg)',
-                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <Shield className="h-4 w-4 mr-1" />
-                  IP Security
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="advanced-features" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-500/40 data-[state=active]:to-purple-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
-                  style={{
-                    transform: 'perspective(1000px) rotateX(5deg)',
-                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <Sparkles className="h-4 w-4 mr-1" />
-                  Advanced Features
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="platform-access" className="mt-6">
-                <div className="max-w-6xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h3 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                      Platform Access
-                    </h3>
-                    <p className="text-white/80 text-lg">Comprehensive analytics and reporting platforms</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Link to="/icv-dashboard">
-                      <Card className="bg-gradient-to-br from-blue-500/25 to-indigo-600/25 backdrop-blur-lg border-blue-300/40 hover:border-blue-300/70 transition-all duration-500 cursor-pointer h-full group hover:scale-110 hover:shadow-2xl"
-                            style={{
-                              transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
-                              boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(59,130,246,0.2)',
-                            }}>
-                        <CardContent className="p-8 text-center">
-                          <div className="relative mb-6">
-                            <div className="absolute inset-0 bg-blue-400 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-300"
-                                 style={{
-                                   transform: 'scale(1.5)',
-                                 }}></div>
-                            <BarChart3 className="relative h-16 w-16 mx-auto text-blue-300 group-hover:text-blue-200 transition-colors"
-                                      style={{
-                                        filter: 'drop-shadow(0 0 15px rgba(59,130,246,0.7))',
-                                        transform: 'perspective(500px) rotateX(15deg)',
-                                      }} />
-                          </div>
-                          <h4 className="text-xl font-semibold text-white mb-3" style={{
-                            textShadow: '0 0 10px rgba(255,255,255,0.3)',
-                          }}>Analytics Dashboard</h4>
-                          <p className="text-white/80 text-sm mb-4">Comprehensive analytics and reporting</p>
-                          <Badge className="bg-gradient-to-r from-green-500/40 to-emerald-500/40 text-green-200 border-green-400/50 hover:from-green-500/50 hover:to-emerald-500/50 transition-all duration-300"
-                                 style={{
-                                   boxShadow: '0 0 15px rgba(34,197,94,0.3)',
-                                 }}>
-                            <ChartLine className="h-3 w-3 mr-1" />
-                            Active Platform
-                          </Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/esg-strategy-analysis">
-                      <Card className="bg-gradient-to-br from-emerald-500/20 to-green-600/20 backdrop-blur-sm border-emerald-300/30 hover:border-emerald-300/60 transition-all duration-300 cursor-pointer h-full group hover:scale-105 hover:shadow-2xl">
-                        <CardContent className="p-6 text-center">
-                          <div className="relative mb-4">
-                            <div className="absolute inset-0 bg-emerald-400 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                            <Leaf className="relative h-12 w-12 mx-auto text-emerald-300 group-hover:text-emerald-200 transition-colors" />
-                          </div>
-                          <h4 className="text-lg font-semibold text-white mb-2">ESG Platform</h4>
-                          <p className="text-white/70 text-sm mb-3">Environmental & sustainability analysis</p>
-                          <Badge className="bg-gradient-to-r from-green-500/30 to-emerald-500/30 text-green-200 border-green-400/40 hover:from-green-500/40 hover:to-emerald-500/40 transition-all">
-                            <Leaf className="h-3 w-3 mr-1" />
-                            Active Platform
-                          </Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/sam-platform">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer h-full">
-                        <CardContent className="p-6 text-center">
-                          <Target className="h-12 w-12 mx-auto mb-4 text-purple-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">SAM Platform</h4>
-                          <p className="text-white/70 text-sm">Strategic Asset Management</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/brick-by-brick">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer h-full">
-                        <CardContent className="p-6 text-center">
-                          <Zap className="h-12 w-12 mx-auto mb-4 text-orange-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Blockchain Hub</h4>
-                          <p className="text-white/70 text-sm">Cryptocurrency & blockchain tools</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer h-full">
-                      <CardContent className="p-6 text-center">
-                        <Globe className="h-12 w-12 mx-auto mb-4 text-teal-300" />
-                        <h4 className="text-lg font-semibold text-white mb-2">Sustaino Sphere™</h4>
-                        <p className="text-white/70 text-sm">Revolutionary platform ecosystem</p>
-                        <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                    <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                      <CardContent className="p-6 text-center">
-                        <Building className="h-10 w-10 mx-auto mb-3 text-red-300" />
-                        <h4 className="text-lg font-semibold text-white mb-2">Mortgage Broker</h4>
-                        <p className="text-white/70 text-sm">Mortgage and finance services</p>
-                        <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                      </CardContent>
-                    </Card>
-
-                    <Link to="/reality-sales">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <Gavel className="h-10 w-10 mx-auto mb-3 text-pink-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Reality Sales</h4>
-                          <p className="text-white/70 text-sm">Real estate sales platform</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                      <CardContent className="p-6 text-center">
-                        <Users className="h-10 w-10 mx-auto mb-3 text-blue-300" />
-                        <h4 className="text-lg font-semibold text-white mb-2">Property Management</h4>
-                        <p className="text-white/70 text-sm">Property management tools</p>
-                        <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="data-tools" className="mt-6">
-                <div className="max-w-6xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">Data Tools</h3>
-                    <p className="text-white/80">Advanced data analysis and processing tools</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Link to="/property-valuations">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <Calculator className="h-10 w-10 mx-auto mb-3 text-blue-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Property Valuations</h4>
-                          <p className="text-white/70 text-sm">Comprehensive property analysis</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/workhub">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <FileText className="h-10 w-10 mx-auto mb-3 text-green-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Work Hub</h4>
-                          <p className="text-white/70 text-sm">Central job and task management</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/automated-valuation">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <Zap className="h-10 w-10 mx-auto mb-3 text-orange-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Automated Valuation</h4>
-                          <p className="text-white/70 text-sm">AI-powered instant valuations</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="marketing-hub" className="mt-6">
-                <div className="max-w-6xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">Marketing Hub</h3>
-                    <p className="text-white/80">Marketing and promotional tools</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Link to="/marketing">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <Megaphone className="h-10 w-10 mx-auto mb-3 text-purple-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Marketing Tools</h4>
-                          <p className="text-white/70 text-sm">Comprehensive marketing suite</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/social-media-assets">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <Palette className="h-10 w-10 mx-auto mb-3 text-pink-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Social Media Assets</h4>
-                          <p className="text-white/70 text-sm">Social media content creation</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/advertising-platforms">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <BarChart3 className="h-10 w-10 mx-auto mb-3 text-blue-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Advertising Platforms</h4>
-                          <p className="text-white/70 text-sm">Advertising management tools</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="brochures" className="mt-6">
-                <div className="max-w-6xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">Brochures</h3>
-                    <p className="text-white/80">Information and documentation</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Link to="/brochure-viewer">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <BookOpen className="h-10 w-10 mx-auto mb-3 text-blue-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Brochure Viewer</h4>
-                          <p className="text-white/70 text-sm">View all product brochures</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/concepts-and-plans">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <FileText className="h-10 w-10 mx-auto mb-3 text-green-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Concepts & Plans</h4>
-                          <p className="text-white/70 text-sm">Platform concepts and planning</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="ip-security" className="mt-6">
-                <div className="max-w-6xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">IP Security</h3>
-                    <p className="text-white/80">Intellectual property and security features</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                      <CardContent className="p-6 text-center">
-                        <ShieldCheck className="h-10 w-10 mx-auto mb-3 text-green-300" />
-                        <h4 className="text-lg font-semibold text-white mb-2">Security Dashboard</h4>
-                        <p className="text-white/70 text-sm">Comprehensive security monitoring</p>
-                        <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                      <CardContent className="p-6 text-center">
-                        <Lock className="h-10 w-10 mx-auto mb-3 text-orange-300" />
-                        <h4 className="text-lg font-semibold text-white mb-2">IP Protection</h4>
-                        <p className="text-white/70 text-sm">Intellectual property protection</p>
-                        <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="advanced-features" className="mt-6">
-                <div className="max-w-6xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">Advanced Features</h3>
-                    <p className="text-white/80">Cutting-edge platform capabilities</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Link to="/crypto-trading-dashboard">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <Zap className="h-10 w-10 mx-auto mb-3 text-orange-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Crypto Trading</h4>
-                          <p className="text-white/70 text-sm">Cryptocurrency trading dashboard</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-
-                    <Link to="/investment-platform">
-                      <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all cursor-pointer">
-                        <CardContent className="p-6 text-center">
-                          <Target className="h-10 w-10 mx-auto mb-3 text-purple-300" />
-                          <h4 className="text-lg font-semibold text-white mb-2">Investment Platform</h4>
-                          <p className="text-white/70 text-sm">Investment management tools</p>
-                          <Badge className="mt-3 bg-green-500/20 text-green-300 border-green-500/30">Active Platform</Badge>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced Start Property Valuation Button */}
-      <div className="relative z-10 px-4 pb-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-3xl p-8 text-center relative overflow-hidden group hover:scale-105 transition-all duration-300 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="relative z-10">
-              <Sparkles className="h-8 w-8 mx-auto mb-4 text-white animate-pulse" />
-              <Link to="/workhub" className="inline-flex items-center gap-3 text-white font-bold text-2xl hover:no-underline group-hover:scale-110 transition-transform">
-                🚀 Start Property Valuation
-                <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
-              </Link>
-              <p className="text-white/80 mt-2 text-sm">Begin your comprehensive property assessment journey</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced Footer */}
-      <div className="relative z-10 text-center py-6">
-        <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm rounded-xl mx-4 p-4 border border-white/20">
-          <p className="text-white/80 text-sm font-medium">
-            © 2025 Sustaino Pro. All platforms integrated and ready to use.
-          </p>
-          <div className="flex justify-center items-center mt-2 space-x-4">
-            <Badge variant="secondary" className="bg-white/20 text-white/80 border-white/30">
-              <Award className="h-3 w-3 mr-1" />
-              Award Winning Platform
-            </Badge>
-            <Badge variant="secondary" className="bg-white/20 text-white/80 border-white/30">
-              <Shield className="h-3 w-3 mr-1" />
-              Enterprise Security
-            </Badge>
-          </div>
-        </div>
-      </div>
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 };
