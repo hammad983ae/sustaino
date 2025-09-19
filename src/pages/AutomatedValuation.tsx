@@ -9,6 +9,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import WebDataUploadInterface from '@/components/WebDataUploadInterface';
+import DataStorageViewer from '@/components/DataStorageViewer';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -235,7 +236,25 @@ export default function AutomatedValuation() {
                     </TabsContent>
                     
                     <TabsContent value="tools" className="space-y-6">
-                      <WebDataUploadInterface />
+                      <Tabs defaultValue="upload" className="w-full">
+                        <TabsList className="grid w-full grid-cols-2 bg-slate-800/90 border border-slate-600">
+                          <TabsTrigger value="upload" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900">
+                            📤 Web Data Upload
+                          </TabsTrigger>
+                          <TabsTrigger value="viewer" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900">
+                            <Database className="w-4 h-4 mr-2" />
+                            View Stored Data
+                          </TabsTrigger>
+                        </TabsList>
+                        
+                        <TabsContent value="upload">
+                          <WebDataUploadInterface />
+                        </TabsContent>
+                        
+                        <TabsContent value="viewer">
+                          <DataStorageViewer />
+                        </TabsContent>
+                      </Tabs>
                     </TabsContent>
                      
                     <TabsContent value="marketing" className="space-y-6">
