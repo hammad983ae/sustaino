@@ -8,6 +8,8 @@ import ValuationMethodologies from "@/components/development/ValuationMethodolog
 import ESGClimateRiskAssessment from "@/components/development/ESGClimateRiskAssessment";
 import FeasibilityStudy from "@/components/development/FeasibilityStudy";
 import ComparableEvidence from "@/components/development/ComparableEvidence";
+import RiskAssessmentEngine from "@/components/development/RiskAssessmentEngine";
+import ProfessionalReportGenerator from "@/components/development/ProfessionalReportGenerator";
 
 const DevelopmentSiteValuation = () => {
   const [siteData, setSiteData] = useState(null);
@@ -74,52 +76,12 @@ const DevelopmentSiteValuation = () => {
 
           {/* Risk Analysis Tab */}
           <TabsContent value="risk" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5" />
-                  Comprehensive Risk Assessment
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <Shield className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-semibold mb-2">Risk Analysis Engine</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Comprehensive development risk assessment including market, regulatory, environmental, and financial risks
-                  </p>
-                  <Badge variant="outline" className="mb-4">
-                    Coming Soon
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
+            <RiskAssessmentEngine siteData={siteData} />
           </TabsContent>
 
           {/* Reports Tab */}
           <TabsContent value="reports" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  Professional Valuation Reports
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-semibold mb-2">Report Generation</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Generate comprehensive development site valuation reports compliant with Australian valuation standards
-                  </p>
-                  <div className="space-y-2">
-                    <Badge variant="outline">AASB Compliant</Badge>
-                    <Badge variant="outline">GST Inc/Exc</Badge>
-                    <Badge variant="outline">ESG Integrated</Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <ProfessionalReportGenerator siteData={siteData} />
           </TabsContent>
         </Tabs>
       </div>
