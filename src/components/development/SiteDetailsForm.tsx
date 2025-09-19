@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MapPin, Building, Calculator } from "lucide-react";
+import AddressVerificationService from "./AddressVerificationService";
+import DataSourcesConfig from "./DataSourcesConfig";
+import AutoPopulationService from "./AutoPopulationService";
 
 interface SiteData {
   address: string;
+  lotNumber: string;
+  planNumber: string;
   landArea: number;
   currentZoning: string;
   proposedZoning: string;
@@ -26,6 +31,11 @@ interface SiteData {
   valuationDate: string;
   clientName: string;
   clientCompany: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  autoPopulated?: boolean;
 }
 
 interface SiteDetailsFormProps {
@@ -34,24 +44,31 @@ interface SiteDetailsFormProps {
 
 export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormProps) {
   const [siteData, setSiteData] = useState<SiteData>({
-    address: '95 Epping Road, Macquarie Park, NSW 2113',
-    landArea: 14561,
-    currentZoning: 'Commercial',
-    proposedZoning: 'MU1 Mixed Use',
-    fsr: 3.3,
-    proposedGFA: 48051,
-    estimatedUnits: 500,
-    hdaSupport: true,
+    address: '',
+    lotNumber: '',
+    planNumber: '',
+    landArea: 0,
+    currentZoning: '',
+    proposedZoning: '',
+    fsr: 0,
+    proposedGFA: 0,
+    estimatedUnits: 0,
+    hdaSupport: false,
     ssdaApproval: false,
-    heightLimit: 120,
-    state: 'NSW',
-    council: 'Ryde City Council',
-    description: 'Scalable Mixed-Use Development Site within a Transformative Precinct. HDA declared SSD project with proposed GFA of 48,051m² and indicative yield of 500 apartments.',
+    heightLimit: 0,
+    state: 'VIC',
+    council: '',
+    description: '',
     valuationPurpose: '',
     valuationDate: new Date().toISOString().split('T')[0],
     clientName: '',
-    clientCompany: ''
+    clientCompany: '',
+    autoPopulated: false
   });
+
+  const [addressVerified, setAddressVerified] = useState(false);
+  const [verifiedAddressData, setVerifiedAddressData] = useState<any>(null);
+  const [enabledDataSources, setEnabledDataSources] = useState<any[]>([]);
 
   const handleInputChange = (field: keyof SiteData, value: any) => {
     const updatedData = { ...siteData, [field]: value };
@@ -59,8 +76,83 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     onSiteDataChange(updatedData);
   };
 
+  const handleAddressVerified = (addressData: any) => {
+    setAddressVerified(true);
+    setVerifiedAddressData(addressData);
+    
+    // Update site data with verified address information
+    const updatedData = {
+      ...siteData,
+      address: addressData.fullAddress,
+      lotNumber: addressData.lotNumber,
+      planNumber: addressData.planNumber,
+      landArea: addressData.landArea,
+      currentZoning: addressData.zoning,
+      state: addressData.state,
+      council: addressData.council,
+      coordinates: addressData.coordinates
+    };
+    
+    setSiteData(updatedData);
+    onSiteDataChange(updatedData);
+  };
+
+  const handleDataPopulated = (populatedData: any) => {
+    const updatedData = { ...siteData };
+    
+    // Merge populated data
+    if (populatedData['planning-data']) {
+      const planningData = populatedData['planning-data'];
+      updatedData.currentZoning = planningData.currentZoning;
+      updatedData.heightLimit = planningData.heightLimit;
+      updatedData.fsr = planningData.floorSpaceRatio;
+    }
+    
+    if (populatedData['title-data']) {
+      const titleData = populatedData['title-data'];
+      updatedData.lotNumber = titleData.lotNumber;
+      updatedData.planNumber = titleData.planNumber;
+      updatedData.landArea = titleData.landArea;
+    }
+    
+    if (populatedData['council-data']) {
+      const councilData = populatedData['council-data'];
+      updatedData.council = councilData.localGovernmentArea;
+    }
+    
+    if (populatedData['development-data']) {
+      const devData = populatedData['development-data'];
+      updatedData.proposedGFA = devData.developmentPotential.maximumGFA;
+      updatedData.estimatedUnits = devData.developmentPotential.estimatedUnits;
+    }
+    
+    updatedData.autoPopulated = true;
+    setSiteData(updatedData);
+    onSiteDataChange(updatedData);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Address Verification */}
+      <AddressVerificationService 
+        onAddressVerified={handleAddressVerified}
+        initialAddress={siteData.address}
+      />
+
+      {/* Data Sources Configuration */}
+      <DataSourcesConfig 
+        selectedState={siteData.state}
+        onSourcesChange={setEnabledDataSources}
+      />
+
+      {/* Auto-Population Service */}
+      <AutoPopulationService
+        addressData={verifiedAddressData}
+        selectedState={siteData.state}
+        enabledSources={enabledDataSources}
+        onDataPopulated={handleDataPopulated}
+      />
+
       {/* Valuation Details */}
       <Card>
         <CardHeader>
