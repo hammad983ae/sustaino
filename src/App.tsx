@@ -84,9 +84,9 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<SustanoProDashboard />} />
+                <Route path="/" element={<ICVDashboard />} />
                 <Route path="/automated-valuation" element={<AutomatedValuation />} />
-                <Route path="/sustaino-pro" element={<SustanoProDashboard />} />
+                <Route path="/sustaino-pro-legacy" element={<SustanoProDashboard />} />
                 <Route path="/report" element={<Report />} />
                 <Route path="/renewable-energy" element={<RenewableEnergyValuations />} />
                 <Route path="/property-assessment" element={<PropertyAssessment />} />
