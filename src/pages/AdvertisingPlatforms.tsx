@@ -3,9 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Mail, Phone, Globe, Star, Camera, BarChart3, Target, Users } from "lucide-react";
+import { CheckCircle, Mail, Phone, Globe, Star, Camera, BarChart3, Target, Users, Megaphone } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import PageHeader from "@/components/PageHeader";
 
 interface Package {
   id: string;
@@ -198,6 +199,13 @@ export default function AdvertisingPlatforms() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 relative overflow-hidden">
+      {/* Page Header with Navigation */}
+      <PageHeader 
+        title="Advertise Your Property"
+        subtitle="Choose between our revolutionary auction platform or sustainable property marketplace"
+        icon={<Megaphone className="h-6 w-6 text-white" />}
+        gradient="from-emerald-500 to-blue-600"
+      />
       {/* Floating 3D Elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full animate-[float_6s_ease-in-out_infinite] blur-sm" />
@@ -206,16 +214,9 @@ export default function AdvertisingPlatforms() {
       </div>
       
       {/* Hero Section */}
-      <div className="relative py-20 px-4">
+      <div className="relative py-12 px-4">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 backdrop-blur-sm" />
         <div className="relative max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-6 animate-fade-in transform hover:scale-105 transition-transform duration-500">
-            Advertise Your Property
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-fade-in animation-delay-200">
-            Choose between our revolutionary auction platform or sustainable property marketplace
-          </p>
-          
           {/* Platform Selection */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in animation-delay-400">
             <Button
