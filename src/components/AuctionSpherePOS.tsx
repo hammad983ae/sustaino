@@ -18,6 +18,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import DigitalContractSigning from './DigitalContractSigning';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -420,11 +421,12 @@ const AuctionSpherePOS = () => {
               </div>
 
               <Tabs defaultValue="transaction" className="w-full">
-                <TabsList className="grid w-full grid-cols-5 bg-white/50 backdrop-blur-lg">
+                <TabsList className="grid w-full grid-cols-6 bg-white/50 backdrop-blur-lg">
                   <TabsTrigger value="transaction">Transaction</TabsTrigger>
                   <TabsTrigger value="payment">Payment</TabsTrigger>
                   <TabsTrigger value="settlement">PEXA Settlement</TabsTrigger>
                   <TabsTrigger value="contracts">Contracts</TabsTrigger>
+                  <TabsTrigger value="documents">Documents</TabsTrigger>
                   <TabsTrigger value="reporting">Reporting</TabsTrigger>
                 </TabsList>
 
@@ -730,6 +732,10 @@ const AuctionSpherePOS = () => {
                       </div>
                     </div>
                   </Card>
+                </TabsContent>
+
+                <TabsContent value="documents">
+                  <DigitalContractSigning />
                 </TabsContent>
 
                 <TabsContent value="reporting" className="space-y-6">

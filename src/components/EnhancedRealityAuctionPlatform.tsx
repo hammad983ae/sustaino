@@ -498,11 +498,12 @@ const EnhancedRealityAuctionPlatform = () => {
             <Card className="backdrop-blur-xl bg-white/50 border-white/30 shadow-2xl rounded-2xl overflow-hidden">
               <CardContent className="p-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid w-full grid-cols-8 mb-8 bg-white/50 backdrop-blur-lg rounded-xl p-2 border border-white/30">
+                  <TabsList className="grid w-full grid-cols-9 mb-8 bg-white/50 backdrop-blur-lg rounded-xl p-2 border border-white/30">
                     <TabsTrigger value="overview" className="text-xs font-semibold rounded-lg">Overview</TabsTrigger>
                     <TabsTrigger value="bidding" className="text-xs font-semibold rounded-lg">Bidding</TabsTrigger>
                     <TabsTrigger value="vendor" className="text-xs font-semibold rounded-lg">Vendor Statement</TabsTrigger>
                     <TabsTrigger value="valuation" className="text-xs font-semibold rounded-lg">Valuation</TabsTrigger>
+                    <TabsTrigger value="documents" className="text-xs font-semibold rounded-lg">Documents</TabsTrigger>
                     <TabsTrigger value="market" className="text-xs font-semibold rounded-lg">Market</TabsTrigger>
                     <TabsTrigger value="risk" className="text-xs font-semibold rounded-lg">Risk</TabsTrigger>
                     <TabsTrigger value="demographics" className="text-xs font-semibold rounded-lg">Demographics</TabsTrigger>
@@ -646,6 +647,10 @@ const EnhancedRealityAuctionPlatform = () => {
                         // Here you could integrate with your backend to store or process the statement
                       }}
                     />
+                  </TabsContent>
+
+                  <TabsContent value="documents">
+                    <DigitalContractSigning />
                   </TabsContent>
 
                   <TabsContent value="valuation" className="space-y-6">

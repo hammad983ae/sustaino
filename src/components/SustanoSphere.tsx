@@ -24,6 +24,8 @@ import VendorStatementGenerator from './VendorStatementGenerator';
 import SustanoSphereDataCentre from './SustanoSphereDataCentre';
 import ComprehensiveEcosystemValuation from './ComprehensiveEcosystemValuation';
 import ModularPlatformValuation from './ModularPlatformValuation';
+import DigitalContractSigning from './DigitalContractSigning';
+import SustanoProLiveAuction from './SustanoProLiveAuction';
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -293,11 +295,12 @@ export const SustanoSphere = () => {
 
       {/* Main Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 gap-1">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-8 gap-1">
           <TabsTrigger value="browse" className="text-xs lg:text-sm">🔍 Browse</TabsTrigger>
           <TabsTrigger value="featured" className="text-xs lg:text-sm">⭐ Featured</TabsTrigger>
           <TabsTrigger value="valuation" className="text-xs lg:text-sm">📊 Valuation</TabsTrigger>
           <TabsTrigger value="contracts" className="text-xs lg:text-sm">📝 Contracts</TabsTrigger>
+          <TabsTrigger value="documents" className="text-xs lg:text-sm">📋 Documents</TabsTrigger>
           <TabsTrigger value="datacentre" className="text-xs lg:text-sm">🏛️ Data Centre</TabsTrigger>
           <TabsTrigger value="watchlist" className="text-xs lg:text-sm">❤️ Watchlist</TabsTrigger>
           <TabsTrigger value="vendor" className="text-xs lg:text-sm">📄 Vendor</TabsTrigger>
@@ -583,31 +586,14 @@ export const SustanoSphere = () => {
           </div>
         </TabsContent>
 
-        {/* Sell Tab */}
+        {/* Documents Tab - Digital Contract Signing */}
+        <TabsContent value="documents">
+          <DigitalContractSigning />
+        </TabsContent>
+
+        {/* Sell Tab - Live Auction */}
         <TabsContent value="sell">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5 text-green-600" />
-                List Your Digital Asset
-              </CardTitle>
-              <CardDescription>
-                Professional valuation and auction listing for your digital platform
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <div className="text-lg font-medium mb-2">Seller Portal Coming Soon</div>
-                <div className="text-muted-foreground mb-4">
-                  Get professional valuation and list your digital assets for auction
-                </div>
-                <Button>
-                  <DollarSign className="h-4 w-4 mr-2" />
-                  Request Valuation
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <SustanoProLiveAuction />
         </TabsContent>
       </Tabs>
 
