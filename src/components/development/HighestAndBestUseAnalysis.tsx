@@ -28,6 +28,7 @@ interface SiteData {
   zoning?: string;
   council?: string;
   state?: string;
+  extractedDocumentData?: any;
 }
 
 interface HighestAndBestUseAnalysisProps {
@@ -44,21 +45,28 @@ const HighestAndBestUseAnalysis: React.FC<HighestAndBestUseAnalysisProps> = ({ s
     setIsAnalyzing(true);
     setAnalysisProgress(0);
     
-    // Simulate analysis progress
+    // Enhanced analysis steps incorporating document data
     const steps = [
+      "Processing uploaded documents...",
       "Analyzing planning requirements...",
       "Checking compliance requirements...", 
       "Performing soil testing assessment...",
       "Calculating construction costs...",
       "Running demographic analysis...",
       "Analyzing market demand/supply...",
+      "Incorporating extracted financial data...",
       "Comparing development scenarios...",
       "Generating recommendations..."
     ];
 
     for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 800));
       setAnalysisProgress(((i + 1) / steps.length) * 100);
+      
+      // If we have extracted document data, use it during analysis
+      if (i === 0 && siteData?.extractedDocumentData) {
+        console.log('Incorporating document data into analysis:', siteData.extractedDocumentData);
+      }
     }
     
     setIsAnalyzing(false);

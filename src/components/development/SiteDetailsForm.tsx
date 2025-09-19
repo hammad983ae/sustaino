@@ -10,6 +10,7 @@ import { MapPin, Building, Calculator } from "lucide-react";
 import AddressVerificationService from "./AddressVerificationService";
 import DataSourcesConfig from "./DataSourcesConfig";
 import AutoPopulationService from "./AutoPopulationService";
+import DocumentUploadAnalyzer from "./DocumentUploadAnalyzer";
 
 interface SiteData {
   address: string;
@@ -36,6 +37,7 @@ interface SiteData {
     lng: number;
   };
   autoPopulated?: boolean;
+  extractedDocumentData?: any;
 }
 
 interface SiteDetailsFormProps {
@@ -131,8 +133,34 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     onSiteDataChange(updatedData);
   };
 
+  const handleDocumentDataExtracted = (extractedData: any) => {
+    const updatedData = { ...siteData };
+    
+    // Merge extracted property details
+    if (extractedData.propertyDetails) {
+      const propDetails = extractedData.propertyDetails;
+      if (propDetails.address && !updatedData.address) updatedData.address = propDetails.address;
+      if (propDetails.landArea && !updatedData.landArea) updatedData.landArea = propDetails.landArea;
+      if (propDetails.zoning && !updatedData.currentZoning) updatedData.currentZoning = propDetails.zoning;
+      if (propDetails.lotNumber && !updatedData.lotNumber) updatedData.lotNumber = propDetails.lotNumber;
+      if (propDetails.planNumber && !updatedData.planNumber) updatedData.planNumber = propDetails.planNumber;
+      if (propDetails.council && !updatedData.council) updatedData.council = propDetails.council;
+    }
+    
+    // Store the extracted document data for use in highest and best use analysis
+    updatedData.extractedDocumentData = extractedData;
+    
+    setSiteData(updatedData);
+    onSiteDataChange(updatedData);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Document Upload & Analysis */}
+      <DocumentUploadAnalyzer 
+        onDataExtracted={handleDocumentDataExtracted}
+      />
+
       {/* Address Verification */}
       <AddressVerificationService 
         onAddressVerified={handleAddressVerified}
