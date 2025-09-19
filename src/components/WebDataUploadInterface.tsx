@@ -54,7 +54,7 @@ const WebDataUploadInterface = () => {
           const { data, error } = await supabase.functions.invoke('web-data-scraper', {
             body: { 
               url: url.trim(), 
-              data_type: 'sales' // Default to sales, could be made configurable
+              data_type: 'both' // Extract both sales and rental data
             }
           });
           
@@ -194,7 +194,7 @@ const WebDataUploadInterface = () => {
                           const { data, error } = await supabase.functions.invoke('web-data-scraper', {
                             body: { 
                               url: url.trim(), 
-                              data_type: 'sales' // Default to sales, could be made configurable
+                              data_type: 'both' // Extract both sales and rental data
                             }
                           });
                           

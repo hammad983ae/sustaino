@@ -28,6 +28,8 @@ interface WebScrapingRequest {
 interface ExtractedPropertyData {
   address?: string;
   price?: number;
+  rental_amount?: number;
+  rental_period?: string;
   date?: string;
   bedrooms?: number;
   bathrooms?: number;
@@ -63,6 +65,9 @@ interface ExtractedPropertyData {
   pool?: boolean;
   energy_rating?: string;
   water_rating?: string;
+  lease_term_months?: number;
+  lease_start_date?: string;
+  lease_end_date?: string;
 }
 
 function getHostname(url: string): string {
@@ -116,130 +121,154 @@ Deno.serve(async (req) => {
       extracted = extractPropertyData(html);
     }
 
-    if (!extracted.address && !extracted.price) {
+    if (!extracted.address && !extracted.price && !extracted.rental_amount) {
       return badRequest("Could not extract property data from the document");
     }
 
-    // Insert evidence with comprehensive data
     const source = getHostname(url);
-    if (data_type === "sales") {
-      const { data, error } = await supabase
-        .from("sales_evidence")
-        .insert({
-          user_id: user.id,
-          comparable_address: extracted.address || "Address not found",
-          sale_price: extracted.price || 0,
-          sale_date: extracted.date || new Date().toISOString().slice(0, 10),
-          property_type: extracted.property_type || "mixed",
-          unit_number: extracted.unit_number ?? null,
-          street_number: extracted.street_number ?? null,
-          street_name: extracted.street_name ?? null,
-          street_type: extracted.street_type ?? null,
-          suburb: extracted.suburb ?? null,
-          state: extracted.state ?? null,
-          postcode: extracted.postcode ?? null,
-          bedrooms: extracted.bedrooms ?? null,
-          bathrooms: extracted.bathrooms ?? null,
-          car_spaces: extracted.car_spaces ?? null,
-          parking_spaces: extracted.parking_spaces ?? null,
-          parking_type: extracted.parking_type ?? null,
-          building_area: extracted.building_area ?? null,
-          land_area: extracted.land_area ?? null,
-          year_built: extracted.year_built ?? null,
-          year_renovated: extracted.year_renovated ?? null,
-          condition_rating: extracted.condition_rating ?? null,
-          quality_rating: extracted.quality_rating ?? null,
-          view_rating: extracted.view_rating ?? null,
-          aspect: extracted.aspect ?? null,
-          topography: extracted.topography ?? null,
-          is_strata: extracted.is_strata ?? false,
-          strata_scheme_number: extracted.strata_scheme_number ?? null,
-          strata_lot_number: extracted.strata_lot_number ?? null,
-          strata_fees_quarterly: extracted.strata_fees_quarterly ?? null,
-          strata_fees_annual: extracted.strata_fees_annual ?? null,
-          body_corporate_name: extracted.body_corporate_name ?? null,
-          air_conditioning: extracted.air_conditioning ?? null,
-          heating: extracted.heating ?? null,
-          solar_panels: extracted.solar_panels ?? false,
-          pool: extracted.pool ?? false,
-          energy_rating: extracted.energy_rating ?? null,
-          water_rating: extracted.water_rating ?? null,
-          source: url,
-          notes: `Auto-extracted from ${source}`,
-          data_source_verified: true,
-          last_verified_date: new Date().toISOString().slice(0, 10),
-          extraction_confidence: 85.0,
-          data_quality_score: 7,
-        })
-        .select()
-        .single();
-      if (error) return serverError("Database insert failed", error.message);
-      return json({ 
-        success: true, 
-        data, 
-        extracted_fields: extracted,
-        message: `Sales evidence added with ${Object.keys(extracted).length} fields extracted`
-      });
-    } else {
-      const { data, error } = await supabase
-        .from("rental_evidence")
-        .insert({
-          user_id: user.id,
-          comparable_address: extracted.address || "Address not found",
-          rental_amount: extracted.price || 0,
-          rental_period: "weekly",
-          lease_date: extracted.date || new Date().toISOString().slice(0, 10),
-          property_type: extracted.property_type || "mixed",
-          unit_number: extracted.unit_number ?? null,
-          street_number: extracted.street_number ?? null,
-          street_name: extracted.street_name ?? null,
-          street_type: extracted.street_type ?? null,
-          suburb: extracted.suburb ?? null,
-          state: extracted.state ?? null,
-          postcode: extracted.postcode ?? null,
-          bedrooms: extracted.bedrooms ?? null,
-          bathrooms: extracted.bathrooms ?? null,
-          car_spaces: extracted.car_spaces ?? null,
-          parking_spaces: extracted.parking_spaces ?? null,
-          parking_type: extracted.parking_type ?? null,
-          building_area: extracted.building_area ?? null,
-          land_area: extracted.land_area ?? null,
-          year_built: extracted.year_built ?? null,
-          year_renovated: extracted.year_renovated ?? null,
-          condition_rating: extracted.condition_rating ?? null,
-          quality_rating: extracted.quality_rating ?? null,
-          view_rating: extracted.view_rating ?? null,
-          aspect: extracted.aspect ?? null,
-          topography: extracted.topography ?? null,
-          is_strata: extracted.is_strata ?? false,
-          strata_scheme_number: extracted.strata_scheme_number ?? null,
-          strata_lot_number: extracted.strata_lot_number ?? null,
-          strata_fees_quarterly: extracted.strata_fees_quarterly ?? null,
-          strata_fees_annual: extracted.strata_fees_annual ?? null,
-          body_corporate_name: extracted.body_corporate_name ?? null,
-          air_conditioning: extracted.air_conditioning ?? null,
-          heating: extracted.heating ?? null,
-          solar_panels: extracted.solar_panels ?? false,
-          pool: extracted.pool ?? false,
-          energy_rating: extracted.energy_rating ?? null,
-          water_rating: extracted.water_rating ?? null,
-          source: url,
-          notes: `Auto-extracted from ${source}`,
-          data_source_verified: true,
-          last_verified_date: new Date().toISOString().slice(0, 10),
-          extraction_confidence: 85.0,
-          data_quality_score: 7,
-        })
-        .select()
-        .single();
-      if (error) return serverError("Database insert failed", error.message);
-      return json({ 
-        success: true, 
-        data, 
-        extracted_fields: extracted,
-        message: `Rental evidence added with ${Object.keys(extracted).length} fields extracted`
-      });
+    const results = { success: true, sales_added: 0, rentals_added: 0, errors: [] };
+
+    // Extract and store sales data if price is found
+    if (extracted.price) {
+      try {
+        const { data: salesData, error: salesError } = await supabase
+          .from("sales_evidence")
+          .insert({
+            user_id: user.id,
+            comparable_address: extracted.address || "Address not found",
+            sale_price: extracted.price,
+            sale_date: extracted.date || new Date().toISOString().slice(0, 10),
+            property_type: extracted.property_type || "mixed",
+            unit_number: extracted.unit_number ?? null,
+            street_number: extracted.street_number ?? null,
+            street_name: extracted.street_name ?? null,
+            street_type: extracted.street_type ?? null,
+            suburb: extracted.suburb ?? null,
+            state: extracted.state ?? null,
+            postcode: extracted.postcode ?? null,
+            bedrooms: extracted.bedrooms ?? null,
+            bathrooms: extracted.bathrooms ?? null,
+            car_spaces: extracted.car_spaces ?? null,
+            parking_spaces: extracted.parking_spaces ?? null,
+            parking_type: extracted.parking_type ?? null,
+            building_area: extracted.building_area ?? null,
+            land_area: extracted.land_area ?? null,
+            year_built: extracted.year_built ?? null,
+            year_renovated: extracted.year_renovated ?? null,
+            condition_rating: extracted.condition_rating ?? null,
+            quality_rating: extracted.quality_rating ?? null,
+            view_rating: extracted.view_rating ?? null,
+            aspect: extracted.aspect ?? null,
+            topography: extracted.topography ?? null,
+            is_strata: extracted.is_strata ?? false,
+            strata_scheme_number: extracted.strata_scheme_number ?? null,
+            strata_lot_number: extracted.strata_lot_number ?? null,
+            strata_fees_quarterly: extracted.strata_fees_quarterly ?? null,
+            strata_fees_annual: extracted.strata_fees_annual ?? null,
+            body_corporate_name: extracted.body_corporate_name ?? null,
+            air_conditioning: extracted.air_conditioning ?? null,
+            heating: extracted.heating ?? null,
+            solar_panels: extracted.solar_panels ?? false,
+            pool: extracted.pool ?? false,
+            energy_rating: extracted.energy_rating ?? null,
+            water_rating: extracted.water_rating ?? null,
+            source: url,
+            notes: `Auto-extracted from ${source}`,
+            data_source_verified: true,
+            last_verified_date: new Date().toISOString().slice(0, 10),
+            extraction_confidence: 85.0,
+            data_quality_score: 7,
+          })
+          .select()
+          .single();
+        
+        if (salesError) {
+          results.errors.push(`Sales data: ${salesError.message}`);
+        } else {
+          results.sales_added = 1;
+        }
+      } catch (error) {
+        results.errors.push(`Sales insertion failed: ${error}`);
+      }
     }
+
+    // Extract and store rental data if rental amount is found
+    if (extracted.rental_amount) {
+      try {
+        const { data: rentalData, error: rentalError } = await supabase
+          .from("rental_evidence")
+          .insert({
+            user_id: user.id,
+            comparable_address: extracted.address || "Address not found",
+            rental_amount: extracted.rental_amount,
+            rental_period: extracted.rental_period || "weekly",
+            lease_date: extracted.date || new Date().toISOString().slice(0, 10),
+            property_type: extracted.property_type || "mixed",
+            unit_number: extracted.unit_number ?? null,
+            street_number: extracted.street_number ?? null,
+            street_name: extracted.street_name ?? null,
+            street_type: extracted.street_type ?? null,
+            suburb: extracted.suburb ?? null,
+            state: extracted.state ?? null,
+            postcode: extracted.postcode ?? null,
+            bedrooms: extracted.bedrooms ?? null,
+            bathrooms: extracted.bathrooms ?? null,
+            car_spaces: extracted.car_spaces ?? null,
+            parking_spaces: extracted.parking_spaces ?? null,
+            parking_type: extracted.parking_type ?? null,
+            building_area: extracted.building_area ?? null,
+            land_area: extracted.land_area ?? null,
+            year_built: extracted.year_built ?? null,
+            year_renovated: extracted.year_renovated ?? null,
+            condition_rating: extracted.condition_rating ?? null,
+            quality_rating: extracted.quality_rating ?? null,
+            view_rating: extracted.view_rating ?? null,
+            aspect: extracted.aspect ?? null,
+            topography: extracted.topography ?? null,
+            is_strata: extracted.is_strata ?? false,
+            strata_scheme_number: extracted.strata_scheme_number ?? null,
+            strata_lot_number: extracted.strata_lot_number ?? null,
+            strata_fees_quarterly: extracted.strata_fees_quarterly ?? null,
+            strata_fees_annual: extracted.strata_fees_annual ?? null,
+            body_corporate_name: extracted.body_corporate_name ?? null,
+            air_conditioning: extracted.air_conditioning ?? null,
+            heating: extracted.heating ?? null,
+            solar_panels: extracted.solar_panels ?? false,
+            pool: extracted.pool ?? false,
+            energy_rating: extracted.energy_rating ?? null,
+            water_rating: extracted.water_rating ?? null,
+            source: url,
+            notes: `Auto-extracted from ${source}`,
+            data_source_verified: true,
+            last_verified_date: new Date().toISOString().slice(0, 10),
+            extraction_confidence: 85.0,
+            data_quality_score: 7,
+            lease_term_months: extracted.lease_term_months ?? null,
+            lease_start_date: extracted.lease_start_date ?? null,
+            lease_end_date: extracted.lease_end_date ?? null,
+          })
+          .select()
+          .single();
+        
+        if (rentalError) {
+          results.errors.push(`Rental data: ${rentalError.message}`);
+        } else {
+          results.rentals_added = 1;
+        }
+      } catch (error) {
+        results.errors.push(`Rental insertion failed: ${error}`);
+      }
+    }
+
+    // Return comprehensive results
+    const message = `Extracted data: ${results.sales_added} sales, ${results.rentals_added} rentals${results.errors.length > 0 ? ` (${results.errors.length} errors)` : ''}`;
+    
+    return json({ 
+      success: true, 
+      results,
+      extracted_fields: extracted,
+      message
+    });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     // Map common network/timeout/PDF errors to 400 to avoid noisy 500s
@@ -339,10 +368,27 @@ function extractPropertyData(html: string): ExtractedPropertyData {
   else if (text.includes("farm") || text.includes("agricultural")) out.property_type = "agricultural";
   else out.property_type = "mixed";
 
-  // Enhanced price extraction
+  // Enhanced price extraction - both sales and rental
   const priceRe = /\$[\d,]+(?:\.\d{2})?|price[:\s]*\$?([\d,]+)/i;
   const p = text.match(priceRe);
   if (p) { const num = (p[0] || p[1]).replace(/[^\d]/g, ""); const n = parseInt(num); if (n > 1000) out.price = n; }
+
+  // Rental income extraction (Net Income, Rental, etc.)
+  const rentalRe = /(?:net\s*income|rental\s*income|rent)[:\s]*\$?([\d,]+)(?:\s*pa|\s*per\s*annum|\s*annually|\s*pw|\s*per\s*week|\s*weekly)?/i;
+  const rental = text.match(rentalRe);
+  if (rental) {
+    const amount = parseInt(rental[1].replace(/[^\d]/g, ""));
+    if (amount > 100) {
+      out.rental_amount = amount;
+      // Determine if it's weekly or annual based on amount and context
+      const context = rental[0].toLowerCase();
+      if (context.includes("pa") || context.includes("annum") || context.includes("annual") || amount > 50000) {
+        out.rental_period = "annual";
+      } else {
+        out.rental_period = "weekly";
+      }
+    }
+  }
 
   // Basic property details
   const bed = text.match(/(\d+)\s*(?:bed|bedroom)s?/i); if (bed) out.bedrooms = parseInt(bed[1]);
@@ -381,6 +427,13 @@ function extractPropertyData(html: string): ExtractedPropertyData {
   out.heating = text.includes("heating") || text.includes("ducted heating") ? "yes" : undefined;
   out.solar_panels = text.includes("solar panel") || text.includes("solar power");
   out.pool = text.includes("pool") || text.includes("swimming pool");
+
+  // Lease term extraction
+  const leaseRe = /(\d+)\s*year\s*(?:lease|net\s*lease)/i;
+  const lease = text.match(leaseRe);
+  if (lease) {
+    out.lease_term_months = parseInt(lease[1]) * 12;
+  }
 
   // Energy rating
   const energyRe = /energy\s*rating[:\s]*(\d+(?:\.\d+)?)\s*star/i;
