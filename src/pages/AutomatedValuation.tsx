@@ -29,7 +29,6 @@ import { ScrapedDataViewer } from "@/components/ScrapedDataViewer";
 import ComprehensiveValuationGenerator from "@/components/ComprehensiveValuationGenerator";
 import { ValuationProvider } from "@/contexts/ValuationContext";
 import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider";
-
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
 import ThunderboltIcon from "@/components/ThunderboltIcon";
@@ -44,7 +43,6 @@ import Enhanced3DCard from "@/components/Enhanced3DCard";
 
 // Import professional images
 import automatedValuationPlatform from '@/assets/automated-valuation-platform.jpg';
-
 export default function AutomatedValuation() {
   const [currentStep, setCurrentStep] = useState("propertyType");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
@@ -59,12 +57,10 @@ export default function AutomatedValuation() {
 
     return () => clearInterval(interval);
   }, []);
-
   const handlePropertyTypeSelect = (type: string) => {
     setSelectedPropertyType(type);
     setCurrentStep("setupMethod");
   };
-
   const handleSetupMethodSelect = (method: "quick" | "advanced") => {
     setSetupMethod(method);
     if (method === "quick") {
@@ -73,7 +69,6 @@ export default function AutomatedValuation() {
       setCurrentStep("propertyDetails");
     }
   };
-
   const handleQuickSetupComplete = (data: any) => {
     // Store the setup data and proceed to streamlined assessment
     localStorage.setItem('quickSetupData', JSON.stringify(data));
@@ -83,17 +78,14 @@ export default function AutomatedValuation() {
       setCurrentStep("automatedReport");
     }
   };
-
   const handleStreamlinedComplete = (data: any) => {
     // Assessment complete, proceed to report
     localStorage.setItem('streamlinedAssessmentData', JSON.stringify(data));
     setCurrentStep("automatedReport");
   };
-
   const handlePropertyDetailsNext = () => {
     setCurrentStep("automatedReport");
   };
-
   const handleBack = () => {
     if (currentStep === "setupMethod") {
       setCurrentStep("propertyType");
@@ -112,19 +104,12 @@ export default function AutomatedValuation() {
 
   // Show property valuation as primary feature
   if (currentStep === "propertyType" || currentStep === "default") {
-    return (
-      <div className="min-h-screen" style={{
-        background: isGreenTheme 
-          ? 'linear-gradient(135deg, #059669 0%, #10b981 25%, #34d399 50%, #6ee7b7 75%, #a7f3d0 100%)'
-          : 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #60a5fa 75%, #93c5fd 100%)'
-      }}>
+    return <div className="min-h-screen" style={{
+      background: isGreenTheme ? 'linear-gradient(135deg, #059669 0%, #10b981 25%, #34d399 50%, #6ee7b7 75%, #a7f3d0 100%)' : 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #60a5fa 75%, #93c5fd 100%)'
+    }}>
         {/* Professional Platform Visual */}
         <div className="absolute inset-0 opacity-20">
-          <img 
-            src={automatedValuationPlatform} 
-            alt="Professional Automated Valuation Platform" 
-            className="w-full h-full object-cover"
-          />
+          <img src={automatedValuationPlatform} alt="Professional Automated Valuation Platform" className="w-full h-full object-cover" />
         </div>
         
         {/* Enhanced 3D Background Effect - Temporarily disabled to fix WebGL error */}
@@ -135,21 +120,13 @@ export default function AutomatedValuation() {
         <div className="absolute inset-0 backdrop-blur-sm" />
         
         {/* Floating orbs for extra ambiance with theme-based colors */}
-        <div className={`absolute top-20 left-10 w-32 h-32 rounded-full blur-xl animate-pulse ${
-          isGreenTheme 
-            ? 'bg-gradient-to-r from-emerald-400/30 to-green-400/30' 
-            : 'bg-gradient-to-r from-blue-400/30 to-cyan-400/30'
-        }`} />
-        <div className={`absolute bottom-20 right-10 w-48 h-48 rounded-full blur-2xl animate-pulse ${
-          isGreenTheme 
-            ? 'bg-gradient-to-r from-green-400/25 to-emerald-400/25' 
-            : 'bg-gradient-to-r from-cyan-400/25 to-blue-400/25'
-        }`} style={{ animationDelay: '2s' }} />
-        <div className={`absolute top-1/2 left-1/3 w-24 h-24 rounded-full blur-lg animate-float-3d ${
-          isGreenTheme 
-            ? 'bg-gradient-to-r from-emerald-300/35 to-green-300/35' 
-            : 'bg-gradient-to-r from-blue-300/35 to-cyan-300/35'
-        }`} style={{ animationDelay: '4s' }} />
+        <div className={`absolute top-20 left-10 w-32 h-32 rounded-full blur-xl animate-pulse ${isGreenTheme ? 'bg-gradient-to-r from-emerald-400/30 to-green-400/30' : 'bg-gradient-to-r from-blue-400/30 to-cyan-400/30'}`} />
+        <div className={`absolute bottom-20 right-10 w-48 h-48 rounded-full blur-2xl animate-pulse ${isGreenTheme ? 'bg-gradient-to-r from-green-400/25 to-emerald-400/25' : 'bg-gradient-to-r from-cyan-400/25 to-blue-400/25'}`} style={{
+        animationDelay: '2s'
+      }} />
+        <div className={`absolute top-1/2 left-1/3 w-24 h-24 rounded-full blur-lg animate-float-3d ${isGreenTheme ? 'bg-gradient-to-r from-emerald-300/35 to-green-300/35' : 'bg-gradient-to-r from-blue-300/35 to-cyan-300/35'}`} style={{
+        animationDelay: '4s'
+      }} />
         
         <div className="relative z-10">
           <div className="text-center py-8">
@@ -178,10 +155,7 @@ export default function AutomatedValuation() {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between mb-8 animate-fade-in">
               <div className="flex items-center gap-4">
-                <Link 
-                  to="/" 
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
+                <Link to="/" className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:scale-105 shadow-lg">
                   🏠 Back to Dashboard
                 </Link>
 
@@ -222,53 +196,23 @@ export default function AutomatedValuation() {
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         {/* Core Platforms with 3D effects */}
                         <Link to="/dashboard" className="block">
-                          <Enhanced3DCard
-                            title="Analytics Dashboard"
-                            description="Comprehensive analytics and reporting"
-                            icon={<span className="text-xl">📊</span>}
-                            primaryColor="blue"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="Analytics Dashboard" description="Comprehensive analytics and reporting" icon={<span className="text-xl">📊</span>} primaryColor="blue" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                         
                         <Link to="/index" className="block">
-                          <Enhanced3DCard
-                            title="ESG Platform"
-                            description="Environmental & sustainability analysis"
-                            icon={<span className="text-xl">🌱</span>}
-                            primaryColor="green"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="ESG Platform" description="Environmental & sustainability analysis" icon={<span className="text-xl">🌱</span>} primaryColor="green" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                         
                         <Link to="/sam-platform" className="block">
-                          <Enhanced3DCard
-                            title="SAM Platform"
-                            description="Strategic Asset Management"
-                            icon={<span className="text-xl">🎯</span>}
-                            primaryColor="purple"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="SAM Platform" description="Strategic Asset Management" icon={<span className="text-xl">🎯</span>} primaryColor="purple" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                         
                         <Link to="/crypto-trading" className="block">
-                          <Enhanced3DCard
-                            title="Blockchain Hub"
-                            description="Cryptocurrency & blockchain tools"
-                            icon={<span className="text-xl">⚡</span>}
-                            primaryColor="orange"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="Blockchain Hub" description="Cryptocurrency & blockchain tools" icon={<span className="text-xl">⚡</span>} primaryColor="orange" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                         
                         <Link to="/market-strategy" className="block">
-                          <Enhanced3DCard
-                            title="Sustano Sphere™"
-                            description="Revolutionary platform ecosystem"
-                            icon={<span className="text-xl">🌍</span>}
-                            primaryColor="green"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="Sustano Sphere™" description="Revolutionary platform ecosystem" icon={<span className="text-xl">🌍</span>} primaryColor="green" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                       </div>
                       
@@ -277,33 +221,15 @@ export default function AutomatedValuation() {
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {/* Professional Services with 3D effects */}
                         <Link to="/work-hub" className="block">
-                          <Enhanced3DCard
-                            title="Mortgage Broker"
-                            description="Mortgage and finance services"
-                            icon={<span className="text-xl">🏠</span>}
-                            primaryColor="teal"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="Mortgage Broker" description="Mortgage and finance services" icon={<span className="text-xl">🏠</span>} primaryColor="teal" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                         
                         <Link to="/reality-sales" className="block">
-                          <Enhanced3DCard
-                            title="Reality Sales"
-                            description="Real estate sales platform"
-                            icon={<span className="text-xl">🏢</span>}
-                            primaryColor="pink"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="Reality Sales" description="Real estate sales platform" icon={<span className="text-xl">🏢</span>} primaryColor="pink" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                         
                         <Link to="/work-hub" className="block">
-                          <Enhanced3DCard
-                            title="Property Management"
-                            description="Property management tools"
-                            icon={<span className="text-xl">🔧</span>}
-                            primaryColor="indigo"
-                            className="border-purple-700/50 bg-purple-800/40"
-                          />
+                          <Enhanced3DCard title="Property Management" description="Property management tools" icon={<span className="text-xl">🔧</span>} primaryColor="indigo" className="border-purple-700/50 bg-purple-800/40" />
                         </Link>
                       </div>
                     </TabsContent>
@@ -443,28 +369,13 @@ export default function AutomatedValuation() {
                           </CardHeader>
                           <CardContent>
                             <div className="space-y-2">
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200"
-                                onClick={() => window.open('/social-media-assets', '_blank')}
-                              >
+                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.open('/social-media-assets', '_blank')}>
                                 📱 Download Logos
                               </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200"
-                                onClick={() => window.open('/market-strategy', '_blank')}
-                              >
+                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.open('/market-strategy', '_blank')}>
                                 📊 Strategy PDF
                               </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200"
-                                onClick={() => window.open('/brochures', '_blank')}
-                              >
+                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.open('/brochures', '_blank')}>
                                 📋 All Materials
                               </Button>
                             </div>
@@ -572,44 +483,21 @@ export default function AutomatedValuation() {
                             <div className="space-y-2">
                               <div className="grid grid-cols-2 gap-2">
                                 <Link to="/market-strategy">
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm"
-                                    className="text-xs hover:bg-purple-700/30 text-purple-200 w-full"
-                                  >
+                                  <Button variant="ghost" size="sm" className="text-xs hover:bg-purple-700/30 text-purple-200 w-full">
                                     🌍 Sustano Sphere™
                                   </Button>
                                 </Link>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  onClick={() => window.open('/brochures', '_blank')}
-                                  className="text-xs hover:bg-purple-700/30 text-purple-200"
-                                >
+                                <Button variant="ghost" size="sm" onClick={() => window.open('/brochures', '_blank')} className="text-xs hover:bg-purple-700/30 text-purple-200">
                                   🏛️ Auction-Sphere™
                                 </Button>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  onClick={() => window.open('/brochures', '_blank')}
-                                  className="text-xs hover:bg-purple-700/30 text-purple-200"
-                                >
+                                <Button variant="ghost" size="sm" onClick={() => window.open('/brochures', '_blank')} className="text-xs hover:bg-purple-700/30 text-purple-200">
                                   🏠 Property Valuations
                                 </Button>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  onClick={() => window.open('/brochures', '_blank')}
-                                  className="text-xs hover:bg-purple-700/30 text-purple-200"
-                                >
+                                <Button variant="ghost" size="sm" onClick={() => window.open('/brochures', '_blank')} className="text-xs hover:bg-purple-700/30 text-purple-200">
                                   📊 ESG Assessments
                                 </Button>
                                 <Link to="/social-media-assets">
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm"
-                                    className="text-xs hover:bg-purple-700/30 text-purple-200 w-full"
-                                  >
+                                  <Button variant="ghost" size="sm" className="text-xs hover:bg-purple-700/30 text-purple-200 w-full">
                                     📱 Social Media Assets
                                   </Button>
                                 </Link>
@@ -648,25 +536,13 @@ export default function AutomatedValuation() {
                 <p className="text-purple-200">Select property type to begin ICV (Instant Comprehensive Valuation)™ process</p>
               </CardHeader>
               <CardContent>
-                <PropertyTypeSelector 
-                  onSelect={handlePropertyTypeSelect}
-                />
+                <PropertyTypeSelector onSelect={handlePropertyTypeSelect} />
               </CardContent>
             </Card>
             
             {/* AI Assistant & Professional Services with 3D effects */}
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-purple-300">🤖 AI Assistant</CardTitle>
-                  <CardDescription className="text-purple-200">
-                    Intelligent assistance for all valuation tasks
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <AIAssistantToggle />
-                </CardContent>
-              </Card>
+              
               
               <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
                 <CardHeader>
@@ -724,78 +600,54 @@ export default function AutomatedValuation() {
             </Card>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
 
   // Other workflow steps remain exactly the same
   if (currentStep === "setupMethod") {
-    return (
-      <div className="min-h-screen bg-background p-8">
+    return <div className="min-h-screen bg-background p-8">
         <div className="max-w-4xl mx-auto">
           <Button onClick={handleBack} variant="outline" className="mb-6">
             ← Back
           </Button>
-          <SetupFlowSelector 
-            onQuickSetup={() => handleSetupMethodSelect("quick")}
-            onAdvancedSetup={() => handleSetupMethodSelect("advanced")}
-          />
+          <SetupFlowSelector onQuickSetup={() => handleSetupMethodSelect("quick")} onAdvancedSetup={() => handleSetupMethodSelect("advanced")} />
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (currentStep === "quickSetup") {
-    return (
-      <div className="min-h-screen bg-background p-8">
+    return <div className="min-h-screen bg-background p-8">
         <div className="max-w-4xl mx-auto">
           <Button onClick={handleBack} variant="outline" className="mb-6">
             ← Back
           </Button>
-          <QuickSetupForm 
-            onComplete={handleQuickSetupComplete}
-            onAdvancedSetup={() => handleSetupMethodSelect("advanced")}
-          />
+          <QuickSetupForm onComplete={handleQuickSetupComplete} onAdvancedSetup={() => handleSetupMethodSelect("advanced")} />
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (currentStep === "streamlinedAssessment") {
-    return (
-      <div className="min-h-screen bg-background">
+    return <div className="min-h-screen bg-background">
         <div className="container mx-auto py-8">
           <Button onClick={handleBack} variant="outline" className="mb-6 ml-4">
             ← Back
           </Button>
           <StreamlinedPropertyAssessment onComplete={handleStreamlinedComplete} />
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (currentStep === "propertyDetails") {
-    return (
-      <PropertyTypeLockProvider>
+    return <PropertyTypeLockProvider>
         <div className="min-h-screen bg-background p-8">
           <div className="max-w-4xl mx-auto">
             <Button onClick={handleBack} variant="outline" className="mb-6">
               ← Back
             </Button>
-            <AutomatedPropertyDetails 
-              propertyType={selectedPropertyType}
-              onNext={handlePropertyDetailsNext}
-              onBack={handleBack}
-            />
+            <AutomatedPropertyDetails propertyType={selectedPropertyType} onNext={handlePropertyDetailsNext} onBack={handleBack} />
           </div>
         </div>
-      </PropertyTypeLockProvider>
-    );
+      </PropertyTypeLockProvider>;
   }
-
   if (currentStep === "automatedReport") {
-    return (
-      <PropertyTypeLockProvider>
+    return <PropertyTypeLockProvider>
         <ValuationProvider>
           <div className="min-h-screen bg-background">
             <div className="container mx-auto py-8">
@@ -806,17 +658,14 @@ export default function AutomatedValuation() {
             </div>
           </div>
         </ValuationProvider>
-      </PropertyTypeLockProvider>
-    );
+      </PropertyTypeLockProvider>;
   }
 
   // Default fallback
-  return (
-    <div className="min-h-screen bg-background p-8">
+  return <div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">ICV (Instant Comprehensive Valuation)™ Platform</h1>
         <p>Loading...</p>
       </div>
-    </div>
-  );
+    </div>;
 }
