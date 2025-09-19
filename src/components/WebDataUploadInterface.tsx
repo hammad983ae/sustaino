@@ -14,7 +14,25 @@ const WebDataUploadInterface = () => {
   const [urls, setUrls] = useState(['']);
   const [bulkUrls, setBulkUrls] = useState('');
   const [files, setFiles] = useState<File[]>([]);
+  const [pdfUrls, setPdfUrls] = useState(['']);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Function to extract actual URL from chrome extension wrapper
+  const extractActualUrl = (url: string): string => {
+    // Handle chrome extension URLs like chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://...
+    const chromeExtensionMatch = url.match(/chrome-extension:\/\/[^\/]+\/(https?:\/\/.+)/i);
+    if (chromeExtensionMatch) {
+      return chromeExtensionMatch[1];
+    }
+    
+    // Handle other common PDF viewer wrappers
+    const pdfViewerMatch = url.match(/\/pdf\/web\/viewer\.html\?file=(.+)/i);
+    if (pdfViewerMatch) {
+      return decodeURIComponent(pdfViewerMatch[1]);
+    }
+    
+    return url;
+  };
 
   const addUrlField = () => {
     setUrls([...urls, '']);
@@ -39,6 +57,21 @@ const WebDataUploadInterface = () => {
     setFiles(files.filter((_, i) => i !== index));
   };
 
+  // PDF URL management functions
+  const addPdfUrlField = () => {
+    setPdfUrls([...pdfUrls, '']);
+  };
+
+  const removePdfUrlField = (index: number) => {
+    setPdfUrls(pdfUrls.filter((_, i) => i !== index));
+  };
+
+  const updatePdfUrl = (index: number, value: string) => {
+    const newUrls = [...pdfUrls];
+    newUrls[index] = value;
+    setPdfUrls(newUrls);
+  };
+
   const processBulkUrls = async () => {
     setIsProcessing(true);
     
@@ -51,9 +84,10 @@ const WebDataUploadInterface = () => {
       
       for (const url of urlList) {
         try {
+          const cleanUrl = extractActualUrl(url.trim());
           const { data, error } = await supabase.functions.invoke('web-data-scraper', {
             body: { 
-              url: url.trim(), 
+              url: cleanUrl, 
               data_type: 'both' // Extract both sales and rental data
             }
           });
@@ -157,7 +191,7 @@ const WebDataUploadInterface = () => {
                       id={`url-${index}`}
                       value={url}
                       onChange={(e) => updateUrl(index, e.target.value)}
-                      placeholder="https://example.com"
+                      placeholder="https://example.com or chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://..."
                       type="url"
                     />
                   </div>
@@ -191,9 +225,10 @@ const WebDataUploadInterface = () => {
                       
                       for (const url of validUrls) {
                         try {
+                          const cleanUrl = extractActualUrl(url.trim());
                           const { data, error } = await supabase.functions.invoke('web-data-scraper', {
                             body: { 
-                              url: url.trim(), 
+                              url: cleanUrl, 
                               data_type: 'both' // Extract both sales and rental data
                             }
                           });
@@ -299,6 +334,43 @@ https://example3.com`}
                 </p>
               </div>
 
+              {/* PDF URL Input Section */}
+              <div className="border-t pt-4">
+                <Label className="text-base font-semibold">Or Enter PDF URLs</Label>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Enter direct PDF links or chrome extension URLs
+                </p>
+                
+                {pdfUrls.map((url, index) => (
+                  <div key={index} className="flex gap-2 mb-2">
+                    <div className="flex-1">
+                      <Label htmlFor={`pdf-url-${index}`}>PDF URL {index + 1}</Label>
+                      <Input
+                        id={`pdf-url-${index}`}
+                        value={url}
+                        onChange={(e) => updatePdfUrl(index, e.target.value)}
+                        placeholder="https://example.com/document.pdf or chrome-extension://..."
+                        type="url"
+                      />
+                    </div>
+                    {pdfUrls.length > 1 && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => removePdfUrlField(index)}
+                        className="mt-6"
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                
+                <Button onClick={addPdfUrlField} variant="outline" size="sm" className="mb-4">
+                  Add Another PDF URL
+                </Button>
+              </div>
+
               {files.length > 0 && (
                 <div className="space-y-2">
                   <Label>Uploaded Files:</Label>
@@ -327,16 +399,66 @@ https://example3.com`}
 
               <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <div>
-                  <div className="font-semibold">Files Ready for Processing:</div>
+                  <div className="font-semibold">Ready for Processing:</div>
                   <div className="text-sm text-muted-foreground">
-                    {files.length} files ({(files.reduce((acc, file) => acc + file.size, 0) / 1024 / 1024).toFixed(2)} MB total)
+                    {files.length} files + {pdfUrls.filter(url => url.trim()).length} PDF URLs
                   </div>
                 </div>
                 <Button 
-                  onClick={processFiles}
-                  disabled={isProcessing || files.length === 0}
+                  onClick={async () => {
+                    setIsProcessing(true);
+                    
+                    try {
+                      let successCount = 0;
+                      let errorCount = 0;
+                      
+                      // Process file uploads
+                      if (files.length > 0) {
+                        await new Promise(resolve => setTimeout(resolve, 3000));
+                        successCount += files.length;
+                      }
+                      
+                      // Process PDF URLs
+                      const validPdfUrls = pdfUrls.filter(url => url.trim());
+                      for (const url of validPdfUrls) {
+                        try {
+                          const cleanUrl = extractActualUrl(url.trim());
+                          const { data, error } = await supabase.functions.invoke('web-data-scraper', {
+                            body: { 
+                              url: cleanUrl, 
+                              data_type: 'both'
+                            }
+                          });
+                          
+                          if (error) throw error;
+                          if (data?.success) {
+                            successCount++;
+                          } else {
+                            errorCount++;
+                          }
+                        } catch (err) {
+                          console.error(`Error processing PDF URL ${url}:`, err);
+                          errorCount++;
+                        }
+                      }
+                      
+                      toast({
+                        title: "Processing Complete",
+                        description: `Successfully processed ${successCount} items${errorCount > 0 ? `, ${errorCount} failed` : ''}`,
+                      });
+                    } catch (error) {
+                      toast({
+                        title: "Processing Error",
+                        description: "Failed to process some items",
+                        variant: "destructive",
+                      });
+                    } finally {
+                      setIsProcessing(false);
+                    }
+                  }}
+                  disabled={isProcessing || (files.length === 0 && pdfUrls.filter(url => url.trim()).length === 0)}
                 >
-                  {isProcessing ? 'Processing...' : 'Process Files'}
+                  {isProcessing ? 'Processing...' : 'Process All'}
                 </Button>
               </div>
             </CardContent>

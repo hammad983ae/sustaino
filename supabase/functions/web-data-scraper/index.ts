@@ -22,7 +22,7 @@ function serverError(msg: string, details?: unknown) { return json({ success: fa
 
 interface WebScrapingRequest {
   url: string;
-  data_type: "sales" | "rental";
+  data_type: "sales" | "rental" | "both";
 }
 
 interface ExtractedPropertyData {
@@ -84,6 +84,28 @@ function getHostname(url: string): string {
   try { return new URL(url).hostname; } catch { return "unknown source"; }
 }
 
+// Function to extract actual URL from chrome extension wrapper
+function extractActualUrl(inputUrl: string): string {
+  // Handle chrome extension URLs like chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://...
+  const chromeExtensionMatch = inputUrl.match(/chrome-extension:\/\/[^\/]+\/(https?:\/\/.+)/i);
+  if (chromeExtensionMatch) {
+    return chromeExtensionMatch[1];
+  }
+  
+  // Handle other common PDF viewer wrappers
+  const pdfViewerMatch = inputUrl.match(/\/pdf\/web\/viewer\.html\?file=(.+)/i);
+  if (pdfViewerMatch) {
+    return decodeURIComponent(pdfViewerMatch[1]);
+  }
+  
+  return inputUrl;
+}
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return badRequest("Use POST with JSON body { url, data_type }.");
@@ -91,9 +113,16 @@ Deno.serve(async (req) => {
   let payload: WebScrapingRequest;
   try { payload = await req.json(); } catch { return badRequest("Invalid JSON body"); }
 
-  const { url, data_type } = payload || {} as WebScrapingRequest;
+  let { url, data_type } = payload || {} as WebScrapingRequest;
+  
   if (!url || !data_type) return badRequest("'url' and 'data_type' are required.");
-  if (data_type !== "sales" && data_type !== "rental") return badRequest("data_type must be 'sales' or 'rental'");
+  if (data_type !== "sales" && data_type !== "rental" && data_type !== "both") return badRequest("data_type must be 'sales', 'rental', or 'both'");
+
+  // Extract actual URL from chrome extension wrapper
+  const originalUrl = url;
+  url = extractActualUrl(url);
+  
+  console.log(`Processing URL: ${url} (original: ${originalUrl})`);
 
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
   const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
