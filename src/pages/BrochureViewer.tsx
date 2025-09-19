@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Building, Leaf, BarChart, Wrench, TrendingUp, Coins, BookOpen, Calculator, Zap, Shield, Globe } from 'lucide-react';
+import { FileText, Building, Leaf, BarChart, Wrench, TrendingUp, Coins, BookOpen, Calculator, Zap, Shield, Globe, Crown, Briefcase } from 'lucide-react';
 import BrochureStyleLayout from '@/components/BrochureStyleLayout';
 
 // Import all brochure components
@@ -21,6 +21,7 @@ import SustanoCoinBrochure from '@/components/brochures/SustanoCoinBrochure';
 import GreeniumBrochure from '@/components/brochures/GreeniumBrochure';
 import BlockchainBrochure from '@/components/brochures/BlockchainBrochure';
 import SAMPlatformBrochure from '@/components/brochures/SAMPlatformBrochure';
+import ComprehensiveInvestorAnalysis from '@/components/brochures/ComprehensiveInvestorAnalysis';
 
 const brochures = [
   // Core Services
@@ -173,6 +174,16 @@ const BrochureViewer = () => {
     }
   ];
 
+  const professionalAnalysis = [
+    {
+      title: 'Comprehensive Investor Analysis',
+      description: 'Complete investment opportunity analysis including SWOT, PESTEL, VIRO, competitor analysis, ROI projections, and digital asset valuation for the entire ecosystem',
+      icon: <Crown className="w-6 h-6 text-white" />,
+      onView: () => console.log('Viewing Comprehensive Investor Analysis'),
+      onPrint: () => console.log('Printing Comprehensive Investor Analysis')
+    }
+  ];
+
   const revolutionaryPlatforms = [
     {
       title: 'SAM Platform',
@@ -220,6 +231,10 @@ const BrochureViewer = () => {
 
   const sections = [
     {
+      title: 'Professional Investment Analysis',
+      cards: professionalAnalysis
+    },
+    {
       title: 'Core Services',
       cards: coreServices
     },
@@ -230,11 +245,19 @@ const BrochureViewer = () => {
   ];
 
   return (
-    <BrochureStyleLayout
-      title="Professional Brochures"
-      subtitle="Comprehensive collection of our revolutionary platforms and services"
-      sections={sections}
-    />
+    <div>
+      {/* Professional Investment Analysis */}
+      <div className="mb-8">
+        <ComprehensiveInvestorAnalysis />
+      </div>
+      
+      {/* Traditional Brochure Layout */}
+      <BrochureStyleLayout
+        title="Professional Brochures"
+        subtitle="Comprehensive collection of our revolutionary platforms and services"
+        sections={sections}
+      />
+    </div>
   );
 };
 
