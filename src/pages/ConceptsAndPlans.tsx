@@ -1,14 +1,30 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Building, Smartphone, Lightbulb, FileText } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Building, Smartphone, Lightbulb, FileText, ArrowLeft, Home } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import ArchitecturalPlanningDesign from '@/components/ArchitecturalPlanningDesign';
 import SustanoProDeviceConcepts from '@/components/SustanoProDeviceConcepts';
 
 const ConceptsAndPlans = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900">
       <div className="container mx-auto px-4 py-8">
+        {/* Back to Dashboard Button */}
+        <div className="mb-6">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 hover:bg-primary hover:text-primary-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <Home className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
         {/* Hero Section */}
         <Card className="mb-8 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 text-white">
           <CardHeader className="text-center py-12">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,8 +7,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, AlertTriangle, Calculator, FileText, Building, Zap } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Calculator, FileText, Building, Zap, Search, MapPin } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ArchitecturalData {
   siteAddress: string;
@@ -16,6 +17,11 @@ interface ArchitecturalData {
   proposedDwellings: number;
   buildingType: string;
   estimatedCost: number;
+  zoning: string;
+  existingInfrastructure: string[];
+  developmentApproval: string;
+  councilArea: string;
+  planningScheme: string;
   complianceChecks: {
     zoning: boolean;
     setbacks: boolean;
@@ -24,15 +30,33 @@ interface ArchitecturalData {
   };
 }
 
+interface PropertySearchResult {
+  id: string;
+  address: string;
+  land_area: number;
+  zoning: string;
+  council: string;
+  state: string;
+  postcode: string;
+}
+
 const ArchitecturalPlanningDesign = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("design");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<PropertySearchResult[]>([]);
+  const [showResults, setShowResults] = useState(false);
   const [data, setData] = useState<ArchitecturalData>({
     siteAddress: '',
     lotSize: 0,
     proposedDwellings: 1,
     buildingType: 'residential',
     estimatedCost: 0,
+    zoning: '',
+    existingInfrastructure: [],
+    developmentApproval: 'required',
+    councilArea: '',
+    planningScheme: '',
     complianceChecks: {
       zoning: false,
       setbacks: false,
@@ -47,6 +71,81 @@ const ArchitecturalPlanningDesign = () => {
     utilities: [],
     developmentStage: 'concept'
   });
+
+  // Search for existing properties
+  const searchProperties = async (query: string) => {
+    if (!query || query.length < 3) {
+      setSearchResults([]);
+      setShowResults(false);
+      return;
+    }
+
+    try {
+      const { data: properties, error } = await supabase
+        .from('properties')
+        .select('id, address, land_area, zoning, council, state, postcode')
+        .or(`address.ilike.%${query}%, suburb.ilike.%${query}%`)
+        .limit(5);
+
+      if (error) throw error;
+
+      setSearchResults(properties || []);
+      setShowResults(true);
+    } catch (error) {
+      console.error('Error searching properties:', error);
+      toast({
+        title: "Search Error",
+        description: "Failed to search properties",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Auto-populate form when property is selected
+  const selectProperty = (property: PropertySearchResult) => {
+    setData(prev => ({
+      ...prev,
+      siteAddress: property.address,
+      lotSize: property.land_area || 0,
+      zoning: property.zoning || '',
+      councilArea: property.council || '',
+      // Auto-populate infrastructure based on location
+      existingInfrastructure: determineInfrastructure(property),
+    }));
+    
+    setSearchQuery(property.address);
+    setShowResults(false);
+    
+    toast({
+      title: "Property Selected",
+      description: "Form auto-populated with property details",
+    });
+  };
+
+  // Determine likely infrastructure based on property location
+  const determineInfrastructure = (property: PropertySearchResult): string[] => {
+    const infrastructure = ['Water', 'Electricity'];
+    
+    // Add likely infrastructure based on state/location
+    if (property.state && ['NSW', 'VIC', 'QLD'].includes(property.state)) {
+      infrastructure.push('Sewer', 'Gas', 'Telecommunications');
+    }
+    
+    // Urban areas likely have more infrastructure
+    if (property.postcode && parseInt(property.postcode) < 4000) {
+      infrastructure.push('Street Lighting', 'Footpaths');
+    }
+    
+    return infrastructure;
+  };
+
+  useEffect(() => {
+    const delayedSearch = setTimeout(() => {
+      searchProperties(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(delayedSearch);
+  }, [searchQuery]);
 
   const calculateEstimatedCost = () => {
     const baseCostPerDwelling = 350000;
@@ -127,14 +226,49 @@ const ArchitecturalPlanningDesign = () => {
                 <CardTitle>Site Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
+                <div className="relative">
                   <Label htmlFor="address">Site Address</Label>
-                  <Input
-                    id="address"
-                    value={data.siteAddress}
-                    onChange={(e) => setData(prev => ({ ...prev, siteAddress: e.target.value }))}
-                    placeholder="Enter development site address"
-                  />
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="address"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search for existing property address..."
+                      className="pl-10"
+                    />
+                  </div>
+                  
+                  {showResults && searchResults.length > 0 && (
+                    <div className="absolute z-10 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                      {searchResults.map((property) => (
+                        <div
+                          key={property.id}
+                          onClick={() => selectProperty(property)}
+                          className="p-3 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer border-b border-slate-100 dark:border-slate-600 last:border-b-0"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <div className="font-medium">{property.address}</div>
+                              <div className="text-sm text-muted-foreground">
+                                {property.land_area ? `${property.land_area}sqm` : ''} 
+                                {property.zoning ? ` • ${property.zoning}` : ''}
+                                {property.council ? ` • ${property.council}` : ''}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {data.siteAddress && data.siteAddress !== searchQuery && (
+                    <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded border">
+                      <div className="text-sm font-medium text-blue-800 dark:text-blue-200">Selected Property:</div>
+                      <div className="text-sm text-blue-700 dark:text-blue-300">{data.siteAddress}</div>
+                    </div>
+                  )}
                 </div>
                 
                 <div>
@@ -173,14 +307,74 @@ const ArchitecturalPlanningDesign = () => {
                     </SelectContent>
                   </Select>
                 </div>
+
+                {/* Additional auto-populated fields */}
+                <div>
+                  <Label htmlFor="zoning">Zoning</Label>
+                  <Input
+                    id="zoning"
+                    value={data.zoning}
+                    onChange={(e) => setData(prev => ({ ...prev, zoning: e.target.value }))}
+                    placeholder="Property zoning classification"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="council">Council Area</Label>
+                  <Input
+                    id="council"
+                    value={data.councilArea}
+                    onChange={(e) => setData(prev => ({ ...prev, councilArea: e.target.value }))}
+                    placeholder="Local government area"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="approval">Development Approval Status</Label>
+                  <Select value={data.developmentApproval} onValueChange={(value) => setData(prev => ({ ...prev, developmentApproval: value }))}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="required">Approval Required</SelectItem>
+                      <SelectItem value="lodged">Application Lodged</SelectItem>
+                      <SelectItem value="approved">Approved</SelectItem>
+                      <SelectItem value="exempt">Exempt Development</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Design Parameters</CardTitle>
+                <CardTitle>Design Parameters & Infrastructure</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div>
+                  <Label>Existing Infrastructure</Label>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+                    {['Water', 'Sewer', 'Electricity', 'Gas', 'Telecommunications', 'Stormwater', 'Street Lighting', 'Footpaths'].map((utility) => (
+                      <div key={utility} className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id={`existing-${utility}`}
+                          checked={data.existingInfrastructure.includes(utility)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setData(prev => ({ ...prev, existingInfrastructure: [...prev.existingInfrastructure, utility] }));
+                            } else {
+                              setData(prev => ({ ...prev, existingInfrastructure: prev.existingInfrastructure.filter(u => u !== utility) }));
+                            }
+                          }}
+                          className="rounded border-gray-300"
+                        />
+                        <label htmlFor={`existing-${utility}`} className="text-sm">{utility}</label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Design Principles</h4>
                   <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
