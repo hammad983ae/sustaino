@@ -27,7 +27,8 @@ function useWebGLSupport() {
       ];
       
       extensions.forEach(ext => {
-        if (!gl.getExtension(ext)) {
+        const webglContext = gl as WebGLRenderingContext;
+        if (!webglContext.getExtension(ext)) {
           console.warn(`WebGL extension ${ext} not available`);
         }
       });

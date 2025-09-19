@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   console.log('Property AI Assistant function called');
   
   if (req.method === 'OPTIONS') {
@@ -19,7 +19,12 @@ serve(async (req) => {
     const body = await req.json();
     console.log('Request body:', body);
     
-    const { message, context } = body;
+    const { message, context, model = 'gpt-4o-mini' } = body;
+    
+    if (!message || typeof message !== 'string') {
+      throw new Error('Message is required and must be a string');
+    }
+    
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
     console.log('OpenAI API Key available:', !!openAIApiKey);
@@ -60,6 +65,9 @@ Context about the user's current activity: ${context || 'General property consul
     console.log('System prompt created, making OpenAI API call...');
     console.log('Message:', message);
     
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -67,7 +75,7 @@ Context about the user's current activity: ${context || 'General property consul
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: model,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
@@ -75,7 +83,10 @@ Context about the user's current activity: ${context || 'General property consul
         max_tokens: 1000,
         temperature: 0.7,
       }),
+      signal: controller.signal,
     });
+    
+    clearTimeout(timeoutId);
 
     console.log('OpenAI response status:', response.status);
     
@@ -90,7 +101,11 @@ Context about the user's current activity: ${context || 'General property consul
     const aiResponse = data.choices[0].message.content;
     
     console.log('AI response received successfully');
-    return new Response(JSON.stringify({ response: aiResponse }), {
+    return new Response(JSON.stringify({ 
+      success: true, 
+      response: aiResponse,
+      model: model 
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
@@ -98,11 +113,16 @@ Context about the user's current activity: ${context || 'General property consul
     console.error('Error message:', error.message);
     console.error('Error stack:', error.stack);
     
+    const errorCode = error.name === 'AbortError' ? 'TIMEOUT' : 'INTERNAL_ERROR';
+    const status = error.message.includes('API key') ? 401 : 500;
+    
     return new Response(JSON.stringify({ 
+      success: false,
       error: error.message,
+      code: errorCode,
       details: 'Check function logs for more information'
     }), {
-      status: 500,
+      status: status,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
