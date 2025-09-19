@@ -71,7 +71,7 @@ interface Job {
   created_at: string;
 }
 
-export default function WorkHub() {
+const WorkHub: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [valuations, setValuations] = useState<Valuation[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
@@ -781,4 +781,6 @@ export default function WorkHub() {
       </Dialog>
     </div>
   );
-}
+};
+
+export default WorkHub;
