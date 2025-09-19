@@ -315,7 +315,7 @@ const SustanoProInvestorBrochure = () => {
     pdf.setFontSize(10);
     pdf.setTextColor(100, 100, 100);
     pdf.text('Ready for immediate investment discussions', pageWidth / 2, pageHeight - 20, { align: 'center' });
-    pdf.text('Contact: info@sustanopro.com', pageWidth / 2, pageHeight - 10, { align: 'center' });
+    pdf.text('Contact: john@delorenzopropertygroup.com', pageWidth / 2, pageHeight - 10, { align: 'center' });
     
     // Save the PDF
     pdf.save('SustanoPro-Investor-Analysis.pdf');
@@ -461,9 +461,9 @@ const SustanoProInvestorBrochure = () => {
         </div>
 
         {/* Contact */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
+          <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
           <h3 className="text-xl font-semibold mb-2">Ready for Investment Discussions</h3>
-          <p className="text-muted-foreground">Contact us immediately to secure your position in this revolutionary PropTech platform.</p>
+          <p className="text-muted-foreground">Contact: john@delorenzopropertygroup.com</p>
         </div>
       </CardContent>
     </Card>
