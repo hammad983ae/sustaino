@@ -13,6 +13,7 @@ import AddressVerificationService from "./AddressVerificationService";
 import DataSourcesConfig from "./DataSourcesConfig";
 import AutoPopulationService from "./AutoPopulationService";
 import DocumentUploadAnalyzer from "./DocumentUploadAnalyzer";
+import DevelopmentProposalGenerator from "./DevelopmentProposalGenerator";
 
 interface SiteData {
   address: string;
@@ -189,6 +190,17 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     }
     
     updatedData.autoPopulated = true;
+    setSiteData(updatedData);
+    onSiteDataChange(updatedData);
+  };
+
+  const handleProposalGenerated = (proposal: any) => {
+    // Optional: Handle the generated proposal data
+    console.log('Development proposal generated:', proposal);
+  };
+
+  const handleFieldsUpdated = (updates: Partial<SiteData>) => {
+    const updatedData = { ...siteData, ...updates };
     setSiteData(updatedData);
     onSiteDataChange(updatedData);
   };
@@ -459,6 +471,13 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Development Proposal Generator */}
+          <DevelopmentProposalGenerator
+            siteData={siteData}
+            onProposalGenerated={handleProposalGenerated}
+            onFieldsUpdated={handleFieldsUpdated}
+          />
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="proposedZoning">Proposed Zoning</Label>
