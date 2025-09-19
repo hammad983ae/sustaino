@@ -106,37 +106,35 @@ const Index = () => {
                 </div>
                 
                 {/* Sustaino Pro Branding */}
-                <div className="flex items-center justify-center gap-4">
-                  <div className="text-center">
-                    <div className="flex items-center justify-center gap-4 mb-2">
-                      <h1 className="text-6xl font-bold text-gray-900">
-                        Sustaino Pro
-                      </h1>
-                      <div className="w-16 h-16 flex items-center justify-center">
-                        <svg 
-                          viewBox="0 0 100 100" 
-                          className="w-full h-full"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <defs>
-                            <mask id="crescentMask">
-                              <rect width="100%" height="100%" fill="white"/>
-                              <circle cx="75" cy="25" r="35" fill="black"/>
-                            </mask>
-                          </defs>
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="40"
-                            fill="#000000"
-                            mask="url(#crescentMask)"
-                          />
-                        </svg>
-                      </div>
+                <div className="flex items-center justify-center">
+                  <div className="w-80 h-80 bg-emerald-500 rounded-lg flex flex-col items-center justify-center gap-4 shadow-xl">
+                    <h1 className="text-4xl font-bold text-white tracking-wide">
+                      Sustano Pro
+                    </h1>
+                    <div className="w-16 h-16 flex items-center justify-center">
+                      <svg 
+                        viewBox="0 0 100 100" 
+                        className="w-full h-full"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        {/* Large circle outline */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="35"
+                          fill="none"
+                          stroke="white"
+                          strokeWidth="6"
+                        />
+                        {/* Smaller filled circle in lower-right area */}
+                        <circle
+                          cx="65"
+                          cy="65"
+                          r="8"
+                          fill="white"
+                        />
+                      </svg>
                     </div>
-                    <p className="text-xl text-gray-600 font-medium">
-                      Property Valuation Platform
-                    </p>
                   </div>
                 </div>
                 
