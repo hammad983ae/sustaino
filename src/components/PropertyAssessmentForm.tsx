@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -76,15 +76,14 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     };
   }, [currentStep]);
 
-  // Define all possible steps
-  const allSteps = [
+  // Define all possible steps with memoized validation
+  const allSteps = useMemo(() => [
     {
       title: "Property Address",
       subtitle: "Find and configure address to begin your valuation report",
       component: <PropertyAddressForm />,
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Property Address validation:', { hasAddress, addressData });
         return hasAddress;
       }
     },
@@ -98,7 +97,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       ),
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Planning Search validation:', { hasAddress, addressData });
         return hasAddress;
       }
     },
@@ -108,7 +106,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       component: <PropertySearchAnalysis />,
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Search & Analysis validation:', { hasAddress, addressData });
         return hasAddress; // Require address to proceed with analysis
       }
     },
@@ -243,7 +240,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       ),
       validation: () => true
     }
-  ];
+  ], [addressData, getFormattedAddress, includeDetailedRentalConfig, onComplete, onNavigateToReport]);
 
   // Filter steps based on configuration
   const steps = allSteps.filter((step, index) => {
@@ -547,18 +544,20 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         </div>
       </div>
 
-      {/* Form content */}
-      <div className="p-4 pb-24">
+      {/* Form content with stable height */}
+      <div className="p-4 pb-24 min-h-[calc(100vh-200px)]">
         <div className="max-w-4xl mx-auto">
-          <Card>
-            <CardHeader>
+          <Card className="min-h-[600px]">
+            <CardHeader className="pb-4">
               <CardTitle>{steps[currentStep].title}</CardTitle>
               <p className="text-sm text-muted-foreground">
                 {steps[currentStep].subtitle}
               </p>
             </CardHeader>
-            <CardContent>
-              {steps[currentStep].component}
+            <CardContent className="min-h-[500px] flex flex-col">
+              <div className="flex-1">
+                {steps[currentStep].component}
+              </div>
             </CardContent>
           </Card>
         </div>
