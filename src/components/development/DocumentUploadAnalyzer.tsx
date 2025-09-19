@@ -193,16 +193,30 @@ const DocumentUploadAnalyzer: React.FC<DocumentUploadAnalyzerProps> = ({
       const imageUrl = URL.createObjectURL(file);
       setUploadedFiles(prev => [...prev, { url: imageUrl, name: file.name, type: file.type }]);
 
+      console.log('Starting OCR processing for:', file.name);
+      
+      // Initialize Tesseract with proper configuration
       const { data } = await Tesseract.recognize(file, 'eng', {
         logger: (m: any) => {
+          console.log('OCR Progress:', m);
           if (m.status === 'recognizing text') {
             setProgress(Math.round(m.progress * 100));
           }
+        },
+        errorHandler: (err: any) => {
+          console.error('Tesseract Error:', err);
         }
       });
 
+      console.log('OCR completed. Text length:', data.text.length);
+      console.log('OCR confidence:', data.confidence);
+
       const text = data.text.trim();
       const confidence = data.confidence;
+
+      if (!text || text.length < 10) {
+        throw new Error('No readable text found in the document. Please ensure the image is clear and contains text.');
+      }
 
       const propertyDetails = extractPropertyData(text);
       const financialData = extractFinancialData(text);
@@ -216,12 +230,13 @@ const DocumentUploadAnalyzer: React.FC<DocumentUploadAnalyzerProps> = ({
         complianceData
       };
 
+      console.log('Extracted property data:', extractedPropertyData);
       setExtractedData(extractedPropertyData);
       onDataExtracted(extractedPropertyData);
       
-    } catch (err) {
+    } catch (err: any) {
       console.error('OCR Error:', err);
-      setError('Failed to process document. Please try again or check file quality.');
+      setError(err.message || 'Failed to process document. Please try again or check file quality.');
     } finally {
       setIsProcessing(false);
       setProgress(0);
