@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   FileText, 
   Search, 
@@ -17,7 +18,19 @@ import {
   Archive,
   Filter,
   ArrowLeft,
-  Home
+  Home,
+  Bot,
+  Upload,
+  FileSignature,
+  Zap,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  Cog,
+  Play,
+  Database,
+  Shield,
+  Globe
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
@@ -77,6 +90,13 @@ export default function WorkHub() {
   const [costaAnalyses, setCostaAnalyses] = useState<CostaPortfolioAnalysis[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("ai-dashboard");
+  const [aiProcessingStatus, setAiProcessingStatus] = useState({
+    dataExtraction: 75,
+    evidenceClassification: 60,
+    contractGeneration: 45,
+    blockchainVerification: 30
+  });
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -271,6 +291,76 @@ export default function WorkHub() {
     (item.property_address || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const aiWorkflowCards = [
+    {
+      title: "Document Upload & AI Extraction",
+      description: "Upload PDFs, URLs, and documents for automatic data extraction",
+      icon: Upload,
+      status: "active",
+      progress: aiProcessingStatus.dataExtraction,
+      action: () => navigate('/web-data-upload'),
+      color: "text-blue-600"
+    },
+    {
+      title: "Evidence Classification & Tagging",
+      description: "AI-powered classification of sales, leases, and ESG data",
+      icon: Database,
+      status: "processing",
+      progress: aiProcessingStatus.evidenceClassification,
+      action: () => navigate('/evidence-manager'),
+      color: "text-green-600"
+    },
+    {
+      title: "Contract Generation & Signing",
+      description: "Automated contract creation with SignNow integration",
+      icon: FileSignature,
+      status: "pending",
+      progress: aiProcessingStatus.contractGeneration,
+      action: () => navigate('/digital-contracts'),
+      color: "text-purple-600"
+    },
+    {
+      title: "Blockchain Verification",
+      description: "Secure evidence verification and document integrity",
+      icon: Shield,
+      status: "pending",
+      progress: aiProcessingStatus.blockchainVerification,
+      action: () => navigate('/security-dashboard'),
+      color: "text-orange-600"
+    }
+  ];
+
+  const platformAccessCards = [
+    {
+      title: "SustanoSphere™ Digital Assets",
+      description: "AI-powered digital asset valuation and auction platform",
+      icon: Globe,
+      action: () => navigate('/sustano-sphere-digital-assets'),
+      badge: "AI Platform"
+    },
+    {
+      title: "Property Valuations",
+      description: "Comprehensive property valuation and analysis",
+      icon: Building,
+      action: () => navigate('/comprehensive-valuation'),
+      badge: "Core Service"
+    },
+    {
+      title: "Financial Reporting",
+      description: "Advanced financial analytics and reporting",
+      icon: TrendingUp,
+      action: () => navigate('/financial-reporting'),
+      badge: "Analytics"
+    },
+    {
+      title: "ESG Assessment",
+      description: "Environmental, Social & Governance analysis",
+      icon: CheckCircle,
+      action: () => navigate('/esg-climate-assessment'),
+      badge: "Sustainability"
+    }
+  ];
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
@@ -297,8 +387,11 @@ export default function WorkHub() {
             Back to Dashboard
           </Button>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Work Hub</h1>
-            <p className="text-muted-foreground">Manage all your completed valuations, reports, and analyses</p>
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
+              <Bot className="h-8 w-8 text-primary" />
+              AI-Driven Work Hub
+            </h1>
+            <p className="text-muted-foreground">Centralized automation and workflow management for rapid deployment</p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -381,156 +474,403 @@ export default function WorkHub() {
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="valuations" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="valuations">Property Valuations ({valuations.length})</TabsTrigger>
-          <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
-          <TabsTrigger value="jobs">Jobs ({jobs.length})</TabsTrigger>
-          <TabsTrigger value="costa">Costa's Operations ({costaAnalyses.length})</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="ai-dashboard">
+            <Bot className="h-4 w-4 mr-2" />
+            AI Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="workflow-automation">
+            <Zap className="h-4 w-4 mr-2" />
+            Automation
+          </TabsTrigger>
+          <TabsTrigger value="platform-access">
+            <Globe className="h-4 w-4 mr-2" />
+            Platforms
+          </TabsTrigger>
+          <TabsTrigger value="completed-work">
+            <Archive className="h-4 w-4 mr-2" />
+            Completed Work
+          </TabsTrigger>
+          <TabsTrigger value="jobs">
+            <Clock className="h-4 w-4 mr-2" />
+            Active Jobs
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="valuations" className="mt-6">
-          <div className="space-y-4">
-            {filteredValuations.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-12">
-                  <Building className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-medium mb-2">No valuations found</h3>
-                  <p className="text-muted-foreground">Start by creating your first property valuation</p>
+        <TabsContent value="ai-dashboard" className="mt-6">
+          <div className="space-y-6">
+            {/* AI Status Overview */}
+            <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Bot className="h-5 w-5" />
+                  AI Consolidation Progress (Week 1)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Data Extraction</span>
+                      <span>{aiProcessingStatus.dataExtraction}%</span>
+                    </div>
+                    <Progress value={aiProcessingStatus.dataExtraction} className="h-2" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Evidence Classification</span>
+                      <span>{aiProcessingStatus.evidenceClassification}%</span>
+                    </div>
+                    <Progress value={aiProcessingStatus.evidenceClassification} className="h-2" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Contract Generation</span>
+                      <span>{aiProcessingStatus.contractGeneration}%</span>
+                    </div>
+                    <Progress value={aiProcessingStatus.contractGeneration} className="h-2" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Blockchain Verification</span>
+                      <span>{aiProcessingStatus.blockchainVerification}%</span>
+                    </div>
+                    <Progress value={aiProcessingStatus.blockchainVerification} className="h-2" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate('/job-management')}>
+                <CardContent className="p-6 text-center">
+                  <Play className="h-8 w-8 mx-auto mb-2 text-green-600" />
+                  <h3 className="font-semibold mb-1">Create New Job</h3>
+                  <p className="text-sm text-muted-foreground">Start a new valuation workflow</p>
                 </CardContent>
               </Card>
-            ) : (
-              <div className="grid gap-4">
-                {filteredValuations.map((valuation) => (
-                  <Card key={valuation.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <MapPin className="h-4 w-4 text-muted-foreground" />
-                            <h3 className="font-semibold">{valuation.property_address}</h3>
-                            <Badge className={getStatusColor(valuation.status)}>
-                              {valuation.status}
-                            </Badge>
-                          </div>
-                          
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                            <div>
-                              <p className="text-muted-foreground">Estimated Value</p>
-                              <p className="font-medium">{formatCurrency(valuation.estimated_value)}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Type</p>
-                              <p className="font-medium">{valuation.valuation_type}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Confidence</p>
-                              <p className="font-medium">{valuation.confidence_score}%</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Date</p>
-                              <p className="font-medium">{formatDate(valuation.valuation_date)}</p>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEmailAction(valuation, 'view', 'valuation')}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEmailAction(valuation, 'export', 'valuation')}
-                          >
-                            <Download className="h-4 w-4 mr-2" />
-                            Export
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
+              
+              <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate('/web-data-upload')}>
+                <CardContent className="p-6 text-center">
+                  <Upload className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                  <h3 className="font-semibold mb-1">Upload Documents</h3>
+                  <p className="text-sm text-muted-foreground">AI-powered document processing</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate('/ai-assistant')}>
+                <CardContent className="p-6 text-center">
+                  <Bot className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+                  <h3 className="font-semibold mb-1">AI Assistant</h3>
+                  <p className="text-sm text-muted-foreground">Get AI-powered insights</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate('/sustano-sphere-digital-assets')}>
+                <CardContent className="p-6 text-center">
+                  <Globe className="h-8 w-8 mx-auto mb-2 text-orange-600" />
+                  <h3 className="font-semibold mb-1">SustanoSphere™</h3>
+                  <p className="text-sm text-muted-foreground">Digital asset platform</p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </TabsContent>
 
-        <TabsContent value="reports" className="mt-6">
-          <div className="space-y-4">
-            {filteredReports.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-12">
-                  <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-medium mb-2">No reports found</h3>
-                  <p className="text-muted-foreground">Generate your first property report</p>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-4">
-                {filteredReports.map((report) => (
-                  <Card key={report.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <FileText className="h-4 w-4 text-muted-foreground" />
-                            <h3 className="font-semibold">{report.title}</h3>
-                            <Badge className={getStatusColor(report.status)}>
-                              {report.status}
-                            </Badge>
-                          </div>
-                          
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                            <div>
-                              <p className="text-muted-foreground">Property</p>
-                              <p className="font-medium">{report.property_address}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Type</p>
-                              <p className="font-medium">{report.report_type}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Sustainability Score</p>
-                              <p className="font-medium">{report.sustainability_score || 'N/A'}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Generated</p>
-                              <p className="font-medium">{formatDate(report.generated_date)}</p>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEmailAction(report, 'view', 'report')}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEmailAction(report, 'export', 'report')}
-                          >
-                            <Download className="h-4 w-4 mr-2" />
-                            Download
-                          </Button>
+        <TabsContent value="workflow-automation" className="mt-6">
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2">AI Workflow Automation</h2>
+              <p className="text-muted-foreground">Streamlined processes for rapid deployment</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {aiWorkflowCards.map((card, index) => (
+                <Card key={index} className="hover:shadow-lg transition-all cursor-pointer" onClick={card.action}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <card.icon className={`h-6 w-6 ${card.color}`} />
+                        <div>
+                          <h3 className="font-semibold">{card.title}</h3>
+                          <p className="text-sm text-muted-foreground">{card.description}</p>
                         </div>
                       </div>
+                      <Badge variant={
+                        card.status === 'active' ? 'default' : 
+                        card.status === 'processing' ? 'secondary' : 'outline'
+                      }>
+                        {card.status}
+                      </Badge>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>Progress</span>
+                        <span>{card.progress}%</span>
+                      </div>
+                      <Progress value={card.progress} className="h-2" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="platform-access" className="mt-6">
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2">Platform Access</h2>
+              <p className="text-muted-foreground">Access all your integrated platforms and services</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {platformAccessCards.map((card, index) => (
+                <Card key={index} className="hover:shadow-lg transition-all cursor-pointer" onClick={card.action}>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <card.icon className="h-6 w-6 text-primary" />
+                        <div>
+                          <h3 className="font-semibold">{card.title}</h3>
+                          <p className="text-sm text-muted-foreground">{card.description}</p>
+                        </div>
+                      </div>
+                      <Badge variant="secondary">{card.badge}</Badge>
+                    </div>
+                    <Button variant="outline" size="sm" className="w-full">
+                      Access Platform
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="completed-work" className="mt-6">
+          <Tabs defaultValue="valuations" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="valuations">Valuations ({valuations.length})</TabsTrigger>
+              <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
+              <TabsTrigger value="costa">Costa Analyses ({costaAnalyses.length})</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="valuations" className="mt-6">
+              <div className="space-y-4">
+                {filteredValuations.length === 0 ? (
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <Building className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-lg font-medium mb-2">No valuations found</h3>
+                      <p className="text-muted-foreground">Start by creating your first property valuation</p>
                     </CardContent>
                   </Card>
-                ))}
+                ) : (
+                  <div className="grid gap-4">
+                    {filteredValuations.map((valuation) => (
+                      <Card key={valuation.id} className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <MapPin className="h-4 w-4 text-muted-foreground" />
+                                <h3 className="font-semibold">{valuation.property_address}</h3>
+                                <Badge className={getStatusColor(valuation.status)}>
+                                  {valuation.status}
+                                </Badge>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                  <p className="text-muted-foreground">Estimated Value</p>
+                                  <p className="font-medium">{formatCurrency(valuation.estimated_value)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Type</p>
+                                  <p className="font-medium">{valuation.valuation_type}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Confidence</p>
+                                  <p className="font-medium">{valuation.confidence_score}%</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Date</p>
+                                  <p className="font-medium">{formatDate(valuation.valuation_date)}</p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEmailAction(valuation, 'view', 'valuation')}
+                              >
+                                <Eye className="h-4 w-4 mr-2" />
+                                View
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEmailAction(valuation, 'export', 'valuation')}
+                              >
+                                <Download className="h-4 w-4 mr-2" />
+                                Export
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </TabsContent>
+
+            <TabsContent value="reports" className="mt-6">
+              <div className="space-y-4">
+                {filteredReports.length === 0 ? (
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-lg font-medium mb-2">No reports found</h3>
+                      <p className="text-muted-foreground">Generate your first property report</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid gap-4">
+                    {filteredReports.map((report) => (
+                      <Card key={report.id} className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <FileText className="h-4 w-4 text-muted-foreground" />
+                                <h3 className="font-semibold">{report.title}</h3>
+                                <Badge className={getStatusColor(report.status)}>
+                                  {report.status}
+                                </Badge>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                  <p className="text-muted-foreground">Property</p>
+                                  <p className="font-medium">{report.property_address}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Type</p>
+                                  <p className="font-medium">{report.report_type}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Sustainability Score</p>
+                                  <p className="font-medium">{report.sustainability_score || 'N/A'}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Generated</p>
+                                  <p className="font-medium">{formatDate(report.generated_date)}</p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEmailAction(report, 'view', 'report')}
+                              >
+                                <Eye className="h-4 w-4 mr-2" />
+                                View
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEmailAction(report, 'export', 'report')}
+                              >
+                                <Download className="h-4 w-4 mr-2" />
+                                Download
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="costa" className="mt-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Saved Analyses</h3>
+                {filteredCostaAnalyses.length === 0 ? (
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-lg font-medium mb-2">No Costa analyses found</h3>
+                      <p className="text-muted-foreground">Create your first Costa Group portfolio analysis</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid gap-4">
+                    {filteredCostaAnalyses.map((analysis) => (
+                      <Card key={analysis.id} className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                                <h3 className="font-semibold">{analysis.title}</h3>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                  <p className="text-muted-foreground">Created</p>
+                                  <p className="font-medium">{formatDate(analysis.created_at)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Last Updated</p>
+                                  <p className="font-medium">{formatDate(analysis.updated_at)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">Analysis Data</p>
+                                  <p className="font-medium">
+                                    {analysis.analysis_data?.locationCount || 0} locations
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEmailAction(analysis, 'view', 'costa')}
+                              >
+                                <Eye className="h-4 w-4 mr-2" />
+                                View
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEmailAction(analysis, 'export', 'costa')}
+                              >
+                                <Download className="h-4 w-4 mr-2" />
+                                Export
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
 
         <TabsContent value="jobs" className="mt-6">
@@ -585,136 +925,6 @@ export default function WorkHub() {
                 ))}
               </div>
             )}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="costa" className="mt-6">
-          <div className="space-y-6">
-            {/* Global Operations Portfolio Section - Now properly secured under Costa's Operations */}
-            <Card className="border-2 border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building className="h-5 w-5 text-primary flash-text" />
-                  <span className="flash-text">Global Operations Portfolio</span>
-                  <Badge variant="outline" className="ml-auto">Restricted Access</Badge>
-                </CardTitle>
-                <p className="text-muted-foreground">
-                  Comprehensive portfolio overview with profit information and operational metrics
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <Button 
-                    onClick={() => navigate('/costa-group-portfolio')}
-                    className="flex items-center gap-2"
-                  >
-                    <TrendingUp className="h-4 w-4" />
-                    Portfolio Analysis
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => navigate('/costa-group-valuations')}
-                    className="flex items-center gap-2"
-                  >
-                    <DollarSign className="h-4 w-4" />
-                    Valuations
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => navigate('/costa-group-reports')}
-                    className="flex items-center gap-2"
-                  >
-                    <FileText className="h-4 w-4" />
-                    Reports
-                  </Button>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div className="text-center p-3 bg-muted/50 rounded">
-                    <p className="text-muted-foreground">Total Locations</p>
-                    <p className="text-2xl font-bold text-primary flash-text">25+</p>
-                  </div>
-                  <div className="text-center p-3 bg-muted/50 rounded">
-                    <p className="text-muted-foreground">Portfolio Value</p>
-                    <p className="text-2xl font-bold text-primary flash-text">$2.8B</p>
-                  </div>
-                  <div className="text-center p-3 bg-muted/50 rounded">
-                    <p className="text-muted-foreground">Annual Production</p>
-                    <p className="text-2xl font-bold text-primary flash-text">125K</p>
-                  </div>
-                  <div className="text-center p-3 bg-muted/50 rounded">
-                    <p className="text-muted-foreground">Water Usage</p>
-                    <p className="text-2xl font-bold text-primary flash-text">890ML</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Existing Costa Analyses Section */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Saved Analyses</h3>
-              {filteredCostaAnalyses.length === 0 ? (
-                <Card>
-                  <CardContent className="text-center py-12">
-                    <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-medium mb-2">No Costa analyses found</h3>
-                    <p className="text-muted-foreground">Create your first Costa Group portfolio analysis</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid gap-4">
-                  {filteredCostaAnalyses.map((analysis) => (
-                    <Card key={analysis.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                              <h3 className="font-semibold">{analysis.title}</h3>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                              <div>
-                                <p className="text-muted-foreground">Created</p>
-                                <p className="font-medium">{formatDate(analysis.created_at)}</p>
-                              </div>
-                              <div>
-                                <p className="text-muted-foreground">Last Updated</p>
-                                <p className="font-medium">{formatDate(analysis.updated_at)}</p>
-                              </div>
-                              <div>
-                                <p className="text-muted-foreground">Analysis Data</p>
-                                <p className="font-medium">
-                                  {analysis.analysis_data?.locationCount || 0} locations
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="flex gap-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleEmailAction(analysis, 'view', 'costa')}
-                            >
-                              <Eye className="h-4 w-4 mr-2" />
-                              View
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleEmailAction(analysis, 'export', 'costa')}
-                            >
-                              <Download className="h-4 w-4 mr-2" />
-                              Export
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </TabsContent>
       </Tabs>
