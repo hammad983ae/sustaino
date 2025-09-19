@@ -161,11 +161,13 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
   };
 
   const handleDataPopulated = (populatedData: any) => {
+    console.log('handleDataPopulated called with:', populatedData);
     const updatedData = { ...siteData };
     
     // Merge populated data
     if (populatedData['planning-data']) {
       const planningData = populatedData['planning-data'];
+      console.log('Planning data:', planningData);
       updatedData.currentZoning = planningData.currentZoning;
       updatedData.heightLimit = planningData.heightLimit;
       updatedData.fsr = planningData.floorSpaceRatio;
@@ -173,6 +175,7 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     
     if (populatedData['title-data']) {
       const titleData = populatedData['title-data'];
+      console.log('Title data:', titleData);
       updatedData.lotNumber = titleData.lotNumber;
       updatedData.planNumber = titleData.planNumber;
       updatedData.landArea = titleData.landArea;
@@ -180,18 +183,27 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     
     if (populatedData['council-data']) {
       const councilData = populatedData['council-data'];
+      console.log('Council data:', councilData);
       updatedData.council = councilData.localGovernmentArea;
     }
     
     if (populatedData['development-data']) {
       const devData = populatedData['development-data'];
+      console.log('Development data:', devData);
       updatedData.proposedGFA = devData.developmentPotential.maximumGFA;
       updatedData.estimatedUnits = devData.developmentPotential.estimatedUnits;
     }
     
     updatedData.autoPopulated = true;
+    console.log('Updated site data:', updatedData);
     setSiteData(updatedData);
     onSiteDataChange(updatedData);
+    
+    // Show toast to confirm data update
+    toast({
+      title: "Site Information Updated",
+      description: "Auto-populated data has been applied to the form fields.",
+    });
   };
 
   const handleProposalGenerated = (proposal: any) => {
@@ -275,14 +287,20 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="valuationPurpose">Purpose of Valuation</Label>
-              <Select value={siteData.valuationPurpose} onValueChange={(value) => handleInputChange('valuationPurpose', value)}>
-                <SelectTrigger>
+              <Select 
+                value={siteData.valuationPurpose} 
+                onValueChange={(value) => {
+                  console.log('Purpose of valuation changed to:', value);
+                  handleInputChange('valuationPurpose', value);
+                }}
+              >
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select valuation purpose" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-60 overflow-y-auto">
+                  <SelectItem value="development-feasibility">Development Feasibility</SelectItem>
                   <SelectItem value="mortgage-security">Mortgage/Security Purposes</SelectItem>
                   <SelectItem value="sale-purchase">Sale/Purchase</SelectItem>
-                  <SelectItem value="development-feasibility">Development Feasibility</SelectItem>
                   <SelectItem value="investment-analysis">Investment Analysis</SelectItem>
                   <SelectItem value="compulsory-acquisition">Compulsory Acquisition</SelectItem>
                   <SelectItem value="insurance">Insurance Purposes</SelectItem>
@@ -408,8 +426,9 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Label htmlFor="address">Property Address</Label>
               <Input
                 id="address"
-                value={siteData.address}
+                value={siteData.address || ''}
                 onChange={(e) => handleInputChange('address', e.target.value)}
+                placeholder="Enter property address"
               />
             </div>
             
@@ -418,8 +437,12 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Input
                 id="landArea"
                 type="number"
-                value={siteData.landArea}
-                onChange={(e) => handleInputChange('landArea', Number(e.target.value))}
+                value={siteData.landArea || ''}
+                onChange={(e) => {
+                  const value = e.target.value === '' ? 0 : Number(e.target.value);
+                  handleInputChange('landArea', value);
+                }}
+                placeholder="Enter land area in square meters"
               />
             </div>
             
@@ -446,8 +469,9 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Label htmlFor="council">Local Council</Label>
               <Input
                 id="council"
-                value={siteData.council}
+                value={siteData.council || ''}
                 onChange={(e) => handleInputChange('council', e.target.value)}
+                placeholder="Enter local council name"
               />
             </div>
             
@@ -455,8 +479,9 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <Label htmlFor="currentZoning">Current Zoning</Label>
               <Input
                 id="currentZoning"
-                value={siteData.currentZoning}
+                value={siteData.currentZoning || ''}
                 onChange={(e) => handleInputChange('currentZoning', e.target.value)}
+                placeholder="Enter current zoning classification"
               />
             </div>
           </div>
