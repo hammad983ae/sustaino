@@ -1,0 +1,38 @@
+/* Custom CSS for floating animations */
+@keyframes float {
+  0%, 100% { transform: perspective(1000px) translateY(0px) rotateX(5deg); }
+  50% { transform: perspective(1000px) translateY(-10px) rotateX(5deg); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: perspective(1000px) translateY(-10px) rotateX(5deg); }
+  50% { transform: perspective(1000px) translateY(0px) rotateX(5deg); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+.float-animation-reverse {
+  animation: float-reverse 6s ease-in-out infinite;
+}
+
+/* 3D Text Shadow Effects */
+.text-3d {
+  text-shadow: 
+    0 1px 0 #ffffff40,
+    0 2px 0 #ffffff30,
+    0 3px 0 #ffffff20,
+    0 4px 0 #ffffff10,
+    0 5px 5px rgba(0,0,0,0.2);
+}
+
+/* Enhanced Glass Morphism */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(31, 38, 135, 0.37),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}

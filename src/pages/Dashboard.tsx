@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/dashboard-3d.css';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -36,128 +37,240 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-white rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-40 right-32 w-24 h-24 bg-purple-300 rounded-full blur-2xl animate-bounce"></div>
-        <div className="absolute bottom-20 left-32 w-40 h-40 bg-emerald-300 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute bottom-40 right-20 w-28 h-28 bg-orange-300 rounded-full blur-2xl animate-bounce delay-500"></div>
+      {/* Enhanced 3D Background Elements */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-white to-blue-200 rounded-full blur-3xl animate-pulse" style={{
+          transform: 'perspective(1000px) rotateX(45deg) rotateY(45deg)',
+          animation: 'pulse 3s ease-in-out infinite, float 6s ease-in-out infinite',
+        }}></div>
+        <div className="absolute top-40 right-32 w-24 h-24 bg-gradient-to-r from-purple-300 to-pink-300 rounded-full blur-2xl" style={{
+          transform: 'perspective(1000px) rotateX(-30deg) rotateZ(30deg)',
+          animation: 'bounce 4s ease-in-out infinite, float 8s ease-in-out infinite reverse',
+        }}></div>
+        <div className="absolute bottom-20 left-32 w-40 h-40 bg-gradient-to-r from-emerald-300 to-teal-300 rounded-full blur-3xl animate-pulse delay-1000" style={{
+          transform: 'perspective(1000px) rotateY(-45deg) rotateX(30deg)',
+          animation: 'pulse 4s ease-in-out infinite 1s, float 10s ease-in-out infinite',
+        }}></div>
+        <div className="absolute bottom-40 right-20 w-28 h-28 bg-gradient-to-r from-orange-300 to-yellow-300 rounded-full blur-2xl" style={{
+          transform: 'perspective(1000px) rotateX(60deg) rotateZ(-30deg)',
+          animation: 'bounce 5s ease-in-out infinite 0.5s, float 7s ease-in-out infinite reverse',
+        }}></div>
       </div>
 
-      {/* Header with Enhanced Logo */}
-      <div className="relative z-10 text-center py-8 px-4">
-        <div className="mb-6">
-          <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 hover:bg-white/30 transition-all duration-300">
-            <Sparkles className="h-3 w-3 mr-1" />
+      {/* 3D Grid Background */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: `
+          linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+        `,
+        backgroundSize: '50px 50px',
+        transform: 'perspective(1000px) rotateX(60deg)',
+        transformOrigin: 'center bottom',
+      }}></div>
+
+      {/* Header with Enhanced 3D Logo */}
+      <div className="relative z-10 text-center py-12 px-4"
+           style={{
+             transform: 'perspective(1000px)',
+           }}>
+        <div className="mb-8">
+          <Badge variant="secondary" className="mb-6 bg-white/25 text-white border-white/40 hover:bg-white/35 transition-all duration-300 backdrop-blur-sm" style={{
+            transform: 'perspective(1000px) rotateX(-5deg)',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.2), 0 0 20px rgba(255,255,255,0.1)',
+          }}>
+            <Sparkles className="h-4 w-4 mr-2" />
             Sustaino Pro - Complete Platform Ecosystem
           </Badge>
         </div>
         
         {/* Enhanced Logo Section */}
-        <div className="flex items-center justify-center mb-6">
+        <div className="flex items-center justify-center mb-8">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-600 rounded-full blur-xl opacity-30 animate-pulse"></div>
-            <PerfectSustanoLogo 
-              size="xl" 
-              variant="white" 
-              className="relative z-10 transform hover:scale-105 transition-transform duration-300"
-            />
+            <div className="relative z-10 transform hover:scale-105 transition-transform duration-300">
+              <div className="flex items-center justify-center gap-4">
+                <h1 className="text-7xl font-bold text-white drop-shadow-2xl" style={{
+                  textShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(59,130,246,0.3), 0 0 60px rgba(139,92,246,0.2)',
+                  transform: 'perspective(1000px) rotateX(5deg)',
+                }}>
+                  Sustaino Pro
+                </h1>
+                <div className="relative">
+                  <div className="absolute inset-0 bg-blue-400 rounded-full blur-lg opacity-50 animate-pulse"></div>
+                  <Moon className="relative h-12 w-12 text-blue-200 animate-pulse" style={{
+                    filter: 'drop-shadow(0 0 10px rgba(59,130,246,0.8))',
+                    transform: 'perspective(1000px) rotateY(-15deg)',
+                  }} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         
-        <h1 className="text-6xl font-bold text-white mb-2 bg-gradient-to-r from-white via-blue-100 to-emerald-100 bg-clip-text text-transparent">
-          Sustaino Pro <Moon className="inline h-10 w-10 ml-2 text-blue-200 animate-pulse" />
-        </h1>
-        
-        <h2 className="text-4xl font-semibold text-white/90 mb-4 bg-gradient-to-r from-blue-100 to-purple-200 bg-clip-text text-transparent">
+        <h2 className="text-5xl font-semibold text-white/95 mb-6" style={{
+          textShadow: '0 0 15px rgba(255,255,255,0.3), 0 0 30px rgba(59,130,246,0.2)',
+          transform: 'perspective(1000px) rotateX(2deg)',
+        }}>
           ICV (Instant Comprehensive Valuation)™
         </h2>
         
-        <p className="text-xl text-white/80 mb-2 font-medium">
+        <p className="text-2xl text-white/85 mb-4 font-medium" style={{
+          textShadow: '0 0 10px rgba(255,255,255,0.2)',
+          transform: 'perspective(1000px) rotateX(1deg)',
+        }}>
           AI-Powered Property Valuation And Assessment Technology
         </p>
         
-        <p className="text-white/70 text-sm mb-8">
+        <p className="text-white/75 text-base mb-8" style={{
+          textShadow: '0 0 8px rgba(255,255,255,0.1)',
+        }}>
           Patent Pending • IP Protected • Trademark © • Copyright Protected
         </p>
 
-        {/* Enhanced Stats with Icons */}
-        <div className="flex justify-center gap-6 mt-8 mb-8 flex-wrap">
-          <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm rounded-xl px-8 py-6 text-center border border-white/20 hover:border-white/40 transition-all duration-300 group">
-            <div className="flex items-center justify-center mb-2">
-              <Building className="h-6 w-6 text-blue-200 mr-2" />
-              <div className="text-3xl font-bold text-white group-hover:scale-110 transition-transform">28</div>
+        {/* Enhanced 3D Stats with Floating Animation */}
+        <div className="flex justify-center gap-8 mt-12 mb-12 flex-wrap">
+          <div className="bg-gradient-to-br from-white/25 to-white/15 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-white/30 hover:border-white/50 transition-all duration-500 group"
+               style={{
+                 transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
+                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(59,130,246,0.2)',
+                 animation: 'float 6s ease-in-out infinite',
+               }}>
+            <div className="flex items-center justify-center mb-3">
+              <Building className="h-8 w-8 text-blue-200 mr-3" style={{
+                filter: 'drop-shadow(0 0 10px rgba(59,130,246,0.5))',
+              }} />
+              <div className="text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-300" style={{
+                textShadow: '0 0 15px rgba(255,255,255,0.5)',
+              }}>28</div>
             </div>
-            <div className="text-white/80 text-sm font-medium">Total Platforms</div>
+            <div className="text-white/90 text-base font-medium">Total Platforms</div>
           </div>
-          <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm rounded-xl px-8 py-6 text-center border border-white/20 hover:border-white/40 transition-all duration-300 group">
-            <div className="flex items-center justify-center mb-2">
-              <BarChart3 className="h-6 w-6 text-emerald-200 mr-2" />
-              <div className="text-3xl font-bold text-white group-hover:scale-110 transition-transform">8</div>
+          
+          <div className="bg-gradient-to-br from-white/25 to-white/15 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-white/30 hover:border-white/50 transition-all duration-500 group"
+               style={{
+                 transform: 'perspective(1000px) rotateY(0deg) rotateX(5deg)',
+                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(16,185,129,0.2)',
+                 animation: 'float 6s ease-in-out infinite 1s',
+               }}>
+            <div className="flex items-center justify-center mb-3">
+              <BarChart3 className="h-8 w-8 text-emerald-200 mr-3" style={{
+                filter: 'drop-shadow(0 0 10px rgba(16,185,129,0.5))',
+              }} />
+              <div className="text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-300" style={{
+                textShadow: '0 0 15px rgba(255,255,255,0.5)',
+              }}>8</div>
             </div>
-            <div className="text-white/80 text-sm font-medium">Categories</div>
+            <div className="text-white/90 text-base font-medium">Categories</div>
           </div>
-          <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm rounded-xl px-8 py-6 text-center border border-white/20 hover:border-white/40 transition-all duration-300 group">
-            <div className="flex items-center justify-center mb-2">
-              <Globe className="h-6 w-6 text-purple-200 mr-2" />
-              <div className="text-3xl font-bold text-white group-hover:scale-110 transition-transform">24/7</div>
+          
+          <div className="bg-gradient-to-br from-white/25 to-white/15 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-white/30 hover:border-white/50 transition-all duration-500 group"
+               style={{
+                 transform: 'perspective(1000px) rotateY(5deg) rotateX(5deg)',
+                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(139,92,246,0.2)',
+                 animation: 'float 6s ease-in-out infinite 2s',
+               }}>
+            <div className="flex items-center justify-center mb-3">
+              <Globe className="h-8 w-8 text-purple-200 mr-3" style={{
+                filter: 'drop-shadow(0 0 10px rgba(139,92,246,0.5))',
+              }} />
+              <div className="text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-300" style={{
+                textShadow: '0 0 15px rgba(255,255,255,0.5)',
+              }}>24/7</div>
             </div>
-            <div className="text-white/80 text-sm font-medium">Availability</div>
+            <div className="text-white/90 text-base font-medium">Availability</div>
           </div>
-          <div className="bg-gradient-to-br from-orange-400/30 to-red-400/30 backdrop-blur-sm rounded-xl px-8 py-6 text-center border border-orange-300/30 hover:border-orange-300/60 transition-all duration-300 group">
-            <div className="flex items-center justify-center mb-2">
-              <Zap className="h-6 w-6 text-orange-200 mr-2" />
-              <div className="text-3xl font-bold text-orange-100 group-hover:scale-110 transition-transform">AI</div>
+          
+          <div className="bg-gradient-to-br from-orange-400/30 to-red-400/30 backdrop-blur-lg rounded-2xl px-10 py-8 text-center border border-orange-300/40 hover:border-orange-300/70 transition-all duration-500 group"
+               style={{
+                 transform: 'perspective(1000px) rotateY(10deg) rotateX(5deg)',
+                 boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(251,146,60,0.3)',
+                 animation: 'float 6s ease-in-out infinite 3s',
+               }}>
+            <div className="flex items-center justify-center mb-3">
+              <Zap className="h-8 w-8 text-orange-200 mr-3" style={{
+                filter: 'drop-shadow(0 0 10px rgba(251,146,60,0.7))',
+              }} />
+              <div className="text-4xl font-bold text-orange-100 group-hover:scale-110 transition-transform duration-300" style={{
+                textShadow: '0 0 15px rgba(255,255,255,0.5)',
+              }}>AI</div>
             </div>
-            <div className="text-orange-200 text-sm font-medium">Powered</div>
+            <div className="text-orange-200 text-base font-medium">Powered</div>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Navigation Tabs */}
+      {/* Enhanced 3D Navigation Tabs */}
       <div className="relative z-10 px-4 mb-8">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-gradient-to-r from-white/15 to-white/10 backdrop-blur-lg rounded-2xl p-3 border border-white/20 shadow-2xl">
+          <div className="bg-gradient-to-r from-white/20 to-white/15 backdrop-blur-xl rounded-3xl p-4 border border-white/30 shadow-2xl"
+               style={{
+                 transform: 'perspective(1000px) rotateX(-2deg)',
+                 boxShadow: '0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
+               }}>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-6 bg-transparent space-x-1">
+              <TabsList className="grid w-full grid-cols-6 bg-transparent space-x-2">
                 <TabsTrigger 
                   value="platform-access" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/30 data-[state=active]:to-purple-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/30 rounded-xl transition-all duration-300"
+                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/40 data-[state=active]:to-purple-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(5deg)',
+                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
+                  }}
                 >
                   <Building className="h-4 w-4 mr-1" />
                   Platform Access
                 </TabsTrigger>
                 <TabsTrigger 
                   value="data-tools" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500/30 data-[state=active]:to-teal-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/30 rounded-xl transition-all duration-300"
+                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500/40 data-[state=active]:to-teal-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(5deg)',
+                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
+                  }}
                 >
                   <Database className="h-4 w-4 mr-1" />
                   Data Tools
                 </TabsTrigger>
                 <TabsTrigger 
                   value="marketing-hub" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/30 data-[state=active]:to-rose-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/30 rounded-xl transition-all duration-300"
+                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/40 data-[state=active]:to-rose-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(5deg)',
+                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
+                  }}
                 >
                   <Megaphone className="h-4 w-4 mr-1" />
                   Marketing Hub
                 </TabsTrigger>
                 <TabsTrigger 
                   value="brochures" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500/30 data-[state=active]:to-amber-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/30 rounded-xl transition-all duration-300"
+                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500/40 data-[state=active]:to-amber-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(5deg)',
+                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
+                  }}
                 >
                   <BookOpen className="h-4 w-4 mr-1" />
                   Brochures
                 </TabsTrigger>
                 <TabsTrigger 
                   value="ip-security" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-500/30 data-[state=active]:to-pink-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/30 rounded-xl transition-all duration-300"
+                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-500/40 data-[state=active]:to-pink-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(5deg)',
+                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
+                  }}
                 >
                   <Shield className="h-4 w-4 mr-1" />
                   IP Security
                 </TabsTrigger>
                 <TabsTrigger 
                   value="advanced-features" 
-                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-500/30 data-[state=active]:to-purple-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/30 rounded-xl transition-all duration-300"
+                  className="text-white/80 data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-500/40 data-[state=active]:to-purple-500/40 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-white/40 rounded-2xl transition-all duration-500 transform hover:scale-105"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(5deg)',
+                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.1)',
+                  }}
                 >
                   <Sparkles className="h-4 w-4 mr-1" />
                   Advanced Features
@@ -175,15 +288,31 @@ const Dashboard = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <Link to="/icv-dashboard">
-                      <Card className="bg-gradient-to-br from-blue-500/20 to-indigo-600/20 backdrop-blur-sm border-blue-300/30 hover:border-blue-300/60 transition-all duration-300 cursor-pointer h-full group hover:scale-105 hover:shadow-2xl">
-                        <CardContent className="p-6 text-center">
-                          <div className="relative mb-4">
-                            <div className="absolute inset-0 bg-blue-400 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                            <BarChart3 className="relative h-12 w-12 mx-auto text-blue-300 group-hover:text-blue-200 transition-colors" />
+                      <Card className="bg-gradient-to-br from-blue-500/25 to-indigo-600/25 backdrop-blur-lg border-blue-300/40 hover:border-blue-300/70 transition-all duration-500 cursor-pointer h-full group hover:scale-110 hover:shadow-2xl"
+                            style={{
+                              transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
+                              boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(59,130,246,0.2)',
+                            }}>
+                        <CardContent className="p-8 text-center">
+                          <div className="relative mb-6">
+                            <div className="absolute inset-0 bg-blue-400 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-300"
+                                 style={{
+                                   transform: 'scale(1.5)',
+                                 }}></div>
+                            <BarChart3 className="relative h-16 w-16 mx-auto text-blue-300 group-hover:text-blue-200 transition-colors"
+                                      style={{
+                                        filter: 'drop-shadow(0 0 15px rgba(59,130,246,0.7))',
+                                        transform: 'perspective(500px) rotateX(15deg)',
+                                      }} />
                           </div>
-                          <h4 className="text-lg font-semibold text-white mb-2">Analytics Dashboard</h4>
-                          <p className="text-white/70 text-sm mb-3">Comprehensive analytics and reporting</p>
-                          <Badge className="bg-gradient-to-r from-green-500/30 to-emerald-500/30 text-green-200 border-green-400/40 hover:from-green-500/40 hover:to-emerald-500/40 transition-all">
+                          <h4 className="text-xl font-semibold text-white mb-3" style={{
+                            textShadow: '0 0 10px rgba(255,255,255,0.3)',
+                          }}>Analytics Dashboard</h4>
+                          <p className="text-white/80 text-sm mb-4">Comprehensive analytics and reporting</p>
+                          <Badge className="bg-gradient-to-r from-green-500/40 to-emerald-500/40 text-green-200 border-green-400/50 hover:from-green-500/50 hover:to-emerald-500/50 transition-all duration-300"
+                                 style={{
+                                   boxShadow: '0 0 15px rgba(34,197,94,0.3)',
+                                 }}>
                             <ChartLine className="h-3 w-3 mr-1" />
                             Active Platform
                           </Badge>
