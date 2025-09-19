@@ -245,18 +245,31 @@ const DocumentUploadAnalyzer: React.FC<DocumentUploadAnalyzerProps> = ({
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
+    console.log('Files selected:', files.length, files.map(f => `${f.name} (${f.type})`));
+    
+    if (files.length === 0) {
+      console.log('No files selected');
+      return;
+    }
     
     files.forEach(file => {
+      console.log(`Processing file: ${file.name}, type: ${file.type}, size: ${file.size}`);
+      
       if (!acceptedTypes.includes(file.type)) {
-        setError('Please select valid image files (JPEG, PNG) or PDF documents.');
+        const errorMsg = `Invalid file type: ${file.type}. Accepted types: ${acceptedTypes.join(', ')}`;
+        console.error(errorMsg);
+        setError(errorMsg);
         return;
       }
 
       if (file.size > maxSize) {
-        setError('File size too large. Please select files under 20MB.');
+        const errorMsg = `File size too large: ${(file.size / 1024 / 1024).toFixed(2)}MB. Maximum size: ${(maxSize / 1024 / 1024)}MB`;
+        console.error(errorMsg);
+        setError(errorMsg);
         return;
       }
 
+      console.log('File validation passed, starting processing...');
       processImage(file);
     });
   };
@@ -264,11 +277,32 @@ const DocumentUploadAnalyzer: React.FC<DocumentUploadAnalyzerProps> = ({
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const files = Array.from(event.dataTransfer.files);
+    console.log('Files dropped:', files.length, files.map(f => `${f.name} (${f.type})`));
+    
+    if (files.length === 0) {
+      console.log('No files dropped');
+      return;
+    }
     
     files.forEach(file => {
-      if (acceptedTypes.includes(file.type)) {
-        processImage(file);
+      console.log(`Processing dropped file: ${file.name}, type: ${file.type}, size: ${file.size}`);
+      
+      if (!acceptedTypes.includes(file.type)) {
+        const errorMsg = `Invalid file type: ${file.type}. Accepted types: ${acceptedTypes.join(', ')}`;
+        console.error(errorMsg);
+        setError(errorMsg);
+        return;
       }
+
+      if (file.size > maxSize) {
+        const errorMsg = `File size too large: ${(file.size / 1024 / 1024).toFixed(2)}MB. Maximum size: ${(maxSize / 1024 / 1024)}MB`;
+        console.error(errorMsg);
+        setError(errorMsg);
+        return;
+      }
+
+      console.log('Dropped file validation passed, starting processing...');
+      processImage(file);
     });
   };
 
@@ -330,13 +364,19 @@ const DocumentUploadAnalyzer: React.FC<DocumentUploadAnalyzerProps> = ({
                   multiple
                   className="hidden"
                   id="document-upload"
+                  key={Date.now()} // Force re-render to reset input
                 />
                 <label htmlFor="document-upload">
-                  <Button variant="outline" className="cursor-pointer">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Select Documents
+                  <Button variant="outline" className="cursor-pointer" asChild>
+                    <span>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Select Documents
+                    </span>
                   </Button>
                 </label>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Drag & drop files or click to select • Max 20MB • JPG, PNG, PDF
+                </p>
               </div>
             )}
           </div>
