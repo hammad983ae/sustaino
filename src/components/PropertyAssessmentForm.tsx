@@ -544,18 +544,18 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         </div>
       </div>
 
-      {/* Form content with stable height */}
-      <div className="p-4 pb-24 min-h-[calc(100vh-200px)]">
-        <div className="max-w-4xl mx-auto">
-          <Card className="min-h-[600px]">
-            <CardHeader className="pb-4">
+      {/* Form content with completely stable layout */}
+      <div className="p-4 pb-24 h-[calc(100vh-200px)] overflow-hidden">
+        <div className="max-w-4xl mx-auto h-full">
+          <Card className="h-full flex flex-col">
+            <CardHeader className="pb-4 flex-shrink-0">
               <CardTitle>{steps[currentStep].title}</CardTitle>
               <p className="text-sm text-muted-foreground">
                 {steps[currentStep].subtitle}
               </p>
             </CardHeader>
-            <CardContent className="min-h-[500px] flex flex-col">
-              <div className="flex-1">
+            <CardContent className="flex-1 overflow-auto">
+              <div className="h-full">
                 {steps[currentStep].component}
               </div>
             </CardContent>
