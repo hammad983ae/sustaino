@@ -309,13 +309,13 @@ const SustanoProDashboard = () => {
   const filteredPlatforms = platforms.filter(platform => platform.category === activeTab);
 
   const backgroundGradients = {
-    green: "bg-gradient-to-br from-emerald-400/90 via-teal-500/80 to-green-600/70",
-    blue: "bg-gradient-to-br from-blue-500/90 via-indigo-600/80 to-purple-700/70"
+    green: "absolute inset-0 bg-gradient-to-br from-emerald-400/95 via-teal-500/90 to-green-500/85",
+    blue: "absolute inset-0 bg-gradient-to-br from-blue-500/95 via-indigo-600/90 to-purple-600/85"
   };
 
   const overlayGradients = {
-    green: "from-emerald-50/80 via-teal-50/60 to-green-50/70",
-    blue: "from-blue-50/80 via-indigo-50/60 to-purple-50/70"
+    green: "absolute inset-0 bg-gradient-to-br from-emerald-100/60 via-teal-50/80 to-green-100/70",
+    blue: "absolute inset-0 bg-gradient-to-br from-blue-100/60 via-indigo-50/80 to-purple-100/70"
   };
 
   const accentColors = {
@@ -329,8 +329,8 @@ const SustanoProDashboard = () => {
       <PropertyValuation3DBackground />
       
       {/* Dynamic background overlay */}
-      <div className={`absolute inset-0 ${backgroundGradients[colorTheme]}`} />
-      <div className={`absolute inset-0 bg-gradient-to-br ${overlayGradients[colorTheme]}`} />
+      <div className={backgroundGradients[colorTheme]} />
+      <div className={overlayGradients[colorTheme]} />
       
       <div className="relative z-10 container mx-auto px-4 py-12">
         

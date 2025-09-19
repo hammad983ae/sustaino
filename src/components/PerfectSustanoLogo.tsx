@@ -87,30 +87,41 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Outer semi-circle (thinner stroke) */}
-        <path
-          d="M 12 50 A 38 38 0 0 1 88 50"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className={colors.outerCircle}
-        />
-        
-        {/* Inner filled circle (larger) */}
+        {/* Main circle with crescent cutout */}
         <circle
           cx="50"
           cy="50"
-          r="28"
+          r="40"
           className={colors.innerCircle}
         />
         
-        {/* Inner semi-circle cutout (for the "C" shape) */}
-        <path
-          d="M 32 50 A 18 18 0 0 1 68 50"
+        {/* Crescent cutout */}
+        <circle
+          cx="65"
+          cy="35"
+          r="25"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2.5"
-          className={variant === 'white' || variant === 'purple' ? 'stroke-gray-400' : 'stroke-white'}
+          strokeWidth="50"
+          className={variant === 'white' || variant === 'purple' || variant === 'emerald' || variant === 'blue' ? 'stroke-transparent' : 'stroke-white'}
+          mask="url(#cutout)"
+        />
+        
+        {/* Create mask for crescent effect */}
+        <defs>
+          <mask id="cutout">
+            <rect width="100%" height="100%" fill="white"/>
+            <circle cx="65" cy="35" r="25" fill="black"/>
+          </mask>
+        </defs>
+        
+        <circle
+          cx="50"
+          cy="50"
+          r="40"
+          fill="currentColor"
+          className={colors.innerCircle}
+          mask="url(#cutout)"
         />
       </svg>
     </div>
@@ -122,17 +133,17 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
 
   return (
     <div className={`flex ${config.textContainer} ${config.spacing}`}>
-      {logoSvg}
-      <div className={textPosition === 'bottom' ? 'text-center' : ''}>
-        <div className={`font-bold ${config.text} ${colors.text}`}>
+      <div className={textPosition === 'bottom' ? 'text-center' : 'flex items-center gap-4'}>
+        <div className={`font-bold ${config.text} ${colors.text} tracking-wide`}>
           Sustaino Pro
         </div>
-        {size !== 'sm' && (
-          <div className={`text-xs ${colors.text} opacity-80`}>
-            Property Intelligence
-          </div>
-        )}
+        {logoSvg}
       </div>
+      {size !== 'sm' && textPosition === 'bottom' && (
+        <div className={`text-xs ${colors.text} opacity-80 text-center mt-2`}>
+          Property Intelligence
+        </div>
+      )}
     </div>
   );
 };
