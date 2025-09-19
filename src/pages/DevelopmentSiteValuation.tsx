@@ -8,6 +8,7 @@ import ValuationMethodologies from "@/components/development/ValuationMethodolog
 import ESGClimateRiskAssessment from "@/components/development/ESGClimateRiskAssessment";
 import FeasibilityStudy from "@/components/development/FeasibilityStudy";
 import ComparableEvidence from "@/components/development/ComparableEvidence";
+import HighestAndBestUseAnalysis from "@/components/development/HighestAndBestUseAnalysis";
 
 const DevelopmentSiteValuation = () => {
   const [siteData, setSiteData] = useState(null);
@@ -37,8 +38,9 @@ const DevelopmentSiteValuation = () => {
 
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="site-details">Site Details</TabsTrigger>
+            <TabsTrigger value="best-use">Best Use</TabsTrigger>
             <TabsTrigger value="valuation">Valuation</TabsTrigger>
             <TabsTrigger value="feasibility">Feasibility</TabsTrigger>
             <TabsTrigger value="esg-climate">ESG & Climate</TabsTrigger>
@@ -50,6 +52,11 @@ const DevelopmentSiteValuation = () => {
           {/* Site Details Tab */}
           <TabsContent value="site-details" className="space-y-6">
             <SiteDetailsForm onSiteDataChange={handleSiteDataChange} />
+          </TabsContent>
+
+          {/* Highest and Best Use Tab */}
+          <TabsContent value="best-use" className="space-y-6">
+            <HighestAndBestUseAnalysis siteData={siteData} />
           </TabsContent>
 
           {/* Valuation Tab */}
