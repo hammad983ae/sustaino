@@ -87,20 +87,14 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Simple crescent moon shape */}
-        <defs>
-          <mask id="crescentMask">
-            <rect width="100%" height="100%" fill="white"/>
-            <circle cx="75" cy="25" r="35" fill="black"/>
-          </mask>
-        </defs>
-        
+        {/* Simple circle outline */}
         <circle
           cx="50"
           cy="50"
-          r="40"
-          fill={variant === 'white' ? 'white' : variant === 'dark' ? '#1f2937' : '#000000'}
-          mask="url(#crescentMask)"
+          r="35"
+          fill="none"
+          stroke={variant === 'white' ? 'white' : variant === 'dark' ? '#1f2937' : '#000000'}
+          strokeWidth="6"
         />
       </svg>
     </div>
