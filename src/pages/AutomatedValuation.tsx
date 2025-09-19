@@ -28,6 +28,7 @@ import { RealCommercialScraper } from "@/components/RealCommercialScraper";
 import { ScrapedDataViewer } from "@/components/ScrapedDataViewer";
 import ComprehensiveValuationGenerator from "@/components/ComprehensiveValuationGenerator";
 import { ValuationProvider } from "@/contexts/ValuationContext";
+import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider";
 
 import BrandedHeader from "@/components/BrandedHeader";
 import PropertyValuation3DBackground from "@/components/PropertyValuation3DBackground";
@@ -775,33 +776,37 @@ export default function AutomatedValuation() {
 
   if (currentStep === "propertyDetails") {
     return (
-      <div className="min-h-screen bg-background p-8">
-        <div className="max-w-4xl mx-auto">
-          <Button onClick={handleBack} variant="outline" className="mb-6">
-            ← Back
-          </Button>
-          <AutomatedPropertyDetails 
-            propertyType={selectedPropertyType}
-            onNext={handlePropertyDetailsNext}
-            onBack={handleBack}
-          />
+      <PropertyTypeLockProvider>
+        <div className="min-h-screen bg-background p-8">
+          <div className="max-w-4xl mx-auto">
+            <Button onClick={handleBack} variant="outline" className="mb-6">
+              ← Back
+            </Button>
+            <AutomatedPropertyDetails 
+              propertyType={selectedPropertyType}
+              onNext={handlePropertyDetailsNext}
+              onBack={handleBack}
+            />
+          </div>
         </div>
-      </div>
+      </PropertyTypeLockProvider>
     );
   }
 
   if (currentStep === "automatedReport") {
     return (
-      <ValuationProvider>
-        <div className="min-h-screen bg-background">
-          <div className="container mx-auto py-8">
-            <Button onClick={handleBack} variant="outline" className="mb-6 ml-4">
-              ← Back
-            </Button>
-            <ComprehensiveValuationGenerator />
+      <PropertyTypeLockProvider>
+        <ValuationProvider>
+          <div className="min-h-screen bg-background">
+            <div className="container mx-auto py-8">
+              <Button onClick={handleBack} variant="outline" className="mb-6 ml-4">
+                ← Back
+              </Button>
+              <ComprehensiveValuationGenerator />
+            </div>
           </div>
-        </div>
-      </ValuationProvider>
+        </ValuationProvider>
+      </PropertyTypeLockProvider>
     );
   }
 
