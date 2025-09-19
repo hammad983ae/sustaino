@@ -87,41 +87,20 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Main circle with crescent cutout */}
-        <circle
-          cx="50"
-          cy="50"
-          r="40"
-          className={colors.innerCircle}
-        />
-        
-        {/* Crescent cutout */}
-        <circle
-          cx="65"
-          cy="35"
-          r="25"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="50"
-          className={variant === 'white' || variant === 'purple' || variant === 'emerald' || variant === 'blue' ? 'stroke-transparent' : 'stroke-white'}
-          mask="url(#cutout)"
-        />
-        
-        {/* Create mask for crescent effect */}
+        {/* Crescent moon shape */}
         <defs>
-          <mask id="cutout">
+          <mask id="crescentMask">
             <rect width="100%" height="100%" fill="white"/>
-            <circle cx="65" cy="35" r="25" fill="black"/>
+            <circle cx="65" cy="35" r="30" fill="black"/>
           </mask>
         </defs>
         
         <circle
           cx="50"
           cy="50"
-          r="40"
-          fill="currentColor"
-          className={colors.innerCircle}
-          mask="url(#cutout)"
+          r="35"
+          fill="white"
+          mask="url(#crescentMask)"
         />
       </svg>
     </div>
@@ -132,18 +111,11 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
   }
 
   return (
-    <div className={`flex ${config.textContainer} ${config.spacing}`}>
-      <div className={textPosition === 'bottom' ? 'text-center' : 'flex items-center gap-4'}>
-        <div className={`font-bold ${config.text} ${colors.text} tracking-wide`}>
-          Sustaino Pro
-        </div>
-        {logoSvg}
+    <div className="flex items-center gap-4">
+      <div className={`font-bold ${config.text} text-white tracking-wide`}>
+        Sustaino Pro
       </div>
-      {size !== 'sm' && textPosition === 'bottom' && (
-        <div className={`text-xs ${colors.text} opacity-80 text-center mt-2`}>
-          Property Intelligence
-        </div>
-      )}
+      {logoSvg}
     </div>
   );
 };

@@ -309,13 +309,13 @@ const SustanoProDashboard = () => {
   const filteredPlatforms = platforms.filter(platform => platform.category === activeTab);
 
   const backgroundGradients = {
-    green: "absolute inset-0 bg-gradient-to-br from-emerald-400/95 via-teal-500/90 to-green-500/85",
-    blue: "absolute inset-0 bg-gradient-to-br from-blue-500/95 via-indigo-600/90 to-purple-600/85"
+    green: "absolute inset-0 bg-gradient-to-br from-emerald-400 via-teal-500 to-emerald-600",
+    blue: "absolute inset-0 bg-gradient-to-br from-blue-400 via-indigo-500 to-blue-600"
   };
 
   const overlayGradients = {
-    green: "absolute inset-0 bg-gradient-to-br from-emerald-100/60 via-teal-50/80 to-green-100/70",
-    blue: "absolute inset-0 bg-gradient-to-br from-blue-100/60 via-indigo-50/80 to-purple-100/70"
+    green: "absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-teal-400/10 to-emerald-600/30",
+    blue: "absolute inset-0 bg-gradient-to-br from-blue-500/20 via-indigo-400/10 to-blue-600/30"
   };
 
   const accentColors = {
@@ -353,11 +353,8 @@ const SustanoProDashboard = () => {
           {/* Main Branding */}
           <div className="flex items-center justify-center">
             <PerfectSustanoLogo 
-              size="xl" 
-              variant={colorTheme === 'green' ? 'emerald' : 'blue'}
-              showText={true}
-              textPosition="right"
-              className="scale-125"
+              size="xl"
+              className="scale-150"
             />
           </div>
           
