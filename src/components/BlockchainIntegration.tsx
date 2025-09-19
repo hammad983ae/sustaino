@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import MetaMaskInstallGuide from "./MetaMaskInstallGuide";
 
 interface BlockchainStats {
   sustainoCoinPrice: string;
@@ -32,11 +34,18 @@ interface BlockchainIntegrationProps {
   showWalletConnect?: boolean;
 }
 
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
   variant = "compact",
   showWalletConnect = true
 }) => {
   const [isConnected, setIsConnected] = useState(false);
+  const [showInstallGuide, setShowInstallGuide] = useState(false);
   const [blockchainStats] = useState<BlockchainStats>({
     sustainoCoinPrice: "$2.47",
     marketCap: "$847M",
@@ -47,6 +56,7 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
 
   const connectWallet = async () => {
     if (!window.ethereum) {
+      setShowInstallGuide(true);
       toast.error("MetaMask not detected. Please install MetaMask to continue.");
       return;
     }
@@ -96,10 +106,17 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
           {showWalletConnect && (
             <div className="space-y-2">
               {!isConnected ? (
-                <Button onClick={connectWallet} className="w-full" size="sm">
-                  <Wallet className="w-4 h-4 mr-2" />
-                  Connect Wallet
-                </Button>
+                <Dialog open={showInstallGuide} onOpenChange={setShowInstallGuide}>
+                  <DialogTrigger asChild>
+                    <Button onClick={connectWallet} className="w-full" size="sm">
+                      <Wallet className="w-4 h-4 mr-2" />
+                      Connect Wallet
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
+                  </DialogContent>
+                </Dialog>
               ) : (
                 <div className="text-center text-sm text-green-700">
                   ✅ Wallet Connected
@@ -220,10 +237,20 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
                 <p className="text-muted-foreground">
                   Connect your MetaMask wallet to access blockchain features
                 </p>
-                <Button onClick={connectWallet} className="w-full max-w-md">
-                  <Wallet className="w-4 h-4 mr-2" />
-                  Connect MetaMask Wallet
-                </Button>
+                <Dialog open={showInstallGuide} onOpenChange={setShowInstallGuide}>
+                  <DialogTrigger asChild>
+                    <Button onClick={connectWallet} className="w-full max-w-md">
+                      <Wallet className="w-4 h-4 mr-2" />
+                      Connect MetaMask Wallet
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
+                  </DialogContent>
+                </Dialog>
+                <div className="text-xs text-muted-foreground">
+                  Don't have MetaMask? Click above for installation guide.
+                </div>
               </div>
             ) : (
               <div className="text-center space-y-2">
