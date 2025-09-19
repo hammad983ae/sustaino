@@ -81,24 +81,24 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
   const colors = colorConfig[variant];
 
   const logoSvg = (
-    <div className={`${config.container} ${className} flex items-center justify-center`}>
+    <div className="w-16 h-16 flex items-center justify-center ml-4">
       <svg 
         viewBox="0 0 100 100" 
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Crescent moon shape */}
+        {/* Crescent moon shape - exactly like reference */}
         <defs>
           <mask id="crescentMask">
             <rect width="100%" height="100%" fill="white"/>
-            <circle cx="65" cy="35" r="30" fill="black"/>
+            <circle cx="75" cy="25" r="35" fill="black"/>
           </mask>
         </defs>
         
         <circle
           cx="50"
           cy="50"
-          r="35"
+          r="40"
           fill="white"
           mask="url(#crescentMask)"
         />
@@ -111,8 +111,8 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
   }
 
   return (
-    <div className="flex items-center gap-4">
-      <div className={`font-bold ${config.text} text-white tracking-wide`}>
+    <div className="flex items-center">
+      <div className="text-6xl font-bold text-white tracking-wide">
         Sustaino Pro
       </div>
       {logoSvg}
