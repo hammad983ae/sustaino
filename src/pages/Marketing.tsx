@@ -172,14 +172,14 @@ const Marketing = () => {
                   <LogoDownloader
                     logoComponent={<PerfectSustanoLogo size="xl" variant="white" />}
                     filename="sustaino-pro-dashboard-gradient"
-                    backgroundColor="linear-gradient(135deg, #3b82f6, #06b6d4, #10b981)"
+                    backgroundColor="#3b82f6"
                   />
                 </CardContent>
               </Card>
 
               {/* Standard Logo */}
               <Card>
-                <CardContent className="p-6 text-center">
+                <CardContent className="p-6 text-center bg-white">
                   <div className="mb-4 flex justify-center">
                     <PerfectSustanoLogo size="lg" variant="default" />
                   </div>
@@ -239,7 +239,7 @@ const Marketing = () => {
 
               {/* Icon Only */}
               <Card>
-                <CardContent className="p-6 text-center">
+                <CardContent className="p-6 text-center bg-gray-100">
                   <div className="mb-4 flex justify-center">
                     <PerfectSustanoLogo size="lg" variant="default" showText={false} />
                   </div>
@@ -247,7 +247,7 @@ const Marketing = () => {
                   <LogoDownloader
                     logoComponent={<PerfectSustanoLogo size="xl" variant="default" showText={false} />}
                     filename="sustaino-pro-icon"
-                    backgroundColor="#ffffff"
+                    backgroundColor="#f3f4f6"
                     width={400}
                     height={400}
                   />
@@ -271,7 +271,7 @@ const Marketing = () => {
                 </CardContent>
               </Card>
 
-              {/* Vertical Powered By */}
+              {/* Powered Text */}
               <Card>
                 <CardContent className="p-6 text-center bg-gradient-to-br from-gray-800 to-gray-900">
                   <div className="mb-4 flex justify-center">
