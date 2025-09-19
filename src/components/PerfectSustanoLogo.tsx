@@ -46,9 +46,9 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
   // Color variants
   const colorConfig = {
     default: {
-      outerCircle: 'stroke-gray-300',
-      innerCircle: 'fill-emerald-500',
-      text: 'text-gray-800'
+      outerCircle: 'stroke-gray-800',
+      innerCircle: 'fill-black',
+      text: 'text-black'
     },
     white: {
       outerCircle: 'stroke-white/60',
@@ -56,24 +56,24 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
       text: 'text-white'
     },
     purple: {
-      outerCircle: 'stroke-white/60',
-      innerCircle: 'fill-white',
-      text: 'text-white'
+      outerCircle: 'stroke-black',
+      innerCircle: 'fill-black',
+      text: 'text-black'
     },
     dark: {
-      outerCircle: 'stroke-gray-600',
-      innerCircle: 'fill-gray-800',
-      text: 'text-gray-800'
+      outerCircle: 'stroke-black',
+      innerCircle: 'fill-black',
+      text: 'text-black'
     },
     emerald: {
-      outerCircle: 'stroke-white/60',
-      innerCircle: 'fill-white',
-      text: 'text-white'
+      outerCircle: 'stroke-black',
+      innerCircle: 'fill-black',
+      text: 'text-black'
     },
     blue: {
-      outerCircle: 'stroke-white/60', 
-      innerCircle: 'fill-white',
-      text: 'text-white'
+      outerCircle: 'stroke-black', 
+      innerCircle: 'fill-black',
+      text: 'text-black'
     }
   };
 
