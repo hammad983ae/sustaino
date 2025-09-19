@@ -26,6 +26,7 @@ import ComprehensiveEcosystemValuation from './ComprehensiveEcosystemValuation';
 import ModularPlatformValuation from './ModularPlatformValuation';
 import DigitalContractSigning from './DigitalContractSigning';
 import SustanoProLiveAuction from './SustanoProLiveAuction';
+import PlatformSubmissionForm from './PlatformSubmissionForm';
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -295,7 +296,7 @@ export const SustanoSphere = () => {
 
       {/* Main Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-8 gap-1">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 gap-1">
           <TabsTrigger value="browse" className="text-xs lg:text-sm">🔍 Browse</TabsTrigger>
           <TabsTrigger value="featured" className="text-xs lg:text-sm">⭐ Featured</TabsTrigger>
           <TabsTrigger value="valuation" className="text-xs lg:text-sm">📊 Valuation</TabsTrigger>
@@ -304,7 +305,8 @@ export const SustanoSphere = () => {
           <TabsTrigger value="datacentre" className="text-xs lg:text-sm">🏛️ Data Centre</TabsTrigger>
           <TabsTrigger value="watchlist" className="text-xs lg:text-sm">❤️ Watchlist</TabsTrigger>
           <TabsTrigger value="vendor" className="text-xs lg:text-sm">📄 Vendor</TabsTrigger>
-          <TabsTrigger value="sell" className="text-xs lg:text-sm">💼 List Asset</TabsTrigger>
+          <TabsTrigger value="submit" className="text-xs lg:text-sm">🚀 List Platform</TabsTrigger>
+          <TabsTrigger value="sell" className="text-xs lg:text-sm">💼 Live Sale</TabsTrigger>
         </TabsList>
 
         {/* Browse Auctions */}
@@ -589,6 +591,11 @@ export const SustanoSphere = () => {
         {/* Documents Tab - Digital Contract Signing */}
         <TabsContent value="documents">
           <DigitalContractSigning />
+        </TabsContent>
+
+        {/* Submit Platform Tab - Platform Submission System */}
+        <TabsContent value="submit">
+          <PlatformSubmissionForm />
         </TabsContent>
 
         {/* Sell Tab - Live Auction */}
