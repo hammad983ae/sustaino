@@ -26,7 +26,6 @@ import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import SustanoProDashboard from "./pages/SustanoProDashboard";
-import ICVDashboard from "./components/ICVDashboard";
 import AutomatedValuation from "./pages/AutomatedValuation";
 import RenewableEnergyValuations from "./components/RenewableEnergyValuations";
 import PropertyValuations from "./pages/PropertyValuations";
@@ -84,7 +83,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<ICVDashboard />} />
+                <Route path="/" element={<SustanoProDashboard />} />
                 <Route path="/automated-valuation" element={<AutomatedValuation />} />
                 <Route path="/sustaino-pro" element={<SustanoProDashboard />} />
                 <Route path="/report" element={<Report />} />
