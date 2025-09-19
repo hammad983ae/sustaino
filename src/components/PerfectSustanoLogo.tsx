@@ -79,10 +79,10 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
       >
         {/* Outer semi-circle (thinner stroke) */}
         <path
-          d="M 15 50 A 35 35 0 0 1 85 50"
+          d="M 12 50 A 38 38 0 0 1 88 50"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.5"
           className={colors.outerCircle}
         />
         
@@ -90,16 +90,16 @@ const PerfectSustanoLogo: React.FC<PerfectSustanoLogoProps> = ({
         <circle
           cx="50"
           cy="50"
-          r="25"
+          r="28"
           className={colors.innerCircle}
         />
         
         {/* Inner semi-circle cutout (for the "C" shape) */}
         <path
-          d="M 35 50 A 15 15 0 0 1 65 50"
+          d="M 32 50 A 18 18 0 0 1 68 50"
           fill="none"
           stroke="currentColor"
-          strokeWidth="3"
+          strokeWidth="2.5"
           className={variant === 'white' || variant === 'purple' ? 'stroke-gray-400' : 'stroke-white'}
         />
       </svg>
