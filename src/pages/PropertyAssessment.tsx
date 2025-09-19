@@ -21,10 +21,7 @@ const PropertyAssessment = () => {
     <PropertyProvider>
       <ReportDataProvider>
         <div className="min-h-screen bg-background">
-          <PropertyAssessmentForm
-            onComplete={handleAssessmentComplete}
-            onNavigateToReport={handleNavigateToReport}
-          />
+          <PropertyAssessmentForm />
         </div>
       </ReportDataProvider>
     </PropertyProvider>

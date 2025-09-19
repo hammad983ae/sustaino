@@ -70,6 +70,7 @@ import LovablePartnershipProposal from "./components/LovablePartnershipProposal"
 import SocialMediaAssets from "./pages/SocialMediaAssets";
 import ConceptsAndPlans from "./pages/ConceptsAndPlans";
 import Marketing from "./pages/Marketing";
+import PropertyAssessmentFormPage from "./pages/PropertyAssessmentForm";
 
 const queryClient = new QueryClient();
 
@@ -92,7 +93,8 @@ const App = () => (
                 <Route path="/property-assessment" element={<PropertyAssessment />} />
         <Route path="/automated-report" element={<AutomatedReport propertyType="commercial" />} />
                 <Route path="/property-valuations" element={<PropertyValuations />} />
-                <Route path="/work-hub" element={<WorkHubPage />} />
+                <Route path="/workhub" element={<WorkHubPage />} />
+                <Route path="/property-assessment-form" element={<PropertyAssessmentFormPage />} />
                 <Route path="/white-label" element={<WhiteLabelConfig />} />
                 <Route path="/client-demo" element={<ClientDemo />} />
                 <Route path="/auth" element={<AuthPage />} />

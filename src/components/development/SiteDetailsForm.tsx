@@ -7,7 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MapPin, Building, Calculator, Save, Loader2 } from "lucide-react";
-import { useUniversalSave } from "@/hooks/useUniversalSave";
+import { useManualSave } from "@/hooks/useManualSave";
+import { SectionSaveButton } from "@/components/ui/section-save-button";
 import { useToast } from "@/hooks/use-toast";
 import AddressVerificationService from "./AddressVerificationService";
 import DataSourcesConfig from "./DataSourcesConfig";
@@ -76,30 +77,14 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
   const [enabledDataSources, setEnabledDataSources] = useState<any[]>([]);
   
   // Save system implementation
-  const { saveData, loadData, isSaving } = useUniversalSave('development-site-details');
+  const { saveData, loadData, isSaving, lastSaved } = useManualSave();
   const { toast } = useToast();
-
-  // Auto-save functionality
-  useEffect(() => {
-    const autoSave = async () => {
-      if (siteData.address || siteData.clientName || siteData.description) {
-        try {
-          await saveData(siteData);
-        } catch (error) {
-          console.error('Auto-save failed:', error);
-        }
-      }
-    };
-
-    const debounceTimer = setTimeout(autoSave, 2000);
-    return () => clearTimeout(debounceTimer);
-  }, [siteData, saveData]);
 
   // Load saved data on component mount
   useEffect(() => {
     const loadSavedData = async () => {
       try {
-        const savedData = await loadData();
+        const savedData = await loadData('development-site-details');
         if (savedData && savedData.address) {
           const typedData = savedData as SiteData;
           setSiteData(typedData);
@@ -121,22 +106,6 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
     const updatedData = { ...siteData, [field]: value };
     setSiteData(updatedData);
     onSiteDataChange(updatedData);
-  };
-
-  const handleManualSave = async () => {
-    try {
-      await saveData(siteData);
-      toast({
-        title: "Data Saved",
-        description: "Site details have been saved successfully.",
-      });
-    } catch (error) {
-      toast({
-        title: "Save Failed",
-        description: "Failed to save site details. Please try again.",
-        variant: "destructive",
-      });
-    }
   };
 
   const handleAddressVerified = (addressData: any) => {
@@ -273,14 +242,12 @@ export default function SiteDetailsForm({ onSiteDataChange }: SiteDetailsFormPro
               <MapPin className="w-5 h-5" />
               Valuation Details
             </div>
-            <Button onClick={handleManualSave} disabled={isSaving} size="sm">
-              {isSaving ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Save className="w-4 h-4 mr-2" />
-              )}
-              Save Data
-            </Button>
+            <SectionSaveButton
+              onSave={() => saveData('development-valuation-details', siteData)}
+              isSaving={isSaving}
+              lastSaved={lastSaved}
+              sectionName="Valuation Details"
+            />
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
