@@ -311,14 +311,14 @@ const SustanoProDashboard = () => {
       {/* 3D Background */}
       <PropertyValuation3DBackground />
       
-      {/* Blue/purple glowing background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-purple-50/60 to-indigo-50/70" />
+      {/* Green/teal glowing background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/80 via-teal-50/60 to-green-50/70" />
       
       <div className="relative z-10 container mx-auto px-4 py-12">
         
         {/* Header */}
         <div className="text-center space-y-6 mb-12">
-          <div className="inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-purple-600 rounded-full text-sm font-medium shadow-sm border border-purple-200/50">
+          <div className="inline-flex items-center px-6 py-3 bg-white/80 backdrop-blur-sm text-emerald-600 rounded-full text-sm font-medium shadow-sm border border-emerald-200/50">
             🚀 Sustaino Pro - Complete Platform Ecosystem
           </div>
           
@@ -326,7 +326,7 @@ const SustanoProDashboard = () => {
           <div className="flex items-center justify-center gap-4">
             <ThunderboltIcon className="h-20 w-20" />
             <div className="text-left">
-              <h1 className="text-7xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-7xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Sustaino Pro
               </h1>
               <p className="text-2xl text-slate-600 font-medium">
@@ -335,26 +335,26 @@ const SustanoProDashboard = () => {
             </div>
           </div>
           
-          <p className="text-lg text-purple-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-emerald-600 max-w-3xl mx-auto leading-relaxed">
             Access all Sustaino Pro platforms, tools, and services from one centralized dashboard. 
             Choose your category to explore our comprehensive suite of property and investment solutions.
           </p>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-200/50">
-              <div className="text-2xl font-bold text-purple-600">{platforms.length}</div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-emerald-200/50">
+              <div className="text-2xl font-bold text-emerald-600">{platforms.length}</div>
               <div className="text-sm text-slate-600">Total Platforms</div>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-200/50">
-              <div className="text-2xl font-bold text-blue-600">{categories.length}</div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-emerald-200/50">
+              <div className="text-2xl font-bold text-teal-600">{categories.length}</div>
               <div className="text-sm text-slate-600">Categories</div>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-200/50">
-              <div className="text-2xl font-bold text-emerald-600">24/7</div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-emerald-200/50">
+              <div className="text-2xl font-bold text-green-600">24/7</div>
               <div className="text-sm text-slate-600">Availability</div>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-200/50">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-emerald-200/50">
               <div className="text-2xl font-bold text-orange-600">AI</div>
               <div className="text-sm text-slate-600">Powered</div>
             </div>
@@ -366,7 +366,7 @@ const SustanoProDashboard = () => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             
             {/* Category Tabs */}
-            <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1 mb-8">
+            <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 bg-white/80 backdrop-blur-sm shadow-sm border border-emerald-200/50 rounded-xl p-1 mb-8">
               {categories.map((category) => (
                 <TabsTrigger 
                   key={category.id}
@@ -397,7 +397,7 @@ const SustanoProDashboard = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredPlatforms.map((platform, index) => (
                       <Link key={index} to={platform.route}>
-                        <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50 hover:shadow-2xl transition-all duration-300 cursor-pointer hover:scale-105 h-full">
+                        <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-emerald-200/50 hover:shadow-2xl transition-all duration-300 cursor-pointer hover:scale-105 h-full">
                           <CardHeader className={`bg-gradient-to-r ${platform.color} text-white rounded-t-lg`}>
                             <CardTitle className="flex items-center gap-3 text-lg">
                               <platform.icon className="h-6 w-6" />
@@ -434,7 +434,7 @@ const SustanoProDashboard = () => {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-16 pt-8 border-t border-purple-200">
+        <div className="text-center mt-16 pt-8 border-t border-emerald-200">
           <p className="text-slate-600">
             © 2025 Sustaino Pro. All platforms integrated and ready to use.
           </p>
