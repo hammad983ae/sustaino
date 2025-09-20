@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import WebDataUploadInterface from '@/components/WebDataUploadInterface';
 import DataStorageViewer from '@/components/DataStorageViewer';
+import EvidenceManager from '@/components/evidence/EvidenceManager';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -236,8 +237,12 @@ export default function AutomatedValuation() {
                     </TabsContent>
                     
                     <TabsContent value="tools" className="space-y-6">
-                      <Tabs defaultValue="upload" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 bg-slate-800/90 border border-slate-600">
+                      <Tabs defaultValue="evidence" className="w-full">
+                        <TabsList className="grid w-full grid-cols-3 bg-slate-800/90 border border-slate-600">
+                          <TabsTrigger value="evidence" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900">
+                            <Database className="w-4 h-4 mr-2" />
+                            Evidence Manager
+                          </TabsTrigger>
                           <TabsTrigger value="upload" className="text-white data-[state=active]:bg-white data-[state=active]:text-slate-900">
                             📤 Web Data Upload
                           </TabsTrigger>
@@ -246,6 +251,10 @@ export default function AutomatedValuation() {
                             View Stored Data
                           </TabsTrigger>
                         </TabsList>
+                        
+                        <TabsContent value="evidence">
+                          <EvidenceManager />
+                        </TabsContent>
                         
                         <TabsContent value="upload">
                           <WebDataUploadInterface />
