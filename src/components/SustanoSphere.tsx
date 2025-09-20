@@ -251,34 +251,27 @@ export const SustanoSphere = () => {
         <CardHeader className="text-center py-8">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center relative overflow-hidden">
-                {/* Animated Digital Atom Logo */}
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
+                {/* Atom Logo Design from Screenshot */}
                 <div className="relative w-10 h-10">
-                  {/* Central Core */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                  {/* Central nucleus */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full"></div>
                   
-                  {/* Outer Orbit Ring */}
-                  <div className="absolute inset-0 border-2 border-white/60 rounded-full animate-[spin_4s_linear_infinite]">
-                    <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white rounded-full"></div>
-                  </div>
+                  {/* Horizontal orbital ring */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-4 border border-white rounded-full opacity-80"></div>
                   
-                  {/* Middle Orbit Ring */}
-                  <div className="absolute inset-1 border-2 border-white/40 rounded-full animate-[spin_3s_linear_infinite_reverse]">
-                    <div className="absolute -top-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white/80 rounded-full"></div>
-                  </div>
+                  {/* Diagonal orbital ring (left-right tilt) */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-45 w-8 h-4 border border-white rounded-full opacity-80"></div>
                   
-                  {/* Inner Orbit Ring */}
-                  <div className="absolute inset-2 border border-white/30 rounded-full animate-[spin_2s_linear_infinite]">
-                    <div className="absolute -top-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white/60 rounded-full"></div>
-                  </div>
+                  {/* Diagonal orbital ring (right-left tilt) */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 w-8 h-4 border border-white rounded-full opacity-80"></div>
                   
-                  {/* Digital Particles */}
-                  <div className="absolute top-0 left-1/2 w-0.5 h-0.5 bg-cyan-300 rounded-full animate-[spin_1.5s_linear_infinite]"></div>
-                  <div className="absolute bottom-0 right-1/2 w-0.5 h-0.5 bg-cyan-300 rounded-full animate-[spin_2.5s_linear_infinite_reverse]"></div>
+                  {/* Small electron dots */}
+                  <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
+                  <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
+                  <div className="absolute top-1/2 left-1 transform -translate-y-1/2 w-1 h-1 bg-white rounded-full"></div>
+                  <div className="absolute top-1/2 right-1 transform -translate-y-1/2 w-1 h-1 bg-white rounded-full"></div>
                 </div>
-                
-                {/* Glowing Effect */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-400/20 to-blue-500/20 animate-pulse"></div>
               </div>
             </div>
             <div className="space-y-2">
