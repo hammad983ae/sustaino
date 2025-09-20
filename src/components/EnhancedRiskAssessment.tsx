@@ -29,6 +29,7 @@ import {
 import { toast } from 'sonner';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useProperty } from '@/contexts/PropertyContext';
+import PESTELDataExtractor from '@/components/PESTELDataExtractor';
 
 interface PESTELFactor {
   factor: string;
@@ -347,6 +348,22 @@ export default function EnhancedRiskAssessment() {
     }
   };
 
+  // Handle AI-extracted PESTEL data
+  const handlePESTELDataExtracted = (extractedData: any[]) => {
+    if (extractedData && Array.isArray(extractedData)) {
+      setPestelAnalysis(extractedData);
+      toast.success("PESTEL analysis updated with AI-extracted data");
+      
+      // Update report data
+      updateReportData('riskAssessment', {
+        ...reportData?.riskAssessment,
+        pestelAnalysis: extractedData,
+        lastUpdated: new Date().toISOString()
+      });
+    }
+  };
+  };
+
   return (
     <div className="space-y-6">
       {/* Section Header */}
@@ -422,6 +439,17 @@ export default function EnhancedRiskAssessment() {
               </CardContent>
             )}
           </Card>
+
+          {/* AI-Powered PESTEL Data Extractor */}
+          <PESTELDataExtractor
+            onDataExtracted={handlePESTELDataExtracted}
+            propertyDetails={{
+              address: addressData?.fullAddress || reportData?.propertySearchData?.selectedProperty?.address,
+              propertyType: propertyData.propertyType,
+              location: propertyData.location
+            }}
+            currentPestelData={pestelAnalysis}
+          />
 
           <Tabs defaultValue="pestel" className="space-y-4">
             <TabsList className="grid w-full grid-cols-4">
@@ -798,3 +826,5 @@ export default function EnhancedRiskAssessment() {
     </div>
   );
 }
+
+export default EnhancedRiskAssessment;
