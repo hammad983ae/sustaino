@@ -27,6 +27,7 @@ import EnvironmentalAudit from "./EnvironmentalAudit";
 import SustainoProAnalysis from "./SustainoProAnalysis";
 import ValuationCertificate from "./ValuationCertificate";
 import TermsAndConditions from "./TermsAndConditions";
+import ComprehensiveESGClimateAssessmentForm from "./ComprehensiveESGClimateAssessmentForm";
 import CertificationAndSecurity from "./CertificationAndSecurity";
 
 import MarketTransactionAnalysis from "./MarketTransactionAnalysis";
@@ -228,8 +229,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           <p className="text-sm text-muted-foreground">Comprehensive Environmental, Social, Governance and Climate Risk Assessment</p>
         </CardHeader>
         <CardContent className="space-y-6">
-          <ComprehensiveESGAssessment />
-          <ComprehensiveClimateRiskAssessment />
+          <ComprehensiveESGClimateAssessmentForm />
         </CardContent>
       </Card>
     );
