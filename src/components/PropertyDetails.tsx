@@ -673,45 +673,23 @@ const EnhancedPropertyDetails = () => {
                   </div>
                 </div>
 
-                {/* Area Summary Table */}
                 <div className="border rounded-lg overflow-hidden">
-                  <div className="bg-muted px-4 py-2 border-b">
-                    <h5 className="font-medium text-sm">Area Summary</h5>
-                  </div>
                   <div className="divide-y">
                     <div className="grid grid-cols-3 gap-4 p-3">
-                      <Label className="text-sm font-medium">GLAR</Label>
+                      <Label className="text-sm font-medium">Rooms/Beds</Label>
                       <Input 
                         onChange={(e) => handlePropertyDetailChange('glar', e.target.value)}
-                        placeholder="950 sqm"
+                        placeholder="18 beds/7rooms"
                         className="text-sm"
                       />
-                      <div className="text-xs text-muted-foreground">Gross lettable area</div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-4 p-3">
-                      <Label className="text-sm font-medium">Annex</Label>
-                      <Input 
-                        onChange={(e) => handlePropertyDetailChange('annexArea', e.target.value)}
-                        placeholder="0 sqm"
-                        className="text-sm"
-                      />
-                      <div className="text-xs text-muted-foreground">Additional area</div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-4 p-3">
-                      <Label className="text-sm font-medium">Land Area</Label>
-                      <Input 
-                        onChange={(e) => handlePropertyDetailChange('landArea', e.target.value)}
-                        placeholder="950 sqm"
-                        className="text-sm"
-                      />
-                      <div className="text-xs text-muted-foreground">Total land area</div>
+                      <div className="text-xs text-muted-foreground">Number of rooms/beds</div>
                     </div>
                     <div className="grid grid-cols-3 gap-4 p-3">
                       <Label className="text-sm font-medium">Total Area</Label>
                       <Input 
                         value={propertyDetails.buildingArea}
                         onChange={(e) => handlePropertyDetailChange('buildingArea', e.target.value)}
-                        placeholder="950 sqm"
+                        placeholder="200 sqm"
                         className="text-sm"
                       />
                       <div className="text-xs text-muted-foreground">Combined total area</div>
