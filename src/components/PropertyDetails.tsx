@@ -36,7 +36,15 @@ const EnhancedPropertyDetails = () => {
     airConditioning: '',
     heating: '',
     lighting: '',
-    description: ''
+    description: '',
+    // Pre-populated for 320 Deakin Avenue Mildura
+    streetNumber: '320',
+    streetName: 'Deakin',
+    streetType: 'Avenue',
+    suburb: 'Mildura',
+    state: 'VIC',
+    postcode: '3500',
+    country: 'Australia'
   });
 
   // Commercial compliance state
