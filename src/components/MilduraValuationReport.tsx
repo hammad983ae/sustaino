@@ -1330,6 +1330,333 @@ const MilduraValuationReport = () => {
           </CardContent>
         </Card>
 
+        {/* Valuation Analysis and Rationale */}
+        <Card className="shadow-lg border-border">
+          <CardHeader className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10">
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <BarChart3 className="w-6 h-6" />
+              Valuation Analysis and Rationale
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-2">Comprehensive valuation methodology and future value projections</p>
+          </CardHeader>
+          <CardContent className="pt-6 space-y-8">
+            
+            {/* Valuation Methodology */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Valuation Methodology</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">Income Capitalization Approach</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Net Operating Income:</span>
+                      <span className="font-medium text-foreground">$87,000</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Capitalization Rate:</span>
+                      <span className="font-medium text-foreground">7.0%</span>
+                    </div>
+                    <div className="flex justify-between border-t pt-2">
+                      <span className="text-muted-foreground">Indicated Value:</span>
+                      <span className="font-bold text-blue-600">$1,243,000</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/20 dark:to-green-900/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">Direct Comparison Method</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Avg. Price per Room:</span>
+                      <span className="font-medium text-foreground">$82,778</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Subject Rooms:</span>
+                      <span className="font-medium text-foreground">18</span>
+                    </div>
+                    <div className="flex justify-between border-t pt-2">
+                      <span className="text-muted-foreground">Indicated Value:</span>
+                      <span className="font-bold text-green-600">$1,290,000</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">EBITDA Multiple Analysis</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">EBITDA:</span>
+                      <span className="font-medium text-foreground">$87,000</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Industry Multiple:</span>
+                      <span className="font-medium text-foreground">15.5x</span>
+                    </div>
+                    <div className="flex justify-between border-t pt-2">
+                      <span className="text-muted-foreground">Indicated Value:</span>
+                      <span className="font-bold text-purple-600">$1,349,000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                <h4 className="font-semibold text-foreground mb-2">Weighted Valuation Analysis</h4>
+                <div className="grid md:grid-cols-4 gap-4 text-sm">
+                  <div className="text-center">
+                    <p className="text-muted-foreground">Income Approach (40%)</p>
+                    <p className="font-medium text-foreground">$497,200</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-muted-foreground">Sales Comparison (35%)</p>
+                    <p className="font-medium text-foreground">$451,500</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-muted-foreground">EBITDA Multiple (25%)</p>
+                    <p className="font-medium text-foreground">$337,250</p>
+                  </div>
+                  <div className="text-center border-l border-primary/30">
+                    <p className="text-muted-foreground">Market Value</p>
+                    <p className="text-xl font-bold text-primary">$1,286,000</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Sunraysia Infrastructure Impact Analysis */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Sunraysia Infrastructure Value Impact</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-100 dark:from-emerald-950/20 dark:to-teal-900/30 rounded-lg">
+                    <h4 className="font-semibold text-foreground mb-3">Major Infrastructure Projects</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-medium text-foreground">Mildura Hospital Redevelopment</p>
+                          <p className="text-sm text-muted-foreground">Completion: Q2 2025 | Distance: 1.2km</p>
+                        </div>
+                        <Badge variant="secondary">+8.2% impact</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-medium text-foreground">Sunraysia TAFE Campus Upgrade</p>
+                          <p className="text-sm text-muted-foreground">Completion: Q1 2025 | Distance: 0.8km</p>
+                        </div>
+                        <Badge variant="secondary">+6.5% impact</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-medium text-foreground">Regional Solar Farm Development</p>
+                          <p className="text-sm text-muted-foreground">Completion: Q4 2024 | Distance: 2.1km</p>
+                        </div>
+                        <Badge variant="secondary">+4.8% impact</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-cyan-100 dark:from-blue-950/20 dark:to-cyan-900/30 rounded-lg">
+                    <h4 className="font-semibold text-foreground mb-3">Cumulative Value Enhancement</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Base Market Value:</span>
+                        <span className="font-medium text-foreground">$1,286,000</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Infrastructure Premium:</span>
+                        <span className="font-medium text-green-600">+12.8%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Enhanced Value (6 months):</span>
+                        <span className="font-medium text-foreground">$1,451,000</span>
+                      </div>
+                      <div className="flex justify-between border-t pt-2">
+                        <span className="text-muted-foreground">24-month Projection:</span>
+                        <span className="font-bold text-primary">$1,525,000</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border-l-4 border-yellow-500">
+                    <p className="text-sm text-foreground">
+                      <strong>Infrastructure Impact Rationale:</strong> Proximity to major Sunraysia infrastructure developments 
+                      creates increased demand for worker accommodation, supporting premium pricing and enhanced occupancy rates.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Market Cycle and Risk Analysis */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Market Cycle & Risk Assessment</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-100 dark:from-green-950/20 dark:to-emerald-900/30 rounded-lg">
+                    <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5 text-green-600" />
+                      Market Cycle Position
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Current Phase:</span>
+                        <Badge variant="default" className="bg-green-600">Growth</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Confidence Level:</span>
+                        <span className="font-bold text-green-600">73%</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Time to Next Phase:</span>
+                        <span className="font-medium text-foreground">18 months</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-3">
+                        Market currently in growth phase with positive momentum expected to continue, 
+                        supporting value appreciation and rental growth prospects.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="p-4 bg-gradient-to-r from-orange-50 to-red-100 dark:from-orange-950/20 dark:to-red-900/30 rounded-lg">
+                    <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5 text-orange-600" />
+                      Risk Analysis
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Interest Rate Rise (65% probability):</span>
+                        <span className="text-red-600 font-medium">-8.5% impact</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Economic Recession (25% probability):</span>
+                        <span className="text-red-600 font-medium">-15.2% impact</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Oversupply Risk (40% probability):</span>
+                        <span className="text-orange-600 font-medium">-6.1% impact</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Infrastructure Delays (30% probability):</span>
+                        <span className="text-orange-600 font-medium">-4.3% impact</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-blue-950/20 dark:to-indigo-900/30 rounded-lg">
+                <h4 className="font-semibold text-foreground mb-3">Risk-Adjusted Valuation Range</h4>
+                <div className="grid md:grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Conservative Scenario</p>
+                    <p className="text-lg font-bold text-red-600">$1,150,000</p>
+                    <p className="text-xs text-muted-foreground">High risk impact</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Most Likely Scenario</p>
+                    <p className="text-xl font-bold text-primary">$1,286,000</p>
+                    <p className="text-xs text-muted-foreground">Current market conditions</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Optimistic Scenario</p>
+                    <p className="text-lg font-bold text-green-600">$1,450,000</p>
+                    <p className="text-xs text-muted-foreground">Infrastructure benefits realized</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Value Projections */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Future Value Projections</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">6 Month Projection</h4>
+                  <div className="text-center mb-3">
+                    <p className="text-2xl font-bold text-blue-600">$1,287,500</p>
+                    <p className="text-sm text-green-600">+3.0% change</p>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <p className="text-muted-foreground"><strong>Key Factors:</strong></p>
+                    <ul className="text-muted-foreground space-y-1">
+                      <li>• Interest rate stability</li>
+                      <li>• Local demand patterns</li>
+                      <li>• Seasonal variation</li>
+                    </ul>
+                    <p className="text-muted-foreground mt-2"><strong>Confidence:</strong> <Badge variant="secondary">High (78%)</Badge></p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/20 dark:to-green-900/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">12 Month Projection</h4>
+                  <div className="text-center mb-3">
+                    <p className="text-2xl font-bold text-green-600">$1,342,000</p>
+                    <p className="text-sm text-green-600">+7.4% change</p>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <p className="text-muted-foreground"><strong>Key Factors:</strong></p>
+                    <ul className="text-muted-foreground space-y-1">
+                      <li>• Infrastructure development</li>
+                      <li>• Population growth</li>
+                      <li>• Employment trends</li>
+                    </ul>
+                    <p className="text-muted-foreground mt-2"><strong>Confidence:</strong> <Badge variant="secondary">Medium (71%)</Badge></p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/30 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">24 Month Projection</h4>
+                  <div className="text-center mb-3">
+                    <p className="text-2xl font-bold text-purple-600">$1,425,000</p>
+                    <p className="text-sm text-green-600">+14.0% change</p>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <p className="text-muted-foreground"><strong>Key Factors:</strong></p>
+                    <ul className="text-muted-foreground space-y-1">
+                      <li>• Major infrastructure projects</li>
+                      <li>• Urban development</li>
+                      <li>• Economic growth</li>
+                    </ul>
+                    <p className="text-muted-foreground mt-2"><strong>Confidence:</strong> <Badge variant="secondary">Medium (64%)</Badge></p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-primary/5 rounded-lg border border-primary/20">
+                <h4 className="font-semibold text-foreground mb-3">Valuation Summary & Recommendation</h4>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h5 className="font-medium text-foreground mb-2">Current Valuation Range</h5>
+                    <p className="text-2xl font-bold text-primary mb-2">$1.2M - $1.4M</p>
+                    <p className="text-sm text-muted-foreground">
+                      Based on comprehensive analysis incorporating income approach, comparable sales, and EBITDA multiples, 
+                      with adjustments for climate risk and infrastructure benefits.
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-foreground mb-2">Investment Recommendation</h5>
+                    <Badge variant="default" className="mb-2">POSITIVE OUTLOOK</Badge>
+                    <p className="text-sm text-muted-foreground">
+                      Strong fundamentals with Sunraysia infrastructure development creating additional value enhancement. 
+                      Purpose-built accommodation facility well-positioned for sustained demand growth and capital appreciation.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Valuation Summary */}
         <Card className="shadow-lg border-border bg-gradient-to-r from-primary/5 to-primary/10">
           <CardHeader>
