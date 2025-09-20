@@ -104,8 +104,10 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
 
   const connectWallet = async () => {
     if (!window.ethereum) {
-      setShowInstallGuide(true);
-      toast.error("MetaMask not detected. Please install MetaMask to continue.");
+      // Don't show install guide automatically, just inform user
+      toast.info("MetaMask not detected. You can still use Sustano Sphere features in view-only mode.", {
+        duration: 5000,
+      });
       return;
     }
 
@@ -216,17 +218,22 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
           {showWalletConnect && (
             <div className="space-y-2">
               {!isConnected ? (
-                <Dialog open={showInstallGuide} onOpenChange={setShowInstallGuide}>
-                  <DialogTrigger asChild>
-                    <Button onClick={connectWallet} className="w-full" size="sm">
-                      <Wallet className="w-4 h-4 mr-2" />
-                      Connect Wallet
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
-                  </DialogContent>
-                </Dialog>
+                <div className="space-y-2">
+                  <Button onClick={connectWallet} className="w-full" size="sm">
+                    <Wallet className="w-4 h-4 mr-2" />
+                    Connect Wallet
+                  </Button>
+                  <Dialog open={showInstallGuide} onOpenChange={setShowInstallGuide}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" onClick={() => setShowInstallGuide(true)} className="w-full" size="sm">
+                        Need MetaMask?
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                      <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
+                    </DialogContent>
+                  </Dialog>
+                </div>
               ) : (
                 <div className="text-center text-sm text-green-700">
                   ✅ Wallet Connected
@@ -345,21 +352,29 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
             {!isConnected ? (
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground">
-                  Connect your MetaMask wallet to access blockchain features
+                  Connect your MetaMask wallet to access full blockchain features, or continue using Sustano Sphere in view-only mode.
                 </p>
-                <Dialog open={showInstallGuide} onOpenChange={setShowInstallGuide}>
-                  <DialogTrigger asChild>
-                    <Button onClick={connectWallet} className="w-full max-w-md">
-                      <Wallet className="w-4 h-4 mr-2" />
-                      Connect MetaMask Wallet
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
-                  </DialogContent>
-                </Dialog>
+                <div className="flex flex-col gap-2 max-w-md mx-auto">
+                  <Button onClick={connectWallet} className="w-full">
+                    <Wallet className="w-4 h-4 mr-2" />
+                    Connect MetaMask Wallet
+                  </Button>
+                  <Dialog open={showInstallGuide} onOpenChange={setShowInstallGuide}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" onClick={() => setShowInstallGuide(true)} className="w-full">
+                        Install MetaMask Guide
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                      <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="ghost" className="w-full text-muted-foreground">
+                    Continue Without Wallet
+                  </Button>
+                </div>
                 <div className="text-xs text-muted-foreground">
-                  Don't have MetaMask? Click above for installation guide.
+                  📊 All analytics and reports remain fully accessible • 🔍 Property search and analysis available • 💡 Educational content accessible
                 </div>
               </div>
             ) : (
