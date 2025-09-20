@@ -6,6 +6,7 @@ import { Database, FileText, TrendingUp } from 'lucide-react';
 import SalesEvidence from './SalesEvidence';
 import RentalEvidence from './RentalEvidence';
 import { WebDataUploader } from '../WebDataUploader';
+import AltDataParser from './AltDataParser';
 
 export default function EvidenceManager() {
   const [salesCount, setSalesCount] = useState(0);
@@ -46,9 +47,10 @@ export default function EvidenceManager() {
           </TabsContent>
           
           <TabsContent value="import" className="mt-6">
-            <div className="space-y-4">
+            <div className="space-y-6">
               <h3 className="text-lg font-semibold">Import Evidence from External Sources</h3>
               <WebDataUploader />
+              <AltDataParser />
             </div>
           </TabsContent>
         </Tabs>
