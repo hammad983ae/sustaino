@@ -7,6 +7,7 @@ import SalesEvidence from './SalesEvidence';
 import RentalEvidence from './RentalEvidence';
 import { WebDataUploader } from '../WebDataUploader';
 import AltDataParser from './AltDataParser';
+import BulkAltImporter from './BulkAltImporter';
 
 export default function EvidenceManager() {
   const [salesCount, setSalesCount] = useState(0);
@@ -49,8 +50,21 @@ export default function EvidenceManager() {
           <TabsContent value="import" className="mt-6">
             <div className="space-y-6">
               <h3 className="text-lg font-semibold">Import Evidence from External Sources</h3>
-              <WebDataUploader />
-              <AltDataParser />
+              
+              <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+                <div>
+                  <h4 className="font-medium mb-3">Bulk File Import</h4>
+                  <BulkAltImporter />
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-3">Single File/Text Import</h4>
+                  <div className="space-y-4">
+                    <WebDataUploader />
+                    <AltDataParser />
+                  </div>
+                </div>
+              </div>
             </div>
           </TabsContent>
         </Tabs>
