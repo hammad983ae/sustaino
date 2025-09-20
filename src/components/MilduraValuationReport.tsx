@@ -958,12 +958,16 @@ const MilduraValuationReport = () => {
                   </div>
 
                   <div className="p-4 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-950/20 dark:to-orange-900/30 rounded-lg">
-                    <h4 className="font-semibold text-foreground mb-3">Supply Chain Considerations</h4>
+                    <h4 className="font-semibold text-foreground mb-3">Sunraysia Region Infrastructure Impact</h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• Skilled labor shortages affecting construction timelines</li>
-                      <li>• Material supply delays from international disruptions</li>
-                      <li>• Rising energy costs impacting operational expenses</li>
-                      <li>• Regulatory compliance costs increasing annually</li>
+                      <li>• Murray River infrastructure upgrades and flood mitigation works</li>
+                      <li>• Sunraysia Institute TAFE campus expansions and upgrades</li>
+                      <li>• Mildura Hospital redevelopment and healthcare facility upgrades</li>
+                      <li>• Regional solar farm developments requiring construction workforce</li>
+                      <li>• Irrigation modernization projects across the Sunraysia district</li>
+                      <li>• Mildura Airport terminal upgrade and runway improvements</li>
+                      <li>• Regional road network improvements (Calder Highway, Sturt Highway)</li>
+                      <li>• Water treatment and recycling infrastructure projects</li>
                     </ul>
                   </div>
                 </div>
@@ -1090,8 +1094,8 @@ const MilduraValuationReport = () => {
                         <p className="text-sm text-muted-foreground">Seasonal harvest workers (3,000-5,000 annually), permanent farm employees, and processing facility staff driving consistent accommodation demand.</p>
                       </div>
                       <div>
-                        <h5 className="font-medium text-foreground mb-1">Infrastructure Projects</h5>
-                        <p className="text-sm text-muted-foreground">Government and private infrastructure developments requiring temporary worker housing, including solar farms and irrigation upgrades.</p>
+                        <h5 className="font-medium text-foreground mb-1">Sunraysia Infrastructure Projects</h5>
+                        <p className="text-sm text-muted-foreground">Major regional infrastructure developments including Murray River upgrades, irrigation modernization, and renewable energy projects requiring temporary worker housing.</p>
                       </div>
                       <div>
                         <h5 className="font-medium text-foreground mb-1">Mining & Energy</h5>
@@ -1207,11 +1211,11 @@ const MilduraValuationReport = () => {
                   <h4 className="font-semibold text-foreground mb-3 text-green-700 dark:text-green-300">Demand Growth Factors</h4>
                   <ul className="text-sm text-muted-foreground space-y-2">
                     <li>✓ Expanding agricultural sector requiring seasonal workforce</li>
-                    <li>✓ Government infrastructure investment in regional Victoria</li>
-                    <li>✓ Growing tourism and events sector</li>
-                    <li>✓ Limited quality worker accommodation supply</li>
+                    <li>✓ Sunraysia region infrastructure investment (hospital, TAFE, solar farms)</li>
+                    <li>✓ Murray River tourism and recreational development projects</li>
+                    <li>✓ Limited quality worker accommodation supply in the region</li>
                     <li>✓ Population growth driving service sector employment</li>
-                    <li>✓ Renewable energy projects creating temporary accommodation demand</li>
+                    <li>✓ Renewable energy projects throughout Sunraysia creating accommodation demand</li>
                   </ul>
                 </div>
 
