@@ -154,9 +154,9 @@ const Dashboard = () => {
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="icv-platform" className="toolbar-item flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              ICV Platform
+            <TabsTrigger value="sustaino-world" className="toolbar-item flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              Sustaino World
             </TabsTrigger>
           </TabsList>
 

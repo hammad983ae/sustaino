@@ -43,7 +43,7 @@ export default function BrandedHeader({
       <div className="flex-1">
         <div className="overflow-hidden whitespace-nowrap">
           <h1 className="text-3xl font-bold text-foreground animate-scroll-left">
-            Property Valuation Platform - ESG Assessment - Financial Statements and Analytics Platform
+            Sustaino World - ESG Property Valuation - Blockchain Analytics - Financial Intelligence Platform
           </h1>
         </div>
         <p className="text-muted-foreground">{displaySubtitle}</p>
