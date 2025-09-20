@@ -252,33 +252,16 @@ export const SustanoSphere = () => {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="relative">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
-                {/* Exact Sustano Sphere Logo from Screenshot */}
+                {/* Simple Sustano Sphere Logo - Two rotating circles + center */}
                 <div className="relative w-10 h-10">
-                  {/* Central core */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full"></div>
+                  {/* Center solid circle */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full"></div>
                   
-                  {/* Main intersecting orbital paths - exact from screenshot */}
-                  {/* Horizontal orbital path */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-4 border border-white/80 rounded-full"></div>
+                  {/* First rotating outer circle */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-white/80 rounded-full animate-[spin_4s_linear_infinite]"></div>
                   
-                  {/* Vertical orbital path */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-90 w-8 h-4 border border-white/80 rounded-full"></div>
-                  
-                  {/* Diagonal orbital path 1 (45 degrees) */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-45 w-8 h-4 border border-white/80 rounded-full"></div>
-                  
-                  {/* Diagonal orbital path 2 (-45 degrees) */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 w-8 h-4 border border-white/80 rounded-full"></div>
-                  
-                  {/* Additional intersecting paths for 3D effect */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-[30deg] w-8 h-4 border border-white/60 rounded-full"></div>
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-[60deg] w-8 h-4 border border-white/60 rounded-full"></div>
-                  
-                  {/* Small electron particles */}
-                  <div className="absolute top-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
-                  <div className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
-                  <div className="absolute top-1/2 left-0.5 transform -translate-y-1/2 w-1 h-1 bg-white rounded-full"></div>
-                  <div className="absolute top-1/2 right-0.5 transform -translate-y-1/2 w-1 h-1 bg-white rounded-full"></div>
+                  {/* Second rotating outer circle (perpendicular) */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-90 w-8 h-8 border border-white/80 rounded-full animate-[spin_3s_linear_infinite_reverse]"></div>
                 </div>
               </div>
             </div>
