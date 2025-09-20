@@ -251,19 +251,11 @@ export const SustanoSphere = () => {
         <CardHeader className="text-center py-8">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
-                {/* Simple Sustano Sphere Logo - Two rotating circles + center */}
-                <div className="relative w-10 h-10">
-                  {/* Center solid circle */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full"></div>
-                  
-                  {/* First rotating outer circle */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-white/80 rounded-full animate-[spin_4s_linear_infinite]"></div>
-                  
-                  {/* Second rotating outer circle (perpendicular) */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-90 w-8 h-8 border border-white/80 rounded-full animate-[spin_3s_linear_infinite_reverse]"></div>
-                </div>
-              </div>
+              <img 
+                src="/src/assets/sustano-sphere-logo.png" 
+                alt="Sustaino-Sphere Logo" 
+                className="w-16 h-16 object-contain"
+              />
             </div>
             <div className="space-y-2">
               <CardTitle className="text-5xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
