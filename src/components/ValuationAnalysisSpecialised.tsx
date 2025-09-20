@@ -247,29 +247,33 @@ export default function ValuationAnalysisSpecialised() {
         </CardContent>
       </Card>
 
-      {/* Final Valuation */}
+      {/* Market Value Assessment */}
       <Card>
         <CardHeader>
-          <CardTitle>Final Market Value Assessment</CardTitle>
+          <CardTitle>Market Value Assessment</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Primary Method</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select primary method" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="income">Income Capitalisation</SelectItem>
-                  <SelectItem value="drc">Depreciated Replacement Cost</SelectItem>
-                  <SelectItem value="direct-comparison">Direct Comparison</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Market Value</Label>
-              <Input placeholder="$2,775,000" className="text-lg font-bold" />
+          <div className="space-y-4">
+            <p className="text-base font-medium">
+              After consideration of multiple valuation methods we have assessed the property with a market value of:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Market Value</Label>
+                <Input placeholder="$2,775,000" className="text-lg font-bold" />
+              </div>
+              <div className="space-y-2">
+                <Label>GST Status</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select GST status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="gst-inclusive">GST Inclusive</SelectItem>
+                    <SelectItem value="gst-exclusive">GST Exclusive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
           <div className="space-y-2">
