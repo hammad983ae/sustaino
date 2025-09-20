@@ -168,7 +168,7 @@ export default function EnhancedPropertyDetails() {
       setPafDataLoaded(true);
       toast.success("Property details pre-populated from Property Assessment Form");
     }
-  }, [reportData?.propertyAssessmentForm, pafDataLoaded]);
+  }, [reportData?.propertySearchData, pafDataLoaded]);
 
   // Get PAF value for building specification field
   const getPAFValue = (field: string, pafData: any): string => {

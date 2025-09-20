@@ -156,7 +156,7 @@ export default function EnhancedRiskAssessment() {
       
       toast.success("Risk assessment pre-populated from Property Assessment Form");
     }
-  }, [reportData?.propertyAssessmentForm, addressData, pafDataLoaded]);
+  }, [reportData?.propertySearchData, addressData, pafDataLoaded]);
 
   // Auto-populate PESTEL from PAF
   const populatePESTELFromPAF = (pafData: any) => {

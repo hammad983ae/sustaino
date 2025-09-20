@@ -123,7 +123,7 @@ export default function EnhancedEssentialRepairs() {
         setDepreciationData(prev => ({ ...prev, propertyAge: age, effectiveAge: age }));
       }
     }
-  }, [reportData?.propertyAssessmentForm]);
+  }, [reportData?.propertySearchData]);
 
   // Auto-set conditions based on essential repairs selection
   useEffect(() => {
