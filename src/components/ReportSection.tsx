@@ -219,37 +219,40 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Comprehensive ESG Assessment section
+  // Special handling for ESG and Climate Assessment section (consolidated sections 12 & 13)
   if (sectionIndex === 12) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+          <CardTitle className="text-xl font-semibold">ESG and Climate Assessment</CardTitle>
+          <p className="text-sm text-muted-foreground">Comprehensive Environmental, Social, Governance and Climate Risk Assessment</p>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
           <ComprehensiveESGAssessment />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Special handling for Comprehensive Climate Risk Assessment section
-  if (sectionIndex === 13) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
-        </CardHeader>
-        <CardContent>
           <ComprehensiveClimateRiskAssessment />
         </CardContent>
       </Card>
     );
   }
 
-  // Special handling for Valuation Analysis section
+  // Special handling for Economic, Geographical and Catchment Area Analysis section
+  if (sectionIndex === 13) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">Economic, Geographical and Catchment Area Analysis</CardTitle>
+          <p className="text-sm text-muted-foreground">Market dynamics, location factors, and catchment area assessment</p>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="min-h-[400px] flex items-center justify-center text-muted-foreground">
+            <p>Economic, Geographical and Catchment Area Analysis content will be added here</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Special handling for Valuation Analysis section (moved to section 14)
   if (sectionIndex === 14) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
@@ -264,23 +267,10 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Environmental Audit section
-  if (sectionIndex === 15) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
-        </CardHeader>
-        <CardContent>
-          <EnvironmentalAudit />
-        </CardContent>
-      </Card>
-    );
-  }
+  // Environmental Audit section removed - consolidated into ESG and Climate Assessment
 
   // Special handling for Marketability and Mortgage Security section
-  if (sectionIndex === 16) {
+  if (sectionIndex === 15) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -295,7 +285,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Sustaino Pro Additional Analysis and Features section
-  if (sectionIndex === 17) {
+  if (sectionIndex === 16) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -310,7 +300,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Valuation Certificate section
-  if (sectionIndex === 18) {
+  if (sectionIndex === 17) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -325,7 +315,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Terms and Conditions section
-  if (sectionIndex === 19) {
+  if (sectionIndex === 18) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -340,7 +330,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Annexures section  
-  if (sectionIndex === 20) {
+  if (sectionIndex === 19) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -357,7 +347,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Market Transaction Analysis section
-  if (sectionIndex === 21) {
+  if (sectionIndex === 20) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
@@ -372,7 +362,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
   }
 
   // Special handling for Certification and Security section
-  if (sectionIndex === 22) {
+  if (sectionIndex === 21) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
