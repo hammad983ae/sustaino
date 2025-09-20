@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PropertyTypeLockProvider } from '@/components/PropertyTypeLockProvider';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -169,7 +170,9 @@ const Index = () => {
                           </p>
                         </CardHeader>
                         <CardContent className="p-8">
-                          <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/report')} />
+                          <PropertyTypeLockProvider>
+                            <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/report')} />
+                          </PropertyTypeLockProvider>
                         </CardContent>
                       </Card>
                     </div>
