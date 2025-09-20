@@ -8,11 +8,12 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, FileText, CheckCircle, Sparkles, RefreshCw, Save, Search, Database, Download } from "lucide-react";
+import { MapPin, FileText, CheckCircle, Sparkles, RefreshCw, Save, Search, Database, Download, AlertTriangle } from "lucide-react";
 import { useReportData } from "@/contexts/ReportDataContext";
 import { useProperty } from "@/contexts/PropertyContext";
 import { useUniversalSave } from "@/hooks/useUniversalSave";
 import { useToast } from "@/hooks/use-toast";
+import ZoningCorrection from "@/components/ZoningCorrection";
 
 interface LotPlanData {
   lotNumber: string;
@@ -60,7 +61,8 @@ const EnhancedLegalAndPlanning = () => {
     developmentPotential: "",
     planningScheme: "",
     mapReference: "",
-    lastUpdated: ""
+    lastUpdated: "",
+    dataSource: "external_api" // Track where the data came from
   });
 
   // Load data from state-based planning sources and integrate lot/plan from validated sources
@@ -706,15 +708,45 @@ const EnhancedLegalAndPlanning = () => {
                 </div>
               </div>
 
-              {/* Zone Description */}
-              {planningData.zoneDescription && (
-                <div>
-                  <Label>Zone Description</Label>
-                  <div className="mt-1 p-3 bg-blue-50 rounded-md border">
-                    <p className="text-sm text-blue-700">{planningData.zoneDescription}</p>
+              {/* Zone Description and Correction Button */}
+              <div className="space-y-3">
+                {planningData.zoneDescription && (
+                  <div>
+                    <Label>Zone Description</Label>
+                    <div className="mt-1 p-3 bg-blue-50 rounded-md border">
+                      <p className="text-sm text-blue-700">{planningData.zoneDescription}</p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {/* Data Quality Warning & Correction Button */}
+                {(planningData.zoning === "Residential 1 Zone (R1Z)" || planningData.dataSource !== 'manually_corrected') && (
+                  <div className="flex items-center justify-between p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-orange-600" />
+                      <span className="text-sm text-orange-700">
+                        Zoning data may be incorrect - verify against official planning documents
+                      </span>
+                    </div>
+                    <ZoningCorrection
+                      currentZoning={{
+                        zoning: planningData.zoning,
+                        zoneName: planningData.zoneName,
+                        zoneDescription: planningData.zoneDescription,
+                        currentUse: planningData.currentUse,
+                        permissibleUse: planningData.permissibleUse,
+                        lga: planningData.lga
+                      }}
+                      onZoningUpdated={(updatedZoning) => {
+                        setPlanningData(prev => ({
+                          ...prev,
+                          ...updatedZoning
+                        }));
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
 
               {/* Current and Permissible Use */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
