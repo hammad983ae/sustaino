@@ -6,6 +6,9 @@ import SalesEvidenceResidential from "./SalesEvidenceResidential";
 import SalesEvidenceAgricultural from "./SalesEvidenceAgricultural";
 import SalesEvidenceDevelopment from "./SalesEvidenceDevelopment";
 import SalesEvidenceSpecialised from "./SalesEvidenceSpecialised";
+import EnhancedSalesEvidenceCommercial from "./EnhancedSalesEvidenceCommercial";
+import EnhancedSalesEvidenceResidential from "./EnhancedSalesEvidenceResidential";
+import EnhancedSalesEvidenceSpecialised from "./EnhancedSalesEvidenceSpecialised";
 
 export default function SalesEvidence() {
   return (
@@ -20,11 +23,11 @@ export default function SalesEvidence() {
         </TabsList>
         
         <TabsContent value="commercial" className="mt-6">
-          <SalesEvidenceCommercial />
+          <EnhancedSalesEvidenceCommercial />
         </TabsContent>
         
         <TabsContent value="residential" className="mt-6">
-          <SalesEvidenceResidential />
+          <EnhancedSalesEvidenceResidential />
         </TabsContent>
         
         <TabsContent value="agricultural" className="mt-6">
@@ -36,7 +39,7 @@ export default function SalesEvidence() {
         </TabsContent>
         
         <TabsContent value="specialised" className="mt-6">
-          <SalesEvidenceSpecialised />
+          <EnhancedSalesEvidenceSpecialised />
         </TabsContent>
       </Tabs>
     </div>
