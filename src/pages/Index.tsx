@@ -158,7 +158,7 @@ const Index = () => {
 
                   <TabsContent value="assessment" className="mt-8">
                     <div className="max-w-7xl mx-auto">
-                      <Card className="card-3d-medium bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <Card className="bg-white/95 border border-purple-200/50">
                         <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
                           <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
                             <Building className="h-6 w-6 text-purple-700" />
