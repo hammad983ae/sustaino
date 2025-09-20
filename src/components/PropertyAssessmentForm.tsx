@@ -547,7 +547,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       {/* Form content with completely stable layout */}
       <div className="p-4 pb-24 h-[calc(100vh-200px)] overflow-hidden">
         <div className="max-w-4xl mx-auto h-full">
-          <Card className="h-full flex flex-col">
+          <Card className="h-full flex flex-col border-none shadow-none bg-transparent">
             <CardHeader className="pb-4 flex-shrink-0">
               <CardTitle>{steps[currentStep].title}</CardTitle>
               <p className="text-sm text-muted-foreground">
@@ -564,7 +564,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       </div>
 
       {/* Navigation footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-background via-background to-primary/10 border-t border-primary/20 p-4 shadow-lg backdrop-blur-sm">
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4">
         <div className="flex justify-between items-center max-w-4xl mx-auto">
           <Button
             variant="outline"
