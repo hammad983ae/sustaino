@@ -902,7 +902,7 @@ export const RevolutionarySustainoSphere = () => {
                     size="lg" 
                     variant="outline"
                     className="text-lg px-8 py-4 hover-scale border-primary"
-                    onClick={() => window.open('/sustano-sphere-digital-assets', '_blank')}
+                    onClick={() => window.location.href = '/sustano-sphere-digital-assets'}
                   >
                     <Cpu className="h-5 w-5 mr-2" />
                     Digital Asset Valuation

@@ -213,7 +213,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
           <div className="flex gap-4 justify-center flex-wrap">
             <Button
               variant="outline"
-              onClick={() => window.open('/work-hub', '_blank')}
+              onClick={() => window.location.href = '/work-hub'}
               className="flex items-center gap-2"
             >
               <ExternalLink className="h-4 w-4" />

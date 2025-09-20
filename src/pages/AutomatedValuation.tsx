@@ -388,13 +388,13 @@ export default function AutomatedValuation() {
                           </CardHeader>
                           <CardContent>
                             <div className="space-y-2">
-                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.open('/social-media-assets', '_blank')}>
+                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.location.href = '/social-media-assets'}>
                                 📱 Download Logos
                               </Button>
-                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.open('/market-strategy', '_blank')}>
+                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.location.href = '/market-strategy'}>
                                 📊 Strategy PDF
                               </Button>
-                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.open('/brochures', '_blank')}>
+                              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-xs hover:bg-orange-700/30 text-orange-200" onClick={() => window.location.href = '/brochures'}>
                                 📋 All Materials
                               </Button>
                             </div>
@@ -506,13 +506,13 @@ export default function AutomatedValuation() {
                                     🌍 Sustano Sphere™
                                   </Button>
                                 </Link>
-                                <Button variant="ghost" size="sm" onClick={() => window.open('/brochures', '_blank')} className="text-xs hover:bg-purple-700/30 text-purple-200">
+                                <Button variant="ghost" size="sm" onClick={() => window.location.href = '/brochures'} className="text-xs hover:bg-purple-700/30 text-purple-200">
                                   🏛️ Auction-Sphere™
                                 </Button>
-                                <Button variant="ghost" size="sm" onClick={() => window.open('/brochures', '_blank')} className="text-xs hover:bg-purple-700/30 text-purple-200">
+                                <Button variant="ghost" size="sm" onClick={() => window.location.href = '/brochures'} className="text-xs hover:bg-purple-700/30 text-purple-200">
                                   🏠 Property Valuations
                                 </Button>
-                                <Button variant="ghost" size="sm" onClick={() => window.open('/brochures', '_blank')} className="text-xs hover:bg-purple-700/30 text-purple-200">
+                                <Button variant="ghost" size="sm" onClick={() => window.location.href = '/brochures'} className="text-xs hover:bg-purple-700/30 text-purple-200">
                                   📊 ESG Assessments
                                 </Button>
                                 <Link to="/social-media-assets">

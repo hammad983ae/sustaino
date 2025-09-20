@@ -24,7 +24,7 @@ export default function AdvertisingLinks() {
           </ul>
           <Button 
             className="w-full" 
-            onClick={() => window.open('/advertising-platforms?platform=auction', '_blank')}
+            onClick={() => window.location.href = '/advertising-platforms?platform=auction'}
           >
             View Auction Packages <ExternalLink className="ml-2 h-4 w-4" />
           </Button>
@@ -50,7 +50,7 @@ export default function AdvertisingLinks() {
           </ul>
           <Button 
             className="w-full"
-            onClick={() => window.open('/advertising-platforms?platform=sustano', '_blank')}
+            onClick={() => window.location.href = '/advertising-platforms?platform=sustano'}
           >
             View Sustainability Packages <ExternalLink className="ml-2 h-4 w-4" />
           </Button>
