@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Calculator, DollarSign, FileText, Users, TrendingUp, Home, Building, Shield } from 'lucide-react';
+import LoanAssessmentForms from './LoanAssessmentForms';
 
 const MortgageBrokerTab = () => {
   const [loanAmount, setLoanAmount] = useState('');
@@ -31,8 +32,9 @@ const MortgageBrokerTab = () => {
       </div>
 
       <Tabs defaultValue="calculator" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="calculator">Loan Calculator</TabsTrigger>
+          <TabsTrigger value="assessments">Loan Assessments</TabsTrigger>
           <TabsTrigger value="clients">Client Management</TabsTrigger>
           <TabsTrigger value="products">Loan Products</TabsTrigger>
           <TabsTrigger value="analytics">Performance</TabsTrigger>
@@ -93,6 +95,10 @@ const MortgageBrokerTab = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="assessments" className="space-y-4">
+          <LoanAssessmentForms />
         </TabsContent>
 
         <TabsContent value="clients" className="space-y-4">
