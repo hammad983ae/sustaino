@@ -15,6 +15,16 @@ import {
   Thermometer
 } from 'lucide-react';
 import floorPlanImage from '@/assets/marco-floor-plan.jpg';
+import kitchen1 from '@/assets/kitchen-1.jpg';
+import kitchen2 from '@/assets/kitchen-2.jpg';
+import kitchen3 from '@/assets/kitchen-3.jpg';
+import outdoorArea from '@/assets/outdoor-area.jpg';
+import commonArea from '@/assets/common-area.jpg';
+import frontExterior from '@/assets/front-exterior.jpg';
+import streetView from '@/assets/street-view.jpg';
+import backyard from '@/assets/backyard.jpg';
+import bathroom from '@/assets/bathroom.jpg';
+import planningMap from '@/assets/planning-map.png';
 
 const MilduraValuationReport = () => {
   const salesData = [
@@ -250,6 +260,64 @@ const MilduraValuationReport = () => {
           </CardContent>
         </Card>
 
+        {/* Property Photos */}
+        <Card className="shadow-lg border-border">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <MapPin className="w-6 h-6" />
+              Property Inspection Photos
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <img src={frontExterior} alt="Front Exterior" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Front Exterior View</p>
+              </div>
+              <div className="space-y-2">
+                <img src={streetView} alt="Street View" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Street View & Approach</p>
+              </div>
+              <div className="space-y-2">
+                <img src={backyard} alt="Backyard" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Backyard & Landscaping</p>
+              </div>
+              <div className="space-y-2">
+                <img src={kitchen1} alt="Kitchen Area 1" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Kitchen Facilities - Gas Range</p>
+              </div>
+              <div className="space-y-2">
+                <img src={kitchen2} alt="Kitchen Area 2" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Kitchen Facilities - Electric</p>
+              </div>
+              <div className="space-y-2">
+                <img src={kitchen3} alt="Kitchen Area 3" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Kitchen & Dining Area</p>
+              </div>
+              <div className="space-y-2">
+                <img src={outdoorArea} alt="Outdoor Area" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Outdoor Common Area</p>
+              </div>
+              <div className="space-y-2">
+                <img src={commonArea} alt="Common Area" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Indoor Common Area</p>
+              </div>
+              <div className="space-y-2">
+                <img src={bathroom} alt="Bathroom" className="w-full h-48 object-cover rounded-lg shadow-md" />
+                <p className="text-sm text-muted-foreground text-center font-medium">Bathroom Facilities</p>
+              </div>
+            </div>
+            
+            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+              <p className="text-sm text-muted-foreground">
+                <strong>Property Condition Assessment:</strong> The property displays well-maintained facilities with modern kitchen appliances, 
+                clean common areas, landscaped outdoor spaces, and contemporary bathroom fittings. The exterior presents professionally 
+                with secure fencing and established gardens, supporting the accommodation facility's commercial viability.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Floor Plan */}
         <Card className="shadow-lg border-border">
           <CardHeader>
@@ -267,6 +335,96 @@ const MilduraValuationReport = () => {
               />
               <p className="text-sm text-muted-foreground mt-3 text-center">
                 Architectural plans showing site layout, proposed detached bungalow, and development details
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Planning & Legal Details */}
+        <Card className="shadow-lg border-border">
+          <CardHeader className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10">
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <FileText className="w-6 h-6" />
+              Planning & Legal Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Property Identification</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Address</span>
+                    <span className="font-medium text-foreground">320 Deakin Avenue, Mildura 3500</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Lot & Plan</span>
+                    <span className="text-foreground">Lot 46 LP14633</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">SPI</span>
+                    <span className="text-foreground">46\LP14633</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Council Property No.</span>
+                    <span className="text-foreground">1508</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Planning Controls</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                    <span className="text-muted-foreground">Zone</span>
+                    <Badge variant="secondary">Commercial 1 Zone (C1Z)</Badge>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Planning Scheme</span>
+                    <span className="text-foreground">Mildura Planning Scheme</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Council</span>
+                    <span className="text-foreground">Mildura Rural City Council</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <span className="text-muted-foreground">Overlays</span>
+                    <div className="text-right">
+                      <Badge variant="outline" className="mr-1">DDO1</Badge>
+                      <Badge variant="outline">SCO1</Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Utilities & Services</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Water & Sewerage</h4>
+                  <p className="text-sm text-muted-foreground">Lower Murray Water</p>
+                </div>
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Power Distributor</h4>
+                  <p className="text-sm text-muted-foreground">POWERCOR</p>
+                </div>
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Fire Authority</h4>
+                  <p className="text-sm text-muted-foreground">Fire Rescue Victoria & Country Fire Authority</p>
+                </div>
+                <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Bushfire Prone Area</h4>
+                  <p className="text-sm text-green-600 font-medium">Not in designated bushfire prone area</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border-l-4 border-yellow-500">
+              <p className="text-sm text-foreground">
+                <strong>Planning Summary:</strong> The Commercial 1 Zone provides excellent flexibility for accommodation use, 
+                with Design and Development Overlay (DDO1) and Specific Controls Overlay (SCO1) applying additional design requirements. 
+                The property benefits from full urban services and is not subject to bushfire construction requirements.
               </p>
             </div>
           </CardContent>
@@ -609,6 +767,87 @@ const MilduraValuationReport = () => {
               <p className="text-sm text-foreground">
                 <strong>Market Position:</strong> The property is well-positioned to service the growing demand for worker accommodation in the Mildura region, benefiting from its strategic location and purpose-built design. The strong cash flow with EBITDA of $87,000 and estimated 80% occupancy rate supports the valuation range.
               </p>
+            </div>
+          </CardContent>
+        </Card>
+        {/* Appendices */}
+        <Card className="shadow-lg border-border">
+          <CardHeader className="bg-gradient-to-r from-gray-500/10 to-slate-500/10">
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <FileText className="w-6 h-6" />
+              Appendices
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6 space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Appendix A: Planning Zone Map</h3>
+              <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg">
+                <img 
+                  src={planningMap} 
+                  alt="320 Deakin Avenue Planning Zone Map" 
+                  className="w-full h-auto rounded-lg shadow-md"
+                />
+                <p className="text-sm text-muted-foreground mt-3">
+                  <strong>Planning Zone Map:</strong> Shows Commercial 1 Zone (C1Z) designation for 320 Deakin Avenue, 
+                  with surrounding General Residential Zone (GRZ1), Public Use Zone-Education (PUZ2), and Principal Road Network (TRZ2). 
+                  Source: VicPlan Planning Property Report, Department of Transport and Planning, Victoria.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Appendix B: Data Sources & Methodology</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Sales Evidence Sources</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• CoreLogic RP Data</li>
+                    <li>• Regional real estate agents</li>
+                    <li>• Industry accommodation databases</li>
+                    <li>• Local market intelligence</li>
+                  </ul>
+                </div>
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Valuation Methodology</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Income Capitalization Approach</li>
+                    <li>• Direct Comparison Method</li>
+                    <li>• EBITDA Multiple Analysis</li>
+                    <li>• Climate Risk Adjustment</li>
+                  </ul>
+                </div>
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Planning Information</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• VicPlan Planning Property Report</li>
+                    <li>• Mildura Planning Scheme</li>
+                    <li>• Design & Development Overlays</li>
+                    <li>• Heritage & Environmental Overlays</li>
+                  </ul>
+                </div>
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <h4 className="font-medium text-foreground mb-2">Climate Data</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Bureau of Meteorology data</li>
+                    <li>• CSIRO climate projections</li>
+                    <li>• Regional risk assessments</li>
+                    <li>• Industry climate studies</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Appendix C: Report Limitations & Disclaimers</h3>
+              <div className="p-4 bg-red-50 dark:bg-red-950/20 rounded-lg border-l-4 border-red-500">
+                <div className="text-sm text-muted-foreground space-y-2">
+                  <p><strong>Valuation Date:</strong> This valuation is current as at {new Date().toLocaleDateString()} and may not reflect subsequent market changes.</p>
+                  <p><strong>Purpose:</strong> This report is prepared for investment analysis purposes and should not be relied upon for other purposes without specific consent.</p>
+                  <p><strong>Market Conditions:</strong> Valuations are subject to market volatility and economic conditions that may materially affect property values.</p>
+                  <p><strong>Climate Risks:</strong> Climate risk assessments are based on current scientific understanding and may be subject to revision as new data becomes available.</p>
+                  <p><strong>Planning Information:</strong> Planning data sourced from official Victorian Government sources dated September 2025. Users should verify current planning controls with relevant authorities.</p>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
