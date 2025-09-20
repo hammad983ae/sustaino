@@ -221,6 +221,39 @@ export type Database = {
         }
         Relationships: []
       }
+      blocked_ips: {
+        Row: {
+          blocked_at: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          ip_address: string
+          reason: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          blocked_at?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          ip_address: string
+          reason: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          blocked_at?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          ip_address?: string
+          reason?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       business_licenses: {
         Row: {
           annual_compliance_fee: number | null
@@ -356,6 +389,48 @@ export type Database = {
           transaction_hash?: string | null
           transaction_type?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      competitive_threats: {
+        Row: {
+          action_taken: string
+          created_at: string
+          details: Json | null
+          endpoint: string
+          id: string
+          ip_address: string
+          risk_score: number
+          threat_type: string
+          timestamp: string
+          user_agent: string
+          user_id: string
+        }
+        Insert: {
+          action_taken?: string
+          created_at?: string
+          details?: Json | null
+          endpoint: string
+          id?: string
+          ip_address: string
+          risk_score?: number
+          threat_type: string
+          timestamp?: string
+          user_agent: string
+          user_id: string
+        }
+        Update: {
+          action_taken?: string
+          created_at?: string
+          details?: Json | null
+          endpoint?: string
+          id?: string
+          ip_address?: string
+          risk_score?: number
+          threat_type?: string
+          timestamp?: string
+          user_agent?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -863,6 +938,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      honeypot_accesses: {
+        Row: {
+          created_at: string
+          details: Json | null
+          endpoint: string
+          id: string
+          ip_address: string
+          organization: string | null
+          timestamp: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          endpoint: string
+          id?: string
+          ip_address: string
+          organization?: string | null
+          timestamp?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          endpoint?: string
+          id?: string
+          ip_address?: string
+          organization?: string | null
+          timestamp?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       investment_pools: {
         Row: {
@@ -1473,6 +1581,42 @@ export type Database = {
           user_id?: string
           year_built?: number | null
           zoning?: string | null
+        }
+        Relationships: []
+      }
+      protection_config: {
+        Row: {
+          created_at: string
+          decoy_endpoints: boolean
+          honeypots_active: boolean
+          id: string
+          ip_blocking: boolean
+          rate_limiting: boolean
+          updated_at: string
+          user_id: string
+          watermarking: boolean
+        }
+        Insert: {
+          created_at?: string
+          decoy_endpoints?: boolean
+          honeypots_active?: boolean
+          id?: string
+          ip_blocking?: boolean
+          rate_limiting?: boolean
+          updated_at?: string
+          user_id: string
+          watermarking?: boolean
+        }
+        Update: {
+          created_at?: string
+          decoy_endpoints?: boolean
+          honeypots_active?: boolean
+          id?: string
+          ip_blocking?: boolean
+          rate_limiting?: boolean
+          updated_at?: string
+          user_id?: string
+          watermarking?: boolean
         }
         Relationships: []
       }

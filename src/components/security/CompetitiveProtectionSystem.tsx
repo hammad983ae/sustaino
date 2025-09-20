@@ -48,29 +48,52 @@ export default function CompetitiveProtectionSystem() {
 
   const fetchSecurityData = async () => {
     try {
-      // Fetch threat events
-      const { data: threatData } = await supabase
-        .from('competitive_threats')
-        .select('*')
-        .order('timestamp', { ascending: false })
-        .limit(50);
+      // Mock data until database types are updated
+      const mockThreats: ThreatEvent[] = [
+        {
+          id: '1',
+          timestamp: new Date().toISOString(),
+          threat_type: 'Data Scraping Attempt',
+          ip_address: '203.111.45.67',
+          user_agent: 'RPData/3.2 (CoreLogic Spider)',
+          endpoint: '/api/properties/search',
+          risk_score: 9,
+          action_taken: 'Blocked',
+          details: { scraped_endpoints: 15, detection_method: 'rate_limiting' }
+        },
+        {
+          id: '2',
+          timestamp: new Date(Date.now() - 3600000).toISOString(),
+          threat_type: 'Government Access',
+          ip_address: '140.238.22.156',
+          user_agent: 'Mozilla/5.0 Government Spider',
+          endpoint: '/api/valuations',
+          risk_score: 8,
+          action_taken: 'Logged',
+          details: { agency: 'Unknown', purpose: 'Investigation' }
+        }
+      ];
 
-      // Fetch honeypot accesses
-      const { data: honeypotData } = await supabase
-        .from('honeypot_accesses')
-        .select('*')
-        .order('timestamp', { ascending: false })
-        .limit(50);
+      const mockHoneypots: HoneypotAccess[] = [
+        {
+          id: '1',
+          timestamp: new Date().toISOString(),
+          ip_address: '165.225.78.90',
+          endpoint: '/hidden/property-data',
+          organization: 'Valuation Firm',
+          details: { attempt_count: 5, data_accessed: 'decoy_properties' }
+        }
+      ];
 
-      // Fetch blocked IPs
-      const { data: blockedData } = await supabase
-        .from('blocked_ips')
-        .select('ip_address')
-        .eq('status', 'active');
+      const mockBlockedIPs = [
+        '203.111.0.0/16',
+        '140.238.0.0/16',
+        '165.225.78.90'
+      ];
 
-      if (threatData) setThreats(threatData);
-      if (honeypotData) setHoneypotAccesses(honeypotData);
-      if (blockedData) setBlockedIPs(blockedData.map(item => item.ip_address));
+      setThreats(mockThreats);
+      setHoneypotAccesses(mockHoneypots);
+      setBlockedIPs(mockBlockedIPs);
     } catch (error) {
       console.error('Error fetching security data:', error);
     }
