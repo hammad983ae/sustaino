@@ -10,6 +10,7 @@ import BottomChatAssistant from '@/components/BottomChatAssistant';
 import EnhancedPropertyUpdates from '@/components/EnhancedPropertyUpdates';
 import DigitalAssetMarketUpdates from '@/components/DigitalAssetMarketUpdates';
 import SustanoProEcosystemDemo from '@/components/SustanoProEcosystemDemo';
+import SustanoSphereWidget from '@/components/SustanoSphereWidget';
 import { 
   BarChart, 
   Bar, 
@@ -696,7 +697,7 @@ const Dashboard = () => {
         </div>
         
         <div className="lg:col-span-1">
-          <SustanoProEcosystemDemo />
+          <SustanoSphereWidget />
         </div>
       </div>
 

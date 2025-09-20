@@ -71,6 +71,7 @@ import SocialMediaAssets from "./pages/SocialMediaAssets";
 import ConceptsAndPlans from "./pages/ConceptsAndPlans";
 import DigitalContracts from "./pages/DigitalContracts";
 import Marketing from "./pages/Marketing";
+import SustanoSphereDemo from "./pages/SustanoSphereDemo";
 
 const queryClient = new QueryClient();
 
@@ -134,6 +135,7 @@ const App = () => (
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
+                 <Route path="/sustano-sphere" element={<SustanoSphereDemo />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
