@@ -246,52 +246,63 @@ export const SustanoSphere = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header with IP Protection Notice */}
-      <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5">
-        <CardHeader className="text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
+      {/* Header with Professional Design */}
+      <Card className="border-0 bg-gradient-to-r from-emerald-100 via-blue-100 to-purple-100 dark:from-emerald-950/30 dark:via-blue-950/30 dark:to-purple-950/30">
+        <CardHeader className="text-center py-8">
+          <div className="flex items-center justify-center gap-4 mb-6">
             <div className="relative">
-              <Gavel className="h-10 w-10 text-primary" />
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gold rounded-full flex items-center justify-center">
-                <Award className="h-2 w-2 text-white" />
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
+                <div className="w-8 h-8 relative">
+                  <div className="absolute inset-0 rounded-full border-2 border-white"></div>
+                  <div className="absolute top-1 left-1 w-2 h-2 bg-white rounded-full"></div>
+                  <div className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full"></div>
+                  <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white rounded-full"></div>
+                </div>
               </div>
             </div>
-            <div className="space-y-1">
-              <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                Sustano-Phere™
+            <div className="space-y-2">
+              <CardTitle className="text-5xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Sustaino - Sphere™
               </CardTitle>
-              <CardDescription className="text-lg font-medium">
-                Digital Asset Auction Marketplace
+              <CardDescription className="text-xl font-medium text-purple-600">
+                Revolutionary Digital Asset Intelligence Platform
               </CardDescription>
             </div>
           </div>
           
-          <div className="flex justify-center gap-2 mb-4">
-            <Badge variant="secondary" className="bg-green-100 text-green-800">
-              <Shield className="h-3 w-3 mr-1" />
+          <div className="flex justify-center gap-3 mb-6 flex-wrap">
+            <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2">
+              <Shield className="h-4 w-4 mr-2" />
               Patent Pending
             </Badge>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-              <Award className="h-3 w-3 mr-1" />
-              Trademark Protected
+            <Badge className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              SustanoVal™ Algorithm
             </Badge>
-            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-              <Lock className="h-3 w-3 mr-1" />
-              IP Secured
+            <Badge className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2">
+              <Globe className="h-4 w-4 mr-2" />
+              AI-Powered Intelligence
+            </Badge>
+            <Badge className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2">
+              <DollarSign className="h-4 w-4 mr-2" />
+              ESG+ILS Market
             </Badge>
           </div>
 
-          <p className="text-muted-foreground max-w-3xl mx-auto">
-            The world's first ESG-integrated digital asset auction platform. Buy and sell websites, 
-            apps, and digital platforms with comprehensive sustainability scoring and professional valuation.
+          <p className="text-muted-foreground text-lg max-w-4xl mx-auto leading-relaxed mb-6">
+            The world's most advanced digital asset valuation platform powered by revolutionary algorithms, quantum-
+            inspired analytics, and comprehensive ESG integration. Specializing in startups and emerging digital businesses, 
+            we transform how digital assets are valued, analyzed, and traded across all industries.
           </p>
 
           {/* IP Protection Notice */}
-          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-xs text-amber-800 font-medium">
-              <Lock className="h-3 w-3 inline mr-1" />
-              © 2025 DeLorenzo Property Group Pty Ltd. Sustano-Phere™ is a registered trademark. 
-              Patent Pending: Digital Asset Auction System with ESG Integration.
+          <div className="mt-6 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg max-w-4xl mx-auto">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Shield className="h-5 w-5 text-amber-600" />
+              <span className="font-bold text-amber-800">PROTECTED INTELLECTUAL PROPERTY</span>
+            </div>
+            <p className="text-sm text-amber-800 font-medium">
+              © 2025 DeLorenzo Property Group Pty Ltd. Sustaino-Phere™, SustanoVal™, DigitalAssetIQ™ are registered trademarks. Patent applications filed globally. Unauthorized use prohibited.
             </p>
           </div>
         </CardHeader>
@@ -1113,7 +1124,7 @@ export const SustanoSphere = () => {
           <div className="text-center space-y-2">
             <p className="text-sm font-medium text-muted-foreground">
               <Shield className="h-4 w-4 inline mr-1" />
-              Sustano-Phere™ - Patent Pending Digital Asset Auction System
+              Sustaino - Sphere™ - Patent Pending Digital Asset Auction System
             </p>
             <p className="text-xs text-muted-foreground">
               © 2025 DeLorenzo Property Group Pty Ltd. All Rights Reserved. 
