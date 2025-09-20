@@ -147,7 +147,58 @@ interface DigitalAssetComponent {
 }
 
 // Real-world digital asset sales data with actual market examples
-const SAMPLE_DIGITAL_ASSET_SALES: DigitalAssetSale[] = [];
+const SAMPLE_DIGITAL_ASSET_SALES: DigitalAssetSale[] = [
+  {
+    id: "sustano-pro-ecosystem-listing",
+    assetName: "Sustaino Pro Ecosystem",
+    assetType: "platform",
+    salePrice: 64572228, // Current preliminary valuation
+    saleDate: "2025-01-21", // Today's submission
+    monthlyRevenue: 180000,
+    monthlyUsers: 3200,
+    techStack: ["React", "TypeScript", "Node.js", "Python", "PostgreSQL", "Supabase", "AWS", "Blockchain"],
+    businessModel: "B2B PropTech SaaS + Marketplace",
+    geography: "Australia",
+    seller: {
+      type: "corporation",
+      experience: 2
+    },
+    buyer: {
+      type: "strategic",
+      region: "Global"
+    },
+    keyAttributes: {
+      userBase: 8500,
+      revenue: 180000,
+      growth: 285,
+      profitability: 35,
+      techScore: 98,
+      esgScore: 94,
+      brandValue: 92,
+      dataAssets: 96,
+      ipValue: 98, // High due to 12 patents + trade secrets
+      marketPosition: 88
+    },
+    valuation: {
+      revenueMultiple: 29.9, // 64.57M / 2.16M annual revenue
+      userMultiple: 7597, // 64.57M / 8500 users
+      ebitdaMultiple: 102.1,
+      premiumFactors: ["AI Technology", "Patent Portfolio", "ESG Leadership", "PropTech Innovation", "Trade Secrets"],
+      discountFactors: ["Market Competition", "Regulatory Risk"]
+    },
+    dueDiligence: {
+      techAudit: 98,
+      financialVerification: true,
+      legalClearance: true,
+      ipVerification: true
+    },
+    marketConditions: {
+      sectorTrend: "hot",
+      competitionLevel: "high",
+      demandLevel: "high"
+    }
+  }
+];
 
 // Real-world valuation calculation formulas
 const calculateDigitalAssetValuation = (asset: Partial<DigitalAssetSale>) => {

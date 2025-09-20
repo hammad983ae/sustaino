@@ -91,7 +91,41 @@ interface DigitalAsset {
   };
 }
 
-const FEATURED_AUCTIONS: DigitalAsset[] = [];
+const FEATURED_AUCTIONS: DigitalAsset[] = [
+  {
+    id: "sustano-pro-ecosystem",
+    title: "Sustaino Pro Ecosystem",
+    description: "Revolutionary AI-powered property technology ecosystem featuring comprehensive property valuation, ESG assessment, blockchain integration, and digital asset auction capabilities.",
+    category: "web-platform",
+    currentBid: 25000000,
+    reservePrice: 25000000,
+    timeRemaining: "29d 14h 23m",
+    bidCount: 12,
+    views: 847,
+    images: ["/src/assets/sustano-sphere-dashboard.jpg"],
+    techStack: ["React", "TypeScript", "Node.js", "Python", "PostgreSQL", "Supabase", "AWS", "Blockchain"],
+    monthlyRevenue: 180000,
+    monthlyUsers: 3200,
+    esgScore: 94,
+    seller: {
+      name: "DeLorenzo Property Group",
+      avatar: "/src/assets/sustano-pro-logo.jpg",
+      rating: 5.0,
+      verified: true
+    },
+    biddingHistory: [
+      { bidder: "TechVentures Global", amount: 25000000, timestamp: "5 min ago" },
+      { bidder: "PropTech Innovations", amount: 24500000, timestamp: "2h ago" },
+      { bidder: "Digital Asset Fund", amount: 24000000, timestamp: "4h ago" },
+    ],
+    features: ["SustanoVal™ AI Engine", "ESG+ILS Assessment", "Blockchain Auctions", "3D Visualization", "Patent Portfolio"],
+    analytics: {
+      traffic: 285000,
+      conversion: 8.7,
+      growth: "+285% YoY"
+    }
+  }
+];
 
 export const SustanoSphere = () => {
   const { toast } = useToast();
