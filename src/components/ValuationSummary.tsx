@@ -6,13 +6,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useReportData } from "@/contexts/ReportDataContext";
 
 const ValuationSummary = () => {
-  const { reportData } = useReportData();
+  const { reportData, updateReportData } = useReportData();
 
-  // Extract data from PAF/reportData (these would come from Property Assessment Form)
+  // Extract data from Valuation Configuration
   const interestValued = reportData?.reportConfig?.interestValues || "Freehold";
-  const propertyType = reportData?.propertyDetails?.propertyType || "Current Use";
+  const valueComponent = reportData?.reportConfig?.valueComponent || "Market Value";
+  const highestBestUse = reportData?.reportConfig?.propertyType || "Current Use";
   const currency = reportData?.reportConfig?.currency || "AUD";
   const gstTreatment = reportData?.reportConfig?.gstTreatment || "Exclusive";
+  const marketValue = reportData?.reportConfig?.marketValue || "";
+
+  const handleFieldUpdate = (field: string, value: string) => {
+    updateReportData('reportConfig', { 
+      ...reportData?.reportConfig, 
+      [field]: value 
+    });
+  };
 
   return (
     <Card>
@@ -40,51 +49,36 @@ const ValuationSummary = () => {
             {/* Interest Valued */}
             <div className="space-y-2">
               <Label>Interest Valued</Label>
-              <div className="relative">
-                <Input 
-                  value={interestValued} 
-                  readOnly 
-                  className="bg-blue-50 border-blue-200" 
-                />
-                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-blue-600">
-                  Pre-populated from platform
-                </span>
-              </div>
+              <Input 
+                value={interestValued} 
+                onChange={(e) => handleFieldUpdate('interestValues', e.target.value)}
+                className="bg-background border-input" 
+              />
             </div>
 
             {/* Highest and Best Use */}
             <div className="space-y-2">
               <Label>Highest and Best Use</Label>
-              <div className="relative">
-                <Input 
-                  value={propertyType} 
-                  readOnly 
-                  className="bg-blue-50 border-blue-200" 
-                />
-                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-blue-600">
-                  Pre-populated from platform
-                </span>
-              </div>
+              <Input 
+                value={highestBestUse} 
+                onChange={(e) => handleFieldUpdate('propertyType', e.target.value)}
+                className="bg-background border-input" 
+              />
             </div>
 
             {/* GST Treatment */}
             <div className="space-y-2">
               <Label>GST Treatment</Label>
-              <div className="relative">
-                <Select value={gstTreatment}>
-                  <SelectTrigger className="bg-blue-50 border-blue-200">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Exclusive">Exclusive</SelectItem>
-                    <SelectItem value="Inclusive">Inclusive</SelectItem>
-                    <SelectItem value="N/A">N/A</SelectItem>
-                  </SelectContent>
-                </Select>
-                <span className="absolute right-8 top-1/2 transform -translate-y-1/2 text-xs text-blue-600">
-                  Pre-populated from platform
-                </span>
-              </div>
+              <Select value={gstTreatment} onValueChange={(value) => handleFieldUpdate('gstTreatment', value)}>
+                <SelectTrigger className="bg-background border-input">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Exclusive">Exclusive</SelectItem>
+                  <SelectItem value="Inclusive">Inclusive</SelectItem>
+                  <SelectItem value="N/A">N/A</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -93,51 +87,38 @@ const ValuationSummary = () => {
             {/* Value Component */}
             <div className="space-y-2">
               <Label>Value Component</Label>
-              <div className="relative">
-                <Input 
-                  value="Market Value" 
-                  readOnly 
-                  className="bg-blue-50 border-blue-200" 
-                />
-                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-blue-600">
-                  Pre-populated from platform
-                </span>
-              </div>
+              <Input 
+                value={valueComponent} 
+                onChange={(e) => handleFieldUpdate('valueComponent', e.target.value)}
+                className="bg-background border-input" 
+              />
             </div>
 
             {/* Currency of Valuation */}
             <div className="space-y-2">
               <Label>Currency of Valuation</Label>
-              <div className="relative">
-                <Select value={currency}>
-                  <SelectTrigger className="bg-blue-50 border-blue-200">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="AUD">AUD</SelectItem>
-                    <SelectItem value="USD">USD</SelectItem>
-                    <SelectItem value="EUR">EUR</SelectItem>
-                    <SelectItem value="GBP">GBP</SelectItem>
-                  </SelectContent>
-                </Select>
-                <span className="absolute right-8 top-1/2 transform -translate-y-1/2 text-xs text-blue-600">
-                  Pre-populated from platform
-                </span>
-              </div>
+              <Select value={currency} onValueChange={(value) => handleFieldUpdate('currency', value)}>
+                <SelectTrigger className="bg-background border-input">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AUD">AUD</SelectItem>
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="GBP">GBP</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Market Value - User Input */}
             <div className="space-y-2">
-              <Label className="text-green-600 font-medium">Market Value</Label>
-              <div className="relative">
-                <Input 
-                  placeholder="$XXX,XXX" 
-                  className="bg-green-50 border-green-200 text-lg font-bold" 
-                />
-                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-green-600">
-                  Pre-populated from platform
-                </span>
-              </div>
+              <Label className="font-medium">Market Value</Label>
+              <Input 
+                value={marketValue}
+                onChange={(e) => handleFieldUpdate('marketValue', e.target.value)}
+                placeholder="$XXX,XXX" 
+                className="bg-background border-input text-lg font-bold" 
+              />
             </div>
           </div>
         </div>
