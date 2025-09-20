@@ -154,9 +154,9 @@ const Dashboard = () => {
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="sustaino-sphere" className="toolbar-item flex items-center gap-2">
+            <TabsTrigger value="sustaino-world" className="toolbar-item flex items-center gap-2">
               <Globe className="h-4 w-4" />
-              Sustaino Sphere
+              Sustaino World
             </TabsTrigger>
           </TabsList>
 
@@ -290,11 +290,11 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="sustaino-sphere" className="mt-6">
+          <TabsContent value="sustaino-world" className="mt-6">
             <div className="space-y-6">
               <div className="text-center py-8">
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-4">
-                  Welcome to Sustaino Sphere
+                  Welcome to Sustaino World
                 </h2>
                 <p className="text-muted-foreground text-lg">
                   Your comprehensive ESG-powered property ecosystem
