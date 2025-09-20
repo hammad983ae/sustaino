@@ -65,6 +65,7 @@ import ComprehensivePlatformValuation from "./components/ComprehensivePlatformVa
 import SustanoSphereMarketStrategy from "./components/SustanoSphereMarketStrategy";
 import SustanoSphereDigitalAssetValuation from "./components/SustanoSphereDigitalAssetValuation";
 import MilduraPropertyValuation from "./components/MilduraPropertyValuation";
+import MilduraValuationReport from "./components/MilduraValuationReport";
 import LovablePartnershipProposal from "./components/LovablePartnershipProposal";
 import SocialMediaAssets from "./pages/SocialMediaAssets";
 import ConceptsAndPlans from "./pages/ConceptsAndPlans";
@@ -128,7 +129,8 @@ const App = () => (
                 <Route path="/lovable-partnership" element={<LovablePartnershipProposal />} />
                 <Route path="/brochures" element={<BrochureViewer />} />
                 <Route path="/development-site-valuation" element={<DevelopmentSiteValuation />} />
-                <Route path="/mildura-valuation" element={<MilduraPropertyValuation />} />
+        <Route path="/mildura-valuation" element={<MilduraPropertyValuation />} />
+        <Route path="/mildura-report" element={<MilduraValuationReport />} />
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
