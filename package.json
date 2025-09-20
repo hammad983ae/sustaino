@@ -71,6 +71,7 @@
     "tesseract.js": "^6.0.1",
     "three": "^0.160.1",
     "vaul": "^0.9.9",
+    "web3": "^4.16.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

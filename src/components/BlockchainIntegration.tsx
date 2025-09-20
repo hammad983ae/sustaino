@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,12 +14,15 @@ import {
   Zap,
   Lock,
   Globe,
-  BarChart3
+  BarChart3,
+  Wifi,
+  WifiOff
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import MetaMaskInstallGuide from "./MetaMaskInstallGuide";
+import { BlockchainProvider } from "@/lib/blockchain-provider";
 
 interface BlockchainStats {
   sustainoCoinPrice: string;
@@ -27,11 +30,21 @@ interface BlockchainStats {
   stakingApy: string;
   totalStaked: string;
   activeValidators: number;
+  networkStatus: 'connected' | 'disconnected' | 'connecting';
+  blockNumber?: number;
+  gasPrice?: string;
 }
 
 interface BlockchainIntegrationProps {
   variant?: "compact" | "full";
   showWalletConnect?: boolean;
+}
+
+interface NetworkInfo {
+  chainId: number;
+  blockNumber: number;
+  gasPrice: string;
+  network: string;
 }
 
 declare global {
@@ -46,13 +59,48 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
 }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [showInstallGuide, setShowInstallGuide] = useState(false);
-  const [blockchainStats] = useState<BlockchainStats>({
+  const [networkInfo, setNetworkInfo] = useState<NetworkInfo | null>(null);
+  const [blockchainStats, setBlockchainStats] = useState<BlockchainStats>({
     sustainoCoinPrice: "$2.47",
     marketCap: "$847M",
     stakingApy: "12.5%",
     totalStaked: "67%",
-    activeValidators: 1247
+    activeValidators: 1247,
+    networkStatus: 'disconnected'
   });
+
+  // Initialize blockchain provider on component mount
+  useEffect(() => {
+    initializeBlockchain();
+  }, []);
+
+  const initializeBlockchain = async () => {
+    try {
+      setBlockchainStats(prev => ({ ...prev, networkStatus: 'connecting' }));
+      
+      const provider = BlockchainProvider.getInstance();
+      const initialized = await provider.initialize();
+      
+      if (initialized) {
+        const info = await provider.getNetworkInfo();
+        if (info) {
+          setNetworkInfo(info);
+          setBlockchainStats(prev => ({ 
+            ...prev, 
+            networkStatus: 'connected',
+            blockNumber: info.blockNumber,
+            gasPrice: `${parseFloat(info.gasPrice).toFixed(2)} GWEI`
+          }));
+          
+          toast.success("Connected to Polygon network via Infura");
+        }
+      }
+    } catch (error) {
+      console.error('Error initializing blockchain:', error);
+      setBlockchainStats(prev => ({ ...prev, networkStatus: 'disconnected' }));
+      toast.error("Failed to connect to blockchain network");
+    }
+  };
 
   const connectWallet = async () => {
     if (!window.ethereum) {
@@ -66,9 +114,43 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
         method: 'eth_requestAccounts' 
       });
       
+      // Check if connected to Polygon network
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (chainId !== '0x89') { // 0x89 is Polygon Mainnet
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x89' }],
+          });
+        } catch (switchError: any) {
+          // Chain doesn't exist, add it
+          if (switchError.code === 4902) {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: '0x89',
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: {
+                  name: 'MATIC',
+                  symbol: 'MATIC',
+                  decimals: 18
+                },
+                rpcUrls: ['https://polygon-rpc.com/'],
+                blockExplorerUrls: ['https://polygonscan.com/']
+              }]
+            });
+          }
+        }
+      }
+      
       if (accounts.length > 0) {
         setIsConnected(true);
-        toast.success("Wallet connected successfully!");
+        toast.success("Wallet connected successfully to Polygon!");
+        
+        // Get wallet balance using our provider
+        const provider = BlockchainProvider.getInstance();
+        const balance = await provider.getBalance(accounts[0]);
+        console.log(`Wallet balance: ${balance} MATIC`);
       }
     } catch (error) {
       console.error("Error connecting wallet:", error);
@@ -84,11 +166,25 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
             <CardTitle className="text-lg flex items-center gap-2">
               <Zap className="h-5 w-5 text-yellow-500" />
               Blockchain Hub
+              {blockchainStats.networkStatus === 'connected' && (
+                <Wifi className="h-4 w-4 text-green-500" />
+              )}
+              {blockchainStats.networkStatus === 'disconnected' && (
+                <WifiOff className="h-4 w-4 text-red-500" />
+              )}
             </CardTitle>
-            <Badge variant="secondary" className="bg-green-100 text-green-800">
-              <Activity className="w-3 h-3 mr-1" />
-              Live
-            </Badge>
+            <div className="flex gap-2">
+              <Badge variant="secondary" className="bg-green-100 text-green-800">
+                <Activity className="w-3 h-3 mr-1" />
+                {blockchainStats.networkStatus === 'connected' ? 'Connected' : 
+                 blockchainStats.networkStatus === 'connecting' ? 'Connecting...' : 'Offline'}
+              </Badge>
+              {networkInfo && (
+                <Badge variant="outline" className="text-xs">
+                  Block: {networkInfo.blockNumber}
+                </Badge>
+              )}
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -102,6 +198,20 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
               <div className="text-xs text-purple-600">Staking APY</div>
             </div>
           </div>
+          
+          {/* Network Status */}
+          {networkInfo && (
+            <div className="bg-white/60 rounded-lg p-2 text-xs space-y-1">
+              <div className="flex justify-between">
+                <span>Network:</span>
+                <span className="font-medium">{networkInfo.network}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Gas Price:</span>
+                <span className="font-medium">{networkInfo.gasPrice} GWEI</span>
+              </div>
+            </div>
+          )}
           
           {showWalletConnect && (
             <div className="space-y-2">
