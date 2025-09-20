@@ -141,11 +141,12 @@ export default function PropertyAdjustmentTable({
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <Calculator className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm font-medium text-purple-800">Adjusted Value</span>
+                  <span className="text-sm font-medium text-purple-800">Value of Subject</span>
                 </div>
                 <p className="text-lg font-bold text-purple-900">
                   {formatCurrency(adjustedValue)}
                 </p>
+                <p className="text-xs text-purple-700">Direct Comparison</p>
               </CardContent>
             </Card>
           </div>
@@ -226,17 +227,17 @@ export default function PropertyAdjustmentTable({
                   </TableCell>
                 </TableRow>
                 
-                {/* Adjusted Value Row */}
-                <TableRow className="bg-blue-50 border-t">
+                {/* Value of Subject Row */}
+                <TableRow className="bg-purple-50 border-t">
                   <TableCell></TableCell>
-                  <TableCell className="font-bold text-blue-900">ADJUSTED SALE PRICE</TableCell>
+                  <TableCell className="font-bold text-purple-900">VALUE OF SUBJECT</TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
-                  <TableCell className="text-sm text-blue-700">
-                    Indicates value of subject property
+                  <TableCell className="text-sm text-purple-700">
+                    Direct Comparison Approach - Value indication
                   </TableCell>
                   <TableCell></TableCell>
-                  <TableCell className="text-right font-bold text-blue-900 text-lg">
+                  <TableCell className="text-right font-bold text-purple-900 text-lg">
                     {formatCurrency(adjustedValue)}
                   </TableCell>
                 </TableRow>

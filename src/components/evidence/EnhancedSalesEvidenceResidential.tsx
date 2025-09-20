@@ -41,6 +41,15 @@ interface ResidentialComparable {
   comparisonSummary: string;
   esgFactors: boolean;
   esgAdjustment: number;
+  climateRisk: 'greater' | 'less' | 'same';
+  climateRiskAdjustment: number;
+  improvementsRatePerSqm: number;
+  landDevelopmentCost: number;
+  roomRate: number;
+  bedRate: number;
+  improvedLandRatePerSqm: number;
+  capitalizedNetIncome: number;
+  yieldRate: number;
 }
 
 export default function EnhancedSalesEvidenceResidential() {
@@ -79,16 +88,33 @@ export default function EnhancedSalesEvidenceResidential() {
       zoningAdjustment: 0,
       comparisonSummary: '',
       esgFactors: false,
-      esgAdjustment: 0
+      esgAdjustment: 0,
+      climateRisk: 'same',
+      climateRiskAdjustment: 0,
+      improvementsRatePerSqm: 0,
+      landDevelopmentCost: 0,
+      roomRate: 0,
+      bedRate: 0,
+      improvedLandRatePerSqm: 0,
+      capitalizedNetIncome: 0,
+      yieldRate: 0
     };
     setComparables([...comparables, newComparable]);
     setSelectedComparable(newComparable.id);
   };
 
   const updateComparable = (id: string, field: keyof ResidentialComparable, value: any) => {
-    setComparables(prev => prev.map(comp => 
-      comp.id === id ? { ...comp, [field]: value } : comp
-    ));
+    setComparables(prev => prev.map(comp => {
+      if (comp.id === id) {
+        const updated = { ...comp, [field]: value };
+        // Auto-calculate rates when key fields change
+        if (['salePrice', 'livingArea', 'landArea', 'bedrooms', 'bathrooms'].includes(field)) {
+          calculateRates(updated);
+        }
+        return updated;
+      }
+      return comp;
+    }));
   };
 
   const calculateTotalAdjustment = (comparable: ResidentialComparable) => {
@@ -112,8 +138,33 @@ export default function EnhancedSalesEvidenceResidential() {
     
     totalAdjustment += comparable.zoningAdjustment;
     totalAdjustment += comparable.esgAdjustment;
+    totalAdjustment += comparable.climateRiskAdjustment;
     
     return totalAdjustment;
+  };
+
+  // Auto-calculate rates per sqm
+  const calculateRates = (comparable: ResidentialComparable) => {
+    if (comparable.salePrice > 0 && comparable.livingArea > 0) {
+      const improvementsValue = comparable.salePrice * 0.7; // Assuming 70% for improvements
+      const landValue = comparable.salePrice * 0.3; // Assuming 30% for land
+      
+      comparable.improvementsRatePerSqm = improvementsValue / comparable.livingArea;
+      comparable.improvedLandRatePerSqm = landValue / (comparable.landArea || comparable.livingArea);
+      
+      if (comparable.bedrooms > 0) {
+        comparable.bedRate = comparable.salePrice / comparable.bedrooms;
+      }
+      
+      // Calculate room rate (bedrooms + living areas estimate)
+      const totalRooms = comparable.bedrooms + Math.max(2, comparable.bathrooms * 2);
+      comparable.roomRate = comparable.salePrice / totalRooms;
+      
+      // Calculate capitalized net income if yield rate available
+      if (comparable.yieldRate > 0) {
+        comparable.capitalizedNetIncome = comparable.salePrice * (comparable.yieldRate / 100);
+      }
+    }
   };
 
   const formatCurrency = (amount: number): string => {
@@ -461,6 +512,35 @@ export default function EnhancedSalesEvidenceResidential() {
                   </div>
                 </div>
 
+                {/* Climate Risk Assessment */}
+                <div className="grid grid-cols-5 gap-4 items-center py-3 border rounded-lg p-4 bg-yellow-50">
+                  <Label className="font-medium">Climate Risk</Label>
+                  <Select value={currentComparable.climateRisk} onValueChange={(value: 'greater' | 'less' | 'same') => updateComparable(currentComparable.id, 'climateRisk', value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="greater">Greater Risk</SelectItem>
+                      <SelectItem value="same">Same Risk</SelectItem>
+                      <SelectItem value="less">Less Risk</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    type="number"
+                    step="0.1"
+                    value={currentComparable.climateRiskAdjustment}
+                    onChange={(e) => updateComparable(currentComparable.id, 'climateRiskAdjustment', parseFloat(e.target.value) || 0)}
+                    placeholder="% adjustment"
+                    className="text-sm"
+                  />
+                  <div className="text-right font-medium">
+                    {currentComparable.climateRiskAdjustment > 0 ? '+' : ''}{currentComparable.climateRiskAdjustment}%
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Flood, fire, extreme weather exposure vs subject
+                  </div>
+                </div>
+
                 {/* External Improvements */}
                 <div className="grid grid-cols-5 gap-4 items-center py-3 border rounded-lg p-4">
                   <Label className="font-medium">External Improvements</Label>
@@ -484,6 +564,93 @@ export default function EnhancedSalesEvidenceResidential() {
                   <div className="text-sm text-muted-foreground">
                     Gardens, landscaping, outdoor areas, pool, shed (1-10 scale)
                   </div>
+                </div>
+              </div>
+
+              {/* Rate Calculations */}
+              <div className="space-y-4 border-t pt-6">
+                <h4 className="font-semibold text-base">Rate Analysis & Calculations</h4>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Improvements Rate per sqm */}
+                  <div className="p-4 border rounded-lg bg-blue-50">
+                    <Label className="font-medium text-blue-900">Improvements Rate per sqm</Label>
+                    <div className="text-2xl font-bold text-blue-900 mt-1">
+                      {formatCurrency(currentComparable.improvementsRatePerSqm)}
+                    </div>
+                    <div className="text-sm text-blue-700 mt-1">
+                      Building value ÷ Living area
+                    </div>
+                  </div>
+
+                  {/* Improved Land Rate per sqm */}
+                  <div className="p-4 border rounded-lg bg-green-50">
+                    <Label className="font-medium text-green-900">Improved Land Rate per sqm</Label>
+                    <div className="text-2xl font-bold text-green-900 mt-1">
+                      {formatCurrency(currentComparable.improvedLandRatePerSqm)}
+                    </div>
+                    <div className="text-sm text-green-700 mt-1">
+                      Land value ÷ Land area
+                    </div>
+                  </div>
+
+                  {/* Room Rate */}
+                  <div className="p-4 border rounded-lg bg-purple-50">
+                    <Label className="font-medium text-purple-900">Room Rate</Label>
+                    <div className="text-2xl font-bold text-purple-900 mt-1">
+                      {formatCurrency(currentComparable.roomRate)}
+                    </div>
+                    <div className="text-sm text-purple-700 mt-1">
+                      Sale price ÷ Total rooms
+                    </div>
+                  </div>
+
+                  {/* Bed Rate */}
+                  <div className="p-4 border rounded-lg bg-orange-50">
+                    <Label className="font-medium text-orange-900">Bed Rate</Label>
+                    <div className="text-2xl font-bold text-orange-900 mt-1">
+                      {formatCurrency(currentComparable.bedRate)}
+                    </div>
+                    <div className="text-sm text-orange-700 mt-1">
+                      Sale price ÷ Bedrooms
+                    </div>
+                  </div>
+                </div>
+
+                {/* Yield Assessment Integration */}
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div className="space-y-2">
+                    <Label>Yield Rate (%)</Label>
+                    <Input 
+                      type="number"
+                      step="0.1"
+                      value={currentComparable.yieldRate}
+                      onChange={(e) => updateComparable(currentComparable.id, 'yieldRate', parseFloat(e.target.value) || 0)}
+                      placeholder="Annual yield %"
+                      className="text-sm"
+                    />
+                  </div>
+                  <div className="p-4 border rounded-lg bg-indigo-50">
+                    <Label className="font-medium text-indigo-900">Capitalized Net Income</Label>
+                    <div className="text-2xl font-bold text-indigo-900 mt-1">
+                      {formatCurrency(currentComparable.capitalizedNetIncome)}
+                    </div>
+                    <div className="text-sm text-indigo-700 mt-1">
+                      Sale price × Yield rate
+                    </div>
+                  </div>
+                </div>
+
+                {/* LDC Field */}
+                <div className="space-y-2">
+                  <Label>Land Development Cost (LDC)</Label>
+                  <Input 
+                    type="number"
+                    value={currentComparable.landDevelopmentCost}
+                    onChange={(e) => updateComparable(currentComparable.id, 'landDevelopmentCost', parseFloat(e.target.value) || 0)}
+                    placeholder="Land development costs"
+                    className="text-sm"
+                  />
                 </div>
               </div>
 
@@ -514,9 +681,50 @@ export default function EnhancedSalesEvidenceResidential() {
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-sm text-muted-foreground">Adjusted Sale Price</div>
+                      <div className="text-sm text-muted-foreground">Value of Subject</div>
                       <div className="text-lg font-semibold text-primary">{formatCurrency(getAdjustedSalePrice(currentComparable))}</div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Rental Analysis Integration */}
+                <div className="mt-4 p-4 border rounded-lg bg-yellow-50">
+                  <h5 className="font-medium mb-2 flex items-center gap-2">
+                    <Badge variant="secondary">Rental Analysis & Yield Assessment</Badge>
+                  </h5>
+                  <div className="grid grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <Label>Gross Rent (p.a.)</Label>
+                      <div className="font-medium">$0</div>
+                      <div className="text-xs text-muted-foreground">Gross Rent Rate: N/A</div>
+                    </div>
+                    <div>
+                      <Label>Outgoings (p.a.)</Label>
+                      <div className="font-medium">$0</div>
+                      <div className="text-xs text-muted-foreground">Outgoings Rate: N/A</div>
+                    </div>
+                    <div>
+                      <Label>Net Rent (p.a.)</Label>
+                      <div className="font-medium">$0</div>
+                      <div className="text-xs text-muted-foreground">Net Rent Rate: N/A</div>
+                    </div>
+                    <div>
+                      <Label>Net Passing Yield (%)</Label>
+                      <div className="font-medium text-primary">N/A</div>
+                      <div className="text-xs text-muted-foreground">Yield Impact: N/A</div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2">
+                    <h6 className="font-medium text-sm">Subject Property Yield Assessment</h6>
+                    <div className="text-xs text-muted-foreground">
+                      Based on comparison rental rates per/sqm and outgoings analysis:
+                    </div>
+                    <ul className="text-xs text-muted-foreground space-y-1 ml-4">
+                      <li>• Subject should achieve rent rate: Based on comparable analysis</li>
+                      <li>• Outgoings rate indication: Based on comparable analysis</li>
+                      <li>• Yield indication: Yield assessment pending rental analysis</li>
+                    </ul>
                   </div>
                 </div>
               </div>
