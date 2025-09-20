@@ -124,6 +124,7 @@ export default function ValuationAnalysisSpecialised() {
                   <SelectItem value="medical">Medical Centre</SelectItem>
                   <SelectItem value="hospital">Hospital</SelectItem>
                   <SelectItem value="hotel">Hotel</SelectItem>
+                  <SelectItem value="workers-accommodation">Workers Accommodation</SelectItem>
                   <SelectItem value="education">Educational Facility</SelectItem>
                   <SelectItem value="leisure">Leisure/Entertainment</SelectItem>
                   <SelectItem value="service-station">Service Station</SelectItem>
