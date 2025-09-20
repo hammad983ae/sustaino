@@ -146,12 +146,43 @@ const MilduraValuationReport = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed mb-4">
               This report provides a comprehensive valuation of the property at 320 Deakin Avenue, Mildura, 
               incorporating recent market transactions, sector-specific data, regional economic outlook, and 
               climate change risk assessments. The analysis aims to support an informed understanding of the 
               property's current market value and associated risks.
             </p>
+            
+            <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
+              <h3 className="font-semibold text-foreground mb-3">Property Overview</h3>
+              <p className="text-muted-foreground mb-3">
+                The property is a purpose-built accommodation facility comprising 18 rooms, strategically located on a main road within a Commercial 1 zone. The property generates stable rental income of approximately $120,000 per annum with high occupancy potential.
+              </p>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium text-foreground mb-2">Key Features:</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• 18-room purpose-built accommodation facility</li>
+                    <li>• Commercial 1 zoning providing flexibility of use</li>
+                    <li>• Solar power system (13.2 kW) enhancing energy efficiency</li>
+                    <li>• Low-maintenance gardens and acoustic fencing</li>
+                    <li>• Strong cash flow with EBITDA of $87,000</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-foreground mb-2">Property Features:</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Modern construction with low-maintenance materials</li>
+                    <li>• Acoustic fencing providing privacy</li>
+                    <li>• Low-maintenance landscaping</li>
+                    <li>• Car parking facilities</li>
+                    <li>• Common areas and facilities</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -237,6 +268,147 @@ const MilduraValuationReport = () => {
               <p className="text-sm text-muted-foreground mt-3 text-center">
                 Architectural plans showing site layout, proposed detached bungalow, and development details
               </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Financial Analysis */}
+        <Card className="shadow-lg border-border">
+          <CardHeader className="bg-gradient-to-r from-green-500/10 to-emerald-500/10">
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <DollarSign className="w-6 h-6" />
+              Financial Analysis
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Income Analysis</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Gross Annual Rental Income</span>
+                    <span className="font-medium text-foreground">$120,000</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Occupancy Rate (estimated)</span>
+                    <Badge variant="secondary">80%</Badge>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                    <span className="text-muted-foreground">Effective Gross Income</span>
+                    <span className="font-semibold text-green-600">$96,000</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Expense Analysis</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Operating Expenses</span>
+                    <span className="text-foreground">$33,000</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Depreciation</span>
+                    <span className="text-foreground">$10,000</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <span className="text-muted-foreground">Amortization</span>
+                    <span className="text-foreground">$10,000</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-red-50 dark:bg-red-950/20 rounded-lg">
+                    <span className="text-muted-foreground">Total Expenses</span>
+                    <span className="font-semibold text-red-600">$53,000</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Profitability</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <span className="text-muted-foreground">Net Operating Income (NOI)</span>
+                    <span className="font-semibold text-blue-600">$87,000</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <span className="text-muted-foreground">EBITDA</span>
+                    <span className="font-semibold text-blue-600">$87,000</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg">
+                    <span className="text-muted-foreground">Cap Rate (estimated)</span>
+                    <Badge variant="default">7.0%</Badge>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg">
+                    <span className="text-muted-foreground">Estimated Value Range</span>
+                    <span className="font-bold text-primary">$1.2M - $1.4M</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* SWOT Analysis */}
+        <Card className="shadow-lg border-border">
+          <CardHeader className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10">
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <BarChart3 className="w-6 h-6" />
+              SWOT Analysis
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-green-600 mb-3">Strengths</h3>
+                  <div className="bg-green-50 dark:bg-green-950/20 p-4 rounded-lg">
+                    <ul className="text-sm text-muted-foreground space-y-2">
+                      <li>• Purpose-built accommodation for 18 residents with high occupancy potential</li>
+                      <li>• Located on main road within Commercial 1 zone</li>
+                      <li>• Solar energy reduces operating costs significantly</li>
+                      <li>• Low-maintenance gardens and fencing minimize ongoing expenses</li>
+                      <li>• Stable gross revenue stream of approximately $120,000</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-600 mb-3">Opportunities</h3>
+                  <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg">
+                    <ul className="text-sm text-muted-foreground space-y-2">
+                      <li>• Potential to increase occupancy rates or rental rates</li>
+                      <li>• Energy savings through solar and efficiency upgrades</li>
+                      <li>• Expansion or renovation to modernize facilities</li>
+                      <li>• Leveraging location for increased demand from nearby industries</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-orange-600 mb-3">Weaknesses</h3>
+                  <div className="bg-orange-50 dark:bg-orange-950/20 p-4 rounded-lg">
+                    <ul className="text-sm text-muted-foreground space-y-2">
+                      <li>• Dependence on local economic conditions and demand for worker housing</li>
+                      <li>• High depreciation and amortization costs ($20,000 combined)</li>
+                      <li>• Limited diversification of income streams</li>
+                      <li>• Subject to accommodation industry fluctuations</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-red-600 mb-3">Threats</h3>
+                  <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-lg">
+                    <ul className="text-sm text-muted-foreground space-y-2">
+                      <li>• Regulatory changes affecting accommodation use</li>
+                      <li>• Market competition from other housing providers</li>
+                      <li>• Economic downturn affecting occupancy</li>
+                      <li>• Maintenance or operational issues impacting revenue</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -419,7 +591,7 @@ const MilduraValuationReport = () => {
               <div className="text-center p-4 bg-card rounded-lg border border-border">
                 <h4 className="font-semibold text-foreground mb-2">Market Value Range</h4>
                 <p className="text-2xl font-bold text-primary">$1.2M - $1.4M</p>
-                <p className="text-sm text-muted-foreground mt-1">Based on comparable analysis</p>
+                <p className="text-sm text-muted-foreground mt-1">Based on comprehensive analysis incorporating income approach, market comparison, and EBITDA multiples</p>
               </div>
               <div className="text-center p-4 bg-card rounded-lg border border-border">
                 <h4 className="font-semibold text-foreground mb-2">Climate Adjustment</h4>
@@ -435,8 +607,7 @@ const MilduraValuationReport = () => {
             
             <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border-l-4 border-yellow-500">
               <p className="text-sm text-foreground">
-                <strong>Recommendation:</strong> The property represents a solid investment opportunity within the regional accommodation sector, 
-                with recommended implementation of climate resilience measures to preserve long-term value.
+                <strong>Market Position:</strong> The property is well-positioned to service the growing demand for worker accommodation in the Mildura region, benefiting from its strategic location and purpose-built design. The strong cash flow with EBITDA of $87,000 and estimated 80% occupancy rate supports the valuation range.
               </p>
             </div>
           </CardContent>
