@@ -13,6 +13,7 @@ import MarketCommentary from "./MarketCommentary";
 import ValuationCertificate from "./ValuationCertificate";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
+import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider";
 
 const steps = [
   { id: "property", title: "Property Details", icon: Home, description: "Basic property information" },
@@ -113,6 +114,7 @@ export default function ComprehensivePropertyValuation() {
   };
 
   return (
+    <PropertyTypeLockProvider>
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 max-w-7xl">
         {/* Back to Dashboard */}
@@ -293,6 +295,7 @@ export default function ComprehensivePropertyValuation() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+      </div>
+    </PropertyTypeLockProvider>
   );
 }
