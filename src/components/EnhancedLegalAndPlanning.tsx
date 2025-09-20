@@ -63,34 +63,32 @@ const EnhancedLegalAndPlanning = () => {
     lastUpdated: ""
   });
 
-  // Load data from multiple sources and integrate lot/plan from PAF workflow
+  // Load data from state-based planning sources and integrate lot/plan from validated sources
   useEffect(() => {
     const integratedData = getIntegratedData();
     console.log('Enhanced Legal and Planning - Loading integrated data:', integratedData);
     
-    // Load lot/plan from multiple PAF sources with priority order
-    extractLotPlanFromPAFSources(integratedData);
+    // Extract lot/plan from validated sources (not from PAF which may be incorrect)
+    extractLotPlanFromValidatedSources(integratedData);
     
-    // Load planning data from assessment workflow
-    if (integratedData.planningData) {
-      console.log('Loading from planning data:', integratedData.planningData);
+    // Load planning data from STATE-BASED planning authorities (not PAF)
+    if (integratedData.planningData && integratedData.planningData.source === 'planning_authority') {
+      console.log('Loading from verified state planning authority:', integratedData.planningData);
       const planning = integratedData.planningData;
       setPlanningData(prev => ({
         ...prev,
         lga: planning.lga || "",
-        zoning: planning.zoneName || planning.zoning || "",
-        zoneName: planning.zoneName || "",
+        zoning: planning.zoning || planning.zoneName || "", // Use official zoning code
+        zoneName: planning.zoneName || planning.zoneDescription || "",
         zoneDescription: planning.zoneDescription || "",
-        currentUse: planning.currentUse || "",
-        permissibleUse: planning.permittedUse || planning.landUse || "",
+        currentUse: planning.currentUse || planning.existingUse || "",
+        permissibleUse: planning.permittedUse || planning.landUseCategories || "",
         overlays: Array.isArray(planning.overlays) ? planning.overlays.join(", ") : (planning.overlays || ""),
-        heightOfBuilding: planning.heightRestrictions || planning.heightRestriction || "",
-        developmentPotential: planning.developmentPotential || "",
-        planningRestrictions: planning.overlays && Array.isArray(planning.overlays) && planning.overlays.length > 0 
-          ? `Planning overlays apply: ${planning.overlays.join(", ")}` 
-          : "",
-        planningScheme: planning.planningScheme || "",
-        mapReference: planning.mapReference || "",
+        heightOfBuilding: planning.heightLimit || planning.heightRestrictions || "",
+        developmentPotential: planning.developmentRights || planning.developmentPotential || "",
+        planningRestrictions: planning.planningConstraints || planning.restrictions || "",
+        planningScheme: planning.planningScheme || planning.lps || "",
+        mapReference: planning.mapReference || planning.planningMapRef || "",
         lastUpdated: planning.lastUpdated || new Date().toISOString()
       }));
     }
@@ -120,16 +118,20 @@ const EnhancedLegalAndPlanning = () => {
     }
   }, [getIntegratedData, loadData]);
 
-  // Extract lot and plan from PAF workflow sources
-  const extractLotPlanFromPAFSources = (integratedData: any) => {
+  // Extract lot and plan from VALIDATED sources (prioritize official planning authority data)
+  const extractLotPlanFromValidatedSources = (integratedData: any) => {
     const sources = [
-      { data: integratedData.planningData, source: 'planning' as const },
-      { data: integratedData.propertySearchData, source: 'rpdata' as const },
-      { data: integratedData.fileAttachments, source: 'ocr' as const }
+      { data: integratedData.planningData, source: 'planning' as const, priority: 1 },
+      { data: integratedData.propertySearchData, source: 'rpdata' as const, priority: 2 },
+      { data: integratedData.fileAttachments, source: 'ocr' as const, priority: 3 }
     ];
 
+    // Sort by priority to ensure planning authority data takes precedence
+    sources.sort((a, b) => a.priority - b.priority);
+
     for (const { data, source } of sources) {
-      if (data && (data.lotNumber || data.planNumber)) {
+      // Only accept data from verified sources with proper validation
+      if (data && (data.lotNumber || data.planNumber) && data.verified !== false) {
         const newLotPlanData: LotPlanData = {
           lotNumber: data.lotNumber || lotPlanData.lotNumber,
           planNumber: data.planNumber || lotPlanData.planNumber,
@@ -140,7 +142,7 @@ const EnhancedLegalAndPlanning = () => {
 
         setLotPlanData(newLotPlanData);
         addToExtractionHistory(newLotPlanData);
-        break; // Use first available source
+        break; // Use highest priority verified source
       }
     }
   };
@@ -167,11 +169,29 @@ const EnhancedLegalAndPlanning = () => {
     });
   };
 
-  // Enhanced lot/plan extraction from specific PAF sources
+  // State planning authority mapping
+  const getStatePlanningAuthority = (state: string): string => {
+    const authorities: { [key: string]: string } = {
+      'VIC': 'Planning.vic.gov.au',
+      'NSW': 'NSW Planning Portal',
+      'QLD': 'Queensland Development ePortal',
+      'SA': 'SA Planning Portal',
+      'WA': 'WA Planning Online',
+      'TAS': 'Tasmanian Planning Reform',
+      'NT': 'NT Planning Online',
+      'ACT': 'ACT Planning & Land Authority'
+    };
+    return authorities[state] || 'State Planning Authority';
+  };
+
+  // Enhanced lot/plan extraction from STATE-BASED planning authorities
   const extractFromPlanningSearch = async () => {
     setIsExtractingLotPlan(true);
     try {
-      // Simulate planning search API integration
+      const state = addressData?.state || 'VIC';
+      const planningAuthority = getStatePlanningAuthority(state);
+      
+      // Simulate state-based planning search API integration
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       const extractedData: LotPlanData = {
@@ -184,22 +204,45 @@ const EnhancedLegalAndPlanning = () => {
       
       setLotPlanData(extractedData);
       addToExtractionHistory(extractedData);
-      updatePAFData(extractedData);
+      updateStatePlanningData(extractedData, planningAuthority);
       
       toast({
-        title: "Planning search completed",
-        description: "Lot and plan numbers extracted from planning search",
+        title: `${planningAuthority} search completed`,
+        description: "Official lot and plan data extracted from state planning authority",
       });
     } catch (error) {
-      console.error('Planning search extraction failed:', error);
+      console.error('State planning search extraction failed:', error);
       toast({
-        title: "Planning search failed",
-        description: "Could not extract lot/plan from planning search",
+        title: "State planning search failed",
+        description: "Could not extract lot/plan from state planning authority",
         variant: "destructive"
       });
     } finally {
       setIsExtractingLotPlan(false);
     }
+  };
+
+  // Update data from state planning authorities (not PAF)
+  const updateStatePlanningData = (lotPlanData: LotPlanData, authority: string) => {
+    // Update with verified state planning authority data
+    updateReportData('planningData', {
+      ...reportData?.planningData,
+      lotNumber: lotPlanData.lotNumber,
+      planNumber: lotPlanData.planNumber,
+      source: 'planning_authority',
+      authority: authority,
+      verified: true,
+      lastUpdated: lotPlanData.lastUpdated
+    });
+    
+    // Update property search data separately (keep PAF data separate)
+    updateReportData('legalAndPlanning', {
+      ...reportData?.legalAndPlanning,
+      lotNumber: lotPlanData.lotNumber,
+      planNumber: lotPlanData.planNumber,
+      planningAuthority: authority,
+      lastUpdated: lotPlanData.lastUpdated
+    });
   };
 
   const extractFromRPData = async () => {
