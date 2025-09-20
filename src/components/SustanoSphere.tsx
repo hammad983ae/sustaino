@@ -50,7 +50,10 @@ import {
   Code,
   Database,
   Cloud,
-  Lock
+  Lock,
+  Upload,
+  FileText,
+  Leaf
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -296,218 +299,486 @@ export const SustanoSphere = () => {
 
       {/* Main Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 gap-1">
-          <TabsTrigger value="browse" className="text-xs lg:text-sm">🔍 Browse</TabsTrigger>
-          <TabsTrigger value="featured" className="text-xs lg:text-sm">⭐ Featured</TabsTrigger>
-          <TabsTrigger value="valuation" className="text-xs lg:text-sm">📊 Valuation</TabsTrigger>
-          <TabsTrigger value="contracts" className="text-xs lg:text-sm">📝 Contracts</TabsTrigger>
-          <TabsTrigger value="documents" className="text-xs lg:text-sm">📋 Documents</TabsTrigger>
-          <TabsTrigger value="datacentre" className="text-xs lg:text-sm">🏛️ Data Centre</TabsTrigger>
-          <TabsTrigger value="watchlist" className="text-xs lg:text-sm">❤️ Watchlist</TabsTrigger>
-          <TabsTrigger value="vendor" className="text-xs lg:text-sm">📄 Vendor</TabsTrigger>
-          <TabsTrigger value="submit" className="text-xs lg:text-sm">🚀 List Platform</TabsTrigger>
-          <TabsTrigger value="sell" className="text-xs lg:text-sm">💼 Live Sale</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-10 gap-1">
+          <TabsTrigger value="browse" className="text-xs lg:text-sm flex items-center gap-1">
+            <Globe className="h-3 w-3" />
+            AI Intelligence
+          </TabsTrigger>
+          <TabsTrigger value="valuation" className="text-xs lg:text-sm flex items-center gap-1">
+            <TrendingUp className="h-3 w-3" />
+            SustanoVal™
+          </TabsTrigger>
+          <TabsTrigger value="roi-analysis" className="text-xs lg:text-sm flex items-center gap-1">
+            <DollarSign className="h-3 w-3" />
+            ROI Analysis
+          </TabsTrigger>
+          <TabsTrigger value="competitor" className="text-xs lg:text-sm flex items-center gap-1">
+            <Users className="h-3 w-3" />
+            Competitor Intel
+          </TabsTrigger>
+          <TabsTrigger value="gap-analysis" className="text-xs lg:text-sm flex items-center gap-1">
+            <TrendingUp className="h-3 w-3" />
+            Gap Analysis
+          </TabsTrigger>
+          <TabsTrigger value="security" className="text-xs lg:text-sm flex items-center gap-1">
+            <Shield className="h-3 w-3" />
+            Security Intel
+          </TabsTrigger>
+          <TabsTrigger value="featured" className="text-xs lg:text-sm flex items-center gap-1">
+            <Gavel className="h-3 w-3" />
+            Live Auctions
+          </TabsTrigger>
+          <TabsTrigger value="reports" className="text-xs lg:text-sm flex items-center gap-1">
+            <FileText className="h-3 w-3" />
+            Reports
+          </TabsTrigger>
+          <TabsTrigger value="submit" className="text-xs lg:text-sm flex items-center gap-1">
+            <Upload className="h-3 w-3" />
+            List Platform
+          </TabsTrigger>
+          <TabsTrigger value="watchlist" className="text-xs lg:text-sm flex items-center gap-1">
+            <Heart className="h-3 w-3" />
+            Watchlist
+          </TabsTrigger>
         </TabsList>
 
-        {/* Browse Auctions */}
+        {/* AI Intelligence Dashboard */}
         <TabsContent value="browse" className="space-y-6">
-          {/* Stats Dashboard */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="card-3d-light">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-2">
-                  <Gavel className="h-5 w-5 text-primary" />
-                  <div>
-                    <div className="text-2xl font-bold">247</div>
-                    <div className="text-sm text-muted-foreground">Active Auctions</div>
+          <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <Globe className="h-6 w-6 text-blue-600" />
+                Revolutionary AI Intelligence Dashboard
+              </CardTitle>
+              <CardDescription className="text-base">
+                AI Enhanced Algorithms (Designed By Humans)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-6">
+                <div className="relative aspect-video bg-gradient-to-r from-slate-900 to-blue-900 rounded-lg overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
+                  <div className="absolute top-4 right-4 bg-white/10 px-3 py-1 rounded text-white font-mono text-sm">
+                    774,524
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="card-3d-light">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-green-600" />
-                  <div>
-                    <div className="text-2xl font-bold">$2.4M</div>
-                    <div className="text-sm text-muted-foreground">Total Volume</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="card-3d-light">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <div className="text-2xl font-bold">+156%</div>
-                    <div className="text-sm text-muted-foreground">Growth YoY</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="card-3d-light">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-purple-600" />
-                  <div>
-                    <div className="text-2xl font-bold">1,847</div>
-                    <div className="text-sm text-muted-foreground">Active Bidders</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Featured Auctions Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {FEATURED_AUCTIONS.map((asset) => (
-              <Card key={asset.id} className="group card-3d-light hover:shadow-lg transition-all duration-500">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      {getCategoryIcon(asset.category)}
-                      <Badge variant="outline" className="capitalize">
-                        {asset.category.replace("-", " ")}
-                      </Badge>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="grid grid-cols-4 gap-4 text-white text-xs">
+                      <div>Search revolutionary assets...</div>
+                      <div>All Categories ⌄</div>
+                      <div>SustanoVal™ Score ⌄</div>
+                      <div>Overview ⌄</div>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleWatchlist(asset.id)}
-                      className="p-1"
-                    >
-                      <Heart 
-                        className={`h-4 w-4 ${
-                          watchlist.includes(asset.id) ? "fill-red-500 text-red-500" : ""
-                        }`} 
-                      />
-                    </Button>
                   </div>
-                  
-                  <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                    {asset.title}
-                  </CardTitle>
-                  <CardDescription className="line-clamp-2">
-                    {asset.description}
-                  </CardDescription>
-                </CardHeader>
+                </div>
+              </div>
 
-                <CardContent className="space-y-4">
-                  {/* Current Bid & Time */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="text-sm text-muted-foreground">Current Bid</div>
-                      <div className="text-2xl font-bold text-green-600">
-                        {formatCurrency(asset.currentBid)}
+              {/* Asset Cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/20">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="font-bold text-lg">NeoCommerce AI Platform</h3>
+                        <Badge className="bg-emerald-500 text-white mt-1">SustanoVal™: 97/100</Badge>
+                      </div>
+                      <Badge variant="outline">Ecommerce</Badge>
+                    </div>
+                    
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Revolutionary AI-powered e-commerce platform with predictive analytics, AB shopping, and 
+                      comprehensive inventory management serving Fortune 500 companies.
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <div className="text-sm text-muted-foreground">💰 Valuation</div>
+                        <div className="text-2xl font-bold text-emerald-600">$25.0M</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground">📈 Growth Rate</div>
+                        <div className="text-2xl font-bold text-blue-600">245%</div>
                       </div>
                     </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">Time Left</div>
-                      <div className="text-lg font-semibold text-orange-600">
-                        {asset.timeRemaining}
+
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between text-sm">
+                        <span>ESG Score</span>
+                        <span>93%</span>
+                      </div>
+                      <Progress value={93} className="h-2" />
+                      
+                      <div className="flex justify-between text-sm">
+                        <span>Security Score</span>
+                        <span>92%</span>
+                      </div>
+                      <Progress value={92} className="h-2" />
+                      
+                      <div className="flex justify-between text-sm">
+                        <span>Market Position</span>
+                        <span>Challenger</span>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Metrics */}
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div>
-                      <div className="text-sm font-medium">{asset.bidCount}</div>
-                      <div className="text-xs text-muted-foreground">Bids</div>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-emerald-500 hover:bg-emerald-600">
+                        <TrendingUp className="h-4 w-4 mr-1" />
+                        SustanoVal™
+                      </Button>
+                      <Button variant="outline" className="flex-1">
+                        <FileText className="h-4 w-4 mr-1" />
+                        Full Report
+                      </Button>
                     </div>
-                    <div>
-                      <div className="text-sm font-medium">{asset.views}</div>
-                      <div className="text-xs text-muted-foreground">Views</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium">{asset.esgScore}/100</div>
-                      <div className="text-xs text-muted-foreground">ESG</div>
-                    </div>
-                  </div>
+                  </CardContent>
+                </Card>
 
-                  {/* Revenue & Users */}
-                  {(asset.monthlyRevenue || asset.monthlyUsers) && (
-                    <div className="grid grid-cols-2 gap-2 p-2 bg-muted/50 rounded">
-                      {asset.monthlyRevenue && (
-                        <div>
-                          <div className="text-xs text-muted-foreground">Monthly Revenue</div>
-                          <div className="text-sm font-medium">
-                            {formatCurrency(asset.monthlyRevenue)}
-                          </div>
-                        </div>
-                      )}
-                      {asset.monthlyUsers && (
-                        <div>
-                          <div className="text-xs text-muted-foreground">Monthly Users</div>
-                          <div className="text-sm font-medium">
-                            {asset.monthlyUsers.toLocaleString()}
-                          </div>
-                        </div>
-                      )}
+                <Card className="border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/20">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="font-bold text-lg">QuantumFinance SaaS</h3>
+                        <Badge className="bg-emerald-500 text-white mt-1">SustanoVal™: 94/100</Badge>
+                      </div>
+                      <Badge variant="outline">Fintech</Badge>
                     </div>
-                  )}
+                    
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Next generation financial analytics platform using quantum computing algorithms for real 
+                      time risk assessment and portfolio optimization for institutional investors.
+                    </p>
 
-                  {/* Tech Stack */}
-                  <div className="flex flex-wrap gap-1">
-                    {asset.techStack.slice(0, 3).map((tech) => (
-                      <Badge key={tech} variant="secondary" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                    {asset.techStack.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{asset.techStack.length - 3}
-                      </Badge>
-                    )}
-                  </div>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <div className="text-sm text-muted-foreground">💰 Valuation</div>
+                        <div className="text-2xl font-bold text-emerald-600">$45.0M</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground">📈 Growth Rate</div>
+                        <div className="text-2xl font-bold text-blue-600">312%</div>
+                      </div>
+                    </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <Button 
-                      onClick={() => setSelectedAsset(asset)}
-                      className="flex-1"
-                      size="sm"
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      View Details
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => {
-                        toast({
-                          title: "Quick Bid Placed! 🚀",
-                          description: `Bid ${formatCurrency(asset.currentBid + 5000)} submitted`,
-                        });
-                      }}
-                    >
-                      Quick Bid
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between text-sm">
+                        <span>ESG Score</span>
+                        <span>93%</span>
+                      </div>
+                      <Progress value={93} className="h-2" />
+                      
+                      <div className="flex justify-between text-sm">
+                        <span>Security Score</span>
+                        <span>97%</span>
+                      </div>
+                      <Progress value={97} className="h-2" />
+                      
+                      <div className="flex justify-between text-sm">
+                        <span>Market Position</span>
+                        <span>Leader</span>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-emerald-500 hover:bg-emerald-600">
+                        <TrendingUp className="h-4 w-4 mr-1" />
+                        SustanoVal™
+                      </Button>
+                      <Button variant="outline" className="flex-1">
+                        <FileText className="h-4 w-4 mr-1" />
+                        Full Report
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        {/* Featured Tab */}
-        <TabsContent value="featured">
-          <Card>
+        {/* SustanoVal™ Revolutionary Valuation Engine */}
+        <TabsContent value="valuation" className="space-y-6">
+          <Card className="bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/20 dark:to-green-950/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Star className="h-5 w-5 text-yellow-500" />
-                Premium Featured Auctions
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <TrendingUp className="h-6 w-6 text-emerald-600" />
+                SustanoVal™ Revolutionary Valuation Engine
               </CardTitle>
-              <CardDescription>
-                Hand-selected high-value digital assets with verified financials
+              <CardDescription className="text-base">
+                Proprietary AI-powered valuation algorithm providing unprecedented accuracy for digital assets across all industries, with specialized focus on startups and emerging tech companies.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
-                <div className="text-lg font-medium mb-2">Featured auctions coming soon</div>
-                <div className="text-muted-foreground">
-                  Premium listings with enhanced due diligence and verification
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                  <TrendingUp className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">SustanoVal™ Algorithm</h3>
+                <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+                  Revolutionary multi-variable valuation engine combining traditional financial metrics with AI-powered market intelligence, ESG impact scoring, and predictive growth modeling. Specialized for startups, scale-ups, and digital enterprises across all sectors.
+                </p>
+                
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <Card className="p-4">
+                    <CardContent className="p-0 text-center">
+                      <FileText className="h-8 w-8 mx-auto mb-3 text-blue-600" />
+                      <h4 className="font-semibold mb-2">Financial Analysis</h4>
+                      <p className="text-sm text-muted-foreground">Advanced DCF modeling with AI-enhanced projections</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="p-4">
+                    <CardContent className="p-0 text-center">
+                      <Globe className="h-8 w-8 mx-auto mb-3 text-purple-600" />
+                      <h4 className="font-semibold mb-2">AI Intelligence</h4>
+                      <p className="text-sm text-muted-foreground">Machine learning pattern recognition and market prediction</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="p-4">
+                    <CardContent className="p-0 text-center">
+                      <Leaf className="h-8 w-8 mx-auto mb-3 text-emerald-600" />
+                      <h4 className="font-semibold mb-2">ESG Integration</h4>
+                      <p className="text-sm text-muted-foreground">Sustainability impact on long-term valuation</p>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600">
+                  <TrendingUp className="h-5 w-5 mr-2" />
+                  Activate SustanoVal™ Engine
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* ROI Analysis */}
+        <TabsContent value="roi-analysis" className="space-y-6">
+          <ModularPlatformValuation />
+        </TabsContent>
+
+        {/* Competitor Intelligence */}
+        <TabsContent value="competitor" className="space-y-6">
+          <Card className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <Users className="h-6 w-6 text-orange-600" />
+                Advanced Competitor Intelligence
+              </CardTitle>
+              <CardDescription className="text-base">
+                Comprehensive competitive landscape analysis with real-time market positioning
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Market Leaders</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div>
+                      <div className="font-semibold">Market Leader A</div>
+                      <div className="text-sm text-muted-foreground">Market Share: 35%</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold">$150.0M</div>
+                      <div className="text-sm text-green-600">+23% growth</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div>
+                      <div className="font-semibold">Market Leader B</div>
+                      <div className="text-sm text-muted-foreground">Market Share: 28%</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold">$120.0M</div>
+                      <div className="text-sm text-green-600">+18% growth</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div>
+                      <div className="font-semibold">Emerging Player C</div>
+                      <div className="text-sm text-muted-foreground">Market Share: 15%</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold">$65.0M</div>
+                      <div className="text-sm text-green-600">+67% growth</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Gap Analysis */}
+        <TabsContent value="gap-analysis" className="space-y-6">
+          <Card className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <TrendingUp className="h-6 w-6 text-purple-600" />
+                Strategic Gap Analysis
+              </CardTitle>
+              <CardDescription className="text-base">
+                Identify strategic gaps and market opportunities in technology, market, and financial performance
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Technology Gaps</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>Machine Learning</span>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="destructive">Major</Badge>
+                        <span className="text-sm text-muted-foreground">Invest $2M in ML infrastructure</span>
+                      </div>
+                    </div>
+                    <Progress value={20} className="h-2" />
+                    
+                    <div className="flex justify-between items-center">
+                      <span>Mobile Platform</span>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary">Minor</Badge>
+                        <span className="text-sm text-muted-foreground">Expand mobile team by 20%</span>
+                      </div>
+                    </div>
+                    <Progress value={70} className="h-2" />
+                    
+                    <div className="flex justify-between items-center">
+                      <span>API Infrastructure</span>
+                      <div className="flex items-center gap-2">
+                        <Badge>N/A</Badge>
+                        <span className="text-sm text-muted-foreground">Add mobile platform</span>
+                      </div>
+                    </div>
+                    <Progress value={0} className="h-2" />
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Market Gaps</h3>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="font-medium">Enterprise</span>
+                        <span className="text-2xl font-bold">$255M</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">Current: 45% | Potential: 60%</div>
+                      <div className="text-sm text-emerald-600 mt-1">Opportunity Value</div>
+                    </div>
+                    
+                    <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="font-medium">SME</span>
+                        <span className="text-2xl font-bold">$155M</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">Current: 30% | Potential: 65%</div>
+                      <div className="text-sm text-emerald-600 mt-1">Opportunity Value</div>
+                    </div>
+                    
+                    <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="font-medium">International</span>
+                        <span className="text-2xl font-bold">$455M</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">Current: 10% | Potential: 40%</div>
+                      <div className="text-sm text-emerald-600 mt-1">Opportunity Value</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Security Intelligence */}
+        <TabsContent value="security" className="space-y-6">
+          <Card className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <Shield className="h-6 w-6 text-red-600" />
+                Advanced Security Intelligence
+              </CardTitle>
+              <CardDescription className="text-base">
+                Comprehensive security assessment and vulnerability analysis
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center mb-8">
+                <div className="text-6xl font-bold text-orange-600 mb-2">87/100</div>
+                <div className="text-lg text-muted-foreground">Overall Security Score</div>
+              </div>
+              
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Vulnerability Assessment</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <div>
+                        <div className="font-semibold">High Severity</div>
+                        <div className="text-sm text-muted-foreground">Authentication bypass potential</div>
+                      </div>
+                    </div>
+                    <Badge variant="destructive">2 Issues</Badge>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <div>
+                        <div className="font-semibold">Medium Severity</div>
+                        <div className="text-sm text-muted-foreground">Data validation issues</div>
+                      </div>
+                    </div>
+                    <Badge variant="secondary">7 Issues</Badge>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <div>
+                        <div className="font-semibold">Low Severity</div>
+                        <div className="text-sm text-muted-foreground">Minor configuration issues</div>
+                      </div>
+                    </div>
+                    <Badge variant="outline">15 Issues</Badge>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Compliance Status</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>GDPR</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-emerald-600 font-semibold">95%</span>
+                        <Badge className="bg-emerald-500">Compliant</Badge>
+                      </div>
+                    </div>
+                    <Progress value={95} className="h-2" />
+                    
+                    <div className="flex justify-between items-center">
+                      <span>ISO27001</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-yellow-600 font-semibold">78%</span>
+                        <Badge variant="secondary">Partial</Badge>
+                      </div>
+                    </div>
+                    <Progress value={78} className="h-2" />
+                    
+                    <div className="flex justify-between items-center">
+                      <span>SOC2</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 font-semibold">65%</span>
+                        <Badge variant="outline">In Progress</Badge>
+                      </div>
+                    </div>
+                    <Progress value={65} className="h-2" />
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -710,10 +981,131 @@ export const SustanoSphere = () => {
         </Card>
       )}
 
-      {/* Data Centre */}
-      <TabsContent value="datacentre" className="space-y-6">
-        <SustanoSphereDataCentre />
-      </TabsContent>
+        {/* Live Auctions */}
+        <TabsContent value="featured" className="space-y-6">
+          <Card className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <Gavel className="h-6 w-6 text-purple-600" />
+                Revolutionary Live Auction Platform
+              </CardTitle>
+              <CardDescription className="text-base">
+                Professional-grade auction platform with real-time bidding and advanced analytics.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-6">
+                <div className="relative aspect-video bg-gradient-to-r from-slate-900 to-purple-900 rounded-lg overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20"></div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="border-green-200 bg-green-50/50 dark:bg-green-950/20">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="font-bold text-lg">NeoCommerce AI Platform</h3>
+                        <div className="flex items-center gap-2 mt-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                          <span className="text-sm text-green-600 font-medium">Live</span>
+                          <span className="text-sm text-muted-foreground">6d 14h 23m</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <div className="text-sm text-muted-foreground">Current Bid</div>
+                        <div className="text-3xl font-bold text-green-600">$25.0M</div>
+                        <div className="text-sm text-muted-foreground">Reserve: $20.0M</div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">🎯 847 bids</span>
+                        <span className="text-sm">👁 45,672 views</span>
+                        <span className="text-sm">❤ 2,341 watching</span>
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Input placeholder="Enter bid amount" className="flex-1" />
+                        <Button className="bg-purple-600 hover:bg-purple-700">
+                          <Gavel className="h-4 w-4 mr-1" />
+                          Place Bid
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-green-200 bg-green-50/50 dark:bg-green-950/20">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="font-bold text-lg">QuantumFinance SaaS</h3>
+                        <div className="flex items-center gap-2 mt-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                          <span className="text-sm text-green-600 font-medium">Live</span>
+                          <span className="text-sm text-muted-foreground">2d 8h 45m</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <div className="text-sm text-muted-foreground">Current Bid</div>
+                        <div className="text-3xl font-bold text-green-600">$45.0M</div>
+                        <div className="text-sm text-muted-foreground">Reserve: $35.0M</div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">🎯 1247 bids</span>
+                        <span className="text-sm">👁 78,214 views</span>
+                        <span className="text-sm">❤ 4,567 watching</span>
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Input placeholder="Enter bid amount" className="flex-1" />
+                        <Button className="bg-purple-600 hover:bg-purple-700">
+                          <Gavel className="h-4 w-4 mr-1" />
+                          Place Bid
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Reports */}
+        <TabsContent value="reports" className="space-y-6">
+          <Card className="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-950/20 dark:to-slate-950/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <FileText className="h-6 w-6 text-gray-600" />
+                Comprehensive Asset Reports
+              </CardTitle>
+              <CardDescription className="text-base">
+                Generate detailed analysis reports with executive summaries and actionable insights.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-12">
+                <FileText className="h-16 w-16 mx-auto mb-6 text-gray-400" />
+                <h3 className="text-2xl font-bold mb-4">Comprehensive Report Generator</h3>
+                <p className="text-muted-foreground max-w-md mx-auto mb-8">
+                  Generate detailed analysis reports with executive summaries and actionable insights
+                </p>
+                <Button size="lg" className="bg-gray-600 hover:bg-gray-700">
+                  <FileText className="h-5 w-5 mr-2" />
+                  Generate Comprehensive Report
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
       {/* Footer with Additional IP Protection */}
       <Card className="bg-muted/50">
