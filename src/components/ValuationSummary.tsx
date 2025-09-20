@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useReportData } from "@/contexts/ReportDataContext";
+import AIEnhanceButton from "@/components/AIEnhanceButton";
 
 const ValuationSummary = () => {
   const { reportData, updateReportData } = useReportData();
@@ -23,6 +24,33 @@ const ValuationSummary = () => {
     });
   };
 
+  const handleAIEnhancement = (enhancedData: any) => {
+    // Apply AI-enhanced data to the report
+    updateReportData('reportConfig', {
+      ...reportData?.reportConfig,
+      ...enhancedData
+    });
+  };
+
+  // Determine missing fields for AI enhancement
+  const getMissingFields = () => {
+    const fields = [];
+    if (!interestValued || interestValued === "Freehold") fields.push("interestValues");
+    if (!valueComponent || valueComponent === "Market Value") fields.push("valueComponent");
+    if (!highestBestUse || highestBestUse === "Current Use") fields.push("propertyType");
+    if (!marketValue) fields.push("marketValue");
+    return fields;
+  };
+
+  const currentData = {
+    interestValues: interestValued,
+    valueComponent,
+    propertyType: highestBestUse,
+    currency,
+    gstTreatment,
+    marketValue
+  };
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -38,6 +66,12 @@ const ValuationSummary = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <AIEnhanceButton
+            pageType="valuation-summary"
+            currentData={currentData}
+            missingFields={getMissingFields()}
+            onEnhancement={handleAIEnhancement}
+          />
           <Label htmlFor="include-summary" className="text-sm">Include</Label>
           <Switch id="include-summary" defaultChecked />
         </div>
