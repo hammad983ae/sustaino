@@ -43,6 +43,7 @@ import {
   Calculator, TrendingUp, Shield, AlertTriangle, CheckCircle,
   XCircle, Star, Award, BarChart3, Users, Eye, Lock
 } from 'lucide-react';
+import { EquifaxCreditCheck } from './EquifaxCreditCheck';
 
 interface BidderQualificationProps {
   onQualificationComplete?: (qualification: QualificationResult) => void;
@@ -325,7 +326,16 @@ const BidderQualification: React.FC<BidderQualificationProps> = ({
               <TabsTrigger value="results">Results</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="personal" className="space-y-4">
+          <TabsContent value="credit" className="space-y-4">
+            <EquifaxCreditCheck
+              applicantType="individual"
+              onCreditCheckComplete={(creditData) => {
+                console.log('Bidder credit check completed:', creditData);
+              }}
+            />
+          </TabsContent>
+
+          <TabsContent value="personal" className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="firstName">First Name</Label>

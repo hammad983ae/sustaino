@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.signnow-integration]
 verify_jwt = false
+
+[functions.equifax-credit-check]
+verify_jwt = false

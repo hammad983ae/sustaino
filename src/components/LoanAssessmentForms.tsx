@@ -34,6 +34,8 @@ import {
   Building2,
   User
 } from 'lucide-react';
+import { EquifaxCreditCheck } from './EquifaxCreditCheck';
+import { Separator } from '@/components/ui/separator';
 
 interface LoanFormData {
   loanCategory: string;
@@ -391,6 +393,21 @@ const LoanAssessmentForms = () => {
                 />
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Equifax Credit Check */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Credit Assessment</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EquifaxCreditCheck
+              applicantType={formData.applicationType as any}
+              onCreditCheckComplete={(creditData) => {
+                console.log('Credit check completed for loan application:', creditData);
+              }}
+            />
           </CardContent>
         </Card>
 
