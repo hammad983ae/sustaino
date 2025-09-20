@@ -56,6 +56,7 @@ import DashboardQuickSearch from '@/components/DashboardQuickSearch';
 import { RevolutionarySustainoSphere } from '@/components/RevolutionarySustanoSphere';
 import AdvertisingValuationDashboard from '@/components/AdvertisingValuationDashboard';
 import ICVDashboard from '@/components/ICVDashboard';
+import { SustanoSphere } from '@/components/SustanoSphere';
 
 // Import professional images
 import securityAnalysisDashboard from '@/assets/security-analysis-dashboard.jpg';
@@ -302,7 +303,7 @@ const Dashboard = () => {
               </div>
               
               {/* Platform Navigation Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-4 mb-8">
                 <Link to="/dashboard" className="no-underline">
                   <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-emerald-500 text-white border-0">
                     <div className="text-center">
@@ -366,10 +367,17 @@ const Dashboard = () => {
                     </div>
                   </Card>
                 </Link>
+
+                <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-emerald-500 text-white border-0" onClick={() => setActiveTab('sustano-sphere')}>
+                  <div className="text-center">
+                    <Globe className="h-6 w-6 mx-auto mb-2" />
+                    <p className="text-sm font-medium">Sustano Sphere</p>
+                  </div>
+                </Card>
               </div>
               
               <Tabs defaultValue="analytics" className="w-full">
-                <TabsList className="grid w-full grid-cols-7">
+                <TabsList className="grid w-full grid-cols-8">
                   <TabsTrigger value="analytics" className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
                     Analytics
@@ -393,6 +401,10 @@ const Dashboard = () => {
                   <TabsTrigger value="advertising" className="flex items-center gap-2">
                     <Megaphone className="h-4 w-4" />
                     Advertising
+                  </TabsTrigger>
+                  <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    Sustano Sphere
                   </TabsTrigger>
                 </TabsList>
 
@@ -643,6 +655,10 @@ const Dashboard = () => {
 
                 <TabsContent value="advertising" className="mt-6">
                   <AdvertisingValuationDashboard />
+                </TabsContent>
+
+                <TabsContent value="sustano-sphere" className="mt-6">
+                  <SustanoSphere />
                 </TabsContent>
               </Tabs>
             </div>
