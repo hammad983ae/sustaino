@@ -319,8 +319,8 @@ export default function EnhancedSalesEvidenceSpecialised() {
                       className="text-sm"
                     />
                   )}
-                  {currentComparable.settlementMonths &gt; 6 ? (
-                    <Badge variant="destructive">Settlement >6 months</Badge>
+                  {currentComparable.settlementMonths > 6 ? (
+                    <Badge variant="destructive">Settlement &gt;6 months</Badge>
                   ) : (
                     <Badge variant="secondary">Not Applicable</Badge>
                   )}
