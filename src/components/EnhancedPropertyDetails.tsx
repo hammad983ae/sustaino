@@ -10,6 +10,8 @@ import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { 
   Upload, 
   FileText, 
@@ -24,11 +26,40 @@ import {
   Calendar,
   CheckCircle,
   AlertTriangle,
-  RefreshCw
+  RefreshCw,
+  Building2,
+  Shield,
+  BookOpen,
+  Calculator
 } from "lucide-react";
 import { toast } from "sonner";
 import { useReportData } from "@/contexts/ReportDataContext";
 import { useProperty } from "@/contexts/PropertyContext";
+
+// IPMS Measurement Standards (API Technical Information Paper)
+interface IPMSMeasurement {
+  ipms1: string; // Whole building measurement to outer perimeter (insurance, construction)
+  ipms2: string; // Interior boundary to Internal Dominant Face (benchmarking) 
+  ipms3: string; // Exclusive occupier areas (transactional - sales/leasing/valuation)
+  measurementMethod: 'ipms_3_office' | 'ipms_3a_residential' | 'ipms_3a_industrial' | 'pca_gla' | 'pca_glar' | 'strata_title';
+  stateStrataMethod?: string; // For strata properties (VIC/NSW/QLD/SA/WA/TAS/NT/ACT)
+  primaryUse: 'office' | 'residential' | 'industrial' | 'retail' | 'mixed_use' | 'specialised';
+  measurementNotes?: string;
+  lastVerified?: string;
+}
+
+// Building Compliance with PAF Integration
+interface BuildingCompliance {
+  id: string;
+  category: 'building_code' | 'fire_safety' | 'disability_access' | 'energy_efficiency' | 'planning_permit' | 'strata_compliance' | 'heritage_listing' | 'environmental' | 'structural' | 'electrical' | 'plumbing' | 'hvac';
+  description: string;
+  status: 'yes' | 'no' | 'not_applicable';
+  details?: string;
+  pafSource: boolean;
+  lastChecked?: string;
+  certificationNumber?: string;
+  expiryDate?: string;
+}
 
 interface PropertyPhoto {
   id: string;
@@ -55,16 +86,22 @@ interface BuildingSpecification {
   unit?: string;
   fromPAF: boolean;
   editable: boolean;
+  category: 'measurement' | 'construction' | 'systems' | 'features';
 }
 
 interface WorkingDrawing {
   id: string;
   name: string;
-  type: "architectural" | "engineering" | "survey" | "planning";
+  type: "architectural" | "engineering" | "survey" | "planning" | "structural" | "services";
   file: File | null;
   extractedData: any;
   ocrProcessed: boolean;
   uploadedAt: Date;
+  measurementData?: {
+    areas: { [key: string]: string };
+    dimensions: { [key: string]: string };
+    specifications: { [key: string]: string };
+  };
 }
 
 export default function EnhancedPropertyDetails() {
@@ -80,23 +117,75 @@ export default function EnhancedPropertyDetails() {
   // Property Type (preselected from PAF)
   const [propertyType, setPropertyType] = useState("residential");
 
+  // IPMS Building Area Measurements (comprehensive standards)
+  const [buildingAreas, setBuildingAreas] = useState<IPMSMeasurement>({
+    ipms1: "", // Gross Building Area (outer perimeter)
+    ipms2: "", // Internal area to Internal Dominant Face
+    ipms3: "", // Net Lettable/Exclusive area (transactional)
+    measurementMethod: 'ipms_3a_residential',
+    primaryUse: 'residential',
+    measurementNotes: "",
+    lastVerified: ""
+  });
+
+  // Building Compliance with PAF Integration
+  const [buildingCompliance, setBuildingCompliance] = useState<BuildingCompliance[]>([
+    { id: 'bc-1', category: 'building_code', description: 'Building Code Compliance (BCA/NCC)', status: 'not_applicable', pafSource: false },
+    { id: 'bc-2', category: 'fire_safety', description: 'Fire Safety Certificate', status: 'not_applicable', pafSource: false },
+    { id: 'bc-3', category: 'disability_access', description: 'Disability Discrimination Act Compliance', status: 'not_applicable', pafSource: false },
+    { id: 'bc-4', category: 'energy_efficiency', description: 'Energy Efficiency Certificate', status: 'not_applicable', pafSource: false },
+    { id: 'bc-5', category: 'planning_permit', description: 'Planning Permit/Approval', status: 'not_applicable', pafSource: false },
+    { id: 'bc-6', category: 'strata_compliance', description: 'Strata/Body Corporate Compliance', status: 'not_applicable', pafSource: false },
+    { id: 'bc-7', category: 'heritage_listing', description: 'Heritage Listing Compliance', status: 'not_applicable', pafSource: false },
+    { id: 'bc-8', category: 'environmental', description: 'Environmental Compliance', status: 'not_applicable', pafSource: false },
+    { id: 'bc-9', category: 'structural', description: 'Structural Engineering Certificate', status: 'not_applicable', pafSource: false },
+    { id: 'bc-10', category: 'electrical', description: 'Electrical Safety Certificate', status: 'not_applicable', pafSource: false },
+    { id: 'bc-11', category: 'plumbing', description: 'Plumbing/Gas Compliance Certificate', status: 'not_applicable', pafSource: false },
+    { id: 'bc-12', category: 'hvac', description: 'HVAC/Air Conditioning Compliance', status: 'not_applicable', pafSource: false }
+  ]);
+
   // Property Photos (transferred from PAF)
   const [propertyPhotos, setPropertyPhotos] = useState<PropertyPhoto[]>([]);
 
   // Property Improvements (from PAF)
   const [propertyImprovements, setPropertyImprovements] = useState<PropertyImprovement[]>([]);
 
-  // Building Specifications (auto-populated from PAF)
+  // Building Specifications (auto-populated from PAF with IPMS compliance)
   const [buildingSpecs, setBuildingSpecs] = useState<BuildingSpecification[]>([
-    { field: "Building Area", value: "", unit: "sqm", fromPAF: false, editable: true },
-    { field: "Land Area", value: "", unit: "sqm", fromPAF: false, editable: true },
-    { field: "Height", value: "", unit: "meters", fromPAF: false, editable: true },
-    { field: "Floors", value: "", unit: "levels", fromPAF: false, editable: true },
-    { field: "Construction Type", value: "", fromPAF: false, editable: true },
-    { field: "Year Built", value: "", fromPAF: false, editable: true },
-    { field: "Condition", value: "", fromPAF: false, editable: true },
-    { field: "Parking Spaces", value: "", unit: "spaces", fromPAF: false, editable: true },
-    { field: "Accessibility Features", value: "", fromPAF: false, editable: true }
+    // Measurement Category (IPMS Standards)
+    { field: "IPMS 1 - Gross Building Area", value: "", unit: "sqm", fromPAF: false, editable: true, category: 'measurement' },
+    { field: "IPMS 2 - Internal Area", value: "", unit: "sqm", fromPAF: false, editable: true, category: 'measurement' },
+    { field: "IPMS 3 - Net Lettable Area", value: "", unit: "sqm", fromPAF: false, editable: true, category: 'measurement' },
+    { field: "Land Area", value: "", unit: "sqm", fromPAF: false, editable: true, category: 'measurement' },
+    { field: "Site Coverage", value: "", unit: "%", fromPAF: false, editable: true, category: 'measurement' },
+    { field: "Floor Space Ratio", value: "", unit: ":1", fromPAF: false, editable: true, category: 'measurement' },
+    
+    // Construction Category
+    { field: "Construction Type", value: "", fromPAF: false, editable: true, category: 'construction' },
+    { field: "External Wall Construction", value: "", fromPAF: false, editable: true, category: 'construction' },
+    { field: "Roof Construction", value: "", fromPAF: false, editable: true, category: 'construction' },
+    { field: "Internal Wall Construction", value: "", fromPAF: false, editable: true, category: 'construction' },
+    { field: "Floor Construction", value: "", fromPAF: false, editable: true, category: 'construction' },
+    { field: "Foundation Type", value: "", fromPAF: false, editable: true, category: 'construction' },
+    { field: "Year Built", value: "", fromPAF: false, editable: true, category: 'construction' },
+    { field: "Year Renovated", value: "", fromPAF: false, editable: true, category: 'construction' },
+    
+    // Systems Category  
+    { field: "Heating System", value: "", fromPAF: false, editable: true, category: 'systems' },
+    { field: "Cooling System", value: "", fromPAF: false, editable: true, category: 'systems' },
+    { field: "Hot Water System", value: "", fromPAF: false, editable: true, category: 'systems' },
+    { field: "Electrical System", value: "", fromPAF: false, editable: true, category: 'systems' },
+    { field: "Plumbing System", value: "", fromPAF: false, editable: true, category: 'systems' },
+    { field: "Internet/Data Infrastructure", value: "", fromPAF: false, editable: true, category: 'systems' },
+    
+    // Features Category
+    { field: "Parking Spaces", value: "", unit: "spaces", fromPAF: false, editable: true, category: 'features' },
+    { field: "Levels/Floors", value: "", unit: "levels", fromPAF: false, editable: true, category: 'features' },
+    { field: "Ceiling Height", value: "", unit: "m", fromPAF: false, editable: true, category: 'features' },
+    { field: "Natural Light Rating", value: "", fromPAF: false, editable: true, category: 'features' },
+    { field: "Accessibility Features", value: "", fromPAF: false, editable: true, category: 'features' },
+    { field: "Energy Efficiency Rating", value: "", fromPAF: false, editable: true, category: 'features' },
+    { field: "Overall Condition", value: "", fromPAF: false, editable: true, category: 'features' }
   ]);
 
   // Working Drawings and Plans
@@ -119,6 +208,31 @@ export default function EnhancedPropertyDetails() {
       // Transfer property type
       if (pafData.propertyType) {
         setPropertyType(pafData.propertyType);
+        setBuildingAreas(prev => ({
+          ...prev,
+          primaryUse: pafData.propertyType as IPMSMeasurement['primaryUse'],
+          measurementMethod: getMeasurementMethod(pafData.propertyType)
+        }));
+      }
+
+      // Transfer building area measurements with IPMS standards
+      if (pafData.buildingArea || pafData.landArea) {
+        setBuildingAreas(prev => ({
+          ...prev,
+          ipms3: pafData.buildingArea || prev.ipms3,
+          lastVerified: new Date().toISOString()
+        }));
+      }
+
+      // Transfer building compliance from PAF
+      if (pafData.compliance || pafData.certificates) {
+        setBuildingCompliance(prev => prev.map(comp => {
+          const pafCompliance = getPAFCompliance(comp.category, pafData);
+          if (pafCompliance) {
+            return { ...comp, ...pafCompliance, pafSource: true };
+          }
+          return comp;
+        }));
       }
 
       // Transfer property photos
@@ -170,86 +284,226 @@ export default function EnhancedPropertyDetails() {
     }
   }, [reportData?.propertySearchData, pafDataLoaded]);
 
+  // Get IPMS measurement method based on property type
+  const getMeasurementMethod = (propType: string): IPMSMeasurement['measurementMethod'] => {
+    switch (propType.toLowerCase()) {
+      case 'office': return 'ipms_3_office';
+      case 'residential': return 'ipms_3a_residential';
+      case 'industrial': return 'ipms_3a_industrial';
+      case 'retail': return 'pca_gla';
+      default: return 'ipms_3a_residential';
+    }
+  };
+
+  // Get compliance data from PAF
+  const getPAFCompliance = (category: BuildingCompliance['category'], pafData: any) => {
+    const complianceMap: { [key: string]: any } = {
+      'building_code': pafData.buildingCodeCompliance || pafData.bcaCompliance,
+      'fire_safety': pafData.fireSafetyCertificate || pafData.fireCompliance,
+      'disability_access': pafData.dadCompliance || pafData.accessibilityCompliance,
+      'energy_efficiency': pafData.energyRating || pafData.efficiencyCompliance,
+      'planning_permit': pafData.planningPermit || pafData.planningApproval,
+      'strata_compliance': pafData.strataCompliance || pafData.bodyCorpCompliance,
+      'heritage_listing': pafData.heritageCompliance || pafData.heritageStatus,
+      'environmental': pafData.environmentalCompliance || pafData.epaCompliance
+    };
+    
+    const compliance = complianceMap[category];
+    if (compliance) {
+      return {
+        status: compliance.status || 'not_applicable',
+        details: compliance.details || compliance.notes,
+        certificationNumber: compliance.certificateNumber || compliance.permitNumber,
+        expiryDate: compliance.expiryDate,
+        lastChecked: new Date().toISOString()
+      };
+    }
+    return null;
+  };
+
   // Get PAF value for building specification field
   const getPAFValue = (field: string, pafData: any): string => {
     const fieldMap: { [key: string]: string } = {
-      "Building Area": pafData.buildingArea || pafData.floorArea,
+      "IPMS 1 - Gross Building Area": pafData.grossBuildingArea || pafData.ipms1,
+      "IPMS 2 - Internal Area": pafData.internalArea || pafData.ipms2,
+      "IPMS 3 - Net Lettable Area": pafData.buildingArea || pafData.netlettableArea || pafData.ipms3,
       "Land Area": pafData.landArea || pafData.siteArea,
-      "Height": pafData.buildingHeight,
-      "Floors": pafData.numberOfFloors || pafData.levels,
+      "Site Coverage": pafData.siteCoverage,
+      "Floor Space Ratio": pafData.floorSpaceRatio || pafData.fsr,
       "Construction Type": pafData.constructionType || pafData.buildingMaterial,
+      "External Wall Construction": pafData.externalWalls || pafData.wallConstruction,
+      "Roof Construction": pafData.roofType || pafData.roofMaterial,
+      "Internal Wall Construction": pafData.internalWalls,
+      "Floor Construction": pafData.floorType || pafData.flooring,
+      "Foundation Type": pafData.foundationType,
       "Year Built": pafData.yearBuilt || pafData.constructionYear,
-      "Condition": pafData.propertyCondition || pafData.buildingCondition,
+      "Year Renovated": pafData.yearRenovated || pafData.renovationYear,
+      "Heating System": pafData.heating || pafData.heatingSystem,
+      "Cooling System": pafData.cooling || pafData.airConditioning,
+      "Hot Water System": pafData.hotWater || pafData.hotWaterSystem,
+      "Electrical System": pafData.electrical || pafData.electricalSystem,
+      "Plumbing System": pafData.plumbing || pafData.plumbingSystem,
+      "Internet/Data Infrastructure": pafData.internetData || pafData.dataInfrastructure,
       "Parking Spaces": pafData.parkingSpaces || pafData.carSpaces,
-      "Accessibility Features": pafData.accessibilityFeatures || pafData.disabilityAccess
+      "Levels/Floors": pafData.numberOfFloors || pafData.levels,
+      "Ceiling Height": pafData.ceilingHeight,
+      "Natural Light Rating": pafData.naturalLight,
+      "Accessibility Features": pafData.accessibilityFeatures || pafData.disabilityAccess,
+      "Energy Efficiency Rating": pafData.energyRating || pafData.energyEfficiency,
+      "Overall Condition": pafData.propertyCondition || pafData.buildingCondition
     };
     return fieldMap[field] || "";
   };
 
-  // OCR Processing for Working Drawings
+  // Update building compliance
+  const updateCompliance = (id: string, field: keyof BuildingCompliance, value: any) => {
+    setBuildingCompliance(prev => prev.map(comp => 
+      comp.id === id ? { ...comp, [field]: value } : comp
+    ));
+  };
+
+  // Update building area measurement
+  const updateBuildingArea = (field: keyof IPMSMeasurement, value: string) => {
+    setBuildingAreas(prev => ({ ...prev, [field]: value }));
+  };
+
+  // OCR Processing for Working Drawings with enhanced measurement extraction
   const processOCRDocument = async (file: File, drawingId: string) => {
     setIsProcessingOCR(true);
     setOcrProgress(0);
 
     try {
       const stages = [
-        { message: "Scanning document...", progress: 25 },
-        { message: "Extracting dimensions...", progress: 50 },
-        { message: "Analyzing specifications...", progress: 75 },
+        { message: "Scanning document for text and dimensions...", progress: 20 },
+        { message: "Extracting IPMS measurements...", progress: 40 },
+        { message: "Analyzing building specifications...", progress: 60 },
+        { message: "Processing compliance information...", progress: 80 },
         { message: "Updating property data...", progress: 100 }
       ];
 
       for (const stage of stages) {
         setOcrProgress(stage.progress);
         toast.loading(stage.message);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1200));
       }
 
-      // Mock extracted data based on document type
+      // Enhanced extracted data with IPMS compliance
       const extractedData = {
-        dimensions: {
-          buildingArea: "450",
-          landArea: "650",
-          frontage: "20",
-          depth: "32.5"
+        measurements: {
+          ipms1_gross: "485.5",
+          ipms2_internal: "450.2", 
+          ipms3_net: "420.8",
+          landArea: "650.0",
+          siteCoverage: "34.5",
+          floorSpaceRatio: "0.65"
         },
         specifications: {
           constructionType: "Brick Veneer",
-          roofType: "Tile",
-          floors: "2"
+          externalWalls: "Double Brick with Cavity",
+          roofType: "Concrete Tiles",
+          floors: "2",
+          ceilingHeight: "2.7"
         },
-        permits: {
+        compliance: {
           planningPermit: "PP-2023-001234",
           buildingPermit: "BP-2023-005678",
+          fireSafetyCert: "FS-2023-009876",
           approvalDate: "2023-08-15"
+        },
+        dimensions: {
+          frontage: "20.0",
+          depth: "32.5",
+          height: "8.5"
         }
       };
 
       // Update working drawing with extracted data
       setWorkingDrawings(prev => prev.map(drawing => 
         drawing.id === drawingId 
-          ? { ...drawing, extractedData, ocrProcessed: true }
+          ? { 
+              ...drawing, 
+              extractedData, 
+              ocrProcessed: true,
+              measurementData: {
+                areas: extractedData.measurements,
+                dimensions: extractedData.dimensions,
+                specifications: extractedData.specifications
+              }
+            }
           : drawing
       ));
 
+      // Auto-populate IPMS building areas
+      setBuildingAreas(prev => ({
+        ...prev,
+        ipms1: extractedData.measurements.ipms1_gross,
+        ipms2: extractedData.measurements.ipms2_internal,
+        ipms3: extractedData.measurements.ipms3_net,
+        lastVerified: new Date().toISOString()
+      }));
+
       // Auto-populate building specs with extracted data
       setBuildingSpecs(prev => prev.map(spec => {
-        if (spec.field === "Building Area" && extractedData.dimensions.buildingArea) {
-          return { ...spec, value: extractedData.dimensions.buildingArea, fromPAF: false };
+        if (spec.field === "IPMS 1 - Gross Building Area") {
+          return { ...spec, value: extractedData.measurements.ipms1_gross };
         }
-        if (spec.field === "Land Area" && extractedData.dimensions.landArea) {
-          return { ...spec, value: extractedData.dimensions.landArea, fromPAF: false };
+        if (spec.field === "IPMS 2 - Internal Area") {
+          return { ...spec, value: extractedData.measurements.ipms2_internal };
         }
-        if (spec.field === "Construction Type" && extractedData.specifications.constructionType) {
-          return { ...spec, value: extractedData.specifications.constructionType, fromPAF: false };
+        if (spec.field === "IPMS 3 - Net Lettable Area") {
+          return { ...spec, value: extractedData.measurements.ipms3_net };
         }
-        if (spec.field === "Floors" && extractedData.specifications.floors) {
-          return { ...spec, value: extractedData.specifications.floors, fromPAF: false };
+        if (spec.field === "Land Area") {
+          return { ...spec, value: extractedData.measurements.landArea };
+        }
+        if (spec.field === "Construction Type") {
+          return { ...spec, value: extractedData.specifications.constructionType };
+        }
+        if (spec.field === "External Wall Construction") {
+          return { ...spec, value: extractedData.specifications.externalWalls };
+        }
+        if (spec.field === "Roof Construction") {
+          return { ...spec, value: extractedData.specifications.roofType };
+        }
+        if (spec.field === "Levels/Floors") {
+          return { ...spec, value: extractedData.specifications.floors };
+        }
+        if (spec.field === "Ceiling Height") {
+          return { ...spec, value: extractedData.specifications.ceilingHeight };
         }
         return spec;
       }));
 
-      toast.success("OCR processing completed - property data updated");
+      // Auto-populate compliance data
+      setBuildingCompliance(prev => prev.map(comp => {
+        if (comp.category === 'planning_permit' && extractedData.compliance.planningPermit) {
+          return { 
+            ...comp, 
+            status: 'yes',
+            details: `Planning Permit: ${extractedData.compliance.planningPermit}`,
+            certificationNumber: extractedData.compliance.planningPermit
+          };
+        }
+        if (comp.category === 'building_code' && extractedData.compliance.buildingPermit) {
+          return { 
+            ...comp, 
+            status: 'yes',
+            details: `Building Permit: ${extractedData.compliance.buildingPermit}`,
+            certificationNumber: extractedData.compliance.buildingPermit
+          };
+        }
+        if (comp.category === 'fire_safety' && extractedData.compliance.fireSafetyCert) {
+          return { 
+            ...comp, 
+            status: 'yes',
+            details: `Fire Safety Certificate: ${extractedData.compliance.fireSafetyCert}`,
+            certificationNumber: extractedData.compliance.fireSafetyCert
+          };
+        }
+        return comp;
+      }));
+
+      toast.success("OCR processing completed - IPMS measurements and compliance data extracted");
 
     } catch (error) {
       toast.error("OCR processing failed. Please try again.");
@@ -293,7 +547,7 @@ export default function EnhancedPropertyDetails() {
         processOCRDocument(file, newDrawing.id);
       }
       
-      toast.success("Working drawing uploaded successfully");
+      toast.success("Working drawing uploaded - OCR processing started");
     }
   };
 
@@ -304,6 +558,7 @@ export default function EnhancedPropertyDetails() {
     if (lower.includes("engineering") || lower.includes("structural")) return "engineering";
     if (lower.includes("survey")) return "survey";
     if (lower.includes("planning")) return "planning";
+    if (lower.includes("services") || lower.includes("mechanical")) return "services";
     return "architectural";
   };
 
@@ -340,14 +595,27 @@ export default function EnhancedPropertyDetails() {
     ));
   };
 
+  // Get measurement method description
+  const getMeasurementDescription = (method: IPMSMeasurement['measurementMethod']): string => {
+    const descriptions = {
+      'ipms_3_office': 'IPMS 3 Office - Exclusive occupier area excluding Standard Facilities',
+      'ipms_3a_residential': 'IPMS 3A Residential - Australian standard for detached/attached/multi-unit dwellings',
+      'ipms_3a_industrial': 'IPMS 3A Industrial - Australian standard for exclusive occupier areas',
+      'pca_gla': 'PCA Gross Lettable Area - Standard for retail showrooms and supermarkets',
+      'pca_glar': 'PCA Gross Lettable Area Retail - Standard for shopping centres and strip shops',
+      'strata_title': 'State-specific strata title measurement (varies by jurisdiction)'
+    };
+    return descriptions[method] || 'Standard measurement method';
+  };
+
   return (
     <div className="space-y-6">
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Property Details</h2>
+          <h2 className="text-xl font-semibold">Enhanced Property Details</h2>
           <p className="text-sm text-muted-foreground">
-            Comprehensive property information with PAF integration and OCR processing
+            IPMS-compliant measurements, building compliance, and comprehensive property specifications
           </p>
         </div>
         <div className="flex items-center gap-4">
@@ -368,7 +636,7 @@ export default function EnhancedPropertyDetails() {
               <CheckCircle className="h-4 w-4 text-green-600" />
               <AlertDescription className="text-green-800">
                 <div className="flex items-center justify-between">
-                  <span>Property details transferred from Property Assessment Form</span>
+                  <span>Property details and compliance data transferred from Property Assessment Form</span>
                   <Badge variant="outline" className="bg-green-100 text-green-800">
                     <Eye className="h-3 w-3 mr-1" />
                     PAF Data Loaded
@@ -378,46 +646,311 @@ export default function EnhancedPropertyDetails() {
             </Alert>
           )}
 
-          {/* Property Type (Preselected from PAF) */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Home className="h-5 w-5" />
-                Property Type
-                {pafDataLoaded && (
-                  <Badge className="bg-blue-100 text-blue-800">
-                    Preselected from PAF
-                  </Badge>
-                )}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="residential">Residential</SelectItem>
-                  <SelectItem value="commercial">Commercial</SelectItem>
-                  <SelectItem value="industrial">Industrial</SelectItem>
-                  <SelectItem value="retail">Retail</SelectItem>
-                  <SelectItem value="office">Office</SelectItem>
-                  <SelectItem value="agricultural">Agricultural</SelectItem>
-                  <SelectItem value="development">Development</SelectItem>
-                  <SelectItem value="specialised">Specialised</SelectItem>
-                </SelectContent>
-              </Select>
-            </CardContent>
-          </Card>
+          {/* OCR Processing Alert */}
+          {isProcessingOCR && (
+            <Alert className="border-blue-200 bg-blue-50">
+              <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />
+              <AlertDescription className="text-blue-800">
+                <div className="space-y-2">
+                  <span>Processing working drawings with OCR - extracting IPMS measurements...</span>
+                  <Progress value={ocrProgress} className="w-full" />
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
 
-          <Tabs defaultValue="photos" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="photos">Photos</TabsTrigger>
+          <Tabs defaultValue="measurements" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-6">
+              <TabsTrigger value="measurements">IPMS Measurements</TabsTrigger>
+              <TabsTrigger value="compliance">Building Compliance</TabsTrigger>
               <TabsTrigger value="specifications">Specifications</TabsTrigger>
-              <TabsTrigger value="improvements">Improvements</TabsTrigger>
+              <TabsTrigger value="photos">Photos</TabsTrigger>
               <TabsTrigger value="drawings">Working Drawings</TabsTrigger>
               <TabsTrigger value="additional">Additional Info</TabsTrigger>
             </TabsList>
+
+            {/* IPMS Measurements Tab */}
+            <TabsContent value="measurements" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Ruler className="h-5 w-5" />
+                    IPMS Building Area Measurements
+                    <Badge className="bg-blue-100 text-blue-800">
+                      API Technical Standards
+                    </Badge>
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    International Property Measurement Standards for consistent valuation methodology
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Property Type and Measurement Method */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="primary-use">Primary Property Use</Label>
+                      <Select 
+                        value={buildingAreas.primaryUse} 
+                        onValueChange={(value) => updateBuildingArea('primaryUse', value as any)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border shadow-lg z-[100]">
+                          <SelectItem value="residential">Residential</SelectItem>
+                          <SelectItem value="office">Office</SelectItem>
+                          <SelectItem value="industrial">Industrial</SelectItem>
+                          <SelectItem value="retail">Retail</SelectItem>
+                          <SelectItem value="mixed_use">Mixed Use</SelectItem>
+                          <SelectItem value="specialised">Specialised</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="measurement-method">Measurement Method</Label>
+                      <Select 
+                        value={buildingAreas.measurementMethod} 
+                        onValueChange={(value) => updateBuildingArea('measurementMethod', value as any)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border shadow-lg z-[100]">
+                          <SelectItem value="ipms_3_office">IPMS 3 Office</SelectItem>
+                          <SelectItem value="ipms_3a_residential">IPMS 3A Residential</SelectItem>
+                          <SelectItem value="ipms_3a_industrial">IPMS 3A Industrial</SelectItem>
+                          <SelectItem value="pca_gla">PCA GLA (Retail)</SelectItem>
+                          <SelectItem value="pca_glar">PCA GLAR (Shopping Centres)</SelectItem>
+                          <SelectItem value="strata_title">Strata Title (State-specific)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {getMeasurementDescription(buildingAreas.measurementMethod)}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* IPMS Measurements */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card className="p-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="ipms1">IPMS 1 - Gross Building Area</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="ipms1"
+                            value={buildingAreas.ipms1}
+                            onChange={(e) => updateBuildingArea('ipms1', e.target.value)}
+                            placeholder="0.00"
+                          />
+                          <span className="flex items-center text-sm text-muted-foreground">sqm</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Outer perimeter measurement for insurance/construction
+                        </p>
+                      </div>
+                    </Card>
+
+                    <Card className="p-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="ipms2">IPMS 2 - Internal Area</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="ipms2"
+                            value={buildingAreas.ipms2}
+                            onChange={(e) => updateBuildingArea('ipms2', e.target.value)}
+                            placeholder="0.00"
+                          />
+                          <span className="flex items-center text-sm text-muted-foreground">sqm</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Internal Dominant Face measurement for benchmarking
+                        </p>
+                      </div>
+                    </Card>
+
+                    <Card className="p-4 border-blue-200 bg-blue-50">
+                      <div className="space-y-2">
+                        <Label htmlFor="ipms3">IPMS 3 - Net Lettable Area</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="ipms3"
+                            value={buildingAreas.ipms3}
+                            onChange={(e) => updateBuildingArea('ipms3', e.target.value)}
+                            placeholder="0.00"
+                            className="font-semibold"
+                          />
+                          <span className="flex items-center text-sm font-semibold text-blue-700">sqm</span>
+                        </div>
+                        <p className="text-xs text-blue-700 font-medium">
+                          PRIMARY for sales/leasing/valuation
+                        </p>
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Measurement Notes */}
+                  <div>
+                    <Label htmlFor="measurement-notes">Measurement Notes</Label>
+                    <Textarea
+                      id="measurement-notes"
+                      value={buildingAreas.measurementNotes}
+                      onChange={(e) => updateBuildingArea('measurementNotes', e.target.value)}
+                      placeholder="Additional notes about measurement methodology, limitations, or special considerations..."
+                      className="mt-1"
+                    />
+                  </div>
+
+                  {buildingAreas.lastVerified && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Measurements verified: {new Date(buildingAreas.lastVerified).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Building Compliance Tab */}
+            <TabsContent value="compliance" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5" />
+                    Building Compliance Assessment
+                    {buildingCompliance.some(c => c.pafSource) && (
+                      <Badge className="bg-green-100 text-green-800">
+                        {buildingCompliance.filter(c => c.pafSource).length} from PAF
+                      </Badge>
+                    )}
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Comprehensive compliance checklist with PAF integration and dropdown options
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[600px] pr-4">
+                    <div className="space-y-4">
+                      {buildingCompliance.map((compliance) => (
+                        <Card key={compliance.id} className="p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
+                            <div>
+                              <Label className="font-medium">{compliance.description}</Label>
+                              {compliance.pafSource && (
+                                <Badge variant="outline" className="mt-1 bg-green-100 text-green-800">
+                                  PAF Source
+                                </Badge>
+                              )}
+                            </div>
+                            
+                            <div>
+                              <Label htmlFor={`status-${compliance.id}`}>Compliance Status</Label>
+                              <Select 
+                                value={compliance.status} 
+                                onValueChange={(value) => updateCompliance(compliance.id, 'status', value as any)}
+                              >
+                                <SelectTrigger className="mt-1">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white border shadow-lg z-[100]">
+                                  <SelectItem value="yes">Yes</SelectItem>
+                                  <SelectItem value="no">No</SelectItem>
+                                  <SelectItem value="not_applicable">Not Applicable</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div>
+                              <Label htmlFor={`cert-${compliance.id}`}>Certificate/Permit Number</Label>
+                              <Input
+                                id={`cert-${compliance.id}`}
+                                value={compliance.certificationNumber || ""}
+                                onChange={(e) => updateCompliance(compliance.id, 'certificationNumber', e.target.value)}
+                                placeholder="Certificate number"
+                                className="mt-1"
+                              />
+                            </div>
+
+                            <div>
+                              <Label htmlFor={`details-${compliance.id}`}>Additional Details</Label>
+                              <Textarea
+                                id={`details-${compliance.id}`}
+                                value={compliance.details || ""}
+                                onChange={(e) => updateCompliance(compliance.id, 'details', e.target.value)}
+                                placeholder="Notes, expiry dates, conditions..."
+                                className="mt-1 h-20"
+                              />
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Building Specifications Tab */}
+            <TabsContent value="specifications" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5" />
+                    Building Specifications
+                    {buildingSpecs.some(s => s.fromPAF) && (
+                      <Badge className="bg-green-100 text-green-800">
+                        {buildingSpecs.filter(s => s.fromPAF).length} from PAF
+                      </Badge>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="measurement" className="space-y-4">
+                    <TabsList className="grid w-full grid-cols-4">
+                      <TabsTrigger value="measurement">Measurements</TabsTrigger>
+                      <TabsTrigger value="construction">Construction</TabsTrigger>
+                      <TabsTrigger value="systems">Systems</TabsTrigger>
+                      <TabsTrigger value="features">Features</TabsTrigger>
+                    </TabsList>
+
+                    {['measurement', 'construction', 'systems', 'features'].map((category) => (
+                      <TabsContent key={category} value={category}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {buildingSpecs
+                            .filter(spec => spec.category === category)
+                            .map((spec) => (
+                              <div key={spec.field} className="space-y-2">
+                                <Label htmlFor={spec.field}>
+                                  {spec.field}
+                                  {spec.fromPAF && (
+                                    <Badge variant="outline" className="ml-2 bg-green-100 text-green-800">
+                                      PAF
+                                    </Badge>
+                                  )}
+                                </Label>
+                                <div className="flex gap-2">
+                                  <Input
+                                    id={spec.field}
+                                    value={spec.value}
+                                    onChange={(e) => updateBuildingSpec(spec.field, e.target.value)}
+                                    placeholder={`Enter ${spec.field.toLowerCase()}`}
+                                    disabled={!spec.editable}
+                                  />
+                                  {spec.unit && (
+                                    <span className="flex items-center text-sm text-muted-foreground px-2">
+                                      {spec.unit}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </TabsContent>
+                    ))}
+                  </Tabs>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             {/* Property Photos Tab */}
             <TabsContent value="photos" className="space-y-4">
@@ -465,172 +998,29 @@ export default function EnhancedPropertyDetails() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {propertyPhotos.map((photo) => (
                         <Card key={photo.id} className="overflow-hidden">
-                          <div className="aspect-video relative">
+                          <div className="aspect-video bg-gray-100">
                             <img 
                               src={photo.url} 
                               alt={photo.caption}
                               className="w-full h-full object-cover"
                             />
-                            {photo.fromPAF && (
-                              <Badge className="absolute top-2 right-2 bg-green-600 text-white">
-                                <Zap className="h-3 w-3 mr-1" />
-                                PAF
-                              </Badge>
-                            )}
                           </div>
                           <CardContent className="p-3">
-                            <p className="text-sm font-medium">{photo.caption}</p>
-                            <div className="flex items-center justify-between mt-2">
-                              <Badge variant="outline">
+                            <div className="flex items-center justify-between mb-2">
+                              <Badge variant="outline" className="text-xs">
                                 {photo.category}
                               </Badge>
-                              <span className="text-xs text-muted-foreground">
-                                {photo.uploadedAt.toLocaleDateString()}
-                              </span>
+                              {photo.fromPAF && (
+                                <Badge className="bg-green-100 text-green-800 text-xs">
+                                  PAF
+                                </Badge>
+                              )}
                             </div>
+                            <p className="text-sm text-gray-600">{photo.caption}</p>
                           </CardContent>
                         </Card>
                       ))}
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Building Specifications Tab */}
-            <TabsContent value="specifications" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Ruler className="h-5 w-5" />
-                    Building Specifications
-                    {buildingSpecs.some(s => s.fromPAF) && (
-                      <Badge className="bg-green-100 text-green-800">
-                        Auto-populated from PAF
-                      </Badge>
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {buildingSpecs.map((spec) => (
-                      <div key={spec.field} className="space-y-2">
-                        <Label className="flex items-center gap-2">
-                          {spec.field}
-                          {spec.fromPAF && (
-                            <Badge variant="outline" className="bg-green-50 text-green-700 text-xs">
-                              <Zap className="h-2 w-2 mr-1" />
-                              PAF
-                            </Badge>
-                          )}
-                        </Label>
-                        <div className="flex gap-2">
-                          <Input
-                            value={spec.value}
-                            onChange={(e) => updateBuildingSpec(spec.field, e.target.value)}
-                            placeholder={`Enter ${spec.field.toLowerCase()}`}
-                            disabled={!spec.editable}
-                          />
-                          {spec.unit && (
-                            <div className="flex items-center px-3 bg-gray-100 rounded-md border">
-                              <span className="text-sm text-gray-600">{spec.unit}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Property Improvements Tab */}
-            <TabsContent value="improvements" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
-                      Property Improvements
-                      {propertyImprovements.some(i => i.fromPAF) && (
-                        <Badge className="bg-green-100 text-green-800">
-                          From PAF
-                        </Badge>
-                      )}
-                    </CardTitle>
-                    <Button onClick={addImprovement} size="sm">
-                      <Upload className="h-4 w-4 mr-1" />
-                      Add Improvement
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {propertyImprovements.length === 0 ? (
-                    <div className="text-center py-6 border border-dashed border-gray-300 rounded-lg">
-                      <p className="text-gray-500">No improvements recorded</p>
-                    </div>
-                  ) : (
-                    propertyImprovements.map((improvement) => (
-                      <Card key={improvement.id} className="p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-medium">
-                            Improvement #{propertyImprovements.indexOf(improvement) + 1}
-                          </h4>
-                          <div className="flex items-center gap-2">
-                            {improvement.fromPAF && (
-                              <Badge className="bg-green-100 text-green-800">
-                                <Zap className="h-3 w-3 mr-1" />
-                                PAF
-                              </Badge>
-                            )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeImprovement(improvement.id)}
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <Label>Type</Label>
-                            <Input
-                              value={improvement.type}
-                              onChange={(e) => updateImprovement(improvement.id, "type", e.target.value)}
-                              placeholder="e.g., Kitchen renovation"
-                            />
-                          </div>
-                          <div>
-                            <Label>Value (AUD)</Label>
-                            <Input
-                              type="number"
-                              value={improvement.value}
-                              onChange={(e) => updateImprovement(improvement.id, "value", parseFloat(e.target.value) || 0)}
-                              placeholder="0"
-                            />
-                          </div>
-                          <div>
-                            <Label>Year Added</Label>
-                            <Input
-                              type="number"
-                              value={improvement.yearAdded}
-                              onChange={(e) => updateImprovement(improvement.id, "yearAdded", parseInt(e.target.value) || new Date().getFullYear())}
-                              placeholder="2023"
-                            />
-                          </div>
-                        </div>
-                        <div className="mt-3">
-                          <Label>Description</Label>
-                          <Textarea
-                            value={improvement.description}
-                            onChange={(e) => updateImprovement(improvement.id, "description", e.target.value)}
-                            placeholder="Describe the improvement..."
-                            className="min-h-[60px]"
-                          />
-                        </div>
-                      </Card>
-                    ))
                   )}
                 </CardContent>
               </Card>
@@ -644,14 +1034,18 @@ export default function EnhancedPropertyDetails() {
                     <CardTitle className="flex items-center gap-2">
                       <FileText className="h-5 w-5" />
                       Working Drawings & Plans
+                      <Badge className="bg-blue-100 text-blue-800">
+                        OCR Processing Available
+                      </Badge>
                     </CardTitle>
                     <div>
                       <Input
                         type="file"
-                        accept=".pdf,.dwg,.png,.jpg,.jpeg"
+                        accept=".pdf,.jpg,.jpeg,.png,.tiff,.dwg"
+                        multiple
                         onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileUpload(file, "drawing");
+                          const files = Array.from(e.target.files || []);
+                          files.forEach(file => handleFileUpload(file, "drawing"));
                         }}
                         className="hidden"
                         id="drawing-upload"
@@ -659,90 +1053,83 @@ export default function EnhancedPropertyDetails() {
                       <Button asChild variant="outline">
                         <label htmlFor="drawing-upload" className="cursor-pointer">
                           <Upload className="h-4 w-4 mr-2" />
-                          Upload Drawing
+                          Upload Drawings
                         </label>
                       </Button>
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Upload architectural plans, working drawings, and other documentation. OCR will extract dimensions and specifications.
+                    Upload architectural plans, engineering drawings, or surveys for automatic OCR processing and measurement extraction
                   </p>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* OCR Progress */}
-                  {isProcessingOCR && (
-                    <Card className="p-4 border-blue-200 bg-blue-50">
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-blue-700">Processing OCR...</span>
-                          <span className="text-sm text-blue-600">{ocrProgress}%</span>
-                        </div>
-                        <Progress value={ocrProgress} className="h-2" />
-                      </div>
-                    </Card>
-                  )}
-
+                <CardContent>
                   {workingDrawings.length === 0 ? (
                     <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
                       <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500 mb-2">No working drawings uploaded</p>
-                      <p className="text-sm text-gray-400">Upload PDF, DWG, or image files for OCR processing</p>
+                      <p className="text-gray-500 mb-4">No working drawings uploaded</p>
+                      <p className="text-sm text-gray-400">Upload PDF or image files for OCR processing</p>
                     </div>
                   ) : (
-                    workingDrawings.map((drawing) => (
-                      <Card key={drawing.id} className="p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            <FileText className="h-5 w-5 text-blue-600" />
-                            <div>
-                              <h4 className="font-medium">{drawing.name}</h4>
-                              <p className="text-sm text-muted-foreground capitalize">
-                                {drawing.type} drawing
-                              </p>
+                    <div className="space-y-4">
+                      {workingDrawings.map((drawing) => (
+                        <Card key={drawing.id} className="p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              <FileText className="h-5 w-5 text-blue-500" />
+                              <div>
+                                <h4 className="font-medium">{drawing.name}</h4>
+                                <p className="text-sm text-gray-500 capitalize">{drawing.type} drawing</p>
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {drawing.ocrProcessed && (
-                              <Badge className="bg-green-100 text-green-800">
-                                <Zap className="h-3 w-3 mr-1" />
-                                OCR Processed
-                              </Badge>
-                            )}
-                            <Badge variant="outline">
-                              {drawing.uploadedAt.toLocaleDateString()}
-                            </Badge>
-                          </div>
-                        </div>
-
-                        {drawing.extractedData && (
-                          <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                            <h5 className="font-medium mb-2">Extracted Data:</h5>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                              {drawing.extractedData.dimensions && (
-                                <div>
-                                  <span className="font-medium">Dimensions:</span>
-                                  <ul className="ml-4 mt-1">
-                                    {Object.entries(drawing.extractedData.dimensions).map(([key, value]) => (
-                                      <li key={key}>• {key}: {value as string}</li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-                              {drawing.extractedData.specifications && (
-                                <div>
-                                  <span className="font-medium">Specifications:</span>
-                                  <ul className="ml-4 mt-1">
-                                    {Object.entries(drawing.extractedData.specifications).map(([key, value]) => (
-                                      <li key={key}>• {key}: {value as string}</li>
-                                    ))}
-                                  </ul>
-                                </div>
+                            <div className="flex items-center gap-2">
+                              {drawing.ocrProcessed ? (
+                                <Badge className="bg-green-100 text-green-800">
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  OCR Complete
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline">
+                                  <RefreshCw className="h-3 w-3 mr-1" />
+                                  Processing...
+                                </Badge>
                               )}
                             </div>
                           </div>
-                        )}
-                      </Card>
-                    ))
+                          
+                          {drawing.ocrProcessed && drawing.measurementData && (
+                            <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                              <h5 className="font-medium mb-2">Extracted Measurements</h5>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                  <strong>Areas:</strong>
+                                  <ul className="text-gray-600">
+                                    {Object.entries(drawing.measurementData.areas).map(([key, value]) => (
+                                      <li key={key}>{key}: {value} sqm</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                                <div>
+                                  <strong>Dimensions:</strong>
+                                  <ul className="text-gray-600">
+                                    {Object.entries(drawing.measurementData.dimensions).map(([key, value]) => (
+                                      <li key={key}>{key}: {value}m</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                                <div>
+                                  <strong>Specifications:</strong>
+                                  <ul className="text-gray-600">
+                                    {Object.entries(drawing.measurementData.specifications).map(([key, value]) => (
+                                      <li key={key}>{key}: {value}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </Card>
+                      ))}
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -753,70 +1140,55 @@ export default function EnhancedPropertyDetails() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5" />
+                    <BookOpen className="h-5 w-5" />
                     Additional Property Information
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
-                    <Label>Property Description</Label>
-                    <Textarea
-                      value={additionalInfo.propertyDescription}
-                      onChange={(e) => setAdditionalInfo(prev => ({ ...prev, propertyDescription: e.target.value }))}
-                      placeholder="Provide a comprehensive description of the property..."
-                      className="min-h-[100px]"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Special Features</Label>
-                    <Textarea
-                      value={additionalInfo.specialFeatures}
-                      onChange={(e) => setAdditionalInfo(prev => ({ ...prev, specialFeatures: e.target.value }))}
-                      placeholder="List any special features, unique characteristics, or notable amenities..."
-                      className="min-h-[80px]"
-                    />
-                  </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label>Location Description</Label>
+                      <Label htmlFor="property-description">Property Description</Label>
                       <Textarea
+                        id="property-description"
+                        value={additionalInfo.propertyDescription}
+                        onChange={(e) => setAdditionalInfo(prev => ({ ...prev, propertyDescription: e.target.value }))}
+                        placeholder="General description of the property..."
+                        className="mt-1 h-32"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="special-features">Special Features</Label>
+                      <Textarea
+                        id="special-features"
+                        value={additionalInfo.specialFeatures}
+                        onChange={(e) => setAdditionalInfo(prev => ({ ...prev, specialFeatures: e.target.value }))}
+                        placeholder="Notable features, recent improvements, unique characteristics..."
+                        className="mt-1 h-32"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="location-description">Location Description</Label>
+                      <Textarea
+                        id="location-description"
                         value={additionalInfo.locationDescription}
                         onChange={(e) => setAdditionalInfo(prev => ({ ...prev, locationDescription: e.target.value }))}
-                        placeholder="Describe the location, surroundings, and accessibility..."
-                        className="min-h-[80px]"
+                        placeholder="Location attributes, proximity to amenities..."
+                        className="mt-1 h-32"
                       />
                     </div>
+                    
                     <div>
-                      <Label>Access Notes</Label>
+                      <Label htmlFor="access-notes">Access Notes</Label>
                       <Textarea
+                        id="access-notes"
                         value={additionalInfo.accessNotes}
                         onChange={(e) => setAdditionalInfo(prev => ({ ...prev, accessNotes: e.target.value }))}
-                        placeholder="Access arrangements, keys, restrictions, etc..."
-                        className="min-h-[80px]"
+                        placeholder="Access arrangements, security, parking..."
+                        className="mt-1 h-32"
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <Label>Maintenance History</Label>
-                    <Textarea
-                      value={additionalInfo.maintenanceHistory}
-                      onChange={(e) => setAdditionalInfo(prev => ({ ...prev, maintenanceHistory: e.target.value }))}
-                      placeholder="Recent maintenance work, service records, warranty information..."
-                      className="min-h-[80px]"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Upgrades & Renovations</Label>
-                    <Textarea
-                      value={additionalInfo.upgradesRenovations}
-                      onChange={(e) => setAdditionalInfo(prev => ({ ...prev, upgradesRenovations: e.target.value }))}
-                      placeholder="Details of recent upgrades, renovations, or modifications..."
-                      className="min-h-[80px]"
-                    />
                   </div>
                 </CardContent>
               </Card>
