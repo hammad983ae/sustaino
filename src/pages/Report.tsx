@@ -13,6 +13,7 @@ import { ValuationProvider } from "@/contexts/ValuationContext";
 import { ReportDataProvider } from "@/contexts/ReportDataContext";
 import PDFReportGenerator from "@/components/PDFReportGenerator";
 import AIAnimationPreview from "@/components/AIAnimationPreview";
+import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider";
 
 const ReportViewer = () => {
   const sections = [
@@ -117,8 +118,9 @@ const ReportViewer = () => {
   const progress = ((currentSection + 1) / sections.length) * 100;
 
   return (
-    <ReportDataProvider>
-      <ValuationProvider>
+    <PropertyTypeLockProvider>
+      <ReportDataProvider>
+        <ValuationProvider>
         <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
              style={{ 
                background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 70%, hsl(var(--primary) / 0.05) 100%)',
@@ -266,8 +268,9 @@ const ReportViewer = () => {
         </div>
       </div>
         </div>
-      </ValuationProvider>
-    </ReportDataProvider>
+        </ValuationProvider>
+      </ReportDataProvider>
+    </PropertyTypeLockProvider>
   );
 };
 
