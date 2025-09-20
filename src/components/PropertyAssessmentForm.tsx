@@ -489,7 +489,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   return (
     <div className="min-h-screen bg-background">
       {/* Header with progress */}
-      <div className="sticky top-0 z-20 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm">
+      <div className="sticky top-0 z-20 bg-background border-b border-border p-4 space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold">Property Assessment Form</h1>
