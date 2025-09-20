@@ -178,7 +178,7 @@ const AltDataParser: React.FC = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileUp className="h-5 w-5" />
-            ALT Sales Data Parser
+            Import Property Sales Evidence
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
