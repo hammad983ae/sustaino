@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -6,21 +6,38 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, Upload } from "lucide-react";
+import { CalendarIcon, Upload, Database, Calculator, TrendingUp, FileText, RefreshCw } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const PreviousSalesHistoryAndCurrentSale = () => {
+  const { toast } = useToast();
   const [includePreviousSales, setIncludePreviousSales] = useState(true);
   const [includeCurrentSale, setIncludeCurrentSale] = useState(true);
+  
+  // PAF Integration & Auto-population
+  const [pafDataLoading, setPafDataLoading] = useState(false);
+  const [rpDataLoading, setRpDataLoading] = useState(false);
+  const [pafDataAvailable, setPafDataAvailable] = useState(false);
+  const [ocrProcessing, setOcrProcessing] = useState(false);
+  const [contractUploaded, setContractUploaded] = useState(false);
   
   // Previous Sales History state
   const [lastSaleDate, setLastSaleDate] = useState<Date>();
   const [lastSalePrice, setLastSalePrice] = useState("");
   const [saleMethod, setSaleMethod] = useState("");
   const [saleHistoryNotes, setSaleHistoryNotes] = useState("");
+  
+  // Enhanced analytics
+  const [priceIncrease, setPriceIncrease] = useState<number | null>(null);
+  const [annualizedReturn, setAnnualizedReturn] = useState<number | null>(null);
+  const [marketComparison, setMarketComparison] = useState<string>("");
   
   // Current/Proposed Sale Transaction state
   const [transactionType, setTransactionType] = useState("");
@@ -45,13 +62,105 @@ const PreviousSalesHistoryAndCurrentSale = () => {
   const [includeValuationImpact, setIncludeValuationImpact] = useState(true);
   const [includeOverallComments, setIncludeOverallComments] = useState(true);
 
+  // Auto-populate from PAF/RP Data
+  const fetchPAFData = async () => {
+    setPafDataLoading(true);
+    try {
+      // Simulate PAF integration
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setPafDataAvailable(true);
+      toast({
+        title: "PAF Data Retrieved",
+        description: "Previous sales history populated from Property and Floorplan database",
+      });
+    } catch (error) {
+      toast({
+        title: "PAF Integration Error",
+        description: "Unable to retrieve property data",
+        variant: "destructive",
+      });
+    } finally {
+      setPafDataLoading(false);
+    }
+  };
+
+  const fetchRPData = async () => {
+    setRpDataLoading(true);
+    try {
+      // Simulate RP Data integration
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setLastSaleDate(new Date('2021-03-15'));
+      setLastSalePrice("1250000");
+      setSaleMethod("private-treaty");
+      toast({
+        title: "RP Data Retrieved",
+        description: "Sales history populated from RP Data",
+      });
+    } catch (error) {
+      toast({
+        title: "RP Data Error",
+        description: "Unable to retrieve RP Data",
+        variant: "destructive",
+      });
+    } finally {
+      setRpDataLoading(false);
+    }
+  };
+
+  // OCR Contract Processing
+  const processContractOCR = async (file: File) => {
+    setOcrProcessing(true);
+    try {
+      // Simulate OCR processing
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      setTransactionPrice("1450000");
+      setCurrentTransactionDate(new Date());
+      setMarketingPeriod("4 weeks");
+      setSettlementPeriod("45 days");
+      setContractUploaded(true);
+      
+      toast({
+        title: "Contract Processed",
+        description: "Sale details extracted via OCR",
+      });
+    } catch (error) {
+      toast({
+        title: "OCR Processing Error",
+        description: "Unable to process contract",
+        variant: "destructive",
+      });
+    } finally {
+      setOcrProcessing(false);
+    }
+  };
+
+  // Calculate analytics
+  useEffect(() => {
+    if (lastSalePrice && transactionPrice && lastSaleDate && currentTransactionDate) {
+      const previousPrice = parseFloat(lastSalePrice);
+      const currentPrice = parseFloat(transactionPrice);
+      const yearsDiff = (currentTransactionDate.getTime() - lastSaleDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+      
+      if (previousPrice > 0 && currentPrice > 0 && yearsDiff > 0) {
+        const increase = ((currentPrice - previousPrice) / previousPrice) * 100;
+        const annualized = Math.pow(currentPrice / previousPrice, 1 / yearsDiff) - 1;
+        
+        setPriceIncrease(increase);
+        setAnnualizedReturn(annualized * 100);
+      }
+    }
+  }, [lastSalePrice, transactionPrice, lastSaleDate, currentTransactionDate]);
+
   return (
     <div className="space-y-6">
       {/* Previous Sale History Section */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg">Previous Sale History</CardTitle>
+            <CardTitle className="text-lg flex items-center gap-2">
+              Previous Sale History
+              {pafDataAvailable && <Badge variant="secondary">PAF Data</Badge>}
+            </CardTitle>
             <div className="flex items-center gap-2">
               <Label htmlFor="include-previous-sales">Include</Label>
               <Switch
@@ -62,6 +171,45 @@ const PreviousSalesHistoryAndCurrentSale = () => {
             </div>
           </div>
           <p className="text-sm text-muted-foreground">Historical sales information for the property</p>
+          
+          {/* Data Integration Controls */}
+          <div className="flex gap-2 mt-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={fetchPAFData}
+              disabled={pafDataLoading}
+            >
+              {pafDataLoading ? (
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Database className="h-4 w-4 mr-2" />
+              )}
+              Load PAF Data
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={fetchRPData}
+              disabled={rpDataLoading}
+            >
+              {rpDataLoading ? (
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Database className="h-4 w-4 mr-2" />
+              )}
+              Load RP Data
+            </Button>
+          </div>
+          
+          {(pafDataLoading || rpDataLoading) && (
+            <div className="mt-2">
+              <Progress value={pafDataLoading ? 60 : 80} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-1">
+                {pafDataLoading ? "Retrieving PAF data..." : "Loading RP Data..."}
+              </p>
+            </div>
+          )}
         </CardHeader>
         {includePreviousSales && (
           <CardContent className="space-y-4">
@@ -153,7 +301,11 @@ const PreviousSalesHistoryAndCurrentSale = () => {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg">Current/Proposed Sale Transaction</CardTitle>
+            <CardTitle className="text-lg flex items-center gap-2">
+              Current/Proposed Sale Transaction
+              {contractUploaded && <Badge variant="secondary">Contract Processed</Badge>}
+              {ocrProcessing && <Badge variant="outline">Processing OCR...</Badge>}
+            </CardTitle>
             <div className="flex items-center gap-2">
               <Label htmlFor="include-current-sale">Include</Label>
               <Switch
@@ -164,6 +316,31 @@ const PreviousSalesHistoryAndCurrentSale = () => {
             </div>
           </div>
           <p className="text-sm text-muted-foreground">Details of current or proposed sale</p>
+          
+          {/* Contract Upload Section */}
+          {includeCurrentSale && (
+            <div className="mt-4 p-4 border border-dashed rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <FileText className="h-4 w-4" />
+                <span className="text-sm font-medium">Contract of Sale Required</span>
+              </div>
+              <p className="text-xs text-muted-foreground mb-3">
+                Upload contract for automatic data extraction via OCR
+              </p>
+              <input
+                type="file"
+                accept=".pdf,.jpg,.png"
+                onChange={(e) => e.target.files?.[0] && processContractOCR(e.target.files[0])}
+                className="text-sm"
+              />
+              {ocrProcessing && (
+                <div className="mt-2">
+                  <Progress value={75} className="h-2" />
+                  <p className="text-xs text-muted-foreground mt-1">Processing contract...</p>
+                </div>
+              )}
+            </div>
+          )}
         </CardHeader>
         {includeCurrentSale && (
           <CardContent className="space-y-4">
@@ -490,6 +667,39 @@ const PreviousSalesHistoryAndCurrentSale = () => {
                 placeholder="Summary of sales history analysis and impact on valuation..."
                 rows={4}
               />
+            </div>
+          )}
+
+          {/* Enhanced Analytics Section */}
+          {priceIncrease !== null && annualizedReturn !== null && (
+            <div className="mt-6 p-4 bg-muted/30 rounded-lg">
+              <div className="flex items-center gap-2 mb-4">
+                <Calculator className="h-4 w-4" />
+                <span className="font-medium">Performance Analytics</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">
+                    {priceIncrease > 0 ? '+' : ''}{priceIncrease.toFixed(1)}%
+                  </div>
+                  <div className="text-sm text-muted-foreground">Total Price Increase</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">
+                    {annualizedReturn > 0 ? '+' : ''}{annualizedReturn.toFixed(1)}%
+                  </div>
+                  <div className="text-sm text-muted-foreground">Annualized Return</div>
+                </div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-1">
+                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <Badge variant={priceIncrease > 5 ? "default" : "secondary"}>
+                      {priceIncrease > 5 ? "Outperforming" : "Market Rate"}
+                    </Badge>
+                  </div>
+                  <div className="text-sm text-muted-foreground">Market Comparison</div>
+                </div>
+              </div>
             </div>
           )}
         </CardContent>
