@@ -172,7 +172,7 @@ export default function AutomatedValuation() {
             
             {/* Sustaino World Platform Hub */}
             <div className="mb-12">
-              <Card className="card-3d-medium bg-slate-800/40 backdrop-blur-sm border-blue-700/50">
+              <Card className="bg-slate-800/40 border-blue-700/50">
                 <CardHeader className="text-center">
                   <CardTitle className="text-2xl text-cyan-300 flex items-center justify-center gap-2">
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center">
@@ -260,7 +260,7 @@ export default function AutomatedValuation() {
                     <TabsContent value="marketing" className="space-y-6">
                       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                         {/* Social Media Assets */}
-                        <Card className="card-3d-light border-pink-200/60 bg-pink-800/40 backdrop-blur-sm">
+                        <Card className="border-pink-200/60 bg-pink-800/40">
                           <CardHeader>
                             <CardTitle className="text-pink-300 flex items-center gap-2">
                               <Sparkles className="h-5 w-5" />
@@ -288,7 +288,7 @@ export default function AutomatedValuation() {
                         </Card>
 
                         {/* Marketing Strategy */}
-                        <Card className="card-3d-light border-blue-200/60 bg-blue-800/40 backdrop-blur-sm">
+                        <Card className="border-blue-200/60 bg-blue-800/40">
                           <CardHeader>
                             <CardTitle className="text-blue-300 flex items-center gap-2">
                               <TrendingUp className="h-5 w-5" />
@@ -316,7 +316,7 @@ export default function AutomatedValuation() {
                         </Card>
 
                         {/* Professional Brochures */}
-                        <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
+                        <Card className="border-purple-200/60 bg-purple-800/40">
                           <CardHeader>
                             <CardTitle className="text-purple-300 flex items-center gap-2">
                               <FileText className="h-5 w-5" />
@@ -344,7 +344,7 @@ export default function AutomatedValuation() {
                         </Card>
 
                         {/* Platform Access */}
-                        <Card className="card-3d-light border-green-200/60 bg-green-800/40 backdrop-blur-sm">
+                        <Card className="border-green-200/60 bg-green-800/40">
                           <CardHeader>
                             <CardTitle className="text-green-300 flex items-center gap-2">
                               <Globe className="h-5 w-5" />
@@ -376,7 +376,7 @@ export default function AutomatedValuation() {
                         </Card>
 
                         {/* Quick Marketing Actions */}
-                        <Card className="card-3d-light border-orange-200/60 bg-orange-800/40 backdrop-blur-sm">
+                        <Card className="border-orange-200/60 bg-orange-800/40">
                           <CardHeader>
                             <CardTitle className="text-orange-300 flex items-center gap-2">
                               <Zap className="h-5 w-5" />
@@ -402,7 +402,7 @@ export default function AutomatedValuation() {
                         </Card>
 
                         {/* Email Templates */}
-                        <Card className="card-3d-light border-cyan-200/60 bg-cyan-800/40 backdrop-blur-sm">
+                        <Card className="border-cyan-200/60 bg-cyan-800/40">
                           <CardHeader>
                             <CardTitle className="text-cyan-300 flex items-center gap-2">
                               <Mail className="h-5 w-5" />
@@ -432,7 +432,7 @@ export default function AutomatedValuation() {
                     <TabsContent value="brochures" className="space-y-6">
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* Sustaino Sphere Platform */}
-                        <Card className="card-3d-light border-green-200/60 bg-green-800/40 backdrop-blur-sm">
+                        <Card className="border-green-200/60 bg-green-800/40">
                           <CardHeader>
                             <CardTitle className="text-green-300 flex items-center gap-2">
                               <Globe className="h-5 w-5" />
@@ -460,7 +460,7 @@ export default function AutomatedValuation() {
                         </Card>
 
                         {/* Marketing Brochures Section */}
-                        <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
+                        <Card className="border-purple-200/60 bg-purple-800/40">
                           <CardHeader>
                             <CardTitle className="text-purple-300 flex items-center gap-2">
                               <FileText className="h-5 w-5" />
@@ -488,7 +488,7 @@ export default function AutomatedValuation() {
                         </Card>
                         
                         {/* Quick Access to Popular Brochures with 3D effects */}
-                        <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
+                        <Card className="border-purple-200/60 bg-purple-800/40">
                           <CardHeader>
                             <CardTitle className="text-purple-300 flex items-center gap-2">
                               <Sparkles className="h-5 w-5" />
@@ -546,7 +546,7 @@ export default function AutomatedValuation() {
             </div>
             
             {/* Step-by-Step Property Valuation with 3D effects */}
-            <Card className="card-3d-medium bg-purple-800/40 backdrop-blur-sm border-purple-700/50 mb-8">
+            <Card className="bg-purple-800/40 border-purple-700/50 mb-8">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl text-purple-300 flex items-center justify-center gap-2">
                   <ThunderboltIcon />
@@ -563,7 +563,7 @@ export default function AutomatedValuation() {
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               
               
-              <Card className="card-3d-light border-purple-200/60 bg-purple-800/40 backdrop-blur-sm">
+              <Card className="border-purple-200/60 bg-purple-800/40">
                 <CardHeader>
                   <CardTitle className="text-purple-300">📈 Property Updates</CardTitle>
                   <CardDescription className="text-purple-200">
