@@ -73,6 +73,9 @@ interface PlatformData {
   reservePrice: string;
   auctionType: string;
   timeframe: string;
+  
+  // Trading Status
+  yetToCommenceTrading: boolean;
 }
 
 export default function PlatformSubmissionForm() {
@@ -108,7 +111,8 @@ export default function PlatformSubmissionForm() {
     funding: '',
     reservePrice: '',
     auctionType: '',
-    timeframe: ''
+    timeframe: '',
+    yetToCommenceTrading: false
   });
 
   const [completionProgress, setCompletionProgress] = useState(0);
@@ -134,6 +138,28 @@ export default function PlatformSubmissionForm() {
   };
 
   const calculateEstimatedValue = () => {
+    if (formData.yetToCommenceTrading) {
+      // Pre-revenue valuation based on potential and development stage
+      let baseValue = 500000; // Base pre-revenue valuation
+      
+      // Tech stack multipliers for pre-revenue
+      if (formData.hasAI) baseValue *= 2.5;
+      if (formData.hasBlockchain) baseValue *= 2.0;
+      if (formData.hasAPI) baseValue *= 1.5;
+      if (formData.hasMobileApp) baseValue *= 1.3;
+      
+      // IP multipliers (more valuable for pre-revenue)
+      const patentCount = parseInt(formData.patents) || 0;
+      baseValue += patentCount * 750000; // $750k per patent for pre-revenue
+      
+      // Funding raised as indicator of value
+      const fundingRaised = parseFloat(formData.funding) || 0;
+      baseValue += fundingRaised * 0.8; // 80% of funding raised
+      
+      setEstimatedValue(baseValue);
+      return;
+    }
+    
     const revenue = parseFloat(formData.currentRevenue) || 0;
     const users = parseFloat(formData.totalUsers) || 0;
     const mrr = parseFloat(formData.monthlyRecurring) || 0;
@@ -426,61 +452,111 @@ export default function PlatformSubmissionForm() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Trading Status */}
+              <div className="flex items-center space-x-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <Checkbox
+                  id="yetToCommenceTrading"
+                  checked={formData.yetToCommenceTrading}
+                  onCheckedChange={(checked) => handleInputChange('yetToCommenceTrading', checked)}
+                />
+                <Label htmlFor="yetToCommenceTrading" className="flex items-center gap-2 font-medium">
+                  <Clock className="h-4 w-4 text-blue-600" />
+                  Yet to Commence Trading (Pre-Revenue Stage)
+                </Label>
+              </div>
+              
+              {formData.yetToCommenceTrading && (
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertCircle className="h-4 w-4 text-yellow-600" />
+                    <span className="font-medium text-yellow-800">Pre-Revenue Platform</span>
+                  </div>
+                  <p className="text-sm text-yellow-700">
+                    Valuation will be based on development stage, technology stack, IP portfolio, and funding raised.
+                    Financial projections can be added in the description section.
+                  </p>
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="currentRevenue">Annual Revenue (AUD)</Label>
+                  <Label htmlFor="currentRevenue">
+                    {formData.yetToCommenceTrading ? "Projected Annual Revenue (AUD)" : "Annual Revenue (AUD)"}
+                    {!formData.yetToCommenceTrading && " *"}
+                  </Label>
                   <Input
                     id="currentRevenue"
                     type="number"
                     value={formData.currentRevenue}
                     onChange={(e) => handleInputChange('currentRevenue', e.target.value)}
-                    placeholder="1000000"
+                    placeholder={formData.yetToCommenceTrading ? "Projected: 1000000" : "1000000"}
+                    disabled={formData.yetToCommenceTrading}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="monthlyRecurring">Monthly Recurring Revenue (AUD)</Label>
+                  <Label htmlFor="monthlyRecurring">
+                    {formData.yetToCommenceTrading ? "Projected Monthly Recurring Revenue (AUD)" : "Monthly Recurring Revenue (AUD)"}
+                  </Label>
                   <Input
                     id="monthlyRecurring"
                     type="number"
                     value={formData.monthlyRecurring}
                     onChange={(e) => handleInputChange('monthlyRecurring', e.target.value)}
-                    placeholder="50000"
+                    placeholder={formData.yetToCommenceTrading ? "Projected: 50000" : "50000"}
+                    disabled={formData.yetToCommenceTrading}
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="totalUsers">Total Users</Label>
+                  <Label htmlFor="totalUsers">
+                    {formData.yetToCommenceTrading ? "Projected Total Users" : "Total Users"}
+                  </Label>
                   <Input
                     id="totalUsers"
                     type="number"
                     value={formData.totalUsers}
                     onChange={(e) => handleInputChange('totalUsers', e.target.value)}
-                    placeholder="10000"
+                    placeholder={formData.yetToCommenceTrading ? "Projected: 10000" : "10000"}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="activeUsers">Monthly Active Users</Label>
+                  <Label htmlFor="activeUsers">
+                    {formData.yetToCommenceTrading ? "Projected Monthly Active Users" : "Monthly Active Users"}
+                  </Label>
                   <Input
                     id="activeUsers"
                     type="number"
                     value={formData.activeUsers}
                     onChange={(e) => handleInputChange('activeUsers', e.target.value)}
-                    placeholder="5000"
+                    placeholder={formData.yetToCommenceTrading ? "Projected: 5000" : "5000"}
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="transactionVolume">Annual Transaction Volume (AUD)</Label>
+                  <Label htmlFor="transactionVolume">
+                    {formData.yetToCommenceTrading ? "Projected Annual Transaction Volume (AUD)" : "Annual Transaction Volume (AUD)"}
+                  </Label>
                   <Input
                     id="transactionVolume"
                     type="number"
                     value={formData.transactionVolume}
                     onChange={(e) => handleInputChange('transactionVolume', e.target.value)}
-                    placeholder="10000000"
+                    placeholder={formData.yetToCommenceTrading ? "Projected: 10000000" : "10000000"}
+                    disabled={formData.yetToCommenceTrading}
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="funding">Total Funding Raised (AUD)</Label>
+                  <Input
+                    id="funding"
+                    type="number"
+                    value={formData.funding}
+                    onChange={(e) => handleInputChange('funding', e.target.value)}
+                    placeholder="500000"
                   />
                 </div>
                 <div>
