@@ -230,7 +230,13 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                      <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
+                      <MetaMaskInstallGuide 
+                        onClose={() => setShowInstallGuide(false)} 
+                        onConnect={() => {
+                          setIsConnected(true);
+                          setShowInstallGuide(false);
+                        }}
+                      />
                     </DialogContent>
                   </Dialog>
                 </div>
@@ -366,7 +372,13 @@ export const BlockchainIntegration: React.FC<BlockchainIntegrationProps> = ({
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                      <MetaMaskInstallGuide onClose={() => setShowInstallGuide(false)} />
+                      <MetaMaskInstallGuide 
+                        onClose={() => setShowInstallGuide(false)} 
+                        onConnect={() => {
+                          setIsConnected(true);
+                          setShowInstallGuide(false);
+                        }}
+                      />
                     </DialogContent>
                   </Dialog>
                   <Button variant="ghost" className="w-full text-muted-foreground">
