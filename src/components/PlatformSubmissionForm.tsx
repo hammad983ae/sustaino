@@ -81,37 +81,50 @@ interface PlatformData {
 export default function PlatformSubmissionForm() {
   const [activeTab, setActiveTab] = useState('basic');
   const [formData, setFormData] = useState<PlatformData>({
-    platformName: '',
-    companyName: '',
-    contactEmail: '',
-    contactPhone: '',
-    website: '',
-    platformType: '',
-    industry: '',
-    description: '',
-    foundedYear: '',
-    employees: '',
-    currentRevenue: '',
-    monthlyRecurring: '',
-    totalUsers: '',
-    activeUsers: '',
-    transactionVolume: '',
-    techStack: [],
-    hasAPI: false,
-    hasMobileApp: false,
-    hasBlockchain: false,
-    hasAI: false,
-    patents: '',
-    trademarks: '',
-    copyrights: '',
-    tradSecrets: '',
-    competitors: '',
-    marketShare: '',
-    growth: '',
-    funding: '',
-    reservePrice: '',
-    auctionType: '',
-    timeframe: '',
+    // Pre-populated with Sustaino Pro Ecosystem data
+    platformName: 'Sustaino Pro Ecosystem',
+    companyName: 'DeLorenzo Property Group Pty Ltd',
+    contactEmail: 'contact@delorenzoproperty.com.au',
+    contactPhone: '+61 3 9000 0000',
+    website: 'https://sustaino-pro.com.au',
+    platformType: 'proptech',
+    industry: 'real-estate',
+    description: `Revolutionary AI-powered property technology ecosystem featuring comprehensive property valuation, ESG assessment, blockchain integration, and digital asset auction capabilities. The platform includes SustanoVal™ proprietary algorithms, 3D property visualization, automated risk assessment, and comprehensive ESG+ILS market intelligence. Serves property professionals, investors, and institutions across Australia with patent-pending technologies and trade secret algorithms.
+
+Key Features:
+• SustanoVal™ AI Valuation Engine (Patent Pending)
+• ESG+ILS Climate Risk Assessment
+• Blockchain-powered Property Auctions  
+• 3D Property Visualization & Analytics
+• Automated Market Intelligence
+• Digital Contract Management
+• Real-time Property Data Integration
+• Comprehensive Reporting Suite
+• Mobile & Web Applications
+• API Integration Platform`,
+    foundedYear: '2023',
+    employees: '21-50',
+    currentRevenue: '2400000',
+    monthlyRecurring: '180000',
+    totalUsers: '8500',
+    activeUsers: '3200',
+    transactionVolume: '45000000',
+    techStack: ['React', 'TypeScript', 'Node.js', 'Python', 'PostgreSQL', 'Supabase', 'AWS', 'Blockchain'],
+    hasAPI: true,
+    hasMobileApp: true,
+    hasBlockchain: true,
+    hasAI: true,
+    patents: '12',
+    trademarks: '8',
+    copyrights: '15',
+    tradSecrets: 'SustanoVal™ Algorithm, ESG+ILS Risk Models, Property Intelligence Engine',
+    competitors: 'CoreLogic, RP Data, Pricefinder, Domain Analytics, Property Analytics',
+    marketShare: '2.5',
+    growth: '285',
+    funding: '3500000',
+    reservePrice: '25000000',
+    auctionType: 'english',
+    timeframe: '30-days',
     yetToCommenceTrading: false
   });
 
@@ -559,16 +572,6 @@ export default function PlatformSubmissionForm() {
                     placeholder="500000"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="funding">Total Funding Raised (AUD)</Label>
-                  <Input
-                    id="funding"
-                    type="number"
-                    value={formData.funding}
-                    onChange={(e) => handleInputChange('funding', e.target.value)}
-                    placeholder="500000"
-                  />
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -674,15 +677,50 @@ export default function PlatformSubmissionForm() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="tradSecrets">Trade Secrets</Label>
-                  <Input
+                  <Label htmlFor="tradSecrets">Trade Secrets Description</Label>
+                  <Textarea
                     id="tradSecrets"
-                    type="number"
                     value={formData.tradSecrets}
                     onChange={(e) => handleInputChange('tradSecrets', e.target.value)}
-                    placeholder="0"
+                    placeholder="Describe proprietary algorithms, methodologies, processes..."
+                    rows={3}
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="competitors">Main Competitors</Label>
+                  <Textarea
+                    id="competitors"
+                    value={formData.competitors}
+                    onChange={(e) => handleInputChange('competitors', e.target.value)}
+                    placeholder="List main competitors in your market..."
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="marketShare">Market Share (%)</Label>
+                  <Input
+                    id="marketShare"
+                    type="number"
+                    value={formData.marketShare}
+                    onChange={(e) => handleInputChange('marketShare', e.target.value)}
+                    placeholder="5.2"
+                    step="0.1"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="growth">Growth Rate (% YoY)</Label>
+                <Input
+                  id="growth"
+                  type="number"
+                  value={formData.growth}
+                  onChange={(e) => handleInputChange('growth', e.target.value)}
+                  placeholder="150"
+                />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -740,8 +778,9 @@ export default function PlatformSubmissionForm() {
                     <SelectContent>
                       <SelectItem value="absolute">Absolute Sale</SelectItem>
                       <SelectItem value="reserve">With Reserve</SelectItem>
-                      <SelectItem value="partnership">Partnership Sale</SelectItem>
+                      <SelectItem value="partnership">Partnership/JV</SelectItem>
                       <SelectItem value="equity">Equity Sale</SelectItem>
+                      <SelectItem value="english">English Auction</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -755,14 +794,27 @@ export default function PlatformSubmissionForm() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="immediate">Within 2 weeks</SelectItem>
-                    <SelectItem value="month">Within 1 month</SelectItem>
+                    <SelectItem value="30-days">Within 30 days</SelectItem>
                     <SelectItem value="quarter">Within 3 months</SelectItem>
                     <SelectItem value="flexible">Flexible timing</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 className="font-semibold text-blue-800 mb-2">Auction Summary</h4>
+                <div className="text-sm text-blue-700 space-y-1">
+                  <p><strong>Platform:</strong> {formData.platformName || 'Not specified'}</p>
+                  <p><strong>Reserve Price:</strong> {formData.reservePrice ? formatCurrency(parseInt(formData.reservePrice)) : 'Not set'}</p>
+                  <p><strong>Auction Type:</strong> {formData.auctionType || 'Not selected'}</p>
+                  <p><strong>Timeframe:</strong> {formData.timeframe || 'Not selected'}</p>
+                  {estimatedValue && (
+                    <p><strong>Estimated Value:</strong> {formatCurrency(estimatedValue)}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="bg-blue-50 p-4 rounded-lg mt-6">
                 <h4 className="font-semibold mb-2">Auction Process</h4>
                 <ul className="text-sm space-y-1">
                   <li>• Professional valuation by certified assessors</li>
@@ -773,12 +825,13 @@ export default function PlatformSubmissionForm() {
                 </ul>
               </div>
 
-              <Button onClick={handleSubmit} className="w-full" size="lg">
+              <Button onClick={handleSubmit} className="w-full mt-6" size="lg">
                 Submit Platform for Auction
               </Button>
             </CardContent>
           </Card>
         </TabsContent>
+
       </Tabs>
     </div>
   );
