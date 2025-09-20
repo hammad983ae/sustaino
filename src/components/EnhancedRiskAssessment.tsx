@@ -60,7 +60,7 @@ interface RiskMatrix {
   mitigation: string;
 }
 
-export default function EnhancedRiskAssessment() {
+function EnhancedRiskAssessment() {
   const { reportData, updateReportData } = useReportData();
   const { addressData } = useProperty();
 
@@ -362,7 +362,6 @@ export default function EnhancedRiskAssessment() {
       });
     }
   };
-  };
 
   return (
     <div className="space-y-6">
@@ -444,7 +443,7 @@ export default function EnhancedRiskAssessment() {
           <PESTELDataExtractor
             onDataExtracted={handlePESTELDataExtracted}
             propertyDetails={{
-              address: addressData?.fullAddress || reportData?.propertySearchData?.selectedProperty?.address,
+              address: addressData?.propertyAddress || reportData?.propertySearchData?.selectedProperty?.address,
               propertyType: propertyData.propertyType,
               location: propertyData.location
             }}
