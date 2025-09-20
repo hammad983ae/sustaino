@@ -353,7 +353,7 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
             )}
             <Button 
               variant="outline" 
-              onClick={() => window.location.href = '/work-hub'}
+              onClick={() => window.open(`/work-hub`, '_blank')}
               className="flex items-center gap-2"
             >
               <ExternalLink className="h-4 w-4" />
