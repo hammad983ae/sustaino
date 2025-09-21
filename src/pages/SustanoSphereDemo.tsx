@@ -68,6 +68,61 @@ const SustanoSphereDemo = () => {
       features: ["Climate Risk", "Sustainability Metrics", "AI Predictions"],
       category: "Analytics",
       users: 5200
+    },
+    {
+      id: 4,
+      title: "Renewable Energy Marketplace",
+      subtitle: "Clean Energy Trading Platform • 50MW Daily Volume",
+      currentBid: 320000,
+      esgScore: 98,
+      monthlyRevenue: 67000,
+      features: ["Solar Trading", "Wind Credits", "Battery Storage"],
+      category: "Energy",
+      users: 2800
+    },
+    {
+      id: 5,
+      title: "Carbon Offset Exchange",
+      subtitle: "Verified Carbon Credit Platform • Global Forest Projects",
+      currentBid: 195000,
+      esgScore: 94,
+      monthlyRevenue: 41000,
+      features: ["Forest Credits", "Ocean Projects", "Direct Air Capture"],
+      category: "Environmental",
+      users: 4600
+    },
+    {
+      id: 6,
+      title: "Sustainable Supply Chain AI",
+      subtitle: "Blockchain-Based Transparency • Fortune 500 Clients",
+      currentBid: 275000,
+      esgScore: 91,
+      monthlyRevenue: 58000,
+      features: ["Blockchain Tracking", "Ethical Sourcing", "Labor Standards"],
+      category: "Supply Chain",
+      users: 1200
+    },
+    {
+      id: 7,
+      title: "Smart City IoT Platform",
+      subtitle: "Urban Sustainability Dashboard • 15 Cities Deployed",
+      currentBid: 450000,
+      esgScore: 89,
+      monthlyRevenue: 84000,
+      features: ["Energy Optimization", "Waste Management", "Air Quality"],
+      category: "Smart Cities",
+      users: 25000
+    },
+    {
+      id: 8,
+      title: "Green Gaming Network",
+      subtitle: "Eco-Friendly Gaming Platform • 100k+ Active Gamers",
+      currentBid: 125000,
+      esgScore: 85,
+      monthlyRevenue: 32000,
+      features: ["Tree Planting Rewards", "Green Challenges", "Eco NFTs"],
+      category: "Gaming",
+      users: 102000
     }
   ];
 
