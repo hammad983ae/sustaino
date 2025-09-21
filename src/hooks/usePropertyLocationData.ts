@@ -31,41 +31,22 @@ export const usePropertyLocationData = () => {
       const suburb = addressData?.suburb || 'Local Area';
       const state = addressData?.state || 'State';
       
-      // Check for existing saved data first before generating defaults
-      const savedData = localStorage.getItem('propertyLocationAnalysis');
-      
-      let generatedData: LocationAnalysisData;
-      
-      if (savedData) {
-        try {
-          generatedData = JSON.parse(savedData);
-        } catch (error) {
-          console.error('Error parsing saved location data:', error);
-          generatedData = generateDefaultData();
-        }
-      } else {
-        generatedData = generateDefaultData();
-      }
-      
-      function generateDefaultData(): LocationAnalysisData {
-        return {
-          location: `The property is located at ${propertyAddress}${suburb !== 'Local Area' ? ` in ${suburb}` : ''}${state !== 'State' ? `, ${state}` : ''}. The location provides convenient access to major transport corridors and is situated within a well-established residential/commercial area with good connectivity to surrounding districts.`,
-          
-          access: `Property access is via ${propertyAddress}. The site benefits from good road access with sealed road frontage. Public transport options are available in the vicinity, with bus routes servicing the area. Vehicle access and parking facilities are adequate for the property type and location.`,
-          
-          siteDescription: `The site presents as a ${suburb !== 'Local Area' ? `typical ${suburb}` : 'well-positioned'} property with ${addressData?.unitNumber ? 'unit-style accommodation' : 'standard residential/commercial characteristics'}. The property offers practical frontage and depth suitable for its intended use. Topography appears generally level with standard utility connections available.`,
-          
-          neighbourhood: `The surrounding neighbourhood is characterized by ${suburb !== 'Local Area' ? `the established ${suburb} locality` : 'a well-developed area'} with a mix of residential and commercial properties. The area demonstrates good amenity and infrastructure development, with established services and facilities contributing to the locality's appeal.`,
-          
-          amenities: `The property benefits from proximity to local amenities including shopping facilities, educational institutions, medical services, and recreational areas. ${suburb !== 'Local Area' ? `${suburb} offers` : 'The area provides'} good access to both day-to-day necessities and broader community facilities within reasonable distance.`,
-          
-          services: `Essential services are available to the property including electricity, water, sewerage, and telecommunications. Gas services and high-speed internet connectivity are typically available in the area. Council services including waste collection and maintenance of public infrastructure are provided by the relevant local government authority.`
-        };
-      }
+      // Pre-populate with intelligent defaults based on address
+      const generatedData: LocationAnalysisData = {
+        location: `The property is located at ${propertyAddress}${suburb !== 'Local Area' ? ` in ${suburb}` : ''}${state !== 'State' ? `, ${state}` : ''}. The location provides convenient access to major transport corridors and is situated within a well-established residential/commercial area with good connectivity to surrounding districts.`,
+        
+        access: `Property access is via ${propertyAddress}. The site benefits from good road access with sealed road frontage. Public transport options are available in the vicinity, with bus routes servicing the area. Vehicle access and parking facilities are adequate for the property type and location.`,
+        
+        siteDescription: `The site presents as a ${suburb !== 'Local Area' ? `typical ${suburb}` : 'well-positioned'} property with ${addressData?.unitNumber ? 'unit-style accommodation' : 'standard residential/commercial characteristics'}. The property offers practical frontage and depth suitable for its intended use. Topography appears generally level with standard utility connections available.`,
+        
+        neighbourhood: `The surrounding neighbourhood is characterized by ${suburb !== 'Local Area' ? `the established ${suburb} locality` : 'a well-developed area'} with a mix of residential and commercial properties. The area demonstrates good amenity and infrastructure development, with established services and facilities contributing to the locality's appeal.`,
+        
+        amenities: `The property benefits from proximity to local amenities including shopping facilities, educational institutions, medical services, and recreational areas. ${suburb !== 'Local Area' ? `${suburb} offers` : 'The area provides'} good access to both day-to-day necessities and broader community facilities within reasonable distance.`,
+        
+        services: `Essential services are available to the property including electricity, water, sewerage, and telecommunications. Gas services and high-speed internet connectivity are typically available in the area. Council services including waste collection and maintenance of public infrastructure are provided by the relevant local government authority.`
+      };
 
       setAnalysisData(generatedData);
-      // Save the generated data
-      localStorage.setItem('propertyLocationAnalysis', JSON.stringify(generatedData));
     } catch (error) {
       console.error('Error generating location analysis:', error);
     } finally {
@@ -74,26 +55,21 @@ export const usePropertyLocationData = () => {
   };
 
   const updateAnalysisField = (field: keyof LocationAnalysisData, value: string) => {
-    const updatedData = {
-      ...analysisData,
+    setAnalysisData(prev => ({
+      ...prev,
       [field]: value
-    };
-    setAnalysisData(updatedData);
-    // Auto-save changes
-    localStorage.setItem('propertyLocationAnalysis', JSON.stringify(updatedData));
+    }));
   };
 
   const clearAnalysisData = () => {
-    const emptyData = {
+    setAnalysisData({
       location: '',
       access: '',
       siteDescription: '',
       neighbourhood: '',
       amenities: '',
       services: ''
-    };
-    setAnalysisData(emptyData);
-    localStorage.removeItem('propertyLocationAnalysis');
+    });
   };
 
   return {

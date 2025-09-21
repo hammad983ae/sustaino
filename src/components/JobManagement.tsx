@@ -119,23 +119,26 @@ export default function JobManagement() {
 
       if (propertyError) throw propertyError;
 
-      const { data: jobResult, error } = await supabase
-        .rpc('create_valuation_job', {
-          job_data: {
-            job_title: newJob.job_title,
-            client_name: newJob.client_name,
-            client_email: newJob.client_email || null,
-            client_phone: newJob.client_phone || null,
-            job_type: newJob.job_type,
-            property_address: newJob.property_address,
-            property_id: propertyData.id,
-            priority: newJob.priority,
-            estimated_hours: 1.0,
-            due_date: newJob.due_date || null,
-            client_type: 'standard',
-            notes: newJob.notes
-          }
-        });
+      const { error } = await supabase
+        .from('valuation_jobs')
+        .insert([{
+          job_title: newJob.job_title,
+          job_description: newJob.job_description,
+          job_type: newJob.job_type,
+          property_address: newJob.property_address,
+          estimated_value: newJob.estimated_value,
+          due_date: newJob.due_date,
+          assigned_to: newJob.assigned_to,
+          priority: newJob.priority,
+          notes: newJob.notes,
+          client_name: newJob.client_name,
+          client_email: newJob.client_email,
+          client_phone: newJob.client_phone,
+          user_id: user.id,
+          property_id: propertyData.id,
+          status: 'pending',
+          job_number: `VAL-${new Date().getFullYear()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`
+        }]);
 
       if (error) throw error;
 

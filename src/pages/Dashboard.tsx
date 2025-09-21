@@ -10,7 +10,6 @@ import BottomChatAssistant from '@/components/BottomChatAssistant';
 import EnhancedPropertyUpdates from '@/components/EnhancedPropertyUpdates';
 import DigitalAssetMarketUpdates from '@/components/DigitalAssetMarketUpdates';
 import SustanoProEcosystemDemo from '@/components/SustanoProEcosystemDemo';
-import SustanoSphereWidget from '@/components/SustanoSphereWidget';
 import { 
   BarChart, 
   Bar, 
@@ -323,6 +322,28 @@ const Dashboard = () => {
                   </div>
                 </Card>
 
+                <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-emerald-500 text-white border-0" onClick={() => setActiveTab('esg-platform')}>
+                  <div className="text-center">
+                    <Leaf className="h-6 w-6 mx-auto mb-2" />
+                    <p className="text-sm font-medium">ESG Platform</p>
+                  </div>
+                </Card>
+
+                <Link to="/sam-platform" className="no-underline">
+                  <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-emerald-500 text-white border-0">
+                    <div className="text-center">
+                      <Target className="h-6 w-6 mx-auto mb-2" />
+                      <p className="text-sm font-medium">SAM Platform</p>
+                    </div>
+                  </Card>
+                </Link>
+
+                <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-emerald-500 text-white border-0" onClick={() => setActiveTab('blockchain')}>
+                  <div className="text-center">
+                    <Zap className="h-6 w-6 mx-auto mb-2" />
+                    <p className="text-sm font-medium">Blockchain Hub</p>
+                  </div>
+                </Card>
 
                 <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-emerald-500 text-white border-0" onClick={() => setActiveTab('mortgage')}>
                   <div className="text-center">
@@ -349,13 +370,27 @@ const Dashboard = () => {
                   </Card>
                 </Link>
 
+                <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-emerald-500 text-white border-0" onClick={() => setActiveTab('sustano-sphere')}>
+                  <div className="text-center">
+                    <Globe className="h-6 w-6 mx-auto mb-2" />
+                    <p className="text-sm font-medium">Sustano Sphere</p>
+                  </div>
+                </Card>
               </div>
               
               <Tabs defaultValue="analytics" className="w-full">
-                <TabsList className="grid w-full grid-cols-5">
+                <TabsList className="grid w-full grid-cols-8">
                   <TabsTrigger value="analytics" className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
                     Analytics
+                  </TabsTrigger>
+                  <TabsTrigger value="esg-platform" className="flex items-center gap-2">
+                    <Calculator className="h-4 w-4" />
+                    ESG Platform
+                  </TabsTrigger>
+                  <TabsTrigger value="blockchain" className="flex items-center gap-2">
+                    <Zap className="h-4 w-4" />
+                    Blockchain
                   </TabsTrigger>
                   <TabsTrigger value="mortgage" className="flex items-center gap-2">
                     <CreditCard className="h-4 w-4" />
@@ -368,6 +403,10 @@ const Dashboard = () => {
                   <TabsTrigger value="advertising" className="flex items-center gap-2">
                     <Megaphone className="h-4 w-4" />
                     Advertising
+                  </TabsTrigger>
+                  <TabsTrigger value="sustano-sphere" className="flex items-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    Sustano Sphere
                   </TabsTrigger>
                 </TabsList>
 
@@ -441,7 +480,37 @@ const Dashboard = () => {
                   </div>
                 </TabsContent>
 
+                <TabsContent value="esg-platform" className="mt-6">
+                  <ESGRiskAdjustedCalculator />
+                </TabsContent>
 
+                <TabsContent value="blockchain" className="mt-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <BlockchainIntegration />
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Blockchain Hub</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground mb-4">Decentralized property management and verification</p>
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center">
+                            <span>Smart Contracts</span>
+                            <Badge variant="secondary">47 Active</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Token Rewards</span>
+                            <Badge variant="secondary" className="bg-green-100 text-green-800">2,450 SUST</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Validation Status</span>
+                            <Badge variant="secondary">Verified</Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
 
                 <TabsContent value="mortgage" className="mt-6">
                   <Card>
@@ -590,6 +659,9 @@ const Dashboard = () => {
                   <AdvertisingValuationDashboard />
                 </TabsContent>
 
+                <TabsContent value="sustano-sphere" className="mt-6">
+                  <SustanoSphere />
+                </TabsContent>
               </Tabs>
             </div>
           </TabsContent>
@@ -624,7 +696,7 @@ const Dashboard = () => {
         </div>
         
         <div className="lg:col-span-1">
-          <SustanoSphereWidget />
+          <SustanoProEcosystemDemo />
         </div>
       </div>
 

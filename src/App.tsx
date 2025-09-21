@@ -32,7 +32,7 @@ import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import ClientDemo from "./pages/ClientDemo";
-import AuthPage from "./pages/AuthPage";
+import AuthPage from "./pages/Auth";
 import AutomatedReport from "./pages/AutomatedReport";
 import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
 import CryptoTradingDashboard from "./pages/CryptoTradingDashboard";
@@ -71,9 +71,6 @@ import SocialMediaAssets from "./pages/SocialMediaAssets";
 import ConceptsAndPlans from "./pages/ConceptsAndPlans";
 import DigitalContracts from "./pages/DigitalContracts";
 import Marketing from "./pages/Marketing";
-import SustanoSphereDemo from "./pages/SustanoSphereDemo";
-import CEOChessChallenge from "./components/CEOChessChallenge";
-import { EternumMysteryHunt } from "./components/EternumMysteryHunt";
 
 const queryClient = new QueryClient();
 
@@ -137,10 +134,6 @@ const App = () => (
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
-                 <Route path="/sustano-sphere" element={<SustanoSphereDemo />} />
-                 <Route path="/ceo-chess" element={<CEOChessChallenge />} />
-                 <Route path="/eternum-hunt" element={<EternumMysteryHunt />} />
-                 <Route path="/auth" element={<AuthPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

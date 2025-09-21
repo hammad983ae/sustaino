@@ -22,17 +22,16 @@ interface PropertyContextType {
 }
 
 const defaultAddressData: PropertyAddressData = {
-  propertyAddress: '701 Irymple Avenue Irymple VIC 3498',
+  propertyAddress: '',
   lotNumber: '',
   planNumber: '',
   unitNumber: '',
-  streetNumber: '701',
-  streetName: 'Irymple',
-  streetType: 'Avenue',
-  state: 'VIC',
-  postcode: '3498',
+  streetNumber: '',
+  streetName: '',
+  streetType: '',
+  state: '',
+  postcode: '',
   country: 'Australia',
-  suburb: 'Irymple'
 };
 
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);

@@ -82,21 +82,10 @@ const AuctionReadyJobCreator = () => {
     setIsSubmitting(true);
 
     try {
-      // Check authentication first
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to create jobs",
-          variant: "destructive"
-        });
-        return;
-      }
-
       // Create property for the job if it doesn't exist
       const { data: propertyData, error: propertyError } = await supabase
         .rpc('upsert_property_for_job', {
-          address_text: jobData.title || 'Comprehensive Platform Ecosystem',
+          address_text: 'Comprehensive Platform Ecosystem',
           property_type_text: 'digital_asset'
         });
 

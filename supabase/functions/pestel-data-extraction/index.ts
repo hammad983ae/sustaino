@@ -293,7 +293,7 @@ async function fetchTechnologyFactors(propertyType: string) {
       },
       constructionTech: {
         prefabrication: 'increasing adoption',
-        'threeDPrinting': 'pilot projects',
+        3dPrinting: 'pilot projects',
         sustainableMaterials: 'innovation focus',
         automation: 'labor shortage driver'
       },

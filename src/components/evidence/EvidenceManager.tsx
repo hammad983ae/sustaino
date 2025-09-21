@@ -6,9 +6,6 @@ import { Database, FileText, TrendingUp } from 'lucide-react';
 import SalesEvidence from './SalesEvidence';
 import RentalEvidence from './RentalEvidence';
 import { WebDataUploader } from '../WebDataUploader';
-import AltDataParser from './AltDataParser';
-import BulkAltImporter from './BulkAltImporter';
-import WebAltImporter from './WebAltImporter';
 
 export default function EvidenceManager() {
   const [salesCount, setSalesCount] = useState(0);
@@ -49,30 +46,9 @@ export default function EvidenceManager() {
           </TabsContent>
           
           <TabsContent value="import" className="mt-6">
-            <div className="space-y-6">
+            <div className="space-y-4">
               <h3 className="text-lg font-semibold">Import Evidence from External Sources</h3>
-              
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-medium mb-3">Web-Based Import</h4>
-                  <WebAltImporter />
-                </div>
-                
-                <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-                  <div>
-                    <h4 className="font-medium mb-3">Bulk File Upload</h4>
-                    <BulkAltImporter />
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium mb-3">Single File/Text Import</h4>
-                    <div className="space-y-4">
-                      <WebDataUploader />
-                      <AltDataParser />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <WebDataUploader />
             </div>
           </TabsContent>
         </Tabs>
