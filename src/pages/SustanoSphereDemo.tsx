@@ -344,9 +344,14 @@ const SustanoSphereDemo = () => {
                 <Rocket className="h-5 w-5 mr-2" />
                 Get Started
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                <FileText className="h-5 w-5 mr-2" />
-                Learn More
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white/10"
+                onClick={() => navigate('/ceo-chess')}
+              >
+                <Crown className="h-5 w-5 mr-2" />
+                CEO Chess Challenge
               </Button>
             </div>
           </CardContent>

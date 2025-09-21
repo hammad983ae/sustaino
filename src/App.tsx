@@ -72,6 +72,7 @@ import ConceptsAndPlans from "./pages/ConceptsAndPlans";
 import DigitalContracts from "./pages/DigitalContracts";
 import Marketing from "./pages/Marketing";
 import SustanoSphereDemo from "./pages/SustanoSphereDemo";
+import CEOChessChallenge from "./components/CEOChessChallenge";
 
 const queryClient = new QueryClient();
 
@@ -136,6 +137,7 @@ const App = () => (
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
                  <Route path="/sustano-sphere" element={<SustanoSphereDemo />} />
+                 <Route path="/ceo-chess" element={<CEOChessChallenge />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
