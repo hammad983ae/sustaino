@@ -99,9 +99,9 @@ export const useUnifiedDataManager = () => {
   // Save unified data
   const saveData = useCallback(async (
     updates: Partial<UnifiedData>,
-    options: SaveOptions = {}
+    options: SaveOptions = { debounceMs: 2000 } // Default 2 second debounce
   ) => {
-    const { showToast = false, debounceMs = 0 } = options;
+    const { showToast = false, debounceMs = 2000 } = options; // Default to no toast and 2s debounce
     
     // Clear existing timeout if debouncing
     if (debounceMs > 0 && saveTimeoutRef.current) {

@@ -308,18 +308,32 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     }
   }, [completedSteps, addressData]);
 
+  // Single auto-save effect with proper debouncing
   useEffect(() => {
-  // Auto-save progress using unified manager
-    const saveProgress = async () => {
-      await updateProgress({
-        currentStep,
-        completedSteps
-      }, { debounceMs: 2000 });
+    const saveCurrentProgress = async () => {
+      try {
+        // Only log occasionally to reduce console spam
+        if (currentStep !== 0 || completedSteps.some(Boolean)) {
+          console.log('Auto-saving progress (debounced):', { currentStep, completedSteps });
+        }
+        await updateProgress({
+          currentStep,
+          completedSteps
+        }, { debounceMs: 3000 }); // 3 second debounce to prevent spam
+      } catch (error) {
+        console.error('Failed to save progress:', error);
+        toast({
+          title: "Save Warning", 
+          description: "Failed to auto-save progress. Please use Save Progress button.",
+          variant: "destructive"
+        });
+      }
     };
 
-    const debounceTimer = setTimeout(saveProgress, 10000); // Changed to 10 seconds to reduce flashing
+    // Debounce auto-save to prevent excessive calls
+    const debounceTimer = setTimeout(saveCurrentProgress, 5000); // 5 second delay
     return () => clearTimeout(debounceTimer);
-  }, [currentStep, completedSteps, reportData, addressData, updateProgress]);
+  }, [currentStep, completedSteps, updateProgress, toast]); // Removed reportData and addressData that change frequently
 
   function handleAddressConfirmed(address: string) {
     markStepComplete(1);
@@ -357,30 +371,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     }
     return true;
   };
-
-  // Auto-save on step changes only
-  useEffect(() => {
-    const saveCurrentProgress = async () => {
-      try {
-        await updateProgress({
-          currentStep,
-          completedSteps
-        }, { debounceMs: 1000 });
-        
-        console.log('Auto-saved progress:', { currentStep, completedSteps });
-      } catch (error) {
-        console.error('Failed to save progress:', error);
-        toast({
-          title: "Save Warning",
-          description: "Failed to auto-save progress. Please use Save Progress button.",
-          variant: "destructive"
-        });
-      }
-    };
-
-    // Only auto-save on step changes
-    saveCurrentProgress();
-  }, [currentStep, completedSteps, updateProgress, toast]);
 
   const nextStep = () => {
     if (validateCurrentStep()) {
@@ -434,7 +424,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             >
               Start Fresh
             </Button>
-            <Badge variant={isSaving ? "default" : lastSaved ? "secondary" : "outline"}>
+            <Badge variant={isSaving ? "default" : lastSaved ? "secondary" : "outline"} className="transition-all duration-500">
               {isSaving ? "Saving..." : lastSaved ? "Saved" : "Unsaved"}
             </Badge>
             <Badge variant="outline">
