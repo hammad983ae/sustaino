@@ -95,31 +95,6 @@ const Index = () => {
           </div>
         </header>
 
-        {/* Featured Platform */}
-        {user && (
-          <div className="mb-12">
-            <Card className="bg-gradient-to-r from-green-600 to-emerald-600 text-white border-0">
-              <CardContent className="p-8">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-3xl font-bold mb-2">🌿 Sustano-Sphere™</h2>
-                    <p className="text-xl opacity-90 mb-4">
-                      The world's first ESG-integrated digital asset auction platform
-                    </p>
-                    <p className="opacity-80">
-                      Join live auctions, bid on sustainable platforms, and be part of the green revolution
-                    </p>
-                  </div>
-                  <Link to="/sustano-sphere">
-                    <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100 font-bold">
-                      Enter Marketplace
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
 
         {/* Main Platform Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
