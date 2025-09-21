@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useUnifiedDataManager } from '@/hooks/useUnifiedDataManager';
 
 export interface ReportData {
   // Planning Data
@@ -343,48 +344,38 @@ const ReportDataContext = createContext<ReportDataContextType | undefined>(undef
 
 export const ReportDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [reportData, setReportData] = useState<ReportData>({});
+  const { getAllData, updateReportSection, clearAllData } = useUnifiedDataManager();
 
-  // Load data from localStorage on mount
+  // Load data from unified manager on mount
   useEffect(() => {
-    const savedData = localStorage.getItem('reportData');
-    if (savedData) {
+    const loadData = async () => {
       try {
-        setReportData(JSON.parse(savedData));
+        const unifiedData = await getAllData();
+        if (unifiedData?.reportData) {
+          setReportData(unifiedData.reportData);
+        }
       } catch (error) {
-        console.error('Error loading report data:', error);
+        console.error('Error loading unified report data:', error);
       }
-    }
-  }, []);
+    };
+    
+    loadData();
+  }, [getAllData]);
 
-  // Listen for address changes and clear report data when address changes
+  // Listen for unified data changes
   useEffect(() => {
-    const handleAddressChange = (event: CustomEvent) => {
-      console.log('Address changed detected in ReportData - clearing report data');
+    const handleUnifiedDataClear = () => {
       setReportData({});
-      localStorage.removeItem('reportData');
     };
 
-    const handleDataClear = (event: CustomEvent) => {
-      console.log('Data clear event detected in ReportData - clearing report data');
-      setReportData({});
-      localStorage.removeItem('reportData');
-    };
-
-    window.addEventListener('addressChanged', handleAddressChange as EventListener);
-    window.addEventListener('dataCleared', handleDataClear as EventListener);
-
+    window.addEventListener('unifiedDataCleared', handleUnifiedDataClear);
     return () => {
-      window.removeEventListener('addressChanged', handleAddressChange as EventListener);
-      window.removeEventListener('dataCleared', handleDataClear as EventListener);
+      window.removeEventListener('unifiedDataCleared', handleUnifiedDataClear);
     };
   }, []);
 
-  // Save data to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('reportData', JSON.stringify(reportData));
-  }, [reportData]);
-
-  const updateReportData = (section: keyof ReportData, data: any) => {
+  const updateReportData = async (section: keyof ReportData, data: any) => {
+    // Update local state immediately for UI responsiveness
     setReportData(prev => {
       const currentSection = prev[section];
       const updatedSection = currentSection && typeof currentSection === 'object' 
@@ -397,6 +388,9 @@ export const ReportDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         lastUpdated: new Date().toISOString()
       };
     });
+
+    // Save to unified manager with debounce
+    await updateReportSection(section, data, { debounceMs: 1000 });
   };
 
   const getIntegratedData = (): ReportData => {
@@ -425,9 +419,9 @@ export const ReportDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return integrated;
   };
 
-  const clearReportData = () => {
+  const clearReportData = async () => {
     setReportData({});
-    localStorage.removeItem('reportData');
+    await clearAllData();
   };
 
   return (

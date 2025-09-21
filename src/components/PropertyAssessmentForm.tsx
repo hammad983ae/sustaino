@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText, Building2, MapPin, Camera, Settings, Play } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { useUniversalSave } from '@/hooks/useUniversalSave';
+import { useUnifiedDataManager } from '@/hooks/useUnifiedDataManager';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useProperty } from '@/contexts/PropertyContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -42,7 +42,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
   const [includeDetailedRentalConfig, setIncludeDetailedRentalConfig] = useState(false);
   const { toast } = useToast();
-  const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('PropertyAssessmentForm');
+  const { updateProgress, getAllData, isSaving, lastSaved } = useUnifiedDataManager();
   const { reportData, updateReportData } = useReportData();
   const { addressData, getFormattedAddress } = useProperty();
 
@@ -253,13 +253,20 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
 
   useEffect(() => {
     // Load saved data on mount
-    loadData().then(savedData => {
-      if (savedData) {
-        setCurrentStep(savedData.currentStep || 0);
-        setCompletedSteps(savedData.completedSteps || []);
+    const loadSavedData = async () => {
+      try {
+        const unifiedData = await getAllData();
+        if (unifiedData?.assessmentProgress) {
+          setCurrentStep(unifiedData.assessmentProgress.currentStep || 0);
+          setCompletedSteps(unifiedData.assessmentProgress.completedSteps || []);
+        }
+      } catch (error) {
+        console.error('Error loading assessment progress:', error);
       }
-    });
-  }, [loadData]);
+    };
+    
+    loadSavedData();
+  }, [getAllData]);
 
   // Clear old data when starting fresh assessment
   const startFreshAssessment = async () => {
@@ -345,21 +352,17 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   }, [completedSteps, addressData]);
 
   useEffect(() => {
-    // Auto-save progress
+  // Auto-save progress using unified manager
     const saveProgress = async () => {
-      const progressData = {
+      await updateProgress({
         currentStep,
-        completedSteps,
-        reportData,
-        addressData,
-        lastUpdated: new Date().toISOString()
-      };
-      await saveData(progressData);
+        completedSteps
+      }, { debounceMs: 2000 });
     };
 
     const debounceTimer = setTimeout(saveProgress, 10000); // Changed to 10 seconds to reduce flashing
     return () => clearTimeout(debounceTimer);
-  }, [currentStep, completedSteps, reportData, addressData, saveData]);
+  }, [currentStep, completedSteps, reportData, addressData, updateProgress]);
 
   function handleAddressConfirmed(address: string) {
     markStepComplete(1);
@@ -398,22 +401,16 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     return true;
   };
 
-  // Auto-save on step changes and data updates with proper debouncing
+  // Auto-save on step changes only
   useEffect(() => {
     const saveCurrentProgress = async () => {
       try {
-        const progressData = {
+        await updateProgress({
           currentStep,
-          completedSteps,
-          reportData,
-          addressData,
-          includeDetailedRentalConfig,
-          timestamp: Date.now(),
-          lastUpdated: new Date().toISOString()
-        };
+          completedSteps
+        }, { debounceMs: 1000 });
         
-        console.log('Auto-saving progress:', progressData);
-        await saveData(progressData);
+        console.log('Auto-saved progress:', { currentStep, completedSteps });
       } catch (error) {
         console.error('Failed to save progress:', error);
         toast({
@@ -424,35 +421,9 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       }
     };
 
-    // Only auto-save on step changes, not on every data change
-    // Manual save should be used for data changes
+    // Only auto-save on step changes
     saveCurrentProgress();
-  }, [currentStep, completedSteps]); // Removed frequent changing dependencies
-
-  // Separate effect for manual data changes with longer debounce
-  useEffect(() => {
-    const saveDataChanges = async () => {
-      try {
-        const progressData = {
-          currentStep,
-          completedSteps,
-          reportData,
-          addressData,
-          includeDetailedRentalConfig,
-          timestamp: Date.now(),
-          lastUpdated: new Date().toISOString()
-        };
-        
-        await saveData(progressData);
-      } catch (error) {
-        console.warn('Failed to auto-save data changes:', error);
-      }
-    };
-
-    // Longer debounce for data changes (10 seconds)
-    const timeoutId = setTimeout(saveDataChanges, 10000);
-    return () => clearTimeout(timeoutId);
-  }, [reportData, addressData, includeDetailedRentalConfig]);
+  }, [currentStep, completedSteps, updateProgress, toast]);
 
   const nextStep = () => {
     if (validateCurrentStep()) {
@@ -579,13 +550,10 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
           <div className="flex items-center gap-2">
             <Button 
               variant="outline" 
-              onClick={() => saveData({
+              onClick={() => updateProgress({
                 currentStep,
-                completedSteps,
-                reportData,
-                addressData,
-                forceSave: true
-              })}
+                completedSteps
+              }, { showToast: true })}
               disabled={isSaving}
               className="flex items-center gap-2"
             >

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useUnifiedDataManager } from '@/hooks/useUnifiedDataManager';
 
 export interface PropertyAddressData {
   propertyAddress: string;
@@ -37,48 +38,41 @@ const defaultAddressData: PropertyAddressData = {
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
 
 export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [addressData, setAddressData] = useState<PropertyAddressData>(() => {
-    // Load from localStorage on init
-    const saved = localStorage.getItem('propertyAddressData');
-    return saved ? JSON.parse(saved) : defaultAddressData;
-  });
+  const [addressData, setAddressData] = useState<PropertyAddressData>(defaultAddressData);
+  const { getAllData, updateAddressData: saveAddressData, clearAllData } = useUnifiedDataManager();
 
-  // Save to localStorage whenever addressData changes
+  // Load from unified manager on init
   useEffect(() => {
-    localStorage.setItem('propertyAddressData', JSON.stringify(addressData));
-  }, [addressData]);
+    const loadData = async () => {
+      try {
+        const unifiedData = await getAllData();
+        if (unifiedData?.addressData) {
+          setAddressData(prev => ({ ...prev, ...unifiedData.addressData }));
+        }
+      } catch (error) {
+        console.error('Error loading unified address data:', error);
+      }
+    };
+    
+    loadData();
+  }, [getAllData]);
 
-  const updateAddressData = (data: Partial<PropertyAddressData>) => {
+  const updateAddressData = async (data: Partial<PropertyAddressData>) => {
     const prevAddress = getFormattedAddress();
+    
+    // Update local state immediately
     setAddressData(prev => ({ ...prev, ...data }));
     
     // Check if this is a significant address change (new property)
     const newPartialAddress = { ...addressData, ...data };
     const newFormattedAddress = formatAddressFromData(newPartialAddress);
     
-    // If the core address components changed, clear all associated property data
+    // Save to unified manager (handles clearing report data if address changed significantly)
+    await saveAddressData(data, { showToast: false });
+    
+    // If the core address components changed, notify components
     if (prevAddress && newFormattedAddress && prevAddress !== newFormattedAddress) {
-      // Clear all related property data from localStorage to prevent data bleed
-      const clearKeys = [
-        'reportData',
-        'planningData',
-        'mappingData', 
-        'vicPlanData',
-        'propertyData',
-        'analysisData',
-        'valuationData',
-        'tenancyData',
-        'riskData',
-        'salesData',
-        'generatedSections',
-        'workingHubFiles'
-      ];
-      
-      clearKeys.forEach(key => {
-        localStorage.removeItem(key);
-      });
-      
-      // Dispatch event to notify all components to clear their data
+      // Dispatch event to notify components of address change
       const addressChangeEvent = new CustomEvent('addressChanged', { 
         detail: { 
           oldAddress: prevAddress, 
@@ -88,7 +82,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       });
       window.dispatchEvent(addressChangeEvent);
       
-      console.log(`Address changed from "${prevAddress}" to "${newFormattedAddress}" - cleared all property data`);
+      console.log(`Address changed from "${prevAddress}" to "${newFormattedAddress}" - unified manager handled data clearing`);
     } else {
       console.log(`Address updated but no significant change detected: "${newFormattedAddress}"`);
     }
@@ -113,29 +107,9 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return formatAddressFromData(addressData);
   };
 
-  const clearAddressData = () => {
+  const clearAddressData = async () => {
     setAddressData(defaultAddressData);
-    localStorage.removeItem('propertyAddressData');
-    
-    // Also clear all associated property data
-    const clearKeys = [
-      'reportData',
-      'planningData', 
-      'mappingData',
-      'vicPlanData',
-      'propertyData',
-      'analysisData',
-      'valuationData',
-      'tenancyData',
-      'riskData',
-      'salesData',
-      'generatedSections',
-      'workingHubFiles'
-    ];
-    
-    clearKeys.forEach(key => {
-      localStorage.removeItem(key);
-    });
+    await clearAllData();
     
     // Dispatch clear event
     const clearEvent = new CustomEvent('dataCleared', { detail: { timestamp: Date.now() } });
