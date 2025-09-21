@@ -17,7 +17,8 @@ import {
   Building,
   LogIn,
   UserPlus,
-  Leaf
+  Leaf,
+  Zap
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -170,38 +171,20 @@ const Index = () => {
             </Card>
           </Link>
 
-          <Link to="/investment-platform">
+          <Link to="/property-assessment">
             <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-orange-600" />
-                  Investment Platform
+                  <Zap className="h-5 w-5 text-purple-600" />
+                  Powered Platform
                 </CardTitle>
                 <CardDescription>
-                  Smart investment tools and portfolio management
+                  Complete your property assessment form to receive a comprehensive ESG-integrated valuation report
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Progress value={88} className="mb-2" />
-                <p className="text-sm text-slate-600">Automated investing solutions</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/white-label">
-            <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-gray-600" />
-                  White Label Config
-                </CardTitle>
-                <CardDescription>
-                  Customize branding and platform configuration
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Progress value={72} className="mb-2" />
-                <p className="text-sm text-slate-600">Brand customization tools</p>
+                <Progress value={95} className="mb-2" />
+                <p className="text-sm text-slate-600">A Sustaino Pro Product</p>
               </CardContent>
             </Card>
           </Link>
