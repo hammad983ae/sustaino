@@ -221,6 +221,107 @@ export type Database = {
         }
         Relationships: []
       }
+      auction_bids: {
+        Row: {
+          auction_id: string
+          bid_amount: number
+          bid_time: string
+          bidder_id: string
+          created_at: string
+          id: string
+          is_winning_bid: boolean
+        }
+        Insert: {
+          auction_id: string
+          bid_amount: number
+          bid_time?: string
+          bidder_id: string
+          created_at?: string
+          id?: string
+          is_winning_bid?: boolean
+        }
+        Update: {
+          auction_id?: string
+          bid_amount?: number
+          bid_time?: string
+          bidder_id?: string
+          created_at?: string
+          id?: string
+          is_winning_bid?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auction_bids_auction_id_fkey"
+            columns: ["auction_id"]
+            isOneToOne: false
+            referencedRelation: "auction_platforms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auction_platforms: {
+        Row: {
+          auction_end_date: string
+          auction_start_date: string
+          auction_status: string
+          category: string
+          created_at: string
+          current_bid: number
+          description: string | null
+          esg_score: number
+          features: Json | null
+          id: string
+          monthly_revenue: number
+          reserve_price: number | null
+          starting_bid: number
+          subtitle: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          users_count: number
+        }
+        Insert: {
+          auction_end_date: string
+          auction_start_date?: string
+          auction_status?: string
+          category: string
+          created_at?: string
+          current_bid?: number
+          description?: string | null
+          esg_score?: number
+          features?: Json | null
+          id?: string
+          monthly_revenue?: number
+          reserve_price?: number | null
+          starting_bid?: number
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          users_count?: number
+        }
+        Update: {
+          auction_end_date?: string
+          auction_start_date?: string
+          auction_status?: string
+          category?: string
+          created_at?: string
+          current_bid?: number
+          description?: string | null
+          esg_score?: number
+          features?: Json | null
+          id?: string
+          monthly_revenue?: number
+          reserve_price?: number | null
+          starting_bid?: number
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          users_count?: number
+        }
+        Relationships: []
+      }
       blocked_ips: {
         Row: {
           blocked_at: string
@@ -2794,6 +2895,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          joined_at: string
+          total_bids: number
+          total_wins: number
+          updated_at: string
+          user_id: string
+          verified: boolean
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          joined_at?: string
+          total_bids?: number
+          total_wins?: number
+          updated_at?: string
+          user_id: string
+          verified?: boolean
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          joined_at?: string
+          total_bids?: number
+          total_wins?: number
+          updated_at?: string
+          user_id?: string
+          verified?: boolean
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

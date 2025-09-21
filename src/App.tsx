@@ -32,7 +32,7 @@ import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import ClientDemo from "./pages/ClientDemo";
-import AuthPage from "./pages/Auth";
+import AuthPage from "./pages/AuthPage";
 import AutomatedReport from "./pages/AutomatedReport";
 import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
 import CryptoTradingDashboard from "./pages/CryptoTradingDashboard";
@@ -74,6 +74,7 @@ import Marketing from "./pages/Marketing";
 import SustanoSphereDemo from "./pages/SustanoSphereDemo";
 import CEOChessChallenge from "./components/CEOChessChallenge";
 import { EternumMysteryHunt } from "./components/EternumMysteryHunt";
+import AuthPage from "./pages/AuthPage";
 
 const queryClient = new QueryClient();
 
@@ -140,6 +141,7 @@ const App = () => (
                  <Route path="/sustano-sphere" element={<SustanoSphereDemo />} />
                  <Route path="/ceo-chess" element={<CEOChessChallenge />} />
                  <Route path="/eternum-hunt" element={<EternumMysteryHunt />} />
+                 <Route path="/auth" element={<AuthPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
