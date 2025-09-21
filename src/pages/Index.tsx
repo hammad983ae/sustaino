@@ -17,8 +17,7 @@ import {
   Building,
   LogIn,
   UserPlus,
-  Leaf,
-  Zap
+  Leaf
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -171,20 +170,38 @@ const Index = () => {
             </Card>
           </Link>
 
-          <Link to="/property-assessment">
+          <Link to="/investment-platform">
             <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-purple-600" />
-                  Powered Platform
+                  <TrendingUp className="h-5 w-5 text-orange-600" />
+                  Investment Platform
                 </CardTitle>
                 <CardDescription>
-                  Complete your property assessment form to receive a comprehensive ESG-integrated valuation report
+                  Smart investment tools and portfolio management
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Progress value={95} className="mb-2" />
-                <p className="text-sm text-slate-600">A Sustaino Pro Product</p>
+                <Progress value={88} className="mb-2" />
+                <p className="text-sm text-slate-600">Automated investing solutions</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/white-label">
+            <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-gray-600" />
+                  White Label Config
+                </CardTitle>
+                <CardDescription>
+                  Customize branding and platform configuration
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Progress value={72} className="mb-2" />
+                <p className="text-sm text-slate-600">Brand customization tools</p>
               </CardContent>
             </Card>
           </Link>
