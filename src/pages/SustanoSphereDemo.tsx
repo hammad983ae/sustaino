@@ -353,6 +353,15 @@ const SustanoSphereDemo = () => {
                 <Crown className="h-5 w-5 mr-2" />
                 CEO Chess Challenge
               </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white/10"
+                onClick={() => navigate('/eternum-hunt')}
+              >
+                <Brain className="h-5 w-5 mr-2" />
+                Eternum Mystery Hunt
+              </Button>
             </div>
           </CardContent>
         </Card>

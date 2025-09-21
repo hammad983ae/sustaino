@@ -73,6 +73,7 @@ import DigitalContracts from "./pages/DigitalContracts";
 import Marketing from "./pages/Marketing";
 import SustanoSphereDemo from "./pages/SustanoSphereDemo";
 import CEOChessChallenge from "./components/CEOChessChallenge";
+import { EternumMysteryHunt } from "./components/EternumMysteryHunt";
 
 const queryClient = new QueryClient();
 
@@ -138,6 +139,7 @@ const App = () => (
                  <Route path="/marketing" element={<Marketing />} />
                  <Route path="/sustano-sphere" element={<SustanoSphereDemo />} />
                  <Route path="/ceo-chess" element={<CEOChessChallenge />} />
+                 <Route path="/eternum-hunt" element={<EternumMysteryHunt />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
