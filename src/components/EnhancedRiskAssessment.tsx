@@ -60,7 +60,7 @@ interface RiskMatrix {
   mitigation: string;
 }
 
-export default function EnhancedRiskAssessment() {
+function EnhancedRiskAssessment() {
   const { reportData, updateReportData } = useReportData();
   const { addressData } = useProperty();
 

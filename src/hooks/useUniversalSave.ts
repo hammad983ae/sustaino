@@ -79,13 +79,7 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
       
       setLastSaved(new Date());
       
-      // Show toast only for demo users to indicate save status
-      if (isDemo && showToast) {
-        toast({
-          title: "Demo Save Complete",
-          description: "Data saved locally for this demo session.",
-        });
-      }
+      // Removed demo toast notification
       
       return { success: true, data: saveObject };
     } catch (error) {
@@ -105,12 +99,7 @@ export const useUniversalSave = (sectionName: string, options: SaveOptions = {})
         localStorage.setItem(storageKey, JSON.stringify(saveObject));
         setLastSaved(new Date());
         
-        if (showToast) {
-          toast({
-            title: "Demo Save Complete",
-            description: "Data saved locally for this demo session.",
-          });
-        }
+        // Removed demo toast notification
         
         return { success: true, data: saveObject };
       } catch (fallbackError) {
