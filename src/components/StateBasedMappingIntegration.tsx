@@ -103,46 +103,31 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
     }
   }, [mappingData, getFormattedAddress, selectedState]);
 
-  // Clear data when address changes
+  // Clear data when address changes (debounced)
   useEffect(() => {
     const propertyAddress = getFormattedAddress();
     if (propertyAddress && propertyAddress !== lastAddress.current) {
-      console.log('StateBasedMapping: Address changed, forcing complete refresh');
+      console.log('StateBasedMapping: Address changed, clearing data');
       
-      // Clear ALL component state
+      // Clear component state immediately
       setMapImages([]);
       setIsLoading(false);
       setMapDataCached(false);
       setMappingData(null);
-      setSelectedState('');
-      setSelectedPortal(null);
       
-      // Force clear ALL related localStorage
-      if (typeof Storage !== 'undefined') {
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-          if (key.includes('mapping') || 
-              key.includes('state_based') || 
-              key.includes('property') || 
-              key.includes('planning') || 
-              key.includes('vicplan') ||
-              key.includes('analysis') ||
-              key.includes('search')) {
-            console.log('StateBasedMapping clearing:', key);
+      // Clear localStorage with debounce to prevent excessive operations
+      const clearStorage = setTimeout(() => {
+        if (typeof Storage !== 'undefined') {
+          const keysToRemove = ['vicplan-mapping-data', 'state-mapping-data'];
+          keysToRemove.forEach(key => {
             localStorage.removeItem(key);
-          }
-        });
-      }
+          });
+        }
+      }, 500); // Debounce localStorage operations
       
       lastAddress.current = propertyAddress;
       
-      // Force complete component refresh with delay
-      setTimeout(() => {
-        setMapImages([]);
-        setIsLoading(false);
-        setMapDataCached(false);
-        setMappingData(null);
-      }, 100);
+      return () => clearTimeout(clearStorage);
     }
   }, [getFormattedAddress]);
 
@@ -192,11 +177,15 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
       }
     }
     
-    // Clear mapping data when address changes to ensure fresh search
+    // Clear mapping data when address changes to ensure fresh search (debounced)
     if (currentAddress && mappingData && mappingData.address !== currentAddress) {
       console.log('Address changed from', mappingData.address, 'to', currentAddress, '- clearing mapping data');
-      setMappingData(null);
-      localStorage.removeItem('vicplan-mapping-data');
+      const clearData = setTimeout(() => {
+        setMappingData(null);
+        localStorage.removeItem('vicplan-mapping-data');
+      }, 300);
+      
+      return () => clearTimeout(clearData);
     }
   }, [addressData.state, addressData, getFormattedAddress, mappingData]);
 

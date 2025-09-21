@@ -109,7 +109,7 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
         updateReportData('planningData', defaultData);
       }
     });
-  }, [loadData, propertyAddress, updateReportData]);
+  }, [loadData]); // Removed propertyAddress and updateReportData to prevent excessive re-renders
 
   // Use saved planning data if available, otherwise use generated data
   const planningData = localPlanningData || generateDefaultPlanningData();
@@ -266,7 +266,6 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
 
       {/* State-Based Mapping Integration */}
       <StateBasedMappingIntegration 
-        key={propertyAddress} // Force re-render when address changes
         onPlanningDataUpdate={handlePlanningDataUpdate} 
       />
 
