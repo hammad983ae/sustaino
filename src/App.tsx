@@ -74,6 +74,7 @@ import Marketing from "./pages/Marketing";
 import SustanoSphereDemo from "./pages/SustanoSphereDemo";
 import CEOChessChallenge from "./components/CEOChessChallenge";
 import { EternumMysteryHunt } from "./components/EternumMysteryHunt";
+import AuthPage from "./pages/AuthPage";
 
 const queryClient = new QueryClient();
 
