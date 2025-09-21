@@ -362,7 +362,6 @@ function EnhancedRiskAssessment() {
       });
     }
   };
-  };
 
   return (
     <div className="space-y-6">
@@ -444,7 +443,7 @@ function EnhancedRiskAssessment() {
           <PESTELDataExtractor
             onDataExtracted={handlePESTELDataExtracted}
             propertyDetails={{
-              address: addressData?.fullAddress || reportData?.propertySearchData?.selectedProperty?.address,
+              address: addressData?.propertyAddress || reportData?.propertySearchData?.selectedProperty?.address,
               propertyType: propertyData.propertyType,
               location: propertyData.location
             }}
