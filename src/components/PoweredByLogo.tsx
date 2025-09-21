@@ -79,7 +79,7 @@ const PoweredByLogo: React.FC<PoweredByLogoProps> = ({
           Powered by
         </div>
         <div className={`${config.brand} ${colors.brand}`}>
-          Sustaino Pro
+          DeLorenzo Property Group
         </div>
       </div>
     </div>
