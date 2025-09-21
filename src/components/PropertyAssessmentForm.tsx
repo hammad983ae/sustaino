@@ -42,7 +42,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
   const [includeDetailedRentalConfig, setIncludeDetailedRentalConfig] = useState(false);
   const { toast } = useToast();
-  const { updateProgress, getAllData, isSaving, lastSaved } = useUnifiedDataManager();
+  const { updateProgress, getAllData, isSaving, lastSaved, clearAllData } = useUnifiedDataManager();
   const { reportData, updateReportData } = useReportData();
   const { addressData, getFormattedAddress } = useProperty();
 
@@ -277,51 +277,8 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     setCompletedSteps([]);
     setIncludeDetailedRentalConfig(false);
     
-    // Force clear ALL localStorage data
-    if (typeof Storage !== 'undefined') {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        // Clear all localStorage keys that might contain old data
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-          if (key.includes('report') || 
-              key.includes('planning') || 
-              key.includes('mapping') || 
-              key.includes('vicplan') || 
-              key.includes('property') ||
-              key.includes('assessment') ||
-              key.includes('analysis') ||
-              key.includes('valuation') ||
-              key.includes('global_report') ||
-              key.includes('workingHub')) {
-            console.log('Clearing localStorage key:', key);
-            localStorage.removeItem(key);
-          }
-        });
-        
-        // Also clear user-specific keys if user exists
-        if (user) {
-          const userSpecificKeys = [
-            `report_PropertyAssessmentForm_${user.id}`,
-            `global_report_tracking_${user.id}`,
-            'workingHubFiles'
-          ];
-          userSpecificKeys.forEach(key => {
-            localStorage.removeItem(key);
-          });
-        }
-      } catch (error) {
-        console.log('Could not clear user-specific data:', error);
-        // Still clear what we can
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-          if (key.includes('report') || key.includes('planning') || key.includes('mapping') || key.includes('property')) {
-            localStorage.removeItem(key);
-          }
-        });
-      }
-    }
+    // Use unified data manager to clear all data
+    await clearAllData();
     
     // Dispatch event to force all components to refresh
     const freshStartEvent = new CustomEvent('freshStart', { detail: { timestamp: Date.now() } });

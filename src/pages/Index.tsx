@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
+import { UnifiedDataStatus } from '@/components/UnifiedDataStatus';
 import { ValuationProvider } from '@/contexts/ValuationContext';
 import ThunderboltIcon from '@/components/ThunderboltIcon';
 import InformationBrochure from '@/components/InformationBrochure';
@@ -173,6 +174,10 @@ const Index = () => {
                           <PropertyTypeLockProvider>
                             <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/report')} />
                           </PropertyTypeLockProvider>
+                          
+                          <div className="mt-6">
+                            <UnifiedDataStatus />
+                          </div>
                         </CardContent>
                       </Card>
                     </div>
