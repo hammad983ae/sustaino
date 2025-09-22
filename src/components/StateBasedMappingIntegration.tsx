@@ -329,14 +329,14 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
   };
 
   return (
-    <Card className="w-full max-w-6xl mx-auto">
-       <CardHeader>
-         <div className="flex items-center justify-between">
+    <Card className="w-full">
+       <CardHeader className="pb-4">
+         <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
            <div className="flex items-center gap-2">
-             <Map className="h-5 w-5 text-primary" />
-             <CardTitle className="text-xl font-semibold">State-Based Mapping Integration</CardTitle>
+             <Map className="h-5 w-5 text-primary flex-shrink-0" />
+             <CardTitle className="text-lg lg:text-xl font-semibold">State-Based Mapping Integration</CardTitle>
            </div>
-           <div className="flex items-center gap-2">
+           <div className="flex items-center gap-2 flex-wrap">
              <Badge variant="secondary" className="text-xs">
                Enhanced Planning Search
              </Badge>
@@ -351,12 +351,12 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
            </div>
          </div>
        </CardHeader>
-       <CardContent className="space-y-6">
+       <CardContent className="space-y-4 lg:space-y-6">
          {/* State Portal Selection */}
-         <div className="space-y-4">
+         <div className="space-y-3 lg:space-y-4">
            <div className="flex items-center gap-2">
-             <Layers className="h-4 w-4 text-primary" />
-             <Label className="font-medium">Planning Portal Selection</Label>
+             <Layers className="h-4 w-4 text-primary flex-shrink-0" />
+             <Label className="font-medium text-sm lg:text-base">Planning Portal Selection</Label>
            </div>
           
           <Select value={selectedState} onValueChange={handleStateChange}>
@@ -381,17 +381,17 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
           </Select>
         </div>
 
-        {/* Portal Information & Search */}
-        {selectedPortal && (
-          <div className="p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h4 className="font-semibold text-blue-900 mb-1">{selectedPortal.name}</h4>
-                <p className="text-sm text-blue-700">
-                  Access {selectedPortal.id.toUpperCase()} planning data and interactive mapping
-                </p>
-              </div>
-              <div className="flex gap-2">
+         {/* Portal Information & Search */}
+         {selectedPortal && (
+           <div className="p-3 lg:p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+             <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 mb-4">
+               <div className="flex-1">
+                 <h4 className="font-semibold text-blue-900 mb-1 text-sm lg:text-base">{selectedPortal.name}</h4>
+                 <p className="text-xs lg:text-sm text-blue-700">
+                   Access {selectedPortal.id.toUpperCase()} planning data and interactive mapping
+                 </p>
+               </div>
+               <div className="flex gap-2 flex-wrap">
                 <Button
                   variant="outline"
                   size="sm"
@@ -571,7 +571,7 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
               </Badge>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
               {/* Core Planning Data */}
               <div className="space-y-3">
                 <h5 className="font-medium text-emerald-800 border-b border-emerald-200 pb-1">Core Planning</h5>

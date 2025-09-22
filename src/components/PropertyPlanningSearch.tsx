@@ -163,17 +163,17 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
   }, []);
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4 lg:space-y-6">
       {/* Header Card */}
       <Card className="w-full">
-        <CardHeader>
-          <div className="flex items-center justify-between">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
             <div className="flex items-center gap-2">
-              <Map className="h-5 w-5 text-primary" />
-              <CardTitle className="text-xl font-semibold">Planning Search & Analysis</CardTitle>
+              <Map className="h-5 w-5 text-primary flex-shrink-0" />
+              <CardTitle className="text-lg lg:text-xl font-semibold">Planning Search & Analysis</CardTitle>
             </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant="secondary" className="text-xs">
                 {addressData.state?.toUpperCase() || 'Unknown State'}
               </Badge>
               <Button 
@@ -181,14 +181,14 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
                 size="sm"
                 onClick={handleSavePlanningData}
                 disabled={isSaving}
-                className="flex items-center gap-1"
+                className="flex items-center gap-1 text-xs"
               >
                 <Save className="h-3 w-3" />
                 {isSaving ? "Saving..." : "Save"}
               </Button>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">{propertyAddress}</p>
+          <p className="text-sm text-muted-foreground break-words">{propertyAddress}</p>
         </CardHeader>
         <CardContent>
           <PlanningDataSummary planningData={planningData} />

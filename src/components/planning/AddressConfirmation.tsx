@@ -147,7 +147,7 @@ export const AddressConfirmation: React.FC<AddressConfirmationProps> = ({
 
         {/* Address Components Breakdown */}
         {hasValidAddress && (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             {addressParts.streetNumber && (
               <Badge variant="outline" className="justify-center">
                 {addressParts.streetNumber}
@@ -212,7 +212,7 @@ export const AddressConfirmation: React.FC<AddressConfirmationProps> = ({
         <Separator />
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           {showAutoGenerate && (
             <Button 
               variant="outline" 
