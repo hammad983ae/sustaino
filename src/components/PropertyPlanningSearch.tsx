@@ -16,7 +16,10 @@ interface PropertyPlanningSearchProps {
 const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps) => {
   const { reportData, updateReportData } = useReportData();
   const { addressData } = useProperty();
-  const { saveData, loadData, isSaving } = useUniversalSave('PropertyPlanningSearch');
+  const { saveData, loadData, isSaving } = useUniversalSave('PropertyPlanningSearch', { 
+    showToast: false, 
+    debounceMs: 500 
+  });
   const [localPlanningData, setLocalPlanningData] = useState<any>(null);
   
   // Memoized planning data generation to prevent unnecessary recalculations
@@ -93,19 +96,31 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
   useEffect(() => {
     // Load saved planning data on mount
     loadData().then(savedData => {
-      if (savedData?.planningData) {
-        setLocalPlanningData(savedData.planningData);
-        // Update report data with loaded planning data
-        updateReportData('planningData', savedData.planningData);
-      } else {
-        // Generate default planning data
+      try {
+        if (savedData?.planningData) {
+          const cleanData = JSON.parse(JSON.stringify(savedData.planningData));
+          setLocalPlanningData(cleanData);
+          updateReportData('planningData', cleanData);
+        } else {
+          // Generate default planning data
+          const defaultData = generateDefaultPlanningData();
+          setLocalPlanningData(defaultData);
+          updateReportData('planningData', defaultData);
+        }
+      } catch (error) {
+        console.error('Error loading planning data:', error);
+        // Fallback to default data
         const defaultData = generateDefaultPlanningData();
         setLocalPlanningData(defaultData);
-        // Update report data with default planning data
         updateReportData('planningData', defaultData);
       }
+    }).catch(error => {
+      console.error('Error in loadData:', error);
+      const defaultData = generateDefaultPlanningData();
+      setLocalPlanningData(defaultData);
+      updateReportData('planningData', defaultData);
     });
-  }, [loadData]); // Removed propertyAddress and updateReportData to prevent excessive re-renders
+  }, []); // Empty dependency array to run only on mount
 
   // Memoized planning data to prevent unnecessary recalculations
   const planningData = useMemo(() => 
@@ -114,39 +129,54 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
   );
 
   const handleSavePlanningData = useCallback(async () => {
-    const planningInfo = {
-      planningData: planningData,
-      propertyAddress,
-      savedAt: new Date().toISOString(),
-      state: addressData.state
-    };
-    
-    const result = await saveData(planningInfo);
-    if (result.success) {
-      // Also update report data with planning data including lot/plan
-      updateReportData('planningData', planningData);
-      updateReportData('legalAndPlanning', {
-        ...reportData.legalAndPlanning,
-        ...planningData
-      });
+    try {
+      // Ensure data is serializable by creating a clean copy
+      const cleanPlanningData = JSON.parse(JSON.stringify(planningData));
+      const planningInfo = {
+        planningData: cleanPlanningData,
+        propertyAddress: String(propertyAddress || ''),
+        savedAt: new Date().toISOString(),
+        state: String(addressData?.state || '')
+      };
+      
+      const result = await saveData(planningInfo);
+      if (result.success) {
+        // Also update report data with planning data including lot/plan
+        updateReportData('planningData', cleanPlanningData);
+        updateReportData('legalAndPlanning', {
+          ...reportData.legalAndPlanning,
+          ...cleanPlanningData
+        });
+      }
+    } catch (error) {
+      console.error('Error saving planning data:', error);
     }
-  }, [planningData, propertyAddress, addressData.state, saveData, updateReportData, reportData.legalAndPlanning]);
+  }, [planningData, propertyAddress, addressData?.state, saveData, updateReportData, reportData.legalAndPlanning]);
 
   const handlePlanningDataUpdate = useCallback((newData: any) => {
-    console.log('Planning data updated:', newData);
-    const updatedData = {
-      ...planningData,
-      ...newData,
-      lastUpdated: new Date().toISOString()
-    };
-    setLocalPlanningData(updatedData);
-    
-    // Auto-save updated data and pass lot/plan to planning data
-    updateReportData('planningData', updatedData);
-    updateReportData('legalAndPlanning', {
-      ...reportData.legalAndPlanning,
-      ...updatedData
-    });
+    try {
+      console.log('Planning data updated:', newData);
+      // Ensure data is serializable
+      const cleanNewData = JSON.parse(JSON.stringify(newData || {}));
+      const cleanPlanningData = JSON.parse(JSON.stringify(planningData || {}));
+      
+      const updatedData = {
+        ...cleanPlanningData,
+        ...cleanNewData,
+        lastUpdated: new Date().toISOString()
+      };
+      
+      setLocalPlanningData(updatedData);
+      
+      // Auto-save updated data and pass lot/plan to planning data
+      updateReportData('planningData', updatedData);
+      updateReportData('legalAndPlanning', {
+        ...reportData.legalAndPlanning,
+        ...updatedData
+      });
+    } catch (error) {
+      console.error('Error updating planning data:', error);
+    }
   }, [planningData, updateReportData, reportData.legalAndPlanning]);
 
   const handleAddressConfirmed = useCallback((address: string) => {
