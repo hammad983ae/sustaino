@@ -27,32 +27,34 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
     const suburb = addressData.suburb || 'Unknown Area';
     const state = addressData.state || 'Unknown State';
     
-    // Property-specific planning data examples
+    // Property-specific planning data examples (from PAF screenshots)
     const planningExamples = {
-      // Sample data for 320 Deakin Avenue (as shown in uploaded images)
+      // Sample data from PAF for Commercial property
       '320 deakin avenue': {
         lotNumber: '1',
         planNumber: 'PS123456',
         zoneName: 'Commercial 1 Zone (C1Z)',
         zoneDescription: 'Provides for a range of commercial activities to service the needs of the wider community',
-        overlays: ['Development Contributions Plan Overlay', 'Special Building Overlay', 'Heritage Overlay'],
-        landUse: 'Commercial uses, Retail premises, Office premises, Dwelling (if part of a mixed use development)',
-        developmentPotential: 'Medium - Subject to overlays and heritage considerations',
+        overlays: ['Heritage Overlay'],
+        landUse: 'Commercial uses, Retail premises, Office premises',
+        developmentPotential: 'Medium - Subject to overlays',
         permitRequired: true,
-        heightRestriction: '15m maximum building height',
-        planningScheme: `${suburb} Planning Scheme`,
+        heightRestriction: '15m maximum',
+        planningScheme: 'Bayside Planning Scheme',
         mapReference: `vicplan.vic.gov.au/planning/PS327856`,
         riskAssessment: {
-          heritage: 'Heritage overlay applies - Special permits required',
-          flooding: 'Special Building Overlay - Flood prone area',
-          bushfire: 'Not in flood prone area',
+          heritage: 'Non-contributory building in Heritage Overlay',
+          flooding: 'Not in flood prone area',
+          bushfire: 'BAL-LOW',
           contamination: 'Commercial land use - Environmental audit may be required'
         },
         coreDetails: {
-          commercial: 'Commercial 1 Zone (C1Z)',
-          landUse: 'Medium - Subject to overlays',
-          development: 'Development Potential',
-          planningScheme: `${suburb} Planning Scheme`
+          zoning: 'Commercial 1 Zone (C1Z)',
+          landUse: 'Commercial uses, Retail premises, Office premises',
+          development: 'Medium - Subject to overlays',
+          planningScheme: 'Bayside Planning Scheme',
+          heightRestriction: '15m maximum',
+          permitRequired: 'Yes'
         }
       }
     };

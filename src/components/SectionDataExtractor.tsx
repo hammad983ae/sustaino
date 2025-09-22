@@ -92,12 +92,16 @@ const SectionDataExtractor: React.FC = () => {
     };
 
     if (reportData.planningData) {
-      // Extract planning data
+      // Extract planning data from PAF
       legalData.lga = reportData.planningData.lga || 'Investigation Required';
-      legalData.zoning = reportData.planningData.zoning || 'Investigation Required';
+      legalData.zoning = reportData.planningData.zoneName || reportData.planningData.zoning || 'Investigation Required';
       legalData.zoneName = reportData.planningData.zoneName || 'Investigation Required';
-      legalData.currentUse = reportData.planningData.currentUse || 'Investigation Required';
+      legalData.currentUse = reportData.planningData.landUse || reportData.planningData.currentUse || 'Investigation Required';
       legalData.overlays = reportData.planningData.overlays || [];
+      legalData.heightRestriction = reportData.planningData.heightRestriction || 'Investigation Required';
+      legalData.planningScheme = reportData.planningData.planningScheme || 'Investigation Required';
+      legalData.permitRequired = reportData.planningData.permitRequired ? 'Yes' : 'No';
+      legalData.developmentPotential = reportData.planningData.developmentPotential || 'Investigation Required';
       legalData.developmentPotential = reportData.planningData.developmentPotential || 'Investigation Required';
       
       // Check if data is incomplete
