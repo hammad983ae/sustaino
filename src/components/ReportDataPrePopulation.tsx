@@ -151,6 +151,28 @@ const ReportDataPrePopulation = () => {
       updateReportData('fileAttachments', reportData.fileAttachments);
     }
 
+    // Pre-populate Sustaino Pro Additional Analysis (Section 18) with PAF data
+    const sustainoProData: any = {
+      sustainoProAdditionalAnalysis: {
+        valuationSummary: {
+          interestValued: 'Freehold Going Concern',
+          valueComponent: reportConfig.valueComponent || reportConfig['Value Component'] || 'Market Value',
+          highestAndBestUse: 'Current Use',
+          currencyOfValuation: 'AUD',
+          durationOfValuation: '3 months',
+          gstTreatment: 'GST Inclusive',
+          marketValue: '$XXX,XXX'
+        }
+      }
+    };
+
+    // Update Sustaino Pro section using generatedSections
+    updateReportData('generatedSections', {
+      ...reportData.generatedSections,
+      ...sustainoProData
+    });
+    console.log('Updated Sustaino Pro section with PAF data:', sustainoProData);
+
     console.log('Pre-population completed successfully');
 
   }, [reportData.reportConfig]); // Only depend on reportConfig, not the entire reportData
