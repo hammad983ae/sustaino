@@ -30,6 +30,7 @@ import ReportSectionToggler from '@/components/ReportSectionToggler';
 import DataValidationPipeline from '@/components/DataValidationPipeline';
 import ReportConfigurationIntegrator from '@/components/ReportConfigurationIntegrator';
 import OptionalSectionManager from '@/components/OptionalSectionManager';
+import ESGAssessmentIntegrator from '@/components/ESGAssessmentIntegrator';
 
 interface PropertyAssessmentFormProps {
   onComplete?: (data: any) => void;
@@ -115,9 +116,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       title: "Property Photos",
       subtitle: "Property photos and visual assessment for this specific property",
       component: (
-        <PropertyPhotos 
-          propertyAddress={addressData.propertyAddress || getFormattedAddress() || ''}
-        />
+        <PropertyPhotosOCRExtractor />
       ),
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
@@ -168,6 +167,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         <div className="space-y-6">
           <ReportConfigurationIntegrator />
           <OptionalSectionManager />
+          <ESGAssessmentIntegrator />
           <DataValidationPipeline />
           <GenerateReportData
             assessmentData={{

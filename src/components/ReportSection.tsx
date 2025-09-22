@@ -28,6 +28,7 @@ import SustainoProAnalysis from "./SustainoProAnalysis";
 import ValuationCertificate from "./ValuationCertificate";
 import TermsAndConditions from "./TermsAndConditions";
 import ComprehensiveESGClimateAssessmentForm from "./ComprehensiveESGClimateAssessmentForm";
+import EconomicGeographicalCatchmentAnalysis from './EconomicGeographicalCatchmentAnalysis';
 import CertificationAndSecurity from "./CertificationAndSecurity";
 
 import MarketTransactionAnalysis from "./MarketTransactionAnalysis";
@@ -220,12 +221,12 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for ESG and Climate Assessment section (consolidated sections 12 & 13)
+  // Special handling for ESG Assessment Summary section 
   if (sectionIndex === 12) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold">ESG and Climate Assessment</CardTitle>
+          <CardTitle className="text-xl font-semibold">ESG Assessment Summary</CardTitle>
           <p className="text-sm text-muted-foreground">Comprehensive Environmental, Social, Governance and Climate Risk Assessment</p>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -237,19 +238,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
 
   // Special handling for Economic, Geographical and Catchment Area Analysis section
   if (sectionIndex === 13) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">Economic, Geographical and Catchment Area Analysis</CardTitle>
-          <p className="text-sm text-muted-foreground">Market dynamics, location factors, and catchment area assessment</p>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="min-h-[400px] flex items-center justify-center text-muted-foreground">
-            <p>Economic, Geographical and Catchment Area Analysis content will be added here</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <EconomicGeographicalCatchmentAnalysis />;
   }
 
   // Special handling for Valuation Analysis section (moved to section 14)

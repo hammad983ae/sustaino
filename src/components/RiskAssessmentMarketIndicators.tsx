@@ -113,30 +113,30 @@ const RiskAssessmentMarketIndicators = () => {
     setRiskSummaries(prev => ({ ...prev, [category]: summary }));
   };
 
-  // Auto-evaluate risk assessment based on property data
+  // Auto-evaluate risk assessment based on property data from PAF
   const runAutomaticAssessment = () => {
     try {
-      // Construct property data from available sources
+      // Construct property data from PAF and planning data
       const propertyData: PropertyData = {
-        address: addressData.propertyAddress || reportData.propertySearchData?.address,
-        suburb: addressData.suburb,
-        state: addressData.state,
-        postcode: addressData.postcode,
-        propertyType: reportData.reportConfig?.propertyType || reportData.propertySearchData?.propertyType || 'residential',
-        zoning: reportData.planningData?.zoning,
-        // Property details from report data
-        landArea: reportData.propertySearchData?.landArea ? Number(reportData.propertySearchData.landArea) : undefined,
-        buildingArea: reportData.propertySearchData?.buildingArea ? Number(reportData.propertySearchData.buildingArea) : undefined,
-        // Planning and environmental data
-        planningRestrictions: reportData.planningData?.overlays || [],
-        floodZone: reportData.planningData?.overlays?.includes('flood') || false,
-        bushfireZone: reportData.planningData?.overlays?.includes('bushfire') || false,
+        address: addressData.propertyAddress || reportData.locationData?.propertyAddress,
+        suburb: addressData.suburb || reportData.locationData?.suburb,
+        state: addressData.state || reportData.locationData?.state,
+        postcode: addressData.postcode || reportData.locationData?.postcode,
+        propertyType: reportData.reportConfig?.propertyType || 'residential',
+        zoning: reportData.planningData?.zoning || reportData.legalAndPlanning?.zoning,
+        // Property details from PAF data
+        landArea: reportData.propertyDetails?.landArea ? Number(reportData.propertyDetails.landArea) : undefined,
+        buildingArea: reportData.propertyDetails?.buildingArea ? Number(reportData.propertyDetails.buildingArea) : undefined,
+        // Planning and environmental data from PAF
+        planningRestrictions: reportData.planningData?.overlays || reportData.legalAndPlanning?.overlays || [],
+        floodZone: reportData.riskAssessment?.flooding === 'High' || reportData.planningData?.overlays?.includes('flood') || false,
+        bushfireZone: reportData.riskAssessment?.bushfire === 'High' || reportData.planningData?.overlays?.includes('bushfire') || false,
         coastalLocation: addressData.suburb?.toLowerCase().includes('beach') || 
                         addressData.suburb?.toLowerCase().includes('coast') || false,
-        // Estimate market conditions based on available data
+        // Market conditions from PAF market data
         marketConditions: {
-          priceMovement: 'stable' as const, // Default assumption
-          salesActivity: 'moderate' as const, // Default assumption
+          priceMovement: reportData.marketCommentary?.trends?.includes('increasing') ? 'rising' as const : 'stable' as const,
+          salesActivity: reportData.marketCommentary?.activity || 'moderate' as const,
         }
       };
 

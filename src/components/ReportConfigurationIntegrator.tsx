@@ -44,9 +44,9 @@ const ReportConfigurationIntegrator: React.FC = () => {
       // Custom Basis (Auto-Generated)
       customBasis: config.customBasis || reportData.valuationCertificate?.customBasis,
       
-      // Dates from Report Configuration
-      valuationDate: config.valuationDate || reportData.valuationCertificate?.valuationDate,
-      inspectionDate: config.inspectionDate || reportData.valuationCertificate?.inspectionDate,
+      // Dates from Report Configuration (CRITICAL: Always extract these)
+      valuationDate: config.valuationDate || reportData.valuationCertificate?.valuationDate || new Date().toISOString().split('T')[0],
+      inspectionDate: config.inspectionDate || reportData.valuationCertificate?.inspectionDate || new Date().toISOString().split('T')[0],
       
       // Mark as extracted from Report Configuration
       extractedFrom: 'Report Configuration Step 5',
@@ -81,19 +81,14 @@ const ReportConfigurationIntegrator: React.FC = () => {
       setValuationType(valuationType);
     }
 
-    // 5. Update Executive Summary to include Custom Basis
-    if (config.customBasis) {
-      const executiveSummaryUpdate = {
-        ...reportData.executiveSummary,
-        customBasis: config.customBasis,
-        basisOfValuation: Array.isArray(config.basisOfValuation) ? config.basisOfValuation.join(', ') : config.basisOfValuation,
-        valuationPurpose: config.valuationPurpose,
-        includedInSummary: true,
-        extractedFrom: 'Report Configuration Step 5'
-      };
+    // 5. Update Executive Summary to include Custom Basis and Configuration Data
+    const executiveSummaryUpdate = {
+      ...reportData.executiveSummary,
+      content: `${reportData.executiveSummary?.content || ''}\n\nConfiguration Data:\n- Custom Basis: ${config.customBasis || 'Standard basis'}\n- Valuation Purpose: ${config.valuationPurpose || 'Not specified'}\n- Report Type: ${config.reportType || 'Standard report'}\n- Property Type: ${config.propertyType || 'Not specified'}\n- Valuation Date: ${config.valuationDate || 'To be confirmed'}\n- Inspection Date: ${config.inspectionDate || 'To be confirmed'}`,
+      lastUpdated: new Date().toISOString()
+    };
 
-      updateReportData('executiveSummary', executiveSummaryUpdate);
-    }
+    updateReportData('executiveSummary', executiveSummaryUpdate);
 
     // 6. Update Property Details with Configuration
     const propertyDetailsUpdate = {
