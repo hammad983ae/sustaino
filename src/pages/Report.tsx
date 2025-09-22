@@ -55,8 +55,8 @@ const ReportViewer = () => {
       try {
         const reportData = JSON.parse(currentReportData);
         console.log('Loaded report data from Property Assessment:', reportData);
-        // Clear the stored data to prevent reuse
-        localStorage.removeItem('currentReportData');
+        // DO NOT clear the stored data - preserve for section navigation
+        // localStorage.removeItem('currentReportData');
         // Start from the first section with the new report data
         setCurrentSection(0);
         setLastSavedSection(null);

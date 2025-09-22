@@ -21,8 +21,21 @@ const ReportDataPrePopulation = () => {
     console.log('Pre-populating report sections with assessment data');
     console.log('Current reportData:', reportData);
 
-    const reportConfig = reportData.reportConfig;
-    if (!reportConfig) {
+    // Load from localStorage if reportConfig is missing but data exists
+    const currentReportData = localStorage.getItem('currentReportData');
+    let workingReportConfig = reportData.reportConfig;
+    
+    if (!workingReportConfig && currentReportData) {
+      try {
+        const storedData = JSON.parse(currentReportData);
+        workingReportConfig = storedData.reportConfig;
+        console.log('Using reportConfig from localStorage:', workingReportConfig);
+      } catch (error) {
+        console.error('Error parsing stored report data:', error);
+      }
+    }
+
+    if (!workingReportConfig) {
       console.log('No report config found, skipping pre-population');
       return;
     }
@@ -43,33 +56,33 @@ const ReportDataPrePopulation = () => {
     }
 
     // Map property type from report config
-    if (reportConfig.propertyType) {
-      certificateData.propertyType = reportConfig.propertyType;
+    if (workingReportConfig.propertyType) {
+      certificateData.propertyType = workingReportConfig.propertyType;
     }
 
     // Map interest values from selected values
-    if (reportConfig.interestValues || reportConfig['Interest Values']) {
-      certificateData.interestValues = reportConfig.interestValues || reportConfig['Interest Values'];
+    if (workingReportConfig.interestValues || workingReportConfig['Interest Values']) {
+      certificateData.interestValues = workingReportConfig.interestValues || workingReportConfig['Interest Values'];
     }
 
     // Map value component from selected values
-    if (reportConfig.valueComponent || reportConfig['Value Component']) {
-      certificateData.valueComponent = reportConfig.valueComponent || reportConfig['Value Component'];
+    if (workingReportConfig.valueComponent || workingReportConfig['Value Component']) {
+      certificateData.valueComponent = workingReportConfig.valueComponent || workingReportConfig['Value Component'];
     }
 
     // Map purpose of valuation from selected values
-    if (reportConfig.valuationPurpose || reportConfig['Valuation Purpose']) {
-      certificateData.purposeOfValuation = reportConfig.valuationPurpose || reportConfig['Valuation Purpose'];
+    if (workingReportConfig.valuationPurpose || workingReportConfig['Valuation Purpose']) {
+      certificateData.purposeOfValuation = workingReportConfig.valuationPurpose || workingReportConfig['Valuation Purpose'];
     }
 
     // Map valuation basis from selected values
-    if (reportConfig.valuationBasis || reportConfig['Basis of Valuation']) {
-      certificateData.valuationBasis = reportConfig.valuationBasis || reportConfig['Basis of Valuation'];
+    if (workingReportConfig.valuationBasis || workingReportConfig['Basis of Valuation']) {
+      certificateData.valuationBasis = workingReportConfig.valuationBasis || workingReportConfig['Basis of Valuation'];
     }
 
     // Map mortgage security assessment
-    if (reportConfig.mortgageSecurity) {
-      certificateData.mortgageSecurity = reportConfig.mortgageSecurity;
+    if (workingReportConfig.mortgageSecurity) {
+      certificateData.mortgageSecurity = workingReportConfig.mortgageSecurity;
     }
 
     // Only update if we have some data to populate
@@ -79,17 +92,17 @@ const ReportDataPrePopulation = () => {
     }
 
     // Set valuation type for context (Ground Lease visibility) - if leasehold
-    if (reportConfig.interestValues?.includes('Leasehold Interest') || 
-        reportConfig.interestValues?.includes('Ground Lease')) {
-      setValuationType(reportConfig.interestValues);
+    if (workingReportConfig.interestValues?.includes('Leasehold Interest') || 
+        workingReportConfig.interestValues?.includes('Ground Lease')) {
+      setValuationType(workingReportConfig.interestValues);
     }
 
     // Pre-populate Valuation Analysis with selected approaches - always include section
-    if (reportConfig.valuationApproaches?.length > 0) {
+    if (workingReportConfig.valuationApproaches?.length > 0) {
       updateReportData('valuationAnalysis', {
-        activeApproaches: reportConfig.valuationApproaches,
-        selectedApproaches: reportConfig.valuationApproaches,
-        enabledSections: reportConfig.valuationApproaches
+        activeApproaches: workingReportConfig.valuationApproaches,
+        selectedApproaches: workingReportConfig.valuationApproaches,
+        enabledSections: workingReportConfig.valuationApproaches
       });
     }
 
@@ -109,13 +122,13 @@ const ReportDataPrePopulation = () => {
     const propertyDetailsData: any = {};
 
     // Map property type from report config
-    if (reportConfig.propertyType) {
-      propertyDetailsData.propertyType = reportConfig.propertyType;
+    if (workingReportConfig.propertyType) {
+      propertyDetailsData.propertyType = workingReportConfig.propertyType;
     }
 
     // Map report type from report config
-    if (reportConfig.reportType || reportConfig['report-type']) {
-      propertyDetailsData.reportType = reportConfig.reportType || reportConfig['report-type'];
+    if (workingReportConfig.reportType || workingReportConfig['report-type']) {
+      propertyDetailsData.reportType = workingReportConfig.reportType || workingReportConfig['report-type'];
     }
 
     // Map property address from multiple sources
@@ -135,8 +148,8 @@ const ReportDataPrePopulation = () => {
 
     // Pre-populate tenancy details only for leasehold properties
     if (reportData.tenancyDetails && 
-        (reportConfig.interestValues?.includes('Leasehold Interest') || 
-         reportConfig.interestValues?.includes('Ground Lease'))) {
+        (workingReportConfig.interestValues?.includes('Leasehold Interest') || 
+         workingReportConfig.interestValues?.includes('Ground Lease'))) {
       updateReportData('tenancyDetails', {
         ...reportData.tenancyDetails,
         groundLease: {
@@ -156,7 +169,7 @@ const ReportDataPrePopulation = () => {
       sustainoProAdditionalAnalysis: {
         valuationSummary: {
           interestValued: 'Freehold Going Concern',
-          valueComponent: reportConfig.valueComponent || reportConfig['Value Component'] || 'Market Value',
+          valueComponent: workingReportConfig.valueComponent || workingReportConfig['Value Component'] || 'Market Value',
           highestAndBestUse: 'Current Use',
           currencyOfValuation: 'AUD',
           durationOfValuation: '3 months',

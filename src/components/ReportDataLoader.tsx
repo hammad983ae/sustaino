@@ -94,8 +94,8 @@ const ReportDataLoader = () => {
             }
           }
           
-          // Clear the stored data to prevent reuse
-          localStorage.removeItem('currentReportData');
+          // DO NOT clear the stored data - let it persist for reliability
+          // localStorage.removeItem('currentReportData');
         } catch (error) {
           console.error('Error loading generated report data:', error);
         }
