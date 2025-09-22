@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useValuation } from '@/contexts/ValuationContext';
 import { validateAndFilterReportData } from '@/lib/reportDataValidation';
@@ -10,8 +10,14 @@ import { validateAndFilterReportData } from '@/lib/reportDataValidation';
 const ReportDataPrePopulation = () => {
   const { reportData, updateReportData } = useReportData();
   const { setValuationType } = useValuation();
+  const hasPrePopulated = useRef(false);
 
   useEffect(() => {
+    // Prevent infinite loop by checking if we've already pre-populated
+    if (hasPrePopulated.current) {
+      return;
+    }
+
     console.log('Pre-populating report sections with assessment data');
     console.log('Current reportData:', reportData);
 
@@ -20,6 +26,9 @@ const ReportDataPrePopulation = () => {
       console.log('No report config found, skipping pre-population');
       return;
     }
+
+    // Mark as pre-populated to prevent re-running
+    hasPrePopulated.current = true;
 
     // Pre-populate Valuation Certificate with correct field mappings
     const certificateData: any = {};
@@ -144,8 +153,7 @@ const ReportDataPrePopulation = () => {
 
     console.log('Pre-population completed successfully');
 
-  }, [reportData.reportConfig, reportData.planningData, reportData.tenancyDetails, 
-      reportData.fileAttachments, updateReportData, setValuationType]);
+  }, [reportData.reportConfig]); // Only depend on reportConfig, not the entire reportData
 
   return null; // This is a logic-only component
 };
