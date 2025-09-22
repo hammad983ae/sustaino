@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useProperty } from '@/contexts/PropertyContext';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
-import { Map, MapPin, Save, FileText, ExternalLink, Building2, AlertTriangle } from 'lucide-react';
-import AddressConfirmation from '@/components/planning/AddressConfirmation';
-import StatePlanningPortalLinks from '@/components/planning/StatePlanningPortalLinks';
-import VicPlanReportExporter from '@/components/planning/VicPlanReportExporter';
-import StateBasedMappingIntegration from '@/components/StateBasedMappingIntegration';
-import AustralianPlanningPortalIntegration from '@/components/AustralianPlanningPortalIntegration';
-import AustralianAPIIntegration from '@/components/planning/AustralianAPIIntegration';
+import { Map, Save } from 'lucide-react';
+import PlanningDataSummary from '@/components/planning/PlanningDataSummary';
+import PlanningIntegrations from '@/components/planning/PlanningIntegrations';
 
 interface PropertyPlanningSearchProps {
   propertyAddress: string;
@@ -23,8 +19,8 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
   const { saveData, loadData, isSaving } = useUniversalSave('PropertyPlanningSearch');
   const [localPlanningData, setLocalPlanningData] = useState<any>(null);
   
-  // Default planning data based on property address
-  const generateDefaultPlanningData = () => {
+  // Memoized planning data generation to prevent unnecessary recalculations
+  const generateDefaultPlanningData = useCallback(() => {
     const suburb = addressData.suburb || 'Unknown Area';
     const state = addressData.state || 'Unknown State';
     
@@ -92,7 +88,7 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
         planningScheme: `${suburb} Planning Scheme`
       }
     };
-  };
+  }, [addressData.suburb, addressData.state, propertyAddress]);
 
   useEffect(() => {
     // Load saved planning data on mount
@@ -111,10 +107,13 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
     });
   }, [loadData]); // Removed propertyAddress and updateReportData to prevent excessive re-renders
 
-  // Use saved planning data if available, otherwise use generated data
-  const planningData = localPlanningData || generateDefaultPlanningData();
+  // Memoized planning data to prevent unnecessary recalculations
+  const planningData = useMemo(() => 
+    localPlanningData || generateDefaultPlanningData(), 
+    [localPlanningData, generateDefaultPlanningData]
+  );
 
-  const handleSavePlanningData = async () => {
+  const handleSavePlanningData = useCallback(async () => {
     const planningInfo = {
       planningData: planningData,
       propertyAddress,
@@ -131,9 +130,9 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
         ...planningData
       });
     }
-  };
+  }, [planningData, propertyAddress, addressData.state, saveData, updateReportData, reportData.legalAndPlanning]);
 
-  const handlePlanningDataUpdate = (newData: any) => {
+  const handlePlanningDataUpdate = useCallback((newData: any) => {
     console.log('Planning data updated:', newData);
     const updatedData = {
       ...planningData,
@@ -148,7 +147,20 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
       ...reportData.legalAndPlanning,
       ...updatedData
     });
-  };
+  }, [planningData, updateReportData, reportData.legalAndPlanning]);
+
+  const handleAddressConfirmed = useCallback((address: string) => {
+    console.log('Address confirmed for planning search:', address);
+    // Refresh planning data when address is confirmed
+    const newData = generateDefaultPlanningData();
+    setLocalPlanningData(newData);
+  }, [generateDefaultPlanningData]);
+
+  const handleAddressChange = useCallback((address: string) => {
+    console.log('Address updated:', address);
+    // Clear old planning data when address changes
+    setLocalPlanningData(null);
+  }, []);
 
   return (
     <div className="w-full space-y-6">
@@ -179,115 +191,18 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
           <p className="text-sm text-muted-foreground">{propertyAddress}</p>
         </CardHeader>
         <CardContent>
-          {/* Quick Planning Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <Building2 className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">Zone</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{planningData.zoneName}</p>
-            </div>
-            <div className="p-3 bg-success/5 border border-success/20 rounded-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <FileText className="h-4 w-4 text-success" />
-                <span className="text-sm font-medium">Development</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{planningData.developmentPotential}</p>
-            </div>
-            <div className="p-3 bg-amber/5 border border-amber/20 rounded-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
-                <span className="text-sm font-medium">Overlays</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{planningData.overlays?.length || 0} Active</p>
-            </div>
-            <div className="p-3 bg-blue/5 border border-blue/20 rounded-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <MapPin className="h-4 w-4 text-blue-600" />
-                <span className="text-sm font-medium">Scheme</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{planningData.planningScheme}</p>
-            </div>
-          </div>
-
-          {/* Planning Data Retrieved Section */}
-          <div className="p-4 bg-success/5 border border-success/20 rounded-lg">
-            <h4 className="font-medium mb-3 text-success-foreground">Planning Data Retrieved & Saved</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h5 className="font-medium text-sm mb-2">Core Planning</h5>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• {planningData.coreDetails?.commercial || planningData.zoneName}</li>
-                  <li>• {planningData.coreDetails?.landUse || planningData.landUse}</li>
-                  <li>• {planningData.coreDetails?.development || planningData.developmentPotential}</li>
-                </ul>
-              </div>
-              <div>
-                <h5 className="font-medium text-sm mb-2">Risk Assessment</h5>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Heritage: {planningData.riskAssessment?.heritage || 'No constraints'}</li>
-                  <li>• Flooding: {planningData.riskAssessment?.flooding || 'Low risk'}</li>
-                  <li>• Bushfire: {planningData.riskAssessment?.bushfire || 'Low risk'}</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <PlanningDataSummary planningData={planningData} />
         </CardContent>
       </Card>
 
-      {/* Address Confirmation */}
-      <AddressConfirmation 
-        onAddressConfirmed={(address) => {
-          console.log('Address confirmed for planning search:', address);
-          // Refresh planning data when address is confirmed
-          const newData = generateDefaultPlanningData();
-          setLocalPlanningData(newData);
-        }}
-        onAddressChange={(address) => {
-          console.log('Address updated:', address);
-          // Clear old planning data when address changes
-          setLocalPlanningData(null);
-        }}
-      />
-
-      {/* VicPlan Report Exporter */}
-      <VicPlanReportExporter 
-        onReportDownloaded={(reportData) => {
-          console.log('VicPlan report downloaded:', reportData);
-          handlePlanningDataUpdate(reportData);
-        }}
-      />
-
-      {/* State Planning Portal Links */}
-      <StatePlanningPortalLinks 
-        selectedState={addressData.state} 
-      />
-
-      {/* State-Based Mapping Integration */}
-      <StateBasedMappingIntegration 
-        onPlanningDataUpdate={handlePlanningDataUpdate} 
-      />
-
-      {/* Australian Planning Portal Integration */}
-      <AustralianPlanningPortalIntegration
+      <PlanningIntegrations
         propertyAddress={propertyAddress}
-        onDataReceived={(data) => {
-          console.log('Australian planning data received:', data);
-          // Integrate with existing planning data
-          if (data.length > 0) {
-            const planningUpdate = {
-              ...planningData,
-              australianPortalData: data,
-              lastUpdated: new Date().toISOString()
-            };
-            handlePlanningDataUpdate(planningUpdate);
-          }
-        }}
+        addressData={addressData}
+        planningData={planningData}
+        onPlanningDataUpdate={handlePlanningDataUpdate}
+        onAddressConfirmed={handleAddressConfirmed}
+        onAddressChange={handleAddressChange}
       />
-
-      {/* API Integration Documentation */}
-      <AustralianAPIIntegration />
     </div>
   );
 };
