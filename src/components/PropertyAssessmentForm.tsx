@@ -18,7 +18,7 @@ import AddressConfirmation from '@/components/planning/AddressConfirmation';
 import RentalConfiguration from '@/components/RentalConfiguration';
 import PropertyPlanningSearch from '@/components/PropertyPlanningSearch';
 import PropertySearchAnalysis from '@/components/PropertySearchAnalysis';
-import PropertyPhotos from '@/components/PropertyPhotos';
+import PropertyPhotosOCRExtractor from '@/components/PropertyPhotosOCRExtractor';
 import RiskAssessmentMarketIndicators from '@/components/RiskAssessmentMarketIndicators';
 import PreviousSalesHistoryAndCurrentSale from '@/components/PreviousSalesHistoryAndCurrentSale';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
@@ -28,6 +28,8 @@ import IntelligentAssessmentAutomation from '@/components/IntelligentAssessmentA
 import SectionDataExtractor from '@/components/SectionDataExtractor';
 import ReportSectionToggler from '@/components/ReportSectionToggler';
 import DataValidationPipeline from '@/components/DataValidationPipeline';
+import ReportConfigurationIntegrator from '@/components/ReportConfigurationIntegrator';
+import OptionalSectionManager from '@/components/OptionalSectionManager';
 
 interface PropertyAssessmentFormProps {
   onComplete?: (data: any) => void;
@@ -164,6 +166,8 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       subtitle: "Review your information and generate the assessment report",
       component: (
         <div className="space-y-6">
+          <ReportConfigurationIntegrator />
+          <OptionalSectionManager />
           <DataValidationPipeline />
           <GenerateReportData
             assessmentData={{

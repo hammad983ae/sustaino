@@ -134,10 +134,10 @@ const SectionDataExtractor: React.FC = () => {
 
     if (tenancyConfig === false) {
       tenancyData.status = 'not_applicable';
-      tenancyData.reason = 'Property Type - Not Applicable';
-      tenancyData.leaseDetails = 'Not Applicable - Property Type';
-      tenancyData.currentRent = 'Not Applicable - Property Type';
-      tenancyData.leaseExpiry = 'Not Applicable - Property Type';
+      tenancyData.reason = 'Excluded in Report Configuration';
+      tenancyData.leaseDetails = 'Not Applicable - Excluded in Configuration';
+      tenancyData.currentRent = 'Not Applicable - Excluded in Configuration';
+      tenancyData.leaseExpiry = 'Not Applicable - Excluded in Configuration';
     } else if (reportData.tenancyDetails) {
       // Extract from rental configuration
       tenancyData.status = 'supplied';
@@ -164,11 +164,11 @@ const SectionDataExtractor: React.FC = () => {
     };
 
     if (statutoryConfig === false) {
-      statutoryData.status = 'not_supplied';
-      statutoryData.reason = 'Not Supplied - Manual Assessment Required';
-      statutoryData.compliance = 'Not Supplied - Manual Assessment Required';
-      statutoryData.permits = 'Not Supplied - Manual Assessment Required';
-      statutoryData.approvals = 'Not Supplied - Manual Assessment Required';
+      statutoryData.status = 'not_applicable';
+      statutoryData.reason = 'Excluded in Report Configuration';
+      statutoryData.compliance = 'Not Applicable - Excluded in Configuration';
+      statutoryData.permits = 'Not Applicable - Excluded in Configuration';
+      statutoryData.approvals = 'Not Applicable - Excluded in Configuration';
     } else {
       // Check if we have statutory data from assessment automation
       if (reportData.statutoryAssessment) {

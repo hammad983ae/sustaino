@@ -1,0 +1,464 @@
+import React, { useState, useCallback, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Camera, Upload, Zap, Eye, FileImage, Loader2 } from "lucide-react";
+import Tesseract from 'tesseract.js';
+import { Badge } from '@/components/ui/badge';
+import { useReportData } from '@/contexts/ReportDataContext';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+
+interface PhotoWithOCR {
+  id: string;
+  file: File;
+  url: string;
+  name: string;
+  description?: string;
+  ocrText?: string;
+  ocrProcessed: boolean;
+  ocrConfidence?: number;
+}
+
+interface PropertyFeaturesExtracted {
+  roomTypes: string[];
+  features: string[];
+  observations: string[];
+  condition: string;
+  description: string;
+}
+
+const PropertyPhotosOCRExtractor: React.FC = () => {
+  const [photos, setPhotos] = useState<PhotoWithOCR[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingPhotoId, setProcessingPhotoId] = useState<string | null>(null);
+  const [extractedFeatures, setExtractedFeatures] = useState<PropertyFeaturesExtracted>({
+    roomTypes: [],
+    features: [],
+    observations: [],
+    condition: '',
+    description: ''
+  });
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const { toast } = useToast();
+  const { updateReportData, reportData } = useReportData();
+
+  // Load existing photos from reportData
+  useEffect(() => {
+    if (reportData.fileAttachments?.photos) {
+      const existingPhotos = reportData.fileAttachments.photos.map((photo, index) => ({
+        id: `existing-${index}`,
+        file: new File([], photo.name || `photo-${index}.jpg`),
+        url: photo.url || '',
+        name: photo.name || `Property Photo ${index + 1}`,
+        description: photo.description || '',
+        ocrText: photo.ocrText || '',
+        ocrProcessed: Boolean(photo.ocrText),
+        ocrConfidence: photo.ocrConfidence || 0
+      }));
+      setPhotos(existingPhotos);
+    }
+  }, [reportData.fileAttachments?.photos]);
+
+  const handleFileUpload = useCallback(async (files: FileList) => {
+    const newPhotos: PhotoWithOCR[] = [];
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.startsWith('image/')) {
+        const photoId = `photo-${Date.now()}-${i}`;
+        const url = URL.createObjectURL(file);
+        
+        newPhotos.push({
+          id: photoId,
+          file,
+          url,
+          name: file.name,
+          description: '',
+          ocrProcessed: false
+        });
+      }
+    }
+
+    setPhotos(prev => [...prev, ...newPhotos]);
+
+    // Auto-process OCR for new photos
+    for (const photo of newPhotos) {
+      await processPhotoOCR(photo);
+    }
+
+    toast({
+      title: "Photos uploaded",
+      description: `${newPhotos.length} photos uploaded and processing OCR`,
+    });
+  }, []);
+
+  const processPhotoOCR = useCallback(async (photo: PhotoWithOCR) => {
+    setIsProcessing(true);
+    setProcessingPhotoId(photo.id);
+
+    try {
+      const { data } = await Tesseract.recognize(photo.file, 'eng', {
+        logger: (m) => {
+          if (m.status === 'recognizing text') {
+            // Update progress if needed
+          }
+        }
+      });
+
+      const extractedText = data.text.trim();
+      const confidence = data.confidence;
+
+      setPhotos(prev => prev.map(p => 
+        p.id === photo.id 
+          ? { 
+              ...p, 
+              ocrText: extractedText, 
+              ocrProcessed: true,
+              ocrConfidence: confidence
+            }
+          : p
+      ));
+
+      // Update report data
+      updateReportData('fileAttachments', {
+        ...reportData.fileAttachments,
+        photos: photos.map(p => 
+          p.id === photo.id 
+            ? {
+                name: p.name,
+                url: p.url,
+                description: p.description || '',
+                ocrText: extractedText,
+                ocrConfidence: confidence
+              }
+            : {
+                name: p.name,
+                url: p.url,
+                description: p.description || '',
+                ocrText: p.ocrText || '',
+                ocrConfidence: p.ocrConfidence || 0
+              }
+        )
+      });
+
+      toast({
+        title: "OCR Processing Complete",
+        description: `Text extracted from ${photo.name} with ${confidence.toFixed(1)}% confidence`,
+      });
+
+    } catch (error) {
+      console.error('OCR Error:', error);
+      
+      setPhotos(prev => prev.map(p => 
+        p.id === photo.id 
+          ? { 
+              ...p, 
+              ocrText: 'OCR processing failed', 
+              ocrProcessed: false,
+              ocrConfidence: 0
+            }
+          : p
+      ));
+
+      toast({
+        title: "OCR Processing Failed",
+        description: `Failed to extract text from ${photo.name}`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+      setProcessingPhotoId(null);
+    }
+  }, [photos, reportData.fileAttachments, updateReportData, toast]);
+
+  const analyzePropertyFeatures = useCallback(async () => {
+    setIsAnalyzing(true);
+    
+    try {
+      // Combine all OCR text
+      const allOcrText = photos
+        .filter(p => p.ocrProcessed && p.ocrText)
+        .map(p => `${p.name}: ${p.ocrText}`)
+        .join('\n\n');
+
+      // Extract features from OCR text and photo descriptions
+      const roomTypes = extractRoomTypes(allOcrText);
+      const features = extractFeatures(allOcrText);
+      const observations = extractObservations(allOcrText);
+      const condition = assessCondition(allOcrText);
+      const description = generateDescription(photos, allOcrText);
+
+      const extractedFeatures = {
+        roomTypes,
+        features,
+        observations,
+        condition,
+        description
+      };
+
+      setExtractedFeatures(extractedFeatures);
+
+      // Update property details in report data
+      updateReportData('propertyDetails', {
+        ...reportData.propertyDetails,
+        photos: photos.map(p => ({
+          name: p.name,
+          url: p.url,
+          description: p.description,
+          ocrText: p.ocrText
+        })),
+        extractedFeatures,
+        description,
+        condition,
+        featuresObserved: features.join('; '),
+        roomTypes: roomTypes.join(', ')
+      });
+
+      toast({
+        title: "Property Analysis Complete",
+        description: `Analyzed ${photos.length} photos and extracted property features`,
+      });
+
+    } catch (error) {
+      console.error('Analysis Error:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "Failed to analyze property features",
+        variant: "destructive"
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }, [photos, reportData.propertyDetails, updateReportData, toast]);
+
+  // Helper functions for feature extraction
+  const extractRoomTypes = (text: string): string[] => {
+    const roomKeywords = ['kitchen', 'bedroom', 'bathroom', 'living', 'dining', 'laundry', 'office', 'garage'];
+    const found = roomKeywords.filter(room => 
+      text.toLowerCase().includes(room)
+    );
+    return [...new Set(found)];
+  };
+
+  const extractFeatures = (text: string): string[] => {
+    const featureKeywords = [
+      'modern', 'stainless steel', 'granite', 'hardwood', 'carpet', 'tile',
+      'appliances', 'fixtures', 'fencing', 'garden', 'patio', 'deck',
+      'fireplace', 'ceiling fan', 'air conditioning', 'heating'
+    ];
+    const found = featureKeywords.filter(feature => 
+      text.toLowerCase().includes(feature)
+    );
+    return [...new Set(found)];
+  };
+
+  const extractObservations = (text: string): string[] => {
+    const observations = [];
+    if (text.toLowerCase().includes('new') || text.toLowerCase().includes('recently')) {
+      observations.push('Recently updated/renovated');
+    }
+    if (text.toLowerCase().includes('damaged') || text.toLowerCase().includes('worn')) {
+      observations.push('Shows signs of wear');
+    }
+    if (text.toLowerCase().includes('clean') || text.toLowerCase().includes('maintained')) {
+      observations.push('Well maintained');
+    }
+    return observations;
+  };
+
+  const assessCondition = (text: string): string => {
+    if (text.toLowerCase().includes('excellent') || text.toLowerCase().includes('new')) {
+      return 'Excellent';
+    }
+    if (text.toLowerCase().includes('good') || text.toLowerCase().includes('modern')) {
+      return 'Good';
+    }
+    if (text.toLowerCase().includes('fair') || text.toLowerCase().includes('average')) {
+      return 'Fair';
+    }
+    if (text.toLowerCase().includes('poor') || text.toLowerCase().includes('damaged')) {
+      return 'Poor';
+    }
+    return 'Good'; // Default assumption
+  };
+
+  const generateDescription = (photos: PhotoWithOCR[], ocrText: string): string => {
+    const roomCount = extractRoomTypes(ocrText).length;
+    const featureCount = extractFeatures(ocrText).length;
+    
+    return `Property photographed with ${photos.length} images showing ${roomCount} distinct room types and ${featureCount} notable features. ${ocrText ? 'OCR analysis reveals text elements within the property images providing additional detail for assessment.' : 'Visual analysis completed.'}`;
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Camera className="h-5 w-5" />
+            Property Photos with OCR Analysis
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Upload Area */}
+          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+              className="hidden"
+              id="photo-upload"
+            />
+            <label htmlFor="photo-upload" className="cursor-pointer">
+              <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <p className="text-lg font-medium mb-2">Upload Property Photos</p>
+              <p className="text-muted-foreground mb-4">
+                Drag and drop photos or click to browse. OCR will automatically extract text from images.
+              </p>
+              <Button>
+                <FileImage className="h-4 w-4 mr-2" />
+                Choose Photos
+              </Button>
+            </label>
+          </div>
+
+          {/* Photos Grid */}
+          {photos.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {photos.map((photo) => (
+                <Card key={photo.id} className="overflow-hidden">
+                  <div className="aspect-video relative">
+                    <img
+                      src={photo.url}
+                      alt={photo.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 right-2">
+                      {processingPhotoId === photo.id ? (
+                        <Badge variant="secondary">
+                          <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                          Processing
+                        </Badge>
+                      ) : photo.ocrProcessed ? (
+                        <Badge variant="default">
+                          <Zap className="h-3 w-3 mr-1" />
+                          OCR Complete
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline">
+                          Ready for OCR
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  <CardContent className="p-3">
+                    <p className="text-sm font-medium truncate">{photo.name}</p>
+                    {photo.ocrText && (
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                        {photo.ocrText.substring(0, 100)}...
+                      </p>
+                    )}
+                    {photo.ocrConfidence && (
+                      <p className="text-xs text-muted-foreground">
+                        Confidence: {photo.ocrConfidence.toFixed(1)}%
+                      </p>
+                    )}
+                    <div className="flex gap-1 mt-2">
+                      {!photo.ocrProcessed && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => processPhotoOCR(photo)}
+                          disabled={isProcessing}
+                        >
+                          <Zap className="h-3 w-3 mr-1" />
+                          Extract Text
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {/* Analysis Button */}
+          {photos.some(p => p.ocrProcessed) && (
+            <div className="flex justify-center">
+              <Button
+                onClick={analyzePropertyFeatures}
+                disabled={isAnalyzing}
+                size="lg"
+              >
+                {isAnalyzing ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Eye className="h-4 w-4 mr-2" />
+                )}
+                Analyze Property Features
+              </Button>
+            </div>
+          )}
+
+          {/* Extracted Features Display */}
+          {extractedFeatures.description && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Extracted Property Features</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label className="font-medium">Property Description</Label>
+                  <Textarea
+                    value={extractedFeatures.description}
+                    onChange={(e) => setExtractedFeatures(prev => ({
+                      ...prev,
+                      description: e.target.value
+                    }))}
+                    className="mt-2"
+                    rows={3}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="font-medium">Room Types Identified</Label>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {extractedFeatures.roomTypes.map((room, index) => (
+                        <Badge key={index} variant="secondary">{room}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label className="font-medium">Features Observed</Label>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {extractedFeatures.features.map((feature, index) => (
+                        <Badge key={index} variant="outline">{feature}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="font-medium">Overall Condition</Label>
+                  <Badge 
+                    variant={extractedFeatures.condition === 'Excellent' ? 'default' : 
+                             extractedFeatures.condition === 'Good' ? 'secondary' : 
+                             'destructive'}
+                    className="ml-2"
+                  >
+                    {extractedFeatures.condition}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default PropertyPhotosOCRExtractor;
