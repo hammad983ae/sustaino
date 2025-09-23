@@ -65,10 +65,9 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onCr
           </p>
         </div>
 
-        {/* Quick Start Options */}
-        <div className="grid md:grid-cols-2 gap-4">
-          {/* New Professional Assessment */}
-          <Card className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors">
+        {/* Professional Assessment */}
+        <div className="flex justify-center">
+          <Card className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors max-w-md w-full">
             <CardContent className="p-6">
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="p-3 bg-primary/10 rounded-full">
@@ -82,26 +81,6 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onCr
                 </div>
                 <Button onClick={() => setShowJobCreation(true)} size="lg" className="w-full">
                   Create New Job
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quick Assessment */}
-          <Card className="border-2 border-dashed border-muted/20 hover:border-muted/40 transition-colors">
-            <CardContent className="p-6">
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="p-3 bg-muted/10 rounded-full">
-                  <Building className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold">Quick Assessment</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Skip job creation and go straight to property assessment (for testing or personal use)
-                  </p>
-                </div>
-                <Button onClick={onStartFresh} variant="outline" size="lg" className="w-full">
-                  Start Quick Assessment
                 </Button>
               </div>
             </CardContent>
