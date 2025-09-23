@@ -34,7 +34,7 @@ interface RentalEvidence {
   id: string;
   property_address: string;
   rental_amount: number;
-  lease_date: string;
+  lease_start_date: string;
   property_type: string;
   suburb: string;
   state: string;
@@ -44,7 +44,7 @@ interface RentalEvidence {
   car_spaces?: number;
   building_area?: number;
   land_area?: number;
-  source: string;
+  source?: string;
   notes: string;
   created_at: string;
 }
@@ -73,7 +73,7 @@ export const ScrapedDataViewer = () => {
 
       // Load rental evidence
       const { data: rentals, error: rentalError } = await supabase
-        .from('rental_evidence')
+        .from('leasing_evidence')
         .select('*')
         .contains('notes', 'Auto-scraped from RealCommercial.com.au')
         .order('created_at', { ascending: false })
@@ -411,7 +411,7 @@ export const ScrapedDataViewer = () => {
                             {formatCurrency(item.rental_amount)}/month
                           </Badge>
                         </TableCell>
-                        <TableCell>{formatDate(item.lease_date)}</TableCell>
+                        <TableCell>{formatDate(item.lease_start_date)}</TableCell>
                         <TableCell>
                           <Badge variant="outline" className="capitalize">
                             {item.property_type}
@@ -430,7 +430,7 @@ export const ScrapedDataViewer = () => {
                         </TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm" asChild>
-                            <a href={item.data_source} target="_blank" rel="noopener noreferrer">
+                            <a href={item.source} target="_blank" rel="noopener noreferrer">
                               <Eye className="h-4 w-4" />
                             </a>
                           </Button>

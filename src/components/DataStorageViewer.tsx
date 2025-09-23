@@ -13,7 +13,7 @@ interface SalesEvidence {
   property_address: string;
   sale_price: number;
   sale_date: string;
-  data_source: string;
+  data_source?: string;
   created_at: string;
   data_quality_score?: number;
   bedrooms?: number;
@@ -32,7 +32,7 @@ interface RentalEvidence {
   property_address: string;
   rental_amount: number;
   lease_start_date: string;
-  data_source: string;
+  source?: string;
   created_at: string;
   data_quality_score?: number;
   bedrooms?: number;
@@ -75,7 +75,7 @@ const DataStorageViewer = () => {
 
       // Load rental evidence
       const { data: rentals, error: rentalError } = await supabase
-        .from('rental_evidence')
+        .from('leasing_evidence')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
@@ -122,7 +122,7 @@ const DataStorageViewer = () => {
 
   const filteredRentals = rentalData.filter(item => 
     item.property_address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.data_source?.toLowerCase().includes(searchTerm.toLowerCase())
+    item.source?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const filteredFiles = evidenceFiles.filter(item => 
@@ -322,7 +322,7 @@ const DataStorageViewer = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-blue-600">{formatCurrency(rental.rental_amount)}/week</div>
-                      <div className="text-sm text-muted-foreground">Lease Date: {formatDate(rental.lease_date)}</div>
+                      <div className="text-sm text-muted-foreground">Lease Date: {formatDate(rental.lease_start_date)}</div>
                     </div>
                     <div>
                       <div className="text-sm">
@@ -331,7 +331,7 @@ const DataStorageViewer = () => {
                         {rental.building_area && ` • ${rental.building_area}m²`}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Source: {rental.data_source}
+                        Source: {rental.source}
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
