@@ -251,27 +251,66 @@ const StateBasedMappingIntegration = ({ onPlanningDataUpdate }: StateBasedMappin
   };
 
   const generateMockDataForState = (stateId: string) => {
+    const currentAddress = getFormattedAddress();
+    
+    // Extract location information from address
+    const getLocationFromAddress = (address: string) => {
+      const lowerAddress = address.toLowerCase();
+      
+      // Mildura coordinates and planning scheme
+      if (lowerAddress.includes('mildura')) {
+        return {
+          coordinates: { lat: -34.1912, lng: 142.1540 },
+          scheme: "Mildura Rural City Planning Scheme",
+          zoning: "Commercial 1 Zone (C1Z)",
+          overlays: ["Development Contributions Plan Overlay", "Heritage Overlay"],
+          landUse: "Commercial uses, Retail premises, Office premises",
+          heightRestriction: "15m maximum",
+          developmentPotential: "Medium - Subject to overlays",
+          heritage: "Non-contributory building in Heritage Overlay",
+          floodRisk: "Not in flood prone area",
+          bushfireRisk: "BAL-LOW"
+        };
+      }
+      
+      // Melbourne/Bayside default
+      return {
+        coordinates: { lat: -37.8136, lng: 144.9631 },
+        scheme: "Bayside Planning Scheme",
+        zoning: "Commercial 1 Zone (C1Z)",
+        overlays: ["Development Contributions Plan Overlay", "Special Building Overlay", "Heritage Overlay"],
+        landUse: "Commercial uses, Retail premises, Office premises",
+        heightRestriction: "15m maximum",
+        developmentPotential: "Medium - Subject to overlays",
+        heritage: "Non-contributory building in Heritage Overlay",
+        floodRisk: "Not in flood prone area",
+        bushfireRisk: "BAL-LOW"
+      };
+    };
+    
+    const locationData = getLocationFromAddress(currentAddress);
+    
     const baseData = {
       lastUpdated: new Date().toLocaleDateString(),
-      coordinates: { lat: -37.8136, lng: 144.9631 }, // Melbourne as default
-      address: getFormattedAddress(),
-      planningImage: '/src/assets/planning-zones-example.png' // Add planning image
+      coordinates: locationData.coordinates,
+      address: currentAddress,
+      planningImage: '/src/assets/planning-zones-example.png'
     };
 
     switch (stateId) {
       case "vic":
         return {
           ...baseData,
-          zoning: "Commercial 1 Zone (C1Z)",
-          overlays: ["Development Contributions Plan Overlay", "Special Building Overlay", "Heritage Overlay"],
-          landUse: "Commercial uses, Retail premises, Office premises",
-          heightRestriction: "15m maximum",
-          developmentPotential: "Medium - Subject to overlays",
-          planningScheme: "Bayside Planning Scheme",
+          zoning: locationData.zoning,
+          overlays: locationData.overlays,
+          landUse: locationData.landUse,
+          heightRestriction: locationData.heightRestriction,
+          developmentPotential: locationData.developmentPotential,
+          planningScheme: locationData.scheme,
           permitRequired: true,
-          heritage: "Non-contributory building in Heritage Overlay",
-          floodRisk: "Not in flood prone area",
-          bushfireRisk: "BAL-LOW",
+          heritage: locationData.heritage,
+          floodRisk: locationData.floodRisk,
+          bushfireRisk: locationData.bushfireRisk,
           mapReference: "vicplan.vic.gov.au/planning/PS327856",
           planningImage: '/src/assets/planning-zones-example.png'
         };
