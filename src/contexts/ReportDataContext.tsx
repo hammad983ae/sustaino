@@ -362,30 +362,26 @@ export const ReportDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     loadData();
   }, [getAllData]);
 
-  // Listen for unified data changes and job loading
+  // Listen for unified data changes and data refresh events
   useEffect(() => {
     const handleUnifiedDataClear = () => {
       setReportData({});
     };
 
-    const handleJobLoaded = async () => {
-      try {
-        const unifiedData = await getAllData();
-        if (unifiedData?.reportData) {
-          setReportData(unifiedData.reportData);
-        }
-      } catch (error) {
-        console.error('Failed to refresh report data after job load:', error);
+    const handleDataRefresh = async (event: CustomEvent) => {
+      const { data } = event.detail;
+      if (data?.reportData) {
+        setReportData(data.reportData);
       }
     };
 
     window.addEventListener('unifiedDataCleared', handleUnifiedDataClear);
-    window.addEventListener('jobLoadedIntoSession', handleJobLoaded);
+    window.addEventListener('dataRefreshed', handleDataRefresh as EventListener);
     return () => {
       window.removeEventListener('unifiedDataCleared', handleUnifiedDataClear);
-      window.removeEventListener('jobLoadedIntoSession', handleJobLoaded);
+      window.removeEventListener('dataRefreshed', handleDataRefresh as EventListener);
     };
-  }, [getAllData]);
+  }, []);
 
   const updateReportData = async (section: keyof ReportData, data: any) => {
     // Update local state immediately for UI responsiveness

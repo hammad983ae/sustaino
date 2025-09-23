@@ -371,6 +371,19 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
       if (success) {
         setCurrentJobId(jobId);
         dataRef.current = null; // Force reload
+        
+        // Immediately refresh data in contexts
+        const refreshedData = await getCurrentData();
+        
+        // Dispatch detailed refresh event with the actual data
+        window.dispatchEvent(new CustomEvent('dataRefreshed', { 
+          detail: { 
+            jobId, 
+            data: refreshedData,
+            timestamp: Date.now() 
+          } 
+        }));
+        
         return { success: true };
       }
       return { success: false };
@@ -378,7 +391,7 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
       console.error('Error loading existing job:', error);
       return { success: false, error };
     }
-  }, [loadJobIntoSession]);
+  }, [loadJobIntoSession, getCurrentData]);
 
   // Get all data
   const getAllData = useCallback(async () => {
