@@ -106,10 +106,10 @@ const ReportConfigurationIntegrator: React.FC = () => {
 
   // Run integration when report configuration changes
   useEffect(() => {
-    if (reportData.reportConfig) {
+    if (reportData.reportConfig?.reportType) {
       integrateReportConfiguration();
     }
-  }, [reportData.reportConfig, integrateReportConfiguration]);
+  }, [reportData.reportConfig?.reportType, reportData.reportConfig?.valuationDate]);
 
   // This component doesn't render anything - it's logic only
   return null;

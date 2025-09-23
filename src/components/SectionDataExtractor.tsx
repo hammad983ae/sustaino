@@ -11,18 +11,21 @@ const SectionDataExtractor: React.FC = () => {
   const { addressData, getFormattedAddress } = useProperty();
 
   useEffect(() => {
-    console.log('SectionDataExtractor: Processing PAF data extraction');
-    
     const reportConfig = reportData.reportConfig;
     if (!reportConfig) {
-      console.log('No report config found, skipping extraction');
+      return;
+    }
+
+    // Only extract if we have actual data changes
+    const hasRelevantData = reportData.planningData || addressData.propertyAddress;
+    if (!hasRelevantData) {
       return;
     }
 
     // SECTION 2: RPD and Location (ALWAYS REQUIRED)
     extractRPDAndLocation();
     
-    // SECTION 3: Legal and Planning (ALWAYS REQUIRED)
+    // SECTION 3: Legal and Planning (ALWAYS REQUIRED)  
     extractLegalAndPlanning();
     
     // SECTION 4: Tenancy Schedule (OPTIONAL - based on config)
@@ -43,7 +46,7 @@ const SectionDataExtractor: React.FC = () => {
     // SECTION 10: Risk Assessment (ALWAYS REQUIRED)
     extractRiskAssessment();
 
-  }, [reportData.reportConfig, reportData.planningData, addressData]);
+  }, [reportData.reportConfig?.reportType, reportData.planningData?.lga, addressData.propertyAddress]);
 
   const extractRPDAndLocation = () => {
     const locationData: any = {
