@@ -57,6 +57,23 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     loadData();
   }, [getAllData]);
 
+  // Listen for job loaded events to refresh data
+  useEffect(() => {
+    const handleJobLoaded = async () => {
+      try {
+        const unifiedData = await getAllData();
+        if (unifiedData?.addressData) {
+          setAddressData(prev => ({ ...prev, ...unifiedData.addressData }));
+        }
+      } catch (error) {
+        console.error('Failed to refresh address data after job load:', error);
+      }
+    };
+
+    window.addEventListener('jobLoadedIntoSession', handleJobLoaded);
+    return () => window.removeEventListener('jobLoadedIntoSession', handleJobLoaded);
+  }, [getAllData]);
+
   const updateAddressData = async (data: Partial<PropertyAddressData>) => {
     const prevAddress = getFormattedAddress();
     
