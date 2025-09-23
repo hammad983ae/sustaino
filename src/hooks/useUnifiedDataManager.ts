@@ -1,7 +1,9 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import '@/utils/dataMigration'; // Auto-run migration
+import { useJobManager } from './useJobManager';
+// Import migration but don't auto-run to allow fresh starts
+// import '@/utils/dataMigration';
 
 interface UnifiedData {
   // Core data structure
@@ -26,10 +28,12 @@ interface SaveOptions {
 const STORAGE_KEY = 'unified_property_data';
 const BACKUP_KEY = 'unified_property_data_backup';
 
-export const useUnifiedDataManager = () => {
+export const useUnifiedDataManager = (startFresh: boolean = false) => {
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [currentJobId, setCurrentJobId] = useState<string | null>(null);
   const { toast } = useToast();
+  const { archiveAndStartFresh, loadJobIntoSession } = useJobManager();
   const saveTimeoutRef = useRef<NodeJS.Timeout>();
   const dataRef = useRef<UnifiedData | null>(null);
 
@@ -44,12 +48,15 @@ export const useUnifiedDataManager = () => {
       const userId = user?.id || 'demo_user';
       const isDemo = !user;
 
-      // Try to load existing data
-      const stored = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        dataRef.current = parsed;
-        return parsed;
+      // Only load existing data if not starting fresh
+      if (!startFresh) {
+        const stored = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          dataRef.current = parsed;
+          setCurrentJobId(parsed.loadedFromJobId || null);
+          return parsed;
+        }
       }
 
       // Initialize new data structure
@@ -283,7 +290,7 @@ export const useUnifiedDataManager = () => {
     }, options);
   }, [saveData, getCurrentData]);
 
-  // Clear all data
+  // Clear all data and start fresh
   const clearAllData = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -304,9 +311,10 @@ export const useUnifiedDataManager = () => {
       
       legacyKeys.forEach(key => localStorage.removeItem(key));
       
-      // Reset cache
+      // Reset cache and current job
       dataRef.current = null;
       setLastSaved(null);
+      setCurrentJobId(null);
       
       // Dispatch clear event for components that might be listening
       window.dispatchEvent(new CustomEvent('unifiedDataCleared', { 
@@ -314,8 +322,8 @@ export const useUnifiedDataManager = () => {
       }));
       
       toast({
-        title: "Data Cleared",
-        description: "All data has been cleared successfully",
+        title: "Session Cleared",
+        description: "Starting fresh assessment session",
         variant: "default"
       });
       
@@ -325,6 +333,52 @@ export const useUnifiedDataManager = () => {
       return { success: false, error };
     }
   }, [toast]);
+
+  // Archive current session and start fresh
+  const completeAndStartFresh = useCallback(async () => {
+    try {
+      const currentData = await getCurrentData();
+      
+      // Only archive if there's meaningful data
+      const hasData = Object.keys(currentData.reportData || {}).length > 0 || 
+                     Object.keys(currentData.componentData || {}).length > 0 ||
+                     currentData.addressData?.propertyAddress;
+      
+      if (hasData) {
+        const jobId = await archiveAndStartFresh(currentData);
+        if (jobId) {
+          setCurrentJobId(null);
+          dataRef.current = null;
+          return { success: true, jobId };
+        }
+      } else {
+        // Just clear if no meaningful data
+        await clearAllData();
+        return { success: true, jobId: null };
+      }
+      
+      return { success: false };
+    } catch (error) {
+      console.error('Error completing and starting fresh:', error);
+      return { success: false, error };
+    }
+  }, [getCurrentData, archiveAndStartFresh, clearAllData]);
+
+  // Load existing job into current session
+  const loadExistingJob = useCallback(async (jobId: string) => {
+    try {
+      const success = await loadJobIntoSession(jobId);
+      if (success) {
+        setCurrentJobId(jobId);
+        dataRef.current = null; // Force reload
+        return { success: true };
+      }
+      return { success: false };
+    } catch (error) {
+      console.error('Error loading existing job:', error);
+      return { success: false, error };
+    }
+  }, [loadJobIntoSession]);
 
   // Get all data
   const getAllData = useCallback(async () => {
@@ -336,6 +390,11 @@ export const useUnifiedDataManager = () => {
     saveData,
     getAllData,
     clearAllData,
+    
+    // Job management
+    completeAndStartFresh,
+    loadExistingJob,
+    currentJobId,
     
     // Component-specific operations
     loadComponentData,

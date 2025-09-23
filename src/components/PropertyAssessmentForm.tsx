@@ -3,13 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText, Building2, MapPin, Camera, Settings, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Save, CheckCircle, ExternalLink, FileText, Building2, MapPin, Camera, Settings, Play, RotateCcw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useUnifiedDataManager } from '@/hooks/useUnifiedDataManager';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useProperty } from '@/contexts/PropertyContext';
 import { supabase } from '@/integrations/supabase/client';
+import JobSelector from './JobSelector';
 
 // Step Components
 import PropertyAddressForm from '@/components/PropertyAddressForm';
@@ -44,8 +45,19 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
   const [includeDetailedRentalConfig, setIncludeDetailedRentalConfig] = useState(false);
+  const [showJobSelector, setShowJobSelector] = useState(true);
+  const [sessionStarted, setSessionStarted] = useState(false);
   const { toast } = useToast();
-  const { updateProgress, getAllData, isSaving, lastSaved, clearAllData } = useUnifiedDataManager();
+  const { 
+    updateProgress, 
+    getAllData, 
+    isSaving, 
+    lastSaved, 
+    clearAllData, 
+    completeAndStartFresh, 
+    loadExistingJob,
+    currentJobId 
+  } = useUnifiedDataManager(!sessionStarted);
   const { reportData, updateReportData } = useReportData();
   const { addressData, getFormattedAddress } = useProperty();
 
@@ -256,47 +268,86 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   });
 
   useEffect(() => {
-    // Load saved data on mount
-    const loadSavedData = async () => {
-      try {
-        const unifiedData = await getAllData();
-        if (unifiedData?.assessmentProgress) {
-          setCurrentStep(unifiedData.assessmentProgress.currentStep || 0);
-          setCompletedSteps(unifiedData.assessmentProgress.completedSteps || []);
+    // Load saved data on mount (only if session started)
+    if (sessionStarted) {
+      const loadSavedData = async () => {
+        try {
+          const unifiedData = await getAllData();
+          if (unifiedData?.assessmentProgress) {
+            setCurrentStep(unifiedData.assessmentProgress.currentStep || 0);
+            setCompletedSteps(unifiedData.assessmentProgress.completedSteps || []);
+          }
+        } catch (error) {
+          console.error('Error loading assessment progress:', error);
         }
-      } catch (error) {
-        console.error('Error loading assessment progress:', error);
-      }
-    };
-    
-    loadSavedData();
-  }, [getAllData]);
+      };
+      
+      loadSavedData();
+    }
+  }, [getAllData, sessionStarted]);
 
-  // Clear old data when starting fresh assessment
-  const startFreshAssessment = async () => {
-    console.log('Starting fresh assessment - clearing all data');
-    
-    // Reset form state
-    setCurrentStep(0);
-    setCompletedSteps([]);
-    setIncludeDetailedRentalConfig(false);
-    
-    // Use unified data manager to clear all data
-    await clearAllData();
-    
-    // Dispatch event to force all components to refresh
-    const freshStartEvent = new CustomEvent('freshStart', { detail: { timestamp: Date.now() } });
-    window.dispatchEvent(freshStartEvent);
-    
-    // Force page reload to ensure clean state
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
-    
-    toast({
-      title: "Fresh Start",
-      description: "All previous data cleared. Starting fresh assessment.",
-    });
+  // Handle job selection
+  const handleStartFresh = async () => {
+    try {
+      await clearAllData();
+      setCurrentStep(0);
+      setCompletedSteps([]);
+      setIncludeDetailedRentalConfig(false);
+      setSessionStarted(true);
+      setShowJobSelector(false);
+      
+      toast({
+        title: "Fresh Assessment Started",
+        description: "Starting new property assessment session",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Failed to start fresh:', error);
+      toast({
+        title: "Error",
+        description: "Failed to start fresh assessment",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleLoadJob = async (jobId: string) => {
+    try {
+      const result = await loadExistingJob(jobId);
+      if (result.success) {
+        setSessionStarted(true);
+        setShowJobSelector(false);
+        // Progress will be loaded automatically by the useEffect
+      }
+    } catch (error) {
+      console.error('Failed to load job:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load selected job",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Complete current assessment and start fresh
+  const completeAssessmentAndStartFresh = async () => {
+    try {
+      const result = await completeAndStartFresh();
+      if (result.success) {
+        setCurrentStep(0);
+        setCompletedSteps([]);
+        setIncludeDetailedRentalConfig(false);
+        setSessionStarted(false);
+        setShowJobSelector(true);
+      }
+    } catch (error) {
+      console.error('Failed to complete and start fresh:', error);
+      toast({
+        title: "Error",
+        description: "Failed to complete assessment",
+        variant: "destructive"
+      });
+    }
   };
 
   // Only auto-clear if there's corrupted state (steps marked complete but no data)
@@ -312,32 +363,31 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     }
   }, [completedSteps, addressData]);
 
-  // Single auto-save effect with proper debouncing
+  // Single auto-save effect with proper debouncing (only if session started)
   useEffect(() => {
-    const saveCurrentProgress = async () => {
-      try {
-        // Only log occasionally to reduce console spam
-        if (currentStep !== 0 || completedSteps.some(Boolean)) {
+    if (sessionStarted && (currentStep !== 0 || completedSteps.some(Boolean))) {
+      const saveCurrentProgress = async () => {
+        try {
           console.log('Auto-saving progress (debounced):', { currentStep, completedSteps });
+          await updateProgress({
+            currentStep,
+            completedSteps
+          }, { debounceMs: 3000 }); // 3 second debounce to prevent spam
+        } catch (error) {
+          console.error('Failed to save progress:', error);
+          toast({
+            title: "Save Warning", 
+            description: "Failed to auto-save progress. Please use Save Progress button.",
+            variant: "destructive"
+          });
         }
-        await updateProgress({
-          currentStep,
-          completedSteps
-        }, { debounceMs: 3000 }); // 3 second debounce to prevent spam
-      } catch (error) {
-        console.error('Failed to save progress:', error);
-        toast({
-          title: "Save Warning", 
-          description: "Failed to auto-save progress. Please use Save Progress button.",
-          variant: "destructive"
-        });
-      }
-    };
+      };
 
-    // Debounce auto-save to prevent excessive calls
-    const debounceTimer = setTimeout(saveCurrentProgress, 5000); // 5 second delay
-    return () => clearTimeout(debounceTimer);
-  }, [currentStep, completedSteps, updateProgress, toast]); // Removed reportData and addressData that change frequently
+      // Debounce auto-save to prevent excessive calls
+      const debounceTimer = setTimeout(saveCurrentProgress, 5000); // 5 second delay
+      return () => clearTimeout(debounceTimer);
+    }
+  }, [currentStep, completedSteps, updateProgress, toast, sessionStarted]);
 
   function handleAddressConfirmed(address: string) {
     markStepComplete(1);
@@ -408,6 +458,19 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const isLastStep = currentStep === steps.length - 1;
   const canProceed = validateCurrentStep();
 
+  // Show job selector if session not started
+  if (!sessionStarted || showJobSelector) {
+    return (
+      <div className="min-h-screen bg-background">
+        <JobSelector
+          onStartFresh={handleStartFresh}
+          onLoadJob={handleLoadJob}
+          onClose={() => setShowJobSelector(false)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header with progress */}
@@ -417,16 +480,27 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             <h1 className="text-xl font-bold">Property Assessment Form</h1>
             <p className="text-sm text-muted-foreground">
               Step {currentStep + 1}: {steps[currentStep].title}
+              {currentJobId && <span className="ml-2 text-blue-600">(Job: {currentJobId.slice(-8)})</span>}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={startFreshAssessment}
-              className="text-xs"
+              onClick={() => setShowJobSelector(true)}
+              className="text-xs flex items-center gap-1"
             >
-              Start Fresh
+              <FileText className="h-3 w-3" />
+              Jobs
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={completeAssessmentAndStartFresh}
+              className="text-xs flex items-center gap-1"
+            >
+              <RotateCcw className="h-3 w-3" />
+              Complete & Start Fresh
             </Button>
             <Badge variant={isSaving ? "default" : lastSaved ? "secondary" : "outline"} className="transition-all duration-500">
               {isSaving ? "Saving..." : lastSaved ? "Saved" : "Unsaved"}
