@@ -4,16 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useJobManager } from '@/hooks/useJobManager';
-import { Plus, FileText, Calendar, MapPin, Trash2 } from 'lucide-react';
+import JobCreationModal from '@/components/JobCreationModal';
+import { Plus, FileText, Calendar, MapPin, Trash2, Users, Building } from 'lucide-react';
 
 interface JobSelectorProps {
   onStartFresh: () => void;
   onLoadJob: (jobId: string) => void;
+  onCreateNewJob: (jobId: string) => void;
   onClose?: () => void;
 }
 
-const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onClose }) => {
+const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onCreateNewJob, onClose }) => {
   const [jobs, setJobs] = useState<any[]>([]);
+  const [showJobCreation, setShowJobCreation] = useState(false);
   const { getAllJobs, deleteJob, isLoading } = useJobManager();
 
   useEffect(() => {
@@ -37,6 +40,11 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onCl
     }
   };
 
+  const handleJobCreated = (jobId: string) => {
+    setShowJobCreation(false);
+    onCreateNewJob(jobId);
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800';
@@ -48,33 +56,57 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onCl
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Property Assessment Jobs</h1>
-        <p className="text-muted-foreground">
-          Start a new assessment or continue working on an existing job
-        </p>
-      </div>
+    <>
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold">Property Assessment Manager</h1>
+          <p className="text-muted-foreground">
+            The world's most comprehensive property valuation system
+          </p>
+        </div>
 
-      {/* Start Fresh Button */}
-      <Card className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                <Plus className="h-5 w-5" />
-                Start New Assessment
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Begin a fresh property assessment session
-              </p>
-            </div>
-            <Button onClick={onStartFresh} size="lg" className="ml-4">
-              Start Fresh
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        {/* Quick Start Options */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* New Professional Assessment */}
+          <Card className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-3 bg-primary/10 rounded-full">
+                  <Users className="h-8 w-8 text-primary" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">New Professional Assessment</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Start with client intake, create comprehensive job file, and conduct full property assessment
+                  </p>
+                </div>
+                <Button onClick={() => setShowJobCreation(true)} size="lg" className="w-full">
+                  Create New Job
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Assessment */}
+          <Card className="border-2 border-dashed border-muted/20 hover:border-muted/40 transition-colors">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-3 bg-muted/10 rounded-full">
+                  <Building className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">Quick Assessment</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Skip job creation and go straight to property assessment (for testing or personal use)
+                  </p>
+                </div>
+                <Button onClick={onStartFresh} variant="outline" size="lg" className="w-full">
+                  Start Quick Assessment
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
       {/* Existing Jobs */}
       {jobs.length > 0 && (
@@ -160,14 +192,21 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onCl
         </div>
       )}
 
-      {onClose && (
-        <div className="flex justify-center pt-4">
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-        </div>
-      )}
-    </div>
+        {onClose && (
+          <div className="flex justify-center pt-4">
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+          </div>
+        )}
+      </div>
+      
+      <JobCreationModal
+        isOpen={showJobCreation}
+        onClose={() => setShowJobCreation(false)}
+        onJobCreated={handleJobCreated}
+      />
+    </>
   );
 };
 

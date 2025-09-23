@@ -465,6 +465,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         <JobSelector
           onStartFresh={handleStartFresh}
           onLoadJob={handleLoadJob}
+          onCreateNewJob={() => {}} // Placeholder - this flow won't be used in this version
           onClose={() => setShowJobSelector(false)}
         />
       </div>
