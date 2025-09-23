@@ -2,23 +2,69 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+interface ClientDetails {
+  name: string;
+  email?: string;
+  phone?: string;
+  company?: string;
+  address?: string;
+  contactPreference?: 'email' | 'phone' | 'both';
+}
+
+interface TaskItem {
+  id: string;
+  title: string;
+  description?: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  assignedTo?: string;
+  dueDate?: string;
+  priority?: 'low' | 'medium' | 'high';
+  createdAt: string;
+}
+
+interface JobFile {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  url?: string;
+  uploadedAt: string;
+  category?: 'document' | 'image' | 'report' | 'other';
+}
+
 interface JobData {
   id?: string;
   title: string;
   propertyAddress: string;
   status: 'draft' | 'in_progress' | 'completed' | 'cancelled';
   type: 'valuation' | 'assessment' | 'inspection';
+  priority?: 'low' | 'medium' | 'high';
   createdAt?: string;
   updatedAt?: string;
+  dueDate?: string;
+  notes?: string;
+  
+  // Client information
+  client: ClientDetails;
+  
+  // Assessment data
   data: {
     reportData: any;
     addressData: any;
     assessmentProgress: any;
     componentData: Record<string, any>;
   };
-  clientName?: string;
-  dueDate?: string;
-  notes?: string;
+  
+  // Workflow management
+  tasks: TaskItem[];
+  
+  // File management
+  files: JobFile[];
+  
+  // Financial details
+  fee?: number;
+  paid?: boolean;
+  invoiceNumber?: string;
 }
 
 const JOBS_STORAGE_KEY = 'property_valuation_jobs';
@@ -167,12 +213,19 @@ export const useJobManager = () => {
         propertyAddress: currentData.addressData?.propertyAddress || 'Unknown Address',
         status: 'completed',
         type: 'valuation',
+        priority: 'medium',
         data: {
           reportData: currentData.reportData || {},
           addressData: currentData.addressData || {},
           assessmentProgress: currentData.assessmentProgress || {},
           componentData: currentData.componentData || {}
         },
+        client: {
+          name: 'Assessment Client',
+          contactPreference: 'email'
+        },
+        tasks: [],
+        files: [],
         notes: `Completed assessment on ${new Date().toLocaleDateString()}`
       };
 
