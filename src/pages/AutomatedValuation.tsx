@@ -145,7 +145,7 @@ export default function AutomatedValuation() {
               ICV (Instant Comprehensive Valuation)™
             </h2>
             <p className="text-xl text-white/90 mb-2">
-              AI-Powered Property Valuation And Assessment Technology
+              AI Assisted Property Valuation and ESG Assessment Technology
             </p>
             <p className="text-sm text-white/70">
               Patent Pending • IP Protected • Trademark © • Copyright Protected
@@ -180,7 +180,7 @@ export default function AutomatedValuation() {
                     </div>
                     ICV (Instant Comprehensive Valuation)™ Platform
                   </CardTitle>
-                  <p className="text-cyan-200">AI-powered property valuation and assessment technology</p>
+                  <p className="text-cyan-200">AI Assisted Property Valuation and ESG Assessment Technology</p>
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="platforms" className="w-full">

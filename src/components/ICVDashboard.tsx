@@ -35,7 +35,7 @@ const ICVDashboard: React.FC = () => {
           <h1 className="text-3xl font-bold">ICV (Instant Comprehensive Valuation)™ Platform</h1>
         </div>
         <p className="text-muted-foreground text-lg">
-          AI-powered property valuation and assessment technology
+          AI Assisted Property Valuation and ESG Assessment Technology
         </p>
       </div>
 

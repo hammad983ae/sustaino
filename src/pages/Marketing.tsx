@@ -20,6 +20,7 @@ import PerfectSustanoLogo from '@/components/PerfectSustanoLogo';
 import LogoDownloader from '@/components/LogoDownloader';
 import SustanoSphereLogo from '@/components/SustanoSphereLogo';
 import PoweredByLogo from '@/components/PoweredByLogo';
+import SustanoProGradientLogo from '@/components/SustanoProGradientLogo';
 import SustanoProInvestorBrochure from '@/components/brochures/SustanoProInvestorBrochure';
 
 const Marketing = () => {
@@ -321,6 +322,51 @@ const Marketing = () => {
                   <LogoDownloader
                     logoComponent={<PoweredByLogo size="xl" variant="gradient" />}
                     filename="powered-by-gradient"
+                    backgroundColor="#ffffff"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Blue Gradient Logo */}
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="mb-4 flex justify-center">
+                    <SustanoProGradientLogo size="md" variant="blue-gradient" />
+                  </div>
+                  <h4 className="font-semibold mb-2">Blue Gradient Logo</h4>
+                  <LogoDownloader
+                    logoComponent={<SustanoProGradientLogo size="lg" variant="blue-gradient" />}
+                    filename="sustaino-pro-blue-gradient"
+                    backgroundColor="linear-gradient(135deg, #3b82f6, #2563eb)"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Purple Gradient Logo */}
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="mb-4 flex justify-center">
+                    <SustanoProGradientLogo size="md" variant="purple-gradient" />
+                  </div>
+                  <h4 className="font-semibold mb-2">Purple Gradient Logo</h4>
+                  <LogoDownloader
+                    logoComponent={<SustanoProGradientLogo size="lg" variant="purple-gradient" />}
+                    filename="sustaino-pro-purple-gradient"
+                    backgroundColor="linear-gradient(135deg, #8b5cf6, #7c3aed)"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* White Gradient Logo */}
+              <Card>
+                <CardContent className="p-6 text-center bg-gray-800">
+                  <div className="mb-4 flex justify-center">
+                    <SustanoProGradientLogo size="md" variant="white" />
+                  </div>
+                  <h4 className="font-semibold mb-2 text-white">White Logo</h4>
+                  <LogoDownloader
+                    logoComponent={<SustanoProGradientLogo size="lg" variant="white" />}
+                    filename="sustaino-pro-white-gradient"
                     backgroundColor="#ffffff"
                   />
                 </CardContent>
