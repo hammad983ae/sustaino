@@ -13,26 +13,26 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface SalesEvidence {
   id: string;
-  comparable_address: string;
+  property_address: string;
   sale_price: number;
   sale_date: string;
   property_type: string;
   suburb: string;
   state: string;
   postcode: string;
+  data_source: string;
   bedrooms?: number;
   bathrooms?: number;
   car_spaces?: number;
   building_area?: number;
   land_area?: number;
-  source: string;
-  notes: string;
+  notes?: string;
   created_at: string;
 }
 
 interface RentalEvidence {
   id: string;
-  comparable_address: string;
+  property_address: string;
   rental_amount: number;
   lease_date: string;
   property_type: string;
@@ -321,7 +321,7 @@ export const ScrapedDataViewer = () => {
                     {filteredSalesData.map((item) => (
                       <TableRow key={item.id}>
                         <TableCell className="font-medium">
-                          {item.comparable_address}
+                          {item.property_address}
                         </TableCell>
                         <TableCell>
                           <Badge variant="secondary" className="bg-green-100 text-green-800">
@@ -347,7 +347,7 @@ export const ScrapedDataViewer = () => {
                         </TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm" asChild>
-                            <a href={item.source} target="_blank" rel="noopener noreferrer">
+                            <a href={item.data_source} target="_blank" rel="noopener noreferrer">
                               <Eye className="h-4 w-4" />
                             </a>
                           </Button>
@@ -404,7 +404,7 @@ export const ScrapedDataViewer = () => {
                     {filteredRentalData.map((item) => (
                       <TableRow key={item.id}>
                         <TableCell className="font-medium">
-                          {item.comparable_address}
+                          {item.property_address}
                         </TableCell>
                         <TableCell>
                           <Badge variant="secondary" className="bg-blue-100 text-blue-800">
@@ -430,7 +430,7 @@ export const ScrapedDataViewer = () => {
                         </TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm" asChild>
-                            <a href={item.source} target="_blank" rel="noopener noreferrer">
+                            <a href={item.data_source} target="_blank" rel="noopener noreferrer">
                               <Eye className="h-4 w-4" />
                             </a>
                           </Button>

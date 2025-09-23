@@ -10,27 +10,31 @@ import { Input } from '@/components/ui/input';
 
 interface SalesEvidence {
   id: string;
-  comparable_address: string;
+  property_address: string;
   sale_price: number;
   sale_date: string;
-  source: string;
+  data_source: string;
   created_at: string;
-  extraction_confidence?: number;
+  data_quality_score?: number;
   bedrooms?: number;
   bathrooms?: number;
   building_area?: number;
   land_area?: number;
   property_type?: string;
+  suburb?: string;
+  state?: string;
+  postcode?: string;
+  comparable_rating?: number;
 }
 
 interface RentalEvidence {
   id: string;
-  comparable_address: string;
+  property_address: string;
   rental_amount: number;
-  lease_date: string;
-  source: string;
+  lease_start_date: string;
+  data_source: string;
   created_at: string;
-  extraction_confidence?: number;
+  data_quality_score?: number;
   bedrooms?: number;
   bathrooms?: number;
   building_area?: number;
@@ -112,13 +116,13 @@ const DataStorageViewer = () => {
   }, []);
 
   const filteredSales = salesData.filter(item => 
-    item.comparable_address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.source?.toLowerCase().includes(searchTerm.toLowerCase())
+    item.property_address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.data_source?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const filteredRentals = rentalData.filter(item => 
-    item.comparable_address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.source?.toLowerCase().includes(searchTerm.toLowerCase())
+    item.property_address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.data_source?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const filteredFiles = evidenceFiles.filter(item => 
@@ -248,7 +252,7 @@ const DataStorageViewer = () => {
                 <CardContent className="p-4">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                      <div className="font-semibold">{sale.comparable_address}</div>
+                      <div className="font-semibold">{sale.property_address}</div>
                       <div className="text-sm text-muted-foreground">{sale.property_type}</div>
                     </div>
                     <div>
@@ -262,13 +266,13 @@ const DataStorageViewer = () => {
                         {sale.building_area && ` • ${sale.building_area}m²`}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Source: {new URL(sale.source || '').hostname}
+                        Source: {sale.data_source}
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                      {sale.extraction_confidence && (
+                      {sale.data_quality_score && (
                         <Badge variant="secondary">
-                          {sale.extraction_confidence}% confidence
+                          {sale.data_quality_score}% quality
                         </Badge>
                       )}
                       <div className="text-xs text-muted-foreground">
@@ -313,7 +317,7 @@ const DataStorageViewer = () => {
                 <CardContent className="p-4">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                      <div className="font-semibold">{rental.comparable_address}</div>
+                      <div className="font-semibold">{rental.property_address}</div>
                       <div className="text-sm text-muted-foreground">{rental.property_type}</div>
                     </div>
                     <div>
@@ -327,13 +331,13 @@ const DataStorageViewer = () => {
                         {rental.building_area && ` • ${rental.building_area}m²`}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Source: {new URL(rental.source || '').hostname}
+                        Source: {rental.data_source}
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                      {rental.extraction_confidence && (
+                      {rental.data_quality_score && (
                         <Badge variant="secondary">
-                          {rental.extraction_confidence}% confidence
+                          {rental.data_quality_score}% quality
                         </Badge>
                       )}
                       <div className="text-xs text-muted-foreground">

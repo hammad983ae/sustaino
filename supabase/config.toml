@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.equifax-credit-check]
 verify_jwt = false
+
+[functions.property-data-extractor]
+verify_jwt = true
