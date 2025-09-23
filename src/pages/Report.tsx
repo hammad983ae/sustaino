@@ -9,6 +9,9 @@ import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
 import { Badge } from "@/components/ui/badge";
 import ReportDataPrePopulation from "@/components/ReportDataPrePopulation";
 import ReportDataLoader from "@/components/ReportDataLoader";
+import SectionDataExtractor from "@/components/SectionDataExtractor";
+import ReportConfigurationIntegrator from "@/components/ReportConfigurationIntegrator";
+import ESGAssessmentIntegrator from "@/components/ESGAssessmentIntegrator";
 import { ValuationProvider } from "@/contexts/ValuationContext";
 import { ReportDataProvider } from "@/contexts/ReportDataContext";
 import PDFReportGenerator from "@/components/PDFReportGenerator";
@@ -131,6 +134,10 @@ const ReportViewer = () => {
           <ReportDataLoader />
           {/* Data Pre-population Component */}
           <ReportDataPrePopulation />
+          {/* Essential data integrators */}
+          <SectionDataExtractor />
+          <ReportConfigurationIntegrator />
+          <ESGAssessmentIntegrator />
       {/* Mobile-friendly header with progress */}
       <div className="sticky top-0 z-20 bg-gradient-to-r from-background via-background to-primary/10 border-b border-primary/20 p-4 space-y-4 shadow-lg backdrop-blur-sm"
            style={{ 
