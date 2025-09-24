@@ -104,7 +104,7 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message || 'Internal server error' 
+        error: error instanceof Error ? error.message : 'Internal server error'
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -269,7 +269,7 @@ function generateReportSections(assessmentData: any) {
 
   console.log('Data validation results:', dataValidation);
 
-  const reportSections = {};
+  const reportSections: Record<string, any> = {};
 
   // RPD and Location - Always include (core section)
   reportSections.rpdAndLocation = {

@@ -68,7 +68,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in ai-enhance-fields function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message || 'Failed to enhance fields' 
+      error: error instanceof Error ? error.message : 'Failed to enhance fields'
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -81,7 +81,7 @@ function getSystemPromptForPageType(pageType: string): string {
 
 Always respond with valid JSON format only. Do not include any explanatory text outside the JSON structure.`;
 
-  const pageSpecificPrompts = {
+  const pageSpecificPrompts: Record<string, string> = {
     'valuation-summary': `${basePrompt}
     
 Focus on valuation summary fields including:
