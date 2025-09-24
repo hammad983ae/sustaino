@@ -243,7 +243,8 @@ const AutomatedValuationAnalysis = () => {
               {[
                 { id: 'direct-comparison', label: 'Direct Comparison', available: valuationData.salesEvidence.length >= 2 },
                 { id: 'income-capitalisation', label: 'Income Capitalisation', available: valuationData.rentalEvidence.length >= 2 },
-                { id: 'cost-approach', label: 'Cost Approach', available: true }
+                { id: 'cost-approach', label: 'Cost Approach', available: true },
+                { id: 'turnover-method', label: 'Turnover Method', available: true }
               ].map(method => (
                 <Button
                   key={method.id}

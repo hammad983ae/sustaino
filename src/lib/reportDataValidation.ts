@@ -215,7 +215,7 @@ export function checkValuationApproaches(assessmentData: any): DataCheckResult {
   const approaches = reportConfig.valuationApproaches || [];
 
   // Calculate completeness based on approach diversity
-  const maxApproaches = 4; // Direct Comparison, Income, Cost, Development
+  const maxApproaches = 5; // Direct Comparison, Income, Cost, Development, Turnover Method
   const completeness = approaches.length > 0 ? (approaches.length / maxApproaches) * 100 : 0;
 
   const dataQuality = approaches.length >= 2 ? 'excellent' :

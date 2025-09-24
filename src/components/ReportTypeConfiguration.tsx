@@ -179,7 +179,7 @@ const ReportTypeConfiguration = () => {
   const basisOfValuation = ["Market Value", "Insurance Value", "Rental Value"];
   const valuationApproaches = [
     "Direct Comparison", "Summation Approach", "Capitalisation of Net Income",
-    "Capitalisation of Gross Income", "Hypothetical Development"
+    "Capitalisation of Gross Income", "Hypothetical Development", "Turnover Method"
   ];
   const valueComponents = ["As Is", "As If Complete"];
   const interestValues = [
