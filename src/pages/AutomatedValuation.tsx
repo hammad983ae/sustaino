@@ -644,14 +644,16 @@ export default function AutomatedValuation() {
       </div>;
   }
   if (currentStep === "streamlinedAssessment") {
-    return <div className="min-h-screen bg-background">
-        <div className="container mx-auto py-8">
-          <Button onClick={handleBack} variant="outline" className="mb-6 ml-4">
-            ← Back
-          </Button>
-          <StreamlinedPropertyAssessment onComplete={handleStreamlinedComplete} />
+    return <PropertyTypeLockProvider>
+        <div className="min-h-screen bg-background">
+          <div className="container mx-auto py-8">
+            <Button onClick={handleBack} variant="outline" className="mb-6 ml-4">
+              ← Back
+            </Button>
+            <StreamlinedPropertyAssessment onComplete={handleStreamlinedComplete} />
+          </div>
         </div>
-      </div>;
+      </PropertyTypeLockProvider>;
   }
   if (currentStep === "propertyDetails") {
     return <PropertyTypeLockProvider>
