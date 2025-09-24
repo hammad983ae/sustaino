@@ -9,6 +9,7 @@ import { useReportData } from '@/contexts/ReportDataContext';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PhotoWithOCR {
   id: string;
@@ -104,21 +105,75 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
   const handleFileUpload = useCallback(async (files: FileList) => {
     const newPhotos: PhotoWithOCR[] = [];
     
+    // Get current user for storage path
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to upload photos",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (file.type.startsWith('image/')) {
         const photoId = `photo-${Date.now()}-${i}`;
-        const url = URL.createObjectURL(file);
         
-        newPhotos.push({
-          id: photoId,
-          file,
-          url,
-          name: file.name,
-          description: '',
-          ocrProcessed: false
-        });
+        try {
+          // Upload to Supabase storage
+          const fileName = `${photoId}-${file.name}`;
+          const filePath = `${user.id}/property-photos/${fileName}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('property-images')
+            .upload(filePath, file, {
+              cacheControl: '3600',
+              upsert: true
+            });
+
+          if (uploadError) {
+            console.error('Upload error:', uploadError);
+            toast({
+              title: "Upload Failed",
+              description: `Failed to upload ${file.name}: ${uploadError.message}`,
+              variant: "destructive"
+            });
+            continue;
+          }
+
+          // Get public URL for the uploaded file
+          const { data: urlData } = supabase.storage
+            .from('property-images')
+            .getPublicUrl(filePath);
+
+          newPhotos.push({
+            id: photoId,
+            file,
+            url: urlData.publicUrl,
+            name: file.name,
+            description: '',
+            ocrProcessed: false
+          });
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          toast({
+            title: "Upload Error",
+            description: `Failed to upload ${file.name}`,
+            variant: "destructive"
+          });
+        }
       }
+    }
+
+    if (newPhotos.length === 0) {
+      toast({
+        title: "No Photos Uploaded",
+        description: "No valid image files were uploaded",
+        variant: "destructive"
+      });
+      return;
     }
 
     setPhotos(prev => [...prev, ...newPhotos]);
@@ -135,9 +190,9 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
 
     toast({
       title: "Photos uploaded",
-      description: `${newPhotos.length} photos uploaded and processing OCR`,
+      description: `${newPhotos.length} photos uploaded to storage and processing OCR`,
     });
-  }, [handleSavePhotos]);
+  }, [handleSavePhotos, toast]);
 
   const processPhotoOCR = useCallback(async (photo: PhotoWithOCR) => {
     setIsProcessing(true);
