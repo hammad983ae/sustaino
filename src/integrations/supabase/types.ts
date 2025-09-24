@@ -412,6 +412,30 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          branding: Json | null
+          created_at: string | null
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          branding?: Json | null
+          created_at?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          branding?: Json | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       commission_transactions: {
         Row: {
           aggregator_commission: number | null
@@ -1876,6 +1900,62 @@ export type Database = {
           zoning?: string | null
         }
         Relationships: []
+      }
+      property_assessments: {
+        Row: {
+          branding: Json | null
+          client_id: string | null
+          created_at: string | null
+          id: string
+          include_flags: Json | null
+          job_id: string
+          ocr_results: string | null
+          report_type: string | null
+          report_url: string | null
+          reviewed: boolean | null
+          updated_at: string | null
+          user_id: string | null
+          valuation_purpose: string | null
+        }
+        Insert: {
+          branding?: Json | null
+          client_id?: string | null
+          created_at?: string | null
+          id?: string
+          include_flags?: Json | null
+          job_id: string
+          ocr_results?: string | null
+          report_type?: string | null
+          report_url?: string | null
+          reviewed?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          valuation_purpose?: string | null
+        }
+        Update: {
+          branding?: Json | null
+          client_id?: string | null
+          created_at?: string | null
+          id?: string
+          include_flags?: Json | null
+          job_id?: string
+          ocr_results?: string | null
+          report_type?: string | null
+          report_url?: string | null
+          reviewed?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          valuation_purpose?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_assessments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_market_data: {
         Row: {
