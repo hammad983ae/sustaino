@@ -2,12 +2,13 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Camera, Upload, Zap, Eye, FileImage, Loader2 } from "lucide-react";
+import { Camera, Upload, Zap, Eye, FileImage, Loader2, Save } from "lucide-react";
 import Tesseract from 'tesseract.js';
 import { Badge } from '@/components/ui/badge';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { useUniversalSave } from '@/hooks/useUniversalSave';
 
 interface PhotoWithOCR {
   id: string;
@@ -42,6 +43,7 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { toast } = useToast();
   const { updateReportData, reportData } = useReportData();
+  const { saveData, loadData, isSaving } = useUniversalSave('PropertyPhotosOCRExtractor');
 
   // Load existing photos from reportData
   useEffect(() => {
@@ -59,6 +61,45 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
       setPhotos(existingPhotos);
     }
   }, [reportData.fileAttachments?.photos]);
+
+  // Save photos data
+  const handleSavePhotos = useCallback(async () => {
+    try {
+      const photosData = {
+        photos: photos.map(photo => ({
+          id: photo.id,
+          name: photo.name,
+          url: photo.url,
+          description: photo.description || '',
+          ocrText: photo.ocrText || '',
+          ocrProcessed: photo.ocrProcessed,
+          ocrConfidence: photo.ocrConfidence || 0
+        })),
+        extractedFeatures,
+        uploadedAt: new Date().toISOString()
+      };
+
+      await saveData(photosData);
+      
+      // Also update report data for consistency
+      updateReportData('fileAttachments', {
+        ...reportData.fileAttachments,
+        propertyPhotos: photosData.photos
+      });
+
+      toast({
+        title: "Photos Saved",
+        description: `${photos.length} photos and OCR data saved successfully`,
+      });
+    } catch (error) {
+      console.error('Failed to save photos:', error);
+      toast({
+        title: "Save Failed",
+        description: "Failed to save photos data",
+        variant: "destructive"
+      });
+    }
+  }, [photos, extractedFeatures, saveData, updateReportData, reportData.fileAttachments, toast]);
 
   const handleFileUpload = useCallback(async (files: FileList) => {
     const newPhotos: PhotoWithOCR[] = [];
@@ -87,11 +128,16 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
       await processPhotoOCR(photo);
     }
 
+    // Auto-save after upload and OCR processing
+    setTimeout(() => {
+      handleSavePhotos();
+    }, 1000); // Small delay to ensure all OCR processing is complete
+
     toast({
       title: "Photos uploaded",
       description: `${newPhotos.length} photos uploaded and processing OCR`,
     });
-  }, []);
+  }, [handleSavePhotos]);
 
   const processPhotoOCR = useCallback(async (photo: PhotoWithOCR) => {
     setIsProcessing(true);
@@ -322,6 +368,24 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
               </Button>
             </label>
           </div>
+
+          {/* Save Button */}
+          {photos.length > 0 && (
+            <div className="flex justify-end">
+              <Button 
+                onClick={handleSavePhotos}
+                disabled={isSaving}
+                className="flex items-center gap-2"
+              >
+                {isSaving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
+                {isSaving ? 'Saving...' : 'Save Photos'}
+              </Button>
+            </div>
+          )}
 
           {/* Photos Grid */}
           {photos.length > 0 && (
