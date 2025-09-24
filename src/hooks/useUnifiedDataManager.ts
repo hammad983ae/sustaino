@@ -17,6 +17,9 @@ interface UnifiedData {
   lastUpdated: string;
   userId?: string;
   isDemo: boolean;
+  includeFlags?: Record<string, boolean>; // For include/exclude toggles
+  ocrResults?: string; // For OCR extracted text
+  reviewed?: boolean; // For review status
 }
 
 interface SaveOptions {
