@@ -11,24 +11,43 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { PerformanceRatingSystem } from './PerformanceRatingSystem';
 import { EmployeePerformancePlatform } from './EmployeePerformancePlatform';
 import { EnhancedEPAT } from './comprehensive/EnhancedEPAT';
 import { IndustryPositionEPAT } from './IndustryPositionEPAT';
-import { Users, TrendingUp } from 'lucide-react';
+import { Users, TrendingUp, ArrowLeft } from 'lucide-react';
 
-export const EPAT: React.FC = () => {
+interface EPATProps {
+  onBackToDashboard?: () => void;
+}
+
+export const EPAT: React.FC<EPATProps> = ({ onBackToDashboard }) => {
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5" />
-            EPAT™ - Employee Performance Assessment Tool
-            <span className="text-xs text-muted-foreground ml-2">® Powered™</span>
-          </CardTitle>
-          <div className="text-xs text-muted-foreground mt-1">
-            © 2024 Powered™. EPAT™ - Patent Pending. All Rights Reserved.
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                EPAT™ - Employee Performance Assessment Tool
+                <span className="text-xs text-muted-foreground ml-2">® Powered™</span>
+              </CardTitle>
+              <div className="text-xs text-muted-foreground mt-1">
+                © 2024 Powered™. EPAT™ - Patent Pending. All Rights Reserved.
+              </div>
+            </div>
+            {onBackToDashboard && (
+              <Button
+                variant="outline"
+                onClick={onBackToDashboard}
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Dashboard
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent>

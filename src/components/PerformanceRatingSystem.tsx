@@ -29,6 +29,7 @@ interface PerformanceMetrics {
     listingAccuracy: number;
     clientSatisfaction: number;
     marketShare: number;
+    discountedAdvertisedPrice: number;
   };
   developers: {
     projectCompletionRate: number;
@@ -51,9 +52,9 @@ const INDUSTRY_BENCHMARKS = {
     average: { accuracyRate: 92, turnaroundTime: 7, marketKnowledge: 7, clientRetention: 75, professionalStanding: 7 },
   },
   estateAgents: {
-    excellent: { salesVolume: 20000000, daysOnMarket: 25, listingAccuracy: 98, clientSatisfaction: 9, marketShare: 15 },
-    good: { salesVolume: 10000000, daysOnMarket: 35, listingAccuracy: 95, clientSatisfaction: 8, marketShare: 10 },
-    average: { salesVolume: 5000000, daysOnMarket: 50, listingAccuracy: 90, clientSatisfaction: 7, marketShare: 5 },
+    excellent: { salesVolume: 20000000, daysOnMarket: 25, listingAccuracy: 98, clientSatisfaction: 9, marketShare: 15, discountedAdvertisedPrice: 2 },
+    good: { salesVolume: 10000000, daysOnMarket: 35, listingAccuracy: 95, clientSatisfaction: 8, marketShare: 10, discountedAdvertisedPrice: 5 },
+    average: { salesVolume: 5000000, daysOnMarket: 50, listingAccuracy: 90, clientSatisfaction: 7, marketShare: 5, discountedAdvertisedPrice: 8 },
   },
   developers: {
     excellent: { projectCompletionRate: 98, budgetAdherence: 95, timelineCompliance: 95, qualityScore: 9, sustainabilityRating: 9 },
@@ -66,7 +67,7 @@ export const PerformanceRatingSystem: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
     valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0 },
-    estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0 },
+    estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0 },
     developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
   });
 
@@ -356,7 +357,7 @@ export const PerformanceRatingSystem: React.FC = () => {
                     <Users className="h-4 w-4" />
                     Estate Agent Performance
                     <Badge variant="outline">
-                      Overall Score: {calculateOverallScore(metrics.estateAgents, INDUSTRY_BENCHMARKS.estateAgents, ['daysOnMarket'])}%
+                      Overall Score: {calculateOverallScore(metrics.estateAgents, INDUSTRY_BENCHMARKS.estateAgents, ['daysOnMarket', 'discountedAdvertisedPrice'])}%
                     </Badge>
                   </CardTitle>
                 </CardHeader>
@@ -422,10 +423,23 @@ export const PerformanceRatingSystem: React.FC = () => {
                           estateAgents: { ...prev.estateAgents, marketShare: Number(e.target.value) }
                         }))}
                       />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                     </div>
+                     <div>
+                       <Label>Discounted Advertised Price (%)</Label>
+                       <Input
+                         type="number"
+                         step="0.1"
+                         min="0"
+                         value={metrics.estateAgents.discountedAdvertisedPrice}
+                         onChange={(e) => setMetrics(prev => ({
+                           ...prev,
+                           estateAgents: { ...prev.estateAgents, discountedAdvertisedPrice: Number(e.target.value) }
+                         }))}
+                       />
+                     </div>
+                   </div>
+                   
+                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <MetricCard
                       title="Sales Volume"
                       value={metrics.estateAgents.salesVolume}
@@ -445,13 +459,26 @@ export const PerformanceRatingSystem: React.FC = () => {
                       benchmark={INDUSTRY_BENCHMARKS.estateAgents}
                       field="listingAccuracy"
                     />
-                    <MetricCard
-                      title="Client Satisfaction"
-                      value={metrics.estateAgents.clientSatisfaction}
-                      benchmark={INDUSTRY_BENCHMARKS.estateAgents}
-                      field="clientSatisfaction"
-                    />
-                  </div>
+                     <MetricCard
+                       title="Client Satisfaction"
+                       value={metrics.estateAgents.clientSatisfaction}
+                       benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                       field="clientSatisfaction"
+                     />
+                     <MetricCard
+                       title="Market Share"
+                       value={metrics.estateAgents.marketShare}
+                       benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                       field="marketShare"
+                     />
+                     <MetricCard
+                       title="Discounted Advertised Price"
+                       value={metrics.estateAgents.discountedAdvertisedPrice}
+                       benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                       field="discountedAdvertisedPrice"
+                       inverse={true}
+                     />
+                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -567,7 +594,7 @@ export const PerformanceRatingSystem: React.FC = () => {
               setMetrics({
                 mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
                 valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0 },
-                estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0 },
+                estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0 },
                 developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
               });
             }}>

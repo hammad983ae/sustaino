@@ -101,7 +101,15 @@ const INDUSTRIES: Industry[] = [
             description: 'Percentage of repeat/referral clients',
             unit: '%',
             benchmark: { excellent: 40, good: 25, average: 15, poor: 8 },
-            weight: 0.20
+            weight: 0.15
+          },
+          {
+            name: 'Discounted Advertised Price',
+            description: 'Average percentage below advertised price properties sell for',
+            unit: '%',
+            benchmark: { excellent: 2, good: 5, average: 8, poor: 12 },
+            weight: 0.05,
+            isInverse: true
           }
         ]
       },
