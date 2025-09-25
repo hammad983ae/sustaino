@@ -1,0 +1,878 @@
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Calculator, TrendingUp, Shield, Users } from 'lucide-react';
+
+interface PerformanceMetrics {
+  mortgageLending: {
+    loanVolume: number;
+    defaultRate: number;
+    processingTime: number;
+    customerSatisfaction: number;
+    complianceScore: number;
+  };
+  valuation: {
+    accuracyRate: number;
+    turnaroundTime: number;
+    marketKnowledge: number;
+    clientRetention: number;
+    professionalStanding: number;
+  };
+  estateAgents: {
+    salesVolume: number;
+    daysOnMarket: number;
+    listingAccuracy: number;
+    clientSatisfaction: number;
+    marketShare: number;
+  };
+  developers: {
+    projectCompletionRate: number;
+    budgetAdherence: number;
+    timelineCompliance: number;
+    qualityScore: number;
+    sustainabilityRating: number;
+  };
+}
+
+interface FinancialRatios {
+  liquidity: {
+    currentRatio: number;
+    quickRatio: number;
+    workingCapital: number;
+  };
+  profitability: {
+    netProfitMargin: number;
+    returnOnAssets: number;
+    returnOnEquity: number;
+  };
+  efficiency: {
+    assetTurnover: number;
+    receivablesTurnover: number;
+    inventoryTurnover: number;
+  };
+  leverage: {
+    debtToEquity: number;
+    interestCoverage: number;
+    debtServiceCoverage: number;
+  };
+}
+
+const INDUSTRY_BENCHMARKS = {
+  mortgageLending: {
+    excellent: { loanVolume: 50000000, defaultRate: 1, processingTime: 14, customerSatisfaction: 9, complianceScore: 95 },
+    good: { loanVolume: 25000000, defaultRate: 2.5, processingTime: 21, customerSatisfaction: 8, complianceScore: 85 },
+    average: { loanVolume: 10000000, defaultRate: 4, processingTime: 30, customerSatisfaction: 7, complianceScore: 75 },
+  },
+  valuation: {
+    excellent: { accuracyRate: 98, turnaroundTime: 3, marketKnowledge: 9, clientRetention: 95, professionalStanding: 9 },
+    good: { accuracyRate: 95, turnaroundTime: 5, marketKnowledge: 8, clientRetention: 85, professionalStanding: 8 },
+    average: { accuracyRate: 92, turnaroundTime: 7, marketKnowledge: 7, clientRetention: 75, professionalStanding: 7 },
+  },
+  estateAgents: {
+    excellent: { salesVolume: 20000000, daysOnMarket: 25, listingAccuracy: 98, clientSatisfaction: 9, marketShare: 15 },
+    good: { salesVolume: 10000000, daysOnMarket: 35, listingAccuracy: 95, clientSatisfaction: 8, marketShare: 10 },
+    average: { salesVolume: 5000000, daysOnMarket: 50, listingAccuracy: 90, clientSatisfaction: 7, marketShare: 5 },
+  },
+  developers: {
+    excellent: { projectCompletionRate: 98, budgetAdherence: 95, timelineCompliance: 95, qualityScore: 9, sustainabilityRating: 9 },
+    good: { projectCompletionRate: 92, budgetAdherence: 90, timelineCompliance: 88, qualityScore: 8, sustainabilityRating: 7 },
+    average: { projectCompletionRate: 85, budgetAdherence: 80, timelineCompliance: 75, qualityScore: 7, sustainabilityRating: 6 },
+  },
+};
+
+const FINANCIAL_BENCHMARKS = {
+  excellent: {
+    liquidity: { currentRatio: 2.5, quickRatio: 1.5, workingCapital: 500000 },
+    profitability: { netProfitMargin: 20, returnOnAssets: 15, returnOnEquity: 25 },
+    efficiency: { assetTurnover: 2.0, receivablesTurnover: 12, inventoryTurnover: 8 },
+    leverage: { debtToEquity: 0.3, interestCoverage: 10, debtServiceCoverage: 2.5 },
+  },
+  good: {
+    liquidity: { currentRatio: 2.0, quickRatio: 1.2, workingCapital: 200000 },
+    profitability: { netProfitMargin: 15, returnOnAssets: 10, returnOnEquity: 18 },
+    efficiency: { assetTurnover: 1.5, receivablesTurnover: 8, inventoryTurnover: 6 },
+    leverage: { debtToEquity: 0.5, interestCoverage: 6, debtServiceCoverage: 2.0 },
+  },
+  average: {
+    liquidity: { currentRatio: 1.5, quickRatio: 1.0, workingCapital: 50000 },
+    profitability: { netProfitMargin: 10, returnOnAssets: 6, returnOnEquity: 12 },
+    efficiency: { assetTurnover: 1.0, receivablesTurnover: 6, inventoryTurnover: 4 },
+    leverage: { debtToEquity: 0.8, interestCoverage: 3, debtServiceCoverage: 1.5 },
+  },
+};
+
+export const PerformanceRatingSystem: React.FC = () => {
+  const [metrics, setMetrics] = useState<PerformanceMetrics>({
+    mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
+    valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0 },
+    estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0 },
+    developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
+  });
+
+  const [financialRatios, setFinancialRatios] = useState<FinancialRatios>({
+    liquidity: { currentRatio: 0, quickRatio: 0, workingCapital: 0 },
+    profitability: { netProfitMargin: 0, returnOnAssets: 0, returnOnEquity: 0 },
+    efficiency: { assetTurnover: 0, receivablesTurnover: 0, inventoryTurnover: 0 },
+    leverage: { debtToEquity: 0, interestCoverage: 0, debtServiceCoverage: 0 },
+  });
+
+  const calculateRating = (value: number, benchmarks: any, field: string, inverse: boolean = false) => {
+    const excellent = benchmarks.excellent[field];
+    const good = benchmarks.good[field];
+    const average = benchmarks.average[field];
+
+    if (inverse) {
+      if (value <= excellent) return { rating: 'Excellent', score: 95, color: 'bg-green-500' };
+      if (value <= good) return { rating: 'Good', score: 80, color: 'bg-blue-500' };
+      if (value <= average) return { rating: 'Average', score: 65, color: 'bg-yellow-500' };
+      return { rating: 'Below Average', score: 40, color: 'bg-red-500' };
+    } else {
+      if (value >= excellent) return { rating: 'Excellent', score: 95, color: 'bg-green-500' };
+      if (value >= good) return { rating: 'Good', score: 80, color: 'bg-blue-500' };
+      if (value >= average) return { rating: 'Average', score: 65, color: 'bg-yellow-500' };
+      return { rating: 'Below Average', score: 40, color: 'bg-red-500' };
+    }
+  };
+
+  const calculateOverallScore = (categoryMetrics: any, benchmarks: any, inverseFields: string[] = []) => {
+    const scores = Object.entries(categoryMetrics).map(([field, value]) => {
+      const isInverse = inverseFields.includes(field);
+      return calculateRating(value as number, benchmarks, field, isInverse).score;
+    });
+    return Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
+  };
+
+  const MetricCard = ({ title, value, benchmark, field, inverse = false }: any) => {
+    const rating = calculateRating(value, benchmark, field, inverse);
+    return (
+      <div className="p-4 border rounded-lg space-y-2">
+        <div className="flex justify-between items-center">
+          <Label className="font-medium">{title}</Label>
+          <Badge variant="outline" className={`${rating.color} text-white`}>
+            {rating.rating}
+          </Badge>
+        </div>
+        <Progress value={rating.score} className="h-2" />
+        <div className="text-sm text-muted-foreground">
+          Current: {typeof value === 'number' ? value.toLocaleString() : value} | Score: {rating.score}%
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            Performance Rating System
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="mortgage" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="mortgage">Mortgage Lending</TabsTrigger>
+              <TabsTrigger value="valuation">Valuation</TabsTrigger>
+              <TabsTrigger value="estate">Estate Agents</TabsTrigger>
+              <TabsTrigger value="developers">Developers</TabsTrigger>
+              <TabsTrigger value="financial">Financial Ratios</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="mortgage" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Mortgage Lending Performance
+                    <Badge variant="outline">
+                      Overall Score: {calculateOverallScore(metrics.mortgageLending, INDUSTRY_BENCHMARKS.mortgageLending, ['defaultRate', 'processingTime'])}%
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Loan Volume ($)</Label>
+                      <Input
+                        type="number"
+                        value={metrics.mortgageLending.loanVolume}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          mortgageLending: { ...prev.mortgageLending, loanVolume: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Default Rate (%)</Label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={metrics.mortgageLending.defaultRate}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          mortgageLending: { ...prev.mortgageLending, defaultRate: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Processing Time (days)</Label>
+                      <Input
+                        type="number"
+                        value={metrics.mortgageLending.processingTime}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          mortgageLending: { ...prev.mortgageLending, processingTime: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Customer Satisfaction (1-10)</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={metrics.mortgageLending.customerSatisfaction}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          mortgageLending: { ...prev.mortgageLending, customerSatisfaction: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Compliance Score (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.mortgageLending.complianceScore}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          mortgageLending: { ...prev.mortgageLending, complianceScore: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <MetricCard
+                      title="Loan Volume"
+                      value={metrics.mortgageLending.loanVolume}
+                      benchmark={INDUSTRY_BENCHMARKS.mortgageLending}
+                      field="loanVolume"
+                    />
+                    <MetricCard
+                      title="Default Rate"
+                      value={metrics.mortgageLending.defaultRate}
+                      benchmark={INDUSTRY_BENCHMARKS.mortgageLending}
+                      field="defaultRate"
+                      inverse={true}
+                    />
+                    <MetricCard
+                      title="Processing Time"
+                      value={metrics.mortgageLending.processingTime}
+                      benchmark={INDUSTRY_BENCHMARKS.mortgageLending}
+                      field="processingTime"
+                      inverse={true}
+                    />
+                    <MetricCard
+                      title="Customer Satisfaction"
+                      value={metrics.mortgageLending.customerSatisfaction}
+                      benchmark={INDUSTRY_BENCHMARKS.mortgageLending}
+                      field="customerSatisfaction"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="valuation" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calculator className="h-4 w-4" />
+                    Valuation Performance
+                    <Badge variant="outline">
+                      Overall Score: {calculateOverallScore(metrics.valuation, INDUSTRY_BENCHMARKS.valuation, ['turnaroundTime'])}%
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Accuracy Rate (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.valuation.accuracyRate}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          valuation: { ...prev.valuation, accuracyRate: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Turnaround Time (days)</Label>
+                      <Input
+                        type="number"
+                        value={metrics.valuation.turnaroundTime}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          valuation: { ...prev.valuation, turnaroundTime: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Market Knowledge (1-10)</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={metrics.valuation.marketKnowledge}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          valuation: { ...prev.valuation, marketKnowledge: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Client Retention (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.valuation.clientRetention}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          valuation: { ...prev.valuation, clientRetention: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Professional Standing (1-10)</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={metrics.valuation.professionalStanding}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          valuation: { ...prev.valuation, professionalStanding: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <MetricCard
+                      title="Accuracy Rate"
+                      value={metrics.valuation.accuracyRate}
+                      benchmark={INDUSTRY_BENCHMARKS.valuation}
+                      field="accuracyRate"
+                    />
+                    <MetricCard
+                      title="Turnaround Time"
+                      value={metrics.valuation.turnaroundTime}
+                      benchmark={INDUSTRY_BENCHMARKS.valuation}
+                      field="turnaroundTime"
+                      inverse={true}
+                    />
+                    <MetricCard
+                      title="Market Knowledge"
+                      value={metrics.valuation.marketKnowledge}
+                      benchmark={INDUSTRY_BENCHMARKS.valuation}
+                      field="marketKnowledge"
+                    />
+                    <MetricCard
+                      title="Client Retention"
+                      value={metrics.valuation.clientRetention}
+                      benchmark={INDUSTRY_BENCHMARKS.valuation}
+                      field="clientRetention"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="estate" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    Estate Agent Performance
+                    <Badge variant="outline">
+                      Overall Score: {calculateOverallScore(metrics.estateAgents, INDUSTRY_BENCHMARKS.estateAgents, ['daysOnMarket'])}%
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Sales Volume ($)</Label>
+                      <Input
+                        type="number"
+                        value={metrics.estateAgents.salesVolume}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          estateAgents: { ...prev.estateAgents, salesVolume: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Average Days on Market</Label>
+                      <Input
+                        type="number"
+                        value={metrics.estateAgents.daysOnMarket}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          estateAgents: { ...prev.estateAgents, daysOnMarket: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Listing Accuracy (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.estateAgents.listingAccuracy}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          estateAgents: { ...prev.estateAgents, listingAccuracy: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Client Satisfaction (1-10)</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={metrics.estateAgents.clientSatisfaction}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          estateAgents: { ...prev.estateAgents, clientSatisfaction: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Market Share (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.estateAgents.marketShare}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          estateAgents: { ...prev.estateAgents, marketShare: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <MetricCard
+                      title="Sales Volume"
+                      value={metrics.estateAgents.salesVolume}
+                      benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                      field="salesVolume"
+                    />
+                    <MetricCard
+                      title="Days on Market"
+                      value={metrics.estateAgents.daysOnMarket}
+                      benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                      field="daysOnMarket"
+                      inverse={true}
+                    />
+                    <MetricCard
+                      title="Listing Accuracy"
+                      value={metrics.estateAgents.listingAccuracy}
+                      benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                      field="listingAccuracy"
+                    />
+                    <MetricCard
+                      title="Client Satisfaction"
+                      value={metrics.estateAgents.clientSatisfaction}
+                      benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                      field="clientSatisfaction"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="developers" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Developer & Large Business Performance</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Project Completion Rate (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.developers.projectCompletionRate}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          developers: { ...prev.developers, projectCompletionRate: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Budget Adherence (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.developers.budgetAdherence}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          developers: { ...prev.developers, budgetAdherence: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Timeline Compliance (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={metrics.developers.timelineCompliance}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          developers: { ...prev.developers, timelineCompliance: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Quality Score (1-10)</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={metrics.developers.qualityScore}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          developers: { ...prev.developers, qualityScore: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Sustainability Rating (1-10)</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={metrics.developers.sustainabilityRating}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          developers: { ...prev.developers, sustainabilityRating: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <MetricCard
+                      title="Project Completion"
+                      value={metrics.developers.projectCompletionRate}
+                      benchmark={INDUSTRY_BENCHMARKS.developers}
+                      field="projectCompletionRate"
+                    />
+                    <MetricCard
+                      title="Budget Adherence"
+                      value={metrics.developers.budgetAdherence}
+                      benchmark={INDUSTRY_BENCHMARKS.developers}
+                      field="budgetAdherence"
+                    />
+                    <MetricCard
+                      title="Timeline Compliance"
+                      value={metrics.developers.timelineCompliance}
+                      benchmark={INDUSTRY_BENCHMARKS.developers}
+                      field="timelineCompliance"
+                    />
+                    <MetricCard
+                      title="Quality Score"
+                      value={metrics.developers.qualityScore}
+                      benchmark={INDUSTRY_BENCHMARKS.developers}
+                      field="qualityScore"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="financial" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Financial Ratios Analysis</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Liquidity</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div>
+                          <Label>Current Ratio</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.liquidity.currentRatio}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              liquidity: { ...prev.liquidity, currentRatio: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Quick Ratio</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.liquidity.quickRatio}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              liquidity: { ...prev.liquidity, quickRatio: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Working Capital</Label>
+                          <Input
+                            type="number"
+                            value={financialRatios.liquidity.workingCapital}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              liquidity: { ...prev.liquidity, workingCapital: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Profitability</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div>
+                          <Label>Net Profit Margin (%)</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.profitability.netProfitMargin}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              profitability: { ...prev.profitability, netProfitMargin: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Return on Assets (%)</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.profitability.returnOnAssets}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              profitability: { ...prev.profitability, returnOnAssets: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Return on Equity (%)</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.profitability.returnOnEquity}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              profitability: { ...prev.profitability, returnOnEquity: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Efficiency</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div>
+                          <Label>Asset Turnover</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.efficiency.assetTurnover}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              efficiency: { ...prev.efficiency, assetTurnover: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Receivables Turnover</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.efficiency.receivablesTurnover}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              efficiency: { ...prev.efficiency, receivablesTurnover: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Inventory Turnover</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.efficiency.inventoryTurnover}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              efficiency: { ...prev.efficiency, inventoryTurnover: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Leverage</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div>
+                          <Label>Debt to Equity</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.leverage.debtToEquity}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              leverage: { ...prev.leverage, debtToEquity: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Interest Coverage</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.leverage.interestCoverage}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              leverage: { ...prev.leverage, interestCoverage: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                        <div>
+                          <Label>Debt Service Coverage</Label>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={financialRatios.leverage.debtServiceCoverage}
+                            onChange={(e) => setFinancialRatios(prev => ({
+                              ...prev,
+                              leverage: { ...prev.leverage, debtServiceCoverage: Number(e.target.value) }
+                            }))}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-sm">Financial Health Overview</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span>Liquidity Score:</span>
+                            <Badge variant="outline">
+                              {Math.round((
+                                (financialRatios.liquidity.currentRatio >= FINANCIAL_BENCHMARKS.good.liquidity.currentRatio ? 80 : 50) +
+                                (financialRatios.liquidity.quickRatio >= FINANCIAL_BENCHMARKS.good.liquidity.quickRatio ? 80 : 50) +
+                                (financialRatios.liquidity.workingCapital >= FINANCIAL_BENCHMARKS.good.liquidity.workingCapital ? 80 : 50)
+                              ) / 3)}%
+                            </Badge>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Profitability Score:</span>
+                            <Badge variant="outline">
+                              {Math.round((
+                                (financialRatios.profitability.netProfitMargin >= FINANCIAL_BENCHMARKS.good.profitability.netProfitMargin ? 80 : 50) +
+                                (financialRatios.profitability.returnOnAssets >= FINANCIAL_BENCHMARKS.good.profitability.returnOnAssets ? 80 : 50) +
+                                (financialRatios.profitability.returnOnEquity >= FINANCIAL_BENCHMARKS.good.profitability.returnOnEquity ? 80 : 50)
+                              ) / 3)}%
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-sm">Risk Assessment</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span>Credit Risk:</span>
+                            <Badge variant={financialRatios.leverage.debtToEquity > 0.8 ? 'destructive' : 'default'}>
+                              {financialRatios.leverage.debtToEquity > 0.8 ? 'High' : 'Low'}
+                            </Badge>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Operational Risk:</span>
+                            <Badge variant={financialRatios.efficiency.assetTurnover < 1 ? 'destructive' : 'default'}>
+                              {financialRatios.efficiency.assetTurnover < 1 ? 'High' : 'Low'}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <div className="flex justify-end space-x-2 mt-6">
+            <Button variant="outline" onClick={() => {
+              setMetrics({
+                mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
+                valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0 },
+                estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0 },
+                developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
+              });
+              setFinancialRatios({
+                liquidity: { currentRatio: 0, quickRatio: 0, workingCapital: 0 },
+                profitability: { netProfitMargin: 0, returnOnAssets: 0, returnOnEquity: 0 },
+                efficiency: { assetTurnover: 0, receivablesTurnover: 0, inventoryTurnover: 0 },
+                leverage: { debtToEquity: 0, interestCoverage: 0, debtServiceCoverage: 0 },
+              });
+            }}>
+              Reset All
+            </Button>
+            <Button>Generate Report</Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};

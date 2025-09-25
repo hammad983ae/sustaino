@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useStepVisibility } from '@/contexts/PAFConfigContext';
 import FinancialAssessmentTools from './FinancialAssessmentTools';
+import { PerformanceRatingSystem } from './PerformanceRatingSystem';
 import { 
   Building2, 
   CreditCard, 
@@ -173,12 +174,13 @@ const AccountingFinancialIntegration: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="integrations" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="integrations">Integrations</TabsTrigger>
-              <TabsTrigger value="manual">Manual Entry</TabsTrigger>
-              <TabsTrigger value="assessment">Financial Assessment</TabsTrigger>
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-            </TabsList>
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          <TabsTrigger value="manual">Manual Entry</TabsTrigger>
+          <TabsTrigger value="assessment">Financial Assessment</TabsTrigger>
+          <TabsTrigger value="performance">Performance Rating</TabsTrigger>
+          <TabsTrigger value="summary">Summary</TabsTrigger>
+        </TabsList>
 
             <TabsContent value="integrations" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -367,6 +369,10 @@ const AccountingFinancialIntegration: React.FC = () => {
 
             <TabsContent value="assessment" className="space-y-4">
               <FinancialAssessmentTools />
+            </TabsContent>
+
+            <TabsContent value="performance" className="space-y-4">
+              <PerformanceRatingSystem />
             </TabsContent>
 
             <TabsContent value="summary" className="space-y-4">
