@@ -6,163 +6,296 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { CheckCircle, AlertTriangle, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useUnifiedDataManager } from '@/hooks/useUnifiedDataManager';
+import { useReportData } from '@/contexts/ReportDataContext';
 
 interface PAFReviewScreenProps {
   jobId: string;
 }
 
-// Auto-save hook with debounce
-function useAssessmentData(jobId: string) {
-  const [formData, setFormData] = useState<any>({});
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+interface DataReadiness {
+  section: string;
+  label: string;
+  status: 'supplied' | 'investigation_required' | 'optional';
+  completeness: number;
+  hasData: boolean;
+  required: boolean;
+}
 
-  // Load data once
+export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
+  const [assessmentData, setAssessmentData] = useState<any>({});
+  const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+  const [reportUrl, setReportUrl] = useState<string | null>(null);
+  const { toast } = useToast();
+  const { getAllData } = useUnifiedDataManager();
+  const { reportData, updateReportData } = useReportData();
+
+  // Load all PAF data on component mount
   useEffect(() => {
-    const loadData = async () => {
+    const loadPAFData = async () => {
       try {
-        const { data, error } = await supabase
+        setLoading(true);
+        
+        // Get all PAF workflow data
+        const unifiedData = await getAllData();
+        console.log('Loading PAF data for review:', unifiedData);
+        
+        // Get existing property assessment record
+        const { data: existingAssessment } = await supabase
           .from('property_assessments')
           .select('*')
           .eq('job_id', jobId)
-          .single();
+          .maybeSingle();
+
+        // Access the actual report data from unified structure
+        const reportData = unifiedData?.reportData || {};
+        const componentData = unifiedData?.componentData || {};
         
-        if (data) {
-          setFormData(data);
-        } else if (error && error.code === 'PGRST116') {
-          // No record found, create one
-          const { data: newData, error: insertError } = await supabase
-            .from('property_assessments')
-            .insert({
-              job_id: jobId,
-              user_id: (await supabase.auth.getUser()).data.user?.id,
-              include_flags: {},
-              branding: {}
-            })
-            .select()
-            .single();
-          
-          if (newData) setFormData(newData);
-          if (insertError) console.error('Insert error:', insertError);
-        }
-      } catch (err) {
-        console.error('Load error:', err);
+        // Compile comprehensive assessment data by checking both reportData and componentData
+        const compiledData = {
+          ...existingAssessment,
+          unifiedData,
+          reportSections: {
+            // Section 2: RPD and Location - check multiple possible sources
+            rpdAndLocation: reportData.propertySearchData || 
+                           reportData.locationData || 
+                           componentData.propertySearchData ||
+                           componentData.locationData,
+            
+            // Section 3: Legal and Planning
+            legalAndPlanning: reportData.planningData || 
+                             reportData.legalAndPlanning ||
+                             componentData.planningData ||
+                             componentData.legalAndPlanning,
+            
+            // Section 4: Tenancy Schedule
+            tenancyScheduleLeaseDetails: reportData.tenancyDetails || 
+                                        componentData.tenancyDetails,
+            
+            // Section 6: Market Commentary
+            marketCommentary: reportData.marketCommentary || 
+                             componentData.marketCommentary,
+            
+            // Section 7: Property Details
+            propertyDetails: reportData.propertyDetails || 
+                           reportData.propertySearchData ||
+                           componentData.propertyDetails ||
+                           componentData.propertySearchData,
+            
+            // Section 8: Environmental Assessment
+            environmentalAssessment: reportData.environmentalAssessment || 
+                                   componentData.environmentalAssessment,
+            
+            // Section 10: Risk Assessment
+            riskAssessmentMarketIndicators: reportData.riskAssessment || 
+                                          componentData.riskAssessment,
+            
+            // Section 11: Sales History
+            previousSalesHistoryAndCurrentSale: reportData.salesHistory || 
+                                               componentData.salesHistory,
+            
+            // Annexures
+            documentAttachments: reportData.fileAttachments || 
+                               componentData.fileAttachments,
+            
+            // Valuation Certificate
+            valuationCertificate: reportData.valuationCertificate || 
+                                componentData.valuationCertificate,
+            
+            // Valuation Analysis
+            valuationAnalysis: reportData.valuationAnalysis || 
+                             componentData.valuationAnalysis,
+            
+            // Report Configuration
+            reportConfig: reportData.reportConfig || 
+                         componentData.reportConfig,
+            
+            // Professional Declarations
+            professionalDeclarations: reportData.professionalDeclarations || 
+                                    componentData.professionalDeclarations,
+            
+            // Accounting and Financials
+            accountingFinancials: reportData.accountingFinancials || 
+                                componentData.accountingFinancials,
+            
+            // Sales and Leasing Recommendations
+            salesLeasingRecommendations: reportData.salesLeasingRecommendations || 
+                                       componentData.salesLeasingRecommendations
+          }
+        };
+
+        setAssessmentData(compiledData);
+        
+        // Update report context with compiled data
+        Object.entries(compiledData.reportSections).forEach(([key, value]) => {
+          if (value) {
+            updateReportData(key as any, value);
+          }
+        });
+
+        console.log('Compiled assessment data:', compiledData);
+        
+      } catch (error) {
+        console.error('Error loading PAF data:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load assessment data",
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }
     };
-    
-    loadData();
-  }, [jobId]);
 
-  // Auto-save with debounce
-  useEffect(() => {
-    if (loading || !formData.id) return;
-    
-    const timer = setTimeout(async () => {
-      setSaving(true);
-      try {
-        await supabase
-          .from('property_assessments')
-          .update(formData)
-          .eq('job_id', jobId);
-      } catch (error) {
-        console.error('Save error:', error);
-      } finally {
-        setSaving(false);
+    loadPAFData();
+  }, [jobId, getAllData, updateReportData, toast]);
+
+  // Calculate data readiness
+  const calculateDataReadiness = (): DataReadiness[] => {
+    const sections: DataReadiness[] = [
+      {
+        section: 'rpdAndLocation',
+        label: 'Section 2: RPD and Location',
+        status: assessmentData.reportSections?.rpdAndLocation ? 'supplied' : 'investigation_required',
+        completeness: assessmentData.reportSections?.rpdAndLocation ? 100 : 0,
+        hasData: !!assessmentData.reportSections?.rpdAndLocation,
+        required: true
+      },
+      {
+        section: 'legalAndPlanning',
+        label: 'Section 3: Legal and Planning',
+        status: assessmentData.reportSections?.legalAndPlanning ? 'supplied' : 'investigation_required',
+        completeness: assessmentData.reportSections?.legalAndPlanning ? 100 : 0,
+        hasData: !!assessmentData.reportSections?.legalAndPlanning,
+        required: true
+      },
+      {
+        section: 'tenancySchedule',
+        label: 'Section 4: Tenancy Schedule',
+        status: assessmentData.reportSections?.tenancyScheduleLeaseDetails ? 'supplied' : 'optional',
+        completeness: assessmentData.reportSections?.tenancyScheduleLeaseDetails ? 100 : 0,
+        hasData: !!assessmentData.reportSections?.tenancyScheduleLeaseDetails,
+        required: false
+      },
+      {
+        section: 'marketCommentary',
+        label: 'Section 6: Market Commentary',
+        status: assessmentData.reportSections?.marketCommentary ? 'supplied' : 'investigation_required',
+        completeness: assessmentData.reportSections?.marketCommentary ? 100 : 0,
+        hasData: !!assessmentData.reportSections?.marketCommentary,
+        required: true
+      },
+      {
+        section: 'propertyDetails',
+        label: 'Section 7: Property Details',
+        status: assessmentData.reportSections?.propertyDetails ? 'supplied' : 'investigation_required',
+        completeness: assessmentData.reportSections?.propertyDetails ? 100 : 0,
+        hasData: !!assessmentData.reportSections?.propertyDetails,
+        required: true
+      },
+      {
+        section: 'environmental',
+        label: 'Section 8: Environmental',
+        status: assessmentData.reportSections?.environmentalAssessment ? 'supplied' : 'investigation_required',
+        completeness: assessmentData.reportSections?.environmentalAssessment ? 100 : 0,
+        hasData: !!assessmentData.reportSections?.environmentalAssessment,
+        required: true
+      },
+      {
+        section: 'riskAssessment',
+        label: 'Section 10: Risk Assessment',
+        status: assessmentData.reportSections?.riskAssessmentMarketIndicators ? 'supplied' : 'investigation_required',
+        completeness: assessmentData.reportSections?.riskAssessmentMarketIndicators ? 100 : 0,
+        hasData: !!assessmentData.reportSections?.riskAssessmentMarketIndicators,
+        required: true
       }
-    }, 1500);
+    ];
 
-    return () => clearTimeout(timer);
-  }, [formData, jobId, loading]);
-
-  return { formData, setFormData, loading, saving };
-}
-
-// Toggle component for include/exclude
-function IncludeToggle({ 
-  field, 
-  label, 
-  formData, 
-  setFormData 
-}: { 
-  field: string; 
-  label: string; 
-  formData: any; 
-  setFormData: (data: any) => void; 
-}) {
-  const includeFlags = formData.include_flags || {};
-  const isIncluded = includeFlags[field] ?? true;
-
-  const handleToggle = () => {
-    setFormData({
-      ...formData,
-      include_flags: {
-        ...includeFlags,
-        [field]: !isIncluded
-      }
-    });
+    return sections;
   };
 
-  return (
-    <div className="flex items-center justify-between space-x-2">
-      <Label htmlFor={field}>{label}</Label>
-      <Switch
-        id={field}
-        checked={isIncluded}
-        onCheckedChange={handleToggle}
-      />
-    </div>
+  const dataReadiness = calculateDataReadiness();
+  const overallReadiness = Math.round(
+    (dataReadiness.filter(s => s.hasData).length / dataReadiness.length) * 100
   );
-}
 
-export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
-  const { formData, setFormData, loading, saving } = useAssessmentData(jobId);
-  const [reportUrl, setReportUrl] = useState<string | null>(null);
-  const [generating, setGenerating] = useState(false);
-  const { toast } = useToast();
-
-  const handleFieldChange = (field: string, value: any) => {
-    setFormData({
-      ...formData,
-      [field]: value
-    });
-  };
-
-  const handleBrandingChange = (key: string, value: string) => {
-    const newBranding = { ...formData.branding || {}, [key]: value };
-    setFormData({
-      ...formData,
-      branding: newBranding
-    });
-  };
-
-  const generateReport = async (reviewed: boolean) => {
+  const generateFullAssessmentReport = async () => {
     setGenerating(true);
     try {
+      // Store compiled report data in localStorage for report generation
+      const reportData = {
+        jobId,
+        reportSections: assessmentData.reportSections,
+        reportConfig: assessmentData.reportSections?.reportConfig || {},
+        unifiedData: assessmentData.unifiedData
+      };
+
+      localStorage.setItem('currentReportData', JSON.stringify(reportData));
+      
+      // Create or update property assessment record
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) throw new Error('User not authenticated');
+
+      const assessmentRecord = {
+        job_id: jobId,
+        user_id: user.user.id,
+        report_config: assessmentData.reportSections?.reportConfig || {},
+        report_sections: assessmentData.reportSections,
+        include_flags: {
+          rpdAndLocation: !!assessmentData.reportSections?.rpdAndLocation,
+          legalAndPlanning: !!assessmentData.reportSections?.legalAndPlanning,
+          tenancySchedule: !!assessmentData.reportSections?.tenancyScheduleLeaseDetails,
+          marketCommentary: !!assessmentData.reportSections?.marketCommentary,
+          propertyDetails: !!assessmentData.reportSections?.propertyDetails,
+          environmental: !!assessmentData.reportSections?.environmentalAssessment,
+          riskAssessment: !!assessmentData.reportSections?.riskAssessmentMarketIndicators
+        },
+        status: 'ready_for_generation'
+      };
+
+      // Upsert the assessment record
+      const { error: upsertError } = await supabase
+        .from('property_assessments')
+        .upsert(assessmentRecord, { 
+          onConflict: 'job_id',
+          ignoreDuplicates: false 
+        });
+
+      if (upsertError) {
+        console.error('Error saving assessment:', upsertError);
+        throw upsertError;
+      }
+
+      // Generate the report using the edge function
       const { data, error } = await supabase.functions.invoke('generate-report', {
-        body: { job_id: jobId, reviewed }
+        body: { job_id: jobId, reviewed: true }
       });
 
       if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive"
-        });
-        return;
+        throw error;
       }
 
       setReportUrl(data.report_url);
+      
       toast({
         title: "Success",
-        description: "Report generated successfully!"
+        description: "Full assessment report generated successfully! Work Hub job created.",
       });
-    } catch (error) {
+
+      // Navigate to report view after short delay
+      setTimeout(() => {
+        window.location.href = '/report';
+      }, 2000);
+
+    } catch (error: any) {
+      console.error('Error generating report:', error);
       toast({
-        title: "Error", 
-        description: "Failed to generate report",
+        title: "Error",
+        description: error.message || "Failed to generate assessment report",
         variant: "destructive"
       });
     } finally {
@@ -173,179 +306,146 @@ export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="text-muted-foreground">Loading assessment data...</div>
+        <div className="text-center space-y-2">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <div className="text-muted-foreground">Loading assessment data...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 p-6">
-      {/* OCR Results */}
+    <div className="space-y-6 p-6 max-w-4xl mx-auto">
+      {/* Data Readiness Assessment */}
       <Card>
         <CardHeader>
-          <CardTitle>OCR Extracted Text</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Textarea
-            value={formData.ocr_results || ''}
-            onChange={(e) => handleFieldChange('ocr_results', e.target.value)}
-            placeholder="OCR results will appear here..."
-            className="min-h-[120px] resize-none"
-          />
-        </CardContent>
-      </Card>
-
-      {/* Editable Fields */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Report Details</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Data Readiness Assessment
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="report_type">Report Type</Label>
-            <Input
-              id="report_type"
-              value={formData.report_type || ''}
-              onChange={(e) => handleFieldChange('report_type', e.target.value)}
-              placeholder="Enter report type..."
-            />
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-semibold">Overall Progress</span>
+            <Badge variant={overallReadiness >= 80 ? "default" : overallReadiness >= 50 ? "secondary" : "destructive"}>
+              {overallReadiness}% Ready
+            </Badge>
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="valuation_purpose">Valuation Purpose</Label>
-            <Input
-              id="valuation_purpose"
-              value={formData.valuation_purpose || ''}
-              onChange={(e) => handleFieldChange('valuation_purpose', e.target.value)}
-              placeholder="Enter valuation purpose..."
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Include/Exclude Toggles */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Report Sections</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <IncludeToggle
-            field="report_type"
-            label="Report Type"
-            formData={formData}
-            setFormData={setFormData}
-          />
-          <IncludeToggle
-            field="valuation_purpose"
-            label="Valuation Purpose"
-            formData={formData}
-            setFormData={setFormData}
-          />
-          <IncludeToggle
-            field="ocr_results"
-            label="OCR Extracted Text"
-            formData={formData}
-            setFormData={setFormData}
-          />
-          <IncludeToggle
-            field="comparables"
-            label="Comparables"
-            formData={formData}
-            setFormData={setFormData}
-          />
-          <IncludeToggle
-            field="market_analysis"
-            label="Market Analysis"
-            formData={formData}
-            setFormData={setFormData}
-          />
-        </CardContent>
-      </Card>
-
-      {/* White Labelling */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Report Branding</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="company">Company Name</Label>
-            <Input
-              id="company"
-              value={formData.branding?.company || ''}
-              onChange={(e) => handleBrandingChange('company', e.target.value)}
-              placeholder="Your Company Name"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="logo_url">Logo URL</Label>
-            <Input
-              id="logo_url"
-              value={formData.branding?.logo_url || ''}
-              onChange={(e) => handleBrandingChange('logo_url', e.target.value)}
-              placeholder="https://example.com/logo.png"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="primary_color">Primary Color</Label>
-            <Input
-              id="primary_color"
-              type="color"
-              value={formData.branding?.primary_color || '#003366'}
-              onChange={(e) => handleBrandingChange('primary_color', e.target.value)}
-              className="w-20 h-10"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Generate Report */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Generate Report</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-4">
-            <Button
-              onClick={() => generateReport(false)}
-              disabled={generating}
-              variant="default"
-            >
-              {generating ? 'Generating...' : 'Generate Automated Report'}
-            </Button>
-
-            <Button
-              onClick={() => generateReport(true)}
-              disabled={generating}
-              variant="secondary"
-            >
-              {generating ? 'Generating...' : 'Generate Reviewed Report'}
-            </Button>
-          </div>
-
-          {reportUrl && (
-            <div className="p-4 bg-muted rounded-lg">
-              <Label className="font-semibold">Report Generated:</Label>
-              <div className="mt-2">
-                <Button variant="link" className="p-0 h-auto" asChild>
-                  <a
-                    href={reportUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary underline"
-                  >
-                    Download Report
-                  </a>
-                </Button>
+          
+          <div className="grid gap-3">
+            {dataReadiness.map((item) => (
+              <div key={item.section} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  {item.hasData ? (
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  ) : (
+                    <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  )}
+                  <div>
+                    <div className="font-medium">{item.label}</div>
+                    <div className="text-sm text-muted-foreground capitalize">
+                      {item.status.replace('_', ' ')}
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium">Data Completeness</div>
+                  <div className="text-sm text-muted-foreground">{item.completeness}%</div>
+                </div>
               </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Data Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Assessment Data Summary</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label className="text-sm font-medium">Property Address</Label>
+              <div className="text-sm text-muted-foreground">
+                {assessmentData.reportSections?.rpdAndLocation?.address || 
+                 assessmentData.reportSections?.propertyDetails?.propertyAddress ||
+                 'Not provided'}
+              </div>
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Report Type</Label>
+              <div className="text-sm text-muted-foreground">
+                {assessmentData.reportSections?.reportConfig?.reportType || 'Standard Valuation'}
+              </div>
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Property Type</Label>
+              <div className="text-sm text-muted-foreground">
+                {assessmentData.reportSections?.reportConfig?.propertyType || 
+                 assessmentData.reportSections?.propertyDetails?.propertyType || 
+                 'Not specified'}
+              </div>
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Sections Ready</Label>
+              <div className="text-sm text-muted-foreground">
+                {dataReadiness.filter(s => s.hasData).length} of {dataReadiness.length} sections
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Generate Report Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Generate Full Assessment Report</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            This will create a Work Hub job and pre-populate all report sections with your assessment data
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {overallReadiness < 50 && (
+            <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+              <div className="flex items-center gap-2 text-orange-700">
+                <AlertTriangle className="h-4 w-4" />
+                <span className="font-medium">Low Data Completeness</span>
+              </div>
+              <p className="text-sm text-orange-600 mt-1">
+                Consider completing more sections for a comprehensive report
+              </p>
             </div>
           )}
 
-          {saving && (
-            <div className="text-sm text-muted-foreground">
-              Auto-saving changes...
+          <Button
+            onClick={generateFullAssessmentReport}
+            disabled={generating}
+            className="w-full"
+            size="lg"
+          >
+            {generating ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Generating Report...
+              </>
+            ) : (
+              <>
+                <FileText className="h-4 w-4 mr-2" />
+                Generate Full Assessment Report
+              </>
+            )}
+          </Button>
+
+          {reportUrl && (
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center gap-2 text-green-700">
+                <CheckCircle className="h-4 w-4" />
+                <span className="font-medium">Report Generated Successfully</span>
+              </div>
+              <p className="text-sm text-green-600 mt-1">
+                Redirecting to full report view...
+              </p>
             </div>
           )}
         </CardContent>
