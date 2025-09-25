@@ -4,6 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Globe, MapPin, Info } from 'lucide-react';
 
+interface AdditionalMap {
+  name: string;
+  url: string;
+  description: string;
+}
+
 interface StatePlanningPortal {
   id: string;
   name: string;
@@ -12,6 +18,7 @@ interface StatePlanningPortal {
   mapUrl: string;
   description: string;
   features: string[];
+  additionalMaps?: AdditionalMap[];
 }
 
 const planningPortals: StatePlanningPortal[] = [
@@ -21,8 +28,20 @@ const planningPortals: StatePlanningPortal[] = [
     shortName: "VicPlan",
     url: "https://mapshare.vic.gov.au/vicplan/",
     mapUrl: "https://mapshare.vic.gov.au/vicplan/",
+    additionalMaps: [
+      {
+        name: "MapShare Victoria",
+        url: "https://mapshare.vic.gov.au/mapsharevic/",
+        description: "Comprehensive Victorian mapping portal"
+      },
+      {
+        name: "LASSI - Land & Survey Spatial Information",
+        url: "https://maps.land.vic.gov.au/lassi/LassiUI.jsp",
+        description: "Land and survey spatial information system"
+      }
+    ],
     description: "Access Victoria's comprehensive planning data and interactive mapping tools",
-    features: ["Zoning Maps", "Planning Overlays", "Heritage Information", "Development Applications", "Planning Schemes"]
+    features: ["Zoning Maps", "Planning Overlays", "Heritage Information", "Development Applications", "Planning Schemes", "MapShare Victoria", "LASSI System"]
   },
   {
     id: "nsw",
@@ -180,6 +199,34 @@ export const StatePlanningPortalLinks: React.FC<StatePlanningPortalLinksProps> =
                 )}
               </div>
             </div>
+            
+            {/* Additional mapping sites for Victoria */}
+            {portal.additionalMaps && portal.additionalMaps.length > 0 && (
+              <div className="mt-3 pt-3 border-t border-blue-200">
+                <h5 className="text-sm font-medium text-blue-800 mb-2">Additional Victorian Mapping Resources:</h5>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {portal.additionalMaps.map((map, index) => (
+                    <div key={index} className="p-2 bg-blue-50 rounded border border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-blue-900">{map.name}</p>
+                          <p className="text-xs text-blue-600">{map.description}</p>
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open(map.url, "_blank", "noopener,noreferrer")}
+                          className="gap-1 text-blue-600 border-blue-300 hover:bg-blue-100 ml-2"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                          Open
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
 
