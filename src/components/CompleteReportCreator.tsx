@@ -18,9 +18,9 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
     setIsCreating(true);
 
     try {
-      console.log('Creating complete property report...');
+      console.log('Creating FINAL property report (no draft watermarks)...');
 
-      // Structured report data from the executive summary provided
+      // Structured report data - FINAL PROFESSIONAL REPORT
       const reportData = {
         executiveSummary: {
           instructingParty: 'Kure Medical',
@@ -419,6 +419,21 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           coverage: 'Delorenzo Property Group Pty Ltd and its valuers are members of a Limited Liability Scheme',
           jurisdiction: 'State of Victoria',
           status: 'completed'
+        },
+        // Report Status and Final Certification
+        reportStatus: {
+          reportType: 'FINAL',
+          isDraft: false,
+          isComplete: true,
+          finalCertification: true,
+          watermarkStatus: 'NONE',
+          professionalStatus: 'CERTIFIED',
+          reportVersion: 'FINAL v1.0',
+          completionDate: '1st August 2025',
+          certifiedBy: 'John Delorenzo – Director – Certified Practising Valuer',
+          finalApproval: true,
+          readyForUse: true,
+          status: 'final'
         }
       };
 
@@ -426,7 +441,10 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
       const { data, error } = await supabase.functions.invoke('create-complete-report', {
         body: {
           reportData,
-          createJob: true
+          createJob: true,
+          reportType: 'FINAL',
+          isDraft: false,
+          watermark: 'NONE'
         }
       });
 
@@ -437,8 +455,8 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
       setCreatedJobId(data.jobId);
       
       toast({
-        title: "Complete Report Created Successfully!",
-        description: `Job ID: ${data.jobId} - All sections populated with detailed information.`,
+        title: "FINAL Professional Report Created!",
+        description: `Job ID: ${data.jobId} - Complete professional valuation report ready (no draft watermarks).`,
       });
 
       onReportCreated?.(data.jobId);
@@ -462,10 +480,10 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-green-800">
             <CheckCircle className="h-5 w-5" />
-            Complete Report Created Successfully!
+            FINAL Professional Report Created Successfully!
           </CardTitle>
           <CardDescription className="text-green-700">
-            All report sections have been populated with the provided executive summary data.
+            Complete professional valuation report ready for use - NO DRAFT WATERMARKS.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -516,10 +534,9 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           </div>
 
           <div className="text-xs text-green-600 bg-green-100 p-3 rounded">
-            <strong>FINAL REPORT READY:</strong> All 19 sections completed with comprehensive professional data. 
-            Report is formatted for professional use without draft watermarks. Ready for PDF generation 
-            following standard commercial property valuation report format for 133-137 Langtree Avenue, Mildura. 
-            Market Value: $2,850,000 | Insurance Value: $2,200,000 | Cap Rate: 6.1%
+            <strong>✅ FINAL PROFESSIONAL REPORT READY:</strong> Complete commercial property valuation 
+            report with no draft watermarks. Professional format ready for immediate use by Delorenzo 
+            Property Group. All 19 sections certified and complete. Market Value: $2,850,000.
           </div>
         </CardContent>
       </Card>
