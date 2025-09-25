@@ -43,8 +43,8 @@ const ReportSectionToggler: React.FC<ReportSectionTogglerProps> = ({ jobId }) =>
     try {
       setLoading(true);
       const { data, error } = await supabase.functions.invoke('report-configuration', {
-        body: { jobId },
-        method: 'GET'
+        body: JSON.stringify({ jobId, action: 'get' }),
+        method: 'POST'
       });
 
       if (error) throw error;
