@@ -96,7 +96,7 @@ serve(async (req) => {
     console.error('Error generating executive summary:', error);
     return new Response(JSON.stringify({ 
       success: false,
-      error: error.message || 'Failed to generate executive summary'
+      error: error instanceof Error ? error.message : 'Failed to generate executive summary'
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

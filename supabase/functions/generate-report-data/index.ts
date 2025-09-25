@@ -180,7 +180,7 @@ async function createPropertyRecord(supabase: any, assessmentData: any) {
     return { success: true, propertyId };
   } catch (error) {
     console.error('Error in createPropertyRecord:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 
@@ -245,7 +245,7 @@ async function createWorkHubJob(supabase: any, data: any) {
     return job;
   } catch (error) {
     console.error('Error creating work hub job:', error);
-    throw new Error(`Failed to create work hub job: ${error.message}`);
+    throw new Error(`Failed to create work hub job: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
@@ -530,6 +530,6 @@ async function createReportEntry(supabase: any, data: any) {
     return { reportId: report.id };
   } catch (error) {
     console.error('Error creating report entry:', error);
-    throw new Error(`Failed to create report entry: ${error.message}`);
+    throw new Error(`Failed to create report entry: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }

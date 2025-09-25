@@ -195,7 +195,7 @@ Focus on Australian property market conditions and regulations. Use professional
   } catch (error) {
     console.error('Error in automated-risk-assessment function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message,
+      error: error instanceof Error ? error.message : 'Unknown error',
       fallbackAssessment: generateFallbackAssessment()
     }), {
       status: 500,

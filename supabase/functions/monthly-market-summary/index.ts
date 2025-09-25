@@ -87,7 +87,7 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         message: `Market summary ${existingSummary ? 'updated' : 'created'} for ${monthYearStr}`,
-        data: result.data[0]
+        data: result.data?.[0] || null
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -101,7 +101,7 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

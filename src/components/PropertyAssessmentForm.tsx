@@ -142,7 +142,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       component: (
         <div className="space-y-6">
           <ReportTypeConfiguration />
-          <ReportSectionToggler />
+          <ReportSectionToggler jobId={reportData.currentJobId || ''} />
         </div>
       ),
       validation: () => {

@@ -83,7 +83,7 @@ serve(async (req) => {
         const placesData = await placesResponse.json();
         
         if (placesData.status === 'OK') {
-          const amenities = placesData.results.map(place => ({
+          const amenities = placesData.results.map((place: any) => ({
             name: place.name,
             type: place.types[0],
             rating: place.rating,
@@ -91,13 +91,13 @@ serve(async (req) => {
             priceLevel: place.price_level
           }));
 
-          analysisData.propertyDetails.nearbyAmenities = {
+          (analysisData.propertyDetails as any).nearbyAmenities = {
             total: amenities.length,
-            schools: amenities.filter(a => a.type?.includes('school')),
-            hospitals: amenities.filter(a => a.type?.includes('hospital')),
-            shopping: amenities.filter(a => a.type?.includes('shopping') || a.type?.includes('store')),
-            transport: amenities.filter(a => a.type?.includes('transit') || a.type?.includes('bus')),
-            restaurants: amenities.filter(a => a.type?.includes('restaurant') || a.type?.includes('food'))
+            schools: amenities.filter((a: any) => a.type?.includes('school')),
+            hospitals: amenities.filter((a: any) => a.type?.includes('hospital')),
+            shopping: amenities.filter((a: any) => a.type?.includes('shopping') || a.type?.includes('store')),
+            transport: amenities.filter((a: any) => a.type?.includes('transit') || a.type?.includes('bus')),
+            restaurants: amenities.filter((a: any) => a.type?.includes('restaurant') || a.type?.includes('food'))
           };
         }
 
@@ -232,7 +232,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in property-data-analysis function:', error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error', details: error.message }), 
+      JSON.stringify({ error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' }), 
       { 
         status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
