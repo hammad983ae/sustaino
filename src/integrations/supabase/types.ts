@@ -2570,6 +2570,80 @@ export type Database = {
           },
         ]
       }
+      report_configurations: {
+        Row: {
+          created_at: string | null
+          id: string
+          job_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          job_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          job_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      report_sections: {
+        Row: {
+          config_id: string | null
+          created_at: string | null
+          data_completeness: number | null
+          id: string
+          is_included: boolean | null
+          is_required: boolean | null
+          manual_data: Json | null
+          ocr_data: Json | null
+          section_label: string
+          section_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          config_id?: string | null
+          created_at?: string | null
+          data_completeness?: number | null
+          id?: string
+          is_included?: boolean | null
+          is_required?: boolean | null
+          manual_data?: Json | null
+          ocr_data?: Json | null
+          section_label: string
+          section_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          config_id?: string | null
+          created_at?: string | null
+          data_completeness?: number | null
+          id?: string
+          is_included?: boolean | null
+          is_required?: boolean | null
+          manual_data?: Json | null
+          ocr_data?: Json | null
+          section_label?: string
+          section_name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_sections_config_id_fkey"
+            columns: ["config_id"]
+            isOneToOne: false
+            referencedRelation: "report_configurations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reports: {
         Row: {
           completed_at: string | null
@@ -3242,6 +3316,10 @@ export type Database = {
           property_data: Json
         }
         Returns: Json
+      }
+      create_default_report_config: {
+        Args: { p_job_id: string; p_user_id: string }
+        Returns: string
       }
       create_report: {
         Args: { report_data: Json }
