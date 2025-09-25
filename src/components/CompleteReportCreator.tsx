@@ -516,10 +516,10 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           </div>
 
           <div className="text-xs text-green-600 bg-green-100 p-3 rounded">
-            <strong>Complete Report Ready:</strong> All 17 sections have been populated with comprehensive data. 
-            The report is now ready for PDF generation with professional formatting including executive summary, 
-            property photos, risk assessment, and complete valuation summary. This is a comprehensive commercial 
-            property valuation report for 133-137 Langtree Avenue, Mildura.
+            <strong>FINAL REPORT READY:</strong> All 19 sections completed with comprehensive professional data. 
+            Report is formatted for professional use without draft watermarks. Ready for PDF generation 
+            following standard commercial property valuation report format for 133-137 Langtree Avenue, Mildura. 
+            Market Value: $2,850,000 | Insurance Value: $2,200,000 | Cap Rate: 6.1%
           </div>
         </CardContent>
       </Card>
