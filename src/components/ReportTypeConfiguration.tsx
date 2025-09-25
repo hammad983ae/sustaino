@@ -404,6 +404,60 @@ const ReportTypeConfiguration = () => {
             </div>
           </div>
 
+          {/* Insurance Figure Configuration */}
+          <div className="mt-4">
+            <div>
+              <Label htmlFor="insurance-figure" className="text-sm font-medium">Include Insurance Figure</Label>
+              <Select value={formData['insurance-figure'] || ''} onValueChange={(value) => handleSelectChange('insurance-figure', value)}>
+                <SelectTrigger id="insurance-figure" className="mt-1 max-w-xs">
+                  <SelectValue placeholder="Select insurance option" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border z-50">
+                  <SelectItem value="full-replacement">Full Replacement Cost</SelectItem>
+                  <SelectItem value="indemnity">Indemnity Value</SelectItem>
+                  <SelectItem value="reinstatement">Reinstatement Value</SelectItem>
+                  <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+                <h4 className="text-sm font-medium text-green-900 dark:text-green-400 mb-1">Insurance Figure Guidelines</h4>
+                <div className="text-xs text-green-800 dark:text-green-300 space-y-1">
+                  <p><strong>Full Replacement Cost:</strong> Complete rebuilding cost at current prices including demolition and site preparation</p>
+                  <p><strong>Indemnity Value:</strong> Current market value less depreciation for age and condition</p>
+                  <p><strong>Reinstatement Value:</strong> Cost to restore property to equivalent condition and utility</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Figure Options Configuration */}
+          <div className="mt-4">
+            <div>
+              <Label htmlFor="figure-options" className="text-sm font-medium">Include Figure Options</Label>
+              <Select value={formData['figure-options'] || ''} onValueChange={(value) => handleSelectChange('figure-options', value)}>
+                <SelectTrigger id="figure-options" className="mt-1 max-w-xs">
+                  <SelectValue placeholder="Select figure inclusion" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border z-50">
+                  <SelectItem value="charts-graphs">Charts & Graphs</SelectItem>
+                  <SelectItem value="property-images">Property Images</SelectItem>
+                  <SelectItem value="maps-plans">Maps & Plans</SelectItem>
+                  <SelectItem value="comprehensive">All Figures & Charts</SelectItem>
+                  <SelectItem value="minimal">Text Only (No Figures)</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="mt-2 p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-md">
+                <h4 className="text-sm font-medium text-purple-900 dark:text-purple-400 mb-1">Figure Options Guidelines</h4>
+                <div className="text-xs text-purple-800 dark:text-purple-300 space-y-1">
+                  <p><strong>Charts & Graphs:</strong> Market analysis charts, comparable sales graphs, and trend analysis</p>
+                  <p><strong>Property Images:</strong> Photos, floor plans, and visual property documentation</p>
+                  <p><strong>Maps & Plans:</strong> Location maps, zoning plans, and site plans</p>
+                  <p><strong>Comprehensive:</strong> All visual elements including images, charts, maps, and diagrams</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="pt-4 space-y-4">
             <div>
               <Label htmlFor="custom-basis-auto" className="text-sm font-medium">Custom Basis (Auto-Generated)</Label>

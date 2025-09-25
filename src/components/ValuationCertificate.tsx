@@ -388,6 +388,87 @@ const ValuationCertificate = () => {
                 readOnly 
               />
             </div>
+
+            {/* Rental Values Section - Commercial Properties */}
+            {(prePopulatedData.propertyType?.toLowerCase().includes('commercial') || 
+              prePopulatedData.propertyType?.toLowerCase().includes('retail') ||
+              prePopulatedData.propertyType?.toLowerCase().includes('office') ||
+              prePopulatedData.propertyType?.toLowerCase().includes('industrial')) && (
+              <>
+                <div className="p-4 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="font-medium text-orange-800 dark:text-orange-200">Net Rent Value</Label>
+                    <span className="text-xs text-orange-600 dark:text-orange-400">[Commercial Property]</span>
+                  </div>
+                  <Input 
+                    placeholder="$XXX,XXX per annum net"
+                    className="bg-white dark:bg-gray-800" 
+                  />
+                </div>
+
+                <div className="p-4 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="font-medium text-orange-800 dark:text-orange-200">Market Rent Value</Label>
+                    <span className="text-xs text-orange-600 dark:text-orange-400">[Commercial Property]</span>
+                  </div>
+                  <Input 
+                    placeholder="$XXX,XXX per annum gross"
+                    className="bg-white dark:bg-gray-800" 
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Rental Value Section - Residential Properties */}
+            {(prePopulatedData.propertyType?.toLowerCase().includes('residential') || 
+              prePopulatedData.propertyType?.toLowerCase().includes('house') ||
+              prePopulatedData.propertyType?.toLowerCase().includes('apartment') ||
+              prePopulatedData.propertyType?.toLowerCase().includes('unit')) && (
+              <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="font-medium text-blue-800 dark:text-blue-200">Rental Value</Label>
+                  <span className="text-xs text-blue-600 dark:text-blue-400">[Residential Property]</span>
+                </div>
+                <Input 
+                  placeholder="$XXX per week"
+                  className="bg-white dark:bg-gray-800" 
+                />
+              </div>
+            )}
+
+            {/* Insurance Value Section */}
+            <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-purple-800 dark:text-purple-200">Insurance Value</Label>
+                <span className="text-xs text-purple-600 dark:text-purple-400">[Replacement Cost]</span>
+              </div>
+              <Input 
+                placeholder="$XXX,XXX (Full Replacement)"
+                className="bg-white dark:bg-gray-800" 
+              />
+              <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
+                Based on current building costs and site preparation
+              </p>
+            </div>
+          </div>
+
+          {/* Additional Valuation Details */}
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-900/30 rounded-lg border">
+            <h4 className="font-medium mb-3">Valuation Details Summary</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <Label className="text-xs text-muted-foreground">Property Type</Label>
+                <p className="font-medium">{prePopulatedData.propertyType || 'To be determined'}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Valuation Basis</Label>
+                <p className="font-medium">{prePopulatedData.valuationBasis || 'Market Value'}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Interest Valued</Label>
+                <p className="font-medium">{prePopulatedData.interestValues || 'Freehold'}</p>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
