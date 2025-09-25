@@ -15,6 +15,7 @@ import {
   Thermometer,
   TrendingUp
 } from 'lucide-react';
+import ClientFinancialSummary from '@/components/ClientFinancialSummary';
 import floorPlanImage from '@/assets/marco-floor-plan.jpg';
 import kitchen1 from '@/assets/kitchen-1.jpg';
 import kitchen2 from '@/assets/kitchen-2.jpg';
@@ -873,7 +874,41 @@ const MilduraValuationReport = () => {
           </CardContent>
         </Card>
 
-        {/* Economic, Geographical and Catchment Area Analysis */}
+        {/* Client Financial Assessment Integration */}
+        <Card className="shadow-lg border-border mb-8">
+          <CardHeader className="bg-gradient-to-r from-green-500/10 to-teal-500/10">
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <DollarSign className="w-6 h-6" />
+              Client Financial Assessment & Market Impact
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-2">
+              Professional Financial Assessment Tool™ integration with valuation considerations
+            </p>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <ClientFinancialSummary 
+              showFullDetails={true} 
+              purpose="valuation" 
+            />
+            
+            {/* Valuation Impact Analysis */}
+            <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-lg">
+              <h4 className="font-semibold text-foreground mb-3">Financial Assessment Impact on Valuation</h4>
+              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2">
+                  <p><strong>Market Positioning:</strong> Client's financial capacity affects market competitiveness</p>
+                  <p><strong>Settlement Risk:</strong> Financial strength impacts transaction certainty</p>
+                  <p><strong>Lending Terms:</strong> Credit profile influences available financing options</p>
+                </div>
+                <div className="space-y-2">
+                  <p><strong>Risk Premium:</strong> Strong financial position may reduce valuation risk</p>
+                  <p><strong>Purchase Capacity:</strong> Verified through Four C's analysis</p>
+                  <p><strong>LMI Impact:</strong> Weighted calculation affects total acquisition cost</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         <Card className="shadow-lg border-border">
           <CardHeader className="bg-gradient-to-r from-orange-500/10 to-amber-500/10">
             <CardTitle className="flex items-center gap-2 text-foreground">

@@ -23,6 +23,7 @@ import { AutomaticRiskAssessment, type PropertyData } from "@/lib/automaticRiskA
 import { useReportData } from "@/contexts/ReportDataContext";
 import { useProperty } from "@/contexts/PropertyContext";
 import WorldClassRiskAssessment from '@/components/WorldClassRiskAssessment';
+import ClientFinancialSummary from '@/components/ClientFinancialSummary';
 
 const RiskAssessmentMarketIndicators = () => {
   const { saveData, loadData, isSaving, lastSaved } = useUniversalSave('RiskAssessmentMarketIndicators', { 
@@ -218,6 +219,12 @@ const RiskAssessmentMarketIndicators = () => {
   return (
     <div className="space-y-6">
       {/* AI-Powered Risk Assessment Section */}
+      {/* Client Financial Integration */}
+      <ClientFinancialSummary 
+        showFullDetails={true} 
+        purpose="risk-assessment" 
+      />
+
       <WorldClassRiskAssessment />
       
       {/* Legacy Manual Risk Assessment - Optional */}
