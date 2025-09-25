@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PerformanceRatingSystem } from './PerformanceRatingSystem';
 import { EmployeePerformancePlatform } from './EmployeePerformancePlatform';
+import { EnhancedEPAT } from './comprehensive/EnhancedEPAT';
 import { Users, TrendingUp } from 'lucide-react';
 
 export const EPAT: React.FC = () => {
@@ -31,7 +32,7 @@ export const EPAT: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="performance-rating" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="performance-rating" className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
                 Performance Rating System™
@@ -39,6 +40,10 @@ export const EPAT: React.FC = () => {
               <TabsTrigger value="employee-assessment" className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Employee Performance & Value Assessment™
+              </TabsTrigger>
+              <TabsTrigger value="enhanced-epat" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Comprehensive Employment Analysis™
               </TabsTrigger>
             </TabsList>
 
@@ -48,6 +53,10 @@ export const EPAT: React.FC = () => {
 
             <TabsContent value="employee-assessment">
               <EmployeePerformancePlatform />
+            </TabsContent>
+
+            <TabsContent value="enhanced-epat">
+              <EnhancedEPAT />
             </TabsContent>
           </Tabs>
         </CardContent>
