@@ -8,7 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
-import { Calculator, TrendingUp, DollarSign, Shield, Users, Globe, CreditCard, Leaf } from 'lucide-react';
+import { useReportData } from '@/contexts/ReportDataContext';
+import { useToast } from '@/hooks/use-toast';
+import { Calculator, TrendingUp, DollarSign, Shield, Users, Globe, CreditCard, Leaf, Zap, RefreshCw } from 'lucide-react';
 
 interface ServiceabilityInputs {
   grossIncome: number;
@@ -65,6 +67,10 @@ interface CreditProfile {
 }
 
 const FinancialAssessmentTools: React.FC = () => {
+  const { reportData } = useReportData();
+  const { toast } = useToast();
+  const [autoAssessmentEnabled, setAutoAssessmentEnabled] = useState(true);
+
   const [inputs, setInputs] = useState<ServiceabilityInputs>({
     grossIncome: 0,
     existingDebt: 0,
@@ -118,6 +124,76 @@ const FinancialAssessmentTools: React.FC = () => {
     propertyValue: 0,
     downPayment: 0,
   });
+
+  // Auto-populate from integration data
+  useEffect(() => {
+    if (reportData?.accountingFinancials) {
+      const integrationData = reportData.accountingFinancials;
+      
+      // Auto-populate from accounting software data
+      if (integrationData.accountingSoftware) {
+        setInputs(prev => ({
+          ...prev,
+          grossIncome: integrationData.accountingSoftware.revenue || prev.grossIncome,
+          existingDebt: integrationData.accountingSoftware.expenses || prev.existingDebt
+        }));
+        
+        setCreditProfile(prev => ({
+          ...prev,
+          annualIncome: integrationData.accountingSoftware.revenue || prev.annualIncome,
+          monthlyDebts: (integrationData.accountingSoftware.expenses || 0) / 12
+        }));
+      }
+      
+      // Auto-populate from credit assessment
+      if (integrationData.creditAssessment) {
+        setCreditProfile(prev => ({
+          ...prev,
+          creditScore: integrationData.creditAssessment.score || prev.creditScore
+        }));
+      }
+      
+      toast({
+        title: "Assessment Auto-Populated",
+        description: "Financial data has been automatically populated from connected integrations.",
+      });
+    }
+  }, [reportData?.accountingFinancials, toast]);
+
+  const performAutomaticAssessment = () => {
+    // Auto-generate comprehensive report
+    const fourCs = calculateFourCs();
+    const esgScores = calculateESGScore();
+    
+    const overallScore = (fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral + esgScores.overall) / 5;
+    const riskLevel = overallScore >= 8 ? 'Low' : overallScore >= 6 ? 'Medium' : 'High';
+    
+    const report = `
+    AUTOMATED FINANCIAL ASSESSMENT REPORT
+    
+    Overall Assessment Score: ${overallScore.toFixed(1)}/10
+    Risk Level: ${riskLevel}
+    
+    Four C's Analysis:
+    • Character: ${fourCs.character}/10 (Credit Score: ${creditProfile.creditScore})
+    • Capacity: ${fourCs.capacity}/10 (Debt-to-Income: ${((creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) * 100).toFixed(1)}%)
+    • Capital: ${fourCs.capital}/10 (Net Worth: $${(creditProfile.assets + creditProfile.savings).toLocaleString()})
+    • Collateral: ${fourCs.collateral}/10 (LTV: ${((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue * 100).toFixed(1)}%)
+    
+    ESG Assessment:
+    • Environmental: ${esgScores.environmental.toFixed(1)}/10
+    • Social: ${esgScores.social.toFixed(1)}/10
+    • Governance: ${esgScores.governance.toFixed(1)}/10
+    • Climate: ${esgScores.climate.toFixed(1)}/10
+    
+    Recommendations:
+    ${overallScore >= 8 ? '• Excellent financial position - proceed with confidence' : 
+      overallScore >= 6 ? '• Good financial position - minor improvements recommended' : 
+      '• Consider improving financial metrics before proceeding'}
+    `;
+    
+    return report;
+  };
 
   // Calculate automated Four C's based on input data
   const calculateFourCs = () => {
@@ -177,6 +253,30 @@ const FinancialAssessmentTools: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Auto Assessment Control */}
+      <Card className="border-blue-200 bg-blue-50/50">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-blue-600" />
+              <CardTitle className="text-blue-700">Automated Assessment</CardTitle>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={performAutomaticAssessment}
+              className="flex items-center gap-2"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Run Auto Assessment
+            </Button>
+          </div>
+          <CardDescription className="text-blue-600">
+            Financial data is automatically populated from connected integrations (Xero, ATO, Equifax, Banking)
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -979,11 +1079,46 @@ const FinancialAssessmentTools: React.FC = () => {
             </TabsContent>
 
             <div className="flex justify-end space-x-2 mt-6">
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => {
+                // Reset all fields to default values
+                setInputs({
+                  grossIncome: 0,
+                  existingDebt: 0,
+                  livingExpenses: 0,
+                  interestRate: 5.5,
+                  loanTerm: 25,
+                  dependents: 0,
+                  employmentType: 'permanent',
+                  propertyValue: 0,
+                  depositAmount: 0
+                });
+                setCreditProfile({
+                  annualIncome: 0,
+                  monthlyDebts: 0,
+                  creditScore: 0,
+                  employmentYears: 0,
+                  assets: 0,
+                  savings: 0,
+                  propertyValue: 0,
+                  downPayment: 0
+                });
+                toast({
+                  title: "Assessment Reset",
+                  description: "All assessment data has been cleared.",
+                });
+              }}>
                 Reset Assessment
               </Button>
-              <Button>
-                Generate Report
+              <Button onClick={() => {
+                const report = performAutomaticAssessment();
+                toast({
+                  title: "Assessment Report Generated",
+                  description: "Comprehensive financial assessment completed based on integrated data.",
+                });
+                // Here you could save the report or display it in a modal
+                console.log(report);
+              }}>
+                Generate Automated Report
               </Button>
             </div>
           </Tabs>
