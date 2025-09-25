@@ -20,7 +20,13 @@ import {
   TrendingUp,
   AlertCircle,
   CheckCircle,
-  RefreshCw
+  RefreshCw,
+  Users,
+  MapPin,
+  BarChart3,
+  PieChart,
+  Target,
+  FileText
 } from 'lucide-react';
 
 interface FinancialData {
@@ -369,83 +375,319 @@ const AccountingFinancialIntegration: React.FC = () => {
               <FinancialAssessmentTools />
             </TabsContent>
 
-            <TabsContent value="summary" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {financialData.accountingSoftware && (
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm flex items-center gap-2">
-                        <DollarSign className="h-4 w-4" />
-                        Financial Overview
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">Revenue</span>
-                        <span className="font-medium">${financialData.accountingSoftware.revenue?.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">Expenses</span>
-                        <span className="font-medium">${financialData.accountingSoftware.expenses?.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">Profit Margin</span>
-                        <span className="font-medium">{financialData.accountingSoftware.profitMargin?.toFixed(1)}%</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+            <TabsContent value="summary" className="space-y-6">
+              {/* Key Metrics Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <DollarSign className="h-4 w-4" />
+                      Financial Health Score
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-green-600">78/100</div>
+                    <p className="text-sm text-muted-foreground">Above Average</p>
+                  </CardContent>
+                </Card>
 
-                {financialData.creditAssessment && (
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4" />
-                        Credit Assessment
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">Score</span>
-                        <span className="font-medium">{financialData.creditAssessment.score}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">Rating</span>
-                        <Badge variant="outline">{financialData.creditAssessment.rating}</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">Risk</span>
-                        <Badge variant={financialData.creditAssessment.riskLevel === 'Low' ? 'default' : 'secondary'}>
-                          {financialData.creditAssessment.riskLevel}
-                        </Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      Risk Assessment
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-orange-500">Medium</div>
+                    <p className="text-sm text-muted-foreground">Industry Standard</p>
+                  </CardContent>
+                </Card>
 
-                {financialData.governmentData && (
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4" />
-                        Compliance Status
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">ATO</span>
-                        <Badge variant={financialData.governmentData.atoConnected ? 'default' : 'secondary'}>
-                          {financialData.governmentData.atoConnected ? 'Connected' : 'Not Connected'}
-                        </Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-muted-foreground">Status</span>
-                        <Badge variant="default">{financialData.governmentData.complianceStatus}</Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Users className="h-4 w-4" />
+                      Age Demographics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">32 years</div>
+                    <p className="text-sm text-muted-foreground">Prime earning age</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <MapPin className="h-4 w-4" />
+                      Geographic Score
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-blue-600">85/100</div>
+                    <p className="text-sm text-muted-foreground">High opportunity area</p>
+                  </CardContent>
+                </Card>
               </div>
+
+              {/* Financial Performance Charts */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5" />
+                      Financial Performance vs Benchmarks
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm">Revenue Growth</span>
+                          <span className="text-sm font-medium">+12% vs +8% avg</span>
+                        </div>
+                        <div className="w-full bg-muted rounded-full h-2">
+                          <div className="bg-green-500 h-2 rounded-full" style={{ width: '75%' }}></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm">Profit Margin</span>
+                          <span className="text-sm font-medium">18% vs 15% avg</span>
+                        </div>
+                        <div className="w-full bg-muted rounded-full h-2">
+                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: '85%' }}></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm">Cash Flow</span>
+                          <span className="text-sm font-medium">Positive vs 65% avg</span>
+                        </div>
+                        <div className="w-full bg-muted rounded-full h-2">
+                          <div className="bg-emerald-500 h-2 rounded-full" style={{ width: '90%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <PieChart className="h-5 w-5" />
+                      Age vs Earning Potential
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Current Age: 32</span>
+                        <Badge variant="default">Peak Earning Years</Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Current Income</span>
+                          <span className="font-medium">$85,000</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Age Group Average</span>
+                          <span className="font-medium">$72,000</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Projected at 40</span>
+                          <span className="font-medium text-green-600">$115,000</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Lifetime Potential</span>
+                          <span className="font-medium text-blue-600">$2.8M</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Geographic and Industry Analysis */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <MapPin className="h-5 w-5" />
+                      Geographic Statistics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Location</span>
+                      <span className="font-medium">Sydney, NSW</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Median Income</span>
+                      <span className="font-medium">$78,000</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Cost of Living Index</span>
+                      <span className="font-medium">112.5</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Employment Rate</span>
+                      <span className="font-medium text-green-600">96.2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Industry Growth</span>
+                      <span className="font-medium text-blue-600">+8.5%</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5" />
+                      Risk Factors & Mitigation
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Industry Volatility</span>
+                      <Badge variant="secondary">Low</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Economic Sensitivity</span>
+                      <Badge variant="outline">Medium</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Credit History</span>
+                      <Badge variant="default">Excellent</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Market Position</span>
+                      <Badge variant="default">Strong</Badge>
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-2">
+                      Recommended: Diversify income sources, maintain 6-month emergency fund
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="h-5 w-5" />
+                      Alternative Options
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">Investment Portfolio</span>
+                        <span className="text-sm text-green-600">+15% ROI</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">Property Investment</span>
+                        <span className="text-sm text-blue-600">High Potential</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">Side Business</span>
+                        <span className="text-sm text-purple-600">Moderate Risk</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">Skill Development</span>
+                        <span className="text-sm text-emerald-600">Low Risk</span>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" className="w-full mt-3">
+                      View Detailed Analysis
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Detailed Financial Data */}
+              {(financialData.accountingSoftware || financialData.creditAssessment || financialData.governmentData) && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      Connected Data Summary
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {financialData.accountingSoftware && (
+                        <div className="space-y-2">
+                          <h4 className="font-medium flex items-center gap-2">
+                            <DollarSign className="h-4 w-4" />
+                            Financial Overview
+                          </h4>
+                          <div className="space-y-1 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Revenue</span>
+                              <span className="font-medium">${financialData.accountingSoftware.revenue?.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Expenses</span>
+                              <span className="font-medium">${financialData.accountingSoftware.expenses?.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Profit Margin</span>
+                              <span className="font-medium">{financialData.accountingSoftware.profitMargin?.toFixed(1)}%</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {financialData.creditAssessment && (
+                        <div className="space-y-2">
+                          <h4 className="font-medium flex items-center gap-2">
+                            <TrendingUp className="h-4 w-4" />
+                            Credit Assessment
+                          </h4>
+                          <div className="space-y-1 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Score</span>
+                              <span className="font-medium">{financialData.creditAssessment.score}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Rating</span>
+                              <Badge variant="outline" className="h-5">{financialData.creditAssessment.rating}</Badge>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Risk</span>
+                              <Badge variant={financialData.creditAssessment.riskLevel === 'Low' ? 'default' : 'secondary'} className="h-5">
+                                {financialData.creditAssessment.riskLevel}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {financialData.governmentData && (
+                        <div className="space-y-2">
+                          <h4 className="font-medium flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4" />
+                            Compliance Status
+                          </h4>
+                          <div className="space-y-1 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">ATO</span>
+                              <Badge variant={financialData.governmentData.atoConnected ? 'default' : 'secondary'} className="h-5">
+                                {financialData.governmentData.atoConnected ? 'Connected' : 'Not Connected'}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Status</span>
+                              <Badge variant="default" className="h-5">{financialData.governmentData.complianceStatus}</Badge>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
         </CardContent>
