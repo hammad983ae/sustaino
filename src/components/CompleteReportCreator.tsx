@@ -30,7 +30,7 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           interestValued: 'Estate held in fee simple',
           valuationApproach: 'Capitalisation of net income and direct comparison approach',
           basisOfAssessment: 'The basis of valuation assumes market value during a reasonable selling period for the estate held in fee simple. This valuation is determined on the basis that the property, the title thereto and its use is not affected by any matter other than that mentioned in this report.',
-          purposeOfValuation: 'The valuation has been complete for pre-sale purposes.',
+          purposeOfValuation: 'Pre Sale Advice',
           conflictOfInterest: 'We confirm we do not have a conflict of interest',
           valuationDate: '1st August 2025',
           inspectionDate: '1st August 2025',
@@ -38,7 +38,14 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           coSignatory: 'John Delorenzo – Director – Certified Practising Valuer',
           valuerDeclaration: 'I hereby certify that I inspected the property on the date above and have conducted the assessments above as at that date of inspection. No responsibility is accepted by the Valuer and/or the Valuation Firm to any other parties who rely, on use, distribute, publish and/or otherwise represent anything contained in this Report for any purpose. I, John Delorenzo confirm they are competent of completing this assessment.',
           reliance: 'Reliance on this report should only be taken upon sighting the original document that has been signed by the Inspecting Valuer who has undertaken the valuation. In this scenario, the Counter Signatory or Director has inspected the property, read this report, and verifies that the report is genuine and is endorsed by Delorenzo Property Group Pty Ltd.',
-          criticalAssumptions: 'This report is provided subject to the assumptions, disclaimers, limitations, and qualifications detailed herein. Reliance on this report and extension of our liability is conditional upon the readers acknowledgement and understanding of these statements. That third party sales and leasing information is true and correct, we reserve the right to review the valuation if any information gathered from a third party to assist with preparation of this report is incorrect. The currency of the valuation is 3 – months. Property valued as an in use medical centre and has been valued accordingly.'
+          criticalAssumptions: 'This report is provided subject to the assumptions, disclaimers, limitations, and qualifications detailed herein. Reliance on this report and extension of our liability is conditional upon the readers acknowledgement and understanding of these statements. That third party sales and leasing information is true and correct, we reserve the right to review the valuation if any information gathered from a third party to assist with preparation of this report is incorrect. The currency of the valuation is 3 – months. Property valued as an in use medical centre and has been valued accordingly.',
+          firstMortgageSecurity: 'The property is suitable for mortgage purposes.',
+          instructionDate: 'June 2025',
+          sourcesOfInformation: 'Planning Maps, Lease details and outgoings, RP Data',
+          valuationStandards: 'Australian Property Institute (API) Australia and New Zealand Valuation and Property Standards',
+          preparerDetails: 'Delorenzo Property Group Pty Ltd',
+          clientDetails: 'Liberty Finance Pty Ltd and Secure Funding Pty Ltd',
+          pecuniaryInterest: 'The Primary Valuer has at least five years appropriate experience, has no pecuniary interest, and accepts instructions only from the Trustee/Responsible Entity.'
         },
         propertyDetails: {
           address: '133 – 137 Langtree Avenue Mildura VIC 3500',
@@ -46,24 +53,41 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           volume: '',
           folio: '',
           landArea: 1425,
+          totalArea: 1435,
           propertyDescription: 'Healthcare offices with day surgery',
           entitlementLiability: 'Not Applicable',
-          encumbrancesRestriction: 'Title Not supplied',
-          registeredProprietors: 'Title Not Supplied',
+          encumbrancesRestriction: 'Title not sighted',
+          registeredProprietors: 'Title not sighted',
           generalDocuments: 'Current proposed subdivision – property valued on an As Is Basis (excluding first level office)',
-          criticalDocuments: 'As Above'
+          criticalDocuments: 'As Above',
+          propertyIdentification: 'Identified by aerial map, cadastral plan and physical inspections',
+          location: 'Located within the Mildura CBD approximately 400 metres from NAB Deakin Avenue. Mildura is a major regional service centre located approximately 550 kms north west of Melbourne, 400 kms north east of Adelaide and 1000 kms south west of Sydney. Mildura and surrounds have a population of approximately 60,000 to 80,000.',
+          access: 'Accessible via Langtree Avenue, a main arterial road; secondary access points as per site inspection.',
+          siteDescription: 'Irregular shaped land situated at road level. The property is located on the northwest side of Langtree Avenue and southeast side of Shillidays Lane.',
+          neighbourhood: 'Commercial and mixed-use area near main roads, amenities, and community facilities.',
+          amenities: 'Proximity to shopping centres, schools, parks, medical facilities, and public transportation.',
+          services: 'Connected to mains water, sewerage, electricity, gas, and telecommunications.',
+          proposedSubdivision: 'The property appears to be going through some subdivision changes, the valuation has been complete on an AS IS basis as of the 1st of August 2025.'
         },
         legalAndPlanning: {
-          lga: 'Mildura City Council',
-          zoning: 'Commercial 1 Zone',
+          lga: 'Mildura Rural City Council',
+          zoning: 'Commercial 1 Zone (C1Z)',
+          currentUse: 'Healthcare',
+          permissibleUse: 'Yes',
+          permitNumber: 'N/A',
           overlays: {
             ddo3: true,
             po1: true,
             ho: false,
             sco1: true,
-            other: 'Design and Development Overlay (DDO3): Yes, Parking Overlay (PO1): Yes, Heritage Overlay (HO): No – Nearby but do not impact the subject property, Specific Controls Overlay (SCO1): Yes, with specific controls influence.'
+            other: 'No additional overlays directly affect this land, but nearby overlays exist as per map'
           },
-          environmentalIssues: 'None evidential'
+          overlayImpact: 'Low – Overlays common in the area and zoning, most sales used have similar overlays',
+          overlayImpactRating: 2,
+          environmentalIssues: 'None evident',
+          heightOfBuilding: 'N/A',
+          floorSpaceRatio: 'N/A',
+          minimumLotSize: 'N/A'
         },
         financialData: {
           netPassingRent: 180000,
