@@ -8,7 +8,48 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useJobManager } from '@/hooks/useJobManager';
-import { Calendar, User, FileText, DollarSign } from 'lucide-react';
+import { useDomainDataExtraction } from '@/hooks/useDomainDataExtraction';
+import { Calendar, User, FileText, DollarSign, Database, Loader2 } from 'lucide-react';
+import DomainAddressLookup from '@/components/DomainAddressLookup';
+import { toast } from 'sonner';
+
+interface PropertyDetails {
+  id: string;
+  address: {
+    displayAddress: string;
+    unitNumber?: string;
+    streetNumber: string;
+    streetName: string;
+    streetType: string;
+    suburb: string;
+    state: string;
+    postcode: string;
+  };
+  propertyType: string;
+  features: {
+    bedrooms?: number;
+    bathrooms?: number;
+    parkingSpaces?: number;
+    landSize?: number;
+    buildingSize?: number;
+    yearBuilt?: number;
+  };
+  estimates?: {
+    currentValue?: number;
+    confidenceLevel?: string;
+    valuationRange?: {
+      min: number;
+      max: number;
+    };
+    lastUpdated?: string;
+  };
+  salesHistory?: Array<{
+    date: string;
+    price: number;
+    propertyType: string;
+    source: string;
+  }>;
+}
 
 interface JobCreationModalProps {
   isOpen: boolean;
@@ -45,8 +86,11 @@ const JobCreationModal: React.FC<JobCreationModalProps> = ({
     fee: '',
     invoiceNumber: ''
   });
+  const [domainPropertyData, setDomainPropertyData] = useState<PropertyDetails | null>(null);
+  const [isExtractingData, setIsExtractingData] = useState(false);
 
   const { createJob, isLoading } = useJobManager();
+  const { extractToPAF } = useDomainDataExtraction();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -63,6 +107,40 @@ const JobCreationModal: React.FC<JobCreationModalProps> = ({
         [field]: value
       }
     }));
+  };
+
+  const handlePropertySelected = async (propertyData: PropertyDetails) => {
+    setDomainPropertyData(propertyData);
+    
+    // Auto-generate job title if not already set
+    if (!formData.title) {
+      const title = `Property Valuation - ${propertyData.address.displayAddress}`;
+      handleInputChange('title', title);
+    }
+    
+    toast.success('Property details loaded from Domain API');
+  };
+
+  const handleExtractToPAF = async () => {
+    if (!domainPropertyData) {
+      toast.error('No property data available to extract');
+      return;
+    }
+
+    setIsExtractingData(true);
+    try {
+      const success = await extractToPAF(domainPropertyData);
+      if (success) {
+        toast.success('Property data extracted to PAF successfully');
+      } else {
+        toast.error('Failed to extract property data to PAF');
+      }
+    } catch (error) {
+      console.error('Error extracting to PAF:', error);
+      toast.error('Error extracting property data to PAF');
+    } finally {
+      setIsExtractingData(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -172,15 +250,48 @@ const JobCreationModal: React.FC<JobCreationModalProps> = ({
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="address">Property Address</Label>
-                  <Input
-                    id="address"
-                    value={formData.propertyAddress}
-                    onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
-                    placeholder="123 Main Street, Suburb, State, Postcode"
-                  />
-                </div>
+                <DomainAddressLookup
+                  value={formData.propertyAddress}
+                  onChange={(address) => handleInputChange('propertyAddress', address)}
+                  onPropertySelected={handlePropertySelected}
+                  placeholder="Start typing property address..."
+                  label="Property Address"
+                />
+
+                {domainPropertyData && (
+                  <div className="mt-4">
+                    <Card className="bg-primary/5 border-primary/20">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-semibold text-sm flex items-center gap-2">
+                              <Database className="h-4 w-4" />
+                              Domain API Data Available
+                            </h4>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              Property details and market data can be extracted to PAF
+                            </p>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleExtractToPAF}
+                            disabled={isExtractingData}
+                          >
+                            {isExtractingData ? (
+                              <>
+                                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                                Extracting...
+                              </>
+                            ) : (
+                              'Extract to PAF'
+                            )}
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
