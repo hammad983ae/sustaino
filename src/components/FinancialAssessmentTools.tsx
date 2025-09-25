@@ -8,21 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
-import { 
-  Calculator, 
-  TrendingUp, 
-  TrendingDown, 
-  Target,
-  Shield,
-  Leaf,
-  User,
-  CreditCard,
-  Building,
-  DollarSign,
-  AlertTriangle,
-  CheckCircle,
-  Minus
-} from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, Shield, Users, Globe, CreditCard, Leaf } from 'lucide-react';
 
 interface ServiceabilityInputs {
   grossIncome: number;
@@ -36,43 +22,46 @@ interface ServiceabilityInputs {
   depositAmount: number;
 }
 
-interface ESGFactors {
-  energyRating: number; // 1-10
-  waterEfficiency: number; // 1-10
-  sustainableFeatures: number; // 1-10
-  environmentalImpact: number; // 1-10
+interface ComprehensiveESGFactors {
+  environmental: {
+    energyRating: number;
+    waterEfficiency: number;
+    sustainableFeatures: number;
+    wasteManagement: number;
+    renewableEnergy: number;
+  };
+  social: {
+    communityImpact: number;
+    accessibilityFeatures: number;
+    healthSafety: number;
+    socialInfrastructure: number;
+    stakeholderEngagement: number;
+  };
+  governance: {
+    transparencyReporting: number;
+    complianceManagement: number;
+    riskManagement: number;
+    ethicsIntegrity: number;
+    boardDiversity: number;
+  };
+  climateChange: {
+    carbonFootprint: number;
+    climateResilience: number;
+    emissionReduction: number;
+    adaptationMeasures: number;
+    transitionRisk: number;
+  };
 }
 
-interface CreditFactors {
-  character: number; // 1-10 (credit history, payment behavior)
-  capacity: number; // 1-10 (income vs debt)
-  capital: number; // 1-10 (assets and net worth)
-  collateral: number; // 1-10 (property value and security)
-}
-
-interface AssessmentResults {
-  serviceability: {
-    optimistic: number;
-    realistic: number;
-    pessimistic: number;
-    recommendedLoan: number;
-  };
-  lvr: {
-    standardLVR: number;
-    esgAdjustedLVR: number;
-    creditAdjustedLVR: number;
-    finalLVR: number;
-  };
-  minimumValue: {
-    dealValue: number;
-    financeValue: number;
-    securityMargin: number;
-  };
-  riskAssessment: {
-    overall: string;
-    factors: string[];
-    recommendations: string[];
-  };
+interface CreditProfile {
+  annualIncome: number;
+  monthlyDebts: number;
+  creditScore: number;
+  employmentYears: number;
+  assets: number;
+  savings: number;
+  propertyValue: number;
+  downPayment: number;
 }
 
 const FinancialAssessmentTools: React.FC = () => {
@@ -88,170 +77,103 @@ const FinancialAssessmentTools: React.FC = () => {
     depositAmount: 0
   });
 
-  const [esgFactors, setEsgFactors] = useState<ESGFactors>({
-    energyRating: 5,
-    waterEfficiency: 5,
-    sustainableFeatures: 5,
-    environmentalImpact: 5
+  const [esgFactors, setEsgFactors] = useState<ComprehensiveESGFactors>({
+    environmental: {
+      energyRating: 0,
+      waterEfficiency: 0,
+      sustainableFeatures: 0,
+      wasteManagement: 0,
+      renewableEnergy: 0,
+    },
+    social: {
+      communityImpact: 0,
+      accessibilityFeatures: 0,
+      healthSafety: 0,
+      socialInfrastructure: 0,
+      stakeholderEngagement: 0,
+    },
+    governance: {
+      transparencyReporting: 0,
+      complianceManagement: 0,
+      riskManagement: 0,
+      ethicsIntegrity: 0,
+      boardDiversity: 0,
+    },
+    climateChange: {
+      carbonFootprint: 0,
+      climateResilience: 0,
+      emissionReduction: 0,
+      adaptationMeasures: 0,
+      transitionRisk: 0,
+    }
   });
 
-  const [creditFactors, setCreditFactors] = useState<CreditFactors>({
-    character: 7,
-    capacity: 7,
-    capital: 7,
-    collateral: 7
+  const [creditProfile, setCreditProfile] = useState<CreditProfile>({
+    annualIncome: 0,
+    monthlyDebts: 0,
+    creditScore: 0,
+    employmentYears: 0,
+    assets: 0,
+    savings: 0,
+    propertyValue: 0,
+    downPayment: 0,
   });
 
-  const [results, setResults] = useState<AssessmentResults | null>(null);
+  // Calculate automated Four C's based on input data
+  const calculateFourCs = () => {
+    // Character: Based on credit score and employment stability
+    const character = Math.min(10, 
+      (creditProfile.creditScore >= 750 ? 8 : 
+       creditProfile.creditScore >= 700 ? 6 : 
+       creditProfile.creditScore >= 650 ? 4 : 2) +
+      (creditProfile.employmentYears >= 3 ? 2 : 
+       creditProfile.employmentYears >= 1 ? 1 : 0)
+    );
 
-  const calculateServiceability = () => {
-    const { grossIncome, existingDebt, livingExpenses, interestRate, loanTerm, dependents, employmentType } = inputs;
-    
-    // Net income after tax (simplified calculation)
-    const taxRate = grossIncome > 180000 ? 0.45 : grossIncome > 120000 ? 0.37 : grossIncome > 45000 ? 0.325 : 0.19;
-    const netIncome = grossIncome * (1 - taxRate);
-    
-    // Employment stability factor
-    const employmentFactor = employmentType === 'permanent' ? 1.0 : 
-                            employmentType === 'contract' ? 0.9 : 0.8;
-    
-    // Adjusted income for dependents
-    const dependentsCost = dependents * 2500; // Annual cost per dependent
-    
-    // Available income for debt service
-    const availableIncome = (netIncome - livingExpenses - dependentsCost - existingDebt) * employmentFactor;
-    
-    // Monthly payment capacity
-    const monthlyCapacity = availableIncome / 12;
-    
-    // Serviceability scenarios
-    const baseRate = interestRate / 100;
-    const optimisticRate = Math.max(baseRate - 0.01, 0.025); // -1% with floor
-    const pessimisticRate = baseRate + 0.03; // +3% stress test
-    
-    const calculateLoanAmount = (rate: number, capacity: number) => {
-      const monthlyRate = rate / 12;
-      const numPayments = loanTerm * 12;
-      if (monthlyRate === 0) return capacity * numPayments;
-      return (capacity * (1 - Math.pow(1 + monthlyRate, -numPayments))) / monthlyRate;
-    };
-    
-    const optimisticLoan = calculateLoanAmount(optimisticRate, monthlyCapacity * 0.9);
-    const realisticLoan = calculateLoanAmount(baseRate, monthlyCapacity * 0.8);
-    const pessimisticLoan = calculateLoanAmount(pessimisticRate, monthlyCapacity * 0.7);
+    // Capacity: Debt-to-Income ratio
+    const monthlyIncome = creditProfile.annualIncome / 12;
+    const debtToIncomeRatio = monthlyIncome > 0 ? (creditProfile.monthlyDebts / monthlyIncome) * 100 : 0;
+    const capacity = debtToIncomeRatio <= 28 ? 10 : 
+                    debtToIncomeRatio <= 36 ? 8 : 
+                    debtToIncomeRatio <= 43 ? 6 : 
+                    debtToIncomeRatio <= 50 ? 4 : 2;
+
+    // Capital: Net worth and savings
+    const netWorth = creditProfile.assets + creditProfile.savings;
+    const capital = netWorth >= 100000 ? 10 : 
+                   netWorth >= 50000 ? 8 : 
+                   netWorth >= 25000 ? 6 : 
+                   netWorth >= 10000 ? 4 : 2;
+
+    // Collateral: Loan-to-Value ratio
+    const loanAmount = creditProfile.propertyValue - creditProfile.downPayment;
+    const ltvRatio = creditProfile.propertyValue > 0 ? (loanAmount / creditProfile.propertyValue) * 100 : 0;
+    const collateral = ltvRatio <= 70 ? 10 : 
+                      ltvRatio <= 80 ? 8 : 
+                      ltvRatio <= 90 ? 6 : 
+                      ltvRatio <= 95 ? 4 : 2;
+
+    return { character, capacity, capital, collateral };
+  };
+
+  // Calculate overall ESG score
+  const calculateESGScore = () => {
+    const envScore = Object.values(esgFactors.environmental).reduce((sum, val) => sum + val, 0) / 5;
+    const socialScore = Object.values(esgFactors.social).reduce((sum, val) => sum + val, 0) / 5;
+    const govScore = Object.values(esgFactors.governance).reduce((sum, val) => sum + val, 0) / 5;
+    const climateScore = Object.values(esgFactors.climateChange).reduce((sum, val) => sum + val, 0) / 5;
     
     return {
-      optimistic: Math.max(0, optimisticLoan),
-      realistic: Math.max(0, realisticLoan),
-      pessimistic: Math.max(0, pessimisticLoan),
-      recommendedLoan: Math.max(0, realisticLoan * 0.9) // 90% of realistic for safety
+      environmental: envScore,
+      social: socialScore,
+      governance: govScore,
+      climate: climateScore,
+      overall: (envScore + socialScore + govScore + climateScore) / 4
     };
   };
 
-  const calculateLVR = () => {
-    const { propertyValue, depositAmount } = inputs;
-    const loanAmount = propertyValue - depositAmount;
-    
-    // Standard LVR
-    const standardLVR = (loanAmount / propertyValue) * 100;
-    
-    // ESG adjustment (better ESG = lower LVR requirement)
-    const esgScore = (esgFactors.energyRating + esgFactors.waterEfficiency + 
-                     esgFactors.sustainableFeatures + esgFactors.environmentalImpact) / 4;
-    const esgAdjustment = (esgScore - 5) * 0.5; // ±2.5% adjustment
-    
-    // Credit (Four C's) adjustment
-    const creditScore = (creditFactors.character + creditFactors.capacity + 
-                        creditFactors.capital + creditFactors.collateral) / 4;
-    const creditAdjustment = (creditScore - 5) * 1.0; // ±5% adjustment
-    
-    const esgAdjustedLVR = Math.max(0, standardLVR - esgAdjustment);
-    const creditAdjustedLVR = Math.max(0, standardLVR - creditAdjustment);
-    const finalLVR = Math.max(0, standardLVR - esgAdjustment - creditAdjustment);
-    
-    return {
-      standardLVR,
-      esgAdjustedLVR,
-      creditAdjustedLVR,
-      finalLVR
-    };
-  };
-
-  const calculateMinimumValues = () => {
-    const serviceability = calculateServiceability();
-    const { propertyValue } = inputs;
-    
-    // Minimum value to secure deal (based on serviceability)
-    const dealValue = Math.min(serviceability.realistic + inputs.depositAmount, propertyValue);
-    
-    // Minimum value for finance approval
-    const financeValue = serviceability.recommendedLoan + inputs.depositAmount;
-    
-    // Security margin (typically 10-20%)
-    const securityMargin = financeValue * 0.15;
-    
-    return {
-      dealValue,
-      financeValue: financeValue + securityMargin,
-      securityMargin
-    };
-  };
-
-  const performRiskAssessment = () => {
-    const serviceability = calculateServiceability();
-    const lvr = calculateLVR();
-    const factors: string[] = [];
-    const recommendations: string[] = [];
-    
-    // Risk factors analysis
-    if (lvr.finalLVR > 80) factors.push('High LVR');
-    if (serviceability.realistic < inputs.propertyValue * 0.6) factors.push('Limited serviceability');
-    if (inputs.existingDebt > inputs.grossIncome * 0.3) factors.push('High existing debt');
-    if (creditFactors.character < 6) factors.push('Credit history concerns');
-    if (inputs.employmentType !== 'permanent') factors.push('Employment stability');
-    
-    // ESG benefits
-    const esgScore = (esgFactors.energyRating + esgFactors.waterEfficiency + 
-                     esgFactors.sustainableFeatures + esgFactors.environmentalImpact) / 4;
-    if (esgScore > 7) factors.push('Strong ESG profile (positive)');
-    
-    // Recommendations
-    if (lvr.finalLVR > 80) recommendations.push('Consider increasing deposit to reduce LVR');
-    if (serviceability.realistic < serviceability.optimistic * 0.8) 
-      recommendations.push('Review expenses to improve serviceability');
-    if (esgScore < 6) recommendations.push('Consider ESG improvements for better lending terms');
-    
-    const riskScore = factors.filter(f => !f.includes('positive')).length;
-    const overall = riskScore <= 1 ? 'Low' : riskScore <= 3 ? 'Medium' : 'High';
-    
-    return { overall, factors, recommendations };
-  };
-
-  const runFullAssessment = () => {
-    const serviceability = calculateServiceability();
-    const lvr = calculateLVR();
-    const minimumValue = calculateMinimumValues();
-    const riskAssessment = performRiskAssessment();
-    
-    setResults({
-      serviceability,
-      lvr,
-      minimumValue,
-      riskAssessment
-    });
-  };
-
-  const updateInput = (field: keyof ServiceabilityInputs, value: number | string) => {
-    setInputs(prev => ({ ...prev, [field]: value }));
-  };
-
-  const updateESG = (field: keyof ESGFactors, value: number) => {
-    setEsgFactors(prev => ({ ...prev, [field]: value }));
-  };
-
-  const updateCredit = (field: keyof CreditFactors, value: number) => {
-    setCreditFactors(prev => ({ ...prev, [field]: value }));
-  };
+  const fourCs = calculateFourCs();
+  const esgScores = calculateESGScore();
 
   return (
     <div className="space-y-6">
@@ -266,213 +188,230 @@ const FinancialAssessmentTools: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="inputs" className="space-y-6">
+          <Tabs defaultValue="income-debt" className="space-y-6">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="inputs">Income & Debt</TabsTrigger>
+              <TabsTrigger value="income-debt">Income & Debt</TabsTrigger>
               <TabsTrigger value="esg">ESG Factors</TabsTrigger>
               <TabsTrigger value="credit">Four C's Credit</TabsTrigger>
               <TabsTrigger value="results">Assessment Results</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="inputs" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Income & Employment</h3>
-                  <div>
-                    <Label htmlFor="grossIncome">Gross Annual Income ($)</Label>
-                    <Input
-                      id="grossIncome"
-                      type="number"
-                      value={inputs.grossIncome || ''}
-                      onChange={(e) => updateInput('grossIncome', parseFloat(e.target.value) || 0)}
-                      placeholder="120000"
-                    />
+            <TabsContent value="income-debt" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Income & Debt Analysis</CardTitle>
+                  <CardDescription>
+                    Provide financial details for automated Four C's assessment
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label>Annual Income ($)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.annualIncome}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, annualIncome: Number(e.target.value) }))}
+                        placeholder="Enter annual income"
+                      />
+                    </div>
+                    <div>
+                      <Label>Monthly Debts ($)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.monthlyDebts}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, monthlyDebts: Number(e.target.value) }))}
+                        placeholder="Total monthly debt payments"
+                      />
+                    </div>
+                    <div>
+                      <Label>Credit Score</Label>
+                      <Input
+                        type="number"
+                        min="300"
+                        max="850"
+                        value={creditProfile.creditScore}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, creditScore: Number(e.target.value) }))}
+                        placeholder="Enter credit score"
+                      />
+                    </div>
+                    <div>
+                      <Label>Years of Employment</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.employmentYears}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, employmentYears: Number(e.target.value) }))}
+                        placeholder="Years in current employment"
+                      />
+                    </div>
+                    <div>
+                      <Label>Total Assets ($)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.assets}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, assets: Number(e.target.value) }))}
+                        placeholder="Total asset value"
+                      />
+                    </div>
+                    <div>
+                      <Label>Savings ($)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.savings}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, savings: Number(e.target.value) }))}
+                        placeholder="Available savings"
+                      />
+                    </div>
+                    <div>
+                      <Label>Property Value ($)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.propertyValue}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, propertyValue: Number(e.target.value) }))}
+                        placeholder="Property valuation"
+                      />
+                    </div>
+                    <div>
+                      <Label>Down Payment ($)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.downPayment}
+                        onChange={(e) => setCreditProfile(prev => ({ ...prev, downPayment: Number(e.target.value) }))}
+                        placeholder="Down payment amount"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="employmentType">Employment Type</Label>
-                    <Select value={inputs.employmentType} onValueChange={(value) => updateInput('employmentType', value)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="permanent">Permanent Full-time</SelectItem>
-                        <SelectItem value="contract">Contract/Casual</SelectItem>
-                        <SelectItem value="self-employed">Self-employed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="dependents">Number of Dependents</Label>
-                    <Input
-                      id="dependents"
-                      type="number"
-                      value={inputs.dependents || ''}
-                      onChange={(e) => updateInput('dependents', parseInt(e.target.value) || 0)}
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Expenses & Debt</h3>
-                  <div>
-                    <Label htmlFor="livingExpenses">Annual Living Expenses ($)</Label>
-                    <Input
-                      id="livingExpenses"
-                      type="number"
-                      value={inputs.livingExpenses || ''}
-                      onChange={(e) => updateInput('livingExpenses', parseFloat(e.target.value) || 0)}
-                      placeholder="40000"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="existingDebt">Annual Existing Debt Payments ($)</Label>
-                    <Input
-                      id="existingDebt"
-                      type="number"
-                      value={inputs.existingDebt || ''}
-                      onChange={(e) => updateInput('existingDebt', parseFloat(e.target.value) || 0)}
-                      placeholder="12000"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                    <Input
-                      id="interestRate"
-                      type="number"
-                      step="0.1"
-                      value={inputs.interestRate || ''}
-                      onChange={(e) => updateInput('interestRate', parseFloat(e.target.value) || 0)}
-                      placeholder="5.5"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="loanTerm">Loan Term (Years)</Label>
-                    <Input
-                      id="loanTerm"
-                      type="number"
-                      value={inputs.loanTerm || ''}
-                      onChange={(e) => updateInput('loanTerm', parseInt(e.target.value) || 0)}
-                      placeholder="25"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
-                <div>
-                  <Label htmlFor="propertyValue">Property Value ($)</Label>
-                  <Input
-                    id="propertyValue"
-                    type="number"
-                    value={inputs.propertyValue || ''}
-                    onChange={(e) => updateInput('propertyValue', parseFloat(e.target.value) || 0)}
-                    placeholder="800000"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="depositAmount">Deposit Amount ($)</Label>
-                  <Input
-                    id="depositAmount"
-                    type="number"
-                    value={inputs.depositAmount || ''}
-                    onChange={(e) => updateInput('depositAmount', parseFloat(e.target.value) || 0)}
-                    placeholder="160000"
-                  />
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="esg" className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Environmental Factors */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2">
                       <Leaf className="h-4 w-4" />
                       Environmental Factors
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div>
-                      <Label>Energy Rating: {esgFactors.energyRating}/10</Label>
-                      <Slider
-                        value={[esgFactors.energyRating]}
-                        onValueChange={(value) => updateESG('energyRating', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                    </div>
-                    <div>
-                      <Label>Water Efficiency: {esgFactors.waterEfficiency}/10</Label>
-                      <Slider
-                        value={[esgFactors.waterEfficiency]}
-                        onValueChange={(value) => updateESG('waterEfficiency', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                    </div>
-                    <div>
-                      <Label>Sustainable Features: {esgFactors.sustainableFeatures}/10</Label>
-                      <Slider
-                        value={[esgFactors.sustainableFeatures]}
-                        onValueChange={(value) => updateESG('sustainableFeatures', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                    </div>
-                    <div>
-                      <Label>Environmental Impact: {esgFactors.environmentalImpact}/10</Label>
-                      <Slider
-                        value={[esgFactors.environmentalImpact]}
-                        onValueChange={(value) => updateESG('environmentalImpact', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                    </div>
+                    {Object.entries(esgFactors.environmental).map(([key, value]) => (
+                      <div key={key}>
+                        <Label className="capitalize">
+                          {key.replace(/([A-Z])/g, ' $1').trim()}: {value}/10
+                        </Label>
+                        <Slider
+                          value={[value]}
+                          onValueChange={(newValue) => setEsgFactors(prev => ({
+                            ...prev,
+                            environmental: { ...prev.environmental, [key]: newValue[0] }
+                          }))}
+                          max={10}
+                          step={1}
+                          className="w-full"
+                        />
+                      </div>
+                    ))}
                   </CardContent>
                 </Card>
 
+                {/* Social Factors */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">ESG Impact Summary</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <Users className="h-4 w-4" />
+                      Social Factors
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span>Overall ESG Score</span>
-                        <Badge variant="outline">
-                          {((esgFactors.energyRating + esgFactors.waterEfficiency + 
-                            esgFactors.sustainableFeatures + esgFactors.environmentalImpact) / 4).toFixed(1)}/10
-                        </Badge>
+                  <CardContent className="space-y-4">
+                    {Object.entries(esgFactors.social).map(([key, value]) => (
+                      <div key={key}>
+                        <Label className="capitalize">
+                          {key.replace(/([A-Z])/g, ' $1').trim()}: {value}/10
+                        </Label>
+                        <Slider
+                          value={[value]}
+                          onValueChange={(newValue) => setEsgFactors(prev => ({
+                            ...prev,
+                            social: { ...prev.social, [key]: newValue[0] }
+                          }))}
+                          max={10}
+                          step={1}
+                          className="w-full"
+                        />
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        Higher ESG scores can reduce LVR requirements by up to 2.5% and improve lending terms.
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Governance Factors */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Shield className="h-4 w-4" />
+                      Governance Factors
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {Object.entries(esgFactors.governance).map(([key, value]) => (
+                      <div key={key}>
+                        <Label className="capitalize">
+                          {key.replace(/([A-Z])/g, ' $1').trim()}: {value}/10
+                        </Label>
+                        <Slider
+                          value={[value]}
+                          onValueChange={(newValue) => setEsgFactors(prev => ({
+                            ...prev,
+                            governance: { ...prev.governance, [key]: newValue[0] }
+                          }))}
+                          max={10}
+                          step={1}
+                          className="w-full"
+                        />
                       </div>
-                      <Progress 
-                        value={((esgFactors.energyRating + esgFactors.waterEfficiency + 
-                               esgFactors.sustainableFeatures + esgFactors.environmentalImpact) / 4) * 10} 
-                        className="mt-2"
-                      />
-                    </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Climate Change Factors */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      Climate Change Factors
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {Object.entries(esgFactors.climateChange).map(([key, value]) => (
+                      <div key={key}>
+                        <Label className="capitalize">
+                          {key.replace(/([A-Z])/g, ' $1').trim()}: {value}/10
+                        </Label>
+                        <Slider
+                          value={[value]}
+                          onValueChange={(newValue) => setEsgFactors(prev => ({
+                            ...prev,
+                            climateChange: { ...prev.climateChange, [key]: newValue[0] }
+                          }))}
+                          max={10}
+                          step={1}
+                          className="w-full"
+                        />
+                      </div>
+                    ))}
                   </CardContent>
                 </Card>
               </div>
             </TabsContent>
 
             <TabsContent value="credit" className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Four C's Assessment */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Shield className="h-4 w-4" />
+                    <CardTitle className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4" />
                       Four C's of Credit Assessment
                     </CardTitle>
                     <CardDescription>
@@ -480,119 +419,78 @@ const FinancialAssessmentTools: React.FC = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <User className="h-3 w-3" />
-                        Character (Credit History): {creditFactors.character}/10
-                      </Label>
-                      <Slider
-                        value={[creditFactors.character]}
-                        onValueChange={(value) => updateCredit('character', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Payment history, credit behavior, reliability
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Character (Credit History):</span>
+                        <Badge variant="outline">{fourCs.character}/10</Badge>
                       </div>
+                      <Progress value={fourCs.character * 10} className="h-2" />
+                      <p className="text-sm text-muted-foreground">Payment history, credit behavior, reliability</p>
                     </div>
-                    
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <CreditCard className="h-3 w-3" />
-                        Capacity (Debt-to-Income): {creditFactors.capacity}/10
-                      </Label>
-                      <Slider
-                        value={[creditFactors.capacity]}
-                        onValueChange={(value) => updateCredit('capacity', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Income stability, debt service capacity
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Capacity (Debt-to-Income):</span>
+                        <Badge variant="outline">{fourCs.capacity}/10</Badge>
                       </div>
+                      <Progress value={fourCs.capacity * 10} className="h-2" />
+                      <p className="text-sm text-muted-foreground">Income stability, debt service capacity</p>
                     </div>
-                    
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <DollarSign className="h-3 w-3" />
-                        Capital (Net Worth): {creditFactors.capital}/10
-                      </Label>
-                      <Slider
-                        value={[creditFactors.capital]}
-                        onValueChange={(value) => updateCredit('capital', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Assets, savings, financial reserves
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Capital (Net Worth):</span>
+                        <Badge variant="outline">{fourCs.capital}/10</Badge>
                       </div>
+                      <Progress value={fourCs.capital * 10} className="h-2" />
+                      <p className="text-sm text-muted-foreground">Assets, savings, financial reserves</p>
                     </div>
-                    
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <Building className="h-3 w-3" />
-                        Collateral (Security Value): {creditFactors.collateral}/10
-                      </Label>
-                      <Slider
-                        value={[creditFactors.collateral]}
-                        onValueChange={(value) => updateCredit('collateral', value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="mt-2"
-                      />
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Property value, location, marketability
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Collateral (Security Value):</span>
+                        <Badge variant="outline">{fourCs.collateral}/10</Badge>
                       </div>
+                      <Progress value={fourCs.collateral * 10} className="h-2" />
+                      <p className="text-sm text-muted-foreground">Property value, location, marketability</p>
                     </div>
                   </CardContent>
                 </Card>
 
+                {/* Credit Profile Summary */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Credit Profile Summary</CardTitle>
+                    <CardTitle>Credit Profile Summary</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
                       <div className="flex justify-between">
-                        <span>Overall Credit Score</span>
-                        <Badge variant="outline">
-                          {((creditFactors.character + creditFactors.capacity + 
-                            creditFactors.capital + creditFactors.collateral) / 4).toFixed(1)}/10
-                        </Badge>
+                        <span className="text-sm text-muted-foreground">Overall Credit Score</span>
+                        <span className="font-medium">{((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4).toFixed(1)}/10</span>
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        Strong credit profiles can reduce LVR requirements by up to 5% and secure better interest rates.
+                      <Progress value={((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 10} className="h-2" />
+                    </div>
+
+                    <div className="text-sm text-muted-foreground">
+                      Strong credit profiles can reduce LVR requirements by up to 5% and secure better interest rates.
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">Character</div>
+                        <div className="font-medium">{fourCs.character}/10</div>
                       </div>
-                      <Progress 
-                        value={((creditFactors.character + creditFactors.capacity + 
-                               creditFactors.capital + creditFactors.collateral) / 4) * 10} 
-                        className="mt-2"
-                      />
-                      
-                      <div className="grid grid-cols-2 gap-2 mt-4 text-xs">
-                        <div className="text-center p-2 bg-muted rounded">
-                          <div className="font-medium">Character</div>
-                          <div>{creditFactors.character}/10</div>
-                        </div>
-                        <div className="text-center p-2 bg-muted rounded">
-                          <div className="font-medium">Capacity</div>
-                          <div>{creditFactors.capacity}/10</div>
-                        </div>
-                        <div className="text-center p-2 bg-muted rounded">
-                          <div className="font-medium">Capital</div>
-                          <div>{creditFactors.capital}/10</div>
-                        </div>
-                        <div className="text-center p-2 bg-muted rounded">
-                          <div className="font-medium">Collateral</div>
-                          <div>{creditFactors.collateral}/10</div>
-                        </div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">Capacity</div>
+                        <div className="font-medium">{fourCs.capacity}/10</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">Capital</div>
+                        <div className="font-medium">{fourCs.capital}/10</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">Collateral</div>
+                        <div className="font-medium">{fourCs.collateral}/10</div>
                       </div>
                     </div>
                   </CardContent>
@@ -601,174 +499,176 @@ const FinancialAssessmentTools: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="results" className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-medium">Assessment Results</h3>
-                <Button onClick={runFullAssessment} className="flex items-center gap-2">
-                  <Calculator className="h-4 w-4" />
-                  Run Complete Assessment
-                </Button>
-              </div>
-
-              {results && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Serviceability Analysis */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4" />
-                        Serviceability Analysis
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-3">
-                        <div className="flex justify-between items-center">
-                          <span className="flex items-center gap-2">
-                            <TrendingUp className="h-3 w-3 text-green-500" />
-                            Optimistic Scenario
-                          </span>
-                          <span className="font-medium">${results.serviceability.optimistic.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="flex items-center gap-2">
-                            <Minus className="h-3 w-3 text-blue-500" />
-                            Realistic Scenario
-                          </span>
-                          <span className="font-medium">${results.serviceability.realistic.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="flex items-center gap-2">
-                            <TrendingDown className="h-3 w-3 text-red-500" />
-                            Pessimistic Scenario
-                          </span>
-                          <span className="font-medium">${results.serviceability.pessimistic.toLocaleString()}</span>
-                        </div>
-                        <div className="pt-2 border-t">
-                          <div className="flex justify-between items-center">
-                            <span className="flex items-center gap-2 font-medium">
-                              <Target className="h-3 w-3 text-primary" />
-                              Recommended Loan
-                            </span>
-                            <span className="font-bold text-primary">${results.serviceability.recommendedLoan.toLocaleString()}</span>
-                          </div>
-                        </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* ESG Impact Summary */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      ESG Impact Summary
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Environmental Score:</span>
+                        <Badge variant="outline">{esgScores.environmental.toFixed(1)}/10</Badge>
                       </div>
-                    </CardContent>
-                  </Card>
+                      <Progress value={esgScores.environmental * 10} className="h-2" />
+                    </div>
 
-                  {/* LVR Analysis */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Shield className="h-4 w-4" />
-                        LVR Analysis
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span>Standard LVR</span>
-                          <span className="font-medium">{results.lvr.standardLVR.toFixed(1)}%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>ESG Adjusted</span>
-                          <span className="font-medium text-green-600">{results.lvr.esgAdjustedLVR.toFixed(1)}%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Credit Adjusted</span>
-                          <span className="font-medium text-blue-600">{results.lvr.creditAdjustedLVR.toFixed(1)}%</span>
-                        </div>
-                        <div className="pt-2 border-t">
-                          <div className="flex justify-between">
-                            <span className="font-medium">Final LVR</span>
-                            <Badge variant={results.lvr.finalLVR <= 80 ? 'default' : 'destructive'}>
-                              {results.lvr.finalLVR.toFixed(1)}%
-                            </Badge>
-                          </div>
-                        </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Social Score:</span>
+                        <Badge variant="outline">{esgScores.social.toFixed(1)}/10</Badge>
                       </div>
-                    </CardContent>
-                  </Card>
+                      <Progress value={esgScores.social * 10} className="h-2" />
+                    </div>
 
-                  {/* Minimum Values */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <DollarSign className="h-4 w-4" />
-                        Minimum Value Analysis
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span>Deal Security Value</span>
-                          <span className="font-medium">${results.minimumValue.dealValue.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Finance Approval Value</span>
-                          <span className="font-medium">${results.minimumValue.financeValue.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Security Margin</span>
-                          <span className="font-medium text-muted-foreground">${results.minimumValue.securityMargin.toLocaleString()}</span>
-                        </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Governance Score:</span>
+                        <Badge variant="outline">{esgScores.governance.toFixed(1)}/10</Badge>
                       </div>
-                    </CardContent>
-                  </Card>
+                      <Progress value={esgScores.governance * 10} className="h-2" />
+                    </div>
 
-                  {/* Risk Assessment */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4" />
-                        Risk Assessment
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Climate Score:</span>
+                        <Badge variant="outline">{esgScores.climate.toFixed(1)}/10</Badge>
+                      </div>
+                      <Progress value={esgScores.climate * 10} className="h-2" />
+                    </div>
+
+                    <div className="pt-4 border-t">
                       <div className="flex justify-between items-center">
-                        <span>Overall Risk Level</span>
-                        <Badge variant={
-                          results.riskAssessment.overall === 'Low' ? 'default' :
-                          results.riskAssessment.overall === 'Medium' ? 'secondary' : 'destructive'
-                        }>
-                          {results.riskAssessment.overall}
+                        <span className="font-medium">Overall ESG Score:</span>
+                        <Badge variant="default">{esgScores.overall.toFixed(1)}/10</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Higher ESG scores can reduce LVR requirements by up to 2.5% and improve lending terms.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Credit Assessment Results */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4" />
+                      Credit Assessment Results
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Character:</span>
+                        <Badge variant="outline">{fourCs.character}/10</Badge>
+                      </div>
+                      <Progress value={fourCs.character * 10} className="h-2" />
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Capacity:</span>
+                        <Badge variant="outline">{fourCs.capacity}/10</Badge>
+                      </div>
+                      <Progress value={fourCs.capacity * 10} className="h-2" />
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Capital:</span>
+                        <Badge variant="outline">{fourCs.capital}/10</Badge>
+                      </div>
+                      <Progress value={fourCs.capital * 10} className="h-2" />
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Collateral:</span>
+                        <Badge variant="outline">{fourCs.collateral}/10</Badge>
+                      </div>
+                      <Progress value={fourCs.collateral * 10} className="h-2" />
+                    </div>
+
+                    <div className="pt-4 border-t">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Overall Credit Score:</span>
+                        <Badge variant="default">
+                          {((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4).toFixed(1)}/10
                         </Badge>
                       </div>
-                      
-                      {results.riskAssessment.factors.length > 0 && (
-                        <div>
-                          <h4 className="font-medium mb-2">Risk Factors:</h4>
-                          <ul className="text-sm space-y-1">
-                            {results.riskAssessment.factors.map((factor, index) => (
-                              <li key={index} className="flex items-center gap-2">
-                                {factor.includes('positive') ? 
-                                  <CheckCircle className="h-3 w-3 text-green-500" /> :
-                                  <AlertTriangle className="h-3 w-3 text-amber-500" />
-                                }
-                                {factor}
-                              </li>
-                            ))}
-                          </ul>
+                      <div className="mt-2">
+                        <div className="text-sm text-muted-foreground">
+                          DTI Ratio: {creditProfile.annualIncome > 0 ? ((creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) * 100).toFixed(1) : 0}%
                         </div>
-                      )}
-                      
-                      {results.riskAssessment.recommendations.length > 0 && (
-                        <div>
-                          <h4 className="font-medium mb-2">Recommendations:</h4>
-                          <ul className="text-sm space-y-1">
-                            {results.riskAssessment.recommendations.map((rec, index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <CheckCircle className="h-3 w-3 text-blue-500 mt-0.5" />
-                                {rec}
-                              </li>
-                            ))}
-                          </ul>
+                        <div className="text-sm text-muted-foreground">
+                          LTV Ratio: {creditProfile.propertyValue > 0 ? (((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue) * 100).toFixed(1) : 0}%
                         </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Minimum Value Calculation */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Minimum Value to Secure Deal</CardTitle>
+                  <CardDescription>
+                    Based on LVR requirements, ESG factors, and Four C's assessment
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-sm text-muted-foreground">Base LVR (80%)</div>
+                        <div className="text-2xl font-bold">
+                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * 0.8).toLocaleString() : '0'}
+                        </div>
+                      </div>
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-sm text-muted-foreground">ESG Adjusted</div>
+                        <div className="text-2xl font-bold text-green-600">
+                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * (0.8 + (esgScores.overall * 0.025))).toLocaleString() : '0'}
+                        </div>
+                      </div>
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-sm text-muted-foreground">Four C's Adjusted</div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * (0.8 + (((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 0.05))).toLocaleString() : '0'}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-4 bg-primary/5 rounded-lg">
+                      <div className="font-medium mb-2">Final Recommended Maximum Loan</div>
+                      <div className="text-3xl font-bold text-primary">
+                        ${creditProfile.propertyValue > 0 ? 
+                          (creditProfile.propertyValue * Math.min(0.95, 0.8 + (esgScores.overall * 0.025) + (((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 0.05))).toLocaleString() 
+                          : '0'}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        This includes ESG and creditworthiness adjustments, capped at 95% LVR for security.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
+
+            <div className="flex justify-end space-x-2 mt-6">
+              <Button variant="outline">
+                Reset Assessment
+              </Button>
+              <Button>
+                Generate Report
+              </Button>
+            </div>
           </Tabs>
         </CardContent>
       </Card>
