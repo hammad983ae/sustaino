@@ -26,6 +26,8 @@ import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancelled from "./pages/PaymentCancelled";
 import RenewableEnergyValuations from "./components/RenewableEnergyValuations";
 import PropertyValuations from "./pages/PropertyValuations";
 import PropertyAssessment from "./pages/PropertyAssessment";
@@ -134,6 +136,8 @@ const App = () => (
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
+                 <Route path="/payment-success" element={<PaymentSuccess />} />
+                 <Route path="/payment-cancelled" element={<PaymentCancelled />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
