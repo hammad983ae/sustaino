@@ -39,7 +39,30 @@ interface PerformanceMetrics {
   };
 }
 
+const INDUSTRY_BENCHMARKS = {
+  mortgageLending: {
+    excellent: { loanVolume: 50000000, defaultRate: 1, processingTime: 14, customerSatisfaction: 9, complianceScore: 95 },
+    good: { loanVolume: 25000000, defaultRate: 2.5, processingTime: 21, customerSatisfaction: 8, complianceScore: 85 },
+    average: { loanVolume: 10000000, defaultRate: 4, processingTime: 30, customerSatisfaction: 7, complianceScore: 75 },
+  },
+  valuation: {
+    excellent: { accuracyRate: 98, turnaroundTime: 3, marketKnowledge: 9, clientRetention: 95, professionalStanding: 9 },
+    good: { accuracyRate: 95, turnaroundTime: 5, marketKnowledge: 8, clientRetention: 85, professionalStanding: 8 },
+    average: { accuracyRate: 92, turnaroundTime: 7, marketKnowledge: 7, clientRetention: 75, professionalStanding: 7 },
+  },
+  estateAgents: {
+    excellent: { salesVolume: 20000000, daysOnMarket: 25, listingAccuracy: 98, clientSatisfaction: 9, marketShare: 15 },
+    good: { salesVolume: 10000000, daysOnMarket: 35, listingAccuracy: 95, clientSatisfaction: 8, marketShare: 10 },
+    average: { salesVolume: 5000000, daysOnMarket: 50, listingAccuracy: 90, clientSatisfaction: 7, marketShare: 5 },
+  },
+  developers: {
+    excellent: { projectCompletionRate: 98, budgetAdherence: 95, timelineCompliance: 95, qualityScore: 9, sustainabilityRating: 9 },
+    good: { projectCompletionRate: 92, budgetAdherence: 90, timelineCompliance: 88, qualityScore: 8, sustainabilityRating: 7 },
+    average: { projectCompletionRate: 85, budgetAdherence: 80, timelineCompliance: 75, qualityScore: 7, sustainabilityRating: 6 },
+  },
+};
 
+export const PerformanceRatingSystem: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
     valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0 },

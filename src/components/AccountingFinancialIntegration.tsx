@@ -87,6 +87,27 @@ interface FinancialData {
 }
 
 const AccountingFinancialIntegration: React.FC = () => {
+  // Financial Ratios Benchmarks (moved from EPAT)
+  const FINANCIAL_BENCHMARKS = {
+    excellent: {
+      liquidity: { currentRatio: 2.5, quickRatio: 1.5, workingCapital: 500000 },
+      profitability: { netProfitMargin: 20, returnOnAssets: 15, returnOnEquity: 25 },
+      efficiency: { assetTurnover: 2.0, receivablesTurnover: 12, inventoryTurnover: 8 },
+      leverage: { debtToEquity: 0.3, interestCoverage: 10, debtServiceCoverage: 2.5 },
+    },
+    good: {
+      liquidity: { currentRatio: 2.0, quickRatio: 1.2, workingCapital: 200000 },
+      profitability: { netProfitMargin: 15, returnOnAssets: 10, returnOnEquity: 18 },
+      efficiency: { assetTurnover: 1.5, receivablesTurnover: 8, inventoryTurnover: 6 },
+      leverage: { debtToEquity: 0.5, interestCoverage: 6, debtServiceCoverage: 2.0 },
+    },
+    average: {
+      liquidity: { currentRatio: 1.5, quickRatio: 1.0, workingCapital: 50000 },
+      profitability: { netProfitMargin: 10, returnOnAssets: 6, returnOnEquity: 12 },
+      efficiency: { assetTurnover: 1.0, receivablesTurnover: 6, inventoryTurnover: 4 },
+      leverage: { debtToEquity: 0.8, interestCoverage: 3, debtServiceCoverage: 1.5 },
+    },
+  };
   const { shouldRender } = useStepVisibility('accountancy_financials');
   const { updateReportData, reportData } = useReportData();
   const { toast } = useToast();
@@ -127,6 +148,7 @@ const FINANCIAL_BENCHMARKS = {
     leverage: { debtToEquity: 0.8, interestCoverage: 3, debtServiceCoverage: 1.5 },
   },
 };
+
   }, [reportData]);
 
   if (!shouldRender) return null;
