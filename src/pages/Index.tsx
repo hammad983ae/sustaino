@@ -27,6 +27,7 @@ import {
   PiggyBank
 } from 'lucide-react';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
+import { PAFConfigProvider } from '@/contexts/PAFConfigContext';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 import { UnifiedDataStatus } from '@/components/UnifiedDataStatus';
 import { ValuationProvider } from '@/contexts/ValuationContext';
@@ -175,7 +176,9 @@ const Index = () => {
                         </CardHeader>
                         <CardContent className="p-8">
                           <PropertyTypeLockProvider>
-                            <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/report')} />
+                            <PAFConfigProvider>
+                              <PropertyAssessmentForm onComplete={handleFormSubmit} onNavigateToReport={() => navigate('/report')} />
+                            </PAFConfigProvider>
                           </PropertyTypeLockProvider>
                           
                           <div className="mt-6">

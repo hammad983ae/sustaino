@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PropertyProvider } from '@/contexts/PropertyContext';
 import { ReportDataProvider } from '@/contexts/ReportDataContext';
+import { PAFConfigProvider } from '@/contexts/PAFConfigContext';
 
 const PropertyAssessment = () => {
   const navigate = useNavigate();
@@ -20,12 +21,14 @@ const PropertyAssessment = () => {
   return (
     <PropertyProvider>
       <ReportDataProvider>
-        <div className="min-h-screen bg-background">
-          <PropertyAssessmentForm
-            onComplete={handleAssessmentComplete}
-            onNavigateToReport={handleNavigateToReport}
-          />
-        </div>
+        <PAFConfigProvider>
+          <div className="min-h-screen bg-background">
+            <PropertyAssessmentForm
+              onComplete={handleAssessmentComplete}
+              onNavigateToReport={handleNavigateToReport}
+            />
+          </div>
+        </PAFConfigProvider>
       </ReportDataProvider>
     </PropertyProvider>
   );
