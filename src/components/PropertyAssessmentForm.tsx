@@ -23,6 +23,7 @@ import PropertyPhotosOCRExtractor from '@/components/PropertyPhotosOCRExtractor'
 import RiskAssessmentMarketIndicators from '@/components/RiskAssessmentMarketIndicators';
 import PreviousSalesHistoryAndCurrentSale from '@/components/PreviousSalesHistoryAndCurrentSale';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
+import EnhancedReportConfiguration from '@/components/EnhancedReportConfiguration';
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
 import IntelligentAssessmentAutomation from '@/components/IntelligentAssessmentAutomation';
@@ -130,6 +131,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       component: (
         <div className="space-y-6">
           <ReportTypeConfiguration />
+          <EnhancedReportConfiguration />
           <ReportSectionToggler jobId={reportData.currentJobId || ''} />
         </div>
       ),
