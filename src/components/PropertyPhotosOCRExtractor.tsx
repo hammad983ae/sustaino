@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Camera, Upload, Zap, Eye, FileImage, Loader2, Save } from "lucide-react";
+import { Camera, Upload, Zap, Eye, FileImage, Loader2, Save, FileText } from "lucide-react";
 import Tesseract from 'tesseract.js';
 import { Badge } from '@/components/ui/badge';
 import { useReportData } from '@/contexts/ReportDataContext';
@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
 import { supabase } from '@/integrations/supabase/client';
+import IntelligentDocumentOCR from './IntelligentDocumentOCR';
 
 interface PhotoWithOCR {
   id: string;
@@ -586,6 +587,122 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Analysis Button */}
+          {photos.length > 0 && photos.some(p => p.ocrProcessed) && (
+            <div className="flex justify-center">
+              <Button
+                onClick={analyzePropertyFeatures}
+                disabled={isAnalyzing}
+                className="flex items-center gap-2"
+                size="lg"
+              >
+                {isAnalyzing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Zap className="h-4 w-4" />
+                )}
+                {isAnalyzing ? 'Analyzing Property Features...' : 'Analyze Property Features'}
+              </Button>
+            </div>
+          )}
+
+          {/* Extracted Features Display */}
+          {extractedFeatures.roomTypes.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Eye className="h-5 w-5" />
+                  Property Analysis Results
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {extractedFeatures.roomTypes.length > 0 && (
+                  <div>
+                    <Label className="text-sm font-medium">Room Types Identified:</Label>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {extractedFeatures.roomTypes.map((room, index) => (
+                        <Badge key={index} variant="secondary" className="capitalize">
+                          {room}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {extractedFeatures.features.length > 0 && (
+                  <div>
+                    <Label className="text-sm font-medium">Features Observed:</Label>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {extractedFeatures.features.map((feature, index) => (
+                        <Badge key={index} variant="outline" className="capitalize">
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {extractedFeatures.observations.length > 0 && (
+                  <div>
+                    <Label className="text-sm font-medium">Observations:</Label>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {extractedFeatures.observations.map((obs, index) => (
+                        <Badge key={index} variant="default">
+                          {obs}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {extractedFeatures.condition && (
+                  <div>
+                    <Label className="text-sm font-medium">Overall Condition:</Label>
+                    <Badge variant="secondary" className="ml-2">
+                      {extractedFeatures.condition}
+                    </Badge>
+                  </div>
+                )}
+
+                {extractedFeatures.description && (
+                  <div>
+                    <Label className="text-sm font-medium">Description:</Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {extractedFeatures.description}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Document OCR Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Document Analysis & OCR
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <IntelligentDocumentOCR
+            onDataExtracted={(documents) => {
+              console.log('Document OCR extracted:', documents);
+              // Update report data with document information
+              updateReportData('fileAttachments', {
+                ...reportData.fileAttachments,
+                documents: documents.map(doc => ({
+                  name: doc.name,
+                  type: doc.documentType,
+                  extractedFields: doc.extractedFields,
+                  confidence: doc.confidence
+                }))
+              });
+            }}
+          />
         </CardContent>
       </Card>
     </div>
