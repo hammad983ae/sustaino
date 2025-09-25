@@ -358,8 +358,14 @@ const IntelligentDocumentOCR: React.FC<IntelligentDocumentOCRProps> = ({
   }, [toast]);
 
   const handleFileUpload = useCallback((files: FileList) => {
+    console.log('Document OCR: handleFileUpload called with', files.length, 'files');
+    console.log('Document OCR: Accepted types:', acceptedTypes);
+    
     Array.from(files).forEach(file => {
+      console.log('Document OCR: Processing file:', file.name, 'type:', file.type);
+      
       if (!acceptedTypes.includes(file.type)) {
+        console.log('Document OCR: File type not accepted:', file.type);
         toast({
           title: "Invalid File Type",
           description: `${file.name} is not a supported file type`,
@@ -377,9 +383,12 @@ const IntelligentDocumentOCR: React.FC<IntelligentDocumentOCRProps> = ({
         return;
       }
       
+      console.log('Document OCR: File passed validation, calling processDocument');
       processDocument(file);
     });
-  }, [acceptedTypes, maxSize, processDocument, toast]);
+    
+    console.log('Document OCR: All files processed, current documents:', documents.length);
+  }, [acceptedTypes, maxSize, processDocument, toast, documents.length]);
 
   const getDocumentTypeIcon = (type: DocumentType) => {
     switch (type) {

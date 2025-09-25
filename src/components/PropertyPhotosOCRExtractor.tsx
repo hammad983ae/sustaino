@@ -107,6 +107,7 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
     const newPhotos: PhotoWithOCR[] = [];
     
     console.log('OCR PAF Step 4: Starting file upload, files count:', files.length);
+    console.log('OCR PAF Step 4: Files details:', Array.from(files).map(f => ({name: f.name, type: f.type, size: f.size})));
     
     // Get current user for storage path
     const { data: { user } } = await supabase.auth.getUser();
