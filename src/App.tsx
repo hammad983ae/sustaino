@@ -77,6 +77,7 @@ import SocialMediaAssets from "./pages/SocialMediaAssets";
 import ConceptsAndPlans from "./pages/ConceptsAndPlans";
 import DigitalContracts from "./pages/DigitalContracts";
 import Marketing from "./pages/Marketing";
+import { EPAT } from "./components/EPAT";
 
 const queryClient = new QueryClient();
 
@@ -140,6 +141,7 @@ const App = () => (
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
+                 <Route path="/epat" element={<EPAT />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancelled" element={<PaymentCancelled />} />
         <Route path="/ip-licensing" element={<IPLicensingAgreement />} />
