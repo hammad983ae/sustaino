@@ -104,6 +104,23 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       }
     },
     {
+      title: "Report Configuration",
+      subtitle: "Configure your report settings and client information",
+      component: (
+        <div className="space-y-6">
+          <ReportTypeConfiguration />
+          <EnhancedReportConfiguration />
+          <ReportSectionToggler jobId={reportData.currentJobId || ''} />
+        </div>
+      ),
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        const hasConfig = !!(reportData.reportConfig?.reportType && reportData.reportConfig?.propertyType);
+        console.log('Report Configuration validation:', { hasAddress, hasConfig, reportData: reportData.reportConfig });
+        return hasAddress; // Require address at minimum
+      }
+    },
+    {
       title: "Planning Search", 
       subtitle: "Access planning data, zoning information, and state portal links for this property",
       component: (
@@ -123,23 +140,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         return hasAddress; // Require address to proceed with analysis
-      }
-    },
-    {
-      title: "Report Configuration",
-      subtitle: "Configure your report settings and client information",
-      component: (
-        <div className="space-y-6">
-          <ReportTypeConfiguration />
-          <EnhancedReportConfiguration />
-          <ReportSectionToggler jobId={reportData.currentJobId || ''} />
-        </div>
-      ),
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        const hasConfig = !!(reportData.reportConfig?.reportType && reportData.reportConfig?.propertyType);
-        console.log('Report Configuration validation:', { hasAddress, hasConfig, reportData: reportData.reportConfig });
-        return hasAddress; // Require address at minimum
       }
     },
     {
