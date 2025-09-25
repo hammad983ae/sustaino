@@ -24,7 +24,8 @@ import {
   Info,
   FileCheck,
   FileText,
-  PiggyBank
+  PiggyBank,
+  Users
 } from 'lucide-react';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PAFConfigProvider } from '@/contexts/PAFConfigContext';
@@ -325,6 +326,22 @@ const Index = () => {
                               <CardContent>
                                 <p className="text-sm text-slate-600">
                                   Fractional property investment platform - pool investments in premium real estate
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
+                          <Link to="/epat">
+                            <Card className="bg-gradient-to-br from-white to-indigo-50/50 border border-indigo-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-indigo-700">
+                                  <Users className="h-5 w-5" />
+                                  EPAT™
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Employee Performance Assessment Tool - comprehensive workforce evaluation platform
                                 </p>
                               </CardContent>
                             </Card>
