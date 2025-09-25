@@ -26,7 +26,8 @@ import {
   BarChart3,
   PieChart,
   Target,
-  FileText
+  FileText,
+  Clock
 } from 'lucide-react';
 
 interface FinancialData {
@@ -377,7 +378,7 @@ const AccountingFinancialIntegration: React.FC = () => {
 
             <TabsContent value="summary" className="space-y-6">
               {/* Key Metrics Overview */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <Card>
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm flex items-center gap-2">
@@ -394,13 +395,26 @@ const AccountingFinancialIntegration: React.FC = () => {
                 <Card>
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4" />
-                      Risk Assessment
+                      <Users className="h-4 w-4" />
+                      Employment Risk
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-orange-500">Medium</div>
-                    <p className="text-sm text-muted-foreground">Industry Standard</p>
+                    <div className="text-2xl font-bold text-green-600">Low</div>
+                    <p className="text-sm text-muted-foreground">Stable profession</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      Career Stage
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-blue-600">Peak</div>
+                    <p className="text-sm text-muted-foreground">7-year tenure</p>
                   </CardContent>
                 </Card>
 
@@ -430,6 +444,146 @@ const AccountingFinancialIntegration: React.FC = () => {
                   </CardContent>
                 </Card>
               </div>
+
+              {/* Employment Risk Analysis - New Section */}
+              <Card className="border-orange-200 bg-orange-50/30">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-orange-700">
+                    <Users className="h-5 w-5" />
+                    Employment Risk Assessment
+                  </CardTitle>
+                  <CardDescription className="text-orange-600">
+                    Comprehensive employment stability analysis affecting loan risk and LVR calculations
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Occupation Analysis */}
+                    <div>
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <Badge className="h-5 w-5" />
+                        Occupation Analysis
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Current Role</span>
+                          <span className="font-medium">Senior Software Engineer</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Industry</span>
+                          <span className="font-medium">Technology</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Tenure</span>
+                          <span className="font-medium text-green-600">7 years</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Employment Type</span>
+                          <span className="font-medium">Permanent Full-time</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Recession Resilience</span>
+                          <Badge variant="default" className="h-5">High</Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Career Maturity Stage */}
+                    <div>
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <TrendingUp className="h-5 w-5" />
+                        Career Maturity Stage
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Stage</span>
+                          <Badge variant="default" className="h-5">Peak Performance</Badge>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Experience Level</span>
+                          <span className="font-medium">10+ years</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Skill Demand</span>
+                          <span className="font-medium text-green-600">Very High</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Promotion Potential</span>
+                          <span className="font-medium text-blue-600">Strong</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Market Mobility</span>
+                          <Badge variant="default" className="h-5">Excellent</Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Employment Risk Factors */}
+                    <div>
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <AlertCircle className="h-5 w-5" />
+                        Risk Factors & Stability
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">Overall Risk</span>
+                          <Badge variant="default" className="h-5">Low</Badge>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Job Security</span>
+                          <span className="font-medium text-green-600">95%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Industry Volatility</span>
+                          <span className="font-medium">Low</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Skills Obsolescence</span>
+                          <span className="font-medium text-green-600">Very Low</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Automation Risk</span>
+                          <Badge variant="outline" className="h-5">Minimal</Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Employment History Timeline */}
+                  <div className="mt-6">
+                    <h4 className="font-medium mb-3 flex items-center gap-2">
+                      <Clock className="h-5 w-5" />
+                      Employment History & Stability
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-4 p-3 bg-white rounded-lg border">
+                        <div className="text-sm font-medium">2017-Present</div>
+                        <div className="flex-1">
+                          <div className="font-medium">Senior Software Engineer - TechCorp Australia</div>
+                          <div className="text-sm text-muted-foreground">7 years • Permanent • No gaps</div>
+                        </div>
+                        <Badge variant="default">Current</Badge>
+                      </div>
+                      <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border">
+                        <div className="text-sm font-medium">2015-2017</div>
+                        <div className="flex-1">
+                          <div className="font-medium">Software Developer - StartupXYZ</div>
+                          <div className="text-sm text-muted-foreground">2 years • Permanent • Career progression</div>
+                        </div>
+                        <Badge variant="outline">Previous</Badge>
+                      </div>
+                      <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border">
+                        <div className="text-sm font-medium">2013-2015</div>
+                        <div className="flex-1">
+                          <div className="font-medium">Junior Developer - WebSolutions</div>
+                          <div className="text-sm text-muted-foreground">2 years • Permanent • Entry level</div>
+                        </div>
+                        <Badge variant="outline">Graduate</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Financial Performance Charts */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -546,28 +700,38 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <TrendingUp className="h-5 w-5" />
-                      Risk Factors & Mitigation
+                      Employment-Adjusted Risk & LVR Impact
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                      <div className="font-medium text-green-800 mb-2">Employment Risk Bonus</div>
+                      <div className="text-sm text-green-700 space-y-1">
+                        <div>• Stable 7-year tenure: +5% LVR allowance</div>
+                        <div>• Recession-proof industry: +3% LVR allowance</div>
+                        <div>• Peak career stage: +2% LVR allowance</div>
+                        <div>• No employment gaps: +2% LVR allowance</div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                      <div className="text-center p-3 bg-white rounded-lg border">
+                        <div className="text-sm text-muted-foreground">Standard LVR</div>
+                        <div className="text-xl font-bold">80%</div>
+                      </div>
+                      <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
+                        <div className="text-sm text-green-600">Employment-Adjusted LVR</div>
+                        <div className="text-xl font-bold text-green-600">92%</div>
+                      </div>
+                    </div>
+                    
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Industry Volatility</span>
-                      <Badge variant="secondary">Low</Badge>
+                      <span className="text-sm">Interest Rate Reduction</span>
+                      <Badge variant="default" className="h-5">-0.25% p.a.</Badge>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Economic Sensitivity</span>
-                      <Badge variant="outline">Medium</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Credit History</span>
-                      <Badge variant="default">Excellent</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Market Position</span>
-                      <Badge variant="default">Strong</Badge>
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-2">
-                      Recommended: Diversify income sources, maintain 6-month emergency fund
+                      <span className="text-sm">Approval Probability</span>
+                      <span className="font-medium text-green-600">96%</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -576,30 +740,37 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Target className="h-5 w-5" />
-                      Alternative Options
+                      Alternative Career Options
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="space-y-2">
                       <div className="flex justify-between">
-                        <span className="text-sm font-medium">Investment Portfolio</span>
-                        <span className="text-sm text-green-600">+15% ROI</span>
+                        <span className="text-sm font-medium">Freelance Consulting</span>
+                        <span className="text-sm text-green-600">+40% Income</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm font-medium">Property Investment</span>
-                        <span className="text-sm text-blue-600">High Potential</span>
+                        <span className="text-sm font-medium">Tech Leadership Role</span>
+                        <span className="text-sm text-blue-600">+25% Income</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm font-medium">Side Business</span>
-                        <span className="text-sm text-purple-600">Moderate Risk</span>
+                        <span className="text-sm font-medium">Side Product Development</span>
+                        <span className="text-sm text-purple-600">Passive Income</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm font-medium">Skill Development</span>
-                        <span className="text-sm text-emerald-600">Low Risk</span>
+                        <span className="text-sm font-medium">Industry Mentoring</span>
+                        <span className="text-sm text-emerald-600">Stable Add-on</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                      <div className="text-sm font-medium text-blue-800">Career Progression Path</div>
+                      <div className="text-sm text-blue-700 mt-1">
+                        Next 5 years: Technical Lead → Engineering Manager
+                        <br />Expected salary: $140,000 - $180,000
                       </div>
                     </div>
                     <Button variant="outline" size="sm" className="w-full mt-3">
-                      View Detailed Analysis
+                      View Career Strategy Analysis
                     </Button>
                   </CardContent>
                 </Card>
