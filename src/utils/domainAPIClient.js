@@ -1,19 +1,27 @@
 // Frontend utility for calling Domain API endpoints through your backend
 class DomainAPIClient {
-  constructor(baseURL = '/api/domain') {
+  constructor(baseURL = 'https://cxcfxnbvtddwebqprile.supabase.co/functions/v1/domain-integration') {
     this.baseURL = baseURL;
   }
 
   async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`;
+    const url = `${this.baseURL}/proxy`;
     
     try {
       const response = await fetch(url, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN4Y2Z4bmJ2dGRkd2VicXByaWxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxOTQwMjksImV4cCI6MjA3MDc3MDAyOX0.-tSWd97U0rxEZcW1ejcAJlX2EPVBDAFI-dEuQf6CDys`,
           ...options.headers
         },
-        ...options
+        body: JSON.stringify({
+          path: endpoint,
+          method: options.method || 'GET',
+          query: options.query,
+          body: options.body ? JSON.parse(options.body) : undefined,
+          auth: { use: 'oauth' }
+        })
       });
 
       if (!response.ok) {
@@ -36,18 +44,19 @@ class DomainAPIClient {
 
   // Address suggestions with debouncing
   async getPropertySuggestions(terms, options = {}) {
-    const params = new URLSearchParams({
-      terms,
-      pageSize: options.pageSize || 10,
-      channel: options.channel || 'All'
+    return this.request('/v1/addressLocators', {
+      method: 'GET',
+      query: {
+        search: terms,
+        pageSize: options.pageSize || 10,
+        channel: options.channel || 'All'
+      }
     });
-    
-    return this.request(`/suggest?${params}`);
   }
 
   // Property details
   async getPropertyDetails(propertyId) {
-    return this.request(`/properties/${propertyId}`);
+    return this.request(`/v1/properties/${propertyId}`);
   }
 
   // Commercial listings search
