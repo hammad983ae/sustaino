@@ -10,7 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useToast } from '@/hooks/use-toast';
-import { Calculator, TrendingUp, DollarSign, Shield, Users, Globe, CreditCard, Leaf, Zap, RefreshCw } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, Shield, Users, Globe, CreditCard, Leaf, Zap, RefreshCw, AlertTriangle } from 'lucide-react';
 
 interface ServiceabilityInputs {
   grossIncome: number;
@@ -588,39 +588,156 @@ const FinancialAssessmentTools: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Shield className="h-4 w-4" />
-                    Lender Policy Matching™
+                    Lender Policy Matching™ & Appetite Analysis
                     <Badge variant="outline" className="text-xs">© 2024 Proprietary Algorithm</Badge>
                   </CardTitle>
                   <CardDescription>
-                    Real-time lender policy filtering based on your profile and deal structure
+                    Real-time lender policy filtering with appetite risk assessment
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {(() => {
                       const dtiRatio = creditProfile.totalAnnualIncome > 0 ? (creditProfile.monthlyDebts * 12 / creditProfile.totalAnnualIncome) * 100 : 0;
                       const ltvRatio = creditProfile.propertyValue > 0 ? ((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue) * 100 : 0;
+                      const employmentRisk = Math.min(10, Math.max(1, creditProfile.creditScore / 80)); // Convert credit score to employment risk (1-10)
                       
-                      const eligibleLenders = [
-                        { name: 'Big 4 Banks', eligible: dtiRatio <= 30 && ltvRatio <= 80 && creditProfile.creditScore >= 650, requirements: 'DTI ≤30%, LTV ≤80%, Credit ≥650' },
-                        { name: 'Regional Banks', eligible: dtiRatio <= 35 && ltvRatio <= 85 && creditProfile.creditScore >= 600, requirements: 'DTI ≤35%, LTV ≤85%, Credit ≥600' },
-                        { name: 'Non-Bank Lenders', eligible: dtiRatio <= 40 && ltvRatio <= 90 && creditProfile.creditScore >= 550, requirements: 'DTI ≤40%, LTV ≤90%, Credit ≥550' },
-                        { name: 'Specialist Lenders', eligible: dtiRatio <= 45 && creditProfile.creditScore >= 500, requirements: 'DTI ≤45%, Credit ≥500' }
+                      const lenderPolicies = [
+                        { 
+                          name: 'Big 4 Banks', 
+                          eligible: dtiRatio <= 30 && ltvRatio <= 80 && creditProfile.creditScore >= 650 && employmentRisk >= 7,
+                          requirements: 'DTI ≤30%, LTV ≤80%, Credit ≥650, Employment Risk ≥7/10',
+                          appetite: 85, // High appetite
+                          interestRate: 6.2,
+                          fees: '$600',
+                          maxLvr: 80,
+                          specialty: 'Standard residential, investment properties'
+                        },
+                        { 
+                          name: 'Regional Banks', 
+                          eligible: dtiRatio <= 35 && ltvRatio <= 85 && creditProfile.creditScore >= 600 && employmentRisk >= 6,
+                          requirements: 'DTI ≤35%, LTV ≤85%, Credit ≥600, Employment Risk ≥6/10',
+                          appetite: 70,
+                          interestRate: 6.4,
+                          fees: '$800',
+                          maxLvr: 85,
+                          specialty: 'Regional properties, first home buyers'
+                        },
+                        { 
+                          name: 'Non-Bank Lenders', 
+                          eligible: dtiRatio <= 40 && ltvRatio <= 90 && creditProfile.creditScore >= 550 && employmentRisk >= 5,
+                          requirements: 'DTI ≤40%, LTV ≤90%, Credit ≥550, Employment Risk ≥5/10',
+                          appetite: 45,
+                          interestRate: 7.1,
+                          fees: '$1,200',
+                          maxLvr: 90,
+                          specialty: 'Alternative income, self-employed'
+                        },
+                        { 
+                          name: 'Specialist Lenders', 
+                          eligible: dtiRatio <= 50 && creditProfile.creditScore >= 500 && employmentRisk >= 4,
+                          requirements: 'DTI ≤50%, Credit ≥500, Employment Risk ≥4/10',
+                          appetite: 25,
+                          interestRate: 8.5,
+                          fees: '$2,000',
+                          maxLvr: 95,
+                          specialty: 'Complex deals, credit impaired'
+                        }
                       ];
 
+                      const eligibleCount = lenderPolicies.filter(l => l.eligible).length;
+                      const riskMultiplier = eligibleCount === 0 ? 3.0 : eligibleCount === 1 ? 2.0 : eligibleCount === 2 ? 1.5 : 1.0;
+
                       return (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {eligibleLenders.map((lender, index) => (
-                            <div key={index} className={`p-3 rounded-lg border ${lender.eligible ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                              <div className="flex justify-between items-center mb-1">
-                                <span className="font-medium">{lender.name}</span>
-                                <Badge variant={lender.eligible ? "default" : "destructive"}>
-                                  {lender.eligible ? "Eligible" : "Not Eligible"}
-                                </Badge>
-                              </div>
-                              <div className="text-xs text-muted-foreground">{lender.requirements}</div>
+                        <div className="space-y-4">
+                          {/* Risk Alert */}
+                          <div className={`p-4 rounded-lg border ${eligibleCount >= 3 ? 'bg-green-50 border-green-200' : eligibleCount >= 2 ? 'bg-yellow-50 border-yellow-200' : 'bg-red-50 border-red-200'}`}>
+                            <div className="flex items-center gap-2 mb-2">
+                              <AlertTriangle className="h-4 w-4" />
+                              <span className="font-medium">Lender Appetite Risk Assessment™</span>
                             </div>
-                          ))}
+                            <div className="text-sm">
+                              <strong>Eligible Lenders: {eligibleCount}/4</strong> - 
+                              {eligibleCount >= 3 && " Excellent choice of lenders available"}
+                              {eligibleCount === 2 && " Moderate lender appetite, acceptable risk"}
+                              {eligibleCount === 1 && " Limited lender appetite, higher risk"}
+                              {eligibleCount === 0 && " Critical: No eligible lenders, restructure required"}
+                            </div>
+                            <div className="text-xs text-muted-foreground mt-1">
+                              Risk multiplier: {riskMultiplier}x - Fewer lenders = higher pricing risk
+                            </div>
+                          </div>
+
+                          {/* Lender Grid */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {lenderPolicies.map((lender, index) => (
+                              <div key={index} className={`p-4 rounded-lg border ${lender.eligible ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
+                                <div className="flex justify-between items-start mb-2">
+                                  <div>
+                                    <span className="font-medium">{lender.name}</span>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <Badge variant={lender.eligible ? "default" : "secondary"} className="text-xs">
+                                        {lender.eligible ? "Eligible" : "Not Eligible"}
+                                      </Badge>
+                                      <Badge variant="outline" className="text-xs">
+                                        Appetite: {lender.appetite}%
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                  {lender.eligible && (
+                                    <div className="text-right text-sm">
+                                      <div className="font-medium text-green-600">{lender.interestRate}%</div>
+                                      <div className="text-xs text-muted-foreground">+{lender.fees}</div>
+                                    </div>
+                                  )}
+                                </div>
+                                
+                                <div className="text-xs text-muted-foreground mb-2">{lender.requirements}</div>
+                                <div className="text-xs text-blue-600">{lender.specialty}</div>
+                                
+                                {lender.eligible && (
+                                  <div className="mt-2 pt-2 border-t border-green-200">
+                                    <div className="text-xs space-y-1">
+                                      <div className="flex justify-between">
+                                        <span>Max LVR:</span>
+                                        <span className="font-medium">{lender.maxLvr}%</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span>Market Position:</span>
+                                        <span className={lender.appetite >= 70 ? "text-green-600" : lender.appetite >= 50 ? "text-yellow-600" : "text-red-600"}>
+                                          {lender.appetite >= 70 ? "Active" : lender.appetite >= 50 ? "Selective" : "Cautious"}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Best Policy Recommendation */}
+                          {eligibleCount > 0 && (
+                            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                              <h4 className="font-medium text-blue-800 mb-2">🏆 Best Policy Recommendation</h4>
+                              {(() => {
+                                const bestLender = lenderPolicies
+                                  .filter(l => l.eligible)
+                                  .sort((a, b) => (b.appetite * 0.4) + ((10 - a.interestRate) * 0.6) - ((10 - b.interestRate) * 0.6) - (a.appetite * 0.4))[0];
+                                
+                                return bestLender ? (
+                                  <div className="text-sm">
+                                    <div className="font-medium">{bestLender.name}</div>
+                                    <div className="text-blue-700 mt-1">
+                                      Best combination of rate ({bestLender.interestRate}%) and appetite ({bestLender.appetite}%)
+                                    </div>
+                                    <div className="text-xs text-blue-600 mt-1">
+                                      {bestLender.specialty} • Max LVR: {bestLender.maxLvr}% • Fees: {bestLender.fees}
+                                    </div>
+                                  </div>
+                                ) : null;
+                              })()}
+                            </div>
+                          )}
                         </div>
                       );
                     })()}
