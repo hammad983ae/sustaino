@@ -28,6 +28,10 @@ import NotFound from "./pages/NotFound";
 import AutomatedValuation from "./pages/AutomatedValuation";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancelled from "./pages/PaymentCancelled";
+import IPLicensingAgreement from "./components/IPLicensingAgreement";
+import LegalComplianceDashboard from "./components/LegalComplianceDashboard";
+import TermsOfService from "./components/TermsOfService";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 import RenewableEnergyValuations from "./components/RenewableEnergyValuations";
 import PropertyValuations from "./pages/PropertyValuations";
 import PropertyAssessment from "./pages/PropertyAssessment";
@@ -136,8 +140,12 @@ const App = () => (
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
-                 <Route path="/payment-success" element={<PaymentSuccess />} />
-                 <Route path="/payment-cancelled" element={<PaymentCancelled />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-cancelled" element={<PaymentCancelled />} />
+        <Route path="/ip-licensing" element={<IPLicensingAgreement />} />
+        <Route path="/legal-compliance" element={<LegalComplianceDashboard />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
