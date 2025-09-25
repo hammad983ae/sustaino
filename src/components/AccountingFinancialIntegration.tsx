@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useStepVisibility } from '@/contexts/PAFConfigContext';
+import FinancialAssessmentTools from './FinancialAssessmentTools';
 import { 
   Building2, 
   CreditCard, 
@@ -172,9 +173,10 @@ const AccountingFinancialIntegration: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="integrations" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="integrations">Integrations</TabsTrigger>
               <TabsTrigger value="manual">Manual Entry</TabsTrigger>
+              <TabsTrigger value="assessment">Financial Assessment</TabsTrigger>
               <TabsTrigger value="summary">Summary</TabsTrigger>
             </TabsList>
 
@@ -361,6 +363,10 @@ const AccountingFinancialIntegration: React.FC = () => {
                   </Button>
                 </div>
               </div>
+            </TabsContent>
+
+            <TabsContent value="assessment" className="space-y-4">
+              <FinancialAssessmentTools />
             </TabsContent>
 
             <TabsContent value="summary" className="space-y-4">
