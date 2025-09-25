@@ -27,7 +27,8 @@ import {
   PieChart,
   Target,
   FileText,
-  Clock
+  Clock,
+  Calculator
 } from 'lucide-react';
 
 interface FinancialData {
@@ -45,11 +46,37 @@ interface FinancialData {
     riskLevel?: string;
     lastChecked?: string;
   };
+  financialRatios?: {
+    enabled: boolean;
+    data: {
+      liquidity: {
+        currentRatio: number;
+        quickRatio: number;
+        workingCapital: number;
+      };
+      profitability: {
+        netProfitMargin: number;
+        returnOnAssets: number;
+        returnOnEquity: number;
+      };
+      efficiency: {
+        assetTurnover: number;
+        receivablesTurnover: number;
+        inventoryTurnover: number;
+      };
+      leverage: {
+        debtToEquity: number;
+        interestCoverage: number;
+        debtServiceCoverage: number;
+      };
+    };
+  };
   governmentData?: {
     atoConnected: boolean;
     asicConnected: boolean;
     businessNumbers?: string[];
     complianceStatus?: string;
+    taxReturns?: any[];
   };
   bankingData?: {
     connected: boolean;
@@ -77,7 +104,29 @@ const AccountingFinancialIntegration: React.FC = () => {
   useEffect(() => {
     if (reportData?.accountingFinancials) {
       setFinancialData(reportData.accountingFinancials);
-    }
+}
+
+// Financial Ratios Benchmarks
+const FINANCIAL_BENCHMARKS = {
+  excellent: {
+    liquidity: { currentRatio: 2.5, quickRatio: 1.5, workingCapital: 500000 },
+    profitability: { netProfitMargin: 20, returnOnAssets: 15, returnOnEquity: 25 },
+    efficiency: { assetTurnover: 2.0, receivablesTurnover: 12, inventoryTurnover: 8 },
+    leverage: { debtToEquity: 0.3, interestCoverage: 10, debtServiceCoverage: 2.5 },
+  },
+  good: {
+    liquidity: { currentRatio: 2.0, quickRatio: 1.2, workingCapital: 200000 },
+    profitability: { netProfitMargin: 15, returnOnAssets: 10, returnOnEquity: 18 },
+    efficiency: { assetTurnover: 1.5, receivablesTurnover: 8, inventoryTurnover: 6 },
+    leverage: { debtToEquity: 0.5, interestCoverage: 6, debtServiceCoverage: 2.0 },
+  },
+  average: {
+    liquidity: { currentRatio: 1.5, quickRatio: 1.0, workingCapital: 50000 },
+    profitability: { netProfitMargin: 10, returnOnAssets: 6, returnOnEquity: 12 },
+    efficiency: { assetTurnover: 1.0, receivablesTurnover: 6, inventoryTurnover: 4 },
+    leverage: { debtToEquity: 0.8, interestCoverage: 3, debtServiceCoverage: 1.5 },
+  },
+};
   }, [reportData]);
 
   if (!shouldRender) return null;
@@ -879,6 +928,388 @@ const AccountingFinancialIntegration: React.FC = () => {
                   </CardContent>
                 </Card>
               )}
+            </TabsContent>
+
+            {/* Financial Ratios Analysis Tab */}
+            <TabsContent value="financial-ratios" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calculator className="h-5 w-5" />
+                    Financial Ratios Analysis™
+                    <Badge variant="outline" className="text-xs">© 2024 Powered™</Badge>
+                  </CardTitle>
+                  <CardDescription>
+                    Optional comprehensive financial ratio analysis for employment risk assessment
+                  </CardDescription>
+                  <div className="flex items-center space-x-2 mt-4">
+                    <Switch
+                      id="enable-financial-ratios"
+                      checked={financialData.financialRatios?.enabled || false}
+                      onCheckedChange={(checked) => 
+                        setFinancialData(prev => ({
+                          ...prev,
+                          financialRatios: {
+                            ...prev.financialRatios!,
+                            enabled: checked
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="enable-financial-ratios">
+                      Include Financial Ratios Analysis in Assessment
+                    </Label>
+                  </div>
+                </CardHeader>
+
+                {financialData.financialRatios?.enabled && (
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {/* Liquidity Card */}
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">Liquidity</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label>Current Ratio</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.liquidity.currentRatio}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    liquidity: { 
+                                      ...prev.financialRatios!.data.liquidity, 
+                                      currentRatio: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Quick Ratio</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.liquidity.quickRatio}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    liquidity: { 
+                                      ...prev.financialRatios!.data.liquidity, 
+                                      quickRatio: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Working Capital</Label>
+                            <Input
+                              type="number"
+                              value={financialData.financialRatios.data.liquidity.workingCapital}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    liquidity: { 
+                                      ...prev.financialRatios!.data.liquidity, 
+                                      workingCapital: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Profitability Card */}
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">Profitability</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label>Net Profit Margin (%)</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.profitability.netProfitMargin}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    profitability: { 
+                                      ...prev.financialRatios!.data.profitability, 
+                                      netProfitMargin: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Return on Assets (%)</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.profitability.returnOnAssets}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    profitability: { 
+                                      ...prev.financialRatios!.data.profitability, 
+                                      returnOnAssets: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Return on Equity (%)</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.profitability.returnOnEquity}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    profitability: { 
+                                      ...prev.financialRatios!.data.profitability, 
+                                      returnOnEquity: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Efficiency Card */}
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">Efficiency</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label>Asset Turnover</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.efficiency.assetTurnover}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    efficiency: { 
+                                      ...prev.financialRatios!.data.efficiency, 
+                                      assetTurnover: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Receivables Turnover</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.efficiency.receivablesTurnover}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    efficiency: { 
+                                      ...prev.financialRatios!.data.efficiency, 
+                                      receivablesTurnover: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Inventory Turnover</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.efficiency.inventoryTurnover}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    efficiency: { 
+                                      ...prev.financialRatios!.data.efficiency, 
+                                      inventoryTurnover: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Leverage Card */}
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">Leverage</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label>Debt to Equity</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.leverage.debtToEquity}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    leverage: { 
+                                      ...prev.financialRatios!.data.leverage, 
+                                      debtToEquity: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Interest Coverage</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.leverage.interestCoverage}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    leverage: { 
+                                      ...prev.financialRatios!.data.leverage, 
+                                      interestCoverage: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                          <div>
+                            <Label>Debt Service Coverage</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={financialData.financialRatios.data.leverage.debtServiceCoverage}
+                              onChange={(e) => setFinancialData(prev => ({
+                                ...prev,
+                                financialRatios: {
+                                  ...prev.financialRatios!,
+                                  data: {
+                                    ...prev.financialRatios!.data,
+                                    leverage: { 
+                                      ...prev.financialRatios!.data.leverage, 
+                                      debtServiceCoverage: Number(e.target.value) 
+                                    }
+                                  }
+                                }
+                              }))}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Financial Health Overview */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-sm">Financial Health Overview</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            <div className="flex justify-between">
+                              <span>Liquidity Score:</span>
+                              <Badge variant="outline">
+                                {Math.round((
+                                  (financialData.financialRatios.data.liquidity.currentRatio >= FINANCIAL_BENCHMARKS.good.liquidity.currentRatio ? 80 : 50) +
+                                  (financialData.financialRatios.data.liquidity.quickRatio >= FINANCIAL_BENCHMARKS.good.liquidity.quickRatio ? 80 : 50) +
+                                  (financialData.financialRatios.data.liquidity.workingCapital >= FINANCIAL_BENCHMARKS.good.liquidity.workingCapital ? 80 : 50)
+                                ) / 3)}%
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Profitability Score:</span>
+                              <Badge variant="outline">
+                                {Math.round((
+                                  (financialData.financialRatios.data.profitability.netProfitMargin >= FINANCIAL_BENCHMARKS.good.profitability.netProfitMargin ? 80 : 50) +
+                                  (financialData.financialRatios.data.profitability.returnOnAssets >= FINANCIAL_BENCHMARKS.good.profitability.returnOnAssets ? 80 : 50) +
+                                  (financialData.financialRatios.data.profitability.returnOnEquity >= FINANCIAL_BENCHMARKS.good.profitability.returnOnEquity ? 80 : 50)
+                                ) / 3)}%
+                              </Badge>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-sm">Risk Assessment</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            <div className="flex justify-between">
+                              <span>Credit Risk:</span>
+                              <Badge variant={financialData.financialRatios.data.leverage.debtToEquity > 0.8 ? 'destructive' : 'default'}>
+                                {financialData.financialRatios.data.leverage.debtToEquity > 0.8 ? 'High' : 'Low'}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Operational Risk:</span>
+                              <Badge variant={financialData.financialRatios.data.efficiency.assetTurnover < 1 ? 'destructive' : 'default'}>
+                                {financialData.financialRatios.data.efficiency.assetTurnover < 1 ? 'High' : 'Low'}
+                              </Badge>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
             </TabsContent>
           </Tabs>
         </CardContent>
