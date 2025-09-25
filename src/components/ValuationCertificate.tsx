@@ -70,6 +70,29 @@ const ValuationCertificate = () => {
     }
   }, [reportData.reportConfig, reportData.propertySearchData, reportData.valuationCertificate]);
 
+  // Get configuration settings for conditional rendering
+  const getConfigValue = (key: string) => {
+    return reportData.reportConfig?.[key] || '';
+  };
+
+  const shouldShowInsurance = () => {
+    const insuranceConfig = getConfigValue('insurance-figure');
+    return insuranceConfig && insuranceConfig !== 'not-applicable';
+  };
+
+  const shouldShowRental = () => {
+    const rentalConfig = getConfigValue('rental-value');
+    return rentalConfig && rentalConfig !== 'not-applicable';
+  };
+
+  const getRentalType = () => {
+    return getConfigValue('rental-value');
+  };
+
+  const getInsuranceType = () => {
+    return getConfigValue('insurance-figure');
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -388,69 +411,164 @@ const ValuationCertificate = () => {
                 readOnly 
               />
             </div>
+          </div>
 
-            {/* Rental Values Section - Commercial Properties */}
-            {(prePopulatedData.propertyType?.toLowerCase().includes('commercial') || 
-              prePopulatedData.propertyType?.toLowerCase().includes('retail') ||
-              prePopulatedData.propertyType?.toLowerCase().includes('office') ||
-              prePopulatedData.propertyType?.toLowerCase().includes('industrial')) && (
+          {/* Conditional Rental Values Section */}
+            {shouldShowRental() && (
               <>
-                <div className="p-4 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
-                  <div className="flex items-center justify-between mb-2">
-                    <Label className="font-medium text-orange-800 dark:text-orange-200">Net Rent Value</Label>
-                    <span className="text-xs text-orange-600 dark:text-orange-400">[Commercial Property]</span>
-                  </div>
-                  <Input 
-                    placeholder="$XXX,XXX per annum net"
-                    className="bg-white dark:bg-gray-800" 
-                  />
-                </div>
-
-                <div className="p-4 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
-                  <div className="flex items-center justify-between mb-2">
-                    <Label className="font-medium text-orange-800 dark:text-orange-200">Market Rent Value</Label>
-                    <span className="text-xs text-orange-600 dark:text-orange-400">[Commercial Property]</span>
-                  </div>
-                  <Input 
-                    placeholder="$XXX,XXX per annum gross"
-                    className="bg-white dark:bg-gray-800" 
-                  />
-                </div>
+                {(() => {
+                  const rentalType = getRentalType();
+                  const propertyType = prePopulatedData.propertyType?.toLowerCase() || '';
+                  
+                  // For residential properties
+                  if (propertyType.includes('residential')) {
+                    return (
+                      <>
+                        {(rentalType === 'market-rent' || rentalType === 'both-residential') && (
+                          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="font-medium text-blue-800 dark:text-blue-200">Market Rent</Label>
+                              <span className="text-xs text-blue-600 dark:text-blue-400">[Residential Property]</span>
+                            </div>
+                            <Input 
+                              placeholder="$XXX per week"
+                              className="bg-white dark:bg-gray-800" 
+                            />
+                          </div>
+                        )}
+                        {(rentalType === 'gross-passing-rent' || rentalType === 'both-residential') && (
+                          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="font-medium text-blue-800 dark:text-blue-200">Gross Passing Rent</Label>
+                              <span className="text-xs text-blue-600 dark:text-blue-400">[Residential Property]</span>
+                            </div>
+                            <Input 
+                              placeholder="$XXX per week (inclusive of outgoings)"
+                              className="bg-white dark:bg-gray-800" 
+                            />
+                          </div>
+                        )}
+                      </>
+                    );
+                  }
+                  
+                  // For commercial, agriculture, development, specialised properties  
+                  if (['commercial', 'agriculture', 'development', 'specialised'].some(type => propertyType.includes(type))) {
+                    return (
+                      <>
+                        {(rentalType === 'net-passing-rent' || rentalType === 'both-commercial') && (
+                          <div className="p-4 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="font-medium text-orange-800 dark:text-orange-200">Net Passing Rent</Label>
+                              <span className="text-xs text-orange-600 dark:text-orange-400">[{propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} Property]</span>
+                            </div>
+                            <Input 
+                              placeholder="$XXX,XXX per annum net"
+                              className="bg-white dark:bg-gray-800" 
+                            />
+                          </div>
+                        )}
+                        {(rentalType === 'market-rent' || rentalType === 'both-commercial') && (
+                          <div className="p-4 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="font-medium text-orange-800 dark:text-orange-200">Market Rent</Label>
+                              <span className="text-xs text-orange-600 dark:text-orange-400">[{propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} Property]</span>
+                            </div>
+                            <Input 
+                              placeholder="$XXX,XXX per annum"
+                              className="bg-white dark:bg-gray-800" 
+                            />
+                          </div>
+                        )}
+                      </>
+                    );
+                  }
+                  
+                  // For comprehensive or other types
+                  return (
+                    <>
+                      {rentalType === 'comprehensive' && (
+                        <>
+                          <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="font-medium text-green-800 dark:text-green-200">Market Rent</Label>
+                              <span className="text-xs text-green-600 dark:text-green-400">[All Property Types]</span>
+                            </div>
+                            <Input 
+                              placeholder="$XXX,XXX per annum"
+                              className="bg-white dark:bg-gray-800" 
+                            />
+                          </div>
+                          <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="font-medium text-green-800 dark:text-green-200">Net Passing Rent</Label>
+                              <span className="text-xs text-green-600 dark:text-green-400">[All Property Types]</span>
+                            </div>
+                            <Input 
+                              placeholder="$XXX,XXX per annum net"
+                              className="bg-white dark:bg-gray-800" 
+                            />
+                          </div>
+                          <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="font-medium text-green-800 dark:text-green-200">Gross Passing Rent</Label>
+                              <span className="text-xs text-green-600 dark:text-green-400">[All Property Types]</span>
+                            </div>
+                            <Input 
+                              placeholder="$XXX,XXX per annum gross"
+                              className="bg-white dark:bg-gray-800" 
+                            />
+                          </div>
+                        </>
+                      )}
+                    </>
+                  );
+                })()}
               </>
             )}
 
-            {/* Rental Value Section - Residential Properties */}
-            {(prePopulatedData.propertyType?.toLowerCase().includes('residential') || 
-              prePopulatedData.propertyType?.toLowerCase().includes('house') ||
-              prePopulatedData.propertyType?.toLowerCase().includes('apartment') ||
-              prePopulatedData.propertyType?.toLowerCase().includes('unit')) && (
-              <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+            {/* Conditional Insurance Value Section */}
+            {shouldShowInsurance() && (
+              <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
                 <div className="flex items-center justify-between mb-2">
-                  <Label className="font-medium text-blue-800 dark:text-blue-200">Rental Value</Label>
-                  <span className="text-xs text-blue-600 dark:text-blue-400">[Residential Property]</span>
+                  <Label className="font-medium text-purple-800 dark:text-purple-200">
+                    Insurance Value ({(() => {
+                      const insuranceType = getInsuranceType();
+                      switch(insuranceType) {
+                        case 'full-replacement': return 'Full Replacement Cost';
+                        case 'indemnity': return 'Indemnity Value';
+                        case 'reinstatement': return 'Reinstatement Value';
+                        default: return 'Insurance Value';
+                      }
+                    })()})
+                  </Label>
+                  <span className="text-xs text-purple-600 dark:text-purple-400">[{getInsuranceType()?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}]</span>
                 </div>
                 <Input 
-                  placeholder="$XXX per week"
+                  placeholder={(() => {
+                    const insuranceType = getInsuranceType();
+                    switch(insuranceType) {
+                      case 'full-replacement': return '$XXX,XXX (Complete rebuilding cost)';
+                      case 'indemnity': return '$XXX,XXX (Current market value less depreciation)';
+                      case 'reinstatement': return '$XXX,XXX (Restore to equivalent condition)';
+                      default: return '$XXX,XXX (Insurance replacement)';
+                    }
+                  })()}
                   className="bg-white dark:bg-gray-800" 
                 />
+                <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
+                  {(() => {
+                    const insuranceType = getInsuranceType();
+                    switch(insuranceType) {
+                      case 'full-replacement': return 'Based on current building costs including demolition and site preparation';
+                      case 'indemnity': return 'Current market value adjusted for age and condition depreciation';
+                      case 'reinstatement': return 'Cost to restore property to equivalent condition and utility';
+                      default: return 'Based on insurance replacement requirements';
+                    }
+                  })()}
+                </p>
               </div>
             )}
-
-            {/* Insurance Value Section */}
-            <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
-              <div className="flex items-center justify-between mb-2">
-                <Label className="font-medium text-purple-800 dark:text-purple-200">Insurance Value</Label>
-                <span className="text-xs text-purple-600 dark:text-purple-400">[Replacement Cost]</span>
-              </div>
-              <Input 
-                placeholder="$XXX,XXX (Full Replacement)"
-                className="bg-white dark:bg-gray-800" 
-              />
-              <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
-                Based on current building costs and site preparation
-              </p>
-            </div>
-          </div>
 
           {/* Additional Valuation Details */}
           <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-900/30 rounded-lg border">

@@ -430,6 +430,85 @@ const ReportTypeConfiguration = () => {
             </div>
           </div>
 
+          {/* Rental Value Configuration */}
+          <div className="mt-4">
+            <div>
+              <Label htmlFor="rental-value" className="text-sm font-medium">Include Rental Value</Label>
+              <Select value={formData['rental-value'] || ''} onValueChange={(value) => handleSelectChange('rental-value', value)}>
+                <SelectTrigger id="rental-value" className="mt-1 max-w-xs">
+                  <SelectValue placeholder="Select rental value option" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border z-50">
+                  {(() => {
+                    const propertyType = formData['property-type'] || selectedPropertyType || '';
+                    
+                    if (propertyType === 'residential') {
+                      return (
+                        <>
+                          <SelectItem value="market-rent">Market Rent</SelectItem>
+                          <SelectItem value="gross-passing-rent">Gross Passing Rent</SelectItem>
+                          <SelectItem value="both-residential">Market Rent & Gross Passing Rent</SelectItem>
+                          <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                        </>
+                      );
+                    } else if (['commercial', 'agriculture', 'development', 'specialised'].includes(propertyType)) {
+                      return (
+                        <>
+                          <SelectItem value="net-passing-rent">Net Passing Rent</SelectItem>
+                          <SelectItem value="market-rent">Market Rent</SelectItem>
+                          <SelectItem value="both-commercial">Net Passing Rent & Market Rent</SelectItem>
+                          <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                        </>
+                      );
+                    } else {
+                      return (
+                        <>
+                          <SelectItem value="market-rent">Market Rent</SelectItem>
+                          <SelectItem value="net-passing-rent">Net Passing Rent</SelectItem>
+                          <SelectItem value="gross-passing-rent">Gross Passing Rent</SelectItem>
+                          <SelectItem value="comprehensive">All Rental Values</SelectItem>
+                          <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                        </>
+                      );
+                    }
+                  })()}
+                </SelectContent>
+              </Select>
+              <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+                <h4 className="text-sm font-medium text-green-900 dark:text-green-400 mb-1">Rental Value Guidelines</h4>
+                <div className="text-xs text-green-800 dark:text-green-300 space-y-1">
+                  {(() => {
+                    const propertyType = formData['property-type'] || selectedPropertyType || '';
+                    
+                    if (propertyType === 'residential') {
+                      return (
+                        <>
+                          <p><strong>Market Rent:</strong> Current rental value achievable in the open market</p>
+                          <p><strong>Gross Passing Rent:</strong> Total rental income including outgoings recovered from tenant</p>
+                        </>
+                      );
+                    } else if (['commercial', 'agriculture', 'development', 'specialised'].includes(propertyType)) {
+                      return (
+                        <>
+                          <p><strong>Net Passing Rent:</strong> Rental income with tenant responsible for outgoings</p>
+                          <p><strong>Market Rent:</strong> Current rental value achievable in the open market</p>
+                        </>
+                      );
+                    } else {
+                      return (
+                        <>
+                          <p><strong>Market Rent:</strong> Current rental value achievable in the open market</p>
+                          <p><strong>Net Passing Rent:</strong> Rental income with tenant responsible for outgoings</p>
+                          <p><strong>Gross Passing Rent:</strong> Total rental income including outgoings recovered</p>
+                        </>
+                      );
+                    }
+                  })()}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Figure Options Configuration */}
           <div className="mt-4">
             <div>
