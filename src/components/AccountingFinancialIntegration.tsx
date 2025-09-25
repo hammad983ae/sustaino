@@ -12,6 +12,7 @@ import { useReportData } from '@/contexts/ReportDataContext';
 import { useStepVisibility } from '@/contexts/PAFConfigContext';
 import FinancialAssessmentTools from './FinancialAssessmentTools';
 import { PerformanceRatingSystem } from './PerformanceRatingSystem';
+import { EmployeePerformancePlatform } from './EmployeePerformancePlatform';
 import { 
   Building2, 
   CreditCard, 
@@ -174,11 +175,12 @@ const AccountingFinancialIntegration: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="integrations" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
           <TabsTrigger value="manual">Manual Entry</TabsTrigger>
           <TabsTrigger value="assessment">Financial Assessment</TabsTrigger>
           <TabsTrigger value="performance">Performance Rating</TabsTrigger>
+          <TabsTrigger value="employees">Employee Performance</TabsTrigger>
           <TabsTrigger value="summary">Summary</TabsTrigger>
         </TabsList>
 
@@ -373,6 +375,10 @@ const AccountingFinancialIntegration: React.FC = () => {
 
             <TabsContent value="performance" className="space-y-4">
               <PerformanceRatingSystem />
+            </TabsContent>
+
+            <TabsContent value="employees" className="space-y-4">
+              <EmployeePerformancePlatform />
             </TabsContent>
 
             <TabsContent value="summary" className="space-y-4">
