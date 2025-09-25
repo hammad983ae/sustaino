@@ -20,6 +20,8 @@ import RentalConfiguration from '@/components/RentalConfiguration';
 import PropertyPlanningSearch from '@/components/PropertyPlanningSearch';
 import PropertySearchAnalysis from '@/components/PropertySearchAnalysis';
 import PropertyPhotosOCRExtractor from '@/components/PropertyPhotosOCRExtractor';
+import AccountingFinancialIntegration from '@/components/AccountingFinancialIntegration';
+import SalesLeasingRecommendations from '@/components/SalesLeasingRecommendations';
 import RiskAssessmentMarketIndicators from '@/components/RiskAssessmentMarketIndicators';
 import PreviousSalesHistoryAndCurrentSale from '@/components/PreviousSalesHistoryAndCurrentSale';
 import ReportTypeConfiguration from '@/components/ReportTypeConfiguration';
@@ -125,7 +127,29 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       }
     },
     {
-      title: "Intelligent Enhancement", 
+      title: "Accountancy & Financials",
+      subtitle: "Integration with accounting software and government portals",
+      component: (
+        <AccountingFinancialIntegration />
+      ),
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        return hasAddress; // Require address to proceed
+      }
+    },
+    {
+      title: "Sales & Leasing Recommendations",
+      subtitle: "AI-powered sales and leasing strategy recommendations",
+      component: (
+        <SalesLeasingRecommendations />
+      ),
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        return hasAddress; // Require address to proceed
+      }
+    },
+    {
+      title: "Intelligent Enhancement",
       subtitle: "AI-powered assessment automation and optimization",
       component: <IntelligentAssessmentAutomation />,
       validation: () => {

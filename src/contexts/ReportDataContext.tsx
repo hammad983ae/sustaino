@@ -192,6 +192,66 @@ export interface ReportData {
     [key: string]: any;
   };
 
+  // Accounting and Financial Integration
+  accountingFinancials?: {
+    accountingSoftware?: {
+      connected: boolean;
+      platform: string;
+      lastSync?: string;
+      revenue?: number;
+      expenses?: number;
+      profitMargin?: number;
+    };
+    creditAssessment?: {
+      score?: number;
+      rating?: string;
+      riskLevel?: string;
+      lastChecked?: string;
+    };
+    governmentData?: {
+      atoConnected: boolean;
+      asicConnected: boolean;
+      businessNumbers?: string[];
+      complianceStatus?: string;
+    };
+    bankingData?: {
+      connected: boolean;
+      bankName?: string;
+      accountBalance?: number;
+      transactionVolume?: number;
+    };
+  };
+
+  // Sales and Leasing Recommendations
+  salesLeasingRecommendations?: {
+    sales?: {
+      strategy: string;
+      estimatedValue: number;
+      timeframe: string;
+      marketingApproach: string[];
+      targetBuyers: string[];
+      riskFactors: string[];
+      confidence: number;
+    };
+    leasing?: {
+      rentalRange: { min: number; max: number };
+      optimalRent: number;
+      timeframe: string;
+      targetTenants: string[];
+      marketingChannels: string[];
+      leasingStrategy: string;
+      confidence: number;
+    };
+    marketConditions?: {
+      trend: string;
+      demandLevel: string;
+      inventory: string;
+      priceGrowth: number;
+    };
+    preference?: 'sales' | 'leasing' | 'both';
+    notes?: string;
+  };
+
   // Risk Assessment and Market Analysis
   riskAssessment?: {
     includePestelAnalysis?: boolean;

@@ -80,6 +80,24 @@ const defaultSections: Record<string, SectionConfig> = {
     category: 'optional',
     priority: 5
   },
+  accountancy_financials: {
+    id: 'accountancy_financials',
+    name: 'Accountancy & Financials',
+    description: 'Integration with accounting software and government portals',
+    required: false,
+    included: true,
+    category: 'optional',
+    priority: 6
+  },
+  sales_leasing: {
+    id: 'sales_leasing',
+    name: 'Sales & Leasing Recommendations',
+    description: 'AI-powered sales and leasing strategy recommendations',
+    required: false,
+    included: true,
+    category: 'optional',
+    priority: 7
+  },
   rental_configuration: {
     id: 'rental_configuration',
     name: 'Rental Configuration',
@@ -87,7 +105,7 @@ const defaultSections: Record<string, SectionConfig> = {
     required: false,
     included: false,
     category: 'supplementary',
-    priority: 6
+    priority: 8
   },
   risk_assessment: {
     id: 'risk_assessment',
@@ -96,7 +114,7 @@ const defaultSections: Record<string, SectionConfig> = {
     required: false,
     included: true,
     category: 'optional',
-    priority: 7
+    priority: 9
   },
   environmental_assessment: {
     id: 'environmental_assessment',
@@ -105,7 +123,7 @@ const defaultSections: Record<string, SectionConfig> = {
     required: false,
     included: true,
     category: 'optional',
-    priority: 8
+    priority: 10
   },
   intelligent_enhancement: {
     id: 'intelligent_enhancement',
@@ -114,7 +132,7 @@ const defaultSections: Record<string, SectionConfig> = {
     required: false,
     included: true,
     category: 'optional',
-    priority: 9
+    priority: 11
   },
   
   // Final steps (always included)
@@ -125,7 +143,7 @@ const defaultSections: Record<string, SectionConfig> = {
     required: true,
     included: true,
     category: 'core',
-    priority: 10
+    priority: 12
   },
   assessment_complete: {
     id: 'assessment_complete',
@@ -134,7 +152,7 @@ const defaultSections: Record<string, SectionConfig> = {
     required: true,
     included: true,
     category: 'core',
-    priority: 11
+    priority: 13
   }
 };
 
@@ -232,6 +250,8 @@ export const PAFConfigProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       planning_search: 'planningData',
       search_analysis: 'searchAnalysis',
       property_photos: 'propertyPhotos',
+      accountancy_financials: 'accountingFinancials',
+      sales_leasing: 'salesLeasingRecommendations',
       rental_configuration: 'rentalConfiguration',
       risk_assessment: 'riskAssessment',
       environmental_assessment: 'environmentalAssessment',
@@ -269,6 +289,8 @@ export const PAFConfigProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       planning_search: 'planningData',
       search_analysis: 'searchAnalysis',
       property_photos: 'propertyPhotos',
+      accountancy_financials: 'accountingFinancials',
+      sales_leasing: 'salesLeasingRecommendations',
       rental_configuration: 'rentalConfiguration',
       risk_assessment: 'riskAssessment',
       environmental_assessment: 'environmentalAssessment',
