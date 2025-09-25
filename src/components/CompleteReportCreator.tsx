@@ -368,6 +368,57 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           inspectingValuer: 'John Delorenzo – Director – Certified Practising Valuer',
           copyright: '©2020-2021 Delorenzo Property Group PTY LTD, all rights reserved.',
           status: 'completed'
+        },
+        // Terms and Conditions
+        termsAndConditions: {
+          explanation: 'The following terms and conditions are the standard terms and conditions that apply to all Valuations, or the Valuation Services or consultancy services and Services provided by Delorenzo Property Group Pty Ltd.',
+          clientDefinition: 'Kure Medical',
+          definitions: {
+            confidentialInformation: 'Information that is by its nature confidential, designated by Us as confidential, or You know or ought to know is confidential',
+            dateOfValuation: 'The date of preparation of our report or the specific date as at which our opinions are stated to apply',
+            limitedLiabilityScheme: 'A scheme pursuant to the Professional Standards Legislation in the State of Victoria',
+            services: 'The Valuation, Valuation Services, asset management, property management, facilities management or consultancy services or advice provided by Us',
+            valuation: 'A Valuation, Valuation services, or feasibility study, made or given in relation to any real or personal property'
+          },
+          quotationTerms: {
+            purposeRestriction: 'You will not use any advice we provide for any purpose other than as stated in the Quotation',
+            confidentiality: 'You will keep this report confidential, unless otherwise agreed by Us in writing',
+            thirdPartyIndemnity: 'You will indemnify Us in relation to any loss suffered by a third party that relies on Our advice without first receiving our written consent'
+          },
+          clientObligations: {
+            fullDisclosure: 'You warrant that the instructions and subsequent information supplied by You contain a full and frank disclosure of all information',
+            thirdPartyReports: 'You warrant that all third-party expert or specialist reports provided to Us are provided with the authority of the authors',
+            intellectualProperty: 'You authorise and license Us to incorporate Your intellectual property within Our report(s)',
+            exclusiveUse: 'The Valuation and all Valuation Services are provided by Us solely for the use of the Client'
+          },
+          paymentTerms: {
+            paymentPeriod: '14 days of the date of a correctly rendered invoice',
+            latePaymentCharge: '2% of the total of the invoice calculated per month or part thereof for fees unpaid for 30 days or more'
+          },
+          valuationCurrency: 'Our Valuation and or Valuation Services are current at the Date of Valuation only. We do not accept liability for losses arising from subsequent changes in value after 90 days from the date of valuation.',
+          assignmentRights: 'We reserve the right, at Our absolute discretion, to determine whether to assign Our valuation to any third party',
+          expertWitnessServices: 'If you retain Us to provide services as an expert for any litigation, court rules will take precedence over these terms and conditions',
+          status: 'completed'
+        },
+        // Banking Code of Conduct Disclaimer
+        bankingCodeDisclaimer: {
+          unauthorizedDisclosure: 'Delorenzo Property Group Pty Ltd. does not authorise the disclosure of this Valuation Report to any unauthorised third party other than to a customer who directly paid for this Valuation Report',
+          lenderInstructions: 'The Lender instructed Delorenzo Property Group Pty Ltd. to undertake a valuation of the subject property for mortgage security assessment purposes',
+          noLiabilityToCustomer: 'Delorenzo Property Group Pty Ltd has no liability to the Lender\'s Customer howsoever arising at law, including because of negligence',
+          notForCustomerReliance: 'The Lender\'s Customer should not rely in any way on the Valuation Report as its sole purpose is for use by the Lender in assessing the subject property for mortgage security purposes',
+          insuranceValueWarning: 'The insurance value should not be relied on as a full and accurate estimation of the insurance value for the purposes of deciding insurance coverage',
+          confidentiality: 'The contents of the Valuation Report are confidential and Delorenzo Property Group Pty Ltd does not authorise disclosure by the Lender\'s Customer to any third party',
+          marketValueWarning: 'The market value of the property may change significantly over a short period of time',
+          contactRestriction: 'Delorenzo Property Group Pty Ltd is unable to speak to you directly due to privacy and confidentiality obligations owed to the Lender',
+          status: 'completed'
+        },
+        // Capped Liability Scheme
+        cappedLiabilityScheme: {
+          statement: 'Liability limited by a scheme approved under Professional Standards Legislation.',
+          scheme: 'Professional Standards Act 1994',
+          coverage: 'Delorenzo Property Group Pty Ltd and its valuers are members of a Limited Liability Scheme',
+          jurisdiction: 'State of Victoria',
+          status: 'completed'
         }
       };
 
@@ -456,9 +507,11 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
               <li>• Valuation Rationale - Complete methodology and supporting evidence</li>
               <li>• Risk Assessment - SWOT analysis with management strategies</li>
               <li>• Valuation Summary - Final valuation with definitions and clauses</li>
+              <li>• Terms and Conditions - Complete legal terms and client obligations</li>
+              <li>• Banking Code Disclaimer - Professional liability and disclosure terms</li>
+              <li>• Capped Liability Scheme - Professional Standards Act compliance</li>
               <li>• Financial Analysis - Rental income, market value ($2.85M), cap rate (6.1%)</li>
               <li>• Professional Certification - Complete valuation certificate</li>
-              <li>• Report ready for PDF generation in professional format</li>
             </ul>
           </div>
 
