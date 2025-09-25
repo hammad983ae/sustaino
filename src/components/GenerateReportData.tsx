@@ -29,6 +29,9 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   const [generationProgress, setGenerationProgress] = useState(0);
   const [generationStage, setGenerationStage] = useState('');
   const [generatedReport, setGeneratedReport] = useState<any>(null);
+  const [acknowledgedMissing, setAcknowledgedMissing] = useState<Set<string>>(new Set());
+  const [quickDataEntry, setQuickDataEntry] = useState<Record<string, any>>({});
+  const [showDataEntry, setShowDataEntry] = useState<string | false>(false);
   const { toast } = useToast();
 
   // Validate PAF workflow sections for pre-inspection report generation
@@ -128,81 +131,33 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   };
 
   const validationItems = validateAssessmentData();
-  const allCriticalComplete = validationItems.filter(item => item.status === 'missing').length === 0;
+  const missingItems = validationItems.filter(item => item.status === 'missing');
+  const acknowledgedItems = missingItems.filter(item => acknowledgedMissing.has(item.label));
+  const unacknowledgedMissing = missingItems.filter(item => !acknowledgedMissing.has(item.label));
+  const canGenerate = unacknowledgedMissing.length === 0; // Can generate if all missing items are acknowledged
   const criticalItems = validationItems.filter(item => item.status !== 'optional');
   const completedCritical = criticalItems.filter(item => item.status === 'complete').length;
   const readinessScore = Math.round((completedCritical / criticalItems.length) * 100);
 
+  const handleAcknowledgeMissing = (itemLabel: string) => {
+    setAcknowledgedMissing(prev => new Set([...prev, itemLabel]));
+  };
+
+  const handleProvideData = (itemLabel: string, data: any) => {
+    setQuickDataEntry(prev => ({ ...prev, [itemLabel]: data }));
+    setAcknowledgedMissing(prev => new Set([...prev, itemLabel]));
+  };
+
   const generateReportData = async () => {
     console.log('Generating report with data:', assessmentData);
     
-    // Strict validation - require all critical components
+    // Only require address - everything else can be acknowledged as missing
     const hasAddress = assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress;
-    const hasPlanningData = assessmentData.reportData?.planningData?.lga && assessmentData.reportData?.planningData?.zoning;
-    const hasPhotos = assessmentData.reportData?.fileAttachments?.propertyPhotos?.length >= 3;
-    const hasReportConfig = assessmentData.reportData?.reportConfig?.reportType && assessmentData.reportData?.reportConfig?.propertyType;
-    const hasValuationConfig = assessmentData.reportData?.methodologyConfig?.approaches?.length > 0;
-    const hasMarketData = assessmentData.reportData?.marketData?.indicators || assessmentData.reportData?.propertySearchData?.marketAnalysis;
-    const hasPropertyAnalysis = assessmentData.reportData?.propertySearchData?.analysisComplete;
 
     if (!hasAddress) {
       toast({
-        title: "Missing Property Address",
-        description: "Please complete the property address before generating the report.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!hasPlanningData) {
-      toast({
-        title: "Missing Planning Data",
-        description: "Planning data with zoning and LGA information is required for comprehensive valuation.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!hasPhotos) {
-      toast({
-        title: "Insufficient Property Photos",
-        description: "Minimum 3 property photos are required for professional valuation standards.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!hasReportConfig) {
-      toast({
-        title: "Missing Report Configuration",
-        description: "Report type and property type configuration is required.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!hasValuationConfig) {
-      toast({
-        title: "Missing Valuation Methodology",
-        description: "Valuation approaches and methodology must be configured.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!hasMarketData) {
-      toast({
-        title: "Missing Market Data",
-        description: "Market analysis and comparative data is required for accurate valuation.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!hasPropertyAnalysis) {
-      toast({
-        title: "Incomplete Property Analysis",
-        description: "Automated property analysis must be completed before generating report.",
+        title: "Property Address Required",
+        description: "A property address is required to generate the report.",
         variant: "destructive"
       });
       return;
@@ -231,9 +186,15 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
       setGenerationStage('Pre-populating report sections...');
       setGenerationProgress(80);
 
-      // Prepare data with fallbacks
+      // Prepare data with fallbacks and quick entry data
+      const enhancedAssessmentData = {
+        ...assessmentData,
+        quickDataEntry,
+        acknowledgedMissing: Array.from(acknowledgedMissing)
+      };
+
       const reportPayload = {
-        assessmentData,
+        assessmentData: enhancedAssessmentData,
         reportType: assessmentData.reportData?.reportConfig?.reportType || 'desktop-report',
         propertyType: assessmentData.reportData?.reportConfig?.propertyType || 'residential',
         propertyAddress: hasAddress,
@@ -395,6 +356,33 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
                   <p className="text-xs font-mono bg-muted/50 px-2 py-1 rounded truncate">
                     {item.value}
                   </p>
+                  
+                  {item.status === 'missing' && !acknowledgedMissing.has(item.label) && (
+                    <div className="mt-2 flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleAcknowledgeMissing(item.label)}
+                      >
+                        Acknowledge Missing
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => setShowDataEntry(item.label)}
+                      >
+                        Provide Data
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {acknowledgedMissing.has(item.label) && (
+                    <div className="mt-2">
+                      <Badge variant="secondary" className="bg-blue-500/10 text-blue-700 dark:text-blue-400">
+                        Acknowledged
+                      </Badge>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -423,7 +411,7 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
         <CardContent className="pt-6">
           <Button 
             onClick={generateReportData}
-            disabled={!allCriticalComplete || isGenerating}
+            disabled={!canGenerate || isGenerating}
             className="w-full"
             size="lg"
           >
@@ -441,6 +429,11 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
           </Button>
           <p className="text-xs text-muted-foreground text-center mt-2">
             This will create a Work Hub job and pre-populate all report sections with your assessment data
+            {unacknowledgedMissing.length > 0 && (
+              <span className="block text-orange-600 dark:text-orange-400 mt-1">
+                Please acknowledge or provide missing data before generating the report
+              </span>
+            )}
           </p>
         </CardContent>
       </Card>

@@ -172,10 +172,18 @@ async function createPropertyRecord(supabase: any, assessmentData: any) {
       throw new Error('No property address found');
     }
 
-    // Create a mock property ID for now since we don't have actual database tables
-    const propertyId = `prop_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    // Use the existing upsert function to create/find property
+    const { data: propertyId, error } = await supabase.rpc('upsert_property_from_address', {
+      address_text: address,
+      property_type_text: assessmentData.reportData?.reportConfig?.propertyType || 'residential'
+    });
+
+    if (error) {
+      console.error('Database error creating property:', error);
+      throw new Error(`Failed to create property: ${error.message}`);
+    }
     
-    console.log('Created mock property record:', { propertyId, address });
+    console.log('Created/found property record:', { propertyId, address });
 
     return { success: true, propertyId };
   } catch (error) {
@@ -227,22 +235,33 @@ async function createWorkHubJob(supabase: any, data: any) {
     const address = data.assessmentData.addressData?.propertyAddress || 
                    data.assessmentData.reportData?.propertySearchData?.confirmedAddress;
     
-    // Create mock job for now
-    const jobId = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const job = {
-      id: jobId,
-      title: `${data.reportType} - ${address}`,
+    // Create valuation job using existing function
+    const jobData = {
+      job_title: `${data.reportType} - ${address}`,
+      client_name: 'Generated from Assessment',
+      client_email: '',
+      client_phone: '',
+      job_type: data.reportType,
+      property_address: address,
       property_id: data.propertyId,
-      report_type: data.reportType,
-      property_type: data.propertyType,
-      status: 'Generated from Assessment',
-      source_data: data.assessmentData,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      priority: 'medium',
+      estimated_hours: 1.0,
+      due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7 days from now
+      client_type: 'assessment-generated',
+      notes: 'Generated from Property Assessment Form'
     };
 
-    console.log('Created mock work hub job:', job);
-    return job;
+    const { data: jobId, error } = await supabase.rpc('create_valuation_job', {
+      job_data: jobData
+    });
+
+    if (error) {
+      console.error('Database error creating valuation job:', error);
+      throw new Error(`Failed to create valuation job: ${error.message}`);
+    }
+
+    console.log('Created valuation job:', { jobId, address });
+    return { id: jobId, ...jobData };
   } catch (error) {
     console.error('Error creating work hub job:', error);
     throw new Error(`Failed to create work hub job: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -511,23 +530,28 @@ function generateReportSections(assessmentData: any) {
 
 async function createReportEntry(supabase: any, data: any) {
   try {
-    // Create mock report for now
-    const reportId = `rpt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const report = {
-      id: reportId,
+    // Create report using existing function
+    const reportData = {
       property_id: data.propertyId,
-      work_hub_job_id: data.workHubJobId,
+      title: `${data.reportType} - Assessment Generated Report`,
       report_type: data.reportType,
-      property_type: data.propertyType,
-      sections_data: data.reportSections,
-      status: 'Draft - Generated from Assessment',
-      generated_from_assessment: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      status: 'in_progress',
+      current_section: 'rpdAndLocation',
+      progress: 10,
+      sections_data: data.reportSections
     };
 
-    console.log('Created mock report entry:', { reportId });
-    return { reportId: report.id };
+    const { data: reportId, error } = await supabase.rpc('create_report', {
+      report_data: reportData
+    });
+
+    if (error) {
+      console.error('Database error creating report:', error);
+      throw new Error(`Failed to create report: ${error.message}`);
+    }
+
+    console.log('Created report entry:', { reportId });
+    return { reportId, ...reportData };
   } catch (error) {
     console.error('Error creating report entry:', error);
     throw new Error(`Failed to create report entry: ${error instanceof Error ? error.message : 'Unknown error'}`);
