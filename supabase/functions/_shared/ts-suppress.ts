@@ -2,9 +2,24 @@
 // TypeScript error suppression for all edge functions
 /* eslint-disable */
 
-// Error handling utility
+// Enhanced error handling utility
 export function getErrorMessage(error: any): string {
-  return error?.message || String(error) || 'Unknown error';
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  return 'Unknown error';
+}
+
+// Safe property access utility
+export function safeGet(obj: any, path: string): any {
+  try {
+    return path.split('.').reduce((o, p) => o?.[p], obj);
+  } catch {
+    return undefined;
+  }
 }
 
 // Global error suppressions for common patterns

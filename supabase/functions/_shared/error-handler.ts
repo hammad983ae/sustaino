@@ -9,9 +9,10 @@ export function getErrorMessage(error: unknown): string {
 }
 
 export function createErrorResponse(error: unknown, defaultMessage: string, status: number = 500, headers: Record<string, string> = {}) {
+  const errorMessage = getErrorMessage(error) || defaultMessage;
   return new Response(
     JSON.stringify({ 
-      error: getErrorMessage(error) || defaultMessage 
+      error: errorMessage 
     }),
     { 
       status,

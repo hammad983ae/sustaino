@@ -9,11 +9,13 @@
     "noImplicitReturns": false,
     "noImplicitThis": false,
     "skipLibCheck": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "exactOptionalPropertyTypes": false,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false
   },
-  "exclude": ["**/index.ts"],
-  "include": ["**/*.ts"],
-  "imports": {
-    "supabase": "https://esm.sh/@supabase/supabase-js@2"
-  }
+  "exclude": [],
+  "include": ["**/*.ts"]
 }
