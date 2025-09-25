@@ -38,8 +38,24 @@ serve(async (req) => {
       })
     }
 
-    // Apply include_flags
-    const includeFlags = assessment.include_flags || {}
+    // Check if new schema exists, use appropriate data structure
+    const hasNewSchema = assessment.hasOwnProperty('report_config');
+    let reportConfig, includeFlags;
+    
+    if (hasNewSchema && assessment.report_config) {
+      reportConfig = assessment.report_config;
+      includeFlags = reportConfig.sections || {};
+    } else {
+      // Fallback to old structure
+      includeFlags = assessment.include_flags || {};
+      reportConfig = {
+        reportType: assessment.report_type,
+        valuationPurpose: assessment.valuation_purpose,
+        branding: assessment.branding || {}
+      };
+    }
+
+    // Apply include_flags using the determined structure
     const reportData = {}
     for (const key of [
       "report_type",
@@ -53,8 +69,8 @@ serve(async (req) => {
       }
     }
 
-    // Get branding
-    const branding = assessment.branding || {}
+    // Get branding from the determined config
+    const branding = reportConfig.branding || {}
     const company = branding.company || "Property Valuations"
 
     // Build report content
