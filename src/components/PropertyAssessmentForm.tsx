@@ -427,10 +427,8 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   };
 
   const goToStep = (stepIndex: number) => {
-    // Only allow navigation to completed steps or next step
-    if (stepIndex <= currentStep || completedSteps[stepIndex - 1]) {
-      setCurrentStep(stepIndex);
-    }
+    // Allow navigation to any step - users can start anywhere
+    setCurrentStep(stepIndex);
   };
 
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -498,16 +496,16 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
             <button
               key={index}
               onClick={() => goToStep(index)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer hover:scale-105 ${
                 index === currentStep
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground shadow-lg"
                   : completedSteps[index]
-                  ? "bg-green-500/10 text-green-700 dark:text-green-400"
+                  ? "bg-green-500/10 text-green-700 dark:text-green-400 hover:bg-green-500/20"
                   : index < currentStep
-                  ? "bg-primary/20 text-primary"
-                  : "bg-muted text-muted-foreground"
+                  ? "bg-primary/20 text-primary hover:bg-primary/30"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
-              disabled={index > currentStep && !completedSteps[index - 1]}
+              disabled={false} // Allow navigation to any step
             >
               {completedSteps[index] ? (
                 <CheckCircle className="h-3 w-3" />
