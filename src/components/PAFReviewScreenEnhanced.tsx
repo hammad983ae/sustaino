@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
+import { OCRConfidenceTable } from './OCRConfidenceTable';
+import { fetchReportConfigWithOCR, generateReportWithOCR, calculateReadiness } from '@/utils/ocrIntegration';
 
 interface PAFReviewScreenProps {
   jobId: string;
@@ -188,7 +190,7 @@ function useAssessmentData(jobId: string) {
   };
 }
 
-// Enhanced toggle component for sections
+// Enhanced toggle component for sections with OCR confidence
 function SectionToggle({ 
   sectionKey, 
   label, 
@@ -205,8 +207,11 @@ function SectionToggle({
   onManualEdit: (key: string, value: string) => void;
 }) {
   const isIncluded = reportConfig.sections?.[sectionKey] ?? true;
-  const ocrText = ocrResults[sectionKey] || "";
+  const ocrData = ocrResults[sectionKey];
+  const ocrText = typeof ocrData === 'object' ? ocrData?.text || "" : ocrData || "";
+  const confidence = typeof ocrData === 'object' ? ocrData?.confidence || 0 : 0;
   const manualText = reportConfig.manual_edits?.[sectionKey] || "";
+  const isLowConfidence = confidence > 0 && confidence < 0.75;
 
   const handleToggle = () => {
     setReportConfig({
@@ -219,14 +224,21 @@ function SectionToggle({
   };
 
   return (
-    <Card className={`mb-4 ${isIncluded ? 'border-green-200' : 'border-gray-200'}`}>
+    <Card className={`mb-4 ${isIncluded ? 'border-primary' : 'border-muted'}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium">{label}</CardTitle>
-          <Switch
-            checked={isIncluded}
-            onCheckedChange={handleToggle}
-          />
+          <div className="flex items-center gap-2">
+            {confidence > 0 && (
+              <span className={`text-xs px-2 py-1 rounded ${isLowConfidence ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary'}`}>
+                {(confidence * 100).toFixed(0)}% confidence
+              </span>
+            )}
+            <Switch
+              checked={isIncluded}
+              onCheckedChange={handleToggle}
+            />
+          </div>
         </div>
       </CardHeader>
       
@@ -234,8 +246,13 @@ function SectionToggle({
         <CardContent className="pt-0">
           {ocrText && (
             <div className="mb-3">
-              <Label className="text-xs text-muted-foreground">OCR Extracted:</Label>
-              <div className="bg-muted p-2 rounded text-sm mt-1">
+              <Label className="text-xs text-muted-foreground flex items-center gap-2">
+                OCR Extracted:
+                {isLowConfidence && (
+                  <span className="text-destructive">⚠ Low confidence - please review</span>
+                )}
+              </Label>
+              <div className={`p-2 rounded text-sm mt-1 ${isLowConfidence ? 'bg-destructive/5 border border-destructive/20' : 'bg-muted'}`}>
                 {ocrText}
               </div>
             </div>
@@ -247,8 +264,13 @@ function SectionToggle({
               placeholder={ocrText ? "Override OCR content..." : "Add content for this section..."}
               value={manualText}
               onChange={(e) => onManualEdit(sectionKey, e.target.value)}
-              className="mt-1 min-h-[60px]"
+              className={`mt-1 min-h-[60px] ${isLowConfidence && !manualText ? 'border-destructive bg-destructive/5' : ''}`}
             />
+            {isLowConfidence && !manualText && (
+              <p className="text-xs text-destructive mt-1">
+                This section requires manual review due to low OCR confidence
+              </p>
+            )}
           </div>
         </CardContent>
       )}
@@ -311,9 +333,38 @@ export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
     });
   };
 
+  const validateOCRConfidence = () => {
+    const warnings: string[] = [];
+    
+    Object.entries(ocrResults).forEach(([key, result]) => {
+      const confidence = typeof result === 'object' && result && 'confidence' in result ? (result as any).confidence || 0 : 0;
+      const manualEdit = reportConfig.manual_edits?.[key] || "";
+      const isEnabled = reportConfig.sections?.[key];
+      
+      if (isEnabled && confidence > 0 && confidence < 0.75 && !manualEdit) {
+        const sectionName = reportConfig.labels?.[key] || DEFAULT_SECTIONS[key as keyof typeof DEFAULT_SECTIONS] || key;
+        warnings.push(sectionName);
+      }
+    });
+    
+    return warnings;
+  };
+
   const generateReport = async (reviewed: boolean) => {
     setGeneratingReport(true);
     try {
+      // Validate OCR confidence before generating
+      const lowConfidenceSections = validateOCRConfidence();
+      if (lowConfidenceSections.length > 0) {
+        toast({
+          title: "Review Required",
+          description: `Please review these sections with low OCR confidence: ${lowConfidenceSections.join(', ')}`,
+          variant: "destructive"
+        });
+        setGeneratingReport(false);
+        return;
+      }
+
       // Ensure config is saved first
       await supabase
         .from('property_assessments')
@@ -436,6 +487,18 @@ export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
           </div>
         </CardContent>
       </Card>
+
+      {/* OCR Confidence Dashboard */}
+      {Object.keys(ocrResults).length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>OCR Confidence Dashboard</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <OCRConfidenceTable ocr={ocrResults} labels={reportConfig.labels} />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Report Sections */}
       <Card>

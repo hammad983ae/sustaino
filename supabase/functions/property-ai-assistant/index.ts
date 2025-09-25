@@ -110,15 +110,15 @@ Context about the user's current activity: ${context || 'General property consul
     });
   } catch (error) {
     console.error('Detailed error in property-ai-assistant:', error);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
     
-    const errorCode = error.name === 'AbortError' ? 'TIMEOUT' : 'INTERNAL_ERROR';
-    const status = error.message.includes('API key') ? 401 : 500;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const isAbortError = error instanceof Error && error.name === 'AbortError';
+    const errorCode = isAbortError ? 'TIMEOUT' : 'INTERNAL_ERROR';
+    const status = errorMessage.includes('API key') ? 401 : 500;
     
     return new Response(JSON.stringify({ 
       success: false,
-      error: error.message,
+      error: errorMessage,
       code: errorCode,
       details: 'Check function logs for more information'
     }), {
