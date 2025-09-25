@@ -35,6 +35,7 @@ import DataValidationPipeline from '@/components/DataValidationPipeline';
 import ReportConfigurationIntegrator from '@/components/ReportConfigurationIntegrator';
 import OptionalSectionManager from '@/components/OptionalSectionManager';
 import ESGAssessmentIntegrator from '@/components/ESGAssessmentIntegrator';
+import PAFStepToggleManager from '@/components/PAFStepToggleManager';
 
 interface PropertyAssessmentFormProps {
   onComplete?: (data: any) => void;
@@ -490,6 +491,11 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         </div>
         <Progress value={progress} className="w-full" />
         
+        {/* Configuration Toggle */}
+        <div className="flex justify-center mb-4">
+          <PAFStepToggleManager />
+        </div>
+
         {/* Step indicators */}
         <div className="flex justify-center gap-2">
           {steps.map((step, index) => (

@@ -7,7 +7,7 @@ interface SectionConfig {
   description: string;
   required: boolean;
   included: boolean;
-  category: 'core' | 'optional' | 'supplementary';
+  category: 'core' | 'optional' | 'supplementary' | 'financial' | 'analysis';
   priority: number;
 }
 
@@ -86,7 +86,7 @@ const defaultSections: Record<string, SectionConfig> = {
     description: 'Integration with accounting software and government portals',
     required: false,
     included: true,
-    category: 'optional',
+    category: 'financial',
     priority: 6
   },
   sales_leasing: {
@@ -95,7 +95,7 @@ const defaultSections: Record<string, SectionConfig> = {
     description: 'AI-powered sales and leasing strategy recommendations',
     required: false,
     included: true,
-    category: 'optional',
+    category: 'analysis',
     priority: 7
   },
   rental_configuration: {
