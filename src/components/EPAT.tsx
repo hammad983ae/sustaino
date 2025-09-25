@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PerformanceRatingSystem } from './PerformanceRatingSystem';
 import { EmployeePerformancePlatform } from './EmployeePerformancePlatform';
 import { EnhancedEPAT } from './comprehensive/EnhancedEPAT';
+import { IndustryPositionEPAT } from './IndustryPositionEPAT';
 import { Users, TrendingUp } from 'lucide-react';
 
 export const EPAT: React.FC = () => {
@@ -31,8 +32,12 @@ export const EPAT: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="performance-rating" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue="industry-position" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="industry-position" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Industry & Position-Based EPAT™
+              </TabsTrigger>
               <TabsTrigger value="performance-rating" className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
                 Performance Rating System™
@@ -46,6 +51,10 @@ export const EPAT: React.FC = () => {
                 Comprehensive Employment Analysis™
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="industry-position">
+              <IndustryPositionEPAT />
+            </TabsContent>
 
             <TabsContent value="performance-rating">
               <PerformanceRatingSystem />
