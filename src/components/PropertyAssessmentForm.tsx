@@ -615,5 +615,8 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   );
 };
 
+console.log('PropertyAssessmentForm component defined successfully');
 
-export default PropertyAssessmentForm;
+// Export the component with explicit typing
+const Component = PropertyAssessmentForm as React.FC<PropertyAssessmentFormProps>;
+export default Component;
