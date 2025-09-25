@@ -141,7 +141,7 @@ const App = () => (
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
-                 <Route path="/epat" element={<EPAT />} />
+                 <Route path="/epat" element={<EPAT onBackToDashboard={() => window.location.href = '/dashboard'} />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancelled" element={<PaymentCancelled />} />
         <Route path="/ip-licensing" element={<IPLicensingAgreement />} />

@@ -848,74 +848,147 @@ export const IndustryPositionEPAT: React.FC = () => {
 
             <TabsContent value="kpi-assessment" className="space-y-6">
               {selectedPosition ? (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>KPI Assessment for {selectedPosition.title}</CardTitle>
-                    <div className="text-sm text-muted-foreground">
-                      Enter current performance metrics for each KPI
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {selectedPosition.kpis.map(kpi => (
-                        <div key={kpi.name} className="space-y-4">
-                          <div>
-                            <Label className="text-base font-medium">{kpi.name}</Label>
-                            <p className="text-sm text-muted-foreground">{kpi.description}</p>
-                            <div className="text-xs text-muted-foreground mt-1">
-                              Weight: {(kpi.weight * 100).toFixed(0)}% | Unit: {kpi.unit}
-                            </div>
+                <>
+                  {/* Industry & Position Overview */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Assessment Criteria for {selectedPosition.title}</CardTitle>
+                      <div className="text-sm text-muted-foreground">
+                        Industry: {selectedIndustry?.name} | Position Level: {selectedPosition.level}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div className="text-center p-4 bg-primary/5 rounded-lg">
+                          <div className="text-2xl font-bold text-primary">
+                            ${(selectedIndustry?.industryMetrics.averageRevenue || 0 / 1000).toFixed(0)}k
                           </div>
-                          
-                          <div>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              value={assessment.kpiScores[kpi.name] || ''}
-                              onChange={(e) => setAssessment(prev => ({
-                                ...prev,
-                                kpiScores: {
-                                  ...prev.kpiScores,
-                                  [kpi.name]: Number(e.target.value)
-                                }
-                              }))}
-                              placeholder={`Enter ${kpi.name.toLowerCase()}`}
-                            />
-                          </div>
-                          
-                          {assessment.kpiScores[kpi.name] !== undefined && (
-                            <div className="space-y-2">
-                              {(() => {
-                                const rating = calculateKPIRating(assessment.kpiScores[kpi.name], kpi);
-                                return (
-                                  <>
-                                    <div className="flex justify-between items-center">
-                                      <Badge variant="outline" className={`${rating.color} text-white`}>
-                                        {rating.rating}
-                                      </Badge>
-                                      <span className="text-sm font-medium">Score: {rating.score}%</span>
-                                    </div>
-                                    <Progress value={rating.score} className="h-2" />
-                                  </>
-                                );
-                              })()}
-                            </div>
-                          )}
-                          
-                          <div className="text-xs space-y-1">
-                            <div className="font-medium">Benchmarks:</div>
-                            <div className="grid grid-cols-2 gap-1">
-                              <div>Excellent: {kpi.benchmark.excellent}{kpi.unit}</div>
-                              <div>Good: {kpi.benchmark.good}{kpi.unit}</div>
-                              <div>Average: {kpi.benchmark.average}{kpi.unit}</div>
-                              <div>Poor: {kpi.benchmark.poor}{kpi.unit}</div>
-                            </div>
-                          </div>
+                          <div className="text-sm text-muted-foreground">Avg Revenue</div>
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                        <div className="text-center p-4 bg-green-50 rounded-lg">
+                          <div className="text-2xl font-bold text-green-600">
+                            +{selectedIndustry?.industryMetrics.growthRate}%
+                          </div>
+                          <div className="text-sm text-muted-foreground">Growth Rate</div>
+                        </div>
+                        <div className="text-center p-4 bg-blue-50 rounded-lg">
+                          <div className="text-2xl font-bold text-blue-600">
+                            {selectedIndustry?.industryMetrics.employmentStability}/10
+                          </div>
+                          <div className="text-sm text-muted-foreground">Stability</div>
+                        </div>
+                        <div className="text-center p-4 bg-orange-50 rounded-lg">
+                          <div className="text-2xl font-bold text-orange-600">
+                            {selectedIndustry?.industryMetrics.automationRisk}/10
+                          </div>
+                          <div className="text-sm text-muted-foreground">Auto Risk</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* KPI Assessment Form */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Performance Metrics Assessment</CardTitle>
+                      <div className="text-sm text-muted-foreground">
+                        Enter current performance metrics for each KPI. Benchmarks are shown below each input.
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {selectedPosition.kpis.map(kpi => (
+                          <div key={kpi.name} className="space-y-4 p-4 border rounded-lg">
+                            <div>
+                              <Label className="text-base font-medium flex items-center justify-between">
+                                {kpi.name}
+                                <Badge variant="outline" className="text-xs">
+                                  Weight: {(kpi.weight * 100).toFixed(0)}%
+                                </Badge>
+                              </Label>
+                              <p className="text-sm text-muted-foreground mt-1">{kpi.description}</p>
+                              <div className="text-xs text-muted-foreground">
+                                Unit: {kpi.unit} {kpi.isInverse && "• Lower is better"}
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                value={assessment.kpiScores[kpi.name] || ''}
+                                onChange={(e) => setAssessment(prev => ({
+                                  ...prev,
+                                  kpiScores: {
+                                    ...prev.kpiScores,
+                                    [kpi.name]: Number(e.target.value)
+                                  }
+                                }))}
+                                placeholder={`Enter ${kpi.name.toLowerCase()}`}
+                                className="text-center font-medium"
+                              />
+                            </div>
+                            
+                            {/* Performance Rating Display */}
+                            {assessment.kpiScores[kpi.name] !== undefined && (
+                              <div className="space-y-2">
+                                {(() => {
+                                  const rating = calculateKPIRating(assessment.kpiScores[kpi.name], kpi);
+                                  return (
+                                    <>
+                                      <div className="flex justify-between items-center">
+                                        <Badge variant="outline" className={`${rating.color} text-white`}>
+                                          {rating.rating}
+                                        </Badge>
+                                        <span className="text-sm font-medium">Score: {rating.score}%</span>
+                                      </div>
+                                      <Progress value={rating.score} className="h-2" />
+                                    </>
+                                  );
+                                })()}
+                              </div>
+                            )}
+                            
+                            {/* Benchmark Criteria Display */}
+                            <div className="bg-muted/50 p-3 rounded-md">
+                              <div className="text-xs font-medium mb-2">Performance Benchmarks:</div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <div className="flex justify-between items-center">
+                                  <span className="flex items-center gap-1">
+                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    Excellent
+                                  </span>
+                                  <span className="font-medium">{kpi.benchmark.excellent}{kpi.unit}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                  <span className="flex items-center gap-1">
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                    Good
+                                  </span>
+                                  <span className="font-medium">{kpi.benchmark.good}{kpi.unit}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                  <span className="flex items-center gap-1">
+                                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                                    Average
+                                  </span>
+                                  <span className="font-medium">{kpi.benchmark.average}{kpi.unit}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                  <span className="flex items-center gap-1">
+                                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                                    Poor
+                                  </span>
+                                  <span className="font-medium">{kpi.benchmark.poor}{kpi.unit}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
               ) : (
                 <Card>
                   <CardContent className="text-center py-12">
