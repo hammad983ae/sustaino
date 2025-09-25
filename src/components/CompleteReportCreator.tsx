@@ -89,6 +89,46 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           floorSpaceRatio: 'N/A',
           minimumLotSize: 'N/A'
         },
+        // Environmental Assessment
+        environmentalAssessment: {
+          previousContaminatingUse: 'Not evident',
+          environmentalPlanningOverlay: 'Not evident',
+          contaminationAdjoiningProperties: 'Not evident',
+          knownContaminationSurrounding: 'Not evident',
+          contaminatingProcesses: 'Not evident',
+          undergroundStorageContaminants: 'Not evident',
+          contaminatedSiteRegisters: 'No',
+          environmentalLicensing: 'No',
+          noxiousWeeds: 'Not applicable',
+          salinityErosion: 'No',
+          bioSecurityIssues: 'Not evident',
+          floodingIssues: 'None',
+          landslipMineSubsidence: 'None',
+          mainRoadAcquisition: 'None',
+          compliantBuildingMaterials: 'Yes',
+          asbestosRelatedMaterials: 'No',
+          renewableEnergySystems: 'Not present (no solar panels installed)',
+          renewableEnergyCapacity: '0 kW',
+          nathersRating: 'Not applicable',
+          greenStarRating: '4 Stars',
+          nabersEnergy: '6 Stars',
+          nabersWater: '0 (indicating minimal water efficiency features)',
+          nabersIEQ: '3 Stars',
+          buildingOrientation: 'Northwest',
+          esgSustainabilityRating: '3 out of 5',
+          overallComments: 'The building appears to be somewhat dated, with fixtures and fittings that likely do not incorporate the latest sustainability standards. The property lacks a reticulated watering system and does not operate with renewable energy systems. This presents opportunities for future upgrades to enhance sustainability.',
+          status: 'completed'
+        },
+        // Economic Commentary
+        economicCommentary: {
+          australianEconomicOverlay: 'As of August 2025, the Australian economy is experiencing persistent headwinds, with GDP growth tapering to an estimated 1.0% for the year. Recent data indicates headline GDP growth remains subdued, driven by subdued domestic demand and ongoing global uncertainties. Population growth remains modest at around 0.5% annually, with per capita GDP growth still negative at approximately -0.2% over the past year.',
+          cashRate: 'The Reserve Bank of Australia (RBA), as of August 2025, has maintained the cash rate at 3.85%. Recent inflation data indicates that headline inflation has moderated to around 3.2%, with core inflation estimates remaining elevated at 3.4%.',
+          inflationData: '3.2% headline, 3.4% core inflation',
+          productivityChallenges: 'Decline in productivity persists, with recent data showing a 1.2% decrease in real GDP per hour worked over the past year. Real unit labour costs continue to climb, registering a 1.4% annual increase.',
+          source: 'KPMG (August 2025 Outlook), Sprintfinance (August 2025)',
+          status: 'completed'
+        },
+        // Financial Data
         financialData: {
           netPassingRent: 180000,
           netPassingRentPerSuite: 11250,
@@ -99,6 +139,7 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           forceSaleRange: 'Not Assessed',
           insuranceReplacementValue: 2200000
         },
+        // Valuation Details
         valuationDetails: {
           marketValue: 2850000,
           insuranceValue: 2200000,
@@ -108,6 +149,40 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           coSignatory: 'John Delorenzo – Director – Certified Practising Valuer',
           approach: 'Capitalisation of net income and direct comparison approach',
           purpose: 'Pre-sale purposes'
+        },
+        // Market Commentary
+        marketCommentary: {
+          nationalHealthcareAssets: 'The healthcare sector in Australia remains a resilient and vital component of the property market. Driven by demographic shifts such as an aging population and rising healthcare service demands, the sector continues to attract investment and steady income streams. The proportion of Australians aged 65 and over is projected to exceed 20% by 2030.',
+          milduraCommercialMarket: 'The commercial property market in Mildura remains relatively stable in August 2025, buoyed by regional economic diversification including agriculture, tourism, and burgeoning small business activity. Commercial rents are steady, with select sectors experiencing modest rent increases.',
+          milduraResidentialMarket: 'The residential property sector in Mildura remains resilient, characterized by stable demand supported by local population growth. Property values have appreciated slightly, averaging around 2-3% annually, sustained by low vacancy rates and high occupancy levels.',
+          milduraAgriculturalMarket: 'Agriculture continues to underpin Mildura economy in 2025, with positive seasonal conditions enhancing productivity and profitability. Improved water allocations and favorable seasonal yields have driven farm profitability.',
+          investmentOutlook: 'Investment interest continues to favor stable, income-generating assets. Healthcare assets are regarded as a secure and resilient asset class with favorable long-term prospects.',
+          marketDrivers: 'Aging population, infrastructure investments, regional diversification, and government initiatives supporting healthcare expansion.',
+          status: 'completed'
+        },
+        // Property Construction Details
+        propertyConstruction: {
+          yearBuilt: '1990s',
+          foundation: 'Concrete',
+          roof: 'CGI',
+          windows: 'Aluminium',
+          externalCladding: 'Rendered/Brick',
+          internalCladding: 'Plasterboard',
+          ceilings: 'Plasterboard and acoustic panel grid',
+          signage: 'Yes – Front of building Langtree Avenue side',
+          floorCoverings: 'Mixed',
+          lighting: 'LED',
+          fixturesAndFittings: 'Ceiling fans, evaporative air conditioning, his and hers toilet amenities, kitchen amenities, day surgery room – Full list held on file',
+          pathways: 'Concrete',
+          fencing: 'Parting walls',
+          parking: 'Approximately 12 car parks at the rear of the premises and on-site parking',
+          communalAreas: 'N/A',
+          nla: '860 sqm',
+          awning: '60 sqm',
+          otherAreas: 'First Level office was not accessible, and any consideration has been excluded from the value',
+          totalArea: '920 sqm',
+          floorPlan: 'Available',
+          status: 'completed'
         }
       };
 
@@ -182,19 +257,23 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           <div className="bg-white p-4 rounded-lg border">
             <h4 className="font-medium text-green-800 mb-2">✅ Completed Sections:</h4>
             <ul className="space-y-1 text-sm text-green-700">
-              <li>• Executive Summary - Fully populated</li>
-              <li>• Property Details & RPD - Address, lot/plan, land area</li>
-              <li>• Legal & Planning - LGA, zoning, overlays</li>
-              <li>• Financial Analysis - Rental income, market value</li>
-              <li>• Valuation Certificate - Professional valuation details</li>
-              <li>• Report Configuration - Default sections enabled</li>
+              <li>• Executive Summary - Fully populated with professional details</li>
+              <li>• Property Details & RPD - Address, construction, areas (860 sqm NLA)</li>
+              <li>• Legal & Planning - LGA, zoning, overlays, environmental compliance</li>
+              <li>• Environmental Assessment - ESG rating, NABERS, sustainability analysis</li>
+              <li>• Economic Commentary - Australian economy, cash rates, inflation data</li>
+              <li>• Market Commentary - Healthcare, Mildura commercial/residential markets</li>
+              <li>• Property Construction - Building details, fixtures, parking, amenities</li>
+              <li>• Financial Analysis - Rental income, market value ($2.85M)</li>
+              <li>• Valuation Certificate - Professional valuation certification</li>
+              <li>• Report Configuration - All sections properly structured</li>
             </ul>
           </div>
 
           <div className="text-xs text-green-600 bg-green-100 p-3 rounded">
             <strong>Ready for next section:</strong> You can now provide additional information 
-            for any remaining sections (photos, market analysis, risk assessment, etc.) 
-            to further enhance this comprehensive report.
+            for any remaining sections (tenancy details, sales evidence, risk assessment, etc.) 
+            to further enhance this comprehensive report. 10 major sections now complete including environmental and market analysis.
           </div>
         </CardContent>
       </Card>
@@ -239,15 +318,27 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
-              Executive Summary
+              Executive Summary & Purpose
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
-              Property Details & RPD
+              Property Details & Construction
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
               Legal & Planning Information
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              Environmental Assessment
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              Economic Commentary
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              Market Commentary
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
@@ -256,10 +347,6 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
               Valuation Certificate
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              Report Configuration
             </div>
           </div>
         </div>
