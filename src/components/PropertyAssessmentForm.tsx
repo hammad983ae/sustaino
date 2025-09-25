@@ -43,7 +43,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   onComplete,
   onNavigateToReport
 }) => {
-  const [includeDetailedRentalConfig, setIncludeDetailedRentalConfig] = useState(false);
+  
   const [showJobSelector, setShowJobSelector] = useState(true);
   const [sessionStarted, setSessionStarted] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -62,35 +62,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const { reportData, updateReportData } = useReportData();
   const { addressData, getFormattedAddress } = useProperty();
 
-  // Listen for rental configuration toggle
-  useEffect(() => {
-    const handleRentalToggle = (event: CustomEvent) => {
-      const newValue = event.detail.includeDetailed;
-      setIncludeDetailedRentalConfig(newValue);
-      
-      // If we're currently on or past the rental config step and it's being disabled,
-      // adjust the current step to avoid being on a non-existent step
-      if (!newValue && currentStep >= 5) { // Rental config is typically step 5
-        const rentalConfigStepIndex = allSteps.findIndex(step => step.title === "Rental Configuration");
-        if (currentStep === rentalConfigStepIndex) {
-          // Move to the next step (Review & Generate)
-          setCurrentStep(currentStep - 1);
-        }
-      }
-    };
-
-    window.addEventListener('rentalConfigToggle', handleRentalToggle as EventListener);
-    
-    // Check localStorage on mount
-    const stored = localStorage.getItem('includeDetailedRentalConfig');
-    if (stored) {
-      setIncludeDetailedRentalConfig(stored === 'true');
-    }
-
-    return () => {
-      window.removeEventListener('rentalConfigToggle', handleRentalToggle as EventListener);
-    };
-  }, [currentStep]);
 
   // Define all possible steps with memoized validation
   const allSteps = useMemo(() => [
@@ -151,16 +122,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         console.log('Property Photos validation:', { hasAddress, addressData });
         return hasAddress; // Require address to proceed
-      }
-    },
-    {
-      title: "Rental Configuration",
-      subtitle: "Configure detailed rental valuation settings (optional)",
-      component: <RentalConfiguration />,
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Rental Configuration validation:', { hasAddress, addressData });
-        return hasAddress; // Require address
       }
     },
     {
@@ -257,16 +218,10 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       ),
       validation: () => true
     }
-  ], [addressData, getFormattedAddress, includeDetailedRentalConfig, onComplete, onNavigateToReport]);
+  ], [addressData, getFormattedAddress, onComplete, onNavigateToReport]);
 
-  // Filter steps based on configuration
-  const steps = allSteps.filter((step, index) => {
-    // Remove rental configuration step if not needed
-    if (step.title === "Rental Configuration" && !includeDetailedRentalConfig) {
-      return false;
-    }
-    return true;
-  });
+  // Use all steps since rental configuration is now part of report configuration
+  const steps = allSteps;
 
   useEffect(() => {
     // Load saved data on mount (only if session started)
@@ -293,7 +248,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       await clearAllData();
       setCurrentStep(0);
       setCompletedSteps([]);
-      setIncludeDetailedRentalConfig(false);
       setSessionStarted(true);
       setShowJobSelector(false);
       
@@ -337,7 +291,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       if (result.success) {
         setCurrentStep(0);
         setCompletedSteps([]);
-        setIncludeDetailedRentalConfig(false);
+        
         setSessionStarted(false);
         setShowJobSelector(true);
       }
