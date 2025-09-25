@@ -12,6 +12,7 @@ import { useReportData } from '@/contexts/ReportDataContext';
 import { useStepVisibility } from '@/contexts/PAFConfigContext';
 import FinancialAssessmentTools from './FinancialAssessmentTools';
 import WeightedLMICalculator from './WeightedLMICalculator';
+import TotalPortfolioRiskAssessment from './TotalPortfolioRiskAssessment';
 import { 
   Building2, 
   CreditCard, 
@@ -252,11 +253,12 @@ const FINANCIAL_BENCHMARKS = {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="integrations" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
           <TabsTrigger value="manual">Manual Entry</TabsTrigger>
           <TabsTrigger value="assessment">Financial Assessment</TabsTrigger>
           <TabsTrigger value="lmi">Weighted LMI</TabsTrigger>
+          <TabsTrigger value="portfolio">Portfolio Risk</TabsTrigger>
           <TabsTrigger value="summary">Summary</TabsTrigger>
         </TabsList>
 
@@ -451,6 +453,10 @@ const FINANCIAL_BENCHMARKS = {
 
             <TabsContent value="lmi" className="space-y-4">
               <WeightedLMICalculator />
+            </TabsContent>
+
+            <TabsContent value="portfolio" className="space-y-4">
+              <TotalPortfolioRiskAssessment />
             </TabsContent>
 
             <TabsContent value="summary" className="space-y-6">
