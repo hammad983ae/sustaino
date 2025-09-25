@@ -57,6 +57,50 @@ export const DomainListingsSearch: React.FC = () => {
     }
   };
 
+  const handleSaveToEvidence = async (listing: any, type: 'sales' | 'leasing') => {
+    try {
+      if (type === 'sales') {
+        await apiClient.saveSalesEvidence({
+          property_address: listing.address,
+          sale_price: listing.price,
+          property_type: listing.propertyType,
+          bedrooms: listing.bedrooms,
+          bathrooms: listing.bathrooms,
+          suburb: listing.suburb,
+          state: listing.state,
+          postcode: listing.postcode,
+          source_url: listing.url,
+          notes: `Imported from Domain API - ${new Date().toLocaleDateString()}`
+        });
+      } else {
+        await apiClient.saveLeasingEvidence({
+          property_address: listing.address,
+          rental_amount: listing.rent || listing.price || 0,
+          property_type: listing.propertyType,
+          bedrooms: listing.bedrooms,
+          bathrooms: listing.bathrooms,
+          suburb: listing.suburb,
+          state: listing.state,
+          postcode: listing.postcode,
+          source_url: listing.url,
+          notes: `Imported from Domain API - ${new Date().toLocaleDateString()}`
+        });
+      }
+      
+      toast({
+        title: "Evidence saved",
+        description: `Listing saved to ${type} evidence database`,
+      });
+    } catch (error: any) {
+      console.error('Failed to save evidence:', error);
+      toast({
+        title: "Save failed",
+        description: "Failed to save to evidence database",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -168,6 +212,23 @@ export const DomainListingsSearch: React.FC = () => {
                       {listing.bedrooms} bed, {listing.bathrooms} bath
                     </div>
                   )}
+                  
+                  <div className="flex gap-2 mt-3">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleSaveToEvidence(listing, 'sales')}
+                    >
+                      Save to Sales Evidence
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleSaveToEvidence(listing, 'leasing')}
+                    >
+                      Save to Leasing Evidence
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>

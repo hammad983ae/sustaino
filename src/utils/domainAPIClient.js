@@ -75,6 +75,22 @@ class DomainAPIClient {
     });
   }
 
+  // Save sales evidence to database
+  async saveSalesEvidence(salesData) {
+    return this.request('/save-sales-evidence', {
+      method: 'POST',
+      body: JSON.stringify(salesData)
+    });
+  }
+
+  // Save leasing evidence to database
+  async saveLeasingEvidence(leasingData) {
+    return this.request('/save-leasing-evidence', {
+      method: 'POST',
+      body: JSON.stringify(leasingData)
+    });
+  }
+
   // Demographics data
   async getDemographics(state, suburb, postcode = null) {
     const endpoint = postcode 
