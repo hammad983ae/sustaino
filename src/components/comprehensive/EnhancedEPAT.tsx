@@ -44,7 +44,7 @@ export const EnhancedEPAT: React.FC = () => {
   const filteredOccupations = useMemo(() => {
     let occupations = occupationDatabase;
     
-    if (selectedCategory) {
+    if (selectedCategory && selectedCategory !== "all") {
       occupations = getOccupationByCategory(selectedCategory);
     }
     
@@ -145,7 +145,7 @@ export const EnhancedEPAT: React.FC = () => {
                           <SelectValue placeholder="All categories" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">All categories</SelectItem>
+                          <SelectItem value="all">All categories</SelectItem>
                           {categories.map(category => (
                             <SelectItem key={category} value={category}>
                               {category}
