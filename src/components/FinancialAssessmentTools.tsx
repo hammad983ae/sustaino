@@ -189,10 +189,11 @@ const FinancialAssessmentTools: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="income-debt" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="income-debt">Income & Debt</TabsTrigger>
               <TabsTrigger value="esg">ESG Factors</TabsTrigger>
               <TabsTrigger value="credit">Four C's Credit</TabsTrigger>
+              <TabsTrigger value="valuation">Acquisition Valuation</TabsTrigger>
               <TabsTrigger value="results">Assessment Results</TabsTrigger>
             </TabsList>
 
@@ -498,6 +499,224 @@ const FinancialAssessmentTools: React.FC = () => {
               </div>
             </TabsContent>
 
+            <TabsContent value="valuation" className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Acquisition Valuation */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <DollarSign className="h-4 w-4" />
+                      Acquisition Valuation Analysis
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-sm text-muted-foreground">Conservative Valuation (P/E: 8-10)</div>
+                        <div className="text-2xl font-bold">
+                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * 0.85).toLocaleString() : '0'}
+                        </div>
+                        <div className="text-sm text-green-600">85% of market value</div>
+                      </div>
+                      
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-sm text-muted-foreground">Market Valuation (P/E: 12-15)</div>
+                        <div className="text-2xl font-bold">
+                          ${creditProfile.propertyValue > 0 ? creditProfile.propertyValue.toLocaleString() : '0'}
+                        </div>
+                        <div className="text-sm text-blue-600">100% of market value</div>
+                      </div>
+                      
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-sm text-muted-foreground">Optimistic Valuation (P/E: 18-20)</div>
+                        <div className="text-2xl font-bold">
+                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * 1.15).toLocaleString() : '0'}
+                        </div>
+                        <div className="text-sm text-orange-600">115% of market value</div>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t">
+                      <h4 className="font-medium mb-3">Valuation Factors</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>ESG Premium:</span>
+                          <span className="text-green-600">+{(esgScores.overall * 2.5).toFixed(1)}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Credit Quality Adjustment:</span>
+                          <span className="text-blue-600">+{(((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 1.5).toFixed(1)}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Market Conditions:</span>
+                          <span className="text-yellow-600">Neutral (0%)</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Sensitivity Analysis */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      Deal Success Sensitivity Analysis
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {[
+                      { scenario: 'Best Case', probability: 85, lvr: 70, conditions: 'Strong credit, high ESG, favorable market' },
+                      { scenario: 'Base Case', probability: 70, lvr: 80, conditions: 'Good credit, average ESG, stable market' },
+                      { scenario: 'Stress Case', probability: 45, lvr: 85, conditions: 'Average credit, low ESG, tight market' },
+                      { scenario: 'Worst Case', probability: 25, lvr: 90, conditions: 'Poor credit, no ESG, declining market' }
+                    ].map((scenario) => (
+                      <div key={scenario.scenario} className="p-3 border rounded-lg">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-medium">{scenario.scenario}</span>
+                          <Badge variant={
+                            scenario.probability >= 70 ? 'default' : 
+                            scenario.probability >= 50 ? 'secondary' : 'destructive'
+                          }>
+                            {scenario.probability}% Success
+                          </Badge>
+                        </div>
+                        <div className="text-sm text-muted-foreground mb-2">
+                          LVR: {scenario.lvr}% | Max Loan: ${creditProfile.propertyValue > 0 ? 
+                            (creditProfile.propertyValue * (scenario.lvr / 100)).toLocaleString() : '0'}
+                        </div>
+                        <div className="text-xs text-muted-foreground">{scenario.conditions}</div>
+                        <Progress value={scenario.probability} className="h-2 mt-2" />
+                      </div>
+                    ))}
+
+                    <div className="pt-4 border-t">
+                      <h4 className="font-medium mb-2">Key Risk Factors</h4>
+                      <div className="space-y-1 text-sm">
+                        <div className="flex justify-between">
+                          <span>Interest Rate Risk:</span>
+                          <span className={
+                            creditProfile.annualIncome > 0 && (creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) < 0.3 
+                              ? 'text-green-600' : 'text-red-600'
+                          }>
+                            {creditProfile.annualIncome > 0 && (creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) < 0.3 ? 'Low' : 'High'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Market Risk:</span>
+                          <span className="text-yellow-600">Medium</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Liquidity Risk:</span>
+                          <span className={creditProfile.savings > 50000 ? 'text-green-600' : 'text-red-600'}>
+                            {creditProfile.savings > 50000 ? 'Low' : 'High'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Finance Probability Matrix */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Finance Approval Probability Matrix</CardTitle>
+                  <CardDescription>
+                    Shows likelihood of finance approval under different LVR and credit score scenarios
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-2">Credit Score</th>
+                          <th className="text-center p-2">70% LVR</th>
+                          <th className="text-center p-2">75% LVR</th>
+                          <th className="text-center p-2">80% LVR</th>
+                          <th className="text-center p-2">85% LVR</th>
+                          <th className="text-center p-2">90% LVR</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          { range: '800+', scores: [95, 92, 88, 75, 45] },
+                          { range: '750-799', scores: [90, 85, 80, 65, 35] },
+                          { range: '700-749', scores: [85, 78, 70, 50, 25] },
+                          { range: '650-699', scores: [75, 65, 55, 35, 15] },
+                          { range: '600-649', scores: [60, 45, 35, 20, 8] },
+                          { range: '<600', scores: [35, 25, 15, 8, 3] }
+                        ].map((row) => (
+                          <tr key={row.range} className="border-b">
+                            <td className="p-2 font-medium">{row.range}</td>
+                            {row.scores.map((score, index) => (
+                              <td key={index} className="text-center p-2">
+                                <span className={`px-2 py-1 rounded text-xs ${
+                                  score >= 80 ? 'bg-green-100 text-green-800' :
+                                  score >= 60 ? 'bg-blue-100 text-blue-800' :
+                                  score >= 40 ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}>
+                                  {score}%
+                                </span>
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div className="mt-4 p-4 bg-muted rounded-lg">
+                    <h4 className="font-medium mb-2">Your Current Position</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">Your Credit Score</div>
+                        <div className="text-lg font-bold">{creditProfile.creditScore || 'Not Set'}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">Current LVR</div>
+                        <div className="text-lg font-bold">
+                          {creditProfile.propertyValue > 0 ? 
+                            (((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue) * 100).toFixed(1) + '%' 
+                            : 'Not Set'}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">Approval Probability</div>
+                        <div className="text-lg font-bold text-primary">
+                          {(() => {
+                            const currentLVR = creditProfile.propertyValue > 0 ? 
+                              ((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue) * 100 : 0;
+                            const creditScore = creditProfile.creditScore;
+                            
+                            let probability = 50; // Default
+                            
+                            if (creditScore >= 800) {
+                              if (currentLVR <= 70) probability = 95;
+                              else if (currentLVR <= 80) probability = 88;
+                              else if (currentLVR <= 90) probability = 45;
+                            } else if (creditScore >= 700) {
+                              if (currentLVR <= 70) probability = 85;
+                              else if (currentLVR <= 80) probability = 70;
+                              else if (currentLVR <= 90) probability = 25;
+                            } else if (creditScore >= 650) {
+                              if (currentLVR <= 70) probability = 75;
+                              else if (currentLVR <= 80) probability = 55;
+                              else probability = 15;
+                            }
+                            
+                            return probability + '%';
+                          })()}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             <TabsContent value="results" className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* ESG Impact Summary */}
@@ -617,43 +836,141 @@ const FinancialAssessmentTools: React.FC = () => {
               {/* Minimum Value Calculation */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Minimum Value to Secure Deal</CardTitle>
+                  <CardTitle>Comprehensive Deal Analysis</CardTitle>
                   <CardDescription>
-                    Based on LVR requirements, ESG factors, and Four C's assessment
+                    Acquisition valuation, minimum values, and sensitivity analysis
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="p-4 border rounded-lg">
-                        <div className="text-sm text-muted-foreground">Base LVR (80%)</div>
-                        <div className="text-2xl font-bold">
-                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * 0.8).toLocaleString() : '0'}
+                  <div className="space-y-6">
+                    {/* Acquisition Valuations */}
+                    <div>
+                      <h4 className="font-medium mb-3">Acquisition Valuation Scenarios</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="p-4 border rounded-lg">
+                          <div className="text-sm text-muted-foreground">Conservative (85%)</div>
+                          <div className="text-xl font-bold text-green-600">
+                            ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * 0.85).toLocaleString() : '0'}
+                          </div>
+                          <div className="text-xs text-muted-foreground">Low risk acquisition</div>
                         </div>
-                      </div>
-                      <div className="p-4 border rounded-lg">
-                        <div className="text-sm text-muted-foreground">ESG Adjusted</div>
-                        <div className="text-2xl font-bold text-green-600">
-                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * (0.8 + (esgScores.overall * 0.025))).toLocaleString() : '0'}
+                        <div className="p-4 border rounded-lg">
+                          <div className="text-sm text-muted-foreground">Market Value (100%)</div>
+                          <div className="text-xl font-bold text-blue-600">
+                            ${creditProfile.propertyValue > 0 ? creditProfile.propertyValue.toLocaleString() : '0'}
+                          </div>
+                          <div className="text-xs text-muted-foreground">Fair market price</div>
                         </div>
-                      </div>
-                      <div className="p-4 border rounded-lg">
-                        <div className="text-sm text-muted-foreground">Four C's Adjusted</div>
-                        <div className="text-2xl font-bold text-blue-600">
-                          ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * (0.8 + (((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 0.05))).toLocaleString() : '0'}
+                        <div className="p-4 border rounded-lg">
+                          <div className="text-sm text-muted-foreground">Premium (115%)</div>
+                          <div className="text-xl font-bold text-orange-600">
+                            ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * 1.15).toLocaleString() : '0'}
+                          </div>
+                          <div className="text-xs text-muted-foreground">Competitive bidding</div>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="p-4 bg-primary/5 rounded-lg">
-                      <div className="font-medium mb-2">Final Recommended Maximum Loan</div>
-                      <div className="text-3xl font-bold text-primary">
-                        ${creditProfile.propertyValue > 0 ? 
-                          (creditProfile.propertyValue * Math.min(0.95, 0.8 + (esgScores.overall * 0.025) + (((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 0.05))).toLocaleString() 
-                          : '0'}
+
+                    {/* Finance Scenarios */}
+                    <div>
+                      <h4 className="font-medium mb-3">Finance Scenarios & Deal Success Probability</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {[
+                          { 
+                            name: 'Optimal Deal Structure', 
+                            lvr: 75, 
+                            probability: 88, 
+                            maxLoan: creditProfile.propertyValue * 0.75,
+                            description: 'Conservative LVR with strong approval odds'
+                          },
+                          { 
+                            name: 'Balanced Approach', 
+                            lvr: 80, 
+                            probability: 75, 
+                            maxLoan: creditProfile.propertyValue * 0.80,
+                            description: 'Standard LVR with good approval chances'
+                          },
+                          { 
+                            name: 'Aggressive Financing', 
+                            lvr: 85, 
+                            probability: 55, 
+                            maxLoan: creditProfile.propertyValue * 0.85,
+                            description: 'Higher risk but maximum leverage'
+                          },
+                          { 
+                            name: 'Maximum LVR', 
+                            lvr: 90, 
+                            probability: 35, 
+                            maxLoan: creditProfile.propertyValue * 0.90,
+                            description: 'Highest leverage, significant risk'
+                          }
+                        ].map((scenario) => (
+                          <div key={scenario.name} className="p-4 border rounded-lg">
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <div className="font-medium">{scenario.name}</div>
+                                <div className="text-sm text-muted-foreground">{scenario.description}</div>
+                              </div>
+                              <Badge variant={
+                                scenario.probability >= 75 ? 'default' : 
+                                scenario.probability >= 50 ? 'secondary' : 'destructive'
+                              }>
+                                {scenario.probability}%
+                              </Badge>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="flex justify-between text-sm">
+                                <span>LVR:</span>
+                                <span className="font-medium">{scenario.lvr}%</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span>Max Loan:</span>
+                                <span className="font-medium">${scenario.maxLoan.toLocaleString()}</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span>Required Deposit:</span>
+                                <span className="font-medium">${(creditProfile.propertyValue - scenario.maxLoan).toLocaleString()}</span>
+                              </div>
+                            </div>
+                            <Progress value={scenario.probability} className="h-2 mt-3" />
+                          </div>
+                        ))}
                       </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        This includes ESG and creditworthiness adjustments, capped at 95% LVR for security.
+                    </div>
+
+                    {/* Final Recommendation */}
+                    <div className="p-4 bg-primary/5 rounded-lg">
+                      <div className="font-medium mb-2">Recommended Deal Structure</div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground">Target Acquisition Price</div>
+                          <div className="text-xl font-bold text-primary">
+                            ${creditProfile.propertyValue > 0 ? (creditProfile.propertyValue * 0.95).toLocaleString() : '0'}
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground">Recommended LVR</div>
+                          <div className="text-xl font-bold text-primary">
+                            {Math.min(80, 75 + (esgScores.overall * 0.5) + (((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 0.5)).toFixed(0)}%
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground">Maximum Loan</div>
+                          <div className="text-xl font-bold text-primary">
+                            ${creditProfile.propertyValue > 0 ? 
+                              (creditProfile.propertyValue * 0.95 * (Math.min(80, 75 + (esgScores.overall * 0.5) + (((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 0.5)) / 100)).toLocaleString() 
+                              : '0'}
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground">Success Probability</div>
+                          <div className="text-xl font-bold text-green-600">
+                            {Math.min(95, 70 + (esgScores.overall * 2) + (((fourCs.character + fourCs.capacity + fourCs.capital + fourCs.collateral) / 4) * 2)).toFixed(0)}%
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-3">
+                        This structure balances risk and leverage, incorporating ESG benefits and creditworthiness adjustments for optimal approval probability.
                       </p>
                     </div>
                   </div>
