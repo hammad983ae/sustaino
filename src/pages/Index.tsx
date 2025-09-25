@@ -247,6 +247,22 @@ const Index = () => {
                             </Card>
                           </Link>
 
+                          <Link to="/work-hub">
+                            <Card className="bg-gradient-to-br from-white to-green-50/50 border border-green-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-green-700">
+                                  <Building className="h-5 w-5" />
+                                  Work Hub
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Manage jobs, reports, and valuation workflows in one central location
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
                           <Link to="/information-memorandum">
                             <Card className="bg-gradient-to-br from-white to-blue-50/50 border border-blue-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
                               <CardHeader>
