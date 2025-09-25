@@ -8,6 +8,7 @@ import { useUniversalSave } from '@/hooks/useUniversalSave';
 import { Map, Save } from 'lucide-react';
 import PlanningDataSummary from '@/components/planning/PlanningDataSummary';
 import PlanningIntegrations from '@/components/planning/PlanningIntegrations';
+import VictorianMappingResources from '@/components/VictorianMappingResources';
 
 interface PropertyPlanningSearchProps {
   propertyAddress: string;
@@ -226,6 +227,14 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
           <PlanningDataSummary planningData={planningData} />
         </CardContent>
       </Card>
+
+      <VictorianMappingResources
+        onDataUpdate={handlePlanningDataUpdate}
+        onPlanningSearch={(searchData) => {
+          console.log('Planning search initiated from mapping resources:', searchData);
+          handlePlanningDataUpdate(searchData);
+        }}
+      />
 
       <PlanningIntegrations
         propertyAddress={propertyAddress}
