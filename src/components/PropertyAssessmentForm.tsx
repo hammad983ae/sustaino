@@ -28,7 +28,7 @@ import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
 import IntelligentAssessmentAutomation from '@/components/IntelligentAssessmentAutomation';
 import SectionDataExtractor from '@/components/SectionDataExtractor';
-import ReportSectionToggler from '@/components/ReportSectionToggler';
+
 import DataValidationPipeline from '@/components/DataValidationPipeline';
 import ReportConfigurationIntegrator from '@/components/ReportConfigurationIntegrator';
 import OptionalSectionManager from '@/components/OptionalSectionManager';
@@ -110,7 +110,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         <div className="space-y-6">
           <ReportTypeConfiguration />
           <EnhancedReportConfiguration />
-          <ReportSectionToggler jobId={reportData.currentJobId || ''} />
         </div>
       ),
       validation: () => {
