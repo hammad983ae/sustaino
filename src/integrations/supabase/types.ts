@@ -2937,6 +2937,30 @@ export type Database = {
         }
         Relationships: []
       }
+      system_logs: {
+        Row: {
+          created_at: string | null
+          details: string | null
+          id: string
+          operation: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          operation: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          operation?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       test_results: {
         Row: {
           calculated_at: string | null
@@ -3316,6 +3340,10 @@ export type Database = {
           property_data: Json
         }
         Returns: Json
+      }
+      cleanup_rp_data_references: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       create_default_report_config: {
         Args: { p_job_id: string; p_user_id: string }
