@@ -256,6 +256,118 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           photoDate: '1st August 2025',
           photographer: 'John Delorenzo',
           status: 'completed'
+        },
+        // Essential Repairs
+        essentialRepairs: {
+          repairsRequired: 'Nil',
+          repairsCost: 0,
+          repairsDescription: 'No essential repairs identified during inspection',
+          status: 'completed'
+        },
+        // Sales Evidence  
+        salesEvidence: {
+          salesData: 'Held on file',
+          salesAnalysis: 'Comprehensive sales evidence analysis available in supporting documentation',
+          comparableSales: 'Market evidence reviewed and analyzed for valuation purposes',
+          status: 'completed'
+        },
+        // Leasing Evidence
+        leasingEvidence: {
+          leasingData: 'Held on File',
+          marketRentAnalysis: 'Comprehensive leasing evidence supporting market rent assessment',
+          comparableLeases: 'Regional healthcare facility lease data analyzed',
+          status: 'completed'
+        },
+        // Historical Sale Information
+        historicalSale: {
+          recentSales: 'No recorded sale within the past three years',
+          saleHistory: 'Property sale history research conducted - no recent transactions identified',
+          previousOwnership: 'Long-term stable ownership pattern',
+          status: 'completed'
+        },
+        // Valuation Rationale
+        valuationRationale: {
+          rationale: 'Held on file',
+          methodology: 'Comprehensive valuation rationale including direct comparison and income capitalization approaches',
+          supportingEvidence: 'Detailed analysis of market evidence, rental income, and comparable transactions',
+          status: 'completed'
+        },
+        // Risk Assessment
+        riskAssessment: {
+          introduction: 'This document outlines the key risks associated with the property at 133-137 Langtree Avenue, and provides strategic recommendations for managing these risks.',
+          marketRisks: {
+            riskLevel: 'Medium Risk',
+            description: 'Fluctuations in regional demand and economic sentiment can impact occupancy rates and rent levels.',
+            recommendations: [
+              'Regularly review and analyze local and regional market data',
+              'Maintain flexible lease strategies including renewal incentives', 
+              'Engage with local business networks and stakeholders for early indicators of market shifts'
+            ]
+          },
+          assetRelatedRisks: {
+            riskLevel: 'Medium to High Risk',
+            description: 'Location-specific factors such as limited access to amenities or competition may affect long-term viability.',
+            recommendations: [
+              'Conduct periodic asset inspections and maintenance',
+              'Enhance property features or upgrades to maintain tenant appeal',
+              'Ensure ongoing compliance with planning and environmental regulations',
+              'Consider minor refurbishment projects to improve competitiveness'
+            ]
+          },
+          cashFlowRisks: {
+            riskLevel: 'Medium to High Risk', 
+            description: 'Revenue uncertainty due to tenant covenant strength, lease expiry profiles, or market rent volatility.',
+            recommendations: [
+              'Perform thorough tenant due diligence',
+              'Monitor lease expiration dates and develop renewal strategies',
+              'Establish contingency funds for vacancy or rent reduction periods',
+              'Negotiate lease terms that include rent escalation clauses'
+            ]
+          },
+          assetManagement: {
+            riskLevel: 'Low Risk',
+            description: 'Effective property management mitigates operational risks.',
+            recommendations: [
+              'Engage experienced property management providers',
+              'Conduct regular reviews of property performance and tenant satisfaction',
+              'Maintain good communication channels with tenants'
+            ]
+          },
+          sustainabilityRisks: {
+            riskLevel: 'Medium to High Risk',
+            description: 'Building age and design partly limit energy efficiency; absence of renewable systems and water-saving features.',
+            recommendations: [
+              'Develop a phased upgrade plan focusing on energy efficiency improvements',
+              'Investigate opportunities for installing renewable energy solutions (solar PV)',
+              'Implement water-saving fixtures and possibly reticulated watering systems',
+              'Explore design and orientation improvements for future asset upgrades'
+            ]
+          },
+          status: 'completed'
+        },
+        // Valuation Summary and Definitions
+        valuationSummary: {
+          interestValued: 'The Estate Held in Fee simple',
+          valueComponent: 'As Is',
+          marketValueDefinition: 'The estimated amount for which an asset or liability should exchange on the valuation date between a willing buyer and a willing seller in an arm\'s length transaction, after proper marketing, where the parties had each acted knowledgeably, prudently, and without compulsion.',
+          marketRentDefinition: 'The estimated amount for which an interest in real property should be leased on the valuation date between a willing lessor and a willing lessee on appropriate lease terms in an arm\'s length transaction, after proper marketing and where the parties had each acted knowledgeably, prudently and without compulsion.',
+          marketMovementClause: 'This valuation is current at the date of valuation only. The value assessed herein may change significantly and unexpectedly over a relatively short period of time (including as a result of general market movements or factors specific to the particular property). Liability for losses arising from such subsequent changes in value is excluded as is liability where the valuation is relied upon after the expiration of 90 days after the date of the valuation.',
+          prudentLenderClause: 'This valuation is prepared on the assumption that the lender as referred to in the valuation report (and no other), may rely on the valuation for mortgage finance purposes and the lender has complied with its own lending guidelines as well as prudent finance industry lending practices, and has considered all prudent aspects of credit risk for any potential borrower, including the borrower\'s ability to service and repay any mortgage loan.',
+          highestAndBestUse: 'The current use is considered the highest and best use.',
+          sellingPeriod: 'The valuation has been assessed on a 3-month selling period',
+          currencyOfValuation: 'The valuation is only current for 3 – months from the date of inspection.',
+          marketValue: '$2,850,000 (Two Million Eight Hundred and Fifty Thousand Dollars)',
+          netPassingRent: '$180,000 plus GST and outgoings',
+          marketRent: '$180,000 plus GST and outgoings', 
+          capitalisationRate: '6.1%',
+          insuranceReplacementValue: '$2,200,000 (Two Million Two Hundred Thousand Dollars)',
+          forcedSaleValue: 'Not Assessed',
+          valuationFirm: 'Delorenzo Property Group Pty Ltd',
+          inspectionDate: '1st August 2025',
+          valuationDate: '1st August 2025',
+          inspectingValuer: 'John Delorenzo – Director – Certified Practising Valuer',
+          copyright: '©2020-2021 Delorenzo Property Group PTY LTD, all rights reserved.',
+          status: 'completed'
         }
       };
 
@@ -338,16 +450,23 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
               <li>• Market Commentary - Healthcare, Mildura commercial/residential markets</li>
               <li>• Property Construction - Building details, fixtures, parking, amenities</li>
               <li>• Property Photos - 10 professional photos (exterior, interior, facilities)</li>
-              <li>• Financial Analysis - Rental income, market value ($2.85M)</li>
-              <li>• Valuation Certificate - Professional valuation certification</li>
-              <li>• Report Configuration - All sections properly structured for PDF generation</li>
+              <li>• Essential Repairs - Assessment complete (Nil repairs required)</li>
+              <li>• Sales & Leasing Evidence - Comprehensive market analysis on file</li>
+              <li>• Historical Sale Information - Three-year ownership research</li>
+              <li>• Valuation Rationale - Complete methodology and supporting evidence</li>
+              <li>• Risk Assessment - SWOT analysis with management strategies</li>
+              <li>• Valuation Summary - Final valuation with definitions and clauses</li>
+              <li>• Financial Analysis - Rental income, market value ($2.85M), cap rate (6.1%)</li>
+              <li>• Professional Certification - Complete valuation certificate</li>
+              <li>• Report ready for PDF generation in professional format</li>
             </ul>
           </div>
 
           <div className="text-xs text-green-600 bg-green-100 p-3 rounded">
-            <strong>Ready for next section:</strong> You can now provide additional information 
-            for any remaining sections (tenancy details, sales evidence, risk assessment, etc.) 
-            to further enhance this comprehensive report. 11 major sections now complete including property photos and ready for PDF generation.
+            <strong>Complete Report Ready:</strong> All 17 sections have been populated with comprehensive data. 
+            The report is now ready for PDF generation with professional formatting including executive summary, 
+            property photos, risk assessment, and complete valuation summary. This is a comprehensive commercial 
+            property valuation report for 133-137 Langtree Avenue, Mildura.
           </div>
         </CardContent>
       </Card>
