@@ -46,6 +46,8 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   const [includeDetailedRentalConfig, setIncludeDetailedRentalConfig] = useState(false);
   const [showJobSelector, setShowJobSelector] = useState(true);
   const [sessionStarted, setSessionStarted] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
   const { toast } = useToast();
   const { 
     updateProgress, 
@@ -613,13 +615,5 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
   );
 };
 
-// Main component wrapper
-const PropertyAssessmentFormComponent = (props: PropertyAssessmentFormProps) => {
-  return (
-    <PAFConfigProvider>
-      <PropertyAssessmentFormInner {...props} />
-    </PAFConfigProvider>
-  );
-};
 
-export default PropertyAssessmentFormComponent;
+export default PropertyAssessmentForm;
