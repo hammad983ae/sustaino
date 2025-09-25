@@ -105,9 +105,14 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
   const handleFileUpload = useCallback(async (files: FileList) => {
     const newPhotos: PhotoWithOCR[] = [];
     
+    console.log('OCR PAF Step 4: Starting file upload, files count:', files.length);
+    
     // Get current user for storage path
     const { data: { user } } = await supabase.auth.getUser();
+    console.log('OCR PAF Step 4: User authentication check:', user ? 'authenticated' : 'not authenticated');
+    
     if (!user) {
+      console.error('OCR PAF Step 4: Authentication failed');
       toast({
         title: "Authentication Required",
         description: "Please log in to upload photos",
@@ -126,6 +131,8 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
           const fileName = `${photoId}-${file.name}`;
           const filePath = `${user.id}/property-photos/${fileName}`;
           
+          console.log('OCR PAF Step 4: Attempting upload to path:', filePath);
+          
           const { data: uploadData, error: uploadError } = await supabase.storage
             .from('property-images')
             .upload(filePath, file, {
@@ -134,7 +141,7 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
             });
 
           if (uploadError) {
-            console.error('Upload error:', uploadError);
+            console.error('OCR PAF Step 4: Upload error:', uploadError);
             toast({
               title: "Upload Failed",
               description: `Failed to upload ${file.name}: ${uploadError.message}`,
@@ -142,6 +149,8 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
             });
             continue;
           }
+          
+          console.log('OCR PAF Step 4: Upload successful:', uploadData);
 
           // Get public URL for the uploaded file
           const { data: urlData } = supabase.storage
@@ -195,17 +204,20 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
   }, [handleSavePhotos, toast]);
 
   const processPhotoOCR = useCallback(async (photo: PhotoWithOCR) => {
+    console.log('OCR PAF Step 4: Starting OCR processing for photo:', photo.name);
     setIsProcessing(true);
     setProcessingPhotoId(photo.id);
 
     try {
+      console.log('OCR PAF Step 4: Calling Tesseract.recognize...');
       const { data } = await Tesseract.recognize(photo.file, 'eng', {
         logger: (m) => {
           if (m.status === 'recognizing text') {
-            // Update progress if needed
+            console.log('OCR PAF Step 4: OCR progress:', m.progress);
           }
         }
       });
+      console.log('OCR PAF Step 4: Tesseract completed, extracted text length:', data.text.length);
 
       const extractedText = data.text.trim();
       const confidence = data.confidence;
@@ -249,7 +261,7 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
       });
 
     } catch (error) {
-      console.error('OCR Error:', error);
+      console.error('OCR PAF Step 4: OCR processing failed:', error);
       
       setPhotos(prev => prev.map(p => 
         p.id === photo.id 
