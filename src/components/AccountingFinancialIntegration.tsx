@@ -450,10 +450,14 @@ const AccountingFinancialIntegration: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-orange-700">
                     <Users className="h-5 w-5" />
-                    Employment Risk Assessment
+                    Employment Risk Assessment™
+                    <Badge variant="outline" className="text-xs ml-2">Patent Pending</Badge>
                   </CardTitle>
                   <CardDescription className="text-orange-600">
                     Comprehensive employment stability analysis affecting loan risk and LVR calculations
+                    <div className="text-xs mt-1 text-muted-foreground">
+                      © 2024 Powered™. Employment Risk Assessment System™ - All Rights Reserved. Patent Pending.
+                    </div>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -462,7 +466,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                     <div>
                       <h4 className="font-medium mb-3 flex items-center gap-2">
                         <Badge className="h-5 w-5" />
-                        Occupation Analysis
+                        Occupation Analysis™
+                        <span className="text-xs text-muted-foreground ml-1">©</span>
                       </h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
@@ -492,7 +497,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                     <div>
                       <h4 className="font-medium mb-3 flex items-center gap-2">
                         <TrendingUp className="h-5 w-5" />
-                        Career Maturity Stage
+                        Career Maturity Stage™
+                        <span className="text-xs text-muted-foreground ml-1">®</span>
                       </h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
@@ -522,7 +528,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                     <div>
                       <h4 className="font-medium mb-3 flex items-center gap-2">
                         <AlertCircle className="h-5 w-5" />
-                        Risk Factors & Stability
+                        Risk Factors & Stability™
+                        <span className="text-xs text-muted-foreground ml-1">©</span>
                       </h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between items-center">
@@ -553,7 +560,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <div className="mt-6">
                     <h4 className="font-medium mb-3 flex items-center gap-2">
                       <Clock className="h-5 w-5" />
-                      Employment History & Stability
+                      Employment History & Stability™
+                      <span className="text-xs text-muted-foreground ml-1">© Powered™</span>
                     </h4>
                     <div className="space-y-3">
                       <div className="flex items-center gap-4 p-3 bg-white rounded-lg border">
@@ -591,7 +599,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <BarChart3 className="h-5 w-5" />
-                      Financial Performance vs Benchmarks
+                      Financial Performance vs Benchmarks™
+                      <span className="text-xs text-muted-foreground ml-2">© 2024</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -631,7 +640,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <PieChart className="h-5 w-5" />
-                      Age vs Earning Potential
+                      Age vs Earning Potential™
+                      <span className="text-xs text-muted-foreground ml-2">Patent Pending</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -669,7 +679,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <MapPin className="h-5 w-5" />
-                      Geographic Statistics
+                      Geographic Statistics™
+                      <span className="text-xs text-muted-foreground ml-2">© Powered™</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -700,12 +711,16 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <TrendingUp className="h-5 w-5" />
-                      Employment-Adjusted Risk & LVR Impact
+                      Employment-Adjusted Risk & LVR Impact™
+                      <Badge variant="outline" className="text-xs ml-2">Patent Pending</Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <div className="font-medium text-green-800 mb-2">Employment Risk Bonus</div>
+                      <div className="font-medium text-green-800 mb-2">
+                        Employment Risk Bonus™ 
+                        <span className="text-xs text-muted-foreground ml-1">© 2024</span>
+                      </div>
                       <div className="text-sm text-green-700 space-y-1">
                         <div>• Stable 7-year tenure: +5% LVR allowance</div>
                         <div>• Recession-proof industry: +3% LVR allowance</div>
@@ -740,7 +755,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Target className="h-5 w-5" />
-                      Alternative Career Options
+                      Alternative Career Options™
+                      <span className="text-xs text-muted-foreground ml-2">® Powered™</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -763,7 +779,10 @@ const AccountingFinancialIntegration: React.FC = () => {
                       </div>
                     </div>
                     <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                      <div className="text-sm font-medium text-blue-800">Career Progression Path</div>
+                      <div className="text-sm font-medium text-blue-800">
+                        Career Progression Path™
+                        <span className="text-xs text-muted-foreground ml-1">© Powered™</span>
+                      </div>
                       <div className="text-sm text-blue-700 mt-1">
                         Next 5 years: Technical Lead → Engineering Manager
                         <br />Expected salary: $140,000 - $180,000
@@ -782,7 +801,8 @@ const AccountingFinancialIntegration: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <FileText className="h-5 w-5" />
-                      Connected Data Summary
+                      Connected Data Summary™
+                      <span className="text-xs text-muted-foreground ml-2">© 2024 Powered™</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>

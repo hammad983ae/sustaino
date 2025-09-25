@@ -259,7 +259,10 @@ const FinancialAssessmentTools: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Zap className="h-5 w-5 text-blue-600" />
-              <CardTitle className="text-blue-700">Automated Assessment</CardTitle>
+              <CardTitle className="text-blue-700">
+                Automated Assessment™
+                <span className="text-xs text-muted-foreground ml-2">Patent Pending</span>
+              </CardTitle>
             </div>
             <Button 
               variant="outline" 
@@ -273,6 +276,9 @@ const FinancialAssessmentTools: React.FC = () => {
           </div>
           <CardDescription className="text-blue-600">
             Financial data is automatically populated from connected integrations (Xero, ATO, Equifax, Banking)
+            <div className="text-xs mt-1 text-muted-foreground">
+              © 2024 Powered™. Automated Assessment System™ - All Rights Reserved.
+            </div>
           </CardDescription>
         </CardHeader>
       </Card>
@@ -281,10 +287,14 @@ const FinancialAssessmentTools: React.FC = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calculator className="h-5 w-5" />
-            Professional Financial Assessment Tools
+            Professional Financial Assessment Tools™
+            <span className="text-xs text-muted-foreground ml-2">© Powered™</span>
           </CardTitle>
           <CardDescription>
-            Industry-standard serviceability, LVR analysis with ESG factors and Four C's of credit
+            Industry-standard serviceability, LVR analysis with ESG factors and Four C's of credit™
+            <div className="text-xs mt-1 text-muted-foreground">
+              Patent Pending - Advanced Financial Analysis Engine™
+            </div>
           </CardDescription>
         </CardHeader>
         <CardContent>
