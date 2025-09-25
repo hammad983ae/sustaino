@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { Calculator, TrendingUp, Shield, Users } from 'lucide-react';
+import { Calculator, TrendingUp, Shield, Users, DollarSign } from 'lucide-react';
 
 interface PerformanceMetrics {
   mortgageLending: {
@@ -127,11 +127,26 @@ export const PerformanceRatingSystem: React.FC = () => {
         <CardContent>
           <Tabs defaultValue="mortgage" className="space-y-4">
             <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="mortgage">Mortgage Lending</TabsTrigger>
-              <TabsTrigger value="valuation">Valuation</TabsTrigger>
-              <TabsTrigger value="estate">Estate Agents</TabsTrigger>
-              <TabsTrigger value="developers">Developers</TabsTrigger>
-              <TabsTrigger value="financial">Financial Ratios</TabsTrigger>
+              <TabsTrigger value="mortgage" className="flex items-center gap-1">
+                <Shield className="h-3 w-3" />
+                Mortgage
+              </TabsTrigger>
+              <TabsTrigger value="valuation" className="flex items-center gap-1">
+                <Calculator className="h-3 w-3" />
+                Valuation
+              </TabsTrigger>
+              <TabsTrigger value="estate" className="flex items-center gap-1">
+                <Users className="h-3 w-3" />
+                Estate Agents
+              </TabsTrigger>
+              <TabsTrigger value="developers" className="flex items-center gap-1">
+                <TrendingUp className="h-3 w-3" />
+                Developers
+              </TabsTrigger>
+              <TabsTrigger value="financial" className="flex items-center gap-1">
+                <DollarSign className="h-3 w-3" />
+                Financial
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="mortgage" className="space-y-4">

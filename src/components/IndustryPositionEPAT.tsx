@@ -689,10 +689,22 @@ export const IndustryPositionEPAT: React.FC = () => {
         <CardContent>
           <Tabs defaultValue="industry-selection" className="space-y-6">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="industry-selection">Industry & Position</TabsTrigger>
-              <TabsTrigger value="kpi-assessment">KPI Assessment</TabsTrigger>
-              <TabsTrigger value="performance-analysis">Performance Analysis</TabsTrigger>
-              <TabsTrigger value="benchmarks">Industry Benchmarks</TabsTrigger>
+              <TabsTrigger value="industry-selection" className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                Industry & Position
+              </TabsTrigger>
+              <TabsTrigger value="kpi-assessment" className="flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                KPI Assessment
+              </TabsTrigger>
+              <TabsTrigger value="performance-analysis" className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Performance Analysis
+              </TabsTrigger>
+              <TabsTrigger value="benchmarks" className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                Industry Benchmarks
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="industry-selection" className="space-y-6">

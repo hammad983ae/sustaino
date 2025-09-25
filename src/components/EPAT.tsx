@@ -16,7 +16,8 @@ import { PerformanceRatingSystem } from './PerformanceRatingSystem';
 import { EmployeePerformancePlatform } from './EmployeePerformancePlatform';
 import { EnhancedEPAT } from './comprehensive/EnhancedEPAT';
 import { IndustryPositionEPAT } from './IndustryPositionEPAT';
-import { Users, TrendingUp, ArrowLeft } from 'lucide-react';
+import { DemoAccessPanel } from './DemoAccessPanel';
+import { Users, TrendingUp, ArrowLeft, Zap } from 'lucide-react';
 
 interface EPATProps {
   onBackToDashboard?: () => void;
@@ -51,8 +52,12 @@ export const EPAT: React.FC<EPATProps> = ({ onBackToDashboard }) => {
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="industry-position" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-4">
+          <Tabs defaultValue="demo-access" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="demo-access" className="flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                Demo Access
+              </TabsTrigger>
               <TabsTrigger value="industry-position" className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Industry & Position-Based EPAT™
@@ -70,6 +75,10 @@ export const EPAT: React.FC<EPATProps> = ({ onBackToDashboard }) => {
                 Comprehensive Employment Analysis™
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="demo-access">
+              <DemoAccessPanel />
+            </TabsContent>
 
             <TabsContent value="industry-position">
               <IndustryPositionEPAT />

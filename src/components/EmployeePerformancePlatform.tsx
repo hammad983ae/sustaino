@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Star, TrendingUp, Award, Users, Target, Brain, Clock, DollarSign } from 'lucide-react';
+import { Star, TrendingUp, Award, Users, Target, Brain, Clock, DollarSign, BarChart3 } from 'lucide-react';
 
 interface EmployeeMetrics {
   // Core Performance Metrics
@@ -344,10 +344,22 @@ export const EmployeePerformancePlatform: React.FC = () => {
         <CardContent>
           <Tabs defaultValue="assessment" className="space-y-4">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="assessment">Performance Assessment</TabsTrigger>
-              <TabsTrigger value="rankings">Employee Rankings</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics Dashboard</TabsTrigger>
-              <TabsTrigger value="benchmarks">Industry Benchmarks</TabsTrigger>
+              <TabsTrigger value="assessment" className="flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                Assessment
+              </TabsTrigger>
+              <TabsTrigger value="rankings" className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                Rankings
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger value="benchmarks" className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Benchmarks
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="assessment" className="space-y-6">
