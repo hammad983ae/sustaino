@@ -183,6 +183,79 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           totalArea: '920 sqm',
           floorPlan: 'Available',
           status: 'completed'
+        },
+        // Property Photos
+        propertyPhotos: {
+          exteriorPhotos: [
+            {
+              id: 'ext-001',
+              name: 'Covered Parking Area',
+              url: '/property-photos/parking-area.png',
+              description: 'Covered parking spaces with concrete flooring and structural pillars'
+            },
+            {
+              id: 'ext-002', 
+              name: 'Exterior Parking View',
+              url: '/property-photos/exterior-parking.png',
+              description: 'External view of building with designated parking spaces'
+            }
+          ],
+          interiorPhotos: [
+            {
+              id: 'int-001',
+              name: 'Office/Consultation Room',
+              url: '/property-photos/office-consultation.png',
+              description: 'Professional office space with desk, chairs, and medical certificates on wall'
+            },
+            {
+              id: 'int-002',
+              name: 'Conference Room',
+              url: '/property-photos/conference-room.png',
+              description: 'Large conference room with meeting table and chairs for staff meetings'
+            },
+            {
+              id: 'int-003',
+              name: 'Medical Storage Room',
+              url: '/property-photos/medical-storage.png', 
+              description: 'Well-organized medical storage with shelving and medical supplies'
+            },
+            {
+              id: 'int-004',
+              name: 'Meeting Room',
+              url: '/property-photos/meeting-room-2.png',
+              description: 'Additional meeting space with conference table'
+            },
+            {
+              id: 'int-005',
+              name: 'Patient Waiting Area',
+              url: '/property-photos/waiting-area.png',
+              description: 'Comfortable patient waiting area with modern seating and decor'
+            },
+            {
+              id: 'int-006',
+              name: 'Reception Area',
+              url: '/property-photos/reception-area.png',
+              description: 'Modern reception area with comfortable seating and professional layout'
+            },
+            {
+              id: 'int-007',
+              name: 'Kitchen Facilities',
+              url: '/property-photos/kitchen-facilities.png',
+              description: 'Staff kitchen with modern appliances, cabinets, and preparation areas'
+            }
+          ],
+          facilityPhotos: [
+            {
+              id: 'fac-001',
+              name: 'Bathroom Facilities', 
+              url: '/property-photos/bathroom-facilities.png',
+              description: 'Clean, modern bathroom facilities with appropriate accessibility features'
+            }
+          ],
+          totalPhotos: 10,
+          photoDate: '1st August 2025',
+          photographer: 'John Delorenzo',
+          status: 'completed'
         }
       };
 
@@ -264,16 +337,17 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
               <li>• Economic Commentary - Australian economy, cash rates, inflation data</li>
               <li>• Market Commentary - Healthcare, Mildura commercial/residential markets</li>
               <li>• Property Construction - Building details, fixtures, parking, amenities</li>
+              <li>• Property Photos - 10 professional photos (exterior, interior, facilities)</li>
               <li>• Financial Analysis - Rental income, market value ($2.85M)</li>
               <li>• Valuation Certificate - Professional valuation certification</li>
-              <li>• Report Configuration - All sections properly structured</li>
+              <li>• Report Configuration - All sections properly structured for PDF generation</li>
             </ul>
           </div>
 
           <div className="text-xs text-green-600 bg-green-100 p-3 rounded">
             <strong>Ready for next section:</strong> You can now provide additional information 
             for any remaining sections (tenancy details, sales evidence, risk assessment, etc.) 
-            to further enhance this comprehensive report. 10 major sections now complete including environmental and market analysis.
+            to further enhance this comprehensive report. 11 major sections now complete including property photos and ready for PDF generation.
           </div>
         </CardContent>
       </Card>
