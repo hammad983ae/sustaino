@@ -134,13 +134,25 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   const missingItems = validationItems.filter(item => item.status === 'missing');
   const acknowledgedItems = missingItems.filter(item => acknowledgedMissing.has(item.label));
   const unacknowledgedMissing = missingItems.filter(item => !acknowledgedMissing.has(item.label));
-  const canGenerate = unacknowledgedMissing.length === 0; // Can generate if all missing items are acknowledged
   const criticalItems = validationItems.filter(item => item.status !== 'optional');
   const completedCritical = criticalItems.filter(item => item.status === 'complete').length;
   const readinessScore = Math.round((completedCritical / criticalItems.length) * 100);
+  const canGenerate = unacknowledgedMissing.length === 0; // Can generate if all missing items are acknowledged
+  
+  console.log('Generate Report Data - Current state:', { 
+    missingItems: missingItems.length, 
+    acknowledgedItems: acknowledgedItems.length,
+    unacknowledgedMissing: unacknowledgedMissing.length,
+    canGenerate 
+  });
 
   const handleAcknowledgeMissing = (itemLabel: string) => {
-    setAcknowledgedMissing(prev => new Set([...prev, itemLabel]));
+    console.log('Acknowledging missing item:', itemLabel);
+    setAcknowledgedMissing(prev => {
+      const updated = new Set([...prev, itemLabel]);
+      console.log('Updated acknowledged items:', Array.from(updated));
+      return updated;
+    });
   };
 
   const handleProvideData = (itemLabel: string, data: any) => {
