@@ -125,18 +125,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       }
     },
     {
-      title: "Property Photos",
-      subtitle: "Property photos and visual assessment for this specific property",
-      component: (
-        <PropertyPhotosOCRExtractor />
-      ),
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Property Photos validation:', { hasAddress, addressData });
-        return hasAddress; // Require address to proceed
-      }
-    },
-    {
       title: "Report Configuration",
       subtitle: "Configure your report settings and client information",
       component: (
@@ -150,6 +138,18 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         const hasConfig = !!(reportData.reportConfig?.reportType && reportData.reportConfig?.propertyType);
         console.log('Report Configuration validation:', { hasAddress, hasConfig, reportData: reportData.reportConfig });
         return hasAddress; // Require address at minimum
+      }
+    },
+    {
+      title: "Property Photos",
+      subtitle: "Property photos and visual assessment for this specific property",
+      component: (
+        <PropertyPhotosOCRExtractor />
+      ),
+      validation: () => {
+        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
+        console.log('Property Photos validation:', { hasAddress, addressData });
+        return hasAddress; // Require address to proceed
       }
     },
     {
