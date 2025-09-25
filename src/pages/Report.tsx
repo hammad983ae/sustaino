@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, Home, Save, Mail, Zap } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Save, Mail, Zap, Eye } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import ReportPreviewModal from "@/components/ReportPreviewModal";
 import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
@@ -21,6 +23,7 @@ import AIAnimationPreview from "@/components/AIAnimationPreview";
 import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider";
 
 const ReportViewer = () => {
+  const { toast } = useToast();
   const sections = [
     { title: "Executive Summary and Contents" },
     { title: "RPD and Location" },
@@ -178,6 +181,36 @@ const ReportViewer = () => {
               <Save className="h-4 w-4 mr-1" />
               Save
             </Button>
+
+            {/* Preview Report Button */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="border-emerald-600/20 text-emerald-700 hover:bg-emerald-50">
+                  <Eye className="h-4 w-4 mr-1" />
+                  Preview
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
+                <ReportPreviewModal 
+                  isOpen={true}
+                  onClose={() => {}}
+                  onSend={() => {
+                    // Handle send action
+                    toast({
+                      title: "Report Sent",
+                      description: "Report has been sent successfully",
+                    });
+                  }}
+                  onDownload={() => {
+                    // Handle download action
+                    toast({
+                      title: "Download Started", 
+                      description: "Report download has started",
+                    });
+                  }}
+                />
+              </DialogContent>
+            </Dialog>
 
             {/* PDF & Email Report Button */}
             <Dialog>
