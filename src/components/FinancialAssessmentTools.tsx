@@ -14,6 +14,9 @@ import { Calculator, TrendingUp, DollarSign, Shield, Users, Globe, CreditCard, L
 
 interface ServiceabilityInputs {
   grossIncome: number;
+  investmentPropertyIncome: number;
+  sharesStockIncome: number;
+  otherIncome: number;
   existingDebt: number;
   livingExpenses: number;
   interestRate: number;
@@ -22,6 +25,9 @@ interface ServiceabilityInputs {
   employmentType: string;
   propertyValue: number;
   depositAmount: number;
+  newInvestmentType: 'property' | 'shares' | 'crypto' | 'none';
+  newInvestmentAmount: number;
+  newInvestmentYield: number;
 }
 
 interface ComprehensiveESGFactors {
@@ -56,7 +62,10 @@ interface ComprehensiveESGFactors {
 }
 
 interface CreditProfile {
-  annualIncome: number;
+  employmentIncome: number;
+  investmentPropertyIncome: number;
+  sharesStockIncome: number;
+  otherIncome: number;
   monthlyDebts: number;
   creditScore: number;
   employmentYears: number;
@@ -64,6 +73,7 @@ interface CreditProfile {
   savings: number;
   propertyValue: number;
   downPayment: number;
+  totalAnnualIncome: number;
 }
 
 const FinancialAssessmentTools: React.FC = () => {
@@ -73,6 +83,9 @@ const FinancialAssessmentTools: React.FC = () => {
 
   const [inputs, setInputs] = useState<ServiceabilityInputs>({
     grossIncome: 0,
+    investmentPropertyIncome: 0,
+    sharesStockIncome: 0,
+    otherIncome: 0,
     existingDebt: 0,
     livingExpenses: 0,
     interestRate: 5.5,
@@ -80,7 +93,10 @@ const FinancialAssessmentTools: React.FC = () => {
     dependents: 0,
     employmentType: 'permanent',
     propertyValue: 0,
-    depositAmount: 0
+    depositAmount: 0,
+    newInvestmentType: 'none',
+    newInvestmentAmount: 0,
+    newInvestmentYield: 0
   });
 
   const [esgFactors, setEsgFactors] = useState<ComprehensiveESGFactors>({
@@ -115,7 +131,10 @@ const FinancialAssessmentTools: React.FC = () => {
   });
 
   const [creditProfile, setCreditProfile] = useState<CreditProfile>({
-    annualIncome: 0,
+    employmentIncome: 0,
+    investmentPropertyIncome: 0,
+    sharesStockIncome: 0,
+    otherIncome: 0,
     monthlyDebts: 0,
     creditScore: 0,
     employmentYears: 0,
@@ -123,6 +142,7 @@ const FinancialAssessmentTools: React.FC = () => {
     savings: 0,
     propertyValue: 0,
     downPayment: 0,
+    totalAnnualIncome: 0,
   });
 
   // Auto-populate from integration data
@@ -140,7 +160,8 @@ const FinancialAssessmentTools: React.FC = () => {
         
         setCreditProfile(prev => ({
           ...prev,
-          annualIncome: integrationData.accountingSoftware.revenue || prev.annualIncome,
+          employmentIncome: integrationData.accountingSoftware.revenue || prev.employmentIncome,
+          totalAnnualIncome: integrationData.accountingSoftware.revenue || prev.totalAnnualIncome,
           monthlyDebts: (integrationData.accountingSoftware.expenses || 0) / 12
         }));
       }
@@ -176,7 +197,7 @@ const FinancialAssessmentTools: React.FC = () => {
     
     Four C's Analysis:
     • Character: ${fourCs.character}/10 (Credit Score: ${creditProfile.creditScore})
-    • Capacity: ${fourCs.capacity}/10 (Debt-to-Income: ${((creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) * 100).toFixed(1)}%)
+    • Capacity: ${fourCs.capacity}/10 (Debt-to-Income: ${((creditProfile.monthlyDebts * 12 / creditProfile.totalAnnualIncome) * 100).toFixed(1)}%)
     • Capital: ${fourCs.capital}/10 (Net Worth: $${(creditProfile.assets + creditProfile.savings).toLocaleString()})
     • Collateral: ${fourCs.collateral}/10 (LTV: ${((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue * 100).toFixed(1)}%)
     
@@ -207,7 +228,7 @@ const FinancialAssessmentTools: React.FC = () => {
     );
 
     // Capacity: Debt-to-Income ratio
-    const monthlyIncome = creditProfile.annualIncome / 12;
+    const monthlyIncome = creditProfile.totalAnnualIncome / 12;
     const debtToIncomeRatio = monthlyIncome > 0 ? (creditProfile.monthlyDebts / monthlyIncome) * 100 : 0;
     const capacity = debtToIncomeRatio <= 28 ? 10 : 
                     debtToIncomeRatio <= 36 ? 8 : 
@@ -308,31 +329,117 @@ const FinancialAssessmentTools: React.FC = () => {
             </TabsList>
 
             <TabsContent value="income-debt" className="space-y-6">
+              {/* Income Sources */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Income & Debt Analysis</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <DollarSign className="h-4 w-4" />
+                    Income Sources™ - Advanced Multi-Stream Assessment
+                    <Badge variant="outline" className="text-xs">© 2024 Patent Pending</Badge>
+                  </CardTitle>
                   <CardDescription>
-                    Provide financial details for automated Four C's assessment
+                    Comprehensive income analysis including employment, investment property, shares/stocks, and other sources
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label>Employment Income (Annual $)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.employmentIncome}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          setCreditProfile(prev => ({ 
+                            ...prev, 
+                            employmentIncome: value,
+                            totalAnnualIncome: value + prev.investmentPropertyIncome + prev.sharesStockIncome + prev.otherIncome
+                          }))
+                        }}
+                        placeholder="Salary, wages, business income"
+                      />
+                    </div>
+                    <div>
+                      <Label>Investment Property Income (Annual $)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.investmentPropertyIncome}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          setCreditProfile(prev => ({ 
+                            ...prev, 
+                            investmentPropertyIncome: value,
+                            totalAnnualIncome: prev.employmentIncome + value + prev.sharesStockIncome + prev.otherIncome
+                          }))
+                        }}
+                        placeholder="Rental income (net)"
+                      />
+                    </div>
+                    <div>
+                      <Label>Shares/Stock Income (Annual $)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.sharesStockIncome}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          setCreditProfile(prev => ({ 
+                            ...prev, 
+                            sharesStockIncome: value,
+                            totalAnnualIncome: prev.employmentIncome + prev.investmentPropertyIncome + value + prev.otherIncome
+                          }))
+                        }}
+                        placeholder="Dividends, capital gains"
+                      />
+                    </div>
+                    <div>
+                      <Label>Other Income (Annual $)</Label>
+                      <Input
+                        type="number"
+                        value={creditProfile.otherIncome}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          setCreditProfile(prev => ({ 
+                            ...prev, 
+                            otherIncome: value,
+                            totalAnnualIncome: prev.employmentIncome + prev.investmentPropertyIncome + prev.sharesStockIncome + value
+                          }))
+                        }}
+                        placeholder="Pension, trust, crypto, etc."
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Total Annual Income:</span>
+                      <span className="text-2xl font-bold text-primary">
+                        ${creditProfile.totalAnnualIncome.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Monthly: ${(creditProfile.totalAnnualIncome / 12).toLocaleString()}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Debt & Obligations */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Debt & Financial Obligations</CardTitle>
+                  <CardDescription>
+                    Current debts and ongoing financial commitments
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label>Annual Income ($)</Label>
-                      <Input
-                        type="number"
-                        value={creditProfile.annualIncome}
-                        onChange={(e) => setCreditProfile(prev => ({ ...prev, annualIncome: Number(e.target.value) }))}
-                        placeholder="Enter annual income"
-                      />
-                    </div>
-                    <div>
-                      <Label>Monthly Debts ($)</Label>
+                      <Label>Monthly Debt Payments ($)</Label>
                       <Input
                         type="number"
                         value={creditProfile.monthlyDebts}
                         onChange={(e) => setCreditProfile(prev => ({ ...prev, monthlyDebts: Number(e.target.value) }))}
-                        placeholder="Total monthly debt payments"
+                        placeholder="Credit cards, loans, etc."
                       />
                     </div>
                     <div>
@@ -352,7 +459,7 @@ const FinancialAssessmentTools: React.FC = () => {
                         type="number"
                         value={creditProfile.employmentYears}
                         onChange={(e) => setCreditProfile(prev => ({ ...prev, employmentYears: Number(e.target.value) }))}
-                        placeholder="Years in current employment"
+                        placeholder="Years in current position"
                       />
                     </div>
                     <div>
@@ -361,25 +468,39 @@ const FinancialAssessmentTools: React.FC = () => {
                         type="number"
                         value={creditProfile.assets}
                         onChange={(e) => setCreditProfile(prev => ({ ...prev, assets: Number(e.target.value) }))}
-                        placeholder="Total asset value"
+                        placeholder="Properties, vehicles, investments"
                       />
                     </div>
                     <div>
-                      <Label>Savings ($)</Label>
+                      <Label>Available Savings ($)</Label>
                       <Input
                         type="number"
                         value={creditProfile.savings}
                         onChange={(e) => setCreditProfile(prev => ({ ...prev, savings: Number(e.target.value) }))}
-                        placeholder="Available savings"
+                        placeholder="Cash, deposits, emergency fund"
                       />
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Property & Investment Details */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Property & Investment Analysis</CardTitle>
+                  <CardDescription>
+                    Current property and new investment details for serviceability assessment
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label>Property Value ($)</Label>
                       <Input
                         type="number"
                         value={creditProfile.propertyValue}
                         onChange={(e) => setCreditProfile(prev => ({ ...prev, propertyValue: Number(e.target.value) }))}
-                        placeholder="Property valuation"
+                        placeholder="Current property valuation"
                       />
                     </div>
                     <div>
@@ -388,9 +509,121 @@ const FinancialAssessmentTools: React.FC = () => {
                         type="number"
                         value={creditProfile.downPayment}
                         onChange={(e) => setCreditProfile(prev => ({ ...prev, downPayment: Number(e.target.value) }))}
-                        placeholder="Down payment amount"
+                        placeholder="Deposit amount"
                       />
                     </div>
+                    <div>
+                      <Label>New Investment Type</Label>
+                      <Select 
+                        value={inputs.newInvestmentType} 
+                        onValueChange={(value) => setInputs(prev => ({ ...prev, newInvestmentType: value as any }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select investment type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">No New Investment</SelectItem>
+                          <SelectItem value="property">Real Estate</SelectItem>
+                          <SelectItem value="shares">Shares/Stocks</SelectItem>
+                          <SelectItem value="crypto">Cryptocurrency</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>New Investment Amount ($)</Label>
+                      <Input
+                        type="number"
+                        value={inputs.newInvestmentAmount}
+                        onChange={(e) => setInputs(prev => ({ ...prev, newInvestmentAmount: Number(e.target.value) }))}
+                        placeholder="Investment value"
+                        disabled={inputs.newInvestmentType === 'none'}
+                      />
+                    </div>
+                    <div>
+                      <Label>Expected Annual Yield (%)</Label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={inputs.newInvestmentYield}
+                        onChange={(e) => setInputs(prev => ({ ...prev, newInvestmentYield: Number(e.target.value) }))}
+                        placeholder="Expected return rate"
+                        disabled={inputs.newInvestmentType === 'none'}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Serviceability Calculations */}
+                  {inputs.newInvestmentType !== 'none' && (
+                    <div className="bg-muted/50 p-4 rounded-lg mt-4">
+                      <h4 className="font-semibold mb-2">New Investment Serviceability Impact™</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Additional Income:</span>
+                          <div className="font-medium">
+                            ${((inputs.newInvestmentAmount * inputs.newInvestmentYield) / 100).toLocaleString()}/year
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Revised Total Income:</span>
+                          <div className="font-medium">
+                            ${(creditProfile.totalAnnualIncome + ((inputs.newInvestmentAmount * inputs.newInvestmentYield) / 100)).toLocaleString()}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Improved DTI Ratio:</span>
+                          <div className="font-medium">
+                            {creditProfile.totalAnnualIncome > 0 
+                              ? ((creditProfile.monthlyDebts * 12) / (creditProfile.totalAnnualIncome + ((inputs.newInvestmentAmount * inputs.newInvestmentYield) / 100)) * 100).toFixed(1)
+                              : 0}%
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Lender Policy Filter */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Lender Policy Matching™
+                    <Badge variant="outline" className="text-xs">© 2024 Proprietary Algorithm</Badge>
+                  </CardTitle>
+                  <CardDescription>
+                    Real-time lender policy filtering based on your profile and deal structure
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {(() => {
+                      const dtiRatio = creditProfile.totalAnnualIncome > 0 ? (creditProfile.monthlyDebts * 12 / creditProfile.totalAnnualIncome) * 100 : 0;
+                      const ltvRatio = creditProfile.propertyValue > 0 ? ((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue) * 100 : 0;
+                      
+                      const eligibleLenders = [
+                        { name: 'Big 4 Banks', eligible: dtiRatio <= 30 && ltvRatio <= 80 && creditProfile.creditScore >= 650, requirements: 'DTI ≤30%, LTV ≤80%, Credit ≥650' },
+                        { name: 'Regional Banks', eligible: dtiRatio <= 35 && ltvRatio <= 85 && creditProfile.creditScore >= 600, requirements: 'DTI ≤35%, LTV ≤85%, Credit ≥600' },
+                        { name: 'Non-Bank Lenders', eligible: dtiRatio <= 40 && ltvRatio <= 90 && creditProfile.creditScore >= 550, requirements: 'DTI ≤40%, LTV ≤90%, Credit ≥550' },
+                        { name: 'Specialist Lenders', eligible: dtiRatio <= 45 && creditProfile.creditScore >= 500, requirements: 'DTI ≤45%, Credit ≥500' }
+                      ];
+
+                      return (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {eligibleLenders.map((lender, index) => (
+                            <div key={index} className={`p-3 rounded-lg border ${lender.eligible ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="font-medium">{lender.name}</span>
+                                <Badge variant={lender.eligible ? "default" : "destructive"}>
+                                  {lender.eligible ? "Eligible" : "Not Eligible"}
+                                </Badge>
+                              </div>
+                              <div className="text-xs text-muted-foreground">{lender.requirements}</div>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </CardContent>
               </Card>
@@ -706,10 +939,10 @@ const FinancialAssessmentTools: React.FC = () => {
                         <div className="flex justify-between">
                           <span>Interest Rate Risk:</span>
                           <span className={
-                            creditProfile.annualIncome > 0 && (creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) < 0.3 
+                            creditProfile.totalAnnualIncome > 0 && (creditProfile.monthlyDebts * 12 / creditProfile.totalAnnualIncome) < 0.3 
                               ? 'text-green-600' : 'text-red-600'
                           }>
-                            {creditProfile.annualIncome > 0 && (creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) < 0.3 ? 'Low' : 'High'}
+                            {creditProfile.totalAnnualIncome > 0 && (creditProfile.monthlyDebts * 12 / creditProfile.totalAnnualIncome) < 0.3 ? 'Low' : 'High'}
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -932,7 +1165,7 @@ const FinancialAssessmentTools: React.FC = () => {
                       </div>
                       <div className="mt-2">
                         <div className="text-sm text-muted-foreground">
-                          DTI Ratio: {creditProfile.annualIncome > 0 ? ((creditProfile.monthlyDebts * 12 / creditProfile.annualIncome) * 100).toFixed(1) : 0}%
+                          DTI Ratio: {creditProfile.totalAnnualIncome > 0 ? ((creditProfile.monthlyDebts * 12 / creditProfile.totalAnnualIncome) * 100).toFixed(1) : 0}%
                         </div>
                         <div className="text-sm text-muted-foreground">
                           LTV Ratio: {creditProfile.propertyValue > 0 ? (((creditProfile.propertyValue - creditProfile.downPayment) / creditProfile.propertyValue) * 100).toFixed(1) : 0}%
@@ -1093,6 +1326,9 @@ const FinancialAssessmentTools: React.FC = () => {
                 // Reset all fields to default values
                 setInputs({
                   grossIncome: 0,
+                  investmentPropertyIncome: 0,
+                  sharesStockIncome: 0,
+                  otherIncome: 0,
                   existingDebt: 0,
                   livingExpenses: 0,
                   interestRate: 5.5,
@@ -1100,17 +1336,24 @@ const FinancialAssessmentTools: React.FC = () => {
                   dependents: 0,
                   employmentType: 'permanent',
                   propertyValue: 0,
-                  depositAmount: 0
+                  depositAmount: 0,
+                  newInvestmentType: 'none',
+                  newInvestmentAmount: 0,
+                  newInvestmentYield: 0
                 });
                 setCreditProfile({
-                  annualIncome: 0,
+                  employmentIncome: 0,
+                  investmentPropertyIncome: 0,
+                  sharesStockIncome: 0,
+                  otherIncome: 0,
                   monthlyDebts: 0,
                   creditScore: 0,
                   employmentYears: 0,
                   assets: 0,
                   savings: 0,
                   propertyValue: 0,
-                  downPayment: 0
+                  downPayment: 0,
+                  totalAnnualIncome: 0
                 });
                 toast({
                   title: "Assessment Reset",
