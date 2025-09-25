@@ -2,6 +2,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useUnifiedDataManager } from '@/hooks/useUnifiedDataManager';
 
 export interface ReportData {
+  // Job Management
+  currentJobId?: string;
+  
   // Planning Data
   planningData?: {
     lga?: string;

@@ -12,6 +12,8 @@ import ReportDataLoader from "@/components/ReportDataLoader";
 import SectionDataExtractor from "@/components/SectionDataExtractor";
 import ReportConfigurationIntegrator from "@/components/ReportConfigurationIntegrator";
 import ESGAssessmentIntegrator from "@/components/ESGAssessmentIntegrator";
+import { DocumentPrefillUploader } from '@/components/DocumentPrefillUploader';
+import { CompleteReportCreator } from '@/components/CompleteReportCreator';
 import { ValuationProvider } from "@/contexts/ValuationContext";
 import { ReportDataProvider } from "@/contexts/ReportDataContext";
 import PDFReportGenerator from "@/components/PDFReportGenerator";

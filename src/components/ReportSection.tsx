@@ -30,6 +30,9 @@ import TermsAndConditions from "./TermsAndConditions";
 import ComprehensiveESGClimateAssessmentForm from "./ComprehensiveESGClimateAssessmentForm";
 import EconomicGeographicalCatchmentAnalysis from './EconomicGeographicalCatchmentAnalysis';
 import CertificationAndSecurity from "./CertificationAndSecurity";
+import { CompleteReportCreator } from "./CompleteReportCreator";
+import { DocumentPrefillUploader } from "./DocumentPrefillUploader";
+import { useReportData } from "@/contexts/ReportDataContext";
 
 import MarketTransactionAnalysis from "./MarketTransactionAnalysis";
 
@@ -41,6 +44,7 @@ interface ReportSectionProps {
 }
 
 const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: ReportSectionProps) => {
+  const { reportData, updateReportData } = useReportData();
   // Special handling for Executive Summary section
   if (sectionIndex === 0) {
     return (
@@ -56,13 +60,44 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for RPD and Location section
+  // Special handling for Document Upload & Prefill section
   if (sectionIndex === 1) {
+    return (
+      <div className="w-full max-w-4xl mx-auto space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+            {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <CompleteReportCreator 
+              onReportCreated={(jobId) => {
+                console.log('Complete report created with job ID:', jobId);
+                updateReportData('currentJobId', jobId);
+              }}
+            />
+            
+            {reportData.currentJobId && (
+              <DocumentPrefillUploader 
+                jobId={reportData.currentJobId}
+                onPrefillComplete={(extractedData) => {
+                  console.log('Additional data extracted:', extractedData);
+                }}
+              />
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Special handling for RPD and Location section (moved to section 2)
+  if (sectionIndex === 2) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+          <CardTitle className="text-xl font-semibold">RPD and Location</CardTitle>
+          <p className="text-sm text-muted-foreground">Real Property Description and Location Details</p>
         </CardHeader>
         <CardContent>
           <RPDAndLocation />
@@ -71,8 +106,8 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
     );
   }
 
-  // Special handling for Legal and Planning section
-  if (sectionIndex === 2) {
+  // Special handling for Legal and Planning section (moved to section 3)
+  if (sectionIndex === 3) {
     return (
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>

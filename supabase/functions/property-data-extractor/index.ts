@@ -47,10 +47,10 @@ class PropertyDataExtractor {
       };
     } catch (error) {
       console.error('Domain extraction failed:', error);
-      await this.logExtractionError(userId, 'domain', url, error.message);
+      await this.logExtractionError(userId, 'domain', url, error instanceof Error ? error.message : 'Unknown error');
       return {
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       };
     }
   }
@@ -80,7 +80,7 @@ class PropertyDataExtractor {
       console.error('RealEstate extraction failed:', error);
       return {
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       };
     }
   }
@@ -104,7 +104,7 @@ class PropertyDataExtractor {
       console.error('RP Data extraction failed:', error);
       return {
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       };
     }
   }
@@ -392,7 +392,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message || 'Internal server error' 
+        error: (error instanceof Error ? error.message : 'Unknown error') || 'Internal server error' 
       }),
       { 
         status: 500, 
