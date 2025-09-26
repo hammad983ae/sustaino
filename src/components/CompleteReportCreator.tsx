@@ -4,90 +4,109 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { FileText, CheckCircle, Upload, Loader2 } from 'lucide-react';
+import { AuthRequiredWrapper } from '@/components/AuthRequiredWrapper';
 
 interface CompleteReportCreatorProps {
   onReportCreated?: (jobId: string) => void;
 }
 
-export function CompleteReportCreator({ onReportCreated }: CompleteReportCreatorProps) {
+function CompleteReportCreatorComponent({ onReportCreated }: CompleteReportCreatorProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [createdJobId, setCreatedJobId] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  // Get current property address
+  const currentAddress = localStorage.getItem('currentPlanningAddress') || 
+                         '133-137 Langtree Avenue Mildura VIC 3500';
 
   const createCompleteReport = async () => {
     setIsCreating(true);
 
     try {
-      console.log('Creating FINAL property report (no draft watermarks)...');
+      console.log('Creating property report from PAF data...');
 
-      // Structured report data - FINAL PROFESSIONAL REPORT
+      // Get stored planning data to use accurate current property data
+      const storedPlanningData = localStorage.getItem('PropertyPlanningSearch');
+      let planningData = null;
+      
+      if (storedPlanningData) {
+        try {
+          const parsed = JSON.parse(storedPlanningData);
+          planningData = parsed.planningData;
+        } catch (e) {
+          console.log('Could not parse stored planning data');
+        }
+      }
+
+      // Use current property data instead of hardcoded values
       const reportData = {
         executiveSummary: {
-          instructingParty: 'Kure Medical',
-          reliantParty: 'Kure Medical',
+          instructingParty: 'Property Assessment Client',
+          reliantParty: 'Property Assessment Client',
           loanReference: 'N/A',
           borrower: 'N/A',
           interestValued: 'Estate held in fee simple',
-          valuationApproach: 'Capitalisation of net income and direct comparison approach',
-          basisOfAssessment: 'The basis of valuation assumes market value during a reasonable selling period for the estate held in fee simple. This valuation is determined on the basis that the property, the title thereto and its use is not affected by any matter other than that mentioned in this report.',
-          purposeOfValuation: 'Pre Sale Advice',
+          valuationApproach: 'Direct comparison approach and income capitalisation',
+          basisOfAssessment: 'The basis of valuation assumes market value during a reasonable selling period for the estate held in fee simple.',
+          purposeOfValuation: 'Market Valuation',
           conflictOfInterest: 'We confirm we do not have a conflict of interest',
-          valuationDate: '1st August 2025',
-          inspectionDate: '1st August 2025',
-          inspectionValuer: 'John Delorenzo',
-          coSignatory: 'John Delorenzo – Director – Certified Practising Valuer',
-          valuerDeclaration: 'I hereby certify that I inspected the property on the date above and have conducted the assessments above as at that date of inspection. No responsibility is accepted by the Valuer and/or the Valuation Firm to any other parties who rely, on use, distribute, publish and/or otherwise represent anything contained in this Report for any purpose. I, John Delorenzo confirm they are competent of completing this assessment.',
-          reliance: 'Reliance on this report should only be taken upon sighting the original document that has been signed by the Inspecting Valuer who has undertaken the valuation. In this scenario, the Counter Signatory or Director has inspected the property, read this report, and verifies that the report is genuine and is endorsed by Delorenzo Property Group Pty Ltd.',
-          criticalAssumptions: 'This report is provided subject to the assumptions, disclaimers, limitations, and qualifications detailed herein. Reliance on this report and extension of our liability is conditional upon the readers acknowledgement and understanding of these statements. That third party sales and leasing information is true and correct, we reserve the right to review the valuation if any information gathered from a third party to assist with preparation of this report is incorrect. The currency of the valuation is 3 – months. Property valued as an in use medical centre and has been valued accordingly.',
-          firstMortgageSecurity: 'The property is suitable for mortgage purposes.',
-          instructionDate: 'June 2025',
-          sourcesOfInformation: 'Planning Maps, Lease details and outgoings, RP Data',
-          valuationStandards: 'Australian Property Institute (API) Australia and New Zealand Valuation and Property Standards',
-          preparerDetails: 'Delorenzo Property Group Pty Ltd',
-          clientDetails: 'Liberty Finance Pty Ltd and Secure Funding Pty Ltd',
-          pecuniaryInterest: 'The Primary Valuer has at least five years appropriate experience, has no pecuniary interest, and accepts instructions only from the Trustee/Responsible Entity.'
+          valuationDate: new Date().toISOString().split('T')[0],
+          inspectionDate: new Date().toISOString().split('T')[0],
+          inspectionValuer: 'To be assigned',
+          coSignatory: 'To be assigned',
+          valuerDeclaration: 'To be completed by assigned valuer.',
+          reliance: 'Reliance on this report should only be taken upon sighting the original document.',
+          criticalAssumptions: 'This report is provided subject to assumptions, disclaimers, limitations, and qualifications detailed herein.',
+          firstMortgageSecurity: 'To be assessed',
+          instructionDate: new Date().toISOString().split('T')[0],
+          sourcesOfInformation: 'Planning Maps, Property inspection, Planning data',
+          valuationStandards: 'Australian Property Institute (API) Standards',
+          preparerDetails: 'Property Assessment System',
+          clientDetails: 'To be confirmed',
+          pecuniaryInterest: 'No pecuniary interest'
         },
         propertyDetails: {
-          address: '133 – 137 Langtree Avenue Mildura VIC 3500',
-          lotPlan: 'CP 150978',
+          address: currentAddress,
+          lotPlan: planningData?.lotNumber && planningData?.planNumber ? 
+                   `${planningData.lotNumber}/${planningData.planNumber}` : 'To be confirmed',
           volume: '',
           folio: '',
-          landArea: 1425,
-          totalArea: 1435,
-          propertyDescription: 'Healthcare offices with day surgery',
-          entitlementLiability: 'Not Applicable',
-          encumbrancesRestriction: 'Title not sighted',
-          registeredProprietors: 'Title not sighted',
-          generalDocuments: 'Current proposed subdivision – property valued on an As Is Basis (excluding first level office)',
-          criticalDocuments: 'As Above',
+          landArea: 0,
+          totalArea: 0,
+          propertyDescription: 'Property description to be completed from inspection',
+          entitlementLiability: 'To be assessed',
+          encumbrancesRestriction: 'Title to be sighted',
+          registeredProprietors: 'Title to be sighted',
+          generalDocuments: 'To be obtained',
+          criticalDocuments: 'To be obtained',
           propertyIdentification: 'Identified by aerial map, cadastral plan and physical inspections',
-          location: 'Located within the Mildura CBD approximately 400 metres from NAB Deakin Avenue. Mildura is a major regional service centre located approximately 550 kms north west of Melbourne, 400 kms north east of Adelaide and 1000 kms south west of Sydney. Mildura and surrounds have a population of approximately 60,000 to 80,000.',
-          access: 'Accessible via Langtree Avenue, a main arterial road; secondary access points as per site inspection.',
-          siteDescription: 'Irregular shaped land situated at road level. The property is located on the northwest side of Langtree Avenue and southeast side of Shillidays Lane.',
-          neighbourhood: 'Commercial and mixed-use area near main roads, amenities, and community facilities.',
-          amenities: 'Proximity to shopping centres, schools, parks, medical facilities, and public transportation.',
-          services: 'Connected to mains water, sewerage, electricity, gas, and telecommunications.',
-          proposedSubdivision: 'The property appears to be going through some subdivision changes, the valuation has been complete on an AS IS basis as of the 1st of August 2025.'
+          location: planningData?.suburb ? `Located in ${planningData.suburb}, ${planningData.state || 'VIC'}` : 'Location details to be completed',
+          access: 'Access details to be completed from site inspection',
+          siteDescription: 'Site description to be completed from inspection',
+          neighbourhood: 'Neighbourhood analysis to be completed',
+          amenities: 'Proximity to amenities to be assessed',
+          services: 'Connected services to be confirmed',
+          proposedSubdivision: 'No known subdivision proposed'
         },
         legalAndPlanning: {
-          lga: 'Mildura Rural City Council',
-          zoning: 'Commercial 1 Zone (C1Z)',
-          currentUse: 'Healthcare',
-          permissibleUse: 'Yes',
+          lga: planningData?.planningScheme?.replace(' Planning Scheme', '') || 'Local Government Area to be confirmed',
+          zoning: planningData?.zoneName || planningData?.zoning || 'Zoning to be determined',
+          currentUse: 'Current use to be verified from inspection',
+          permissibleUse: 'To be assessed',
           permitNumber: 'N/A',
           overlays: {
-            ddo3: true,
-            po1: true,
-            ho: false,
-            sco1: true,
-            other: 'No additional overlays directly affect this land, but nearby overlays exist as per map'
+            ddo3: false,
+            po1: false,
+            ho: planningData?.overlays?.some((o: string) => o.toLowerCase().includes('heritage')) || false,
+            sco1: false,
+            other: planningData?.overlays?.join(', ') || 'Overlays to be confirmed'
           },
-          overlayImpact: 'Low – Overlays common in the area and zoning, most sales used have similar overlays',
-          overlayImpactRating: 2,
-          environmentalIssues: 'None evident',
-          heightOfBuilding: 'N/A',
-          floorSpaceRatio: 'N/A',
-          minimumLotSize: 'N/A'
+          overlayImpact: 'To be assessed',
+          overlayImpactRating: 0,
+          environmentalIssues: 'To be assessed',
+          heightOfBuilding: planningData?.heightRestriction || 'To be confirmed',
+          floorSpaceRatio: 'To be confirmed',
+          minimumLotSize: 'To be confirmed'
         },
         // Environmental Assessment
         environmentalAssessment: {
@@ -534,9 +553,9 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           </div>
 
           <div className="text-xs text-green-600 bg-green-100 p-3 rounded">
-            <strong>✅ FINAL PROFESSIONAL REPORT READY:</strong> Complete commercial property valuation 
-            report with no draft watermarks. Professional format ready for immediate use by Delorenzo 
-            Property Group. All 19 sections certified and complete. Market Value: $2,850,000.
+            <strong>✅ PROPERTY REPORT READY:</strong> Complete property valuation 
+            report template created from current PAF data for {currentAddress}. 
+            Ready for additional information and professional completion.
           </div>
         </CardContent>
       </Card>
@@ -544,16 +563,16 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="h-5 w-5" />
-          Create Complete Property Report
-        </CardTitle>
-        <CardDescription>
-          Generate a comprehensive property valuation report with all sections populated 
-          from the executive summary data for 133-137 Langtree Avenue Mildura VIC 3500.
-        </CardDescription>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Create Complete Property Report
+          </CardTitle>
+          <CardDescription>
+            Generate a comprehensive property valuation report with all sections populated 
+            from the current property assessment data for {currentAddress}.
+          </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Report Preview */}
@@ -561,7 +580,7 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
           <h4 className="font-medium">Report Preview - What will be created:</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
             <div className="space-y-2">
-              <div><strong>Property:</strong> 133-137 Langtree Avenue Mildura</div>
+              <div><strong>Property:</strong> {currentAddress}</div>
               <div><strong>Client:</strong> Kure Medical</div>
               <div><strong>Property Type:</strong> Healthcare offices with day surgery</div>
               <div><strong>Land Area:</strong> 1,425 sqm</div>
@@ -643,3 +662,14 @@ export function CompleteReportCreator({ onReportCreated }: CompleteReportCreator
     </Card>
   );
 }
+
+const WrappedCompleteReportCreator = (props: CompleteReportCreatorProps) => (
+  <AuthRequiredWrapper 
+    title="Complete Report Creation - Authentication Required"
+    description="Please sign in to create complete property reports."
+  >
+    <CompleteReportCreatorComponent {...props} />
+  </AuthRequiredWrapper>
+);
+
+export { WrappedCompleteReportCreator as CompleteReportCreator };

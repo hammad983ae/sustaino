@@ -23,9 +23,17 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Get the authorization header for authenticated requests
+    const authHeader = req.headers.get('authorization');
+    
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',  // Use anon key for RLS
+      {
+        global: {
+          headers: authHeader ? { authorization: authHeader } : {}
+        }
+      }
     );
 
     const { assessmentData, reportType, propertyType }: GenerateReportRequest = await req.json();

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, AlertCircle, FileText, Loader2, ExternalLink } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { AuthRequiredWrapper } from '@/components/AuthRequiredWrapper';
 
 interface GenerateReportDataProps {
   assessmentData: any;
@@ -453,4 +454,13 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   );
 };
 
-export default GenerateReportData;
+const WrappedGenerateReportData = (props: GenerateReportDataProps) => (
+  <AuthRequiredWrapper 
+    title="Report Generation - Authentication Required"
+    description="Please sign in to generate complete property reports and save them to your Work Hub."
+  >
+    <GenerateReportData {...props} />
+  </AuthRequiredWrapper>
+);
+
+export default WrappedGenerateReportData;
