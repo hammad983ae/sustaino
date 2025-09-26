@@ -23,3 +23,12 @@ verify_jwt = false
 
 [functions.property-data-extractor]
 verify_jwt = true
+
+[functions.admin-auth-fix]
+verify_jwt = true
+
+[functions.admin-user-management]
+verify_jwt = true
+
+[functions.admin-operations]
+verify_jwt = true
