@@ -407,8 +407,9 @@ const IntelligentDocumentOCR: React.FC<IntelligentDocumentOCRProps> = ({
   };
 
   React.useEffect(() => {
-    onDataExtracted(documents.filter(doc => doc.processingStatus === 'completed'));
-  }, [documents, onDataExtracted]);
+    const completedDocuments = documents.filter(doc => doc.processingStatus === 'completed');
+    onDataExtracted(completedDocuments);
+  }, [documents]);
 
   return (
     <div className="space-y-6">
