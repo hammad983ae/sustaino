@@ -128,6 +128,11 @@ interface PropertyProValuationData {
   landValue: number;
   improvementValue: number;
   
+  // Report Configuration
+  reportType: 'AS IS' | 'AS IF COMPLETE';
+  inspectionDate: string;
+  valuationDate: string;
+  
   // Land Information (Section 4)
   propertyIdentification: string;
   zoningEffect: string;
@@ -158,7 +163,6 @@ interface PropertyProValuationData {
   // Professional Details
   valuerName: string;
   valuerQualifications: string;
-  inspectionDate: string;
   issueDate: string;
   
   // Additional Comments (Section 8)
@@ -182,6 +186,9 @@ export default function PropertyProValuation() {
     marketValue: 0,
     landValue: 0,
     improvementValue: 0,
+    reportType: 'AS IS',
+    inspectionDate: new Date().toISOString().split('T')[0],
+    valuationDate: new Date().toISOString().split('T')[0],
     propertyIdentification: '',
     zoningEffect: '',
     location: '',
@@ -216,7 +223,6 @@ export default function PropertyProValuation() {
     salesEvidence: [],
     valuerName: '',
     valuerQualifications: '',
-    inspectionDate: '',
     issueDate: '',
     additionalComments: '',
     riskComments: '',
@@ -644,8 +650,8 @@ export default function PropertyProValuation() {
                 <Progress value={formData.automation.progress} className="w-full" />
               </div>
 
-              {/* Quick Property Address Input */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Configuration Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
                 <div>
                   <Label htmlFor="quickAddress">Property Address (Required for Automation)</Label>
                   <Input
@@ -655,25 +661,61 @@ export default function PropertyProValuation() {
                     onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
                   />
                 </div>
-                <div className="flex items-end">
-                  <Button 
-                    onClick={runFullAutomation} 
-                    disabled={isProcessing || !formData.propertyAddress}
-                    className="w-full"
+                <div>
+                  <Label htmlFor="reportType">Report Type</Label>
+                  <Select 
+                    value={formData.reportType} 
+                    onValueChange={(value: 'AS IS' | 'AS IF COMPLETE') => handleInputChange('reportType', value)}
                   >
-                    {isProcessing ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Zap className="h-4 w-4 mr-2" />
-                        Start Full Automation
-                      </>
-                    )}
-                  </Button>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select report type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="AS IS">AS IS (Existing Property)</SelectItem>
+                      <SelectItem value="AS IF COMPLETE">AS IF COMPLETE (TBE/Construction)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
+                <div>
+                  <Label htmlFor="inspectionDate">Inspection Date</Label>
+                  <Input
+                    id="inspectionDate"
+                    type="date"
+                    value={formData.inspectionDate}
+                    onChange={(e) => handleInputChange('inspectionDate', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="valuationDate">Valuation Date</Label>
+                  <Input
+                    id="valuationDate"
+                    type="date"
+                    value={formData.valuationDate}
+                    onChange={(e) => handleInputChange('valuationDate', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Start Automation Button */}
+              <div className="flex justify-center">
+                <Button 
+                  onClick={runFullAutomation} 
+                  disabled={isProcessing || !formData.propertyAddress}
+                  className="px-8 py-3 text-lg"
+                  size="lg"
+                >
+                  {isProcessing ? (
+                    <>
+                      <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="h-5 w-5 mr-2" />
+                      Start Full Automation
+                    </>
+                  )}
+                </Button>
               </div>
 
               {/* Automation Steps */}
@@ -844,7 +886,59 @@ export default function PropertyProValuation() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Report Configuration */}
+              <div className="bg-primary/5 p-4 rounded-lg mb-6">
+                <h3 className="font-semibold mb-3 flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Report Configuration
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <Label htmlFor="reportType">Report Type</Label>
+                    <Select 
+                      value={formData.reportType} 
+                      onValueChange={(value: 'AS IS' | 'AS IF COMPLETE') => handleInputChange('reportType', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="AS IS">AS IS (Existing Property)</SelectItem>
+                        <SelectItem value="AS IF COMPLETE">AS IF COMPLETE (TBE/Construction)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="inspectionDate">Inspection Date</Label>
+                    <Input
+                      id="inspectionDate"
+                      type="date"
+                      value={formData.inspectionDate}
+                      onChange={(e) => handleInputChange('inspectionDate', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="valuationDate">Valuation Date</Label>
+                    <Input
+                      id="valuationDate"
+                      type="date"
+                      value={formData.valuationDate}
+                      onChange={(e) => handleInputChange('valuationDate', e.target.value)}
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <Alert className={`w-full ${formData.reportType === 'AS IF COMPLETE' ? 'border-orange-500' : 'border-green-500'}`}>
+                      <AlertDescription className="text-xs">
+                        {formData.reportType === 'AS IF COMPLETE' 
+                          ? 'TBE Report: Valuation assumes completion' 
+                          : 'Standard Report: Current property condition'}
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                 <div>
                   <Label htmlFor="propertyAddress">Property Address</Label>
                   <Input
@@ -852,15 +946,6 @@ export default function PropertyProValuation() {
                     placeholder="Enter full property address"
                     value={formData.propertyAddress}
                     onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="inspectionDate">Inspection/Valuation Date</Label>
-                  <Input
-                    id="inspectionDate"
-                    type="date"
-                    value={formData.inspectionDate}
-                    onChange={(e) => handleInputChange('inspectionDate', e.target.value)}
                   />
                 </div>
               </div>
@@ -933,14 +1018,24 @@ export default function PropertyProValuation() {
 
               <Separator />
 
-              <div className="bg-blue-50 p-4 rounded-lg">
+              <div className={`p-4 rounded-lg ${formData.reportType === 'AS IF COMPLETE' ? 'bg-orange-50 border border-orange-200' : 'bg-blue-50 border border-blue-200'}`}>
                 <h3 className="font-semibold mb-3 flex items-center gap-2">
                   <DollarSign className="h-4 w-4" />
-                  Valuation Summary
+                  Valuation Summary - {formData.reportType}
                 </h3>
+                {formData.reportType === 'AS IF COMPLETE' && (
+                  <Alert className="mb-4 border-orange-500">
+                    <Building className="h-4 w-4" />
+                    <AlertDescription>
+                      This valuation is on an "As If Complete" basis, assuming all proposed works are completed as per plans and specifications.
+                    </AlertDescription>
+                  </Alert>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="marketValue">Market Value</Label>
+                    <Label htmlFor="marketValue">
+                      Market Value {formData.reportType === 'AS IF COMPLETE' ? '(As If Complete)' : '(Current)'}
+                    </Label>
                     <Input
                       id="marketValue"
                       type="number"
@@ -960,7 +1055,9 @@ export default function PropertyProValuation() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="improvementValue">Improvement Value</Label>
+                    <Label htmlFor="improvementValue">
+                      {formData.reportType === 'AS IF COMPLETE' ? 'Improvement Value (Proposed)' : 'Improvement Value (Existing)'}
+                    </Label>
                     <Input
                       id="improvementValue"
                       type="number"
