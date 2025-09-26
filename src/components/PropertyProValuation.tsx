@@ -1561,6 +1561,107 @@ export default function PropertyProValuation() {
                 </CardContent>
               </Card>
 
+              {/* OCR Document Upload Section */}
+              <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Scan className="h-5 w-5" />
+                    Document & Photo Upload for OCR Processing
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="border-2 border-dashed border-blue-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors bg-white">
+                      <input
+                        type="file"
+                        id="main-ocr-upload"
+                        multiple
+                        accept=".pdf,.jpg,.jpeg,.png,.docx,.doc,.tiff,.bmp,.heic"
+                        onChange={(e) => {
+                          const files = Array.from(e.target.files || []);
+                          if (files.length > 0) {
+                            files.forEach(file => processOCRDocument(file));
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <label htmlFor="main-ocr-upload" className="cursor-pointer">
+                        <div className="flex flex-col items-center space-y-3">
+                          <div className="p-3 bg-blue-100 rounded-full">
+                            <FileText className="h-8 w-8 text-blue-600" />
+                          </div>
+                          <div>
+                            <p className="text-lg font-medium text-gray-900">Upload Property Documents</p>
+                            <p className="text-sm text-gray-600">
+                              Contracts, property reports, legal documents
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              Supports: PDF, DOCX, DOC, JPG, PNG, TIFF
+                            </p>
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                    
+                    <div className="border-2 border-dashed border-green-300 rounded-lg p-6 text-center hover:border-green-400 transition-colors bg-white">
+                      <input
+                        type="file"
+                        id="photo-ocr-upload"
+                        multiple
+                        accept=".jpg,.jpeg,.png,.tiff,.bmp,.heic"
+                        onChange={(e) => {
+                          const files = Array.from(e.target.files || []);
+                          if (files.length > 0) {
+                            files.forEach(file => processOCRDocument(file));
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <label htmlFor="photo-ocr-upload" className="cursor-pointer">
+                        <div className="flex flex-col items-center space-y-3">
+                          <div className="p-3 bg-green-100 rounded-full">
+                            <Eye className="h-8 w-8 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="text-lg font-medium text-gray-900">Upload Property Photos</p>
+                            <p className="text-sm text-gray-600">
+                              DOMAIN listings, inspection photos, floor plans
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              Supports: JPG, PNG, TIFF, BMP, HEIC
+                            </p>
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  {/* Upload Status */}
+                  {ocrResults.length > 0 && (
+                    <Alert className="border-green-200 bg-green-50">
+                      <CheckCircle className="h-4 w-4" />
+                      <AlertDescription>
+                        ✅ {ocrResults.length} file(s) uploaded and ready for OCR processing
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  
+                  {isProcessingOCR && (
+                    <Alert className="border-blue-200 bg-blue-50">
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                      <AlertDescription>
+                        Processing uploaded documents with OCR technology...
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  
+                  <div className="text-xs text-gray-600 bg-white p-3 rounded border border-gray-200">
+                    <strong>OCR will extract:</strong> Property details, addresses, measurements, dwelling descriptions, 
+                    sale prices, contract terms, legal information, and other key property data from your uploaded files.
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Automation Steps */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Card className={`border-2 ${formData.automation.ocrProcessed ? 'border-green-500' : 'border-gray-200'}`}>
@@ -1572,16 +1673,61 @@ export default function PropertyProValuation() {
                       </div>
                       {formData.automation.ocrProcessed && <CheckCircle className="h-4 w-4 text-green-500" />}
                     </div>
-                    <p className="text-sm text-muted-foreground mb-3">Extract data from uploaded documents</p>
-                    <Button 
-                      onClick={processOCR} 
-                      disabled={isProcessing}
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full"
-                    >
-                      {formData.automation.ocrProcessed ? 'Completed' : 'Process OCR'}
-                    </Button>
+                    <p className="text-sm text-muted-foreground mb-3">Upload & extract data from documents/photos</p>
+                    
+                    {/* File Upload Interface */}
+                    <div className="space-y-3">
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+                        <input
+                          type="file"
+                          id="ocr-file-upload"
+                          multiple
+                          accept=".pdf,.jpg,.jpeg,.png,.docx,.doc,.tiff,.bmp"
+                          onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            if (files.length > 0) {
+                              files.forEach(file => processOCRDocument(file));
+                            }
+                          }}
+                          className="hidden"
+                        />
+                        <label htmlFor="ocr-file-upload" className="cursor-pointer">
+                          <div className="flex flex-col items-center space-y-2">
+                            <Scan className="h-8 w-8 text-gray-400" />
+                            <p className="text-sm font-medium">Upload Documents/Photos</p>
+                            <p className="text-xs text-muted-foreground">
+                              PDF, JPG, PNG, DOCX, DOC, TIFF
+                            </p>
+                          </div>
+                        </label>
+                      </div>
+                      
+                      {/* OCR Results Display */}
+                      {ocrResults.length > 0 && (
+                        <div className="text-xs text-green-600">
+                          ✅ {ocrResults.length} file(s) processed
+                        </div>
+                      )}
+                      
+                      <Button 
+                        onClick={processOCR} 
+                        disabled={isProcessing || isProcessingOCR}
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full"
+                      >
+                        {isProcessingOCR ? (
+                          <>
+                            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                            Processing...
+                          </>
+                        ) : formData.automation.ocrProcessed ? (
+                          'Completed'
+                        ) : (
+                          'Process OCR'
+                        )}
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
 
