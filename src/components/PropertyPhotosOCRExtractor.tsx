@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Camera, Upload, Zap, Eye, FileImage, Loader2, Save, FileText } from "lucide-react";
+import { Camera, Upload, Zap, Eye, FileImage, Loader2, Save, FileText, XCircle } from "lucide-react";
 import Tesseract from 'tesseract.js';
 import { Badge } from '@/components/ui/badge';
 import { useReportData } from '@/contexts/ReportDataContext';
@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
 import { supabase } from '@/integrations/supabase/client';
-import IntelligentDocumentOCR from './IntelligentDocumentOCR';
+import ImprovedDocumentOCR from './ImprovedDocumentOCR';
 
 interface PhotoWithOCR {
   id: string;
@@ -105,105 +105,89 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
 
   const handleFileUpload = useCallback(async (files: FileList) => {
     const newPhotos: PhotoWithOCR[] = [];
+    const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
     
     console.log('OCR PAF Step 4: Starting file upload, files count:', files.length);
-    console.log('OCR PAF Step 4: Files details:', Array.from(files).map(f => ({name: f.name, type: f.type, size: f.size})));
     
-    // Get current user for storage path
-    const { data: { user } } = await supabase.auth.getUser();
-    console.log('OCR PAF Step 4: User authentication check:', user ? 'authenticated' : 'not authenticated');
-    
-    if (!user) {
-      console.error('OCR PAF Step 4: Authentication failed');
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to upload photos",
-        variant: "destructive"
-      });
-      return;
-    }
-    
+    // Validate files first
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (file.type.startsWith('image/')) {
-        const photoId = `photo-${Date.now()}-${i}`;
+      
+      // Check file type
+      if (!acceptedTypes.includes(file.type.toLowerCase())) {
+        toast({
+          title: "Invalid File Type",
+          description: `${file.name} is not a supported image type. Please use JPEG, PNG, or WebP.`,
+          variant: "destructive"
+        });
+        continue;
+      }
+      
+      // Check file size
+      if (file.size > maxSize) {
+        toast({
+          title: "File Too Large",
+          description: `${file.name} is too large. Maximum size is 10MB.`,
+          variant: "destructive"
+        });
+        continue;
+      }
+      
+      const photoId = `photo-${Date.now()}-${i}`;
+      
+      try {
+        // Create blob URL for immediate preview
+        const blobUrl = URL.createObjectURL(file);
         
-        try {
-          // Upload to Supabase storage
-          const fileName = `${photoId}-${file.name}`;
-          const filePath = `${user.id}/property-photos/${fileName}`;
-          
-          console.log('OCR PAF Step 4: Attempting upload to path:', filePath);
-          
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('property-images')
-            .upload(filePath, file, {
-              cacheControl: '3600',
-              upsert: true
-            });
-
-          if (uploadError) {
-            console.error('OCR PAF Step 4: Upload error:', uploadError);
-            toast({
-              title: "Upload Failed",
-              description: `Failed to upload ${file.name}: ${uploadError.message}`,
-              variant: "destructive"
-            });
-            continue;
-          }
-          
-          console.log('OCR PAF Step 4: Upload successful:', uploadData);
-
-          // Get public URL for the uploaded file
-          const { data: urlData } = supabase.storage
-            .from('property-images')
-            .getPublicUrl(filePath);
-
-          newPhotos.push({
-            id: photoId,
-            file,
-            url: urlData.publicUrl,
-            name: file.name,
-            description: '',
-            ocrProcessed: false
-          });
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          toast({
-            title: "Upload Error",
-            description: `Failed to upload ${file.name}`,
-            variant: "destructive"
-          });
-        }
+        newPhotos.push({
+          id: photoId,
+          file,
+          url: blobUrl,
+          name: file.name,
+          description: '',
+          ocrProcessed: false
+        });
+        
+        console.log('OCR PAF Step 4: File validated and added to queue:', file.name);
+        
+      } catch (error) {
+        console.error('Error creating preview for file:', error);
+        toast({
+          title: "Preview Error",
+          description: `Failed to create preview for ${file.name}`,
+          variant: "destructive"
+        });
       }
     }
 
     if (newPhotos.length === 0) {
       toast({
-        title: "No Photos Uploaded",
-        description: "No valid image files were uploaded",
+        title: "No Valid Photos",
+        description: "No valid image files were found to upload",
         variant: "destructive"
       });
       return;
     }
 
+    // Add photos to state immediately for UI feedback
     setPhotos(prev => [...prev, ...newPhotos]);
 
-    // Auto-process OCR for new photos
+    toast({
+      title: "Photos Added",
+      description: `${newPhotos.length} photos added. Starting OCR processing...`,
+    });
+
+    // Process OCR for each photo
     for (const photo of newPhotos) {
-      await processPhotoOCR(photo);
+      try {
+        await processPhotoOCR(photo);
+      } catch (error) {
+        console.error('Failed to process OCR for photo:', photo.name, error);
+      }
     }
 
-    // Auto-save after upload and OCR processing
-    setTimeout(() => {
-      handleSavePhotos();
-    }, 1000); // Small delay to ensure all OCR processing is complete
-
-    toast({
-      title: "Photos uploaded",
-      description: `${newPhotos.length} photos uploaded to storage and processing OCR`,
-    });
-  }, [handleSavePhotos, toast]);
+  }, [toast]);
 
   const processPhotoOCR = useCallback(async (photo: PhotoWithOCR) => {
     console.log('OCR PAF Step 4: Starting OCR processing for photo:', photo.name);
@@ -416,22 +400,41 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Upload Area */}
-          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+          <div 
+            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center hover:border-muted-foreground/50 transition-colors"
+            onDrop={(e) => {
+              e.preventDefault();
+              const files = e.dataTransfer.files;
+              if (files && files.length > 0) {
+                handleFileUpload(files);
+              }
+            }}
+            onDragOver={(e) => e.preventDefault()}
+            onDragEnter={(e) => {
+              e.preventDefault();
+              e.currentTarget.classList.add('border-primary');
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              e.currentTarget.classList.remove('border-primary');
+            }}
+          >
             <input
               type="file"
               multiple
-              accept="image/*"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
               onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
               className="hidden"
               id="photo-upload"
             />
-            <label htmlFor="photo-upload" className="cursor-pointer">
+            <label htmlFor="photo-upload" className="cursor-pointer block">
               <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-lg font-medium mb-2">Upload Property Photos</p>
               <p className="text-muted-foreground mb-4">
-                Drag and drop photos or click to browse. OCR will automatically extract text from images.
+                Drag and drop photos here or click to browse<br />
+                Supports JPEG, PNG, WebP (max 10MB each)
               </p>
-              <Button>
+              <Button variant="outline" className="pointer-events-none">
                 <FileImage className="h-4 w-4 mr-2" />
                 Choose Photos
               </Button>
@@ -498,17 +501,32 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
                       </p>
                     )}
                     <div className="flex gap-1 mt-2">
-                      {!photo.ocrProcessed && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => processPhotoOCR(photo)}
-                          disabled={isProcessing}
-                        >
-                          <Zap className="h-3 w-3 mr-1" />
-                          Extract Text
-                        </Button>
-                      )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => processPhotoOCR(photo)}
+                        disabled={isProcessing && processingPhotoId === photo.id}
+                      >
+                        {isProcessing && processingPhotoId === photo.id ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <Zap className="h-3 w-3" />
+                        )}
+                        {photo.ocrProcessed ? 'Re-process' : 'Process OCR'}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setPhotos(prev => prev.filter(p => p.id !== photo.id));
+                          toast({
+                            title: "Photo Removed",
+                            description: `${photo.name} has been removed`,
+                          });
+                        }}
+                      >
+                        <XCircle className="h-3 w-3" />
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -689,7 +707,7 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <IntelligentDocumentOCR
+          <ImprovedDocumentOCR
             onDataExtracted={(documents) => {
               console.log('Document OCR extracted:', documents);
               // Update report data with document information
