@@ -217,13 +217,19 @@ interface PropertyProValuationData {
   
   // Dwelling Description (Section 5)
   style: string;
-  mainWalls: string;
-  roof: string;
+  streetAppeal: string;
+  mainWallsAndRoof: string;
+  internalCondition: string;
+  mainInteriorLining: string;
+  externalCondition: string;
   flooring: string;
   windowFrames: string;
   accommodation: string;
   interiorLayout: string;
-  fixturesAndFittings: string;
+  fixtureAndFitting: string;
+  
+  // Ancillary Improvements (Section 6)
+  ancillaryImprovements: string;
   
   // Risk Analysis
   riskRatings: RiskRating;
@@ -353,13 +359,18 @@ export default function PropertyProValuation() {
       description: ''
     },
     style: '',
-    mainWalls: '',
-    roof: '',
+    
+    streetAppeal: '',
+    mainWallsAndRoof: '',
+    internalCondition: '',
+    mainInteriorLining: '',
+    externalCondition: '',
     flooring: '',
     windowFrames: '',
     accommodation: '',
     interiorLayout: '',
-    fixturesAndFittings: '',
+    fixtureAndFitting: '',
+    ancillaryImprovements: '',
     riskRatings: {
       location: 1,
       land: 1,
@@ -2526,13 +2537,79 @@ export default function PropertyProValuation() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="mainWalls">Main Walls & Roof</Label>
+                  <Label htmlFor="streetAppeal">Street Appeal</Label>
+                  <Select 
+                    value={formData.streetAppeal} 
+                    onValueChange={(value) => handleInputChange('streetAppeal', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select street appeal" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Very good appeal">Very good appeal</SelectItem>
+                      <SelectItem value="Good appeal">Good appeal</SelectItem>
+                      <SelectItem value="Fair appeal">Fair appeal</SelectItem>
+                      <SelectItem value="Poor appeal">Poor appeal</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="mainWallsAndRoof">Main Walls & Roof</Label>
                   <Input
-                    id="mainWalls"
-                    placeholder="e.g., Brick veneer walls and concrete tiles"
-                    value={formData.mainWalls}
-                    onChange={(e) => handleInputChange('mainWalls', e.target.value)}
+                    id="mainWallsAndRoof"
+                    placeholder="e.g., Rendered Brick Walls Tiled"
+                    value={formData.mainWallsAndRoof}
+                    onChange={(e) => handleInputChange('mainWallsAndRoof', e.target.value)}
                   />
+                </div>
+                <div>
+                  <Label htmlFor="internalCondition">Internal Condition</Label>
+                  <Select 
+                    value={formData.internalCondition} 
+                    onValueChange={(value) => handleInputChange('internalCondition', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select internal condition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Excellent">Excellent</SelectItem>
+                      <SelectItem value="Good">Good</SelectItem>
+                      <SelectItem value="Fair">Fair</SelectItem>
+                      <SelectItem value="Poor">Poor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="mainInteriorLining">Main Interior Lining</Label>
+                  <Input
+                    id="mainInteriorLining"
+                    placeholder="e.g., Plasterboard"
+                    value={formData.mainInteriorLining}
+                    onChange={(e) => handleInputChange('mainInteriorLining', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="externalCondition">External Condition</Label>
+                  <Select 
+                    value={formData.externalCondition} 
+                    onValueChange={(value) => handleInputChange('externalCondition', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select external condition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Excellent">Excellent</SelectItem>
+                      <SelectItem value="Good">Good</SelectItem>
+                      <SelectItem value="Fair">Fair</SelectItem>
+                      <SelectItem value="Poor">Poor</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -2561,7 +2638,7 @@ export default function PropertyProValuation() {
                 <Label htmlFor="accommodation">Accommodation</Label>
                 <Textarea
                   id="accommodation"
-                  placeholder="Number of bedrooms, bathrooms, main rooms, service rooms"
+                  placeholder="Dwelling 3 Bedroom(s) And 2 Bathroom(s) Plus study/fourth bedroom, laundry, powdered room, walk in pantry, lounge/theatre room, family/meals/kitchen, gallery, entry, 2 x walk in robes,"
                   value={formData.accommodation}
                   onChange={(e) => handleInputChange('accommodation', e.target.value)}
                   rows={3}
@@ -2572,20 +2649,42 @@ export default function PropertyProValuation() {
                 <Label htmlFor="interiorLayout">Interior Layout</Label>
                 <Input
                   id="interiorLayout"
-                  placeholder="e.g., Functional, practical layout"
+                  placeholder="e.g., Functional"
                   value={formData.interiorLayout}
                   onChange={(e) => handleInputChange('interiorLayout', e.target.value)}
                 />
               </div>
 
               <div>
-                <Label htmlFor="fixturesAndFittings">Fixtures and Fittings</Label>
+                <Label htmlFor="fixtureAndFitting">Fixture & Fitting</Label>
                 <Textarea
-                  id="fixturesAndFittings"
-                  placeholder="Cooking appliances, air conditioning, built-in items, feature finishes"
-                  value={formData.fixturesAndFittings}
-                  onChange={(e) => handleInputChange('fixturesAndFittings', e.target.value)}
-                  rows={3}
+                  id="fixtureAndFitting"
+                  placeholder="reverse cycle heating and cooling, split systems, 2 x gas log fires, evaporative cooling, integrated audio speakers throughout, laminate and marble benchtops, tiles, carpet, high decorative ceilings., timber stair case, 900 mm gas stove, double wall oven, 900 mm rangehood, timber cupboards (floor and wall), down lights, instant gas HWS."
+                  value={formData.fixtureAndFitting}
+                  onChange={(e) => handleInputChange('fixtureAndFitting', e.target.value)}
+                  rows={4}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Section 6: Ancillary Improvements */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building className="h-5 w-5" />
+                Ancillary Improvements (Section 6)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="ancillaryImprovements">Ancillary Improvements</Label>
+                <Textarea
+                  id="ancillaryImprovements"
+                  placeholder="Balcony, verandahs/outdoor area, undercover BBQ area with built in BBQ, workshop, fernery, extensive gardens with removable garden beds and gravel surrounds, automated irrigation, clothes line, fountain/pond, full concrete pathing throughout gardens and house surrounds, colorbond and powdered coating aluminium fencing."
+                  value={formData.ancillaryImprovements}
+                  onChange={(e) => handleInputChange('ancillaryImprovements', e.target.value)}
+                  rows={4}
                 />
               </div>
             </CardContent>
