@@ -52,6 +52,8 @@ import {
   FileCheck,
   RefreshCw
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 // Risk Rating Types (1-5 scale as per PropertyPRO standards)
 type RiskLevel = 1 | 2 | 3 | 4 | 5;
@@ -101,7 +103,6 @@ interface SalesEvidence {
   reliability: 'high' | 'medium' | 'low';
 }
 
-// Automation Status
 interface AutomationStatus {
   ocrProcessed: boolean;
   domainDataExtracted: boolean;
@@ -114,9 +115,8 @@ interface AutomationStatus {
   logs: string[];
 }
 
-// Main Property Data Interface
 interface PropertyProValuationData {
-  // Property Summary (Section 1) - Comprehensive Details
+  // Property Summary
   propertyAddress: string;
   titleSearchSighted: 'Yes' | 'No';
   realPropertyDescription: string;
@@ -126,49 +126,85 @@ interface PropertyProValuationData {
   zoning: string;
   currentUse: string;
   localGovernmentArea: string;
-  
-  // Main Dwelling Details
   mainDwelling: string;
   builtAbout: string;
   additions: string;
-  
-  // Areas
   livingArea: number;
   outdoorArea: number;
   otherArea: number;
   carAccommodation: number;
   carAreas: number;
-  
-  // Property Conditions
   marketability: 'Excellent' | 'Good' | 'Fair' | 'Poor';
   heritageIssues: 'Yes' | 'No';
   environmentalIssues: 'Yes' | 'No';
   essentialRepairs: 'Yes' | 'No';
   estimatedCost: number;
-  
+
   // Valuation Summary
   interestValued: string;
-  valueComponent: 'Existing Property' | 'As If Complete';
+  valueComponent: string;
   landValue: number;
   improvementValue: number;
   marketValue: number;
-  
-  // Other Assessments
   rentalAssessment: number;
   insuranceEstimate: number;
-  
-  // Report Configuration
+
   reportType: 'AS IS' | 'AS IF COMPLETE';
   inspectionDate: string;
   valuationDate: string;
   
-  // Land Information (Section 4)
-  propertyIdentification: string;
+  // Land Information (Section 4) - Enhanced
+  propertyIdentification: {
+    aerialMapping: boolean;
+    physicalInspection: boolean;
+    cadastralMap: boolean;
+    description: string;
+  };
   zoningEffect: string;
-  location: string;
-  neighbourhood: string;
-  siteDescription: string;
-  services: string;
+  location: {
+    distanceFromCBD: string;
+    directionFromCBD: string;
+    distanceFromRegionalCentre: string;
+    directionFromRegionalCentre: string;
+    description: string;
+  };
+  neighbourhood: {
+    surroundingProperties: string;
+    residentialProperties: boolean;
+    commercialProperties: boolean;
+    industrialProperties: boolean;
+    farmingProperties: boolean;
+    positiveInfrastructure: string;
+    negativeInfrastructure: string;
+    description: string;
+  };
+  siteAndAccess: {
+    frontage: string;
+    sideDetails: string;
+    shape: 'rectangular' | 'square' | 'irregular';
+    frontageDistance: string;
+    streetSide: 'north' | 'south' | 'east' | 'west';
+    dwellingOrientation: 'north' | 'south' | 'east' | 'west' | 'northeast' | 'northwest' | 'southeast' | 'southwest';
+    streetSystem: 'single-lane' | 'double-lane' | 'highway' | 'corner-lot' | 'cul-de-sac';
+    footpaths: 'concrete' | 'gravel' | 'none';
+    accessLevel: 'easy-direct' | 'moderate' | 'difficult';
+    description: string;
+  };
+  services: {
+    mainServices: boolean;
+    septic: boolean;
+    nbn: boolean;
+    solar: boolean;
+    gas: boolean;
+    electricity: boolean;
+    water: boolean;
+    sewer: boolean;
+    storm: boolean;
+    telephone: boolean;
+    cable: boolean;
+    otherServices: string;
+    description: string;
+  };
   
   // Dwelling Description (Section 5)
   style: string;
@@ -180,21 +216,19 @@ interface PropertyProValuationData {
   interiorLayout: string;
   fixturesAndFittings: string;
   
-  // Risk Analysis (Section 2)
+  // Risk Analysis
   riskRatings: RiskRating;
   
   // VRA Assessment
   vraAssessment: VRAAssessment;
   
-  // Sales Evidence (Section 7)
+  // Sales Evidence
   salesEvidence: SalesEvidence[];
   
   // Professional Details
   valuerName: string;
   valuerQualifications: string;
   issueDate: string;
-  
-  // Additional Comments (Section 8)
   additionalComments: string;
   riskComments: string;
   vraComments: string;
@@ -237,12 +271,57 @@ export default function PropertyProValuation() {
     reportType: 'AS IS',
     inspectionDate: new Date().toISOString().split('T')[0],
     valuationDate: new Date().toISOString().split('T')[0],
-    propertyIdentification: '',
-    zoningEffect: '',
-    location: '',
-    neighbourhood: '',
-    siteDescription: '',
-    services: '',
+    propertyIdentification: {
+      aerialMapping: true,
+      physicalInspection: true,
+      cadastralMap: true,
+      description: 'Property identified using aerial mapping, physical inspection, and cadastral map verification.'
+    },
+    zoningEffect: 'The existing use complies with current zoning requirements.',
+    location: {
+      distanceFromCBD: '',
+      directionFromCBD: '',
+      distanceFromRegionalCentre: '',
+      directionFromRegionalCentre: '',
+      description: ''
+    },
+    neighbourhood: {
+      surroundingProperties: '',
+      residentialProperties: true,
+      commercialProperties: false,
+      industrialProperties: false,
+      farmingProperties: false,
+      positiveInfrastructure: '',
+      negativeInfrastructure: '',
+      description: ''
+    },
+    siteAndAccess: {
+      frontage: '',
+      sideDetails: '',
+      shape: 'rectangular',
+      frontageDistance: '',
+      streetSide: 'north',
+      dwellingOrientation: 'north',
+      streetSystem: 'double-lane',
+      footpaths: 'concrete',
+      accessLevel: 'easy-direct',
+      description: ''
+    },
+    services: {
+      mainServices: true,
+      septic: false,
+      nbn: true,
+      solar: false,
+      gas: true,
+      electricity: true,
+      water: true,
+      sewer: true,
+      storm: true,
+      telephone: true,
+      cable: false,
+      otherServices: '',
+      description: ''
+    },
     style: '',
     mainWalls: '',
     roof: '',
@@ -312,6 +391,48 @@ export default function PropertyProValuation() {
       case 4: return 'Medium-High Risk';
       case 5: return 'High Risk';
       default: return 'Unknown';
+    }
+  };
+
+  // Auto-fill location data from APIs
+  const autoFillLocationData = async () => {
+    if (!formData.propertyAddress) {
+      toast.error('Please enter a property address first');
+      return;
+    }
+
+    setIsProcessing(true);
+    updateAutomationLog('Starting location data extraction...');
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('property-location-data', {
+        body: { address: formData.propertyAddress }
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        setFormData(prev => ({
+          ...prev,
+          ...data.data,
+          automation: {
+            ...prev.automation,
+            planningMapsIntegrated: true,
+            progress: Math.max(prev.automation.progress, 50),
+            logs: [...prev.automation.logs, 'Location data auto-filled successfully']
+          }
+        }));
+        toast.success('Property location data auto-filled successfully');
+        updateAutomationLog('Location data extraction completed');
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error('Error auto-filling location data:', error);
+      toast.error('Failed to auto-fill location data');
+      updateAutomationLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -407,7 +528,10 @@ export default function PropertyProValuation() {
     setFormData(prev => ({
       ...prev,
       zoningEffect: 'The existing use is a permissible use',
-      location: 'Within approximately 9 kilometres south west of the Mildura CBD, schools and shops',
+      location: {
+        ...prev.location,
+        description: 'Within approximately 9 kilometres south west of the Mildura CBD, schools and shops'
+      },
       automation: {
         ...prev.automation,
         planningMapsIntegrated: true,
@@ -1469,70 +1593,754 @@ export default function PropertyProValuation() {
                 <MapPin className="h-5 w-5" />
                 Land Information (Section 4)
               </CardTitle>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                  onClick={() => autoFillLocationData()}
+                  disabled={isProcessing}
+                >
+                  <Map className="h-4 w-4 mr-1" />
+                  Auto-Fill from APIs
+                </Button>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="propertyIdentification">Property Identification</Label>
+            <CardContent className="space-y-6">
+              {/* Property Identification */}
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">Property Identification</Label>
+                <div className="grid grid-cols-3 gap-4 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="aerialMapping"
+                      checked={formData.propertyIdentification.aerialMapping}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          propertyIdentification: {
+                            ...prev.propertyIdentification,
+                            aerialMapping: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="aerialMapping" className="text-sm">Aerial Mapping</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="physicalInspection"
+                      checked={formData.propertyIdentification.physicalInspection}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          propertyIdentification: {
+                            ...prev.propertyIdentification,
+                            physicalInspection: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="physicalInspection" className="text-sm">Physical Inspection</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="cadastralMap"
+                      checked={formData.propertyIdentification.cadastralMap}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          propertyIdentification: {
+                            ...prev.propertyIdentification,
+                            cadastralMap: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="cadastralMap" className="text-sm">Cadastral Map</Label>
+                  </div>
+                </div>
                 <Textarea
-                  id="propertyIdentification"
-                  placeholder="Aerial mapping and physical inspection details"
-                  value={formData.propertyIdentification}
-                  onChange={(e) => handleInputChange('propertyIdentification', e.target.value)}
-                  rows={3}
+                  placeholder="Additional property identification details"
+                  value={formData.propertyIdentification.description}
+                  onChange={(e) => 
+                    setFormData(prev => ({
+                      ...prev,
+                      propertyIdentification: {
+                        ...prev.propertyIdentification,
+                        description: e.target.value
+                      }
+                    }))
+                  }
+                  rows={2}
                 />
               </div>
 
+              {/* Zoning Effect */}
               <div>
-                <Label htmlFor="zoningEffect">Zoning Effect</Label>
+                <Label htmlFor="zoningEffect" className="text-base font-semibold">Zoning Effect</Label>
                 <Textarea
                   id="zoningEffect"
-                  placeholder="The existing use is a permissible use"
+                  placeholder="The existing use complies with current zoning requirements"
                   value={formData.zoningEffect}
                   onChange={(e) => handleInputChange('zoningEffect', e.target.value)}
                   rows={2}
+                  className="mt-2"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="location">Location</Label>
+              {/* Location */}
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">Location</Label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="distanceFromCBD">Distance from Major Capital City</Label>
+                    <Input
+                      id="distanceFromCBD"
+                      placeholder="e.g., 550km"
+                      value={formData.location.distanceFromCBD}
+                      onChange={(e) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            distanceFromCBD: e.target.value
+                          }
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="directionFromCBD">Direction from Major Capital City</Label>
+                    <Select
+                      value={formData.location.directionFromCBD}
+                      onValueChange={(value) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            directionFromCBD: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select direction" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="north">North</SelectItem>
+                        <SelectItem value="south">South</SelectItem>
+                        <SelectItem value="east">East</SelectItem>
+                        <SelectItem value="west">West</SelectItem>
+                        <SelectItem value="northeast">Northeast</SelectItem>
+                        <SelectItem value="northwest">Northwest</SelectItem>
+                        <SelectItem value="southeast">Southeast</SelectItem>
+                        <SelectItem value="southwest">Southwest</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="distanceFromRegionalCentre">Distance from Major Regional Centre</Label>
+                    <Input
+                      id="distanceFromRegionalCentre"
+                      placeholder="e.g., 9km"
+                      value={formData.location.distanceFromRegionalCentre}
+                      onChange={(e) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            distanceFromRegionalCentre: e.target.value
+                          }
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="directionFromRegionalCentre">Direction from Major Regional Centre</Label>
+                    <Select
+                      value={formData.location.directionFromRegionalCentre}
+                      onValueChange={(value) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            directionFromRegionalCentre: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select direction" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="north">North</SelectItem>
+                        <SelectItem value="south">South</SelectItem>
+                        <SelectItem value="east">East</SelectItem>
+                        <SelectItem value="west">West</SelectItem>
+                        <SelectItem value="northeast">Northeast</SelectItem>
+                        <SelectItem value="northwest">Northwest</SelectItem>
+                        <SelectItem value="southeast">Southeast</SelectItem>
+                        <SelectItem value="southwest">Southwest</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
                 <Textarea
-                  id="location"
-                  placeholder="Distance and direction from nearest town centre"
-                  value={formData.location}
-                  onChange={(e) => handleInputChange('location', e.target.value)}
+                  placeholder="Additional location description"
+                  value={formData.location.description}
+                  onChange={(e) => 
+                    setFormData(prev => ({
+                      ...prev,
+                      location: {
+                        ...prev.location,
+                        description: e.target.value
+                      }
+                    }))
+                  }
                   rows={2}
                 />
               </div>
 
-              <div>
-                <Label htmlFor="neighbourhood">Neighbourhood</Label>
+              {/* Neighbourhood */}
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">Neighbourhood</Label>
+                <div className="grid grid-cols-2 gap-4 p-3 bg-gray-50 rounded-lg">
+                  <Label className="text-sm font-medium col-span-2">Surrounding Properties:</Label>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="residentialProperties"
+                      checked={formData.neighbourhood.residentialProperties}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          neighbourhood: {
+                            ...prev.neighbourhood,
+                            residentialProperties: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="residentialProperties" className="text-sm">Residential</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="commercialProperties"
+                      checked={formData.neighbourhood.commercialProperties}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          neighbourhood: {
+                            ...prev.neighbourhood,
+                            commercialProperties: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="commercialProperties" className="text-sm">Commercial</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="industrialProperties"
+                      checked={formData.neighbourhood.industrialProperties}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          neighbourhood: {
+                            ...prev.neighbourhood,
+                            industrialProperties: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="industrialProperties" className="text-sm">Industrial</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="farmingProperties"
+                      checked={formData.neighbourhood.farmingProperties}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          neighbourhood: {
+                            ...prev.neighbourhood,
+                            farmingProperties: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="farmingProperties" className="text-sm">Farming</Label>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="positiveInfrastructure">Positive Infrastructure</Label>
+                    <Input
+                      id="positiveInfrastructure"
+                      placeholder="e.g., schools, parks, shopping centres"
+                      value={formData.neighbourhood.positiveInfrastructure}
+                      onChange={(e) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          neighbourhood: {
+                            ...prev.neighbourhood,
+                            positiveInfrastructure: e.target.value
+                          }
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="negativeInfrastructure">Negative Infrastructure</Label>
+                    <Input
+                      id="negativeInfrastructure"
+                      placeholder="e.g., highways, industrial noise"
+                      value={formData.neighbourhood.negativeInfrastructure}
+                      onChange={(e) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          neighbourhood: {
+                            ...prev.neighbourhood,
+                            negativeInfrastructure: e.target.value
+                          }
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
                 <Textarea
-                  id="neighbourhood"
-                  placeholder="Brief description of immediate locality and neighbouring development"
-                  value={formData.neighbourhood}
-                  onChange={(e) => handleInputChange('neighbourhood', e.target.value)}
+                  placeholder="Description of surrounding properties and neighbourhood characteristics"
+                  value={formData.neighbourhood.description}
+                  onChange={(e) => 
+                    setFormData(prev => ({
+                      ...prev,
+                      neighbourhood: {
+                        ...prev.neighbourhood,
+                        description: e.target.value
+                      }
+                    }))
+                  }
                   rows={3}
                 />
               </div>
 
-              <div>
-                <Label htmlFor="siteDescription">Site Description & Access</Label>
+              {/* Site and Access */}
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">Site Description & Access</Label>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="frontage">Frontage</Label>
+                    <Input
+                      id="frontage"
+                      placeholder="e.g., 20m"
+                      value={formData.siteAndAccess.frontage}
+                      onChange={(e) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            frontage: e.target.value
+                          }
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="sideDetails">Side Details</Label>
+                    <Input
+                      id="sideDetails"
+                      placeholder="e.g., 30m depth"
+                      value={formData.siteAndAccess.sideDetails}
+                      onChange={(e) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            sideDetails: e.target.value
+                          }
+                        }))
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="shape">Lot Shape</Label>
+                    <Select
+                      value={formData.siteAndAccess.shape}
+                      onValueChange={(value: 'rectangular' | 'square' | 'irregular') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            shape: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="rectangular">Rectangular</SelectItem>
+                        <SelectItem value="square">Square</SelectItem>
+                        <SelectItem value="irregular">Irregular</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="streetSide">Street Side</Label>
+                    <Select
+                      value={formData.siteAndAccess.streetSide}
+                      onValueChange={(value: 'north' | 'south' | 'east' | 'west') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            streetSide: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="north">North Side</SelectItem>
+                        <SelectItem value="south">South Side</SelectItem>
+                        <SelectItem value="east">East Side</SelectItem>
+                        <SelectItem value="west">West Side</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="dwellingOrientation">Dwelling Orientation</Label>
+                    <Select
+                      value={formData.siteAndAccess.dwellingOrientation}
+                      onValueChange={(value: 'north' | 'south' | 'east' | 'west' | 'northeast' | 'northwest' | 'southeast' | 'southwest') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            dwellingOrientation: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="north">North</SelectItem>
+                        <SelectItem value="south">South</SelectItem>
+                        <SelectItem value="east">East</SelectItem>
+                        <SelectItem value="west">West</SelectItem>
+                        <SelectItem value="northeast">Northeast</SelectItem>
+                        <SelectItem value="northwest">Northwest</SelectItem>
+                        <SelectItem value="southeast">Southeast</SelectItem>
+                        <SelectItem value="southwest">Southwest</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="streetSystem">Street System</Label>
+                    <Select
+                      value={formData.siteAndAccess.streetSystem}
+                      onValueChange={(value: 'single-lane' | 'double-lane' | 'highway' | 'corner-lot' | 'cul-de-sac') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            streetSystem: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="single-lane">Single Lane</SelectItem>
+                        <SelectItem value="double-lane">Double Lane</SelectItem>
+                        <SelectItem value="highway">Highway</SelectItem>
+                        <SelectItem value="corner-lot">Corner Lot</SelectItem>
+                        <SelectItem value="cul-de-sac">Cul-de-sac</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="footpaths">Footpaths</Label>
+                    <Select
+                      value={formData.siteAndAccess.footpaths}
+                      onValueChange={(value: 'concrete' | 'gravel' | 'none') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            footpaths: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="concrete">Concrete</SelectItem>
+                        <SelectItem value="gravel">Gravel</SelectItem>
+                        <SelectItem value="none">None</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="accessLevel">Access Level</Label>
+                    <Select
+                      value={formData.siteAndAccess.accessLevel}
+                      onValueChange={(value: 'easy-direct' | 'moderate' | 'difficult') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          siteAndAccess: {
+                            ...prev.siteAndAccess,
+                            accessLevel: value
+                          }
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="easy-direct">Easy and Direct</SelectItem>
+                        <SelectItem value="moderate">Moderate</SelectItem>
+                        <SelectItem value="difficult">Difficult</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
                 <Textarea
-                  id="siteDescription"
                   placeholder="Shape, topography, relationship to road level, suitability for building"
-                  value={formData.siteDescription}
-                  onChange={(e) => handleInputChange('siteDescription', e.target.value)}
-                  rows={4}
+                  value={formData.siteAndAccess.description}
+                  onChange={(e) => 
+                    setFormData(prev => ({
+                      ...prev,
+                      siteAndAccess: {
+                        ...prev.siteAndAccess,
+                        description: e.target.value
+                      }
+                    }))
+                  }
+                  rows={3}
                 />
               </div>
 
-              <div>
-                <Label htmlFor="services">Services</Label>
+              {/* Services */}
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">Services</Label>
+                <div className="grid grid-cols-4 gap-4 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="mainServices"
+                      checked={formData.services.mainServices}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            mainServices: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="mainServices" className="text-sm">Main Services</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="electricity"
+                      checked={formData.services.electricity}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            electricity: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="electricity" className="text-sm">Electricity</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="water"
+                      checked={formData.services.water}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            water: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="water" className="text-sm">Water</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="sewer"
+                      checked={formData.services.sewer}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            sewer: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="sewer" className="text-sm">Sewer</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="gas"
+                      checked={formData.services.gas}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            gas: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="gas" className="text-sm">Gas</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="storm"
+                      checked={formData.services.storm}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            storm: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="storm" className="text-sm">Storm Water</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="telephone"
+                      checked={formData.services.telephone}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            telephone: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="telephone" className="text-sm">Telephone</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="nbn"
+                      checked={formData.services.nbn}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            nbn: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="nbn" className="text-sm">NBN</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="cable"
+                      checked={formData.services.cable}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            cable: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="cable" className="text-sm">Cable</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="solar"
+                      checked={formData.services.solar}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            solar: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="solar" className="text-sm">Solar</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="septic"
+                      checked={formData.services.septic}
+                      onCheckedChange={(checked) => 
+                        setFormData(prev => ({
+                          ...prev,
+                          services: {
+                            ...prev.services,
+                            septic: checked as boolean
+                          }
+                        }))
+                      }
+                    />
+                    <Label htmlFor="septic" className="text-sm">Septic</Label>
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="otherServices">Other Services</Label>
+                  <Input
+                    id="otherServices"
+                    placeholder="e.g., Satellite internet, bore water"
+                    value={formData.services.otherServices}
+                    onChange={(e) => 
+                      setFormData(prev => ({
+                        ...prev,
+                        services: {
+                          ...prev.services,
+                          otherServices: e.target.value
+                        }
+                      }))
+                    }
+                  />
+                </div>
                 <Textarea
-                  id="services"
                   placeholder="List utilities connected or available (do not use 'all usual services are connected')"
-                  value={formData.services}
-                  onChange={(e) => handleInputChange('services', e.target.value)}
+                  value={formData.services.description}
+                  onChange={(e) => 
+                    setFormData(prev => ({
+                      ...prev,
+                      services: {
+                        ...prev.services,
+                        description: e.target.value
+                      }
+                    }))
+                  }
                   rows={2}
                 />
               </div>
@@ -1823,7 +2631,6 @@ export default function PropertyProValuation() {
             </CardContent>
           </Card>
         </TabsContent>
-
 
         {/* VRA Assessment Tab */}
         <TabsContent value="vra-assessment" className="space-y-6">
