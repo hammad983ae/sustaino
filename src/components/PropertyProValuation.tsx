@@ -124,9 +124,17 @@ interface PropertyProValuationData {
   zoning: string;
   currentUse: string;
   localGovernmentArea: string;
-  marketValue: number;
+  
+  // Valuation Summary
+  interestValued: string;
+  valueComponent: 'Existing Property' | 'As If Complete';
   landValue: number;
   improvementValue: number;
+  marketValue: number;
+  
+  // Other Assessments
+  rentalAssessment: number;
+  insuranceEstimate: number;
   
   // Report Configuration
   reportType: 'AS IS' | 'AS IF COMPLETE';
@@ -183,9 +191,13 @@ export default function PropertyProValuation() {
     zoning: '',
     currentUse: '',
     localGovernmentArea: '',
-    marketValue: 0,
+    interestValued: 'Fee Simple Vacant Possession',
+    valueComponent: 'Existing Property',
     landValue: 0,
     improvementValue: 0,
+    marketValue: 0,
+    rentalAssessment: 0,
+    insuranceEstimate: 0,
     reportType: 'AS IS',
     inspectionDate: new Date().toISOString().split('T')[0],
     valuationDate: new Date().toISOString().split('T')[0],
@@ -309,7 +321,11 @@ export default function PropertyProValuation() {
       zoning: 'LDR22',
       localGovernmentArea: 'City of Mildura',
       siteArea: '1508 sqm',
-      marketValue: 850000
+      landValue: 350000,
+      improvementValue: 500000,
+      marketValue: 850000,
+      rentalAssessment: 520,
+      insuranceEstimate: 650000
     };
     
     setFormData(prev => ({
@@ -549,10 +565,19 @@ export default function PropertyProValuation() {
 
   // Handle input changes
   const handleInputChange = (field: keyof PropertyProValuationData, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setFormData(prev => {
+      const updatedData = {
+        ...prev,
+        [field]: value
+      };
+      
+      // Sync valueComponent with reportType
+      if (field === 'reportType') {
+        updatedData.valueComponent = value === 'AS IF COMPLETE' ? 'As If Complete' : 'Existing Property';
+      }
+      
+      return updatedData;
+    });
   };
 
   // Handle risk rating changes
@@ -577,9 +602,13 @@ export default function PropertyProValuation() {
       zoning: '',
       currentUse: '',
       localGovernmentArea: '',
-      marketValue: 0,
+      interestValued: 'Fee Simple Vacant Possession',
+      valueComponent: 'Existing Property',
       landValue: 0,
       improvementValue: 0,
+      marketValue: 0,
+      rentalAssessment: 0,
+      insuranceEstimate: 0,
       salesEvidence: [],
       automation: {
         ocrProcessed: false,
@@ -1018,55 +1047,137 @@ export default function PropertyProValuation() {
 
               <Separator />
 
-              <div className={`p-4 rounded-lg ${formData.reportType === 'AS IF COMPLETE' ? 'bg-orange-50 border border-orange-200' : 'bg-blue-50 border border-blue-200'}`}>
-                <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <DollarSign className="h-4 w-4" />
-                  Valuation Summary - {formData.reportType}
-                </h3>
-                {formData.reportType === 'AS IF COMPLETE' && (
-                  <Alert className="mb-4 border-orange-500">
-                    <Building className="h-4 w-4" />
-                    <AlertDescription>
-                      This valuation is on an "As If Complete" basis, assuming all proposed works are completed as per plans and specifications.
-                    </AlertDescription>
-                  </Alert>
-                )}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="marketValue">
-                      Market Value {formData.reportType === 'AS IF COMPLETE' ? '(As If Complete)' : '(Current)'}
-                    </Label>
-                    <Input
-                      id="marketValue"
-                      type="number"
-                      placeholder="e.g., 850000"
-                      value={formData.marketValue || ''}
-                      onChange={(e) => handleInputChange('marketValue', Number(e.target.value))}
-                    />
+              {/* VALUATION SUMMARY - PropertyPRO Format */}
+              <div className="border-2 border-gray-800 bg-white">
+                <div className="bg-gray-800 text-white p-2 text-center font-bold text-lg">
+                  3. VALUATION SUMMARY
+                </div>
+                
+                <div className="p-4 space-y-4">
+                  {/* Interest Valued and Value Component */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex">
+                        <span className="w-32 font-medium">Interest Valued:</span>
+                        <Select 
+                          value={formData.interestValued} 
+                          onValueChange={(value) => handleInputChange('interestValued', value)}
+                        >
+                          <SelectTrigger className="border-0 shadow-none p-0 h-auto">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Fee Simple Vacant Possession">Fee Simple Vacant Possession</SelectItem>
+                            <SelectItem value="Subject to Long Term Lease">Subject to Long Term Lease</SelectItem>
+                            <SelectItem value="Crown Leasehold">Crown Leasehold</SelectItem>
+                            <SelectItem value="Shares in a Company Title Development">Shares in a Company Title Development</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div className="flex">
+                        <span className="w-32 font-medium">Value Component:</span>
+                        <span className="text-blue-600">{formData.valueComponent}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="text-center font-bold text-lg">Other Assessments</div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="font-medium">Rental Assessment Unfurnished:</span>
+                          <div className="flex items-center gap-2">
+                            <span>$</span>
+                            <Input
+                              type="number"
+                              placeholder="1000"
+                              value={formData.rentalAssessment || ''}
+                              onChange={(e) => handleInputChange('rentalAssessment', Number(e.target.value))}
+                              className="w-20 h-6 text-right border-0 border-b border-gray-300 rounded-none"
+                            />
+                            <span>Per week</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex justify-between">
+                          <span className="font-medium">Insurance Estimate:</span>
+                          <div className="flex items-center gap-2">
+                            <span>$</span>
+                            <Input
+                              type="number"
+                              placeholder="870000"
+                              value={formData.insuranceEstimate || ''}
+                              onChange={(e) => handleInputChange('insuranceEstimate', Number(e.target.value))}
+                              className="w-24 h-6 text-right border-0 border-b border-gray-300 rounded-none"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="landValue">Land Value</Label>
-                    <Input
-                      id="landValue"
-                      type="number"
-                      placeholder="e.g., 350000"
-                      value={formData.landValue || ''}
-                      onChange={(e) => handleInputChange('landValue', Number(e.target.value))}
-                    />
+                  
+                  {/* Land and Improvements */}
+                  <div className="space-y-2 pt-2 border-t">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Land:</span>
+                      <div className="flex items-center gap-2">
+                        <span>$</span>
+                        <Input
+                          type="number"
+                          placeholder="500000"
+                          value={formData.landValue || ''}
+                          onChange={(e) => handleInputChange('landValue', Number(e.target.value))}
+                          className="w-28 h-6 text-right border-0 border-b border-gray-300 rounded-none"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between">
+                      <span className="font-medium">Improvements:</span>
+                      <div className="flex items-center gap-2">
+                        <span>$</span>
+                        <Input
+                          type="number"
+                          placeholder="540000"
+                          value={formData.improvementValue || ''}
+                          onChange={(e) => handleInputChange('improvementValue', Number(e.target.value))}
+                          className="w-28 h-6 text-right border-0 border-b border-gray-300 rounded-none"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="improvementValue">
-                      {formData.reportType === 'AS IF COMPLETE' ? 'Improvement Value (Proposed)' : 'Improvement Value (Existing)'}
-                    </Label>
-                    <Input
-                      id="improvementValue"
-                      type="number"
-                      placeholder="e.g., 500000"
-                      value={formData.improvementValue || ''}
-                      onChange={(e) => handleInputChange('improvementValue', Number(e.target.value))}
-                    />
+                  
+                  {/* Market Value */}
+                  <div className="bg-gray-100 p-3 border-t-2 border-gray-800">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-lg">MARKET VALUE:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 font-bold text-lg">$</span>
+                        <Input
+                          type="number"
+                          placeholder="1040000"
+                          value={formData.marketValue || ''}
+                          onChange={(e) => handleInputChange('marketValue', Number(e.target.value))}
+                          className="w-32 h-8 text-right font-bold text-lg text-blue-600 border-0 border-b-2 border-blue-600 rounded-none bg-transparent"
+                        />
+                        <span className="text-gray-600 text-sm ml-2">
+                          ({formData.marketValue ? `${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(formData.marketValue).replace('$', '').split(',').map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()).join(' ')} dollars` : 'Enter amount'})
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                
+                {formData.reportType === 'AS IF COMPLETE' && (
+                  <div className="bg-orange-50 border-t border-orange-200 p-3">
+                    <Alert className="border-orange-500">
+                      <Building className="h-4 w-4" />
+                      <AlertDescription>
+                        <strong>AS IF COMPLETE BASIS:</strong> This valuation assumes all proposed works are completed as per approved plans and specifications.
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
