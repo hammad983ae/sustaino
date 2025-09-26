@@ -116,6 +116,15 @@ interface AutomationStatus {
 }
 
 interface PropertyProValuationData {
+  // Header Information
+  instructedBy: string;
+  lender: string;
+  contact: string;
+  loanRefNo: string;
+  clientRefNo: string;
+  valuersRefNo: string;
+  borrower: string;
+  
   // Property Summary
   propertyAddress: string;
   titleSearchSighted: 'Yes' | 'No';
@@ -218,6 +227,18 @@ interface PropertyProValuationData {
   
   // Risk Analysis
   riskRatings: RiskRating;
+  propertyRiskRatings: {
+    locationNeighbourhood: number;
+    landPlanningTitle: number;
+    environmentalIssues: number;
+    improvements: number;
+  };
+  marketRiskRatings: {
+    recentMarketDirection: number;
+    marketActivity: number;
+    localRegionalEconomyImpact: number;
+    marketSegmentConditions: number;
+  };
   
   // VRA Assessment
   vraAssessment: VRAAssessment;
@@ -239,6 +260,15 @@ interface PropertyProValuationData {
 
 export default function PropertyProValuation() {
   const [formData, setFormData] = useState<PropertyProValuationData>({
+    // Header Information
+    instructedBy: '',
+    lender: '',
+    contact: '',
+    loanRefNo: '',
+    clientRefNo: '',
+    valuersRefNo: '',
+    borrower: '',
+    
     propertyAddress: '',
     titleSearchSighted: 'No',
     realPropertyDescription: '',
@@ -340,6 +370,18 @@ export default function PropertyProValuation() {
       localEconomy: 1,
       marketSegment: 1
     },
+    propertyRiskRatings: {
+      locationNeighbourhood: 1,
+      landPlanningTitle: 1,
+      environmentalIssues: 1,
+      improvements: 1,
+    },
+    marketRiskRatings: {
+      recentMarketDirection: 1,
+      marketActivity: 1,
+      localRegionalEconomyImpact: 1,
+      marketSegmentConditions: 1,
+    },
     vraAssessment: {
       higherRiskProperty: false,
       adverseMarketability: false,
@@ -366,6 +408,9 @@ export default function PropertyProValuation() {
       logs: []
     }
   });
+
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [reportUrl, setReportUrl] = useState<string | null>(null);
 
   const [activeTab, setActiveTab] = useState('automation');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -814,7 +859,122 @@ export default function PropertyProValuation() {
         logs: []
       }
     }));
+    setReportUrl(null);
     updateAutomationLog('All data cleared - ready for new valuation');
+  };
+
+  const generateISFVReport = async () => {
+    setIsGenerating(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-isfv-report', {
+        body: {
+          jobId: `ISFV_${Date.now()}`,
+          reportData: {
+            propertyAddress: formData.propertyAddress,
+            instructedBy: formData.instructedBy || "N/A",
+            lender: formData.lender || "TBA", 
+            contact: formData.contact || "N/A",
+            loanRefNo: formData.loanRefNo || "TBA",
+            clientRefNo: formData.clientRefNo || "N/A",
+            valuersRefNo: formData.valuersRefNo || "001",
+            borrower: formData.borrower || "TBA",
+            
+            // Property Summary
+            titleSearchSighted: formData.titleSearchSighted,
+            realPropertyDescription: formData.realPropertyDescription,
+            encumbrancesRestrictions: formData.encumbrancesRestrictions,
+            siteDimensions: formData.siteDimensions,
+            siteArea: formData.siteArea,
+            zoning: formData.zoning,
+            currentUse: formData.currentUse,
+            localGovernmentArea: formData.localGovernmentArea,
+            mainDwelling: formData.mainDwelling,
+            builtAbout: formData.builtAbout,
+            additions: formData.additions,
+            livingArea: formData.livingArea,
+            outdoorArea: formData.outdoorArea,
+            otherArea: formData.otherArea,
+            carAccommodation: formData.carAccommodation,
+            carAreas: formData.carAreas,
+            marketability: formData.marketability,
+            heritageIssues: formData.heritageIssues,
+            environmentalIssues: formData.environmentalIssues,
+            essentialRepairs: formData.essentialRepairs,
+            estimatedCost: formData.estimatedCost,
+            
+            // Land & Dwelling Details
+            propertyIdentification: formData.propertyIdentification,
+            zoningEffect: formData.zoningEffect,
+            location: formData.location,
+            neighbourhood: formData.neighbourhood,
+            siteAccess: formData.siteAndAccess,
+            services: formData.services,
+            
+            // Risk Analysis
+            propertyRiskRatings: formData.propertyRiskRatings,
+            marketRiskRatings: formData.marketRiskRatings,
+            
+            // Valuation Summary
+            interestValued: formData.interestValued || "Fee Simple Vacant Possession",
+            valueComponent: formData.valueComponent || "Existing Property",
+            rentalAssessment: formData.rentalAssessment || 0,
+            insuranceEstimate: formData.insuranceEstimate || 0,
+            landValue: formData.landValue || 0,
+            improvementsValue: formData.improvementValue || 0,
+            marketValue: formData.marketValue || 0,
+            
+            // Professional Details
+            valuationFirm: "ISFV Systems",
+            valuer: "Professional Valuer",
+            apiNumber: "75366",
+            inspectionDate: formData.inspectionDate,
+            issueDate: formData.valuationDate
+          }
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data?.report_url) {
+        setReportUrl(data.report_url);
+      }
+
+      toast.success("ISFV Report Generated", {
+        description: "Your Instant Short Form Valuation report has been generated successfully.",
+      });
+
+      // Update automation status
+      setFormData(prev => ({
+        ...prev,
+        automation: {
+          ...prev.automation,
+          reportGenerated: true,
+          progress: 100,
+          logs: [...prev.automation.logs, 'ISFV Report generated successfully']
+        }
+      }));
+
+    } catch (error) {
+      console.error('Error generating ISFV report:', error);
+      toast.error("Error", {
+        description: "Failed to generate ISFV report. Please try again.",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const downloadReport = () => {
+    if (reportUrl) {
+      window.open(reportUrl, '_blank');
+    } else {
+      toast.error("No Report Available", {
+        description: "Please generate a report first.",
+      });
+    }
   };
 
   return (
@@ -2820,6 +2980,52 @@ export default function PropertyProValuation() {
                 <p className="text-sm text-muted-foreground">
                   "This Report is for the use only of the party named above as the Lender for first mortgage purposes only, and is not to be used for any other purpose by any other party."
                 </p>
+              </div>
+
+              {/* ISFV Report Generation */}
+              <div className="bg-blue-50 p-6 rounded-lg space-y-4">
+                <h3 className="font-semibold mb-3 flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Generate ISFV Report
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Generate a professional Instant Short Form Valuation report based on all entered data.
+                </p>
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={generateISFVReport} 
+                    disabled={isGenerating || !formData.propertyAddress}
+                    className="flex-1"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                        Generating Report...
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="h-4 w-4 mr-2" />
+                        Generate ISFV Report
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={downloadReport}
+                    disabled={!reportUrl}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download Report
+                  </Button>
+                </div>
+                {reportUrl && (
+                  <Alert className="border-green-500">
+                    <CheckCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      Report generated successfully! Click "Download Report" to view or download.
+                    </AlertDescription>
+                  </Alert>
+                )}
               </div>
 
               <div className="bg-gray-50 p-4 rounded-lg">
