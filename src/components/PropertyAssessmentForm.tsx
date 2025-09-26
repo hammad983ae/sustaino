@@ -29,8 +29,6 @@ import EnhancedReportConfiguration from '@/components/EnhancedReportConfiguratio
 import DocumentUploadManager from '@/components/DocumentUploadManager';
 import GenerateReportData from '@/components/GenerateReportData';
 import IntelligentAssessmentAutomation from '@/components/IntelligentAssessmentAutomation';
-import { CompleteReportCreator } from '@/components/CompleteReportCreator';
-import EnvironmentalAudit from '@/components/EnvironmentalAudit';
 import SectionDataExtractor from '@/components/SectionDataExtractor';
 
 import DataValidationPipeline from '@/components/DataValidationPipeline';
@@ -160,40 +158,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         console.log('Intelligent Enhancement validation:', { hasAddress, addressData });
         return hasAddress;
-      }
-    },
-    {
-      title: "Risk Assessment",
-      subtitle: "Property and market risk analysis",
-      component: <RiskAssessmentMarketIndicators />,
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Risk Assessment validation:', { hasAddress, addressData });
-        return hasAddress; // Require address to proceed
-      }
-    },
-    {
-      title: "Environmental Assessment",
-      subtitle: "Environmental factors and sustainability analysis",
-      component: <EnvironmentalAudit />,
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('Environmental Assessment validation:', { hasAddress, addressData });
-        return hasAddress; // Require address to proceed
-      }
-    },
-    {
-      title: "RPD and Location",
-      subtitle: "Generate comprehensive property valuation report with all sections",
-      component: (
-        <div className="space-y-6">
-          <CompleteReportCreator />
-        </div>
-      ),
-      validation: () => {
-        const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
-        console.log('RPD and Location validation:', { hasAddress, addressData });
-        return hasAddress; // Require address to proceed
       }
     },
     {
