@@ -24,6 +24,7 @@ interface PerformanceMetrics {
     professionalStanding: number;
     underValuedProperties: number;
     overValuedProperties: number;
+    propertyTypeDifficulty: string;
   };
   estateAgents: {
     salesVolume: number;
@@ -69,7 +70,7 @@ const INDUSTRY_BENCHMARKS = {
 export const PerformanceRatingSystem: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
-    valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0, underValuedProperties: 0, overValuedProperties: 0 },
+    valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0, underValuedProperties: 0, overValuedProperties: 0, propertyTypeDifficulty: 'residential_standard' },
     estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0, overQuoted: 0 },
     developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
   });
@@ -362,6 +363,45 @@ export const PerformanceRatingSystem: React.FC = () => {
                           valuation: { ...prev.valuation, overValuedProperties: Number(e.target.value) }
                         }))}
                       />
+                    </div>
+                  </div>
+                  
+                  {/* Property Type Difficulty Ranking */}
+                  <div className="mt-6 p-4 border rounded-lg bg-muted/50">
+                    <Label className="text-base font-semibold mb-4 block">Property Type Difficulty (Easiest to Most Difficult)</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="flex items-center justify-between p-2 bg-green-50 border border-green-200 rounded">
+                        <span className="text-sm font-medium">1. Residential Standard</span>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">Easiest</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded">
+                        <span className="text-sm font-medium">2. Residential Units/Townhouses</span>
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800">Easy</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-yellow-50 border border-yellow-200 rounded">
+                        <span className="text-sm font-medium">3. Commercial Office</span>
+                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Moderate</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-orange-50 border border-orange-200 rounded">
+                        <span className="text-sm font-medium">4. Retail/Shopping Centers</span>
+                        <Badge variant="secondary" className="bg-orange-100 text-orange-800">Moderate+</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-red-50 border border-red-200 rounded">
+                        <span className="text-sm font-medium">5. Industrial/Warehouses</span>
+                        <Badge variant="secondary" className="bg-red-100 text-red-800">Difficult</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-purple-50 border border-purple-200 rounded">
+                        <span className="text-sm font-medium">6. Agricultural/Rural</span>
+                        <Badge variant="secondary" className="bg-purple-100 text-purple-800">Very Difficult</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-gray-50 border border-gray-300 rounded">
+                        <span className="text-sm font-medium">7. Special Purpose</span>
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-800">Most Difficult</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-slate-50 border border-slate-300 rounded">
+                        <span className="text-sm font-medium">8. Heritage/Historic</span>
+                        <Badge variant="secondary" className="bg-slate-100 text-slate-800">Expert Level</Badge>
+                      </div>
                     </div>
                   </div>
                   
@@ -679,7 +719,7 @@ export const PerformanceRatingSystem: React.FC = () => {
             <Button variant="outline" onClick={() => {
               setMetrics({
                 mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
-                valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0, underValuedProperties: 0, overValuedProperties: 0 },
+                valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0, underValuedProperties: 0, overValuedProperties: 0, propertyTypeDifficulty: 'residential_standard' },
                 estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0, overQuoted: 0 },
                 developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
               });
