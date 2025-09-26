@@ -22,6 +22,8 @@ interface PerformanceMetrics {
     marketKnowledge: number;
     clientRetention: number;
     professionalStanding: number;
+    underValuedProperties: number;
+    overValuedProperties: number;
   };
   estateAgents: {
     salesVolume: number;
@@ -30,6 +32,7 @@ interface PerformanceMetrics {
     clientSatisfaction: number;
     marketShare: number;
     discountedAdvertisedPrice: number;
+    overQuoted: number;
   };
   developers: {
     projectCompletionRate: number;
@@ -47,14 +50,14 @@ const INDUSTRY_BENCHMARKS = {
     average: { loanVolume: 10000000, defaultRate: 4, processingTime: 30, customerSatisfaction: 7, complianceScore: 75 },
   },
   valuation: {
-    excellent: { accuracyRate: 98, turnaroundTime: 3, marketKnowledge: 9, clientRetention: 95, professionalStanding: 9 },
-    good: { accuracyRate: 95, turnaroundTime: 5, marketKnowledge: 8, clientRetention: 85, professionalStanding: 8 },
-    average: { accuracyRate: 92, turnaroundTime: 7, marketKnowledge: 7, clientRetention: 75, professionalStanding: 7 },
+    excellent: { accuracyRate: 98, turnaroundTime: 3, marketKnowledge: 9, clientRetention: 95, professionalStanding: 9, underValuedProperties: 2, overValuedProperties: 2 },
+    good: { accuracyRate: 95, turnaroundTime: 5, marketKnowledge: 8, clientRetention: 85, professionalStanding: 8, underValuedProperties: 5, overValuedProperties: 5 },
+    average: { accuracyRate: 92, turnaroundTime: 7, marketKnowledge: 7, clientRetention: 75, professionalStanding: 7, underValuedProperties: 8, overValuedProperties: 8 },
   },
   estateAgents: {
-    excellent: { salesVolume: 20000000, daysOnMarket: 25, listingAccuracy: 98, clientSatisfaction: 9, marketShare: 15, discountedAdvertisedPrice: 2 },
-    good: { salesVolume: 10000000, daysOnMarket: 35, listingAccuracy: 95, clientSatisfaction: 8, marketShare: 10, discountedAdvertisedPrice: 5 },
-    average: { salesVolume: 5000000, daysOnMarket: 50, listingAccuracy: 90, clientSatisfaction: 7, marketShare: 5, discountedAdvertisedPrice: 8 },
+    excellent: { salesVolume: 20000000, daysOnMarket: 25, listingAccuracy: 98, clientSatisfaction: 9, marketShare: 15, discountedAdvertisedPrice: 2, overQuoted: 3 },
+    good: { salesVolume: 10000000, daysOnMarket: 35, listingAccuracy: 95, clientSatisfaction: 8, marketShare: 10, discountedAdvertisedPrice: 5, overQuoted: 7 },
+    average: { salesVolume: 5000000, daysOnMarket: 50, listingAccuracy: 90, clientSatisfaction: 7, marketShare: 5, discountedAdvertisedPrice: 8, overQuoted: 12 },
   },
   developers: {
     excellent: { projectCompletionRate: 98, budgetAdherence: 95, timelineCompliance: 95, qualityScore: 9, sustainabilityRating: 9 },
@@ -66,8 +69,8 @@ const INDUSTRY_BENCHMARKS = {
 export const PerformanceRatingSystem: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
-    valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0 },
-    estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0 },
+    valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0, underValuedProperties: 0, overValuedProperties: 0 },
+    estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0, overQuoted: 0 },
     developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
   });
 
@@ -263,7 +266,7 @@ export const PerformanceRatingSystem: React.FC = () => {
                     <Calculator className="h-4 w-4" />
                     Valuation Performance
                     <Badge variant="outline">
-                      Overall Score: {calculateOverallScore(metrics.valuation, INDUSTRY_BENCHMARKS.valuation, ['turnaroundTime'])}%
+                      Overall Score: {calculateOverallScore(metrics.valuation, INDUSTRY_BENCHMARKS.valuation, ['turnaroundTime', 'underValuedProperties', 'overValuedProperties'])}%
                     </Badge>
                   </CardTitle>
                 </CardHeader>
@@ -332,9 +335,37 @@ export const PerformanceRatingSystem: React.FC = () => {
                         }))}
                       />
                     </div>
+                    <div>
+                      <Label>Under Valued Properties (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        value={metrics.valuation.underValuedProperties}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          valuation: { ...prev.valuation, underValuedProperties: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Over Valued Properties (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        value={metrics.valuation.overValuedProperties}
+                        onChange={(e) => setMetrics(prev => ({
+                          ...prev,
+                          valuation: { ...prev.valuation, overValuedProperties: Number(e.target.value) }
+                        }))}
+                      />
+                    </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <MetricCard
                       title="Accuracy Rate"
                       value={metrics.valuation.accuracyRate}
@@ -360,6 +391,26 @@ export const PerformanceRatingSystem: React.FC = () => {
                       benchmark={INDUSTRY_BENCHMARKS.valuation}
                       field="clientRetention"
                     />
+                    <MetricCard
+                      title="Professional Standing"
+                      value={metrics.valuation.professionalStanding}
+                      benchmark={INDUSTRY_BENCHMARKS.valuation}
+                      field="professionalStanding"
+                    />
+                    <MetricCard
+                      title="Under Valued Properties"
+                      value={metrics.valuation.underValuedProperties}
+                      benchmark={INDUSTRY_BENCHMARKS.valuation}
+                      field="underValuedProperties"
+                      inverse={true}
+                    />
+                    <MetricCard
+                      title="Over Valued Properties"
+                      value={metrics.valuation.overValuedProperties}
+                      benchmark={INDUSTRY_BENCHMARKS.valuation}
+                      field="overValuedProperties"
+                      inverse={true}
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -372,7 +423,7 @@ export const PerformanceRatingSystem: React.FC = () => {
                     <Users className="h-4 w-4" />
                     Estate Agent Performance
                     <Badge variant="outline">
-                      Overall Score: {calculateOverallScore(metrics.estateAgents, INDUSTRY_BENCHMARKS.estateAgents, ['daysOnMarket', 'discountedAdvertisedPrice'])}%
+                      Overall Score: {calculateOverallScore(metrics.estateAgents, INDUSTRY_BENCHMARKS.estateAgents, ['daysOnMarket', 'discountedAdvertisedPrice', 'overQuoted'])}%
                     </Badge>
                   </CardTitle>
                 </CardHeader>
@@ -452,6 +503,19 @@ export const PerformanceRatingSystem: React.FC = () => {
                          }))}
                        />
                      </div>
+                     <div>
+                       <Label>Over Quoted (%)</Label>
+                       <Input
+                         type="number"
+                         step="0.1"
+                         min="0"
+                         value={metrics.estateAgents.overQuoted}
+                         onChange={(e) => setMetrics(prev => ({
+                           ...prev,
+                           estateAgents: { ...prev.estateAgents, overQuoted: Number(e.target.value) }
+                         }))}
+                       />
+                     </div>
                    </div>
                    
                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
@@ -491,6 +555,13 @@ export const PerformanceRatingSystem: React.FC = () => {
                        value={metrics.estateAgents.discountedAdvertisedPrice}
                        benchmark={INDUSTRY_BENCHMARKS.estateAgents}
                        field="discountedAdvertisedPrice"
+                       inverse={true}
+                     />
+                     <MetricCard
+                       title="Over Quoted"
+                       value={metrics.estateAgents.overQuoted}
+                       benchmark={INDUSTRY_BENCHMARKS.estateAgents}
+                       field="overQuoted"
                        inverse={true}
                      />
                    </div>
@@ -608,8 +679,8 @@ export const PerformanceRatingSystem: React.FC = () => {
             <Button variant="outline" onClick={() => {
               setMetrics({
                 mortgageLending: { loanVolume: 0, defaultRate: 0, processingTime: 0, customerSatisfaction: 0, complianceScore: 0 },
-                valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0 },
-                estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0 },
+                valuation: { accuracyRate: 0, turnaroundTime: 0, marketKnowledge: 0, clientRetention: 0, professionalStanding: 0, underValuedProperties: 0, overValuedProperties: 0 },
+                estateAgents: { salesVolume: 0, daysOnMarket: 0, listingAccuracy: 0, clientSatisfaction: 0, marketShare: 0, discountedAdvertisedPrice: 0, overQuoted: 0 },
                 developers: { projectCompletionRate: 0, budgetAdherence: 0, timelineCompliance: 0, qualityScore: 0, sustainabilityRating: 0 },
               });
             }}>
