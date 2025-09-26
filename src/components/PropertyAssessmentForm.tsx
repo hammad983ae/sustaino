@@ -82,6 +82,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
       subtitle: "Configure your report settings and client information",
       component: (
         <div className="space-y-6">
+          <PAFStepToggleManager />
           <ReportTypeConfiguration />
           <EnhancedReportConfiguration />
         </div>
@@ -490,11 +491,6 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
           </div>
         </div>
         <Progress value={progress} className="w-full" />
-        
-        {/* Configuration Toggle */}
-        <div className="flex justify-center mb-4">
-          <PAFStepToggleManager />
-        </div>
 
         {/* Step indicators */}
         <div className="flex justify-center gap-2">
