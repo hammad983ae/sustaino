@@ -721,9 +721,9 @@ export default function PropertyProValuation() {
         <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="automation">Automation Hub</TabsTrigger>
           <TabsTrigger value="property-summary">Property Summary</TabsTrigger>
+          <TabsTrigger value="land-dwelling">Land & Dwelling</TabsTrigger>
           <TabsTrigger value="risk-analysis">Risk Analysis</TabsTrigger>
           <TabsTrigger value="sales-evidence">Sales Evidence</TabsTrigger>
-          <TabsTrigger value="land-dwelling">Land & Dwelling</TabsTrigger>
           <TabsTrigger value="vra-assessment">VRA Assessment</TabsTrigger>
           <TabsTrigger value="professional">Professional</TabsTrigger>
         </TabsList>
@@ -1461,6 +1461,169 @@ export default function PropertyProValuation() {
           </Card>
         </TabsContent>
 
+        {/* Land & Dwelling Tab */}
+        <TabsContent value="land-dwelling" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                Land Information (Section 4)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="propertyIdentification">Property Identification</Label>
+                <Textarea
+                  id="propertyIdentification"
+                  placeholder="Aerial mapping and physical inspection details"
+                  value={formData.propertyIdentification}
+                  onChange={(e) => handleInputChange('propertyIdentification', e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="zoningEffect">Zoning Effect</Label>
+                <Textarea
+                  id="zoningEffect"
+                  placeholder="The existing use is a permissible use"
+                  value={formData.zoningEffect}
+                  onChange={(e) => handleInputChange('zoningEffect', e.target.value)}
+                  rows={2}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="location">Location</Label>
+                <Textarea
+                  id="location"
+                  placeholder="Distance and direction from nearest town centre"
+                  value={formData.location}
+                  onChange={(e) => handleInputChange('location', e.target.value)}
+                  rows={2}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="neighbourhood">Neighbourhood</Label>
+                <Textarea
+                  id="neighbourhood"
+                  placeholder="Brief description of immediate locality and neighbouring development"
+                  value={formData.neighbourhood}
+                  onChange={(e) => handleInputChange('neighbourhood', e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="siteDescription">Site Description & Access</Label>
+                <Textarea
+                  id="siteDescription"
+                  placeholder="Shape, topography, relationship to road level, suitability for building"
+                  value={formData.siteDescription}
+                  onChange={(e) => handleInputChange('siteDescription', e.target.value)}
+                  rows={4}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="services">Services</Label>
+                <Textarea
+                  id="services"
+                  placeholder="List utilities connected or available (do not use 'all usual services are connected')"
+                  value={formData.services}
+                  onChange={(e) => handleInputChange('services', e.target.value)}
+                  rows={2}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building className="h-5 w-5" />
+                Dwelling Description (Section 5)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="style">Style</Label>
+                  <Input
+                    id="style"
+                    placeholder="e.g., Double storey brick veneer dwelling"
+                    value={formData.style}
+                    onChange={(e) => handleInputChange('style', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="mainWalls">Main Walls & Roof</Label>
+                  <Input
+                    id="mainWalls"
+                    placeholder="e.g., Brick veneer walls and concrete tiles"
+                    value={formData.mainWalls}
+                    onChange={(e) => handleInputChange('mainWalls', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="flooring">Flooring</Label>
+                  <Input
+                    id="flooring"
+                    placeholder="e.g., Concrete slab and timber for second storey"
+                    value={formData.flooring}
+                    onChange={(e) => handleInputChange('flooring', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="windowFrames">Window Frames</Label>
+                  <Input
+                    id="windowFrames"
+                    placeholder="e.g., Aluminium"
+                    value={formData.windowFrames}
+                    onChange={(e) => handleInputChange('windowFrames', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="accommodation">Accommodation</Label>
+                <Textarea
+                  id="accommodation"
+                  placeholder="Number of bedrooms, bathrooms, main rooms, service rooms"
+                  value={formData.accommodation}
+                  onChange={(e) => handleInputChange('accommodation', e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="interiorLayout">Interior Layout</Label>
+                <Input
+                  id="interiorLayout"
+                  placeholder="e.g., Functional, practical layout"
+                  value={formData.interiorLayout}
+                  onChange={(e) => handleInputChange('interiorLayout', e.target.value)}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="fixturesAndFittings">Fixtures and Fittings</Label>
+                <Textarea
+                  id="fixturesAndFittings"
+                  placeholder="Cooking appliances, air conditioning, built-in items, feature finishes"
+                  value={formData.fixturesAndFittings}
+                  onChange={(e) => handleInputChange('fixturesAndFittings', e.target.value)}
+                  rows={3}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {/* Risk Analysis Tab */}
         <TabsContent value="risk-analysis" className="space-y-6">
           <Card>
@@ -1661,168 +1824,6 @@ export default function PropertyProValuation() {
           </Card>
         </TabsContent>
 
-        {/* Land & Dwelling Tab */}
-        <TabsContent value="land-dwelling" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Land Information (Section 4)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="propertyIdentification">Property Identification</Label>
-                <Textarea
-                  id="propertyIdentification"
-                  placeholder="Aerial mapping and physical inspection details"
-                  value={formData.propertyIdentification}
-                  onChange={(e) => handleInputChange('propertyIdentification', e.target.value)}
-                  rows={3}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="zoningEffect">Zoning Effect</Label>
-                <Textarea
-                  id="zoningEffect"
-                  placeholder="The existing use is a permissible use"
-                  value={formData.zoningEffect}
-                  onChange={(e) => handleInputChange('zoningEffect', e.target.value)}
-                  rows={2}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="location">Location</Label>
-                <Textarea
-                  id="location"
-                  placeholder="Distance and direction from nearest town centre"
-                  value={formData.location}
-                  onChange={(e) => handleInputChange('location', e.target.value)}
-                  rows={2}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="neighbourhood">Neighbourhood</Label>
-                <Textarea
-                  id="neighbourhood"
-                  placeholder="Brief description of immediate locality and neighbouring development"
-                  value={formData.neighbourhood}
-                  onChange={(e) => handleInputChange('neighbourhood', e.target.value)}
-                  rows={3}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="siteDescription">Site Description & Access</Label>
-                <Textarea
-                  id="siteDescription"
-                  placeholder="Shape, topography, relationship to road level, suitability for building"
-                  value={formData.siteDescription}
-                  onChange={(e) => handleInputChange('siteDescription', e.target.value)}
-                  rows={4}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="services">Services</Label>
-                <Textarea
-                  id="services"
-                  placeholder="List utilities connected or available (do not use 'all usual services are connected')"
-                  value={formData.services}
-                  onChange={(e) => handleInputChange('services', e.target.value)}
-                  rows={2}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Building className="h-5 w-5" />
-                Dwelling Description (Section 5)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="style">Style</Label>
-                  <Input
-                    id="style"
-                    placeholder="e.g., Double storey brick veneer dwelling"
-                    value={formData.style}
-                    onChange={(e) => handleInputChange('style', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="mainWalls">Main Walls & Roof</Label>
-                  <Input
-                    id="mainWalls"
-                    placeholder="e.g., Brick veneer walls and concrete tiles"
-                    value={formData.mainWalls}
-                    onChange={(e) => handleInputChange('mainWalls', e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="flooring">Flooring</Label>
-                  <Input
-                    id="flooring"
-                    placeholder="e.g., Concrete slab and timber for second storey"
-                    value={formData.flooring}
-                    onChange={(e) => handleInputChange('flooring', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="windowFrames">Window Frames</Label>
-                  <Input
-                    id="windowFrames"
-                    placeholder="e.g., Aluminium"
-                    value={formData.windowFrames}
-                    onChange={(e) => handleInputChange('windowFrames', e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="accommodation">Accommodation</Label>
-                <Textarea
-                  id="accommodation"
-                  placeholder="Number of bedrooms, bathrooms, main rooms, service rooms"
-                  value={formData.accommodation}
-                  onChange={(e) => handleInputChange('accommodation', e.target.value)}
-                  rows={3}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="interiorLayout">Interior Layout</Label>
-                <Input
-                  id="interiorLayout"
-                  placeholder="e.g., Functional, practical layout"
-                  value={formData.interiorLayout}
-                  onChange={(e) => handleInputChange('interiorLayout', e.target.value)}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="fixturesAndFittings">Fixtures and Fittings</Label>
-                <Textarea
-                  id="fixturesAndFittings"
-                  placeholder="Cooking appliances, air conditioning, built-in items, feature finishes"
-                  value={formData.fixturesAndFittings}
-                  onChange={(e) => handleInputChange('fixturesAndFittings', e.target.value)}
-                  rows={3}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         {/* VRA Assessment Tab */}
         <TabsContent value="vra-assessment" className="space-y-6">
