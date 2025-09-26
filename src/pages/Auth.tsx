@@ -114,7 +114,8 @@ export default function AuthPage() {
 
       if (error) {
         if (error.message.includes('Invalid login credentials')) {
-          setError('Invalid email or password. Please check your credentials and try again.');
+          // Check if this might be an unconfirmed email
+          setError('Invalid email or password. If you just signed up, please check your email and confirm your account first.');
         } else if (error.message.includes('Email not confirmed')) {
           setError('Please check your email and click the confirmation link before logging in.');
         } else {
@@ -269,27 +270,83 @@ export default function AuthPage() {
               {error && (
                 <Alert variant="destructive" className="mt-4">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="flex items-center justify-between">
-                    <span>{error}</span>
-                    <div className="flex gap-2 ml-2">
-                      {(error.includes('Invalid token') || error.includes('signature is invalid')) && (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={clearAuthErrorState}
-                        >
-                          Clear & Reset
-                        </Button>
+                  <AlertDescription>
+                    <div className="space-y-3">
+                      <span>{error}</span>
+                      
+                      {error.includes('Invalid email or password. If you just signed up') && (
+                        <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+                          <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+                            <strong>Account not confirmed yet?</strong>
+                          </p>
+                          <p className="text-xs text-blue-700 dark:text-blue-300 mb-3">
+                            Check your email inbox for a confirmation link from Supabase. The email may take a few minutes to arrive.
+                          </p>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={async () => {
+                              setIsLoading(true);
+                              try {
+                                const { error } = await supabase.auth.resend({
+                                  type: 'signup',
+                                  email: loginEmail,
+                                  options: {
+                                    emailRedirectTo: `${window.location.origin}/`
+                                  }
+                                });
+                                
+                                if (error) {
+                                  toast({
+                                    title: "Error",
+                                    description: error.message,
+                                    variant: "destructive"
+                                  });
+                                } else {
+                                  toast({
+                                    title: "Confirmation email sent",
+                                    description: "Please check your email for the confirmation link.",
+                                  });
+                                  setError(null);
+                                }
+                              } catch (err) {
+                                toast({
+                                  title: "Error",
+                                  description: "Failed to resend confirmation email.",
+                                  variant: "destructive"
+                                });
+                              } finally {
+                                setIsLoading(false);
+                              }
+                            }}
+                            disabled={!loginEmail || isLoading}
+                            className="text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700"
+                          >
+                            Resend Confirmation Email
+                          </Button>
+                        </div>
                       )}
-                      {error.includes('signature is invalid') && (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={handleAuthTokenError}
-                        >
-                          Full Reset
-                        </Button>
-                      )}
+                      
+                      <div className="flex gap-2 ml-2">
+                        {(error.includes('Invalid token') || error.includes('signature is invalid')) && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={clearAuthErrorState}
+                          >
+                            Clear & Reset
+                          </Button>
+                        )}
+                        {error.includes('signature is invalid') && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={handleAuthTokenError}
+                          >
+                            Full Reset
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </AlertDescription>
                 </Alert>
