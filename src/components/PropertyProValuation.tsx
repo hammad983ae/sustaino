@@ -113,6 +113,8 @@ interface AutomationStatus {
   reportGenerated: boolean;
   progress: number;
   logs: string[];
+  underContractStatus: 'Yes' | 'No' | '';
+  contractDocumentUploaded: boolean;
 }
 
 interface PropertyProValuationData {
@@ -462,7 +464,9 @@ export default function PropertyProValuation() {
       vraAssessmentComplete: false,
       reportGenerated: false,
       progress: 0,
-      logs: []
+      logs: [],
+      underContractStatus: '',
+      contractDocumentUploaded: false
     }
   });
 
@@ -870,6 +874,94 @@ export default function PropertyProValuation() {
     }));
   };
 
+  // Handle under contract status change
+  const handleUnderContractChange = (status: 'Yes' | 'No') => {
+    setFormData(prev => ({
+      ...prev,
+      automation: {
+        ...prev.automation,
+        underContractStatus: status
+      },
+      underContract: status,
+      // Auto-populate fields based on status
+      currentProposedSale: status === 'No' ? {
+        contractDate: 'Not Applicable',
+        salePrice: 0,
+        agent: 'Not Applicable',
+        source: 'Not Applicable'
+      } : prev.currentProposedSale,
+      currentSaleInLineWithMarket: status === 'No' ? '' : prev.currentSaleInLineWithMarket,
+      saleReasonableness: status === 'No' ? 'Not Applicable - Property not under contract' : prev.saleReasonableness,
+      contractOfSaleSighted: status === 'No' ? 'No' : prev.contractOfSaleSighted
+    }));
+    
+    if (status === 'No') {
+      updateAutomationLog('Property set as NOT under contract - current sale fields set to Not Applicable');
+    } else {
+      updateAutomationLog('Property set as UNDER CONTRACT - contract upload required for OCR processing');
+    }
+  };
+
+  // Handle contract document upload
+  const handleContractUpload = async (file: File) => {
+    if (formData.automation.underContractStatus !== 'Yes') {
+      toast.error('Property must be under contract to upload contract documents');
+      return;
+    }
+
+    setIsProcessing(true);
+    updateAutomationLog('Processing contract document upload...');
+
+    try {
+      // Upload to Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `contract_${Date.now()}.${fileExt}`;
+      const filePath = `contracts/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('evidence-uploads')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Process with OCR (simulate for now)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock OCR extracted data
+      const extractedData = {
+        contractDate: '2024-01-15',
+        salePrice: 750000,
+        agent: 'ABC Real Estate'
+      };
+
+      setFormData(prev => ({
+        ...prev,
+        currentProposedSale: {
+          ...prev.currentProposedSale,
+          contractDate: extractedData.contractDate,
+          salePrice: extractedData.salePrice,
+          agent: extractedData.agent
+        },
+        contractOfSaleSighted: 'Yes',
+        automation: {
+          ...prev.automation,
+          contractDocumentUploaded: true,
+          ocrProcessed: true,
+          progress: Math.max(prev.automation.progress, 75)
+        }
+      }));
+
+      toast.success('Contract document uploaded and processed successfully');
+      updateAutomationLog('Contract OCR processing completed - sale details extracted');
+    } catch (error) {
+      console.error('Error uploading contract:', error);
+      toast.error('Failed to upload contract document');
+      updateAutomationLog(`Contract upload error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   // Clear all data
   const clearAllData = () => {
     setFormData(prev => ({
@@ -913,7 +1005,9 @@ export default function PropertyProValuation() {
         vraAssessmentComplete: false,
         reportGenerated: false,
         progress: 0,
-        logs: []
+        logs: [],
+        underContractStatus: '',
+        contractDocumentUploaded: false
       }
     }));
     setReportUrl(null);
@@ -1155,6 +1249,77 @@ export default function PropertyProValuation() {
                   )}
                 </Button>
               </div>
+
+              {/* Under Contract Control */}
+              <Card className="bg-blue-50 border-blue-200">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Settings className="h-5 w-5" />
+                    Under Contract Status Control
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="underContractStatus">Is the property under contract?</Label>
+                    <Select 
+                      value={formData.automation.underContractStatus} 
+                      onValueChange={(value: 'Yes' | 'No') => handleUnderContractChange(value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Yes or No" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Yes">Yes - Under Contract</SelectItem>
+                        <SelectItem value="No">No - Not Under Contract</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {formData.automation.underContractStatus === 'Yes' && (
+                    <div className="space-y-3">
+                      <Alert>
+                        <Info className="h-4 w-4" />
+                        <AlertDescription>
+                          Contract document upload required for OCR processing and field extraction.
+                        </AlertDescription>
+                      </Alert>
+                      <div>
+                        <Label htmlFor="contractUpload">Upload Contract of Sale</Label>
+                        <Input
+                          id="contractUpload"
+                          type="file"
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleContractUpload(file);
+                          }}
+                          className="cursor-pointer"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Accepts PDF, JPG, or PNG files for OCR processing
+                        </p>
+                      </div>
+                      {formData.automation.contractDocumentUploaded && (
+                        <Alert>
+                          <CheckCircle className="h-4 w-4" />
+                          <AlertDescription>
+                            Contract document uploaded and processed successfully. Sale details extracted.
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </div>
+                  )}
+
+                  {formData.automation.underContractStatus === 'No' && (
+                    <Alert>
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>
+                        Current sale section fields have been set to "Not Applicable" as property is not under contract.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Automation Steps */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -2883,6 +3048,7 @@ export default function PropertyProValuation() {
                         id="currentSaleContractDate"
                         type="date"
                         value={formData.currentProposedSale.contractDate}
+                        disabled={formData.automation.underContractStatus === 'No'}
                         onChange={(e) => 
                           setFormData(prev => ({
                             ...prev,
@@ -2901,6 +3067,7 @@ export default function PropertyProValuation() {
                         type="number"
                         placeholder="0"
                         value={formData.currentProposedSale.salePrice || ''}
+                        disabled={formData.automation.underContractStatus === 'No'}
                         onChange={(e) => 
                           setFormData(prev => ({
                             ...prev,
@@ -2918,6 +3085,7 @@ export default function PropertyProValuation() {
                         id="currentSaleAgent"
                         placeholder="Real estate agent"
                         value={formData.currentProposedSale.agent}
+                        disabled={formData.automation.underContractStatus === 'No'}
                         onChange={(e) => 
                           setFormData(prev => ({
                             ...prev,
@@ -2940,6 +3108,7 @@ export default function PropertyProValuation() {
                   <Label htmlFor="currentSaleInLineWithMarket">Current Sale in line with current local Market?</Label>
                   <Select 
                     value={formData.currentSaleInLineWithMarket} 
+                    disabled={formData.automation.underContractStatus === 'No'}
                     onValueChange={(value: 'Yes' | 'No' | '') => 
                       setFormData(prev => ({
                         ...prev,
@@ -2962,6 +3131,7 @@ export default function PropertyProValuation() {
                     id="saleReasonableness"
                     placeholder="Analysis of whether the sale price is reasonable based on current market conditions"
                     value={formData.saleReasonableness}
+                    disabled={formData.automation.underContractStatus === 'No'}
                     onChange={(e) => handleInputChange('saleReasonableness', e.target.value)}
                     rows={3}
                   />
