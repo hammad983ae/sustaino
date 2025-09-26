@@ -155,10 +155,14 @@ const Index = () => {
                     </TabsList>
                     
                     {/* Second row of tabs */}
-                    <TabsList className="grid w-full grid-cols-1 max-w-xs mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
+                    <TabsList className="grid w-full grid-cols-2 max-w-2xl mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                       <TabsTrigger value="professional-declarations" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <FileCheck className="h-4 w-4" />
                         Professional Declarations
+                      </TabsTrigger>
+                      <TabsTrigger value="property-pro-valuation" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <TrendingUp className="h-4 w-4" />
+                        Property Pro Valuation
                       </TabsTrigger>
                     </TabsList>
                   </div>
@@ -522,6 +526,25 @@ const Index = () => {
                       </CardHeader>
                       <CardContent className="p-8">
                         <ProfessionalDeclarations onComplete={(data) => console.log('Professional declarations completed:', data)} />
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="property-pro-valuation" className="mt-8">
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <TrendingUp className="h-6 w-6 text-purple-700" />
+                          Property Pro Valuation
+                        </CardTitle>
+                        <p className="text-purple-700">
+                          Advanced property valuation analysis and reporting tools
+                        </p>
+                      </CardHeader>
+                      <CardContent className="p-8">
+                        <div className="p-8 text-center text-muted-foreground">
+                          Property Pro Valuation tab created - ready for content
+                        </div>
                       </CardContent>
                     </Card>
                   </TabsContent>

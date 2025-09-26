@@ -34,19 +34,12 @@ export default function ValuationAnalysis() {
         <div className="w-full overflow-x-auto">
           <TabsList className="inline-flex h-12 w-max items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground min-w-full">
             <TabsTrigger value="automated" className="whitespace-nowrap px-4 py-2">Automated</TabsTrigger>
-            <TabsTrigger value="property-pro" className="whitespace-nowrap px-4 py-2">Property Pro Valuation</TabsTrigger>
           </TabsList>
         </div>
         
         <div className="min-h-[600px]">
           <TabsContent value="automated" className="mt-6">
             <AutomatedValuationAnalysis />
-          </TabsContent>
-          
-          <TabsContent value="property-pro" className="mt-6">
-            <div className="p-8 text-center text-muted-foreground">
-              Property Pro Valuation tab created - ready for content
-            </div>
           </TabsContent>
         </div>
       </Tabs>
