@@ -594,7 +594,37 @@ export default function PropertyProValuation() {
     if (results.marketValue && !formData.marketValue) {
       setFormData(prev => ({ ...prev, marketValue: results.marketValue }));
     }
+
+    // Auto-fill dwelling description from OCR
+    if (results.dwellingStyle && !formData.style) {
+      setFormData(prev => ({ ...prev, style: results.dwellingStyle }));
+    }
+    if (results.streetAppeal && !formData.streetAppeal) {
+      setFormData(prev => ({ ...prev, streetAppeal: results.streetAppeal }));
+    }
+    if (results.mainWalls && !formData.mainWallsAndRoof) {
+      setFormData(prev => ({ ...prev, mainWallsAndRoof: results.mainWalls }));
+    }
+    if (results.externalCondition && !formData.externalCondition) {
+      setFormData(prev => ({ ...prev, externalCondition: results.externalCondition }));
+    }
+    if (results.windowFrames && !formData.windowFrames) {
+      setFormData(prev => ({ ...prev, windowFrames: results.windowFrames }));
+    }
+    if (results.dwellingDescription && !formData.accommodation) {
+      setFormData(prev => ({ ...prev, accommodation: results.dwellingDescription }));
+    }
+
+    // Auto-fill ancillary improvements
+    if (results.ancillaryImprovements && !formData.ancillaryImprovements) {
+      setFormData(prev => ({ ...prev, ancillaryImprovements: results.ancillaryImprovements }));
+    }
+    if (results.fixturesAndFittings && !formData.fixtureAndFitting) {
+      setFormData(prev => ({ ...prev, fixtureAndFitting: JSON.stringify(results.fixturesAndFittings) }));
+    }
   };
+
+  // Google Maps Integration for Section 4 (removed duplicate)
 
   // Risk Rating Colors
   const getRiskColor = (level: RiskLevel): string => {
