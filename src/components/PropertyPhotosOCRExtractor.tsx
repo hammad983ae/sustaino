@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
 import { supabase } from '@/integrations/supabase/client';
-import ImprovedDocumentOCR from './ImprovedDocumentOCR';
+import DocumentUploadWithPreview from './DocumentUploadWithPreview';
 
 interface PhotoWithOCR {
   id: string;
@@ -707,18 +707,25 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ImprovedDocumentOCR
-            onDataExtracted={(documents) => {
-              console.log('Document OCR extracted:', documents);
+          <DocumentUploadWithPreview 
+            onDataConfirmed={(documentData) => {
+              console.log('Document data confirmed:', documentData);
+              
               // Update report data with document information
               updateReportData('fileAttachments', {
                 ...reportData.fileAttachments,
-                documents: documents.map(doc => ({
-                  name: doc.name,
-                  type: doc.documentType,
-                  extractedFields: doc.extractedFields,
-                  confidence: doc.confidence
-                }))
+                documents: [{
+                  name: documentData.fileName,
+                  type: documentData.documentType,
+                  extractedFields: documentData.extractedData,
+                  confidence: documentData.confidence,
+                  userNotes: documentData.userNotes
+                }]
+              });
+              
+              toast({
+                title: "Document Data Integrated",
+                description: `${documentData.fieldsToUpdate.length} fields have been updated in your report`,
               });
             }}
           />

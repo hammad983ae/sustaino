@@ -489,8 +489,10 @@ const ImprovedDocumentOCR: React.FC<ImprovedDocumentOCRProps> = ({
 
   React.useEffect(() => {
     const completedDocuments = documents.filter(doc => doc.processingStatus === 'completed');
-    onDataExtracted(completedDocuments);
-  }, [documents, onDataExtracted]);
+    if (completedDocuments.length > 0) {
+      onDataExtracted(completedDocuments);
+    }
+  }, [documents]); // Remove onDataExtracted from dependencies to prevent infinite loop
 
   return (
     <div className="space-y-6">
