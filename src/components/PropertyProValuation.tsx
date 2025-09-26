@@ -50,8 +50,11 @@ import {
   BarChart3,
   Search,
   FileCheck,
-  RefreshCw
+  RefreshCw,
+  Scan
 } from 'lucide-react';
+import { OCRFieldComponent } from './OCRFieldComponent';
+import { GeneralCommentsTab } from './GeneralCommentsTab';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -475,6 +478,123 @@ export default function PropertyProValuation() {
 
   const [activeTab, setActiveTab] = useState('automation');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Extract commonly used data for easier component props
+  const propertyData = {
+    address: formData.propertyAddress,
+    landArea: formData.siteArea,
+    buildingArea: formData.livingArea,
+    bedrooms: formData.mainDwelling.includes('Bedroom') ? parseInt(formData.mainDwelling.match(/(\d+)\s*Bedroom/)?.[1] || '0') : 0,
+    bathrooms: formData.mainDwelling.includes('Bathroom') ? parseInt(formData.mainDwelling.match(/(\d+)\s*Bathroom/)?.[1] || '0') : 0,
+    yearBuilt: formData.builtAbout ? parseInt(formData.builtAbout.replace(/\D/g, '')) : 0,
+    streetNumber: formData.propertyAddress.split(' ')[0] || '',
+    streetName: formData.propertyAddress.split(' ').slice(1).join(' ') || '',
+    suburb: '',
+    state: '',
+    postcode: '',
+    propertyType: 'residential',
+    carSpaces: 0,
+    livingArea: formData.livingArea
+  };
+
+  const riskRating = {
+    location: 1 as RiskLevel,
+    land: 1 as RiskLevel,
+    environmental: 1 as RiskLevel,
+    improvements: 1 as RiskLevel,
+    marketDirection: 1 as RiskLevel,
+    marketActivity: 1 as RiskLevel,
+    localEconomy: 1 as RiskLevel,
+    marketSegment: 1 as RiskLevel
+  };
+
+  const vraAssessment = {
+    higherRiskProperty: false,
+    adverseMarketability: false,
+    incompleteConstruction: false,
+    criticalIssues: false,
+    esgFactors: ''
+  };
+
+  const salesEvidence: any[] = [];
+  const [generalComments, setGeneralComments] = useState('');
+
+  // OCR Data and Processing States
+  const [ocrData, setOcrData] = useState<Record<string, any>>({});
+  const [isProcessingOCR, setIsProcessingOCR] = useState(false);
+  const [ocrResults, setOcrResults] = useState<any[]>([]);
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+
+  // OCR Processing Functions
+  const processOCRDocument = async (file: File) => {
+    setIsProcessingOCR(true);
+    try {
+      // Upload file to Supabase storage first
+      const fileName = `ocr-${Date.now()}-${file.name}`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('evidence-uploads')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('evidence-uploads')
+        .getPublicUrl(fileName);
+
+      // Process with OCR function
+      const { data, error } = await supabase.functions.invoke('ocr-processor', {
+        body: {
+          fileUrl: urlData.publicUrl,
+          fileName: file.name,
+          propertyAddress: propertyData.address
+        }
+      });
+
+      if (error) throw error;
+
+      // Update OCR data state
+      setOcrData(prev => ({
+        ...prev,
+        [file.name]: data.ocrResults
+      }));
+
+      setOcrResults(prev => [...prev, {
+        fileName: file.name,
+        results: data.ocrResults,
+        confidence: data.confidence,
+        processedAt: data.processedAt
+      }]);
+
+      // Auto-fill relevant fields if high confidence
+      if (data.confidence > 80) {
+        autoFillFromOCR(data.ocrResults);
+      }
+
+      toast.success(`OCR processing completed for ${file.name} (${data.confidence}% confidence)`);
+    } catch (error) {
+      console.error('OCR processing error:', error);
+      toast.error('OCR processing failed');
+    } finally {
+      setIsProcessingOCR(false);
+    }
+  };
+
+  const autoFillFromOCR = (results: any) => {
+    // Auto-fill property data from OCR results
+    if (results.propertyAddress && !formData.propertyAddress) {
+      setFormData(prev => ({ ...prev, propertyAddress: results.propertyAddress }));
+    }
+    if (results.landArea && !formData.siteArea) {
+      setFormData(prev => ({ ...prev, siteArea: results.landArea }));
+    }
+    if (results.buildingArea && !formData.livingArea) {
+      setFormData(prev => ({ ...prev, livingArea: results.buildingArea }));
+    }
+    if (results.marketValue && !formData.marketValue) {
+      setFormData(prev => ({ ...prev, marketValue: results.marketValue }));
+    }
+  };
 
   // Risk Rating Colors
   const getRiskColor = (level: RiskLevel): string => {
@@ -3507,10 +3627,22 @@ export default function PropertyProValuation() {
               )}
             </CardContent>
           </Card>
-        </TabsContent>
+              </TabsContent>
 
-        {/* VRA Assessment Tab */}
-        <TabsContent value="vra-assessment" className="space-y-6">
+              {/* General Comments Tab */}
+              <TabsContent value="general-comments" className="space-y-6">
+                <GeneralCommentsTab
+                  propertyData={propertyData}
+                  riskRatings={riskRating}
+                  vraAssessment={vraAssessment}
+                  salesEvidence={salesEvidence}
+                  generalComments={generalComments}
+                  onCommentsChange={setGeneralComments}
+                />
+              </TabsContent>
+
+              {/* VRA Assessment Tab */}
+              <TabsContent value="vra-assessment" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
