@@ -5,6 +5,8 @@ import VicPlanReportExporter from '@/components/planning/VicPlanReportExporter';
 import StateBasedMappingIntegration from '@/components/StateBasedMappingIntegration';
 import AustralianPlanningPortalIntegration from '@/components/AustralianPlanningPortalIntegration';
 import AustralianAPIIntegration from '@/components/planning/AustralianAPIIntegration';
+import LASSIIntegration from '@/components/planning/LASSIIntegration';
+import MapshareVicIntegration from '@/components/planning/MapshareVicIntegration';
 
 interface PlanningIntegrationsProps {
   propertyAddress: string;
@@ -36,6 +38,36 @@ export const PlanningIntegrations = ({
         onReportDownloaded={(reportData) => {
           console.log('VicPlan report downloaded:', reportData);
           onPlanningDataUpdate(reportData);
+        }}
+      />
+
+      {/* LASSI Integration - Victorian Survey Data */}
+      <LASSIIntegration 
+        onDataUpdate={(data) => {
+          console.log('LASSI data received:', data);
+          const planningUpdate = {
+            ...planningData,
+            lassiData: data,
+            lotNumber: data.landDescription?.lotNumber || planningData.lotNumber,
+            planNumber: data.landDescription?.planReference || planningData.planNumber,
+            lastUpdated: new Date().toISOString()
+          };
+          onPlanningDataUpdate(planningUpdate);
+        }}
+      />
+
+      {/* Mapshare Victoria Integration - Live Planning Data */}
+      <MapshareVicIntegration 
+        onDataUpdate={(data) => {
+          console.log('Mapshare Victoria data received:', data);
+          // This will provide the most current/accurate planning data
+          const planningUpdate = {
+            ...planningData,
+            ...data, // Mapshare data takes priority as it's official and current
+            mapshareData: data,
+            lastUpdated: new Date().toISOString()
+          };
+          onPlanningDataUpdate(planningUpdate);
         }}
       />
 

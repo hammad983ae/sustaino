@@ -97,15 +97,41 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
   }, [addressData.suburb, addressData.state, propertyAddress]);
 
   useEffect(() => {
-    // Load saved planning data on mount
+    // Clear old planning data when address changes
+    const handleAddressChange = () => {
+      console.log('Address changed, clearing old planning data');
+      setLocalPlanningData(null);
+      
+      // Clear localStorage planning data to force fresh data
+      localStorage.removeItem('planningData');
+      localStorage.removeItem('planningFormData');
+      localStorage.removeItem('PropertyPlanningSearch');
+      
+      // Generate new planning data for current address
+      const newData = generateDefaultPlanningData();
+      setLocalPlanningData(newData);
+      updateReportData('planningData', newData);
+    };
+
+    // Check if this is a new address by comparing to stored address
+    const storedAddress = localStorage.getItem('currentPlanningAddress');
+    if (storedAddress && storedAddress !== propertyAddress) {
+      handleAddressChange();
+    }
+    
+    // Store current address
+    localStorage.setItem('currentPlanningAddress', propertyAddress);
+
+    // Load saved planning data only if address matches
     loadData().then(savedData => {
       try {
-        if (savedData?.planningData) {
+        const savedAddress = savedData?.propertyAddress;
+        if (savedData?.planningData && savedAddress === propertyAddress) {
           const cleanData = JSON.parse(JSON.stringify(savedData.planningData));
           setLocalPlanningData(cleanData);
           updateReportData('planningData', cleanData);
         } else {
-          // Generate default planning data
+          // Generate fresh planning data for new address
           const defaultData = generateDefaultPlanningData();
           setLocalPlanningData(defaultData);
           updateReportData('planningData', defaultData);
@@ -123,7 +149,7 @@ const PropertyPlanningSearch = ({ propertyAddress }: PropertyPlanningSearchProps
       setLocalPlanningData(defaultData);
       updateReportData('planningData', defaultData);
     });
-  }, []); // Empty dependency array to run only on mount
+  }, [propertyAddress, generateDefaultPlanningData, loadData, updateReportData]); // Include propertyAddress to trigger refresh
 
   // Memoized planning data to prevent unnecessary recalculations
   const planningData = useMemo(() => 
