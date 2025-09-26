@@ -823,7 +823,7 @@ export default function PropertyProValuation() {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            PropertyPRO Automated Valuation System
+            Instant Short Form Valuation (ISFV)
           </h1>
           <p className="text-muted-foreground">
             Professional property valuation with integrated automation, Domain API, and risk analysis
