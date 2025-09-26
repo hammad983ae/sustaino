@@ -231,6 +231,34 @@ interface PropertyProValuationData {
   // Ancillary Improvements (Section 6)
   ancillaryImprovements: string;
   
+  // Previous and Current Sales Information
+  previousSaleData: {
+    dateOfSale: string;
+    salePrice: number;
+    agent: string;
+    vendor: string;
+    purchaser: string;
+    daysOnMarket: number;
+    source: string;
+  };
+  previousSaleComments: string;
+  marketConditionAnalysis: 'improved' | 'declined' | 'stable' | '';
+  propertyImprovements: string;
+  currentProposedSale: {
+    contractDate: string;
+    salePrice: number;
+    purchaser: string;
+    vendor: string;
+    agent: string;
+    source: string;
+  };
+  currentSaleInLineWithMarket: 'Yes' | 'No' | '';
+  saleReasonableness: string;
+  contractOfSaleSighted: 'Yes' | 'No';
+  contractRequiredMessage: string;
+  sellingPeriodGreaterThan6Months: 'Yes' | 'No';
+  underContract: 'Yes' | 'No';
+  
   // Risk Analysis
   riskRatings: RiskRating;
   propertyRiskRatings: {
@@ -371,6 +399,32 @@ export default function PropertyProValuation() {
     interiorLayout: '',
     fixtureAndFitting: '',
     ancillaryImprovements: '',
+    previousSaleData: {
+      dateOfSale: '',
+      salePrice: 0,
+      agent: '',
+      vendor: '',
+      purchaser: '',
+      daysOnMarket: 0,
+      source: 'DOMAIN API'
+    },
+    previousSaleComments: '',
+    marketConditionAnalysis: '',
+    propertyImprovements: '',
+    currentProposedSale: {
+      contractDate: '',
+      salePrice: 0,
+      purchaser: '',
+      vendor: '',
+      agent: '',
+      source: 'OCR'
+    },
+    currentSaleInLineWithMarket: '',
+    saleReasonableness: '',
+    contractOfSaleSighted: 'No',
+    contractRequiredMessage: '',
+    sellingPeriodGreaterThan6Months: 'No',
+    underContract: 'No',
     riskRatings: {
       location: 1,
       land: 1,
@@ -2686,6 +2740,387 @@ export default function PropertyProValuation() {
                   onChange={(e) => handleInputChange('ancillaryImprovements', e.target.value)}
                   rows={4}
                 />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Previous and Current Sales Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="h-5 w-5" />
+                Previous and Current Sales Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Previous Sale Data */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Previous Sale of Subject Property (Last 3 Years)</h3>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-3">Data source: DOMAIN API</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="previousSaleDate">Date of Sale</Label>
+                      <Input
+                        id="previousSaleDate"
+                        type="date"
+                        value={formData.previousSaleData.dateOfSale}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            previousSaleData: {
+                              ...prev.previousSaleData,
+                              dateOfSale: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="previousSalePrice">Sale Price ($)</Label>
+                      <Input
+                        id="previousSalePrice"
+                        type="number"
+                        placeholder="0"
+                        value={formData.previousSaleData.salePrice || ''}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            previousSaleData: {
+                              ...prev.previousSaleData,
+                              salePrice: Number(e.target.value)
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="previousSaleAgent">Agent</Label>
+                      <Input
+                        id="previousSaleAgent"
+                        placeholder="Real estate agent"
+                        value={formData.previousSaleData.agent}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            previousSaleData: {
+                              ...prev.previousSaleData,
+                              agent: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="previousSaleVendor">Vendor</Label>
+                      <Input
+                        id="previousSaleVendor"
+                        placeholder="Vendor name"
+                        value={formData.previousSaleData.vendor}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            previousSaleData: {
+                              ...prev.previousSaleData,
+                              vendor: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="previousSalePurchaser">Purchaser</Label>
+                      <Input
+                        id="previousSalePurchaser"
+                        placeholder="Purchaser name"
+                        value={formData.previousSaleData.purchaser}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            previousSaleData: {
+                              ...prev.previousSaleData,
+                              purchaser: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="previousSaleDaysOnMarket">Days on Market</Label>
+                      <Input
+                        id="previousSaleDaysOnMarket"
+                        type="number"
+                        placeholder="0"
+                        value={formData.previousSaleData.daysOnMarket || ''}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            previousSaleData: {
+                              ...prev.previousSaleData,
+                              daysOnMarket: Number(e.target.value)
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Previous Sale Comments */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Previous Sale Comments</h3>
+                <div>
+                  <Label htmlFor="marketConditionAnalysis">Market Condition Analysis</Label>
+                  <Select 
+                    value={formData.marketConditionAnalysis} 
+                    onValueChange={(value: 'improved' | 'declined' | 'stable' | '') => 
+                      setFormData(prev => ({
+                        ...prev,
+                        marketConditionAnalysis: value
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select market condition change" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="improved">Market conditions have improved</SelectItem>
+                      <SelectItem value="declined">Market conditions have declined</SelectItem>
+                      <SelectItem value="stable">Market conditions remained stable</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="propertyImprovements">Property Improvements Since Previous Sale</Label>
+                  <Textarea
+                    id="propertyImprovements"
+                    placeholder="Describe any renovations, extensions, or new improvements made since the previous sale"
+                    value={formData.propertyImprovements}
+                    onChange={(e) => handleInputChange('propertyImprovements', e.target.value)}
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="previousSaleComments">Additional Comments</Label>
+                  <Textarea
+                    id="previousSaleComments"
+                    placeholder="Additional analysis of the previous sale and market conditions"
+                    value={formData.previousSaleComments}
+                    onChange={(e) => handleInputChange('previousSaleComments', e.target.value)}
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              {/* Current/Proposed Sale */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Current/Proposed Sale of Subject Property</h3>
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-3">Data source: OCR Extraction</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="currentSaleContractDate">Contract Date</Label>
+                      <Input
+                        id="currentSaleContractDate"
+                        type="date"
+                        value={formData.currentProposedSale.contractDate}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            currentProposedSale: {
+                              ...prev.currentProposedSale,
+                              contractDate: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="currentSalePrice">Sale Price ($)</Label>
+                      <Input
+                        id="currentSalePrice"
+                        type="number"
+                        placeholder="0"
+                        value={formData.currentProposedSale.salePrice || ''}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            currentProposedSale: {
+                              ...prev.currentProposedSale,
+                              salePrice: Number(e.target.value)
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="currentSalePurchaser">Purchaser</Label>
+                      <Input
+                        id="currentSalePurchaser"
+                        placeholder="Purchaser name"
+                        value={formData.currentProposedSale.purchaser}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            currentProposedSale: {
+                              ...prev.currentProposedSale,
+                              purchaser: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="currentSaleVendor">Vendor</Label>
+                      <Input
+                        id="currentSaleVendor"
+                        placeholder="Vendor name"
+                        value={formData.currentProposedSale.vendor}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            currentProposedSale: {
+                              ...prev.currentProposedSale,
+                              vendor: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="currentSaleAgent">Agent</Label>
+                      <Input
+                        id="currentSaleAgent"
+                        placeholder="Real estate agent"
+                        value={formData.currentProposedSale.agent}
+                        onChange={(e) => 
+                          setFormData(prev => ({
+                            ...prev,
+                            currentProposedSale: {
+                              ...prev.currentProposedSale,
+                              agent: e.target.value
+                            }
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Market Analysis */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Current Sale Market Analysis</h3>
+                <div>
+                  <Label htmlFor="currentSaleInLineWithMarket">Current Sale in line with current local Market?</Label>
+                  <Select 
+                    value={formData.currentSaleInLineWithMarket} 
+                    onValueChange={(value: 'Yes' | 'No' | '') => 
+                      setFormData(prev => ({
+                        ...prev,
+                        currentSaleInLineWithMarket: value
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Yes or No" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="saleReasonableness">Sale Price Reasonableness Analysis</Label>
+                  <Textarea
+                    id="saleReasonableness"
+                    placeholder="Analysis of whether the sale price is reasonable based on current market conditions"
+                    value={formData.saleReasonableness}
+                    onChange={(e) => handleInputChange('saleReasonableness', e.target.value)}
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              {/* Contract and Selling Period Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Contract and Selling Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="contractOfSaleSighted">Full copy of Contract of Sale sighted?</Label>
+                    <Select 
+                      value={formData.contractOfSaleSighted} 
+                      onValueChange={(value: 'Yes' | 'No') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          contractOfSaleSighted: value,
+                          contractRequiredMessage: value === 'No' ? 'A full copy of the contract of sale must be sighted before finalizing the valuation.' : ''
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Yes or No" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {formData.contractOfSaleSighted === 'No' && (
+                      <Alert className="mt-2">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>
+                          A full copy of the contract of sale must be sighted before finalizing the valuation.
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+                  <div>
+                    <Label htmlFor="sellingPeriodGreaterThan6Months">Selling period greater than 6 months?</Label>
+                    <Select 
+                      value={formData.sellingPeriodGreaterThan6Months} 
+                      onValueChange={(value: 'Yes' | 'No') => 
+                        setFormData(prev => ({
+                          ...prev,
+                          sellingPeriodGreaterThan6Months: value
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pre-set as No" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="underContract">Under Contract Status</Label>
+                  <Select 
+                    value={formData.underContract} 
+                    onValueChange={(value: 'Yes' | 'No') => 
+                      setFormData(prev => ({
+                        ...prev,
+                        underContract: value
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select under contract status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Yes">Under Contract</SelectItem>
+                      <SelectItem value="No">Not Under Contract</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    This selection can be configured in the Automation Control Centre
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
