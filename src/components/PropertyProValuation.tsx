@@ -1392,12 +1392,13 @@ export default function PropertyProValuation() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="automation">Automation Hub</TabsTrigger>
           <TabsTrigger value="property-summary">Property Summary</TabsTrigger>
           <TabsTrigger value="land-dwelling">Land & Dwelling</TabsTrigger>
           <TabsTrigger value="risk-analysis">Risk Analysis</TabsTrigger>
           <TabsTrigger value="sales-evidence">Sales Evidence</TabsTrigger>
+          <TabsTrigger value="general-comments">General Comments</TabsTrigger>
           <TabsTrigger value="vra-assessment">VRA Assessment</TabsTrigger>
           <TabsTrigger value="professional">Professional</TabsTrigger>
         </TabsList>
