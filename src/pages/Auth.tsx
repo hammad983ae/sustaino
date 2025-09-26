@@ -16,8 +16,22 @@ export default function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const [forgotPassword, setForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Clear any invalid authentication state
+  const clearAuthError = () => {
+    setError(null);
+    // Clean up URL parameters that might contain invalid tokens
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('access_token') || url.searchParams.has('refresh_token')) {
+      url.searchParams.delete('access_token');
+      url.searchParams.delete('refresh_token');
+      url.searchParams.delete('type');
+      window.history.replaceState({}, document.title, url.pathname);
+    }
+  };
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
@@ -30,20 +44,43 @@ export default function AuthPage() {
   const [displayName, setDisplayName] = useState('');
 
   useEffect(() => {
-    // Check if user is already logged in
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        navigate('/');
+    // Handle auth URL parameters (for email confirmation, password reset, etc.)
+    const handleAuthUrl = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Session error:', error);
+          // Clear any invalid tokens from URL
+          if (error.message.includes('Invalid token') || error.message.includes('signature is invalid')) {
+            setError('The authentication link has expired or is invalid. Please request a new one.');
+            // Clean up the URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            return;
+          }
+        }
+        
+        if (data?.session?.user) {
+          navigate('/');
+        }
+      } catch (err) {
+        console.error('Auth URL handling error:', err);
+        setError('Authentication error. Please try again.');
       }
     };
 
-    checkUser();
+    handleAuthUrl();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
+      console.log('Auth state change:', event);
+      
+      if (event === 'SIGNED_IN' && session?.user) {
         navigate('/');
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log('Token refreshed successfully');
+      } else if (event === 'SIGNED_OUT') {
+        setError(null);
       }
     });
 
@@ -152,17 +189,21 @@ export default function AuthPage() {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/auth`,
+        redirectTo: `${window.location.origin}/auth?type=recovery`,
       });
 
       if (error) {
-        setError(error.message);
+        if (error.message.includes('rate limit')) {
+          setError('Too many password reset requests. Please wait a few minutes before trying again.');
+        } else {
+          setError(error.message);
+        }
         return;
       }
 
       toast({
         title: "Reset link sent!",
-        description: "Please check your email for the password reset link.",
+        description: "Please check your email for the password reset link. The link will expire in 1 hour.",
       });
 
       setResetEmail('');
@@ -214,7 +255,19 @@ export default function AuthPage() {
               {error && (
                 <Alert variant="destructive" className="mt-4">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
+                  <AlertDescription className="flex items-center justify-between">
+                    <span>{error}</span>
+                    {(error.includes('Invalid token') || error.includes('signature is invalid')) && (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={clearAuthError}
+                        className="ml-2"
+                      >
+                        Clear Error
+                      </Button>
+                    )}
+                  </AlertDescription>
                 </Alert>
               )}
 
