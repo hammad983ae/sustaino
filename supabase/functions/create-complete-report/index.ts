@@ -139,12 +139,9 @@ serve(async (req) => {
 })
 
 async function createPropertyJob(reportData: CompleteReportData) {
-  const currentUser = await supabase.auth.getUser()
-  if (!currentUser.data.user) {
-    throw new Error('User must be authenticated')
-  }
-
-  const userId = currentUser.data.user.id
+  // Since authentication is disabled, we'll use a static user ID
+  // In a production environment, you'd want proper user management
+  const userId = '00000000-0000-0000-0000-000000000000'
 
   // Create or find property
   const { data: property, error: propertyError } = await supabase
