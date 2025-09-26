@@ -236,8 +236,6 @@ interface PropertyProValuationData {
     dateOfSale: string;
     salePrice: number;
     agent: string;
-    vendor: string;
-    purchaser: string;
     daysOnMarket: number;
     source: string;
   };
@@ -247,8 +245,6 @@ interface PropertyProValuationData {
   currentProposedSale: {
     contractDate: string;
     salePrice: number;
-    purchaser: string;
-    vendor: string;
     agent: string;
     source: string;
   };
@@ -403,8 +399,6 @@ export default function PropertyProValuation() {
       dateOfSale: '',
       salePrice: 0,
       agent: '',
-      vendor: '',
-      purchaser: '',
       daysOnMarket: 0,
       source: 'DOMAIN API'
     },
@@ -414,8 +408,6 @@ export default function PropertyProValuation() {
     currentProposedSale: {
       contractDate: '',
       salePrice: 0,
-      purchaser: '',
-      vendor: '',
       agent: '',
       source: 'OCR'
     },
@@ -2812,40 +2804,6 @@ export default function PropertyProValuation() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="previousSaleVendor">Vendor</Label>
-                      <Input
-                        id="previousSaleVendor"
-                        placeholder="Vendor name"
-                        value={formData.previousSaleData.vendor}
-                        onChange={(e) => 
-                          setFormData(prev => ({
-                            ...prev,
-                            previousSaleData: {
-                              ...prev.previousSaleData,
-                              vendor: e.target.value
-                            }
-                          }))
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="previousSalePurchaser">Purchaser</Label>
-                      <Input
-                        id="previousSalePurchaser"
-                        placeholder="Purchaser name"
-                        value={formData.previousSaleData.purchaser}
-                        onChange={(e) => 
-                          setFormData(prev => ({
-                            ...prev,
-                            previousSaleData: {
-                              ...prev.previousSaleData,
-                              purchaser: e.target.value
-                            }
-                          }))
-                        }
-                      />
-                    </div>
-                    <div>
                       <Label htmlFor="previousSaleDaysOnMarket">Days on Market</Label>
                       <Input
                         id="previousSaleDaysOnMarket"
@@ -2949,40 +2907,6 @@ export default function PropertyProValuation() {
                             currentProposedSale: {
                               ...prev.currentProposedSale,
                               salePrice: Number(e.target.value)
-                            }
-                          }))
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="currentSalePurchaser">Purchaser</Label>
-                      <Input
-                        id="currentSalePurchaser"
-                        placeholder="Purchaser name"
-                        value={formData.currentProposedSale.purchaser}
-                        onChange={(e) => 
-                          setFormData(prev => ({
-                            ...prev,
-                            currentProposedSale: {
-                              ...prev.currentProposedSale,
-                              purchaser: e.target.value
-                            }
-                          }))
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="currentSaleVendor">Vendor</Label>
-                      <Input
-                        id="currentSaleVendor"
-                        placeholder="Vendor name"
-                        value={formData.currentProposedSale.vendor}
-                        onChange={(e) => 
-                          setFormData(prev => ({
-                            ...prev,
-                            currentProposedSale: {
-                              ...prev.currentProposedSale,
-                              vendor: e.target.value
                             }
                           }))
                         }
