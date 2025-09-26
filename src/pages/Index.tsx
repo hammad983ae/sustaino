@@ -36,6 +36,7 @@ import ThunderboltIcon from '@/components/ThunderboltIcon';
 import InformationBrochure from '@/components/InformationBrochure';
 import { UserGuide } from '@/components/UserGuide';
 import ProfessionalDeclarations from '@/components/ProfessionalDeclarations';
+import PropertyProValuation from '@/components/PropertyProValuation';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
 import AuthStatus from '@/components/AuthStatus';
 import { useNavigate } from 'react-router-dom';
@@ -538,13 +539,11 @@ const Index = () => {
                           Property Pro Valuation
                         </CardTitle>
                         <p className="text-purple-700">
-                          Advanced property valuation analysis and reporting tools
+                          Professional property valuation report template with comprehensive analysis sections
                         </p>
                       </CardHeader>
-                      <CardContent className="p-8">
-                        <div className="p-8 text-center text-muted-foreground">
-                          Property Pro Valuation tab created - ready for content
-                        </div>
+                      <CardContent className="p-0">
+                        <PropertyProValuation />
                       </CardContent>
                     </Card>
                   </TabsContent>
