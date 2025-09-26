@@ -33,7 +33,7 @@ const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
     if (isOpen && reportData) {
       compileReport();
     }
-  }, [isOpen, reportData]);
+  }, [isOpen]);
 
   const compileReport = async () => {
     setIsLoading(true);
