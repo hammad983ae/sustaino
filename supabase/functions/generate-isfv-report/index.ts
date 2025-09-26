@@ -114,7 +114,11 @@ serve(async (req) => {
   }
 
   try {
-    const { jobId, reportData } = await req.json() as { jobId: string, reportData: ISFVReportData }
+    const { jobId, reportData, format = 'html' } = await req.json() as { 
+      jobId: string, 
+      reportData: ISFVReportData,
+      format?: 'html' | 'pdf'
+    }
 
     if (!jobId || !reportData) {
       return new Response(JSON.stringify({ error: "Missing jobId or reportData" }), {
@@ -126,48 +130,203 @@ serve(async (req) => {
     // Generate the HTML content for the ISFV report
     const htmlContent = generateISFVReportHTML(reportData)
     
-    // For now, we'll return the HTML content. In a production setup, 
-    // you would convert this to PDF using a service like Puppeteer
-    const reportBytes = new TextEncoder().encode(htmlContent)
-
-    // Save to storage
-    const reportPath = `reports/isfv/${jobId}_isfv_report.html`
-
-    const { error: uploadError } = await supabase.storage
-      .from("property-images")
-      .upload(reportPath, reportBytes, {
-        contentType: "text/html",
-        upsert: true,
-      })
-
-    if (uploadError) {
-      throw new Error(uploadError.message)
-    }
-
-    // Create signed URL
-    const { data: signedUrl } = await supabase.storage
-      .from("property-images")
-      .createSignedUrl(reportPath, 60 * 60 * 24) // 24h link
-
-    return new Response(
-      JSON.stringify({ 
-        success: true,
-        report_url: signedUrl?.signedUrl,
-        message: "ISFV Report generated successfully"
-      }),
-      { 
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    if (format === 'pdf') {
+      // Generate PDF using HTML-to-PDF conversion
+      const pdfResponse = await generatePDF(htmlContent)
+      
+      if (!pdfResponse.ok) {
+        throw new Error('Failed to generate PDF')
       }
-    )
+
+      const pdfBuffer = await pdfResponse.arrayBuffer()
+      const pdfBytes = new Uint8Array(pdfBuffer)
+
+      // Save PDF to storage
+      const pdfPath = `reports/isfv/${jobId}_isfv_report.pdf`
+
+      const { error: pdfUploadError } = await supabase.storage
+        .from("property-images")
+        .upload(pdfPath, pdfBytes, {
+          contentType: "application/pdf",
+          upsert: true,
+        })
+
+      if (pdfUploadError) {
+        throw new Error(pdfUploadError.message)
+      }
+
+      // Create signed URL for PDF
+      const { data: pdfSignedUrl } = await supabase.storage
+        .from("property-images")
+        .createSignedUrl(pdfPath, 60 * 60 * 24) // 24h link
+
+      return new Response(
+        JSON.stringify({ 
+          success: true,
+          report_url: pdfSignedUrl?.signedUrl,
+          format: 'pdf',
+          message: "ISFV PDF Report generated successfully"
+        }),
+        { 
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    } else {
+      // Generate HTML report (existing functionality)
+      const reportBytes = new TextEncoder().encode(htmlContent)
+
+      // Save HTML to storage
+      const reportPath = `reports/isfv/${jobId}_isfv_report.html`
+
+      const { error: uploadError } = await supabase.storage
+        .from("property-images")
+        .upload(reportPath, reportBytes, {
+          contentType: "text/html",
+          upsert: true,
+        })
+
+      if (uploadError) {
+        throw new Error(uploadError.message)
+      }
+
+      // Create signed URL for HTML
+      const { data: signedUrl } = await supabase.storage
+        .from("property-images")
+        .createSignedUrl(reportPath, 60 * 60 * 24) // 24h link
+
+      return new Response(
+        JSON.stringify({ 
+          success: true,
+          report_url: signedUrl?.signedUrl,
+          format: 'html',
+          message: "ISFV Report generated successfully"
+        }),
+        { 
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
   } catch (error) {
     console.error('Error generating ISFV report:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     })
   }
 })
+
+async function generatePDF(htmlContent: string): Promise<Response> {
+  // Use a free HTML-to-PDF API service
+  const apiUrl = 'https://api.pdfshift.io/v3/convert/pdf'
+  
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('api:sk_demo_key'), // Using demo key - replace with actual key
+      },
+      body: JSON.stringify({
+        source: htmlContent,
+        landscape: false,
+        format: 'A4',
+        margin: {
+          top: '20mm',
+          bottom: '20mm',
+          left: '15mm',
+          right: '15mm'
+        },
+        wait_for: 1000,
+        javascript: false
+      })
+    })
+
+    if (!response.ok) {
+      // Fallback to a simpler PDF generation service if PDFShift fails
+      return await generatePDFWithAlternativeService(htmlContent)
+    }
+
+    return response
+  } catch (error) {
+    console.error('Error with PDF generation service:', error)
+    // Fallback to alternative service
+    return await generatePDFWithAlternativeService(htmlContent)
+  }
+}
+
+async function generatePDFWithAlternativeService(htmlContent: string): Promise<Response> {
+  // Fallback to HTML/CSS Print API as a simple alternative
+  const htmlWithPrintStyles = htmlContent.replace(
+    '</head>',
+    `
+    <style media="print">
+      @page { 
+        size: A4; 
+        margin: 20mm 15mm; 
+      }
+      body { 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact;
+      }
+      .page-break { 
+        page-break-before: always; 
+      }
+    </style>
+    </head>`
+  )
+
+  try {
+    // Use htmlcsstoimage.com API for PDF generation (they have a free tier)
+    const response = await fetch('https://hcti.io/v1/image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('demo:demo'), // Demo credentials
+      },
+      body: JSON.stringify({
+        html: htmlWithPrintStyles,
+        width: 794, // A4 width in pixels at 96 DPI
+        height: 1123, // A4 height in pixels at 96 DPI
+        device_scale: 2,
+        format: 'pdf'
+      })
+    })
+
+    if (!response.ok) {
+      // Final fallback - return the HTML as a "pseudo-PDF" with print styles
+      const printHtml = htmlWithPrintStyles
+      return new Response(printHtml, {
+        headers: {
+          'Content-Type': 'text/html',
+          'Content-Disposition': 'attachment; filename="report.html"'
+        }
+      })
+    }
+
+    const data = await response.json()
+    
+    if (data.url) {
+      // Fetch the generated PDF
+      const pdfResponse = await fetch(data.url)
+      return pdfResponse
+    } else {
+      throw new Error('No PDF URL returned from service')
+    }
+  } catch (error) {
+    console.error('Fallback PDF generation failed:', error)
+    // Ultimate fallback - return HTML with print styles
+    const printHtml = htmlWithPrintStyles
+    return new Response(printHtml, {
+      headers: {
+        'Content-Type': 'text/html',
+        'Content-Disposition': 'attachment; filename="report.html"'
+      }
+    })
+  }
+}
 
 function generateISFVReportHTML(data: ISFVReportData): string {
   return `

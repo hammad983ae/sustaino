@@ -1014,13 +1014,14 @@ export default function PropertyProValuation() {
     updateAutomationLog('All data cleared - ready for new valuation');
   };
 
-  const generateISFVReport = async () => {
+  const generateISFVReport = async (format: 'html' | 'pdf' = 'html') => {
     setIsGenerating(true);
     
     try {
       const { data, error } = await supabase.functions.invoke('generate-isfv-report', {
         body: {
           jobId: `ISFV_${Date.now()}`,
+          format: format,
           reportData: {
             propertyAddress: formData.propertyAddress,
             instructedBy: formData.instructedBy || "N/A",
@@ -1112,6 +1113,94 @@ export default function PropertyProValuation() {
       console.error('Error generating ISFV report:', error);
       toast.error("Error", {
         description: "Failed to generate ISFV report. Please try again.",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const generatePDFReport = async () => {
+    setIsGenerating(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-isfv-report', {
+        body: {
+          jobId: `ISFV_${Date.now()}`,
+          format: 'pdf',
+          reportData: {
+            propertyAddress: formData.propertyAddress,
+            instructedBy: formData.instructedBy || "N/A",
+            lender: formData.lender || "TBA",
+            contact: formData.contact || "N/A",
+            loanRefNo: formData.loanRefNo || "TBA",
+            clientRefNo: formData.clientRefNo || "N/A",
+            valuersRefNo: formData.valuersRefNo || "001",
+            borrower: formData.borrower || "TBA",
+            titleSearchSighted: formData.titleSearchSighted === 'Yes',
+            realPropertyDescription: formData.realPropertyDescription,
+            encumbrancesRestrictions: formData.encumbrancesRestrictions,
+            siteDimensions: formData.siteDimensions,
+            siteArea: formData.siteArea,
+            zoning: formData.zoning,
+            currentUse: formData.currentUse,
+            localGovernmentArea: formData.localGovernmentArea,
+            mainDwelling: formData.mainDwelling,
+            builtAbout: formData.builtAbout,
+            additions: formData.additions,
+            livingArea: Number(formData.livingArea) || 0,
+            outdoorArea: Number(formData.outdoorArea) || 0,
+            otherArea: Number(formData.otherArea) || 0,
+            carAccommodation: Number(formData.carAccommodation) || 0,
+            carAreas: Number(formData.carAreas) || 0,
+            marketability: formData.marketability,
+            heritageIssues: formData.heritageIssues === 'Yes',
+            environmentalIssues: formData.environmentalIssues === 'Yes',
+            essentialRepairs: formData.essentialRepairs === 'Yes',
+            estimatedCost: formData.estimatedCost,
+            propertyIdentification: formData.propertyIdentification,
+            zoningEffect: formData.zoningEffect,
+            location: formData.location,
+            neighbourhood: formData.neighbourhood,
+            siteAccess: formData.siteAndAccess,
+            services: formData.services,
+            propertyRiskRatings: formData.propertyRiskRatings,
+            marketRiskRatings: formData.marketRiskRatings,
+            interestValued: formData.interestValued,
+            valueComponent: formData.valueComponent,
+            rentalAssessment: Number(formData.rentalAssessment) || 0,
+            insuranceEstimate: Number(formData.insuranceEstimate) || 0,
+            landValue: Number(formData.landValue) || 0,
+            improvementsValue: Number(formData.improvementValue) || 0,
+            marketValue: Number(formData.marketValue) || 0,
+            valuationFirm: "ISFV Systems",
+            valuer: "Professional Valuer",
+            apiNumber: "75366",
+            inspectionDate: formData.inspectionDate,
+            issueDate: formData.issueDate
+          }
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data && data.report_url) {
+        setReportUrl(data.report_url);
+        updateAutomationLog(`✅ PDF Report generated successfully! Format: ${data.format || 'PDF'}`);
+        toast.success("Success", {
+          description: "PDF Report generated successfully! Click 'Download Report' to download.",
+        });
+        
+        // Automatically trigger download
+        window.open(data.report_url, '_blank');
+      } else {
+        throw new Error('No report URL received');
+      }
+    } catch (error) {
+      console.error('Error generating PDF report:', error);
+      toast.error("Error", {
+        description: "Failed to generate PDF report. Please try again.",
       });
     } finally {
       setIsGenerating(false);
@@ -3621,7 +3710,7 @@ export default function PropertyProValuation() {
                 </p>
                 <div className="flex gap-3">
                   <Button 
-                    onClick={generateISFVReport} 
+                    onClick={() => generateISFVReport('html')} 
                     disabled={isGenerating || !formData.propertyAddress}
                     className="flex-1"
                   >
@@ -3633,7 +3722,24 @@ export default function PropertyProValuation() {
                     ) : (
                       <>
                         <FileText className="h-4 w-4 mr-2" />
-                        Generate ISFV Report
+                        Generate HTML Report
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    onClick={generatePDFReport}
+                    disabled={isGenerating || !formData.propertyAddress}
+                    variant="default"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                        Generating PDF...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-4 w-4 mr-2" />
+                        Generate PDF Report
                       </>
                     )}
                   </Button>
