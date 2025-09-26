@@ -116,14 +116,35 @@ interface AutomationStatus {
 
 // Main Property Data Interface
 interface PropertyProValuationData {
-  // Property Summary (Section 1)
+  // Property Summary (Section 1) - Comprehensive Details
   propertyAddress: string;
+  titleSearchSighted: 'Yes' | 'No';
   realPropertyDescription: string;
+  encumbrancesRestrictions: string;
   siteDimensions: string;
   siteArea: string;
   zoning: string;
   currentUse: string;
   localGovernmentArea: string;
+  
+  // Main Dwelling Details
+  mainDwelling: string;
+  builtAbout: string;
+  additions: string;
+  
+  // Areas
+  livingArea: number;
+  outdoorArea: number;
+  otherArea: number;
+  carAccommodation: number;
+  carAreas: number;
+  
+  // Property Conditions
+  marketability: 'Excellent' | 'Good' | 'Fair' | 'Poor';
+  heritageIssues: 'Yes' | 'No';
+  environmentalIssues: 'Yes' | 'No';
+  essentialRepairs: 'Yes' | 'No';
+  estimatedCost: number;
   
   // Valuation Summary
   interestValued: string;
@@ -185,12 +206,27 @@ interface PropertyProValuationData {
 export default function PropertyProValuation() {
   const [formData, setFormData] = useState<PropertyProValuationData>({
     propertyAddress: '',
+    titleSearchSighted: 'No',
     realPropertyDescription: '',
+    encumbrancesRestrictions: '',
     siteDimensions: '',
     siteArea: '',
     zoning: '',
     currentUse: '',
     localGovernmentArea: '',
+    mainDwelling: '',
+    builtAbout: '',
+    additions: '',
+    livingArea: 0,
+    outdoorArea: 0,
+    otherArea: 0,
+    carAccommodation: 0,
+    carAreas: 0,
+    marketability: 'Good',
+    heritageIssues: 'No',
+    environmentalIssues: 'No',
+    essentialRepairs: 'No',
+    estimatedCost: 0,
     interestValued: 'Fee Simple Vacant Possession',
     valueComponent: 'Existing Property',
     landValue: 0,
@@ -317,10 +353,27 @@ export default function PropertyProValuation() {
     
     // Mock data extraction
     const mockData = {
-      realPropertyDescription: 'Lot 15 PS444223, Title not searched/Volume and Folio',
-      zoning: 'LDR22',
-      localGovernmentArea: 'City of Mildura',
-      siteArea: '1508 sqm',
+      propertyAddress: '196 Seventeenth Street Mildura VIC 3500',
+      titleSearchSighted: 'No' as const,
+      realPropertyDescription: 'Lot 9 PS444723 - Title not supplied for Volume and Folio',
+      encumbrancesRestrictions: 'Not Known',
+      siteDimensions: 'Irregular shape lot with approximately 43 metre frontage and 33 metre rear boundary overlooking Lake Hawthorn',
+      siteArea: '4204 sqm',
+      zoning: 'LDRZ2',
+      currentUse: 'Residential',
+      localGovernmentArea: 'Mildura Rural City Council',
+      mainDwelling: 'Dwelling with 3 Bedroom(s) And 2 Bathroom(s)',
+      builtAbout: 'Circa 2005',
+      additions: 'N/A',
+      livingArea: 336,
+      outdoorArea: 44,
+      otherArea: 0,
+      carAccommodation: 3,
+      carAreas: 72,
+      marketability: 'Excellent' as const,
+      heritageIssues: 'No' as const,
+      environmentalIssues: 'No' as const,
+      essentialRepairs: 'No' as const,
       landValue: 350000,
       improvementValue: 500000,
       marketValue: 850000,
@@ -596,12 +649,27 @@ export default function PropertyProValuation() {
     setFormData(prev => ({
       ...prev,
       propertyAddress: '',
+      titleSearchSighted: 'No',
       realPropertyDescription: '',
+      encumbrancesRestrictions: '',
       siteDimensions: '',
       siteArea: '',
       zoning: '',
       currentUse: '',
       localGovernmentArea: '',
+      mainDwelling: '',
+      builtAbout: '',
+      additions: '',
+      livingArea: 0,
+      outdoorArea: 0,
+      otherArea: 0,
+      carAccommodation: 0,
+      carAreas: 0,
+      marketability: 'Good',
+      heritageIssues: 'No',
+      environmentalIssues: 'No',
+      essentialRepairs: 'No',
+      estimatedCost: 0,
       interestValued: 'Fee Simple Vacant Possession',
       valueComponent: 'Existing Property',
       landValue: 0,
@@ -967,80 +1035,290 @@ export default function PropertyProValuation() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+              {/* Basic Property Information */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="propertyAddress">Property Address</Label>
+                    <Input
+                      id="propertyAddress"
+                      placeholder="Enter full property address"
+                      value={formData.propertyAddress}
+                      onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="titleSearchSighted">Title Search Sighted?</Label>
+                    <Select 
+                      value={formData.titleSearchSighted} 
+                      onValueChange={(value: 'Yes' | 'No') => handleInputChange('titleSearchSighted', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
                 <div>
-                  <Label htmlFor="propertyAddress">Property Address</Label>
+                  <Label htmlFor="realPropertyDescription">Real Property Description</Label>
+                  <Textarea
+                    id="realPropertyDescription"
+                    placeholder="e.g., Lot 9 PS444723 - Title not supplied for Volume and Folio"
+                    value={formData.realPropertyDescription}
+                    onChange={(e) => handleInputChange('realPropertyDescription', e.target.value)}
+                    rows={2}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="encumbrancesRestrictions">Encumbrances/Restrictions</Label>
                   <Input
-                    id="propertyAddress"
-                    placeholder="Enter full property address"
-                    value={formData.propertyAddress}
-                    onChange={(e) => handleInputChange('propertyAddress', e.target.value)}
+                    id="encumbrancesRestrictions"
+                    placeholder="e.g., Not Known"
+                    value={formData.encumbrancesRestrictions}
+                    onChange={(e) => handleInputChange('encumbrancesRestrictions', e.target.value)}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="siteDimensions">Site Dimensions</Label>
+                    <Textarea
+                      id="siteDimensions"
+                      placeholder="e.g., Irregular shape lot with approximately 43 metre frontage..."
+                      value={formData.siteDimensions}
+                      onChange={(e) => handleInputChange('siteDimensions', e.target.value)}
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="siteArea">Site Area</Label>
+                    <Input
+                      id="siteArea"
+                      placeholder="e.g., 4204 sqm"
+                      value={formData.siteArea}
+                      onChange={(e) => handleInputChange('siteArea', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="zoning">Zoning</Label>
+                    <Input
+                      id="zoning"
+                      placeholder="e.g., LDRZ2"
+                      value={formData.zoning}
+                      onChange={(e) => handleInputChange('zoning', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="currentUse">Current Use</Label>
+                    <Select value={formData.currentUse} onValueChange={(value) => handleInputChange('currentUse', value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select current use" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Residential">Residential</SelectItem>
+                        <SelectItem value="Vacant Residential">Vacant Residential</SelectItem>
+                        <SelectItem value="Mixed Use">Mixed Use</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="localGovernmentArea">LGA</Label>
+                    <Input
+                      id="localGovernmentArea"
+                      placeholder="e.g., Mildura Rural City Council"
+                      value={formData.localGovernmentArea}
+                      onChange={(e) => handleInputChange('localGovernmentArea', e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Main Dwelling Details */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Main Dwelling & Property Details</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="mainDwelling">Main Dwelling</Label>
+                    <Input
+                      id="mainDwelling"
+                      placeholder="e.g., Dwelling with 3 Bedroom(s) And 2 Bathroom(s)"
+                      value={formData.mainDwelling}
+                      onChange={(e) => handleInputChange('mainDwelling', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="builtAbout">Built About</Label>
+                    <Input
+                      id="builtAbout"
+                      placeholder="e.g., Circa 2005"
+                      value={formData.builtAbout}
+                      onChange={(e) => handleInputChange('builtAbout', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="additions">Additions</Label>
+                  <Input
+                    id="additions"
+                    placeholder="e.g., N/A"
+                    value={formData.additions}
+                    onChange={(e) => handleInputChange('additions', e.target.value)}
                   />
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="realPropertyDescription">Real Property Description</Label>
-                <Textarea
-                  id="realPropertyDescription"
-                  placeholder="Describe the property in detail"
-                  value={formData.realPropertyDescription}
-                  onChange={(e) => handleInputChange('realPropertyDescription', e.target.value)}
-                  rows={3}
-                />
+              <Separator />
+
+              {/* Areas */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Areas</h3>
+                
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div>
+                    <Label htmlFor="livingArea">Living (sqm)</Label>
+                    <Input
+                      id="livingArea"
+                      type="number"
+                      placeholder="336"
+                      value={formData.livingArea || ''}
+                      onChange={(e) => handleInputChange('livingArea', Number(e.target.value))}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="outdoorArea">Outdoor (sqm)</Label>
+                    <Input
+                      id="outdoorArea"
+                      type="number"
+                      placeholder="44"
+                      value={formData.outdoorArea || ''}
+                      onChange={(e) => handleInputChange('outdoorArea', Number(e.target.value))}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="otherArea">Other (sqm)</Label>
+                    <Input
+                      id="otherArea"
+                      type="number"
+                      placeholder="0"
+                      value={formData.otherArea || ''}
+                      onChange={(e) => handleInputChange('otherArea', Number(e.target.value))}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="carAccommodation">Car Accommodation</Label>
+                    <Input
+                      id="carAccommodation"
+                      type="number"
+                      placeholder="3"
+                      value={formData.carAccommodation || ''}
+                      onChange={(e) => handleInputChange('carAccommodation', Number(e.target.value))}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="carAreas">Car Areas (sqm)</Label>
+                    <Input
+                      id="carAreas"
+                      type="number"
+                      placeholder="72"
+                      value={formData.carAreas || ''}
+                      onChange={(e) => handleInputChange('carAreas', Number(e.target.value))}
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="siteDimensions">Site Dimensions</Label>
-                  <Input
-                    id="siteDimensions"
-                    placeholder="e.g., Irregular shaped lot"
-                    value={formData.siteDimensions}
-                    onChange={(e) => handleInputChange('siteDimensions', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="siteArea">Site Area</Label>
-                  <Input
-                    id="siteArea"
-                    placeholder="e.g., 1508 sqm"
-                    value={formData.siteArea}
-                    onChange={(e) => handleInputChange('siteArea', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="currentUse">Current Use</Label>
-                  <Select value={formData.currentUse} onValueChange={(value) => handleInputChange('currentUse', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select current use" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="residential">Residential</SelectItem>
-                      <SelectItem value="vacant-residential">Vacant Residential</SelectItem>
-                      <SelectItem value="mixed-use">Mixed Use</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              <Separator />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="zoning">Zoning</Label>
-                  <Input
-                    id="zoning"
-                    placeholder="e.g., LDR22"
-                    value={formData.zoning}
-                    onChange={(e) => handleInputChange('zoning', e.target.value)}
-                  />
+              {/* Property Conditions */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Property Conditions & Issues</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div>
+                    <Label htmlFor="marketability">Marketability</Label>
+                    <Select 
+                      value={formData.marketability} 
+                      onValueChange={(value: 'Excellent' | 'Good' | 'Fair' | 'Poor') => handleInputChange('marketability', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Excellent">Excellent</SelectItem>
+                        <SelectItem value="Good">Good</SelectItem>
+                        <SelectItem value="Fair">Fair</SelectItem>
+                        <SelectItem value="Poor">Poor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="heritageIssues">Heritage Issues</Label>
+                    <Select 
+                      value={formData.heritageIssues} 
+                      onValueChange={(value: 'Yes' | 'No') => handleInputChange('heritageIssues', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="environmentalIssues">Environmental Issues</Label>
+                    <Select 
+                      value={formData.environmentalIssues} 
+                      onValueChange={(value: 'Yes' | 'No') => handleInputChange('environmentalIssues', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="essentialRepairs">Essential Repairs</Label>
+                    <Select 
+                      value={formData.essentialRepairs} 
+                      onValueChange={(value: 'Yes' | 'No') => handleInputChange('essentialRepairs', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
+
                 <div>
-                  <Label htmlFor="localGovernmentArea">Local Government Area</Label>
+                  <Label htmlFor="estimatedCost">Estimated Cost</Label>
                   <Input
-                    id="localGovernmentArea"
-                    placeholder="e.g., City of Mildura"
-                    value={formData.localGovernmentArea}
-                    onChange={(e) => handleInputChange('localGovernmentArea', e.target.value)}
+                    id="estimatedCost"
+                    type="number"
+                    placeholder="Enter estimated cost if applicable"
+                    value={formData.estimatedCost || ''}
+                    onChange={(e) => handleInputChange('estimatedCost', Number(e.target.value))}
                   />
                 </div>
               </div>
