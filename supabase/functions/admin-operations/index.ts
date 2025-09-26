@@ -1,5 +1,5 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -34,7 +34,7 @@ serve(async (req) => {
         
         if (filters) {
           Object.entries(filters).forEach(([key, value]) => {
-            query = query.eq(key, value);
+            query = query.eq(key, value as any);
           });
         }
 
@@ -79,7 +79,7 @@ serve(async (req) => {
         let query = supabaseAdmin.from(table).update(data);
         
         Object.entries(filters).forEach(([key, value]) => {
-          query = query.eq(key, value);
+          query = query.eq(key, value as any);
         });
 
         const { data: result, error } = await query.select();
@@ -100,13 +100,13 @@ serve(async (req) => {
           throw new Error("Filters are required for delete operation");
         }
 
-        let query = supabaseAdmin.from(table);
+        let query = supabaseAdmin.from(table).delete();
         
         Object.entries(filters).forEach(([key, value]) => {
-          query = query.eq(key, value);
+          query = query.eq(key, value as any);
         });
 
-        const { data: result, error } = await query.delete();
+        const { data: result, error } = await query;
 
         if (error) throw error;
 
@@ -152,7 +152,7 @@ serve(async (req) => {
 
         // Get table counts for main tables
         const tables = ['jobs', 'properties', 'evidence_files', 'valuation_jobs'];
-        const tableCounts = {};
+        const tableCounts: Record<string, number> = {};
 
         for (const tableName of tables) {
           try {
@@ -160,7 +160,7 @@ serve(async (req) => {
               .from(tableName)
               .select('*', { count: 'exact', head: true });
             
-            if (!error) {
+            if (!error && count !== null) {
               tableCounts[tableName] = count;
             }
           } catch (err) {
@@ -190,7 +190,7 @@ serve(async (req) => {
     
     return new Response(JSON.stringify({
       success: false,
-      error: error.message
+      error: error instanceof Error ? error.message : 'Unknown error'
     }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

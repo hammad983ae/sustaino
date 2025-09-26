@@ -1,5 +1,5 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -65,7 +65,7 @@ serve(async (req) => {
             email_confirm: true,
             phone_confirm: true,
             user_metadata: {
-              ...user.user_metadata,
+              ...(user.user?.user_metadata || {}),
               auth_issue_resolved: new Date().toISOString()
             }
           }
@@ -112,7 +112,7 @@ serve(async (req) => {
     
     return new Response(JSON.stringify({
       success: false,
-      error: error.message
+      error: error instanceof Error ? error.message : 'Unknown error'
     }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
