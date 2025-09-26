@@ -9,6 +9,7 @@ import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { clearAuthError, handleAuthTokenError } from '@/utils/authUtils';
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,16 +21,17 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Clear any invalid authentication state
-  const clearAuthError = () => {
-    setError(null);
-    // Clean up URL parameters that might contain invalid tokens
-    const url = new URL(window.location.href);
-    if (url.searchParams.has('access_token') || url.searchParams.has('refresh_token')) {
-      url.searchParams.delete('access_token');
-      url.searchParams.delete('refresh_token');
-      url.searchParams.delete('type');
-      window.history.replaceState({}, document.title, url.pathname);
+  // Enhanced error clearing function
+  const clearAuthErrorState = async () => {
+    try {
+      await clearAuthError();
+      setError(null);
+      toast({
+        title: "Error cleared",
+        description: "Authentication state has been reset. You can now try logging in again.",
+      });
+    } catch (err) {
+      console.error('Failed to clear auth error:', err);
     }
   };
 
@@ -44,9 +46,21 @@ export default function AuthPage() {
   const [displayName, setDisplayName] = useState('');
 
   useEffect(() => {
-    // Handle auth URL parameters (for email confirmation, password reset, etc.)
+    // Handle auth URL parameters and detect invalid tokens
     const handleAuthUrl = async () => {
       try {
+        // Check URL for error parameters first
+        const url = new URL(window.location.href);
+        const errorFromUrl = url.searchParams.get('error');
+        const errorDescription = url.searchParams.get('error_description');
+        
+        if (errorFromUrl) {
+          setError(errorDescription || errorFromUrl);
+          // Clean up the URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+          return;
+        }
+
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -257,16 +271,26 @@ export default function AuthPage() {
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription className="flex items-center justify-between">
                     <span>{error}</span>
-                    {(error.includes('Invalid token') || error.includes('signature is invalid')) && (
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={clearAuthError}
-                        className="ml-2"
-                      >
-                        Clear Error
-                      </Button>
-                    )}
+                    <div className="flex gap-2 ml-2">
+                      {(error.includes('Invalid token') || error.includes('signature is invalid')) && (
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={clearAuthErrorState}
+                        >
+                          Clear & Reset
+                        </Button>
+                      )}
+                      {error.includes('signature is invalid') && (
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={handleAuthTokenError}
+                        >
+                          Full Reset
+                        </Button>
+                      )}
+                    </div>
                   </AlertDescription>
                 </Alert>
               )}

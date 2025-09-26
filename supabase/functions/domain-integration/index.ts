@@ -148,11 +148,11 @@ function transformToSalesEvidence(listing: any, sourceUrl?: string): Partial<Sal
     days_on_market: listing.daysOnMarket,
     listing_price: listing.listingPrice,
     price_per_sqm: listing.pricePerSqm,
-    data_source: 'Domain API',
+    // data_source: 'Domain API', // Removed: not in SalesEvidenceData type
     source_url: sourceUrl,
-    extraction_date: new Date().toISOString(),
-    data_quality_score: 85, // High quality for API data
-    verification_status: 'verified',
+    // extraction_date: new Date().toISOString(), // Removed: not in SalesEvidenceData type
+    // data_quality_score: 85, // Removed: not in SalesEvidenceData type
+    // verification_status: 'verified', // Removed: not in SalesEvidenceData type
     images: listing.images || []
   }
 }
@@ -182,11 +182,11 @@ function transformToLeasingEvidence(listing: any, sourceUrl?: string): Partial<L
     postcode: listing.postcode,
     lease_type: listing.leaseType,
     tenant_type: listing.tenantType,
-    data_source: 'Domain API',
+    // data_source: 'Domain API', // Removed: not in LeasingEvidenceData type
     source_url: sourceUrl,
-    extraction_date: new Date().toISOString(),
-    data_quality_score: 85, // High quality for API data
-    verification_status: 'verified',
+    // extraction_date: new Date().toISOString(), // Removed: not in LeasingEvidenceData type
+    // data_quality_score: 85, // Removed: not in LeasingEvidenceData type
+    // verification_status: 'verified', // Removed: not in LeasingEvidenceData type
     images: listing.images || []
   }
 }
@@ -399,7 +399,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Domain API Error:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
