@@ -38,7 +38,7 @@ import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import ClientDemo from "./pages/ClientDemo";
-import AuthPage from "./pages/Auth";
+
 import AutomatedReport from "./pages/AutomatedReport";
 import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
 import CryptoTradingDashboard from "./pages/CryptoTradingDashboard";
@@ -103,7 +103,7 @@ const App = () => (
                 <Route path="/work-hub" element={<WorkHubPage />} />
                 <Route path="/white-label" element={<WhiteLabelConfig />} />
                 <Route path="/client-demo" element={<ClientDemo />} />
-                <Route path="/auth" element={<AuthPage />} />
+                
                 <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
                 <Route path="/comprehensive-valuation-analysis" element={<ComprehensiveValuationAnalysis />} />
                 <Route path="/crypto-trading" element={<CryptoTradingDashboard />} />
