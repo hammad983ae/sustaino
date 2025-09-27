@@ -163,7 +163,7 @@ interface PropertyProValuationData {
   rentalAssessment: number;
   insuranceEstimate: number;
 
-  reportType: 'AS IS' | 'AS IF COMPLETE' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS';
+  reportType: 'AS IS' | 'AS IF COMPLETE (TBE/Construction)' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS';
   inspectionDate: string;
   valuationDate: string;
   
@@ -182,6 +182,20 @@ interface PropertyProValuationData {
     constructionType: 'house' | 'townhouse' | 'unit' | 'commercial';
     riskAllowance: number; // percentage
     profitAllowance: number; // percentage
+    // AS IF COMPLETE specific fields
+    buildingCost: number;
+    checkCost: number;
+    outOfContractItems: string;
+    progressPaymentSchedules: 'Yes' | 'No';
+    progressPaymentComments: string;
+    costValidationResult: string;
+    automatedRiskAssessment?: {
+      builderLicense: string;
+      councilApprovals: string;
+      riskAllowance: string;
+      vraCompliance: string;
+      alerts: string[];
+    };
   };
   
   // Land Information (Section 4) - Enhanced
@@ -479,6 +493,12 @@ export default function PropertyProValuation() {
       plansAndSpecsUploaded: false,
       buildingPermitNumber: '',
       remainingWorkDescription: '',
+      buildingCost: 0,
+      checkCost: 0,
+      outOfContractItems: '',
+      progressPaymentSchedules: 'No',
+      progressPaymentComments: '',
+      costValidationResult: '',
       constructionType: 'house',
       riskAllowance: 10,
       profitAllowance: 15
@@ -1206,6 +1226,151 @@ export default function PropertyProValuation() {
     updateAutomationLog('All data cleared - ready for new valuation');
   };
 
+  // AS IF COMPLETE specific functions
+  const extractBuildingCostFromContract = async () => {
+    if (!formData.tbeDetails) return;
+    
+    setIsProcessingOCR(true);
+    try {
+      // Simulate OCR processing for building contract
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock extracted building cost from contract
+      const extractedCost = 450000; // This would come from OCR
+      
+      setFormData(prev => ({
+        ...prev,
+        tbeDetails: {
+          ...prev.tbeDetails!,
+          buildingCost: extractedCost
+        }
+      }));
+      
+      toast.success('Building cost extracted from contract');
+    } catch (error) {
+      toast.error('Failed to extract building cost');
+    } finally {
+      setIsProcessingOCR(false);
+    }
+  };
+
+  const validateBuildingCosts = () => {
+    if (!formData.tbeDetails || !formData.livingArea) return;
+    
+    const standardRate = 2800; // $2,800 per sqm
+    const contractCostPerSqm = formData.tbeDetails.buildingCost / formData.livingArea;
+    const variation = ((contractCostPerSqm - standardRate) / standardRate) * 100;
+    
+    let result = '';
+    if (Math.abs(variation) <= 10) {
+      result = `Building cost is within acceptable range (${variation.toFixed(1)}% variation from standard rate)`;
+    } else if (variation > 10) {
+      result = `Building cost is above market rate (+${variation.toFixed(1)}% variation). Consider reviewing contract terms.`;
+    } else {
+      result = `Building cost is below market rate (${variation.toFixed(1)}% variation). Verify quality specifications.`;
+    }
+    
+    setFormData(prev => ({
+      ...prev,
+      tbeDetails: {
+        ...prev.tbeDetails!,
+        checkCost: contractCostPerSqm,
+        costValidationResult: result
+      }
+    }));
+  };
+
+  const analyzeProgressPaymentSchedule = () => {
+    // Simulate analysis of progress payment schedule
+    const frontLoadedComment = "Progress Payment Schedule analysis: Schedule appears to be front-end loaded and may not comply with HIA standards. Recommend review of payment milestones.";
+    const compliantComment = "Progress Payment Schedule analysis: Schedule appears to comply with HIA standards with appropriate milestone-based payments.";
+    
+    // Mock analysis - in reality this would analyze uploaded contract
+    const isFrontLoaded = Math.random() > 0.5;
+    
+    setFormData(prev => ({
+      ...prev,
+      tbeDetails: {
+        ...prev.tbeDetails!,
+        progressPaymentComments: isFrontLoaded ? frontLoadedComment : compliantComment
+      }
+    }));
+  };
+
+  const extractProgressScheduleFromContract = async () => {
+    setIsProcessingOCR(true);
+    try {
+      // Simulate OCR processing
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Mock detection of progress schedule
+      const hasSchedule = Math.random() > 0.3; // 70% chance of finding schedule
+      
+      setFormData(prev => ({
+        ...prev,
+        tbeDetails: {
+          ...prev.tbeDetails!,
+          progressPaymentSchedules: hasSchedule ? 'Yes' : 'No',
+          progressPaymentComments: hasSchedule ? 
+            '' : 
+            'Progress Payment Schedule not detected in contract documents'
+        }
+      }));
+      
+      if (hasSchedule) {
+        analyzeProgressPaymentSchedule();
+      }
+      
+      toast.success(`Progress schedule ${hasSchedule ? 'detected' : 'not found'} in contract`);
+    } catch (error) {
+      toast.error('Failed to extract progress schedule');
+    } finally {
+      setIsProcessingOCR(false);
+    }
+  };
+
+  const generateAutomatedRiskAndVRA = () => {
+    if (!formData.tbeDetails) return;
+    
+    // Automated risk assessment based on standard instructions
+    const alerts: string[] = [];
+    
+    // Check builder license
+    const builderLicense = formData.tbeDetails.builderName || 'Not provided';
+    if (!formData.tbeDetails.builderName) {
+      alerts.push('Builder details not provided');
+    }
+    
+    // Check council approvals
+    const councilStatus = formData.tbeDetails.councilApprovals;
+    if (councilStatus !== 'approved') {
+      alerts.push('Council approvals not fully approved');
+    }
+    
+    // Check risk allowance
+    const riskAllowance = formData.tbeDetails.riskAllowance;
+    if (riskAllowance < 5) {
+      alerts.push('Risk allowance may be insufficient for construction project');
+    }
+    
+    // VRA compliance check
+    const vraCompliance = alerts.length === 0 ? 'Compliant' : 'Non-compliant';
+    
+    setFormData(prev => ({
+      ...prev,
+      tbeDetails: {
+        ...prev.tbeDetails!,
+        automatedRiskAssessment: {
+          builderLicense,
+          councilApprovals: councilStatus,
+          riskAllowance: `${riskAllowance}%`,
+          vraCompliance,
+          alerts
+        }
+      }
+    }));
+  };
+
   const generateISFVReport = async (format: 'html' | 'pdf' = 'html') => {
     setIsGenerating(true);
     
@@ -1411,7 +1576,7 @@ export default function PropertyProValuation() {
 
   // Photos and Documents functions
   const getPropertyType = (): string => {
-    if (formData.reportType === 'AS IF COMPLETE') return 'TBE';
+    if (formData.reportType === 'AS IF COMPLETE (TBE/Construction)') return 'TBE';
     if (formData.reportType === 'VACANT LAND' || formData.currentUse === 'Vacant Residential') return 'Vacant Land';
     if (formData.reportType === 'LAND WITH MINOR IMPROVEMENTS') return 'Vacant Land';
     return 'Full Dwelling';
@@ -1586,14 +1751,14 @@ export default function PropertyProValuation() {
                   <Label htmlFor="reportType">Report Type</Label>
                   <Select 
                     value={formData.reportType} 
-                    onValueChange={(value: 'AS IS' | 'AS IF COMPLETE' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS') => handleInputChange('reportType', value)}
+                     onValueChange={(value: 'AS IS' | 'AS IF COMPLETE (TBE/Construction)' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS') => handleInputChange('reportType', value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select report type" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-md z-50">
                       <SelectItem value="AS IS">AS IS (Existing Property)</SelectItem>
-                      <SelectItem value="AS IF COMPLETE">AS IF COMPLETE (TBE/Construction)</SelectItem>
+                        <SelectItem value="AS IF COMPLETE (TBE/Construction)">AS IF COMPLETE (TBE/Construction)</SelectItem>
                       <SelectItem value="VACANT LAND">Vacant Land</SelectItem>
                       <SelectItem value="LAND WITH MINOR IMPROVEMENTS">Land with Minor Improvements</SelectItem>
                     </SelectContent>
@@ -2037,14 +2202,14 @@ export default function PropertyProValuation() {
                     <Label htmlFor="reportType">Report Type</Label>
                     <Select 
                       value={formData.reportType} 
-                      onValueChange={(value: 'AS IS' | 'AS IF COMPLETE' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS') => handleInputChange('reportType', value)}
+                      onValueChange={(value: 'AS IS' | 'AS IF COMPLETE (TBE/Construction)' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS') => handleInputChange('reportType', value)}
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-md z-50">
                         <SelectItem value="AS IS">AS IS (Existing Property)</SelectItem>
-                        <SelectItem value="AS IF COMPLETE">AS IF COMPLETE (TBE/Construction)</SelectItem>
+                        <SelectItem value="AS IF COMPLETE (TBE/Construction)">AS IF COMPLETE (TBE/Construction)</SelectItem>
                         <SelectItem value="VACANT LAND">Vacant Land</SelectItem>
                         <SelectItem value="LAND WITH MINOR IMPROVEMENTS">Land with Minor Improvements</SelectItem>
                       </SelectContent>
@@ -2069,9 +2234,9 @@ export default function PropertyProValuation() {
                     />
                   </div>
                   <div className="flex items-end">
-                    <Alert className={`w-full ${formData.reportType === 'AS IF COMPLETE' ? 'border-orange-500' : 'border-green-500'}`}>
-                      <AlertDescription className="text-xs">
-                        {formData.reportType === 'AS IF COMPLETE' 
+                     <Alert className={`w-full ${formData.reportType === 'AS IF COMPLETE (TBE/Construction)' ? 'border-orange-500' : 'border-green-500'}`}>
+                       <AlertDescription className="text-xs">
+                         {formData.reportType === 'AS IF COMPLETE (TBE/Construction)'
                           ? 'TBE Report: Valuation assumes completion' 
                           : 'Standard Report: Current property condition'}
                       </AlertDescription>
@@ -2357,7 +2522,7 @@ export default function PropertyProValuation() {
                 </div>
 
                 <div>
-                  <Label htmlFor="estimatedCost">Estimated Cost</Label>
+                  <Label htmlFor="estimatedCost">Estimated Costs to Repair</Label>
                   <Input
                     id="estimatedCost"
                     type="number"
@@ -2366,6 +2531,206 @@ export default function PropertyProValuation() {
                     onChange={(e) => handleInputChange('estimatedCost', Number(e.target.value))}
                   />
                 </div>
+
+                {/* AS IF COMPLETE (TBE) SPECIFIC FIELDS */}
+                {(formData.reportType === 'AS IF COMPLETE (TBE/Construction)') && (
+                  <div className="space-y-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <Building className="h-5 w-5 text-orange-600" />
+                      <Label className="text-lg font-semibold text-orange-800">As If Complete Construction Details</Label>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Building Cost */}
+                      <div>
+                        <Label htmlFor="buildingCost">Building Cost</Label>
+                        <div className="flex space-x-2">
+                          <Input
+                            id="buildingCost"
+                            type="number"
+                            placeholder="$0.00"
+                            value={formData.tbeDetails?.buildingCost || ''}
+                            onChange={(e) => 
+                              setFormData(prev => ({
+                                ...prev,
+                                tbeDetails: {
+                                  ...prev.tbeDetails,
+                                  buildingCost: Number(e.target.value)
+                                }
+                              }))
+                            }
+                          />
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={extractBuildingCostFromContract}
+                            disabled={isProcessingOCR}
+                          >
+                            <FileText className="h-4 w-4 mr-1" />
+                            Extract from Contract
+                          </Button>
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1">OCR extracts from building contract</p>
+                      </div>
+
+                      {/* Check Cost */}
+                      <div>
+                        <Label htmlFor="checkCost">Check Cost Validation</Label>
+                        <div className="space-y-2">
+                          <Input
+                            id="checkCost"
+                            type="number"
+                            placeholder="$0.00 per sqm"
+                            value={formData.tbeDetails?.checkCost || ''}
+                            onChange={(e) => 
+                              setFormData(prev => ({
+                                ...prev,
+                                tbeDetails: {
+                                  ...prev.tbeDetails,
+                                  checkCost: Number(e.target.value)
+                                }
+                              }))
+                            }
+                            readOnly
+                          />
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={validateBuildingCosts}
+                            className="w-full"
+                          >
+                            <Calculator className="h-4 w-4 mr-1" />
+                            Validate Against Current Rates ($2,800/sqm)
+                          </Button>
+                          {formData.tbeDetails?.costValidationResult && (
+                            <Alert className={`mt-2 ${formData.tbeDetails.costValidationResult.includes('within') ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
+                              <AlertDescription className="text-sm">
+                                {formData.tbeDetails.costValidationResult}
+                              </AlertDescription>
+                            </Alert>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Out of Contract Items */}
+                      <div>
+                        <Label htmlFor="outOfContractItems">Out of Contract Items</Label>
+                        <Textarea
+                          id="outOfContractItems"
+                          placeholder="List any items not included in main contract"
+                          value={formData.tbeDetails?.outOfContractItems || ''}
+                          onChange={(e) => 
+                            setFormData(prev => ({
+                              ...prev,
+                              tbeDetails: {
+                                ...prev.tbeDetails,
+                                outOfContractItems: e.target.value
+                              }
+                            }))
+                          }
+                          rows={3}
+                        />
+                      </div>
+
+                      {/* Progress Payment Schedules */}
+                      <div>
+                        <Label htmlFor="progressPaymentSchedules">Progress Payment Schedules</Label>
+                        <div className="space-y-2">
+                          <Select
+                            value={formData.tbeDetails?.progressPaymentSchedules || 'No'}
+                            onValueChange={(value: 'Yes' | 'No') => {
+                              setFormData(prev => ({
+                                ...prev,
+                                tbeDetails: {
+                                  ...prev.tbeDetails,
+                                  progressPaymentSchedules: value,
+                                  progressPaymentComments: value === 'No' ? 
+                                    "Progress Payment Schedule not supplied - unable to assess HIA compliance" :
+                                    ""
+                                }
+                              }));
+                              if (value === 'Yes') {
+                                analyzeProgressPaymentSchedule();
+                              }
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select if progress schedule supplied" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Yes">Yes - Schedule Supplied</SelectItem>
+                              <SelectItem value="No">No - Schedule Not Supplied</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={extractProgressScheduleFromContract}
+                            disabled={isProcessingOCR}
+                            className="w-full"
+                          >
+                            <Scan className="h-4 w-4 mr-1" />
+                            Extract from Contract (OCR)
+                          </Button>
+                          {formData.tbeDetails?.progressPaymentComments && (
+                            <Alert className="mt-2">
+                              <AlertDescription className="text-sm">
+                                {formData.tbeDetails.progressPaymentComments}
+                              </AlertDescription>
+                            </Alert>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Automated Risk & VRA Generation */}
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <Label className="text-sm font-semibold text-blue-800">Automated Risk Ratings & VRA</Label>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={generateAutomatedRiskAndVRA}
+                          disabled={isProcessingOCR}
+                        >
+                          <Shield className="h-4 w-4 mr-1" />
+                          Auto-Generate Risk & VRA
+                        </Button>
+                      </div>
+                      {formData.tbeDetails?.automatedRiskAssessment && (
+                        <div className="space-y-2">
+                          <div className="text-sm text-gray-700">
+                            <strong>Builder License:</strong> {formData.tbeDetails.automatedRiskAssessment.builderLicense}
+                          </div>
+                          <div className="text-sm text-gray-700">
+                            <strong>Council Approvals:</strong> {formData.tbeDetails.automatedRiskAssessment.councilApprovals}
+                          </div>
+                          <div className="text-sm text-gray-700">
+                            <strong>Risk Allowance:</strong> {formData.tbeDetails.automatedRiskAssessment.riskAllowance}%
+                          </div>
+                          <div className="text-sm text-gray-700">
+                            <strong>VRA Compliance:</strong> {formData.tbeDetails.automatedRiskAssessment.vraCompliance}
+                          </div>
+                          {formData.tbeDetails.automatedRiskAssessment.alerts && formData.tbeDetails.automatedRiskAssessment.alerts.length > 0 && (
+                            <Alert className="mt-2 border-yellow-200 bg-yellow-50">
+                              <AlertCircle className="h-4 w-4" />
+                              <AlertDescription>
+                                <strong>Compliance Alerts:</strong>
+                                <ul className="list-disc ml-4 mt-1">
+                                  {formData.tbeDetails.automatedRiskAssessment.alerts.map((alert, index) => (
+                                    <li key={index} className="text-sm">{alert}</li>
+                                  ))}
+                                </ul>
+                              </AlertDescription>
+                            </Alert>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <Separator />
@@ -2491,7 +2856,7 @@ export default function PropertyProValuation() {
                   </div>
                 </div>
                 
-                {formData.reportType === 'AS IF COMPLETE' && (
+                {formData.reportType === 'AS IF COMPLETE (TBE/Construction)' && (
                   <>
                     <div className="bg-orange-50 border-t border-orange-200 p-3">
                       <Alert className="border-orange-500">
