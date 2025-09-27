@@ -167,6 +167,23 @@ interface PropertyProValuationData {
   inspectionDate: string;
   valuationDate: string;
   
+  // TBE/Construction Specific Fields
+  tbeDetails?: {
+    contractPrice: number;
+    builderName: string;
+    contractDate: string;
+    estimatedCompletionDate: string;
+    stageOfCompletion: number; // percentage
+    architectName: string;
+    councilApprovals: 'approved' | 'pending' | 'conditional';
+    plansAndSpecsUploaded: boolean;
+    buildingPermitNumber: string;
+    remainingWorkDescription: string;
+    constructionType: 'house' | 'townhouse' | 'unit' | 'commercial';
+    riskAllowance: number; // percentage
+    profitAllowance: number; // percentage
+  };
+  
   // Land Information (Section 4) - Enhanced
   propertyIdentification: {
     aerialMapping: boolean;
@@ -450,6 +467,21 @@ export default function PropertyProValuation() {
       incompleteConstruction: false,
       criticalIssues: false,
       esgFactors: ''
+    },
+    tbeDetails: {
+      contractPrice: 0,
+      builderName: '',
+      contractDate: '',
+      estimatedCompletionDate: '',
+      stageOfCompletion: 0,
+      architectName: '',
+      councilApprovals: 'pending',
+      plansAndSpecsUploaded: false,
+      buildingPermitNumber: '',
+      remainingWorkDescription: '',
+      constructionType: 'house',
+      riskAllowance: 10,
+      profitAllowance: 15
     },
     salesEvidence: [],
     valuerName: '',
@@ -2462,14 +2494,205 @@ export default function PropertyProValuation() {
                 </div>
                 
                 {formData.reportType === 'AS IF COMPLETE' && (
-                  <div className="bg-orange-50 border-t border-orange-200 p-3">
-                    <Alert className="border-orange-500">
-                      <Building className="h-4 w-4" />
-                      <AlertDescription>
-                        <strong>AS IF COMPLETE BASIS:</strong> This valuation assumes all proposed works are completed as per approved plans and specifications.
-                      </AlertDescription>
-                    </Alert>
-                  </div>
+                  <>
+                    <div className="bg-orange-50 border-t border-orange-200 p-3">
+                      <Alert className="border-orange-500">
+                        <Building className="h-4 w-4" />
+                        <AlertDescription>
+                          <strong>AS IF COMPLETE BASIS:</strong> This valuation assumes all proposed works are completed as per approved plans and specifications.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                    
+                    {/* TBE/Construction Details Section */}
+                    <div className="bg-orange-50 border-orange-200 p-4 space-y-4">
+                      <h3 className="font-semibold text-orange-800 flex items-center gap-2">
+                        <Building className="h-4 w-4" />
+                        TBE/Construction Details
+                      </h3>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="contractPrice">Contract Price</Label>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm">$</span>
+                            <Input
+                              id="contractPrice"
+                              type="number"
+                              placeholder="750000"
+                              value={formData.tbeDetails?.contractPrice || ''}
+                              onChange={(e) => handleInputChange('tbeDetails', {
+                                ...formData.tbeDetails,
+                                contractPrice: Number(e.target.value)
+                              })}
+                              className="flex-1"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="builderName">Builder/Developer</Label>
+                          <Input
+                            id="builderName"
+                            placeholder="ABC Construction Pty Ltd"
+                            value={formData.tbeDetails?.builderName || ''}
+                            onChange={(e) => handleInputChange('tbeDetails', {
+                              ...formData.tbeDetails,
+                              builderName: e.target.value
+                            })}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="contractDate">Contract Date</Label>
+                          <Input
+                            id="contractDate"
+                            type="date"
+                            value={formData.tbeDetails?.contractDate || ''}
+                            onChange={(e) => handleInputChange('tbeDetails', {
+                              ...formData.tbeDetails,
+                              contractDate: e.target.value
+                            })}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="estimatedCompletionDate">Estimated Completion</Label>
+                          <Input
+                            id="estimatedCompletionDate"
+                            type="date"
+                            value={formData.tbeDetails?.estimatedCompletionDate || ''}
+                            onChange={(e) => handleInputChange('tbeDetails', {
+                              ...formData.tbeDetails,
+                              estimatedCompletionDate: e.target.value
+                            })}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="stageOfCompletion">Stage of Completion (%)</Label>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              id="stageOfCompletion"
+                              type="number"
+                              min="0"
+                              max="100"
+                              placeholder="65"
+                              value={formData.tbeDetails?.stageOfCompletion || ''}
+                              onChange={(e) => handleInputChange('tbeDetails', {
+                                ...formData.tbeDetails,
+                                stageOfCompletion: Number(e.target.value)
+                              })}
+                              className="flex-1"
+                            />
+                            <span className="text-sm text-gray-500">%</span>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="architectName">Architect/Engineer</Label>
+                          <Input
+                            id="architectName"
+                            placeholder="John Smith Architects"
+                            value={formData.tbeDetails?.architectName || ''}
+                            onChange={(e) => handleInputChange('tbeDetails', {
+                              ...formData.tbeDetails,
+                              architectName: e.target.value
+                            })}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="buildingPermitNumber">Building Permit Number</Label>
+                          <Input
+                            id="buildingPermitNumber"
+                            placeholder="BP-2024-001234"
+                            value={formData.tbeDetails?.buildingPermitNumber || ''}
+                            onChange={(e) => handleInputChange('tbeDetails', {
+                              ...formData.tbeDetails,
+                              buildingPermitNumber: e.target.value
+                            })}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="councilApprovals">Council Approvals Status</Label>
+                          <Select 
+                            value={formData.tbeDetails?.councilApprovals || 'pending'} 
+                            onValueChange={(value: 'approved' | 'pending' | 'conditional') => handleInputChange('tbeDetails', {
+                              ...formData.tbeDetails,
+                              councilApprovals: value
+                            })}
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="approved">Approved</SelectItem>
+                              <SelectItem value="conditional">Conditional Approval</SelectItem>
+                              <SelectItem value="pending">Pending</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="riskAllowance">Risk Allowance (%)</Label>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              id="riskAllowance"
+                              type="number"
+                              min="0"
+                              max="50"
+                              placeholder="10"
+                              value={formData.tbeDetails?.riskAllowance || ''}
+                              onChange={(e) => handleInputChange('tbeDetails', {
+                                ...formData.tbeDetails,
+                                riskAllowance: Number(e.target.value)
+                              })}
+                              className="flex-1"
+                            />
+                            <span className="text-sm text-gray-500">%</span>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="profitAllowance">Profit Allowance (%)</Label>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              id="profitAllowance"
+                              type="number"
+                              min="0"
+                              max="30"
+                              placeholder="15"
+                              value={formData.tbeDetails?.profitAllowance || ''}
+                              onChange={(e) => handleInputChange('tbeDetails', {
+                                ...formData.tbeDetails,
+                                profitAllowance: Number(e.target.value)
+                              })}
+                              className="flex-1"
+                            />
+                            <span className="text-sm text-gray-500">%</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="remainingWorkDescription">Remaining Work Description</Label>
+                        <textarea
+                          id="remainingWorkDescription"
+                          placeholder="Describe remaining construction work, internal fit-out, landscaping, etc."
+                          value={formData.tbeDetails?.remainingWorkDescription || ''}
+                          onChange={(e) => handleInputChange('tbeDetails', {
+                            ...formData.tbeDetails,
+                            remainingWorkDescription: e.target.value
+                          })}
+                          className="w-full p-2 border border-gray-300 rounded-md min-h-[80px] resize-vertical"
+                        />
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </CardContent>
