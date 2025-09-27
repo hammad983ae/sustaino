@@ -533,8 +533,12 @@ export default function PropertyProValuation() {
   const processOCRDocument = async (file: File) => {
     setIsProcessingOCR(true);
     try {
+      // Get authenticated user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+      
       // Upload file to Supabase storage first
-      const fileName = `ocr-${Date.now()}-${file.name}`;
+      const fileName = `${user.id}/ocr-${Date.now()}-${file.name}`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('evidence-uploads')
         .upload(fileName, file);
@@ -1067,10 +1071,14 @@ export default function PropertyProValuation() {
     updateAutomationLog('Processing contract document upload...');
 
     try {
+      // Get authenticated user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+      
       // Upload to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `contract_${Date.now()}.${fileExt}`;
-      const filePath = `contracts/${fileName}`;
+      const filePath = `${user.id}/contracts/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('evidence-uploads')
@@ -1391,8 +1399,11 @@ export default function PropertyProValuation() {
 
   const uploadReportPhoto = async (file: File) => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+      
       const timestamp = Date.now();
-      const filename = `report-photo-${timestamp}-${file.name}`;
+      const filename = `${user.id}/report-photo-${timestamp}-${file.name}`;
       
       const { data, error } = await supabase.storage
         .from('property-images')
@@ -1430,8 +1441,11 @@ export default function PropertyProValuation() {
 
   const uploadDocument = async (file: File, category: string) => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+      
       const timestamp = Date.now();
-      const filename = `document-${category}-${timestamp}-${file.name}`;
+      const filename = `${user.id}/document-${category}-${timestamp}-${file.name}`;
       
       const { data, error } = await supabase.storage
         .from('documents')
