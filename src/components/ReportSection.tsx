@@ -14,7 +14,7 @@ import LegalAndPlanning from "./LegalAndPlanning";
 import TenancyScheduleLeaseDetails from "./TenancyScheduleLeaseDetails";
 import StatutoryAssessment from "./StatutoryAssessment";
 import MarketCommentary from "./MarketCommentary";
-import PropertyDetails from "./PropertyDetails";
+import EnhancedPropertyDetails from "./PropertyDetails";
 import EssentialRepairs from "./EssentialRepairs";
 import RiskAssessmentMarketIndicators from "./RiskAssessmentMarketIndicators";
 import MarketabilityAndMortgageSecurity from "./MarketabilityAndMortgageSecurity";
@@ -175,7 +175,7 @@ const ReportSection = ({ title, subtitle, sectionIndex, onNavigateToSection }: R
           {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
         </CardHeader>
         <CardContent>
-          <PropertyDetails />
+          <EnhancedPropertyDetails />
         </CardContent>
       </Card>
     );
