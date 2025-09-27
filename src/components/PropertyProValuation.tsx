@@ -479,6 +479,10 @@ export default function PropertyProValuation() {
   const [activeTab, setActiveTab] = useState('automation');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Photos and Documents state
+  const [reportPhotos, setReportPhotos] = useState<Array<{url: string, name: string, description?: string}>>([]);
+  const [supportingDocuments, setSupportingDocuments] = useState<Array<{name: string, url: string, category: string, size: number}>>([]);
+
   // Extract commonly used data for easier component props
   const propertyData = {
     address: formData.propertyAddress,
@@ -1367,6 +1371,105 @@ export default function PropertyProValuation() {
     }
   };
 
+  // Photos and Documents functions
+  const getPropertyType = (): string => {
+    if (formData.reportType === 'AS IF COMPLETE') return 'TBE';
+    if (formData.currentUse === 'Vacant Residential') return 'Vacant Land';
+    return 'Full Dwelling';
+  };
+
+  const getMinPhotoRequirement = (): number => {
+    const propertyType = getPropertyType();
+    if (propertyType === 'Full Dwelling') return 6;
+    return 2; // Vacant Land and TBE properties
+  };
+
+  const getPhotoCount = (): number => {
+    return reportPhotos.length;
+  };
+
+  const uploadReportPhoto = async (file: File) => {
+    try {
+      const timestamp = Date.now();
+      const filename = `report-photo-${timestamp}-${file.name}`;
+      
+      const { data, error } = await supabase.storage
+        .from('property-images')
+        .upload(filename, file);
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('property-images')
+        .getPublicUrl(filename);
+
+      setReportPhotos(prev => [...prev, {
+        url: publicUrl,
+        name: file.name,
+        description: ''
+      }]);
+
+      toast.success(`Photo "${file.name}" uploaded successfully`);
+    } catch (error) {
+      console.error('Photo upload error:', error);
+      toast.error(`Failed to upload photo: ${error.message}`);
+    }
+  };
+
+  const removeReportPhoto = (index: number) => {
+    setReportPhotos(prev => prev.filter((_, i) => i !== index));
+    toast.success('Photo removed');
+  };
+
+  const updatePhotoDescription = (index: number, description: string) => {
+    setReportPhotos(prev => prev.map((photo, i) => 
+      i === index ? { ...photo, description } : photo
+    ));
+  };
+
+  const uploadDocument = async (file: File, category: string) => {
+    try {
+      const timestamp = Date.now();
+      const filename = `document-${category}-${timestamp}-${file.name}`;
+      
+      const { data, error } = await supabase.storage
+        .from('documents')
+        .upload(filename, file);
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('documents')
+        .getPublicUrl(filename);
+
+      setSupportingDocuments(prev => [...prev, {
+        name: file.name,
+        url: publicUrl,
+        category,
+        size: file.size
+      }]);
+
+      toast.success(`Document "${file.name}" uploaded successfully`);
+    } catch (error) {
+      console.error('Document upload error:', error);
+      toast.error(`Failed to upload document: ${error.message}`);
+    }
+  };
+
+  const downloadDocument = (doc: {name: string, url: string}) => {
+    const link = document.createElement('a');
+    link.href = doc.url;
+    link.download = doc.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const removeDocument = (index: number) => {
+    setSupportingDocuments(prev => prev.filter((_, i) => i !== index));
+    toast.success('Document removed');
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
@@ -1392,7 +1495,7 @@ export default function PropertyProValuation() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-8">
+        <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="automation">Automation Hub</TabsTrigger>
           <TabsTrigger value="property-summary">Property Summary</TabsTrigger>
           <TabsTrigger value="land-dwelling">Land & Dwelling</TabsTrigger>
@@ -1400,6 +1503,7 @@ export default function PropertyProValuation() {
           <TabsTrigger value="sales-evidence">Sales Evidence</TabsTrigger>
           <TabsTrigger value="general-comments">General Comments</TabsTrigger>
           <TabsTrigger value="vra-assessment">VRA Assessment</TabsTrigger>
+          <TabsTrigger value="photos-annexures">Photos & Annexures</TabsTrigger>
           <TabsTrigger value="professional">Professional</TabsTrigger>
         </TabsList>
 
@@ -3933,6 +4037,236 @@ export default function PropertyProValuation() {
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
                     You have marked VRA items as 'Yes'. Please provide detailed comments in the VRA Comments section above.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Photos and Annexures Tab */}
+        <TabsContent value="photos-annexures" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Camera className="h-5 w-5" />
+                Photos and Annexures
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Photo Requirements:</strong> Full dwellings require minimum 6 photos, vacant land and TBE properties require minimum 2 photos. 
+                  All photos will be displayed in the ISFV report. Documents will be included for client delivery but excluded from ISFV.
+                </AlertDescription>
+              </Alert>
+
+              {/* Photo Requirements Status */}
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-semibold mb-3 flex items-center gap-2">
+                  <Camera className="h-4 w-4" />
+                  Photo Compliance Status
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-2">
+                    <Badge variant={getPhotoCount() >= getMinPhotoRequirement() ? "default" : "destructive"}>
+                      {getPhotoCount() >= getMinPhotoRequirement() ? "Compliant" : "Non-Compliant"}
+                    </Badge>
+                    <span className="text-sm">
+                      {getPhotoCount()}/{getMinPhotoRequirement()} photos uploaded
+                    </span>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Property Type: {getPropertyType()}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Required: {getMinPhotoRequirement()} minimum photos
+                  </div>
+                </div>
+              </div>
+
+              {/* Photo Upload Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Property Photos (For ISFV Display)</h3>
+                <div className="border-2 border-dashed border-green-300 rounded-lg p-6 text-center hover:border-green-400 transition-colors">
+                  <input
+                    type="file"
+                    id="report-photos-upload"
+                    multiple
+                    accept=".jpg,.jpeg,.png,.tiff,.bmp,.heic"
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files || []);
+                      if (files.length > 0) {
+                        files.forEach(file => uploadReportPhoto(file));
+                      }
+                    }}
+                    className="hidden"
+                  />
+                  <label htmlFor="report-photos-upload" className="cursor-pointer">
+                    <div className="flex flex-col items-center space-y-3">
+                      <div className="p-3 bg-green-100 rounded-full">
+                        <Camera className="h-8 w-8 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-lg font-medium text-gray-900">Upload Property Photos</p>
+                        <p className="text-sm text-gray-600">
+                          External views, internal rooms, key features
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          JPG, PNG, TIFF, BMP, HEIC • Max 10MB per file
+                        </p>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Photo Gallery */}
+                {reportPhotos.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {reportPhotos.map((photo, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={photo.url}
+                          alt={photo.description || `Property photo ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg border"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all rounded-lg flex items-center justify-center">
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => removeReportPhoto(index)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                        <Input
+                          placeholder="Photo description"
+                          value={photo.description || ''}
+                          onChange={(e) => updatePhotoDescription(index, e.target.value)}
+                          className="mt-2 text-xs"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Separator />
+
+              {/* Document Upload Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Supporting Documents (Client Delivery Only)</h3>
+                <Alert className="border-amber-200 bg-amber-50">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription>
+                    Documents uploaded here will be included in client delivery packages but <strong>excluded from the ISFV report</strong> 
+                    to maintain report compliance and readability.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Contracts and Legal Documents */}
+                  <div className="border-2 border-dashed border-blue-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                    <input
+                      type="file"
+                      id="contracts-upload"
+                      multiple
+                      accept=".pdf,.docx,.doc,.txt"
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files || []);
+                        if (files.length > 0) {
+                          files.forEach(file => uploadDocument(file, 'contracts'));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <label htmlFor="contracts-upload" className="cursor-pointer">
+                      <div className="flex flex-col items-center space-y-3">
+                        <div className="p-3 bg-blue-100 rounded-full">
+                          <FileText className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">Contracts & Legal</p>
+                          <p className="text-sm text-gray-600">
+                            Contract of sale, legal documents
+                          </p>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+
+                  {/* Building Documents */}
+                  <div className="border-2 border-dashed border-purple-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors">
+                    <input
+                      type="file"
+                      id="building-upload"
+                      multiple
+                      accept=".pdf,.docx,.doc,.dwg,.jpg,.png"
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files || []);
+                        if (files.length > 0) {
+                          files.forEach(file => uploadDocument(file, 'building'));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <label htmlFor="building-upload" className="cursor-pointer">
+                      <div className="flex flex-col items-center space-y-3">
+                        <div className="p-3 bg-purple-100 rounded-full">
+                          <Building className="h-6 w-6 text-purple-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">Building Documents</p>
+                          <p className="text-sm text-gray-600">
+                            Plans, specifications, contracts
+                          </p>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Document List */}
+                {supportingDocuments.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Uploaded Documents ({supportingDocuments.length})</h4>
+                    <div className="space-y-2">
+                      {supportingDocuments.map((doc, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <FileText className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <p className="text-sm font-medium">{doc.name}</p>
+                              <p className="text-xs text-gray-500">
+                                {doc.category.charAt(0).toUpperCase() + doc.category.slice(1)} • {(doc.size / 1024 / 1024).toFixed(2)} MB
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button size="sm" variant="outline" onClick={() => downloadDocument(doc)}>
+                              <Download className="h-3 w-3 mr-1" />
+                              Download
+                            </Button>
+                            <Button size="sm" variant="destructive" onClick={() => removeDocument(index)}>
+                              Remove
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Photo Compliance Check */}
+              {getPhotoCount() < getMinPhotoRequirement() && (
+                <Alert className="border-red-200 bg-red-50">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    <strong>Non-Compliant:</strong> Please upload at least {getMinPhotoRequirement() - getPhotoCount()} 
+                    more photo(s) to meet ISFV requirements for {getPropertyType()} properties.
                   </AlertDescription>
                 </Alert>
               )}
