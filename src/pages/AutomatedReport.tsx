@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
 import { Badge } from "@/components/ui/badge";
+import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider";
 
 interface AutomatedReportProps {
   propertyType: string;
@@ -107,7 +108,8 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
+    <PropertyTypeLockProvider>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
          style={{ 
            background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 70%, hsl(var(--primary) / 0.05) 100%)',
            transform: 'perspective(1000px) rotateX(1deg)',
@@ -233,6 +235,7 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
         </div>
       </div>
     </div>
+    </PropertyTypeLockProvider>
   );
 };
 
