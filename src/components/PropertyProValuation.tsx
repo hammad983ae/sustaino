@@ -163,7 +163,7 @@ interface PropertyProValuationData {
   rentalAssessment: number;
   insuranceEstimate: number;
 
-  reportType: 'AS IS' | 'AS IF COMPLETE';
+  reportType: 'AS IS' | 'AS IF COMPLETE' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS';
   inspectionDate: string;
   valuationDate: string;
   
@@ -1374,7 +1374,8 @@ export default function PropertyProValuation() {
   // Photos and Documents functions
   const getPropertyType = (): string => {
     if (formData.reportType === 'AS IF COMPLETE') return 'TBE';
-    if (formData.currentUse === 'Vacant Residential') return 'Vacant Land';
+    if (formData.reportType === 'VACANT LAND' || formData.currentUse === 'Vacant Residential') return 'Vacant Land';
+    if (formData.reportType === 'LAND WITH MINOR IMPROVEMENTS') return 'Vacant Land';
     return 'Full Dwelling';
   };
 
@@ -1541,14 +1542,16 @@ export default function PropertyProValuation() {
                   <Label htmlFor="reportType">Report Type</Label>
                   <Select 
                     value={formData.reportType} 
-                    onValueChange={(value: 'AS IS' | 'AS IF COMPLETE') => handleInputChange('reportType', value)}
+                    onValueChange={(value: 'AS IS' | 'AS IF COMPLETE' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS') => handleInputChange('reportType', value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select report type" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-background border shadow-md z-50">
                       <SelectItem value="AS IS">AS IS (Existing Property)</SelectItem>
                       <SelectItem value="AS IF COMPLETE">AS IF COMPLETE (TBE/Construction)</SelectItem>
+                      <SelectItem value="VACANT LAND">Vacant Land</SelectItem>
+                      <SelectItem value="LAND WITH MINOR IMPROVEMENTS">Land with Minor Improvements</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1990,14 +1993,16 @@ export default function PropertyProValuation() {
                     <Label htmlFor="reportType">Report Type</Label>
                     <Select 
                       value={formData.reportType} 
-                      onValueChange={(value: 'AS IS' | 'AS IF COMPLETE') => handleInputChange('reportType', value)}
+                      onValueChange={(value: 'AS IS' | 'AS IF COMPLETE' | 'VACANT LAND' | 'LAND WITH MINOR IMPROVEMENTS') => handleInputChange('reportType', value)}
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-background border shadow-md z-50">
                         <SelectItem value="AS IS">AS IS (Existing Property)</SelectItem>
                         <SelectItem value="AS IF COMPLETE">AS IF COMPLETE (TBE/Construction)</SelectItem>
+                        <SelectItem value="VACANT LAND">Vacant Land</SelectItem>
+                        <SelectItem value="LAND WITH MINOR IMPROVEMENTS">Land with Minor Improvements</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
