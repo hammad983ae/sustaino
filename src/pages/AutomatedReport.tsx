@@ -6,14 +6,15 @@ import { Link } from "react-router-dom";
 import ReportSection from "@/components/ReportSection";
 import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
 import { Badge } from "@/components/ui/badge";
-import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider";
+import { PropertyTypeLockProvider, usePropertyTypeLock } from "@/components/PropertyTypeLockProvider";
 
 interface AutomatedReportProps {
   propertyType: string;
   onBack?: () => void;
 }
 
-const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
+const AutomatedReportContent = ({ propertyType, onBack }: AutomatedReportProps) => {
+  const { lockPropertyType } = usePropertyTypeLock();
   const sections = [
     { title: "Executive Summary and Contents" },
     { title: "RPD and Location" },
@@ -43,8 +44,13 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
   const { saveReport, loadReport, clearReport } = useProgressiveReportSaving(currentSection, sections.length);
   const [lastSavedSection, setLastSavedSection] = useState<number | null>(null);
 
-  // Load saved progress on component mount, but ensure it starts from section 0
+  // Lock property type and load saved progress on component mount
   useEffect(() => {
+    // Lock the property type
+    if (propertyType) {
+      lockPropertyType(propertyType);
+    }
+    
     const savedData = loadReport();
     if (savedData && savedData.currentSection >= 0) {
       // Allow loading saved progress only if it's valid
@@ -54,7 +60,7 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
       // Always start from section 0 if no valid saved data
       setCurrentSection(0);
     }
-  }, [loadReport]);
+  }, [loadReport, propertyType, lockPropertyType]);
 
   const navigateToSection = (sectionIndex: number) => {
     setCurrentSection(sectionIndex);
@@ -108,7 +114,6 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
 
 
   return (
-    <PropertyTypeLockProvider>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 transform perspective-1000"
          style={{ 
            background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 70%, hsl(var(--primary) / 0.05) 100%)',
@@ -235,6 +240,13 @@ const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const AutomatedReport = ({ propertyType, onBack }: AutomatedReportProps) => {
+  return (
+    <PropertyTypeLockProvider>
+      <AutomatedReportContent propertyType={propertyType} onBack={onBack} />
     </PropertyTypeLockProvider>
   );
 };
