@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlertTriangle, CheckCircle, Play, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import ISFVPlatform from './ISFVPlatform';
@@ -563,106 +564,336 @@ export default function GenerateMockReports() {
     toast.info("ICV data cleared");
   };
 
-  // Component for displaying report sections
-  const ReportSection = ({ title, data, contradictions }: { title: string, data: any, contradictions: any[] }) => (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">{title}</h3>
-      
-      {/* Property Details */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Property Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div><strong>Address:</strong> {data.address}</div>
-            <div><strong>Type:</strong> {data.type}</div>
-            <div><strong>Land Area:</strong> {data.mockData.propertyDetails.landArea}</div>
-            <div><strong>Building Area:</strong> {data.mockData.propertyDetails.buildingArea}</div>
-            <div><strong>Year Built:</strong> {data.mockData.propertyDetails.yearBuilt}</div>
-            <div><strong>Zoning:</strong> {data.mockData.propertyDetails.zoning}</div>
-          </div>
-        </CardContent>
-      </Card>
+  // Full Report Tab Component - Shows EXACT same tabs and workflow as real platform
+  const FullReportTabs = ({ data, contradictions }: { data: any, contradictions: any[] }) => {
+    const [activeTab, setActiveTab] = useState("executive-summary");
+    
+    const reportSections = [
+      { id: "executive-summary", title: "Executive Summary and Contents", automated: true },
+      { id: "rpd-location", title: "RPD and Location", automated: true },
+      { id: "legal-planning", title: "Legal and Planning", component: "PlanningDataIntegration" },
+      { id: "property-details", title: "Property Details", component: "PropertyDetails" },
+      { id: "tenancy-lease", title: "Tenancy Schedule/Lease Details", component: "TenancyScheduleLeaseDetails" },
+      { id: "statutory", title: "Statutory Assessment", automated: true },
+      { id: "market-commentary", title: "Market Commentary", automated: true },
+      { id: "sales-evidence", title: "Sales Evidence", subtitle: "Commercial, Residential and Agricultural", component: "SalesEvidence" },
+      { id: "leasing-evidence", title: "Leasing Evidence", subtitle: "Commercial, Residential and Agricultural", component: "LeasingEvidence" },
+      { id: "risk-assessment", title: "Risk Assessment & Market Indicators", automated: true },
+      { id: "valuation-analysis", title: "Valuation Analysis and Rationale", component: "ValuationAnalysis" },
+      { id: "marketability", title: "Marketability and Mortgage Security", automated: true },
+      { id: "esg-assessment", title: "Sustaino Pro ESG Analysis", component: "SustainoProAnalysis" },
+      { id: "valuation-certificate", title: "Valuation Certificate", component: "ValuationCertificate" },
+      { id: "terms-conditions", title: "Terms and Conditions", component: "TermsAndConditions" }
+    ];
 
-      {/* Valuation Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Valuation Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            {Object.entries(data.mockData.valuation).map(([key, value]) => (
-              <div key={key}>
-                <strong>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> {value as string}
+    const getSectionContent = (sectionId: string) => {
+      switch (sectionId) {
+        case "executive-summary":
+          return (
+            <div className="space-y-4">
+              <div className="bg-gray-800 p-4 rounded-lg">
+                <h4 className="font-semibold text-white mb-2">Executive Summary</h4>
+                <p className="text-gray-300 text-sm">
+                  Professional valuation of {data.address} completed using direct comparison and income capitalisation methodologies. 
+                  Market value assessed at ${data.mockData?.valuation?.marketValue || "2,450,000"} as at {new Date().toLocaleDateString()}.
+                </p>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Income Analysis */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Income Analysis</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            {Object.entries(data.mockData.income).map(([key, value]) => (
-              <div key={key}>
-                <strong>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> {value as string}
+              <div className="bg-gray-800 p-4 rounded-lg">
+                <h4 className="font-semibold text-white mb-2">Key Findings</h4>
+                <ul className="text-gray-300 text-sm space-y-1">
+                  <li>• Property type: {data.type}</li>
+                  <li>• Building area: {data.mockData?.propertyDetails?.buildingArea || "1,250 sqm"}</li>
+                  <li>• Market conditions: Stable with moderate growth</li>
+                  <li>• Rental yield: {data.mockData?.income?.rentalYield || "6.2%"} per annum</li>
+                </ul>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+          );
+        
+        case "tenancy-lease":
+          return (
+            <div className="space-y-4">
+              <div className="bg-gray-800 p-4 rounded-lg">
+                <h4 className="font-semibold text-white mb-3">Lease Schedule</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-600">
+                        <th className="text-left text-gray-300 p-2">Tenant</th>
+                        <th className="text-left text-gray-300 p-2">Area (sqm)</th>
+                        <th className="text-left text-gray-300 p-2">Rent (pa)</th>
+                        <th className="text-left text-gray-300 p-2">Lease Expiry</th>
+                        <th className="text-left text-gray-300 p-2">Options</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-700">
+                        <td className="text-white p-2">{data.type.includes('Healthcare') ? 'Medical Services Pty Ltd' : data.type.includes('Office') ? 'Corporate Services Ltd' : 'Primary Tenant Pty Ltd'}</td>
+                        <td className="text-white p-2">{data.mockData?.propertyDetails?.buildingArea?.replace(' sqm', '') || '1,250'}</td>
+                        <td className="text-white p-2">{data.mockData?.income?.annualRent || '$156,000'}</td>
+                        <td className="text-white p-2">31/12/2027</td>
+                        <td className="text-white p-2">2 x 5 years</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
 
-      {/* Risk Factors */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Risk Assessment</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc list-inside space-y-1 text-sm">
-            {data.mockData.riskFactors.map((risk: string, index: number) => (
-              <li key={index}>{risk}</li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+        case "sales-evidence":
+          return (
+            <div className="space-y-4">
+              <div className="bg-gray-800 p-4 rounded-lg">
+                <h4 className="font-semibold text-white mb-3">Sales Analysis</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-600">
+                        <th className="text-left text-gray-300 p-2">Address</th>
+                        <th className="text-left text-gray-300 p-2">Sale Price</th>
+                        <th className="text-left text-gray-300 p-2">Date</th>
+                        <th className="text-left text-gray-300 p-2">$/sqm</th>
+                        <th className="text-left text-gray-300 p-2">Adjustments</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-700">
+                        <td className="text-white p-2">45 Commercial St, Melbourne</td>
+                        <td className="text-white p-2">$2,300,000</td>
+                        <td className="text-white p-2">15/08/2024</td>
+                        <td className="text-white p-2">$1,840</td>
+                        <td className="text-white p-2">+$150,000 (location)</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="text-white p-2">78 Business Ave, Fitzroy</td>
+                        <td className="text-white p-2">$2,650,000</td>
+                        <td className="text-white p-2">22/07/2024</td>
+                        <td className="text-white p-2">$2,120</td>
+                        <td className="text-white p-2">-$200,000 (condition)</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="text-white p-2">156 Property Rd, Richmond</td>
+                        <td className="text-white p-2">$2,475,000</td>
+                        <td className="text-white p-2">05/09/2024</td>
+                        <td className="text-white p-2">$1,980</td>
+                        <td className="text-white p-2">+$25,000 (timing)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
 
-      {/* Contradiction Check Results */}
-      {contradictions.length > 0 && (
-        <Card className="border-orange-200 bg-orange-50">
+        case "leasing-evidence":
+          return (
+            <div className="space-y-4">
+              <div className="bg-gray-800 p-4 rounded-lg">
+                <h4 className="font-semibold text-white mb-3">Rental Evidence</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-600">
+                        <th className="text-left text-gray-300 p-2">Address</th>
+                        <th className="text-left text-gray-300 p-2">Rent (pa)</th>
+                        <th className="text-left text-gray-300 p-2">Area (sqm)</th>
+                        <th className="text-left text-gray-300 p-2">$/sqm</th>
+                        <th className="text-left text-gray-300 p-2">Lease Term</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-700">
+                        <td className="text-white p-2">12 Health Plaza, Melbourne</td>
+                        <td className="text-white p-2">$145,000</td>
+                        <td className="text-white p-2">1,200</td>
+                        <td className="text-white p-2">$121</td>
+                        <td className="text-white p-2">5 + 5 years</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="text-white p-2">89 Medical Centre Dr, Fitzroy</td>
+                        <td className="text-white p-2">$168,000</td>
+                        <td className="text-white p-2">1,350</td>
+                        <td className="text-white p-2">$124</td>
+                        <td className="text-white p-2">7 years</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="text-white p-2">234 Business St, Richmond</td>
+                        <td className="text-white p-2">$152,000</td>
+                        <td className="text-white p-2">1,280</td>
+                        <td className="text-white p-2">$119</td>
+                        <td className="text-white p-2">6 + 3 years</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+
+        case "risk-assessment":
+          return (
+            <div className="space-y-4">
+              <div className="bg-gray-800 p-4 rounded-lg">
+                <h4 className="font-semibold text-white mb-3">Full Risk Analysis</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="font-medium text-gray-300 mb-2">Market Risks</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Interest rate sensitivity: Medium</li>
+                      <li>• Economic downturn impact: Low-Medium</li>
+                      <li>• Supply oversaturation: Low</li>
+                      <li>• Demand volatility: Low</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-gray-300 mb-2">Property Risks</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Tenant concentration: Medium</li>
+                      <li>• Lease rollover risk: Low</li>
+                      <li>• Capital expenditure: Low-Medium</li>
+                      <li>• Obsolescence risk: Low</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-gray-300 mb-2">Location Risks</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Transport accessibility: Low risk</li>
+                      <li>• Area gentrification: Positive</li>
+                      <li>• Planning changes: Low risk</li>
+                      <li>• Environmental factors: Low</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-gray-300 mb-2">Financial Risks</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Cash flow stability: High</li>
+                      <li>• Rent review structure: Favorable</li>
+                      <li>• Covenant strength: Strong</li>
+                      <li>• Liquidity risk: Low</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+
+        default:
+          return (
+            <div className="bg-gray-800 p-4 rounded-lg">
+              <h4 className="font-semibold text-white mb-2">{reportSections.find(s => s.id === sectionId)?.title}</h4>
+              <p className="text-gray-300 text-sm">
+                {reportSections.find(s => s.id === sectionId)?.automated 
+                  ? "This section is automatically populated based on property data and market analysis."
+                  : "This section contains detailed analysis and supporting documentation."}
+              </p>
+            </div>
+          );
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        {/* Property Header */}
+        <Card>
           <CardHeader>
-            <CardTitle className="text-base text-orange-800">Contradiction Check Results</CardTitle>
+            <CardTitle className="text-lg font-semibold text-white">Complete Report - {data.type}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {contradictions.map((contradiction, index) => (
-                <div key={index} className={`p-3 rounded-lg ${
-                  contradiction.type === 'Critical' ? 'bg-red-100 border-red-200' : 'bg-yellow-100 border-yellow-200'
-                }`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <AlertTriangle className={`h-4 w-4 ${
-                      contradiction.type === 'Critical' ? 'text-red-600' : 'text-yellow-600'
-                    }`} />
-                    <span className={`font-medium text-sm ${
-                      contradiction.type === 'Critical' ? 'text-red-800' : 'text-yellow-800'
-                    }`}>
-                      {contradiction.type}: {contradiction.section}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-700 mb-1">{contradiction.issue}</p>
-                  <p className="text-xs text-gray-600 italic">{contradiction.recommendation}</p>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <p className="text-gray-300">Property Address</p>
+                <p className="text-white font-medium">{data.address}</p>
+              </div>
+              <div>
+                <p className="text-gray-300">Report Format</p>
+                <p className="text-white font-medium">{data.reportFormat}</p>
+              </div>
+              <div>
+                <p className="text-gray-300">Market Value</p>
+                <p className="text-white font-medium">{data.mockData?.valuation?.marketValue || "$2,450,000"}</p>
+              </div>
             </div>
           </CardContent>
         </Card>
-      )}
-    </div>
-  );
+
+        {/* Report Tabs */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-white">Report Sections</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid grid-cols-5 lg:grid-cols-5 gap-1 h-auto p-1 bg-gray-800">
+                {reportSections.slice(0, 5).map((section) => (
+                  <TabsTrigger 
+                    key={section.id} 
+                    value={section.id}
+                    className="text-xs px-2 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300 hover:text-white"
+                  >
+                    {section.title.length > 20 ? section.title.substring(0, 18) + '...' : section.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              
+              <div className="mt-4 space-y-2">
+                <div className="flex flex-wrap gap-1">
+                  {reportSections.slice(5).map((section) => (
+                    <Button 
+                      key={section.id}
+                      variant={activeTab === section.id ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setActiveTab(section.id)}
+                      className="text-xs"
+                    >
+                      {section.title.length > 25 ? section.title.substring(0, 23) + '...' : section.title}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {reportSections.map((section) => (
+                <TabsContent key={section.id} value={section.id} className="mt-6">
+                  {getSectionContent(section.id)}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </CardContent>
+        </Card>
+
+        {/* Contradiction Checks */}
+        {contradictions.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-yellow-400">Contradiction Check Results</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {contradictions.map((contradiction: any, index: number) => (
+                  <div key={index} className={`p-4 rounded-lg ${
+                    contradiction.type === 'Critical' ? 'bg-red-900/20 border border-red-500' : 'bg-yellow-900/20 border border-yellow-500'
+                  }`}>
+                    <div className="flex items-start gap-3">
+                      <span className={`text-xs px-2 py-1 rounded font-medium ${
+                        contradiction.type === 'Critical' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-black'
+                      }`}>
+                        {contradiction.type}
+                      </span>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-white">{contradiction.section}</p>
+                        <p className="text-sm text-gray-300 mt-1">{contradiction.issue}</p>
+                        <p className="text-xs text-gray-400 mt-2">{contradiction.recommendation}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-8">
@@ -815,8 +1046,7 @@ export default function GenerateMockReports() {
         {/* PAF Report Sections */}
         {pafReportData && (
           <div className="mt-6">
-            <ReportSection 
-              title={`PAF Report: ${pafReportData.name}`} 
+            <FullReportTabs 
               data={pafReportData} 
               contradictions={pafContradictions} 
             />
@@ -941,8 +1171,7 @@ export default function GenerateMockReports() {
         {/* ICV Report Sections */}
         {icvReportData && (
           <div className="mt-6">
-            <ReportSection 
-              title={`ICV Report: ${icvReportData.name}`} 
+            <FullReportTabs 
               data={icvReportData} 
               contradictions={icvContradictions} 
             />
