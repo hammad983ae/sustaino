@@ -2389,7 +2389,7 @@ export default function PropertyProValuation() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-10">
+        <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="automation">Automation Hub</TabsTrigger>
           <TabsTrigger value="property-summary">Property Summary</TabsTrigger>
           <TabsTrigger value="risk-analysis">Risk Analysis</TabsTrigger>
@@ -2398,7 +2398,6 @@ export default function PropertyProValuation() {
           <TabsTrigger value="general-comments">General Comments</TabsTrigger>
           <TabsTrigger value="vra-assessment">VRA Assessment</TabsTrigger>
           <TabsTrigger value="photos-annexures">Photos & Annexures</TabsTrigger>
-          <TabsTrigger value="demo-reports">Generate Mock Report</TabsTrigger>
           <TabsTrigger value="professional">Professional</TabsTrigger>
         </TabsList>
 
@@ -5486,79 +5485,6 @@ export default function PropertyProValuation() {
           </Card>
         </TabsContent>
 
-        {/* Demo Reports Tab */}
-        <TabsContent value="demo-reports" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileCheck className="h-5 w-5" />
-                Generate Mock Report - Client Demo
-              </CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Perfect for demonstrating the complete end-to-end workflow to clients. Select a demo property and generate a full mock report with contradiction checking.
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Demo Property Selector for Client Testing */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <DemoPropertySelector
-                  selectedProperty={selectedDemoProperty}
-                  onPropertySelect={setSelectedDemoProperty}
-                  onGenerateReport={generateDemoMockReport}
-                  isGenerating={isGeneratingMock}
-                />
-                
-                {/* Contradiction Checker Results */}
-                <Card className="h-fit">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileCheck className="h-5 w-5" />
-                      Report Contradiction Checker
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <Button 
-                        onClick={runContradictionCheck} 
-                        variant="outline" 
-                        className="w-full"
-                        disabled={!formData.propertyAddress}
-                      >
-                        <AlertTriangle className="h-4 w-4 mr-2" />
-                        Run Contradiction Check
-                      </Button>
-                      
-                      {contradictionResults && (
-                        <div className="p-4 bg-gray-50 rounded-lg border">
-                          <h4 className="font-medium mb-2">Contradiction Check Results:</h4>
-                          <pre className="text-sm whitespace-pre-wrap text-gray-700">
-                            {contradictionResults}
-                          </pre>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Demo Instructions */}
-              <Card className="bg-green-50 border-green-200">
-                <CardHeader>
-                  <CardTitle className="text-green-800">Demo Instructions</CardTitle>
-                </CardHeader>
-                <CardContent className="text-green-700">
-                  <ol className="list-decimal list-inside space-y-2 text-sm">
-                    <li>Select a demo property from the dropdown above</li>
-                    <li>Click "Generate Mock Report with Contradiction Check" to populate all sections</li>
-                    <li>Navigate through all tabs to show the complete workflow</li>
-                    <li>The contradiction checker will automatically highlight any issues found</li>
-                    <li>Use the "Demonstration Property" option to show how contradictions are detected</li>
-                  </ol>
-                </CardContent>
-              </Card>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         {/* Professional Tab */}
         <TabsContent value="professional" className="space-y-6">
