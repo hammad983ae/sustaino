@@ -94,13 +94,6 @@ const Index = () => {
                 <div className="flex items-center gap-3">
                   <AuthStatus />
                   
-                  <Link to="/report">
-                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                      <FileText className="w-4 h-4 mr-2" />
-                      View Table of Contents
-                    </Button>
-                  </Link>
-                  
                   <Link to="/client-demo">
                     <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-emerald-200 text-emerald-700 hover:bg-emerald-50">
                       <Shield className="w-4 h-4 mr-2" />
@@ -338,6 +331,22 @@ const Index = () => {
                               <CardContent>
                                 <p className="text-sm text-slate-600">
                                   Fractional property investment platform - pool investments in premium real estate
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
+                          <Link to="/integration-platform">
+                            <Card className="bg-gradient-to-br from-white to-blue-50/50 border border-blue-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-blue-700">
+                                  <Network className="h-5 w-5" />
+                                  Integration Hub
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Connect lenders, brokers, valuers & professional services to the Powered Platform
                                 </p>
                               </CardContent>
                             </Card>
