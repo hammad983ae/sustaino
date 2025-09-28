@@ -67,6 +67,7 @@ import {
   generateMockGeneralComments 
 } from '@/utils/demoDataGenerator';
 import { checkReportContradictions, generateContradictionReport, type ReportData } from '@/utils/reportContradictionChecker';
+import { PreReportContradictionCheck, usePreReportContradictionCheck } from '@/components/PreReportContradictionCheck';
 
 // Risk Rating Types (1-5 scale as per PropertyPRO standards)
 type RiskLevel = 1 | 2 | 3 | 4 | 5;
@@ -631,6 +632,17 @@ export default function PropertyProValuation() {
   const [selectedDemoProperty, setSelectedDemoProperty] = useState('mildura-highway');
   const [contradictionResults, setContradictionResults] = useState<string>('');
   const [isGeneratingMock, setIsGeneratingMock] = useState(false);
+
+  // Pre-report contradiction check
+  const {
+    showChecker,
+    hasContradictions,
+    contradictionReport,
+    runPreReportCheck,
+    handleCheckComplete,
+    closeChecker,
+    PreReportContradictionCheck: ContradictionChecker
+  } = usePreReportContradictionCheck();
 
   // Photos and Documents state
   const [reportPhotos, setReportPhotos] = useState<Array<{url: string, name: string, description?: string}>>([]);
@@ -2035,14 +2047,151 @@ export default function PropertyProValuation() {
     }));
   };
 
-  const generateISFVReport = async (format: 'html' | 'pdf' = 'html') => {
+  // Prepare report data for contradiction checking
+  const prepareReportDataForCheck = (): ReportData => {
+    return {
+      propertyData: {
+        propertyAddress: formData.propertyAddress,
+        realPropertyDescription: formData.realPropertyDescription,
+        marketValue: formData.marketValue,
+        rentalAssessment: formData.rentalAssessment,
+        environmentalIssues: formData.environmentalIssues,
+        essentialRepairs: formData.essentialRepairs,
+        marketability: formData.marketability,
+        kitchen_condition: formData.environmentalIssues === 'Yes' ? 'missing' : 'good',
+        structural_condition: formData.essentialRepairs === 'Yes' ? 'poor' : 'good'
+      },
+      riskRatings: {
+        location: formData.riskRatings?.location || 1,
+        land: formData.riskRatings?.land || 1,
+        environmental: formData.riskRatings?.environmental || 1,
+        improvements: formData.riskRatings?.improvements || 1,
+        marketDirection: formData.riskRatings?.marketDirection || 1,
+        marketActivity: formData.riskRatings?.marketActivity || 1,
+        localEconomy: formData.riskRatings?.localEconomy || 1,
+        marketSegment: formData.riskRatings?.marketSegment || 1
+      },
+      vraAssessment: {
+        higherRiskProperty: Object.values(formData.riskRatings || {}).some(rating => rating >= 4),
+        adverseMarketability: formData.marketability === 'Poor' || formData.marketability === 'Fair',
+        incompleteConstruction: formData.reportType === 'AS IF COMPLETE (TBE/Construction)',
+        criticalIssues: formData.essentialRepairs === 'Yes' || formData.environmentalIssues === 'Yes',
+        comments: formData.vraComments || ''
+      },
+      generalComments: formData.vraComments || '',
+      rentalAssessment: {
+        weekly_rent: formData.rentalAssessment || 0
+      }
+    };
+  };
+
+  // Modified HTML report generation with contradiction check
+  const generateISFVReportWithCheck = async (format: 'html' | 'pdf' = 'html') => {
+    const reportData = prepareReportDataForCheck();
+    
+    // Show contradiction checker modal
+    runPreReportCheck(reportData);
+  };
+
+  // Actual report generation (called after contradiction check passes)
+  const proceedWithReportGeneration = async (format: 'html' | 'pdf' = 'html') => {
     setIsGenerating(true);
     
     try {
       const { data, error } = await supabase.functions.invoke('generate-isfv-report', {
         body: {
           jobId: `ISFV_${Date.now()}`,
-          format: format,
+          reportType: 'isfv',
+          propertyData: {
+            instructedBy: formData.instructedBy,
+            propertyAddress: formData.propertyAddress,
+            marketValue: formData.marketValue,
+            landValue: formData.landValue,
+            improvementValue: formData.improvementValue,
+            rentalAssessment: formData.rentalAssessment,
+            inspectionDate: formData.inspectionDate,
+            
+            // Risk Assessment Data
+            riskRatings: formData.riskRatings,
+            propertyRiskRatings: formData.propertyRiskRatings,
+            marketRiskRatings: formData.marketRiskRatings,
+            
+            // Additional Property Details
+            realPropertyDescription: formData.realPropertyDescription,
+            siteArea: formData.siteArea,
+            livingArea: formData.livingArea,
+            marketability: formData.marketability,
+            
+            // Professional Details
+            valuationFirm: "ISFV Systems",
+            valuer: "Professional Valuer",
+            apiNumber: "75366",
+            inspectionDate: formData.inspectionDate,
+            issueDate: formData.valuationDate,
+            
+            // TBE/Construction Details (if applicable)
+            tbeDetails: formData.reportType === 'AS IF COMPLETE (TBE/Construction)' ? {
+              contractPrice: formData.tbeDetails?.contractPrice || 0,
+              builderName: formData.tbeDetails?.builderName || '',
+              contractDate: formData.tbeDetails?.contractDate || '',
+              estimatedCompletionDate: formData.tbeDetails?.estimatedCompletionDate || '',
+              buildingCost: formData.tbeDetails?.buildingCost || 0,
+              checkCost: formData.tbeDetails?.checkCost || 0,
+              outOfContractItems: formData.tbeDetails?.outOfContractItems || '',
+              progressPaymentSchedules: formData.tbeDetails?.progressPaymentSchedules || 'No'
+            } : undefined
+          }
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data?.report_url) {
+        setReportUrl(data.report_url);
+      }
+
+      toast.success("ISFV Report Generated", {
+        description: "Your Instant Short Form Valuation report has been generated successfully.",
+      });
+
+      // Update automation status
+      setFormData(prev => ({
+        ...prev,
+        automation: {
+          ...prev.automation,
+          reportGenerated: true,
+          progress: 100,
+          logs: [...prev.automation.logs, 'ISFV Report generated successfully']
+        }
+      }));
+
+    } catch (error) {
+      console.error('Error generating ISFV report:', error);
+      toast.error("Error", {
+        description: "Failed to generate ISFV report. Please try again.",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const generatePDFReportWithCheck = async () => {
+    const reportData = prepareReportDataForCheck();
+    
+    // Show contradiction checker modal
+    runPreReportCheck(reportData);
+  };
+
+  const proceedWithPDFGeneration = async () => {
+    setIsGenerating(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-isfv-report', {
+        body: {
+          jobId: `ISFV_${Date.now()}`,
+          format: 'pdf',
           reportData: {
             propertyAddress: formData.propertyAddress,
             instructedBy: formData.instructedBy || "N/A",
@@ -5565,7 +5714,7 @@ export default function PropertyProValuation() {
                 </p>
                 <div className="flex gap-3">
                   <Button 
-                    onClick={() => generateISFVReport('html')} 
+                    onClick={() => generateISFVReportWithCheck()} 
                     disabled={isGenerating || !formData.propertyAddress}
                     className="flex-1"
                   >
@@ -5582,7 +5731,7 @@ export default function PropertyProValuation() {
                     )}
                   </Button>
                   <Button 
-                    onClick={generatePDFReport}
+                    onClick={generatePDFReportWithCheck}
                     disabled={isGenerating || !formData.propertyAddress}
                     variant="default"
                   >
