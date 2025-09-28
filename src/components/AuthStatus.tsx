@@ -15,7 +15,7 @@ export default function AuthStatus() {
   const navigate = useNavigate();
 
   // Always show as if user is logged in (no auth required)
-  const initials = 'DPG'; // DeLorenzo Property Group
+  const initials = 'SP'; // Sustaino Pro
 
   return (
     <DropdownMenu>
@@ -30,7 +30,7 @@ export default function AuthStatus() {
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-1 leading-none">
             <p className="font-medium">
-              DeLorenzo Property Group
+              Sustaino Pro
             </p>
             <p className="w-[200px] truncate text-sm text-muted-foreground">
               Property Management Platform
