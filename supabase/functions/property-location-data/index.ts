@@ -65,20 +65,20 @@ serve(async (req) => {
     const placesData = await placesResponse.json();
 
     // Analyze neighborhood characteristics
-    const schoolsNearby = placesData.results?.filter(place => 
+    const schoolsNearby = placesData.results?.filter((place: any) => 
       place.types.includes('school') || place.types.includes('university')
     ).length || 0;
 
-    const shopsNearby = placesData.results?.filter(place => 
+    const shopsNearby = placesData.results?.filter((place: any) => 
       place.types.includes('shopping_mall') || place.types.includes('store')
     ).length || 0;
 
-    const hospitalNearby = placesData.results?.filter(place => 
+    const hospitalNearby = placesData.results?.filter((place: any) => 
       place.types.includes('hospital') || place.types.includes('health')
     ).length || 0;
 
     // Determine major city distance (simplified logic)
-    const majorCities = {
+    const majorCities: Record<string, { name: string; lat: number; lng: number }> = {
       'VIC': { name: 'Melbourne', lat: -37.8136, lng: 144.9631 },
       'NSW': { name: 'Sydney', lat: -33.8688, lng: 151.2093 },
       'QLD': { name: 'Brisbane', lat: -27.4698, lng: 153.0251 },
