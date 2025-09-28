@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertTriangle, FileCheck, Zap, BarChart3 } from 'lucide-react';
+import { AlertTriangle, FileCheck } from 'lucide-react';
 import DemoPropertySelector, { DemoProperty, demoProperties } from './DemoPropertySelector';
-import ISFVPlatform from './ISFVPlatform';
 import { 
   generateMockPropertyData, 
   generateMockRiskRatings, 
@@ -120,104 +118,70 @@ export default function GenerateMockReports() {
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Generate Mock Reports - Client Demo</h1>
         <p className="text-muted-foreground">
-          Perfect for demonstrating the complete end-to-end workflow to clients. Choose between different valuation platforms and generate full mock reports with contradiction checking.
+          Perfect for demonstrating the complete end-to-end workflow to clients. Select a demo property and generate a full mock report with contradiction checking.
         </p>
       </div>
 
-      <Tabs defaultValue="property-pro" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="property-pro" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Property Pro Valuation
-          </TabsTrigger>
-          <TabsTrigger value="isfv" className="flex items-center gap-2">
-            <Zap className="h-4 w-4" />
-            ISFV Platform
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="property-pro" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <div className="space-y-4">
-              <DemoPropertySelector
-                selectedProperty={selectedDemoProperty}
-                onPropertySelect={setSelectedDemoProperty}
-                onGenerateReport={generateDemoMockReport}
-                isGenerating={isGeneratingMock}
-              />
-            </div>
-            <div className="space-y-4">
-              {/* Contradiction Checker Results */}
-              <Card className="h-fit">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileCheck className="h-5 w-5" />
-                    Report Contradiction Checker
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <Button 
-                      onClick={runContradictionCheck} 
-                      variant="outline" 
-                      className="w-full"
-                      disabled={!selectedDemoProperty}
-                    >
-                      <AlertTriangle className="h-4 w-4 mr-2" />
-                      Run Contradiction Check
-                    </Button>
-                    
-                    {contradictionResults && (
-                      <div className="p-4 bg-gray-50 rounded-lg border">
-                        <h4 className="font-medium mb-2">Contradiction Check Results:</h4>
-                        <pre className="text-sm whitespace-pre-wrap text-gray-700">
-                          {contradictionResults}
-                        </pre>
-                      </div>
-                    )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="space-y-4">
+          <DemoPropertySelector
+            selectedProperty={selectedDemoProperty}
+            onPropertySelect={setSelectedDemoProperty}
+            onGenerateReport={generateDemoMockReport}
+            isGenerating={isGeneratingMock}
+          />
+        </div>
+        <div className="space-y-4">
+          {/* Contradiction Checker Results */}
+          <Card className="h-fit">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileCheck className="h-5 w-5" />
+                Report Contradiction Checker
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Button 
+                  onClick={runContradictionCheck} 
+                  variant="outline" 
+                  className="w-full"
+                  disabled={!selectedDemoProperty}
+                >
+                  <AlertTriangle className="h-4 w-4 mr-2" />
+                  Run Contradiction Check
+                </Button>
+                
+                {contradictionResults && (
+                  <div className="p-4 bg-gray-50 rounded-lg border">
+                    <h4 className="font-medium mb-2">Contradiction Check Results:</h4>
+                    <pre className="text-sm whitespace-pre-wrap text-gray-700">
+                      {contradictionResults}
+                    </pre>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Demo Instructions for Property Pro */}
-          <Card className="bg-green-50 border-green-200">
-            <CardHeader>
-              <CardTitle className="text-green-800">Property Pro Demo Instructions</CardTitle>
-            </CardHeader>
-            <CardContent className="text-green-700">
-              <ol className="list-decimal list-inside space-y-2 text-sm">
-                <li>Select a demo property from the dropdown above</li>
-                <li>Click "Generate Mock Report with Contradiction Check" to populate all sections</li>
-                <li>Navigate to the Property Pro Valuation tab to see the generated data</li>
-                <li>The contradiction checker will automatically highlight any issues found</li>
-                <li>Use the "Demonstration Property" option to show how contradictions are detected</li>
-              </ol>
+                )}
+              </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        </div>
+      </div>
 
-        <TabsContent value="isfv" className="space-y-6">
-          <ISFVPlatform />
-          
-          {/* Demo Instructions for ISFV */}
-          <Card className="bg-blue-50 border-blue-200">
-            <CardHeader>
-              <CardTitle className="text-blue-800">ISFV Demo Instructions</CardTitle>
-            </CardHeader>
-            <CardContent className="text-blue-700">
-              <ol className="list-decimal list-inside space-y-2 text-sm">
-                <li>Enter a property address in the Automation Control Center</li>
-                <li>Click "Run Full Automation" to trigger the automated valuation process</li>
-                <li>Watch as the system automatically generates property data, risk scores, and valuation estimates</li>
-                <li>Explore the different tabs to see automated content in each section</li>
-                <li>Perfect for demonstrating rapid, automated property valuations to clients</li>
-              </ol>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      {/* Demo Instructions */}
+      <Card className="bg-green-50 border-green-200">
+        <CardHeader>
+          <CardTitle className="text-green-800">Client Demo Instructions</CardTitle>
+        </CardHeader>
+        <CardContent className="text-green-700">
+          <ol className="list-decimal list-inside space-y-2 text-sm">
+            <li>Select a demo property from the dropdown above</li>
+            <li>Click "Generate Mock Report with Contradiction Check" to populate all sections</li>
+            <li>Navigate to the Property Pro Valuation tab to see the generated data</li>
+            <li>The contradiction checker will automatically highlight any issues found</li>
+            <li>Use the "Demonstration Property" option to show how contradictions are detected</li>
+            <li>Perfect for showing clients the complete workflow and quality control features</li>
+          </ol>
+        </CardContent>
+      </Card>
     </div>
   );
 }
