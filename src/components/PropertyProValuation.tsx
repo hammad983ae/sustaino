@@ -1015,6 +1015,136 @@ export default function PropertyProValuation() {
     setIsProcessing(false);
   };
 
+  // Generate Comprehensive Comments with Valuation Rationale
+  const generateComprehensiveComments = async () => {
+    updateAutomationLog('Generating comprehensive property comments with valuation rationale...');
+    
+    try {
+      const response = await fetch('https://cxcfxnbvtddwebqprile.supabase.co/functions/v1/generate-valuation-rationale', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN4Y2Z4bmJ2dGRkd2VicXByaWxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxOTQwMjksImV4cCI6MjA3MDc3MDAyOX0.-tSWd97U0rxEZcW1ejcAJlX2EPVBDAFI-dEuQf6CDys`
+        },
+        body: JSON.stringify({
+          propertyData: propertyData,
+          riskRatings: riskRating,
+          vraAssessment: vraAssessment,
+          salesEvidence: salesEvidence
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate comprehensive comments');
+      }
+
+      setGeneralComments(data.comprehensiveComments || data.rationale || '');
+      updateAutomationLog('Comprehensive comments with valuation rationale generated successfully');
+      
+    } catch (error) {
+      console.error('Error generating comprehensive comments:', error);
+      updateAutomationLog('Failed to generate comprehensive comments. Basic structure created.');
+      
+      // Fallback basic comments
+      const basicComments = generateBasicComments();
+      setGeneralComments(basicComments);
+    }
+  };
+
+  // Generate basic comments as fallback
+  const generateBasicComments = () => {
+    let comments = "COMPREHENSIVE PROPERTY COMMENTS\n\n";
+    
+    if (propertyData?.address) {
+      comments += `PROPERTY SUMMARY:\n• Property Address: ${propertyData.address}\n`;
+    }
+    if (propertyData?.landArea) {
+      comments += `• Land Area: ${propertyData.landArea} sqm\n`;
+    }
+    if (propertyData?.buildingArea) {
+      comments += `• Building Area: ${propertyData.buildingArea} sqm\n`;
+    }
+    
+    comments += "\nRISK ASSESSMENT:\n";
+    const highRiskItems = Object.entries(riskRating || {}).filter(([key, value]) => 
+      typeof value === 'number' && value >= 3
+    );
+    
+    if (highRiskItems.length > 0) {
+      comments += "• Risk factors above level 3:\n";
+      highRiskItems.forEach(([key, value]) => {
+        const riskName = key.replace(/([A-Z])/g, ' $1').toLowerCase();
+        comments += `  - ${riskName.charAt(0).toUpperCase() + riskName.slice(1)} (Rating: ${value}/5)\n`;
+      });
+    } else {
+      comments += "• All risk factors assessed as low to moderate\n";
+    }
+
+    return comments;
+  };
+
+  // Save sales evidence changes back to database
+  const saveSalesEvidenceChanges = async (updatedEvidence: any[]) => {
+    try {
+      updateAutomationLog('Saving sales evidence changes to database...');
+      
+      for (const evidence of updatedEvidence) {
+        if (evidence.id) {
+          // Update existing record
+          const { error } = await supabase
+            .from('residential_sales_evidence')
+            .update({
+              property_address: evidence.propertyAddress,
+              sale_price: evidence.salePrice,
+              adjusted_sale_price: evidence.adjustedPrice,
+              price_per_sqm: evidence.pricePerSqm,
+              sale_date: evidence.saleDate,
+              building_area: evidence.buildingArea,
+              land_area: evidence.landArea,
+              bedrooms: evidence.bedrooms,
+              bathrooms: evidence.bathrooms,
+              adjustments: evidence.adjustments,
+              similarity_score: evidence.similarityScore,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', evidence.id);
+            
+          if (error) throw error;
+        } else {
+          // Insert new record
+          const { error } = await supabase
+            .from('residential_sales_evidence')
+            .insert({
+              property_address: evidence.propertyAddress,
+              sale_price: evidence.salePrice,
+              adjusted_sale_price: evidence.adjustedPrice,
+              price_per_sqm: evidence.pricePerSqm,
+              sale_date: evidence.saleDate,
+              building_area: evidence.buildingArea,
+              land_area: evidence.landArea,
+              bedrooms: evidence.bedrooms,
+              bathrooms: evidence.bathrooms,
+              adjustments: evidence.adjustments,
+              similarity_score: evidence.similarityScore,
+              user_id: (await supabase.auth.getUser()).data.user?.id
+            });
+            
+          if (error) throw error;
+        }
+      }
+      
+      updateAutomationLog('Sales evidence changes saved successfully');
+      toast.success('Sales evidence changes saved to database');
+      
+    } catch (error) {
+      console.error('Error saving sales evidence:', error);
+      updateAutomationLog('Failed to save sales evidence changes');
+      toast.error('Failed to save sales evidence changes');
+    }
+  };
+
   // Complete Automation Workflow
   const runFullAutomation = async () => {
     if (!formData.propertyAddress) {
@@ -1030,6 +1160,7 @@ export default function PropertyProValuation() {
     await generateSalesEvidence();
     await calculateRiskRatings();
     await performVRAAssessment();
+    await generateComprehensiveComments();
     
     setFormData(prev => ({
       ...prev,
