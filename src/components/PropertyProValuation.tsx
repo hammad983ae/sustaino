@@ -1670,32 +1670,6 @@ export default function PropertyProValuation() {
     updateAutomationLog('Automation workflow completed');
   };
 
-  // Generate mock report to demonstrate high-risk automation
-  const generateMockReport = async () => {
-    updateAutomationLog('Generating mock report with high-risk factors...');
-    
-    // Run validation first
-    const validation = validateReportConsistency();
-    
-    if (validation.errors.length > 0) {
-      updateAutomationLog(`Validation Errors Found: ${validation.errors.join(', ')}`);
-      toast.error("Validation Errors: " + validation.errors.join('. '));
-      return;
-    }
-    
-    if (validation.warnings.length > 0) {
-      updateAutomationLog(`Validation Warnings: ${validation.warnings.join(', ')}`);
-      toast.warning("Validation Warnings: " + validation.warnings.join('. '));
-    }
-    
-    // Auto-trigger comprehensive comments generation
-    await generateComprehensiveComments();
-    
-    // Switch to General Comments tab to show results
-    setActiveTab('general-comments');
-    
-    updateAutomationLog('Mock report generated successfully - all validations passed');
-  };
 
   // Update automation log
   const updateAutomationLog = (message: string) => {
