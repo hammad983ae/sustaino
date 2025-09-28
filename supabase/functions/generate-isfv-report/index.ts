@@ -7,6 +7,107 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 )
 
+// Contradiction checking functions
+interface ContradictionResult {
+  hasContradictions: boolean;
+  contradictions: string[];
+  warnings: string[];
+}
+
+interface ReportData {
+  propertyData?: any;
+  riskRatings?: any;
+  vraAssessment?: any;
+  salesEvidence?: any;
+  rentalAssessment?: any;
+  generalComments?: string;
+  sections?: any;
+}
+
+function checkReportContradictions(reportData: ReportData): ContradictionResult {
+  const contradictions: string[] = [];
+  const warnings: string[] = [];
+
+  // Property condition vs rental assessment - CRITICAL CHECK
+  if (reportData.propertyData && reportData.rentalAssessment) {
+    const isUninhabitable = reportData.propertyData.kitchen_condition === 'missing' || 
+                           reportData.propertyData.kitchen_condition === 'none' ||
+                           reportData.propertyData.structural_condition === 'very_poor';
+    const hasRental = reportData.rentalAssessment.weekly_rent > 0;
+    
+    if (isUninhabitable && hasRental) {
+      contradictions.push("CRITICAL: Property is uninhabitable (missing kitchen/very poor condition) but shows rental income of $" + reportData.rentalAssessment.weekly_rent + "/week - uninhabitable properties cannot generate rental income");
+    }
+  }
+
+  // Risk ratings vs VRA comments - ENHANCED CHECK
+  if (reportData.riskRatings && reportData.vraAssessment) {
+    const highRiskCount = Object.values(reportData.riskRatings).filter(
+      (rating: any) => rating >= 4
+    ).length;
+    
+    const vraComments = reportData.vraAssessment.comments || '';
+    
+    if (highRiskCount > 0 && vraComments.trim().length === 0) {
+      contradictions.push(`CRITICAL: ${highRiskCount} high risk factors identified (rating ≥4) but no VRA comments provided - VRA assessment is mandatory for high-risk properties`);
+    }
+    
+    if (highRiskCount > 0 && vraComments.trim().length < 50) {
+      warnings.push(`${highRiskCount} high risk factors found but VRA comments are very brief (${vraComments.length} characters) - consider more detailed assessment`);
+    }
+  }
+
+  // General comments risk statement vs actual risks - ENHANCED CHECK
+  if (reportData.generalComments && reportData.riskRatings) {
+    const hasHighRisks = Object.values(reportData.riskRatings).some(
+      (rating: any) => rating >= 4
+    );
+    
+    const commentLower = reportData.generalComments.toLowerCase();
+    const claimsNoRisks = commentLower.includes('no significant risks') ||
+                         commentLower.includes('minimal risk') ||
+                         commentLower.includes('low risk profile') ||
+                         commentLower.includes('no major concerns') ||
+                         commentLower.includes('no risks highlighted') ||
+                         commentLower.includes('risk-free');
+    
+    if (hasHighRisks && claimsNoRisks) {
+      contradictions.push(`CRITICAL: General comments claim low/no risks but ${Object.values(reportData.riskRatings).filter((r: any) => r >= 4).length} high risk factors (≥4) are present - this is a serious contradiction`);
+    }
+  }
+
+  return {
+    hasContradictions: contradictions.length > 0,
+    contradictions,
+    warnings
+  };
+}
+
+function generateContradictionReport(contradictionResult: ContradictionResult): string {
+  if (!contradictionResult.hasContradictions && contradictionResult.warnings.length === 0) {
+    return "✅ No contradictions or warnings detected in report.";
+  }
+
+  let report = "";
+  
+  if (contradictionResult.contradictions.length > 0) {
+    report += "🚨 CRITICAL CONTRADICTIONS FOUND:\n";
+    contradictionResult.contradictions.forEach((contradiction, index) => {
+      report += `${index + 1}. ${contradiction}\n`;
+    });
+    report += "\n";
+  }
+  
+  if (contradictionResult.warnings.length > 0) {
+    report += "⚠️ WARNINGS:\n";
+    contradictionResult.warnings.forEach((warning, index) => {
+      report += `${index + 1}. ${warning}\n`;
+    });
+  }
+  
+  return report;
+}
+
 interface ISFVReportData {
   propertyAddress: string
   instructedBy: string
@@ -139,8 +240,32 @@ serve(async (req) => {
       })
     }
 
-    // Generate the HTML content for the ISFV report
-    const htmlContent = generateISFVReportHTML(reportData)
+    // Run contradiction check before generating report
+    console.log('Running contradiction check for ISFV report...');
+    
+    const contradictionData: ReportData = {
+      propertyData: {
+        propertyAddress: reportData.propertyAddress,
+        structural_condition: reportData.essentialRepairs ? 'poor' : 'good',
+        kitchen_condition: reportData.essentialRepairs ? 'poor' : 'good',
+        overall_condition: reportData.essentialRepairs ? 'poor' : 'good'
+      },
+      generalComments: reportData.marketability || '',
+      // Add more data mapping as needed for contradiction checking
+    };
+
+    const contradictions = checkReportContradictions(contradictionData);
+    const contradictionReport = generateContradictionReport(contradictions);
+    
+    console.log('Contradiction check results:', contradictionReport);
+
+    // Log contradiction results to the database or include in report
+    if (contradictions.hasContradictions) {
+      console.warn('CRITICAL CONTRADICTIONS DETECTED:', contradictions.contradictions);
+    }
+
+    // Generate the HTML content for the ISFV report (now includes contradiction results)
+    const htmlContent = generateISFVReportHTML(reportData, contradictionReport)
     
     if (format === 'pdf') {
       // Generate PDF using HTML-to-PDF conversion
@@ -340,7 +465,7 @@ async function generatePDFWithAlternativeService(htmlContent: string): Promise<R
   }
 }
 
-function generateISFVReportHTML(data: ISFVReportData): string {
+function generateISFVReportHTML(data: ISFVReportData, contradictionReport?: string): string {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -363,6 +488,9 @@ function generateISFVReportHTML(data: ISFVReportData): string {
         .valuation-summary { background-color: #f8fafc; padding: 20px; border-radius: 8px; }
         .market-value { font-size: 24px; font-weight: bold; color: #059669; text-align: center; }
         .signature-section { margin-top: 40px; border-top: 1px solid #d1d5db; padding-top: 20px; }
+        .contradiction-section { background-color: #fef2f2; border: 2px solid #ef4444; padding: 15px; margin: 20px 0; border-radius: 8px; }
+        .contradiction-title { color: #dc2626; font-weight: bold; margin-bottom: 10px; }
+        .contradiction-content { white-space: pre-wrap; font-family: monospace; font-size: 12px; }
         .page-break { page-break-before: always; }
     </style>
 </head>
@@ -372,6 +500,13 @@ function generateISFVReportHTML(data: ISFVReportData): string {
         <h2>API RESIDENTIAL VALUATION & SECURITY ASSESSMENT Pro-Forma Report</h2>
         <p>Page 1 of 1</p>
     </div>
+
+    ${contradictionReport && contradictionReport !== "✅ No contradictions or warnings detected in report." ? `
+    <div class="contradiction-section">
+        <div class="contradiction-title">🚨 REPORT CONTRADICTION CHECK RESULTS</div>
+        <div class="contradiction-content">${contradictionReport}</div>
+    </div>
+    ` : ''}
 
     <div class="info-grid">
         <div>

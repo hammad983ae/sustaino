@@ -17,9 +17,11 @@ import {
   Play,
   RotateCcw,
   CheckCircle,
-  Clock
+  Clock,
+  FileCheck
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { checkReportContradictions, generateContradictionReport, type ReportData } from '@/utils/reportContradictionChecker';
 
 interface ISFVData {
   propertyAddress: string;
@@ -28,6 +30,12 @@ interface ISFVData {
   riskScore: number;
   automationStatus: 'idle' | 'running' | 'completed' | 'error';
   lastUpdated: string;
+  propertyData?: any;
+  riskRatings?: any;
+  vraAssessment?: any;
+  salesEvidence?: any;
+  generalComments?: string;
+  contradictionResults?: string;
 }
 
 export default function ISFVPlatform() {
@@ -37,7 +45,8 @@ export default function ISFVPlatform() {
     confidence: 'medium',
     riskScore: 0,
     automationStatus: 'idle',
-    lastUpdated: ''
+    lastUpdated: '',
+    contradictionResults: ''
   });
 
   const [isRunningAutomation, setIsRunningAutomation] = useState(false);
@@ -60,22 +69,97 @@ export default function ISFVPlatform() {
       const mockRisk = Math.floor(Math.random() * 5) + 1;
       const mockConfidence = mockRisk <= 2 ? 'high' : mockRisk <= 3 ? 'medium' : 'low';
 
+      // Generate mock property data for contradiction checking
+      const mockPropertyData = {
+        propertyAddress: isfvData.propertyAddress,
+        structural_condition: mockRisk >= 4 ? 'poor' : 'good',
+        kitchen_condition: mockRisk >= 4 ? 'missing' : 'good',
+        overall_condition: mockRisk >= 4 ? 'poor' : 'good'
+      };
+
+      const mockRiskRatings = {
+        environmental: mockRisk,
+        structural: mockRisk,
+        market: Math.max(1, mockRisk - 1),
+        legal: Math.max(1, mockRisk - 2),
+        economic: mockRisk
+      };
+
+      const mockVRAAssessment = {
+        comments: mockRisk >= 4 ? '' : 'Property assessment completed with automated analysis.',
+        recommendations: 'Standard recommendations apply.'
+      };
+
+      const mockSalesEvidence = [{
+        id: '1',
+        address: 'Nearby Comparable',
+        salePrice: mockValue * 0.9,
+        reliability: 'medium'
+      }];
+
+      const mockGeneralComments = mockRisk >= 4 
+        ? 'Property presents no significant risks despite structural issues. High confidence valuation.'
+        : 'Automated assessment indicates standard property conditions.';
+
+      // Run contradiction check
+      const reportData: ReportData = {
+        propertyData: mockPropertyData,
+        riskRatings: mockRiskRatings,
+        vraAssessment: mockVRAAssessment,
+        salesEvidence: mockSalesEvidence,
+        generalComments: mockGeneralComments
+      };
+
+      const contradictions = checkReportContradictions(reportData);
+      const contradictionReport = generateContradictionReport(contradictions);
+
       setISFVData(prev => ({
         ...prev,
         estimatedValue: mockValue,
         confidence: mockConfidence,
         riskScore: mockRisk,
         automationStatus: 'completed',
-        lastUpdated: new Date().toLocaleString()
+        lastUpdated: new Date().toLocaleString(),
+        propertyData: mockPropertyData,
+        riskRatings: mockRiskRatings,
+        vraAssessment: mockVRAAssessment,
+        salesEvidence: mockSalesEvidence,
+        generalComments: mockGeneralComments,
+        contradictionResults: contradictionReport
       }));
 
-      toast.success('Full automation completed successfully');
+      if (contradictions.hasContradictions) {
+        toast.error('Automation completed but contradictions detected - please review');
+      } else {
+        toast.success('Full automation completed successfully with no contradictions');
+      }
     } catch (error) {
       setISFVData(prev => ({ ...prev, automationStatus: 'error' }));
       toast.error('Automation failed - please try again');
     } finally {
       setIsRunningAutomation(false);
     }
+  };
+
+  const runContradictionCheck = () => {
+    if (!isfvData.propertyData) {
+      toast.error('Please run automation first to generate data for checking');
+      return;
+    }
+
+    const reportData: ReportData = {
+      propertyData: isfvData.propertyData,
+      riskRatings: isfvData.riskRatings,
+      vraAssessment: isfvData.vraAssessment,
+      salesEvidence: isfvData.salesEvidence,
+      generalComments: isfvData.generalComments
+    };
+
+    const contradictions = checkReportContradictions(reportData);
+    const contradictionReport = generateContradictionReport(contradictions);
+    
+    setISFVData(prev => ({ ...prev, contradictionResults: contradictionReport }));
+    toast.success('Contradiction check completed');
   };
 
   const clearAllData = () => {
@@ -85,7 +169,8 @@ export default function ISFVPlatform() {
       confidence: 'medium',
       riskScore: 0,
       automationStatus: 'idle',
-      lastUpdated: ''
+      lastUpdated: '',
+      contradictionResults: ''
     });
     toast.success('All data cleared');
   };
@@ -182,35 +267,69 @@ export default function ISFVPlatform() {
 
       {/* Results Panel */}
       {isfvData.automationStatus === 'completed' && (
-        <Card className="border-2 border-green-200 bg-green-50">
-          <CardHeader>
-            <CardTitle className="text-green-800">Automated Valuation Results</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">
-                  ${isfvData.estimatedValue.toLocaleString()}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="border-2 border-green-200 bg-green-50">
+            <CardHeader>
+              <CardTitle className="text-green-800">Automated Valuation Results</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-600 mb-2">
+                    ${isfvData.estimatedValue.toLocaleString()}
+                  </div>
+                  <div className="text-sm text-muted-foreground">Estimated Market Value</div>
                 </div>
-                <div className="text-sm text-muted-foreground">Estimated Market Value</div>
-              </div>
-              <div className="text-center">
-                <div className="flex justify-center mb-2">
-                  <Badge className={`${getConfidenceBadgeColor(isfvData.confidence)} text-white`}>
-                    {isfvData.confidence.toUpperCase()} CONFIDENCE
-                  </Badge>
+                <div className="text-center">
+                  <div className="flex justify-center mb-2">
+                    <Badge className={`${getConfidenceBadgeColor(isfvData.confidence)} text-white`}>
+                      {isfvData.confidence.toUpperCase()} CONFIDENCE
+                    </Badge>
+                  </div>
+                  <div className="text-sm text-muted-foreground">Valuation Confidence</div>
                 </div>
-                <div className="text-sm text-muted-foreground">Valuation Confidence</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600 mb-2">
-                  {isfvData.riskScore}/5
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-orange-600 mb-2">
+                    {isfvData.riskScore}/5
+                  </div>
+                  <div className="text-sm text-muted-foreground">Risk Score</div>
                 </div>
-                <div className="text-sm text-muted-foreground">Risk Score</div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+
+          {/* Contradiction Checker Results */}
+          <Card className="border-2 border-blue-200 bg-blue-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-800">
+                <FileCheck className="h-5 w-5" />
+                Report Contradiction Checker
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Button 
+                  onClick={runContradictionCheck} 
+                  variant="outline" 
+                  className="w-full"
+                  disabled={!isfvData.propertyData}
+                >
+                  <AlertTriangle className="h-4 w-4 mr-2" />
+                  Run Contradiction Check
+                </Button>
+                
+                {isfvData.contradictionResults && (
+                  <div className="p-4 bg-white rounded-lg border">
+                    <h4 className="font-medium mb-2">Contradiction Check Results:</h4>
+                    <pre className="text-sm whitespace-pre-wrap text-gray-700">
+                      {isfvData.contradictionResults}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       )}
 
       {/* Tabs for detailed sections */}
