@@ -577,6 +577,79 @@ export default function PropertyProValuation() {
   const salesEvidence: any[] = [];
   const [generalComments, setGeneralComments] = useState('');
 
+  // Auto-generate risk comments when ratings are 3 or higher
+  useEffect(() => {
+    const highRiskRatings = Object.entries(formData.riskRatings).filter(([key, value]) => value >= 3);
+    
+    if (highRiskRatings.length > 0 && !formData.riskComments) {
+      let autoComments = "RISK RATING COMMENTS:\n\nThe following risk factors have been rated 3 or higher and require detailed consideration:\n\n";
+      
+      highRiskRatings.forEach(([riskType, rating]) => {
+        const riskName = riskType.replace(/([A-Z])/g, ' $1').toLowerCase()
+          .replace(/^./, str => str.toUpperCase());
+        
+        autoComments += `• ${riskName} (Rating: ${rating}/5):\n`;
+        
+        // Add specific comments based on risk type
+        switch(riskType) {
+          case 'location':
+            if (rating >= 3) {
+              autoComments += "  - Location factors present moderate to high risk considerations including traffic exposure, noise levels, or accessibility limitations that may impact property marketability and future value growth.\n";
+            }
+            break;
+          case 'land':
+            if (rating >= 3) {
+              autoComments += "  - Land characteristics present elevated risk factors such as slope, soil conditions, drainage, or geotechnical considerations that may affect development potential or maintenance costs.\n";
+            }
+            break;
+          case 'environmental':
+            if (rating >= 3) {
+              autoComments += "  - Environmental factors including potential contamination, flood risk, bushfire exposure, or climate change impacts require ongoing monitoring and may affect insurance and marketability.\n";
+            }
+            break;
+          case 'improvements':
+            if (rating >= 3) {
+              autoComments += "  - Building improvements show signs of wear, deferred maintenance, or structural concerns that may require significant capital expenditure or affect the property's functional utility and market appeal.\n";
+            }
+            break;
+          case 'marketDirection':
+            if (rating >= 3) {
+              autoComments += "  - Market direction indicators suggest potential volatility, declining trends, or uncertainty in the local property market that may impact future value growth and liquidity.\n";
+            }
+            break;
+          case 'marketActivity':
+            if (rating >= 3) {
+              autoComments += "  - Market activity levels indicate reduced transaction volumes, extended marketing periods, or limited buyer interest that may affect the property's marketability and sale timeline.\n";
+            }
+            break;
+          case 'localEconomy':
+            if (rating >= 3) {
+              autoComments += "  - Local economic conditions including employment levels, industry diversification, or economic stability present risks to ongoing property demand and rental markets.\n";
+            }
+            break;
+          case 'marketSegment':
+            if (rating >= 3) {
+              autoComments += "  - Market segment conditions show specific challenges for this property type including oversupply, changing preferences, or demographic shifts affecting target buyer appeal.\n";
+            }
+            break;
+          default:
+            autoComments += "  - This risk factor requires careful consideration and ongoing monitoring.\n";
+        }
+        autoComments += "\n";
+      });
+      
+      autoComments += "RECOMMENDATIONS:\n";
+      autoComments += "• Regular monitoring of identified risk factors is recommended\n";
+      autoComments += "• Consider obtaining specialist reports where appropriate\n";
+      autoComments += "• Market conditions and risk factors should be reassessed at regular intervals\n";
+      
+      setFormData(prev => ({
+        ...prev,
+        riskComments: autoComments
+      }));
+    }
+  }, [formData.riskRatings]);
+
   // OCR Data and Processing States
   const [ocrData, setOcrData] = useState<Record<string, any>>({});
   const [isProcessingOCR, setIsProcessingOCR] = useState(false);
@@ -1961,8 +2034,8 @@ export default function PropertyProValuation() {
         <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="automation">Automation Hub</TabsTrigger>
           <TabsTrigger value="property-summary">Property Summary</TabsTrigger>
-          <TabsTrigger value="land-dwelling">Land & Dwelling</TabsTrigger>
           <TabsTrigger value="risk-analysis">Risk Analysis</TabsTrigger>
+          <TabsTrigger value="land-dwelling">Land & Dwelling</TabsTrigger>
           <TabsTrigger value="sales-evidence">Sales Evidence</TabsTrigger>
           <TabsTrigger value="general-comments">General Comments</TabsTrigger>
           <TabsTrigger value="vra-assessment">VRA Assessment</TabsTrigger>
