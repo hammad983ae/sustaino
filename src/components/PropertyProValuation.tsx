@@ -338,16 +338,16 @@ export default function PropertyProValuation() {
     
     propertyAddress: '24 Highway Drive, Mildura VIC 3500',
     titleSearchSighted: 'No',
-    realPropertyDescription: 'Lot 9 PS444723 - Title not supplied for Volume and Folio. Property affected by proximity to main highway (15m) and high tension power lines (25m).',
+    realPropertyDescription: 'Lot 9 PS444723 - Title not supplied for Volume and Folio. Property affected by proximity to main highway (15m) and high tension power lines (25m). Property currently uninhabitable due to missing kitchen facilities requiring $10,000 repairs.',
     encumbrancesRestrictions: '',
-    siteDimensions: '',
-    siteArea: '',
-    zoning: '',
-    currentUse: '',
-    localGovernmentArea: '',
-    mainDwelling: '',
-    builtAbout: '',
-    additions: '',
+    siteDimensions: '22m x 30m',
+    siteArea: '680',
+    zoning: 'Residential 1',
+    currentUse: 'Single Dwelling (Currently Vacant - Uninhabitable)',
+    localGovernmentArea: 'Mildura Council',
+    mainDwelling: '3 Bedroom, 1 Bathroom House (Missing Kitchen)',
+    builtAbout: '1985',
+    additions: 'Rear Deck',
     livingArea: 120,
     outdoorArea: 25,
     otherArea: 0,
@@ -363,7 +363,7 @@ export default function PropertyProValuation() {
     landValue: 135000,
     improvementValue: 45000,
     marketValue: 180000,
-    rentalAssessment: 280,
+    rentalAssessment: 0, // Property uninhabitable without kitchen
     insuranceEstimate: 200000,
     reportType: 'AS IS',
     inspectionDate: new Date().toISOString().split('T')[0],
@@ -546,6 +546,48 @@ export default function PropertyProValuation() {
         comparisonToSubject: 'superior' as const,
         overallAdjustment: 0,
         reliability: 'high' as const
+      },
+      {
+        address: '142 Riverside Avenue, Mildura VIC 3500',
+        saleDate: '10/09/2024',
+        price: 165000,
+        briefComments: 'Similar age property in quiet street. Full kitchen and good condition. No environmental issues.',
+        livingArea: 110,
+        landArea: 550,
+        bedrooms: 3,
+        bathrooms: 1,
+        locationAdjustment: 15000,
+        sizeAdjustment: -2000,
+        conditionAdjustment: 8000,
+        ageAdjustment: 0,
+        timeAdjustment: -1000,
+        adjustedPrice: 185000,
+        pricePerSqm: 1500,
+        weightingFactor: 0.9,
+        comparisonToSubject: 'superior' as const,
+        overallAdjustment: 20000,
+        reliability: 'high' as const
+      },
+      {
+        address: '89 Murray Street, Mildura VIC 3500',
+        saleDate: '05/08/2024',
+        price: 195000,
+        briefComments: 'Power line proximity (30m) similar to subject. Required minor kitchen upgrades.',
+        livingArea: 125,
+        landArea: 480,
+        bedrooms: 3,
+        bathrooms: 2,
+        locationAdjustment: -3000,
+        sizeAdjustment: 1000,
+        conditionAdjustment: -5000,
+        ageAdjustment: 500,
+        timeAdjustment: 1500,
+        adjustedPrice: 190000,
+        pricePerSqm: 1560,
+        weightingFactor: 0.88,
+        comparisonToSubject: 'similar' as const,
+        overallAdjustment: -5000,
+        reliability: 'high' as const
       }
     ],
     valuerName: '',
@@ -553,7 +595,7 @@ export default function PropertyProValuation() {
     issueDate: '',
     additionalComments: '',
     riskComments: '',
-    vraComments: '',
+    vraComments: 'VRA 1 - Higher Risk Property: Property presents multiple risk factors including environmental concerns from high-tension power lines (25m), highway proximity (15m), and substantial repair requirements ($10,000 for kitchen). These factors impact marketability and valuation confidence. VRA 2 - Adverse Marketability: Location factors including highway frontage and power line proximity create extended marketing periods. VRA 4 - Critical Issues: Environmental exposure concerns require disclosure and may affect insurance premiums and resale potential.',
     automation: {
       ocrProcessed: false,
       domainDataExtracted: false,
@@ -1228,6 +1270,7 @@ export default function PropertyProValuation() {
     const property = propertyData;
     const landRate = 450; // $/sqm - mock rate
     const improvementRate = 4200; // $/sqm - mock rate
+    const currentRiskRatings = formData.riskRatings; // Use current form data risk ratings
     
     let comments = "VALUATION RATIONALE\n\n";
     
@@ -1288,7 +1331,7 @@ export default function PropertyProValuation() {
     comments += "This rating considers property age, orientation, solar installations, and energy efficiency features.\n\n";
     
     // Risk Assessment
-    const highRiskItems = Object.entries(riskRating || {}).filter(([key, value]) => 
+    const highRiskItems = Object.entries(currentRiskRatings || {}).filter(([key, value]) => 
       typeof value === 'number' && value >= 3
     );
     
@@ -1321,7 +1364,8 @@ export default function PropertyProValuation() {
     }
     
     comments += "\nRISK ASSESSMENT:\n";
-    const highRiskItems = Object.entries(riskRating || {}).filter(([key, value]) => 
+    const currentRiskRatings = formData.riskRatings;
+    const highRiskItems = Object.entries(currentRiskRatings || {}).filter(([key, value]) => 
       typeof value === 'number' && value >= 3
     );
     
@@ -1336,6 +1380,45 @@ export default function PropertyProValuation() {
     }
 
     return comments;
+  };
+
+  // Validation function to check for contradictions
+  const validateReportConsistency = () => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    // Check rental assessment vs habitability
+    if (formData.rentalAssessment > 0 && formData.mainDwelling.toLowerCase().includes('missing kitchen')) {
+      errors.push('Rental assessment should be $0 for uninhabitable property (missing kitchen)');
+    }
+
+    // Check VRA comments when VRA flags are set
+    const vraFlags = [
+      formData.vraAssessment.higherRiskProperty,
+      formData.vraAssessment.adverseMarketability,
+      formData.vraAssessment.incompleteConstruction,
+      formData.vraAssessment.criticalIssues
+    ].filter(Boolean);
+    
+    if (vraFlags.length > 0 && (!formData.vraComments || formData.vraComments.trim() === '')) {
+      errors.push('VRA Comments required when VRA flags are set');
+    }
+
+    // Check sales evidence count
+    if (formData.salesEvidence.length < 3) {
+      warnings.push(`Only ${formData.salesEvidence.length} sales provided - minimum 3 recommended for robust analysis`);
+    }
+
+    // Check risk ratings vs risk comments consistency
+    const highRiskItems = Object.entries(formData.riskRatings || {}).filter(([key, value]) => 
+      typeof value === 'number' && value >= 3
+    );
+    
+    if (highRiskItems.length > 0 && formData.riskComments.toLowerCase().includes('no risk')) {
+      errors.push('Risk comments contradict high risk ratings - remove "no risk" statements');
+    }
+
+    return { errors, warnings };
   };
 
   // Save sales evidence changes back to database
@@ -1432,13 +1515,27 @@ export default function PropertyProValuation() {
   const generateMockReport = async () => {
     updateAutomationLog('Generating mock report with high-risk factors...');
     
+    // Run validation first
+    const validation = validateReportConsistency();
+    
+    if (validation.errors.length > 0) {
+      updateAutomationLog(`Validation Errors Found: ${validation.errors.join(', ')}`);
+      toast.error("Validation Errors: " + validation.errors.join('. '));
+      return;
+    }
+    
+    if (validation.warnings.length > 0) {
+      updateAutomationLog(`Validation Warnings: ${validation.warnings.join(', ')}`);
+      toast.warning("Validation Warnings: " + validation.warnings.join('. '));
+    }
+    
     // Auto-trigger comprehensive comments generation
     await generateComprehensiveComments();
     
     // Switch to General Comments tab to show results
     setActiveTab('general-comments');
     
-    updateAutomationLog('Mock report generated - Review comprehensive comments with automated VRA flags and risk assessments');
+    updateAutomationLog('Mock report generated successfully - all validations passed');
   };
 
   // Update automation log
