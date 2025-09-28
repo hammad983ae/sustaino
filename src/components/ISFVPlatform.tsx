@@ -6,6 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { demoProperties } from './DemoPropertySelector';
 import { 
   Zap, 
   MapPin, 
@@ -50,6 +52,7 @@ export default function ISFVPlatform() {
   });
 
   const [isRunningAutomation, setIsRunningAutomation] = useState(false);
+  const [selectedDemoProperty, setSelectedDemoProperty] = useState('');
 
   const runFullAutomation = async () => {
     if (!isfvData.propertyAddress.trim()) {
@@ -216,12 +219,33 @@ export default function ISFVPlatform() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="demo-property">Demo Property</Label>
+              <Select value={selectedDemoProperty} onValueChange={(value) => {
+                setSelectedDemoProperty(value);
+                const property = demoProperties.find(p => p.id === value);
+                if (property) {
+                  setISFVData(prev => ({ ...prev, propertyAddress: property.address }));
+                }
+              }}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select demo property..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {demoProperties.map((property) => (
+                    <SelectItem key={property.id} value={property.id}>
+                      {property.address}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="property-address">Property Address</Label>
               <Input
                 id="property-address"
-                placeholder="Enter property address..."
+                placeholder="Or enter custom address..."
                 value={isfvData.propertyAddress}
                 onChange={(e) => setISFVData(prev => ({ ...prev, propertyAddress: e.target.value }))}
               />

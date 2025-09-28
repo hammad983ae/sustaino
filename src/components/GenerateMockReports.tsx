@@ -2,116 +2,17 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, FileCheck } from 'lucide-react';
-import DemoPropertySelector, { DemoProperty, demoProperties } from './DemoPropertySelector';
 import ISFVPlatform from './ISFVPlatform';
-import { 
-  generateMockPropertyData, 
-  generateMockRiskRatings, 
-  generateMockVRAAssessment, 
-  generateMockSalesEvidence,
-  generateMockGeneralComments 
-} from '@/utils/demoDataGenerator';
 import { checkReportContradictions, generateContradictionReport, type ReportData } from '@/utils/reportContradictionChecker';
 import { toast } from 'sonner';
 
 export default function GenerateMockReports() {
-  const [selectedDemoProperty, setSelectedDemoProperty] = useState('mildura-highway');
   const [contradictionResults, setContradictionResults] = useState<string>('');
-  const [isGeneratingMock, setIsGeneratingMock] = useState(false);
 
-  // Generate demo mock report
-  const generateDemoMockReport = async () => {
-    if (!selectedDemoProperty) {
-      toast.error('Please select a demo property first');
-      return;
-    }
-
-    setIsGeneratingMock(true);
-    try {
-      const demoProperty = demoProperties.find(p => p.id === selectedDemoProperty);
-      if (!demoProperty) {
-        toast.error('Demo property not found');
-        return;
-      }
-
-      // Generate mock data using the demo property
-      const mockPropertyData = generateMockPropertyData(demoProperty);
-      const mockRiskRatings = generateMockRiskRatings(demoProperty);
-      const mockVRAAssessment = generateMockVRAAssessment(demoProperty);
-      const mockSalesEvidence = generateMockSalesEvidence(demoProperty);
-      const mockGeneralComments = generateMockGeneralComments(
-        demoProperty,
-        mockPropertyData,
-        mockRiskRatings,
-        mockVRAAssessment,
-        mockSalesEvidence
-      );
-
-      // Simulate processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Create report data for contradiction checking
-      const reportData: ReportData = {
-        propertyData: mockPropertyData,
-        riskRatings: mockRiskRatings,
-        vraAssessment: mockVRAAssessment,
-        salesEvidence: mockSalesEvidence,
-        generalComments: mockGeneralComments
-      };
-
-      // Run contradiction check
-      const contradictions = checkReportContradictions(reportData);
-      const contradictionReport = generateContradictionReport(contradictions);
-      setContradictionResults(contradictionReport);
-
-      toast.success(`Mock report generated for ${demoProperty.address}`);
-    } catch (error) {
-      console.error('Mock report generation error:', error);
-      toast.error('Failed to generate mock report');
-    } finally {
-      setIsGeneratingMock(false);
-    }
-  };
-
-  // Run contradiction check
+  // Run contradiction check - will be connected to ISFV data later
   const runContradictionCheck = () => {
-    if (!selectedDemoProperty) {
-      toast.error('Please select a demo property first');
-      return;
-    }
-
-    const demoProperty = demoProperties.find(p => p.id === selectedDemoProperty);
-    if (!demoProperty) {
-      toast.error('Demo property not found');
-      return;
-    }
-
-    // Generate mock data for contradiction checking
-    const mockPropertyData = generateMockPropertyData(demoProperty);
-    const mockRiskRatings = generateMockRiskRatings(demoProperty);
-    const mockVRAAssessment = generateMockVRAAssessment(demoProperty);
-    const mockSalesEvidence = generateMockSalesEvidence(demoProperty);
-    const mockGeneralComments = generateMockGeneralComments(
-      demoProperty,
-      mockPropertyData,
-      mockRiskRatings,
-      mockVRAAssessment,
-      mockSalesEvidence
-    );
-
-    const reportData: ReportData = {
-      propertyData: mockPropertyData,
-      riskRatings: mockRiskRatings,
-      vraAssessment: mockVRAAssessment,
-      salesEvidence: mockSalesEvidence,
-      generalComments: mockGeneralComments
-    };
-
-    const contradictions = checkReportContradictions(reportData);
-    const contradictionReport = generateContradictionReport(contradictions);
-    setContradictionResults(contradictionReport);
-
-    toast.success('Contradiction check completed');
+    // For now, show a placeholder message
+    toast.info('Select a property in ISFV and run automation first, then this will check the generated data');
   };
 
   return (
@@ -124,16 +25,40 @@ export default function GenerateMockReports() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="space-y-4">
-          <DemoPropertySelector
-            selectedProperty={selectedDemoProperty}
-            onPropertySelect={setSelectedDemoProperty}
-            onGenerateReport={generateDemoMockReport}
-            isGenerating={isGeneratingMock}
-          />
-        </div>
         <div className="lg:col-span-2">
           <ISFVPlatform />
+        </div>
+        <div className="space-y-4">
+          {/* Contradiction Checker */}
+          <Card className="h-fit">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileCheck className="h-5 w-5" />
+                Report Contradiction Checker
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Button 
+                  onClick={runContradictionCheck} 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  <AlertTriangle className="h-4 w-4 mr-2" />
+                  Run Contradiction Check
+                </Button>
+                
+                {contradictionResults && (
+                  <div className="p-4 bg-gray-50 rounded-lg border">
+                    <h4 className="font-medium mb-2">Contradiction Check Results:</h4>
+                    <pre className="text-sm whitespace-pre-wrap text-gray-700">
+                      {contradictionResults}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
@@ -144,10 +69,10 @@ export default function GenerateMockReports() {
         </CardHeader>
         <CardContent className="text-blue-700">
           <ol className="list-decimal list-inside space-y-2 text-sm">
-            <li>Select a demo property scenario from the selector on the left</li>
-            <li>Click "Generate Mock Report with Contradiction Check" to load the property data</li>
-            <li>Use the ISFV platform to demonstrate automated property valuation</li>
-            <li>Show clients how the contradiction checker validates report consistency</li>
+            <li>Select a demo property from the dropdown in the Automation Control Center</li>
+            <li>Click "Run Full Automation" to trigger the automated valuation process</li>
+            <li>Use the Contradiction Checker to validate report consistency for compliance</li>
+            <li>Explore the different tabs to see automated content in each section</li>
             <li>Perfect for demonstrating rapid, automated property valuations with quality control</li>
           </ol>
         </CardContent>
