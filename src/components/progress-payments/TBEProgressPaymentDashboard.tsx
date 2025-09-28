@@ -15,7 +15,7 @@ interface ProgressPayment {
   current_stage: string;
   claimed_percentage: number;
   verified_percentage: number;
-  status: 'pending' | 'approved' | 'rejected' | 'requires_review';
+  status: string;
   created_at: string;
   inspection_date?: string;
   next_stage?: string;

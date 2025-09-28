@@ -1130,6 +1130,39 @@ export type Database = {
           },
         ]
       }
+      hia_progress_stages: {
+        Row: {
+          created_at: string | null
+          id: string
+          inspection_requirements: Json | null
+          stage_description: string | null
+          stage_name: string
+          stage_order: number
+          standard_percentage: number
+          typical_inclusions: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          inspection_requirements?: Json | null
+          stage_description?: string | null
+          stage_name: string
+          stage_order: number
+          standard_percentage: number
+          typical_inclusions?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          inspection_requirements?: Json | null
+          stage_description?: string | null
+          stage_name?: string
+          stage_order?: number
+          standard_percentage?: number
+          typical_inclusions?: Json | null
+        }
+        Relationships: []
+      }
       honeypot_accesses: {
         Row: {
           created_at: string
@@ -2958,6 +2991,105 @@ export type Database = {
           id?: string
           operation?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      tbe_progress_payments: {
+        Row: {
+          builder_name: string
+          building_contract_number: string | null
+          claimed_percentage: number
+          construction_photos: Json | null
+          contract_date: string | null
+          contract_price: number
+          cost_to_complete: number | null
+          cost_to_date: number | null
+          created_at: string | null
+          current_stage: string
+          estimated_next_inspection_date: string | null
+          fund_release_recommendation: string | null
+          hia_stage_reference: string | null
+          id: string
+          inspection_date: string | null
+          inspector_notes: string | null
+          invoice_amount_claimed: number | null
+          invoice_documents: Json | null
+          next_stage: string | null
+          next_stage_percentage: number | null
+          ocr_extracted_data: Json | null
+          original_valuation_id: string | null
+          out_of_contract_items: Json | null
+          property_address: string
+          recommendation_notes: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+          variations: Json | null
+          verified_percentage: number
+        }
+        Insert: {
+          builder_name: string
+          building_contract_number?: string | null
+          claimed_percentage?: number
+          construction_photos?: Json | null
+          contract_date?: string | null
+          contract_price: number
+          cost_to_complete?: number | null
+          cost_to_date?: number | null
+          created_at?: string | null
+          current_stage: string
+          estimated_next_inspection_date?: string | null
+          fund_release_recommendation?: string | null
+          hia_stage_reference?: string | null
+          id?: string
+          inspection_date?: string | null
+          inspector_notes?: string | null
+          invoice_amount_claimed?: number | null
+          invoice_documents?: Json | null
+          next_stage?: string | null
+          next_stage_percentage?: number | null
+          ocr_extracted_data?: Json | null
+          original_valuation_id?: string | null
+          out_of_contract_items?: Json | null
+          property_address: string
+          recommendation_notes?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+          variations?: Json | null
+          verified_percentage?: number
+        }
+        Update: {
+          builder_name?: string
+          building_contract_number?: string | null
+          claimed_percentage?: number
+          construction_photos?: Json | null
+          contract_date?: string | null
+          contract_price?: number
+          cost_to_complete?: number | null
+          cost_to_date?: number | null
+          created_at?: string | null
+          current_stage?: string
+          estimated_next_inspection_date?: string | null
+          fund_release_recommendation?: string | null
+          hia_stage_reference?: string | null
+          id?: string
+          inspection_date?: string | null
+          inspector_notes?: string | null
+          invoice_amount_claimed?: number | null
+          invoice_documents?: Json | null
+          next_stage?: string | null
+          next_stage_percentage?: number | null
+          ocr_extracted_data?: Json | null
+          original_valuation_id?: string | null
+          out_of_contract_items?: Json | null
+          property_address?: string
+          recommendation_notes?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+          variations?: Json | null
+          verified_percentage?: number
         }
         Relationships: []
       }

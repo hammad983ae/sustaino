@@ -82,6 +82,7 @@ import Marketing from "./pages/Marketing";
 import { EPAT } from "./components/EPAT";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GlobalHeader from "./components/GlobalHeader";
+import { TBEProgressPaymentDashboard } from "./components/progress-payments/TBEProgressPaymentDashboard";
 
 const queryClient = new QueryClient();
 
@@ -303,6 +304,11 @@ const App = () => (
                  <Route path="/epat" element={
                    <ProtectedRoute>
                      <EPAT onBackToDashboard={() => window.location.href = '/dashboard'} />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/tbe-progress-payments" element={
+                   <ProtectedRoute>
+                     <TBEProgressPaymentDashboard />
                    </ProtectedRoute>
                  } />
         <Route path="/payment-success" element={<PaymentSuccess />} />
