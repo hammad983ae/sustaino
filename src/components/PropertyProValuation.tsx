@@ -1065,12 +1065,28 @@ export default function PropertyProValuation() {
     // Simulate VRA assessment
     await new Promise(resolve => setTimeout(resolve, 1500));
     
+    // Auto-generate VRA flags based on risk ratings
+    const currentRiskRatings = formData.riskRatings;
+    const highRiskCount = Object.values(currentRiskRatings).filter(rating => rating >= 3).length;
+    const criticalRiskCount = Object.values(currentRiskRatings).filter(rating => rating >= 4).length;
+    
     const vraAssessment: VRAAssessment = {
-      higherRiskProperty: false,
-      adverseMarketability: false,
-      incompleteConstruction: false,
-      criticalIssues: false,
-      esgFactors: 'Property has standard ESG attributes typical for residential properties in this locality'
+      // VRA 1: Higher Risk Property - triggered if multiple risks ≥3 or any risk ≥4
+      higherRiskProperty: highRiskCount >= 2 || criticalRiskCount >= 1,
+      
+      // VRA 2: Adverse Marketability - triggered by location or market risks ≥3
+      adverseMarketability: currentRiskRatings.location >= 3 || 
+                           currentRiskRatings.marketActivity >= 3 || 
+                           currentRiskRatings.marketDirection >= 3,
+      
+      // VRA 3: Incomplete Construction - triggered by improvements risk ≥4
+      incompleteConstruction: currentRiskRatings.improvements >= 4,
+      
+      // VRA 4: Critical Issues - triggered by environmental risk ≥4 or multiple high risks
+      criticalIssues: currentRiskRatings.environmental >= 4 || criticalRiskCount >= 2,
+      
+      // ESG Factors - auto-generated based on environmental and location risks
+      esgFactors: generateESGFactors(currentRiskRatings)
     };
     
     setFormData(prev => ({
@@ -1084,8 +1100,31 @@ export default function PropertyProValuation() {
       }
     }));
     
-    updateAutomationLog('VRA assessment completed');
+    updateAutomationLog('VRA assessment completed - automated flags set based on risk ratings');
     setIsProcessing(false);
+  };
+
+  // Generate ESG factors text based on risk ratings
+  const generateESGFactors = (riskRatings: any) => {
+    let esgText = '';
+    
+    if (riskRatings.environmental >= 3) {
+      esgText += 'Environmental factors include elevated concerns regarding air quality, noise pollution, or climate-related risks that may impact property sustainability and market appeal. ';
+    }
+    
+    if (riskRatings.location >= 3) {
+      esgText += 'Location presents social governance considerations including accessibility, community impact, or proximity to high-traffic areas affecting liveability. ';
+    }
+    
+    if (riskRatings.improvements >= 3) {
+      esgText += 'Building improvements may require upgrades to meet current sustainability standards including energy efficiency, water conservation, or waste management systems. ';
+    }
+    
+    if (esgText === '') {
+      esgText = 'Property demonstrates standard ESG attributes typical for residential properties in this locality with no significant positive or negative factors identified.';
+    }
+    
+    return esgText.trim();
   };
 
   // Generate Comprehensive Comments with Valuation Rationale
@@ -4777,9 +4816,19 @@ export default function PropertyProValuation() {
               <Alert>
                 <Info className="h-4 w-4" />
                 <AlertDescription>
-                  VRA assessment identifies predefined risks. A 'Yes' response to any question requires detailed comments.
+                  VRA assessment identifies predefined risks. VRA flags are automatically set based on risk ratings from Section 2, but can be manually overridden if required. A 'Yes' response to any question requires detailed comments.
                 </AlertDescription>
               </Alert>
+
+              {/* Show automation status */}
+              {Object.values(formData.vraAssessment).some(val => val === true || (typeof val === 'string' && val.includes('elevated'))) && (
+                <Alert className="border-yellow-200 bg-yellow-50">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription>
+                    <strong>Automated VRA Flags Detected:</strong> One or more VRA flags have been automatically triggered based on your risk ratings in Section 2. Review and adjust as necessary.
+                  </AlertDescription>
+                </Alert>
+              )}
 
               <div className="space-y-4">
                 <div className="flex items-center space-x-2">
