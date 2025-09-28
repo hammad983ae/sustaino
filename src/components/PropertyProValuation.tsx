@@ -2126,7 +2126,6 @@ export default function PropertyProValuation() {
             valuationFirm: "ISFV Systems",
             valuer: "Professional Valuer",
             apiNumber: "75366",
-            inspectionDate: formData.inspectionDate,
             issueDate: formData.valuationDate,
             
             // TBE/Construction Details (if applicable)
