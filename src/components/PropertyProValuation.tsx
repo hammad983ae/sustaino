@@ -58,6 +58,15 @@ import { GeneralCommentsTab } from './GeneralCommentsTab';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import VoiceCommandComponent from '@/components/VoiceCommandComponent';
+import DemoPropertySelector, { DemoProperty, demoProperties } from './DemoPropertySelector';
+import { 
+  generateMockPropertyData, 
+  generateMockRiskRatings, 
+  generateMockVRAAssessment, 
+  generateMockSalesEvidence,
+  generateMockGeneralComments 
+} from '@/utils/demoDataGenerator';
+import { checkReportContradictions, generateContradictionReport, type ReportData } from '@/utils/reportContradictionChecker';
 
 // Risk Rating Types (1-5 scale as per PropertyPRO standards)
 type RiskLevel = 1 | 2 | 3 | 4 | 5;
@@ -618,6 +627,11 @@ export default function PropertyProValuation() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
 
+  // Demo functionality state
+  const [selectedDemoProperty, setSelectedDemoProperty] = useState('mildura-highway');
+  const [contradictionResults, setContradictionResults] = useState<string>('');
+  const [isGeneratingMock, setIsGeneratingMock] = useState(false);
+
   // Photos and Documents state
   const [reportPhotos, setReportPhotos] = useState<Array<{url: string, name: string, description?: string}>>([]);
   const [supportingDocuments, setSupportingDocuments] = useState<Array<{name: string, url: string, category: string, size: number}>>([]);
@@ -830,6 +844,151 @@ export default function PropertyProValuation() {
       toast.error('OCR processing failed');
     } finally {
       setIsProcessingOCR(false);
+    }
+  };
+
+  // Demo Mock Data Generation Functions
+  const generateDemoMockReport = async () => {
+    if (!selectedDemoProperty) return;
+    
+    setIsGeneratingMock(true);
+    
+    try {
+      // Find the selected demo property
+      const demoProperty = demoProperties.find(p => p.id === selectedDemoProperty);
+      if (!demoProperty) {
+        toast.error('Selected demo property not found');
+        return;
+      }
+
+      // Generate mock data
+      const mockPropertyData = generateMockPropertyData(demoProperty);
+      const mockRiskRatings = generateMockRiskRatings(demoProperty);
+      const mockVRAAssessment = generateMockVRAAssessment(demoProperty);
+      const mockSalesEvidence = generateMockSalesEvidence(demoProperty);
+      const mockGeneralComments = generateMockGeneralComments(
+        demoProperty,
+        mockPropertyData,
+        mockRiskRatings,
+        mockVRAAssessment,
+        mockSalesEvidence
+      );
+
+      // Update form data with mock data
+      setFormData(prev => ({
+        ...prev,
+        // Property data
+        propertyAddress: mockPropertyData.propertyAddress,
+        realPropertyDescription: mockPropertyData.realPropertyDescription,
+        siteArea: mockPropertyData.siteArea,
+        siteDimensions: mockPropertyData.siteDimensions,
+        zoning: mockPropertyData.zoning,
+        currentUse: mockPropertyData.currentUse,
+        localGovernmentArea: mockPropertyData.localGovernmentArea,
+        mainDwelling: mockPropertyData.mainDwelling,
+        builtAbout: mockPropertyData.builtAbout,
+        livingArea: mockPropertyData.livingArea,
+        marketValue: mockPropertyData.marketValue,
+        landValue: mockPropertyData.landValue,
+        improvementValue: mockPropertyData.improvementValue,
+        rentalAssessment: mockPropertyData.rentalAssessment,
+        marketability: mockPropertyData.marketability,
+        environmentalIssues: mockPropertyData.environmentalIssues,
+        essentialRepairs: mockPropertyData.essentialRepairs,
+        estimatedCost: mockPropertyData.estimatedCost,
+        
+        // Risk ratings
+        riskRatings: {
+          location: mockRiskRatings.location as RiskLevel,
+          land: mockRiskRatings.land as RiskLevel,
+          environmental: mockRiskRatings.environmental as RiskLevel,
+          improvements: mockRiskRatings.improvements as RiskLevel,
+          marketDirection: mockRiskRatings.marketDirection as RiskLevel,
+          marketActivity: mockRiskRatings.marketActivity as RiskLevel,
+          localEconomy: mockRiskRatings.localEconomy as RiskLevel,
+          marketSegment: mockRiskRatings.marketSegment as RiskLevel
+        },
+        
+        // VRA assessment
+        vraAssessment: mockVRAAssessment,
+        vraComments: mockVRAAssessment.esgFactors,
+        
+        // Sales evidence
+        salesEvidence: mockSalesEvidence.map(sale => ({
+          address: sale.address,
+          saleDate: sale.saleDate,
+          price: sale.price,
+          briefComments: sale.briefComments,
+          livingArea: sale.livingArea,
+          landArea: sale.landArea,
+          bedrooms: sale.bedrooms,
+          bathrooms: sale.bathrooms,
+          locationAdjustment: sale.locationAdjustment,
+          sizeAdjustment: sale.sizeAdjustment,
+          conditionAdjustment: sale.conditionAdjustment,
+          ageAdjustment: sale.ageAdjustment,
+          timeAdjustment: sale.timeAdjustment,
+          adjustedPrice: sale.adjustedPrice,
+          pricePerSqm: sale.pricePerSqm,
+          weightingFactor: sale.weightingFactor,
+          comparisonToSubject: sale.comparisonToSubject,
+          overallAdjustment: sale.overallAdjustment,
+          reliability: sale.reliability
+        })),
+        
+        // General comments
+        additionalComments: mockGeneralComments
+      }));
+
+      // Run contradiction check
+      setTimeout(() => {
+        runContradictionCheck();
+      }, 100);
+
+      toast.success(`Mock report generated for ${demoProperty.address}`);
+    } catch (error) {
+      console.error('Mock report generation error:', error);
+      toast.error('Failed to generate mock report');
+    } finally {
+      setIsGeneratingMock(false);
+    }
+  };
+
+  // Contradiction Check Function
+  const runContradictionCheck = () => {
+    const reportData: ReportData = {
+      propertyData: {
+        kitchen_condition: formData.mainDwelling.toLowerCase().includes('missing kitchen') ? 'missing' : 'good',
+        structural_condition: formData.essentialRepairs === 'Yes' ? 'poor' : 'good',
+        external_factors: formData.realPropertyDescription.toLowerCase().includes('highway') ? ['main_road'] : 
+                         formData.realPropertyDescription.toLowerCase().includes('power') ? ['power_lines'] : []
+      },
+      riskRatings: formData.riskRatings,
+      vraAssessment: {
+        comments: formData.vraComments
+      },
+      salesEvidence: formData.salesEvidence,
+      rentalAssessment: {
+        weekly_rent: formData.rentalAssessment
+      },
+      generalComments: formData.additionalComments,
+      sections: {
+        propertyDetails: formData.propertyAddress ? 'complete' : 'incomplete',
+        riskAssessment: Object.values(formData.riskRatings).every(r => r > 0) ? 'complete' : 'incomplete',
+        salesEvidence: formData.salesEvidence.length > 0 ? 'complete' : 'incomplete'
+      }
+    };
+
+    const contradictionResult = checkReportContradictions(reportData);
+    const contradictionReport = generateContradictionReport(contradictionResult);
+    setContradictionResults(contradictionReport);
+
+    if (contradictionResult.hasContradictions) {
+      toast.error(`${contradictionResult.contradictions.length} contradiction(s) found in report!`);
+    } else if (contradictionResult.warnings.length > 0) {
+      toast.warning(`${contradictionResult.warnings.length} warning(s) found in report`);
+    } else {
+      toast.success('No contradictions detected in report');
     }
   };
 
@@ -2360,6 +2519,48 @@ export default function PropertyProValuation() {
                     </>
                   )}
                 </Button>
+              </div>
+
+              {/* Demo Property Selector for Client Testing */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DemoPropertySelector
+                  selectedProperty={selectedDemoProperty}
+                  onPropertySelect={setSelectedDemoProperty}
+                  onGenerateReport={generateDemoMockReport}
+                  isGenerating={isGeneratingMock}
+                />
+                
+                {/* Contradiction Checker Results */}
+                <Card className="h-fit">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileCheck className="h-5 w-5" />
+                      Report Contradiction Checker
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <Button 
+                        onClick={runContradictionCheck} 
+                        variant="outline" 
+                        className="w-full"
+                        disabled={!formData.propertyAddress}
+                      >
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        Run Contradiction Check
+                      </Button>
+                      
+                      {contradictionResults && (
+                        <div className="p-4 bg-gray-50 rounded-lg border">
+                          <h4 className="font-medium mb-2">Contradiction Check Results:</h4>
+                          <pre className="text-sm whitespace-pre-wrap text-gray-700">
+                            {contradictionResults}
+                          </pre>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
 
               {/* Under Contract Control */}
