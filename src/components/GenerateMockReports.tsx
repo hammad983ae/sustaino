@@ -8,81 +8,344 @@ import { AlertTriangle, CheckCircle, Play, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import ISFVPlatform from './ISFVPlatform';
 
-// PAF Demo Properties
+// PAF Demo Properties with comprehensive mock data
 const pafDemoProperties = [
   {
     name: "Childcare Centre - Melbourne CBD",
     address: "123 Collins Street, Melbourne VIC 3000",
     type: "Childcare",
     reportType: "Long Form",
-    features: "150 child capacity, outdoor play areas, commercial kitchen"
+    features: "150 child capacity, outdoor play areas, commercial kitchen",
+    mockData: {
+      propertyDetails: {
+        landArea: "2,150 sqm",
+        buildingArea: "1,800 sqm",
+        yearBuilt: "2019",
+        zoning: "Commercial 1 Zone",
+        owner: "Little Learners Pty Ltd"
+      },
+      valuation: {
+        marketValue: "$4,250,000",
+        landValue: "$2,800,000",
+        improvementValue: "$1,450,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$980,000 p.a.",
+        operatingExpenses: "$285,000 p.a.",
+        netIncome: "$695,000 p.a.",
+        yieldRate: "6.35%"
+      },
+      riskFactors: [
+        "High regulatory compliance requirements",
+        "Specialized use limits market appeal",
+        "Dependent on license retention"
+      ]
+    }
   },
   {
     name: "Apple Orchard - Yarra Valley",
-    address: "456 Orchard Road, Healesville VIC 3777",
+    address: "1247 Melba Highway, Dixons Creek VIC 3775",
     type: "Agricultural",
     reportType: "Sustino Pro",
-    features: "50 hectares, irrigation system, processing facility"
+    features: "50 hectares, irrigation system, processing facility",
+    mockData: {
+      propertyDetails: {
+        landArea: "50 hectares (500,000 sqm)",
+        buildingArea: "850 sqm (processing facility)",
+        yearBuilt: "2015 (facility), 1995 (orchard)",
+        zoning: "Farming Zone",
+        owner: "Dixons Creek Orchards Ltd"
+      },
+      valuation: {
+        marketValue: "$8,750,000",
+        landValue: "$6,200,000",
+        improvementValue: "$2,550,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$1,450,000 p.a.",
+        operatingExpenses: "$680,000 p.a.",
+        netIncome: "$770,000 p.a.",
+        yieldRate: "4.85%"
+      },
+      riskFactors: [
+        "Weather dependency affects yields",
+        "Limited alternative use options",
+        "Seasonal income variation"
+      ]
+    }
   },
   {
     name: "Healthcare Clinic - Box Hill",
     address: "789 Whitehorse Road, Box Hill VIC 3128",
     type: "Healthcare",
     reportType: "Short Form",
-    features: "Medical suites, parking, specialist equipment"
+    features: "Medical suites, parking, specialist equipment",
+    mockData: {
+      propertyDetails: {
+        landArea: "1,245 sqm",
+        buildingArea: "980 sqm",
+        yearBuilt: "2018",
+        zoning: "Commercial 1 Zone",
+        owner: "Eastern Health Services Pty Ltd"
+      },
+      valuation: {
+        marketValue: "$2,850,000",
+        landValue: "$1,650,000",
+        improvementValue: "$1,200,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$485,000 p.a.",
+        operatingExpenses: "$125,000 p.a.",
+        netIncome: "$360,000 p.a.",
+        yieldRate: "6.15%"
+      },
+      riskFactors: [
+        "Tenant specialization limits appeal",
+        "Equipment depreciation",
+        "Healthcare regulation changes"
+      ]
+    }
   },
   {
     name: "Development Site - Doncaster",
     address: "321 Manningham Road, Doncaster VIC 3108",
     type: "Development",
     reportType: "Long Form",
-    features: "2.5 hectares, residential zoning, planning permits"
+    features: "2.5 hectares, residential zoning, planning permits",
+    mockData: {
+      propertyDetails: {
+        landArea: "25,000 sqm (2.5 hectares)",
+        buildingArea: "N/A (vacant land)",
+        yearBuilt: "N/A",
+        zoning: "Residential Growth Zone",
+        owner: "Manningham Developments Pty Ltd"
+      },
+      valuation: {
+        marketValue: "$12,500,000",
+        landValue: "$12,500,000",
+        improvementValue: "$0",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "N/A (development site)",
+        operatingExpenses: "$45,000 p.a. (holding costs)",
+        netIncome: "Negative holding costs",
+        yieldRate: "N/A"
+      },
+      riskFactors: [
+        "Development approval conditions",
+        "Construction cost escalation",
+        "Market timing dependency"
+      ]
+    }
   },
   {
     name: "Office Complex - South Yarra",
     address: "555 Toorak Road, South Yarra VIC 3141",
     type: "Office",
     reportType: "Sustino Pro",
-    features: "Grade A office, 15 floors, premium fitout"
+    features: "Grade A office, 15 floors, premium fitout",
+    mockData: {
+      propertyDetails: {
+        landArea: "1,850 sqm",
+        buildingArea: "18,500 sqm (15 floors)",
+        yearBuilt: "2017",
+        zoning: "Commercial 1 Zone",
+        owner: "Premium Office Holdings Pty Ltd"
+      },
+      valuation: {
+        marketValue: "$45,750,000",
+        landValue: "$12,200,000",
+        improvementValue: "$33,550,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$3,850,000 p.a.",
+        operatingExpenses: "$965,000 p.a.",
+        netIncome: "$2,885,000 p.a.",
+        yieldRate: "5.45%"
+      },
+      riskFactors: [
+        "Premium rental sustainability",
+        "Technology obsolescence",
+        "CBD competition pressure"
+      ]
+    }
   }
 ];
 
-// ICV Demo Properties
+// ICV Demo Properties with comprehensive mock data
 const icvDemoProperties = [
   {
     name: "Retail Shopping Centre - Chadstone",
     address: "1341 Dandenong Road, Chadstone VIC 3148",
     type: "Retail",
     reportType: "Insurance Valuation",
-    features: "Major shopping centre, 200+ stores, entertainment precinct"
+    features: "Major shopping centre, 200+ stores, entertainment precinct",
+    mockData: {
+      propertyDetails: {
+        landArea: "45,000 sqm",
+        buildingArea: "185,000 sqm (GLA)",
+        yearBuilt: "1998 (major renovation 2019)",
+        zoning: "Commercial 1 Zone",
+        owner: "Vicinity Centres"
+      },
+      valuation: {
+        insuranceValue: "$850,000,000",
+        replacementCost: "$785,000,000",
+        siteClearance: "$15,000,000",
+        professionalFees: "$50,000,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$65,500,000 p.a.",
+        operatingExpenses: "$18,750,000 p.a.",
+        netIncome: "$46,750,000 p.a.",
+        yieldRate: "4.25%"
+      },
+      riskFactors: [
+        "Online retail competition impact",
+        "Large scale reconstruction costs",
+        "Tenant mix dependency"
+      ]
+    }
   },
   {
     name: "Industrial Warehouse - Dandenong",
-    address: "88 Princes Highway, Dandenong VIC 3175",
+    address: "1455 South Gippsland Highway, Dandenong South VIC 3175",
     type: "Industrial",
     reportType: "Commercial Valuation",
-    features: "Distribution centre, high clearance, loading docks"
+    features: "Distribution centre, high clearance, loading docks",
+    mockData: {
+      propertyDetails: {
+        landArea: "28,500 sqm",
+        buildingArea: "24,200 sqm",
+        yearBuilt: "2020",
+        zoning: "Industrial 1 Zone",
+        owner: "Goodman Group"
+      },
+      valuation: {
+        marketValue: "$42,500,000",
+        landValue: "$18,750,000",
+        improvementValue: "$23,750,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$2,850,000 p.a.",
+        operatingExpenses: "$485,000 p.a.",
+        netIncome: "$2,365,000 p.a.",
+        yieldRate: "5.85%"
+      },
+      riskFactors: [
+        "Single tenant dependency",
+        "Specialized racking equipment",
+        "Location accessibility changes"
+      ]
+    }
   },
   {
     name: "Mixed Use Development - Richmond",
-    address: "77 Swan Street, Richmond VIC 3121",
+    address: "425-439 Swan Street, Richmond VIC 3121",
     type: "Mixed Use",
     reportType: "Insurance Valuation",
-    features: "Retail ground floor, residential apartments, basement parking"
+    features: "Retail ground floor, residential apartments, basement parking",
+    mockData: {
+      propertyDetails: {
+        landArea: "3,250 sqm",
+        buildingArea: "18,500 sqm (total)",
+        yearBuilt: "2021",
+        zoning: "Mixed Use Zone",
+        owner: "Swan Street Developments Pty Ltd"
+      },
+      valuation: {
+        insuranceValue: "$65,750,000",
+        replacementCost: "$58,500,000",
+        siteClearance: "$2,250,000",
+        professionalFees: "$5,000,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$4,250,000 p.a.",
+        operatingExpenses: "$1,150,000 p.a.",
+        netIncome: "$3,100,000 p.a.",
+        yieldRate: "4.95%"
+      },
+      riskFactors: [
+        "Mixed use complexity",
+        "Residential market volatility",
+        "Strata management challenges"
+      ]
+    }
   },
   {
     name: "Healthcare Hospital - Fitzroy",
     address: "250 Gertrude Street, Fitzroy VIC 3065",
     type: "Healthcare",
     reportType: "Commercial Valuation",
-    features: "Private hospital, 150 beds, surgical suites, ICU"
+    features: "Private hospital, 150 beds, surgical suites, ICU",
+    mockData: {
+      propertyDetails: {
+        landArea: "8,500 sqm",
+        buildingArea: "28,500 sqm (5 levels)",
+        yearBuilt: "2016",
+        zoning: "Special Use Zone",
+        owner: "Fitzroy Private Hospital Ltd"
+      },
+      valuation: {
+        marketValue: "$125,000,000",
+        landValue: "$28,500,000",
+        improvementValue: "$96,500,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$18,500,000 p.a.",
+        operatingExpenses: "$5,250,000 p.a.",
+        netIncome: "$13,250,000 p.a.",
+        yieldRate: "5.65%"
+      },
+      riskFactors: [
+        "Specialized medical equipment",
+        "Regulatory compliance costs",
+        "Limited alternative use potential"
+      ]
+    }
   },
   {
     name: "Office Tower - Melbourne CBD",
-    address: "101 Collins Street, Melbourne VIC 3000",
+    address: "525 Collins Street, Melbourne VIC 3000",
     type: "Office",
     reportType: "Insurance Valuation",
-    features: "Premium Grade A tower, 40 floors, harbour views"
+    features: "Premium Grade A tower, 40 floors, harbour views",
+    mockData: {
+      propertyDetails: {
+        landArea: "2,150 sqm",
+        buildingArea: "85,500 sqm (40 floors)",
+        yearBuilt: "2019",
+        zoning: "Capital City Zone",
+        owner: "Collins Street Holdings Pty Ltd"
+      },
+      valuation: {
+        insuranceValue: "$485,000,000",
+        replacementCost: "$425,000,000",
+        siteClearance: "$25,000,000",
+        professionalFees: "$35,000,000",
+        valuationDate: "September 2024"
+      },
+      income: {
+        grossIncome: "$28,500,000 p.a.",
+        operatingExpenses: "$7,850,000 p.a.",
+        netIncome: "$20,650,000 p.a.",
+        yieldRate: "4.85%"
+      },
+      riskFactors: [
+        "CBD office market volatility",
+        "High construction replacement costs",
+        "Technology obsolescence risk"
+      ]
+    }
   }
 ];
 
@@ -91,11 +354,15 @@ export default function GenerateMockReports() {
   const [pafCustomAddress, setPafCustomAddress] = useState("");
   const [pafStatus, setPafStatus] = useState("Idle");
   const [pafLoading, setPafLoading] = useState(false);
+  const [pafReportData, setPafReportData] = useState<any>(null);
+  const [pafContradictions, setPafContradictions] = useState<any[]>([]);
 
   const [icvSelectedProperty, setIcvSelectedProperty] = useState("");
   const [icvCustomAddress, setIcvCustomAddress] = useState("");
   const [icvStatus, setIcvStatus] = useState("Idle");
   const [icvLoading, setIcvLoading] = useState(false);
+  const [icvReportData, setIcvReportData] = useState<any>(null);
+  const [icvContradictions, setIcvContradictions] = useState<any[]>([]);
 
   const handlePafAutomation = async () => {
     if (!pafSelectedProperty && !pafCustomAddress.trim()) {
@@ -106,7 +373,10 @@ export default function GenerateMockReports() {
     setPafLoading(true);
     setPafStatus("Running automation...");
 
-    // Simulate automation process
+    // Get selected property data
+    const selectedPropertyData = pafDemoProperties.find(p => p.name === pafSelectedProperty);
+
+    // Simulate automation process with real data population
     setTimeout(() => {
       setPafStatus("Processing property details...");
     }, 1000);
@@ -118,17 +388,61 @@ export default function GenerateMockReports() {
     setTimeout(() => {
       setPafStatus("Complete");
       setPafLoading(false);
+      
+      // Populate report data
+      if (selectedPropertyData) {
+        setPafReportData(selectedPropertyData);
+      }
+      
       toast.success("PAF automation completed successfully!");
     }, 3500);
   };
 
   const handlePafContradictionCheck = () => {
-    if (pafStatus !== "Complete") {
+    if (pafStatus !== "Complete" || !pafReportData) {
       toast.error("Please run full automation first");
       return;
     }
 
-    toast.success("PAF contradiction check passed - no issues detected");
+    // Simulate contradiction checking with realistic results
+    const contradictions = [];
+    const propertyData = pafReportData.mockData;
+
+    // Check for potential contradictions based on property type and data
+    if (pafReportData.type === "Development" && propertyData.income.grossIncome !== "N/A (development site)") {
+      contradictions.push({
+        type: "Critical",
+        section: "Income Analysis",
+        issue: "Development site showing income when it should be vacant land",
+        recommendation: "Verify property status and income attribution"
+      });
+    }
+
+    if (parseFloat(propertyData.income.yieldRate.replace('%', '')) > 8) {
+      contradictions.push({
+        type: "Warning",
+        section: "Yield Analysis",
+        issue: "Yield rate appears unusually high for property type",
+        recommendation: "Review comparable evidence and market conditions"
+      });
+    }
+
+    if (pafReportData.type === "Healthcare" && !propertyData.riskFactors.some(risk => risk.includes("regulation"))) {
+      contradictions.push({
+        type: "Warning",
+        section: "Risk Assessment",
+        issue: "Healthcare property missing regulatory risk assessment",
+        recommendation: "Include healthcare compliance and regulatory risks"
+      });
+    }
+
+    setPafContradictions(contradictions);
+
+    if (contradictions.length === 0) {
+      toast.success("PAF contradiction check passed - no issues detected");
+    } else {
+      toast.warning(`Found ${contradictions.length} potential issues requiring review`);
+    }
   };
 
   const handleIcvAutomation = async () => {
@@ -139,6 +453,9 @@ export default function GenerateMockReports() {
 
     setIcvLoading(true);
     setIcvStatus("Running automation...");
+
+    // Get selected property data
+    const selectedPropertyData = icvDemoProperties.find(p => p.name === icvSelectedProperty);
 
     // Simulate automation process
     setTimeout(() => {
@@ -152,23 +469,74 @@ export default function GenerateMockReports() {
     setTimeout(() => {
       setIcvStatus("Complete");
       setIcvLoading(false);
+      
+      // Populate report data
+      if (selectedPropertyData) {
+        setIcvReportData(selectedPropertyData);
+      }
+      
       toast.success("ICV automation completed successfully!");
     }, 3500);
   };
 
   const handleIcvContradictionCheck = () => {
-    if (icvStatus !== "Complete") {
+    if (icvStatus !== "Complete" || !icvReportData) {
       toast.error("Please run full automation first");
       return;
     }
 
-    toast.success("ICV contradiction check passed - no issues detected");
+    // Simulate contradiction checking for ICV
+    const contradictions = [];
+    const propertyData = icvReportData.mockData;
+
+    // Check insurance valuation specific contradictions
+    if (icvReportData.reportType === "Insurance Valuation") {
+      const replacementCost = parseFloat(propertyData.valuation.replacementCost.replace(/[$,]/g, ''));
+      const insuranceValue = parseFloat(propertyData.valuation.insuranceValue.replace(/[$,]/g, ''));
+      
+      if (insuranceValue < replacementCost) {
+        contradictions.push({
+          type: "Critical",
+          section: "Insurance Valuation",
+          issue: "Insurance value is less than replacement cost",
+          recommendation: "Review insurance adequacy and coverage levels"
+        });
+      }
+    }
+
+    if (icvReportData.type === "Industrial" && !propertyData.riskFactors.some(risk => risk.includes("tenant"))) {
+      contradictions.push({
+        type: "Warning",
+        section: "Risk Assessment",
+        issue: "Industrial property missing tenant dependency risk analysis",
+        recommendation: "Include tenant concentration and lease security risks"
+      });
+    }
+
+    if (parseFloat(propertyData.income.yieldRate.replace('%', '')) < 3) {
+      contradictions.push({
+        type: "Warning",
+        section: "Yield Analysis",
+        issue: "Yield rate appears unusually low - verify market conditions",
+        recommendation: "Compare with recent market transactions and cap rates"
+      });
+    }
+
+    setIcvContradictions(contradictions);
+
+    if (contradictions.length === 0) {
+      toast.success("ICV contradiction check passed - no issues detected");
+    } else {
+      toast.warning(`Found ${contradictions.length} potential issues requiring review`);
+    }
   };
 
   const clearPafData = () => {
     setPafSelectedProperty("");
     setPafCustomAddress("");
     setPafStatus("Idle");
+    setPafReportData(null);
+    setPafContradictions([]);
     toast.info("PAF data cleared");
   };
 
@@ -176,8 +544,111 @@ export default function GenerateMockReports() {
     setIcvSelectedProperty("");
     setIcvCustomAddress("");
     setIcvStatus("Idle");
+    setIcvReportData(null);
+    setIcvContradictions([]);
     toast.info("ICV data cleared");
   };
+
+  // Component for displaying report sections
+  const ReportSection = ({ title, data, contradictions }: { title: string, data: any, contradictions: any[] }) => (
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold">{title}</h3>
+      
+      {/* Property Details */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Property Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div><strong>Address:</strong> {data.address}</div>
+            <div><strong>Type:</strong> {data.type}</div>
+            <div><strong>Land Area:</strong> {data.mockData.propertyDetails.landArea}</div>
+            <div><strong>Building Area:</strong> {data.mockData.propertyDetails.buildingArea}</div>
+            <div><strong>Year Built:</strong> {data.mockData.propertyDetails.yearBuilt}</div>
+            <div><strong>Zoning:</strong> {data.mockData.propertyDetails.zoning}</div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Valuation Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Valuation Summary</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            {Object.entries(data.mockData.valuation).map(([key, value]) => (
+              <div key={key}>
+                <strong>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> {value as string}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Income Analysis */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Income Analysis</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            {Object.entries(data.mockData.income).map(([key, value]) => (
+              <div key={key}>
+                <strong>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> {value as string}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Risk Factors */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Risk Assessment</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="list-disc list-inside space-y-1 text-sm">
+            {data.mockData.riskFactors.map((risk: string, index: number) => (
+              <li key={index}>{risk}</li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* Contradiction Check Results */}
+      {contradictions.length > 0 && (
+        <Card className="border-orange-200 bg-orange-50">
+          <CardHeader>
+            <CardTitle className="text-base text-orange-800">Contradiction Check Results</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {contradictions.map((contradiction, index) => (
+                <div key={index} className={`p-3 rounded-lg ${
+                  contradiction.type === 'Critical' ? 'bg-red-100 border-red-200' : 'bg-yellow-100 border-yellow-200'
+                }`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <AlertTriangle className={`h-4 w-4 ${
+                      contradiction.type === 'Critical' ? 'text-red-600' : 'text-yellow-600'
+                    }`} />
+                    <span className={`font-medium text-sm ${
+                      contradiction.type === 'Critical' ? 'text-red-800' : 'text-yellow-800'
+                    }`}>
+                      {contradiction.type}: {contradiction.section}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-700 mb-1">{contradiction.issue}</p>
+                  <p className="text-xs text-gray-600 italic">{contradiction.recommendation}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
 
   return (
     <div className="container mx-auto p-6 space-y-8">
@@ -326,6 +797,17 @@ export default function GenerateMockReports() {
             </ol>
           </CardContent>
         </Card>
+
+        {/* PAF Report Sections */}
+        {pafReportData && (
+          <div className="mt-6">
+            <ReportSection 
+              title={`PAF Report: ${pafReportData.name}`} 
+              data={pafReportData} 
+              contradictions={pafContradictions} 
+            />
+          </div>
+        )}
       </div>
 
       {/* ICV Section */}
@@ -441,6 +923,17 @@ export default function GenerateMockReports() {
             </ol>
           </CardContent>
         </Card>
+
+        {/* ICV Report Sections */}
+        {icvReportData && (
+          <div className="mt-6">
+            <ReportSection 
+              title={`ICV Report: ${icvReportData.name}`} 
+              data={icvReportData} 
+              contradictions={icvContradictions} 
+            />
+          </div>
+        )}
       </div>
 
       {/* Overall Demo Summary */}
