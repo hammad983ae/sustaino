@@ -336,9 +336,9 @@ export default function PropertyProValuation() {
     valuersRefNo: '',
     borrower: '',
     
-    propertyAddress: '',
+    propertyAddress: '24 Highway Drive, Mildura VIC 3500',
     titleSearchSighted: 'No',
-    realPropertyDescription: '',
+    realPropertyDescription: 'Lot 9 PS444723 - Title not supplied for Volume and Folio. Property affected by proximity to main highway (15m) and high tension power lines (25m).',
     encumbrancesRestrictions: '',
     siteDimensions: '',
     siteArea: '',
@@ -348,23 +348,23 @@ export default function PropertyProValuation() {
     mainDwelling: '',
     builtAbout: '',
     additions: '',
-    livingArea: 0,
-    outdoorArea: 0,
+    livingArea: 120,
+    outdoorArea: 25,
     otherArea: 0,
-    carAccommodation: 0,
-    carAreas: 0,
-    marketability: 'Good',
+    carAccommodation: 1,
+    carAreas: 20,
+    marketability: 'Poor',
     heritageIssues: 'No',
-    environmentalIssues: 'No',
-    essentialRepairs: 'No',
-    estimatedCost: 0,
+    environmentalIssues: 'Yes',
+    essentialRepairs: 'Yes',
+    estimatedCost: 10000,
     interestValued: 'Fee Simple Vacant Possession',
     valueComponent: 'Existing Property',
-    landValue: 0,
-    improvementValue: 0,
-    marketValue: 0,
-    rentalAssessment: 0,
-    insuranceEstimate: 0,
+    landValue: 135000,
+    improvementValue: 45000,
+    marketValue: 180000,
+    rentalAssessment: 280,
+    insuranceEstimate: 200000,
     reportType: 'AS IS',
     inspectionDate: new Date().toISOString().split('T')[0],
     valuationDate: new Date().toISOString().split('T')[0],
@@ -455,14 +455,14 @@ export default function PropertyProValuation() {
     sellingPeriodGreaterThan6Months: 'No',
     underContract: 'No',
     riskRatings: {
-      location: 1,
-      land: 1,
-      environmental: 1,
-      improvements: 1,
-      marketDirection: 1,
-      marketActivity: 1,
-      localEconomy: 1,
-      marketSegment: 1
+      location: 4, // Main road + power lines = high risk
+      land: 2, // Standard residential land
+      environmental: 4, // Power lines + traffic pollution = high risk
+      improvements: 4, // Missing kitchen + $10k repairs = high risk
+      marketDirection: 2, // Stable market
+      marketActivity: 3, // Affected by location issues = medium risk
+      localEconomy: 2, // Regional economy
+      marketSegment: 3 // Marketability concerns = medium risk
     },
     propertyRiskRatings: {
       locationNeighbourhood: 1,
@@ -477,11 +477,11 @@ export default function PropertyProValuation() {
       marketSegmentConditions: 1,
     },
     vraAssessment: {
-      higherRiskProperty: false,
-      adverseMarketability: false,
-      incompleteConstruction: false,
-      criticalIssues: false,
-      esgFactors: ''
+      higherRiskProperty: true, // Multiple risks ≥4
+      adverseMarketability: true, // Location and market activity ≥3
+      incompleteConstruction: false, // Not incomplete construction
+      criticalIssues: true, // Environmental ≥4
+      esgFactors: 'Property presents significant environmental concerns due to proximity to high tension power lines (25m) and main highway traffic (15m). Location factors negatively impact sustainability metrics including air quality, noise pollution, and electromagnetic field exposure. Building improvements require substantial investment ($10,000) to meet contemporary living standards, particularly kitchen facilities.'
     },
     tbeDetails: {
       contractPrice: 0,
@@ -504,7 +504,50 @@ export default function PropertyProValuation() {
       riskAllowance: 10,
       profitAllowance: 15
     },
-    salesEvidence: [],
+    salesEvidence: [
+      {
+        address: '18 Highway Drive, Mildura VIC 3500',
+        saleDate: '15/08/2024',
+        price: 185000,
+        briefComments: 'Similar highway location but better condition. Required kitchen renovation and minor repairs.',
+        livingArea: 120,
+        landArea: 520,
+        bedrooms: 3,
+        bathrooms: 2,
+        locationAdjustment: -5000,
+        sizeAdjustment: 0,
+        conditionAdjustment: -10000,
+        ageAdjustment: 1000,
+        timeAdjustment: 2000,
+        adjustedPrice: 173000,
+        pricePerSqm: 1542,
+        weightingFactor: 0.85,
+        comparisonToSubject: 'similar' as const,
+        overallAdjustment: -12000,
+        reliability: 'high' as const
+      },
+      {
+        address: '67 Commercial Road, Mildura VIC 3500',
+        saleDate: '22/07/2024', 
+        price: 210000,
+        briefComments: 'Main road frontage but superior kitchen facilities and general condition.',
+        livingArea: 132,
+        landArea: 485,
+        bedrooms: 3,
+        bathrooms: 1,
+        locationAdjustment: -8000,
+        sizeAdjustment: 3000,
+        conditionAdjustment: 5000,
+        ageAdjustment: -1000,
+        timeAdjustment: 1000,
+        adjustedPrice: 210000,
+        pricePerSqm: 1591,
+        weightingFactor: 0.78,
+        comparisonToSubject: 'superior' as const,
+        overallAdjustment: 0,
+        reliability: 'high' as const
+      }
+    ],
     valuerName: '',
     valuerQualifications: '',
     issueDate: '',
@@ -566,15 +609,48 @@ export default function PropertyProValuation() {
     marketSegment: 1 as RiskLevel
   };
 
+  // VRA flags should auto-trigger based on high risk ratings
   const vraAssessment = {
-    higherRiskProperty: false,
-    adverseMarketability: false,
-    incompleteConstruction: false,
-    criticalIssues: false,
-    esgFactors: ''
+    higherRiskProperty: true, // Multiple risks ≥4
+    adverseMarketability: true, // Location and market activity ≥3
+    incompleteConstruction: false, // Not incomplete, just damaged
+    criticalIssues: true, // Environmental ≥4
+    esgFactors: 'Property presents significant environmental concerns due to proximity to high tension power lines (25m) and main highway traffic (15m). Location factors negatively impact sustainability metrics including air quality, noise pollution, and electromagnetic field exposure. Building improvements require substantial investment to meet contemporary living standards, particularly kitchen facilities and general maintenance upgrading.'
   };
 
-  const salesEvidence: any[] = [];
+  // Mock sales evidence reflecting the challenges
+  const salesEvidence = [
+    {
+      address: '18 Highway Drive, Mildura VIC 3500',
+      salePrice: 185000,
+      adjustedPrice: 195000,
+      pricePerSqm: 1625,
+      saleDate: '2024-08-15',
+      buildingArea: 120,
+      landArea: 520,
+      bedrooms: 3,
+      bathrooms: 2,
+      adjustments: { location: -5000, condition: -10000 },
+      similarityScore: 85,
+      daysOnMarket: 127,
+      notes: 'Similar highway location but better condition'
+    },
+    {
+      address: '67 Commercial Road, Mildura VIC 3500', 
+      salePrice: 210000,
+      adjustedPrice: 200000,
+      pricePerSqm: 1515,
+      saleDate: '2024-07-22',
+      buildingArea: 132,
+      landArea: 485,
+      bedrooms: 3,
+      bathrooms: 1,
+      adjustments: { location: -8000, size: +3000 },
+      similarityScore: 78,
+      daysOnMarket: 89,
+      notes: 'Main road frontage, better kitchen facilities'
+    }
+  ];
   const [generalComments, setGeneralComments] = useState('');
 
   // Auto-generate risk comments when ratings are 3 or higher
@@ -1352,6 +1428,19 @@ export default function PropertyProValuation() {
     updateAutomationLog('Automation workflow completed');
   };
 
+  // Generate mock report to demonstrate high-risk automation
+  const generateMockReport = async () => {
+    updateAutomationLog('Generating mock report with high-risk factors...');
+    
+    // Auto-trigger comprehensive comments generation
+    await generateComprehensiveComments();
+    
+    // Switch to General Comments tab to show results
+    setActiveTab('general-comments');
+    
+    updateAutomationLog('Mock report generated - Review comprehensive comments with automated VRA flags and risk assessments');
+  };
+
   // Update automation log
   const updateAutomationLog = (message: string) => {
     const timestamp = new Date().toLocaleTimeString();
@@ -2065,6 +2154,11 @@ export default function PropertyProValuation() {
           <Button onClick={runFullAutomation} disabled={isProcessing || !formData.propertyAddress}>
             <Zap className="h-4 w-4 mr-2" />
             {isProcessing ? 'Processing...' : 'Run Full Automation'}
+          </Button>
+          
+          <Button onClick={generateMockReport} variant="outline" className="bg-blue-50 border-blue-200">
+            <FileText className="h-4 w-4 mr-2" />
+            Generate Mock Report (High-Risk Example)
           </Button>
         </div>
       </div>
