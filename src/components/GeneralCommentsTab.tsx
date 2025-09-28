@@ -36,11 +36,58 @@ export function GeneralCommentsTab({
 }: GeneralCommentsTabProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateComments = () => {
+  const generateComments = async () => {
     setIsGenerating(true);
     
-    setTimeout(() => {
-      let comments = "GENERAL COMMENTS - PROPERTY VALUATION ASSESSMENT\n\n";
+    try {
+      // Call the enhanced valuation rationale generation
+      const response = await fetch('https://cxcfxnbvtddwebqprile.supabase.co/functions/v1/generate-valuation-rationale', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN4Y2Z4bmJ2dGRkd2VicXByaWxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxOTQwMjksImV4cCI6MjA3MDc3MDAyOX0.-tSWd97U0rxEZcW1ejcAJlX2EPVBDAFI-dEuQf6CDys`
+        },
+        body: JSON.stringify({
+          propertyData: {
+            address: propertyData?.address || '',
+            landArea: propertyData?.landArea || 0,
+            livingArea: propertyData?.buildingArea || 0,
+            bedrooms: propertyData?.bedrooms || 0,
+            bathrooms: propertyData?.bathrooms || 0,
+            carSpaces: propertyData?.carSpaces || 0,
+            propertyType: propertyData?.propertyType || 'house',
+            zoning: propertyData?.zoning || '',
+            suburb: propertyData?.suburb || '',
+            state: propertyData?.state || '',
+            postcode: propertyData?.postcode || '',
+            streetType: propertyData?.streetType,
+            coastalOrientation: propertyData?.coastalOrientation,
+            esgOrientation: propertyData?.esgOrientation,
+            schoolZones: propertyData?.schoolZones,
+            bushfireRiskZone: propertyData?.bushfireRiskZone,
+            floodRiskZone: propertyData?.floodRiskZone,
+            yearBuilt: propertyData?.yearBuilt,
+            constructionType: propertyData?.constructionType,
+            solarPanels: propertyData?.solarPanels
+          },
+          riskRatings,
+          vraAssessment
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate valuation rationale');
+      }
+
+      // Generate comprehensive comments with valuation rationale
+      let comments = "COMPREHENSIVE PROPERTY COMMENTS\n\n";
+      
+      // Include the detailed valuation rationale
+      if (data.rationale) {
+        comments += data.rationale + "\n\n";
+      }
       
       // Property Details Section
       comments += "PROPERTY SUMMARY:\n";
@@ -137,9 +184,28 @@ export function GeneralCommentsTab({
       comments += "• Regular revaluation recommended as market conditions change\n";
       
       onCommentsChange(comments);
+      toast.success("Comprehensive property comments with valuation rationale generated successfully");
+    } catch (error) {
+      console.error('Error generating valuation rationale:', error);
+      // Fallback to basic comments generation
+      let comments = "COMPREHENSIVE PROPERTY COMMENTS\n\n";
+      
+      comments += "PROPERTY SUMMARY:\n";
+      if (propertyData?.address) {
+        comments += `• Property Address: ${propertyData.address}\n`;
+      }
+      if (propertyData?.landArea) {
+        comments += `• Land Area: ${propertyData.landArea} sqm\n`;
+      }
+      if (propertyData?.buildingArea || propertyData?.livingArea) {
+        comments += `• Building Area: ${propertyData.buildingArea || propertyData.livingArea} sqm\n`;
+      }
+      
+      onCommentsChange(comments);
+      toast.error("Failed to generate enhanced comments. Basic comments provided.");
+    } finally {
       setIsGenerating(false);
-      toast.success("General comments generated based on property data");
-    }, 2000);
+    }
   };
 
   const getHighRiskCount = () => {
