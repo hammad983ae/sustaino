@@ -219,7 +219,7 @@ export default function ISFVPlatform() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div className="space-y-2">
               <Label htmlFor="demo-property">Demo Property</Label>
               <Select value={selectedDemoProperty} onValueChange={(value) => {
@@ -250,14 +250,25 @@ export default function ISFVPlatform() {
                 onChange={(e) => setISFVData(prev => ({ ...prev, propertyAddress: e.target.value }))}
               />
             </div>
-            <div className="flex items-end gap-2">
+            <div className="flex items-end">
               <Button 
                 onClick={runFullAutomation}
                 disabled={isRunningAutomation || !isfvData.propertyAddress.trim()}
-                className="flex-1 bg-green-600 hover:bg-green-700"
+                className="w-full bg-green-600 hover:bg-green-700"
               >
                 <Play className="h-4 w-4 mr-2" />
-                {isRunningAutomation ? 'Running Automation...' : 'Run Full Automation'}
+                {isRunningAutomation ? 'Running...' : 'Run Full Automation'}
+              </Button>
+            </div>
+            <div className="flex items-end">
+              <Button 
+                onClick={runContradictionCheck}
+                disabled={!isfvData.propertyData}
+                variant="outline"
+                className="w-full border-red-300 hover:bg-red-50"
+              >
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                Run Contradiction Check
               </Button>
             </div>
             <div className="flex items-end">
@@ -327,30 +338,22 @@ export default function ISFVPlatform() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-blue-800">
                 <FileCheck className="h-5 w-5" />
-                Report Contradiction Checker
+                Contradiction Check Results
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <Button 
-                  onClick={runContradictionCheck} 
-                  variant="outline" 
-                  className="w-full"
-                  disabled={!isfvData.propertyData}
-                >
-                  <AlertTriangle className="h-4 w-4 mr-2" />
-                  Run Contradiction Check
-                </Button>
-                
-                {isfvData.contradictionResults && (
-                  <div className="p-4 bg-white rounded-lg border">
-                    <h4 className="font-medium mb-2">Contradiction Check Results:</h4>
-                    <pre className="text-sm whitespace-pre-wrap text-gray-700">
-                      {isfvData.contradictionResults}
-                    </pre>
-                  </div>
-                )}
-              </div>
+              {isfvData.contradictionResults ? (
+                <div className="p-4 bg-white rounded-lg border">
+                  <pre className="text-sm whitespace-pre-wrap text-gray-700">
+                    {isfvData.contradictionResults}
+                  </pre>
+                </div>
+              ) : (
+                <div className="text-center text-muted-foreground py-4">
+                  <AlertTriangle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p>Run Contradiction Check from the Control Center above to validate report consistency</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
