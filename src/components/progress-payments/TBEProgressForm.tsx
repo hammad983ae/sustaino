@@ -36,6 +36,7 @@ export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuc
   const [formData, setFormData] = useState({
     property_address: sourcePropertyAddress || '',
     builder_name: '',
+    approved_plans_sighted: '',
     building_contract_number: '',
     original_valuation_id: sourceJobId || '',
     contract_price: 0,
@@ -56,9 +57,15 @@ export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuc
     estimated_next_inspection_date: '',
   });
 
+  const [previousClaims, setPreviousClaims] = useState<any[]>([]);
+  const [loadingPreviousClaims, setLoadingPreviousClaims] = useState(false);
+
   useEffect(() => {
     fetchHIAStages();
-  }, []);
+    if (formData.property_address || formData.building_contract_number) {
+      fetchPreviousClaims();
+    }
+  }, [formData.property_address, formData.building_contract_number]);
 
   const fetchHIAStages = async () => {
     try {
@@ -79,6 +86,41 @@ export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuc
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchPreviousClaims = async () => {
+    if (!formData.property_address && !formData.building_contract_number) return;
+    
+    try {
+      setLoadingPreviousClaims(true);
+      const { data, error } = await supabase
+        .from('tbe_progress_payments')
+        .select('*')
+        .or(`property_address.eq.${formData.property_address},building_contract_number.eq.${formData.building_contract_number}`)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setPreviousClaims(data || []);
+    } catch (error: any) {
+      console.error('Error fetching previous claims:', error);
+    } finally {
+      setLoadingPreviousClaims(false);
+    }
+  };
+
+  const carryOverFromPreviousClaim = (previousClaim: any) => {
+    setFormData(prev => ({
+      ...prev,
+      builder_name: previousClaim.builder_name || prev.builder_name,
+      building_contract_number: previousClaim.building_contract_number || prev.building_contract_number,
+      contract_price: previousClaim.contract_price || prev.contract_price,
+      contract_date: previousClaim.contract_date || prev.contract_date,
+    }));
+    
+    toast({
+      title: "Success",
+      description: "Previous claim information carried over successfully",
+    });
   };
 
   const handleInputChange = (field: string, value: any) => {
@@ -146,7 +188,7 @@ export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuc
           Back to Dashboard
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">New TBE Progress Payment Inspection</h1>
+          <h1 className="text-3xl font-bold">Progress Payment Claims</h1>
           <p className="text-muted-foreground">Construction Progress Payment Assessment</p>
         </div>
       </div>
@@ -169,15 +211,29 @@ export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuc
                   required
                 />
               </div>
-              <div>
-                <Label htmlFor="builder_name">Builder Name</Label>
-                <Input
-                  id="builder_name"
-                  value={formData.builder_name}
-                  onChange={(e) => handleInputChange('builder_name', e.target.value)}
-                  placeholder="Enter builder name"
-                  required
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="builder_name">Builder Name</Label>
+                  <Input
+                    id="builder_name"
+                    value={formData.builder_name}
+                    onChange={(e) => handleInputChange('builder_name', e.target.value)}
+                    placeholder="Enter builder name"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="approved_plans_sighted">Approved Plans Sighted</Label>
+                  <Select onValueChange={(value) => handleInputChange('approved_plans_sighted', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Yes/No" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="yes">Yes</SelectItem>
+                      <SelectItem value="no">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
@@ -261,6 +317,70 @@ export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuc
             )}
           </CardContent>
         </Card>
+
+        {/* Previous Claims */}
+        {previousClaims.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Previous Claims</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Previous progress payment claims for this property/contract
+              </p>
+            </CardHeader>
+            <CardContent>
+              {loadingPreviousClaims ? (
+                <div className="text-center py-4">Loading previous claims...</div>
+              ) : (
+                <div className="space-y-4">
+                  {previousClaims.map((claim, index) => (
+                    <Card key={claim.id} className="border-l-4 border-l-primary/20">
+                      <CardContent className="p-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h4 className="font-semibold">{claim.current_stage}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {new Date(claim.created_at).toLocaleDateString()} • {claim.verified_percentage}% verified
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Badge variant={claim.fund_release_recommendation === 'approve_full' ? 'default' : 'secondary'}>
+                              {claim.fund_release_recommendation}
+                            </Badge>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => carryOverFromPreviousClaim(claim)}
+                            >
+                              Carry Over
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <span className="text-muted-foreground">Contract Price:</span>
+                            <p className="font-medium">{formatCurrency(claim.contract_price)}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Cost to Date:</span>
+                            <p className="font-medium">{formatCurrency(claim.cost_to_date)}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Invoice Amount:</span>
+                            <p className="font-medium">{formatCurrency(claim.invoice_amount_claimed)}</p>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Status:</span>
+                            <p className="font-medium capitalize">{claim.status}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Progress Assessment */}
         <Card>
