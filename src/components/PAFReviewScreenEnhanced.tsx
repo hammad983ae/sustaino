@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { OCRConfidenceTable } from './OCRConfidenceTable';
 import { fetchReportConfigWithOCR, generateReportWithOCR, calculateReadiness } from '@/utils/ocrIntegration';
+import { checkReportContradictions, generateContradictionReport, type ReportData } from '@/utils/reportContradictionChecker';
 
 interface PAFReviewScreenProps {
   jobId: string;
@@ -365,6 +366,41 @@ export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
         return;
       }
 
+      // Run contradiction check before generating report (ISFV workflow integration)
+      console.log('Running contradiction check for PAF report...');
+      
+      const contradictionData: ReportData = {
+        propertyData: {
+          propertyAddress: formData.propertyAddress || '',
+          structural_condition: formData.structuralCondition || 'good',
+          kitchen_condition: formData.kitchenCondition || 'good',
+          overall_condition: formData.overallCondition || 'good'
+        },
+        riskRatings: formData.riskRatings || {},
+        vraAssessment: {
+          comments: formData.vraComments || '',
+          recommendations: formData.vraRecommendations || ''
+        },
+        salesEvidence: formData.salesEvidence || [],
+        generalComments: formData.generalComments || '',
+        sections: formData
+      };
+
+      const contradictions = checkReportContradictions(contradictionData);
+      const contradictionReport = generateContradictionReport(contradictions);
+      
+      console.log('PAF Contradiction check results:', contradictionReport);
+
+      // Show contradiction results to user if any issues found
+      if (contradictions.hasContradictions) {
+        toast({
+          title: "⚠️ Report Contradictions Detected",
+          description: "Critical contradictions found - please review before generating report",
+          variant: "destructive"
+        });
+        console.warn('CRITICAL CONTRADICTIONS in PAF report:', contradictions.contradictions);
+      }
+
       // Ensure config is saved first
       await supabase
         .from('property_assessments')
@@ -372,12 +408,17 @@ export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
           ...formData,
           report_config: reportConfig,
           ocr_results: ocrResults,
+          contradiction_check_results: contradictionReport,
           reviewed
         })
         .eq('job_id', jobId);
 
       const { data, error } = await supabase.functions.invoke('generate_report_with_ocr', {
-        body: { jobId, reviewed }
+        body: { 
+          jobId, 
+          reviewed,
+          contradictionCheck: contradictionReport
+        }
       });
 
       if (error) throw error;
@@ -385,12 +426,14 @@ export default function PAFReviewScreen({ jobId }: PAFReviewScreenProps) {
       if (data?.report_url) {
         setReportUrl(data.report_url);
         toast({
-          title: "Report Generated Successfully",
-          description: "Your report is ready for download."
+          title: "PAF Report Generated Successfully",
+          description: contradictions.hasContradictions 
+            ? "Report generated with contradiction warnings - please review" 
+            : "Your report is ready for download."
         });
       }
     } catch (error) {
-      console.error('Generate report error:', error);
+      console.error('Generate PAF report error:', error);
       toast({
         title: "Error Generating Report",
         description: "Please try again or contact support.",

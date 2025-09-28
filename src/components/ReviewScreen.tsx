@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { checkReportContradictions, generateContradictionReport, type ReportData } from '@/utils/reportContradictionChecker';
 
 interface IncludeToggleProps {
   field: string;
@@ -78,7 +79,7 @@ export default function ReviewScreen({ jobId, onReportGenerated }: ReviewScreenP
     saveData(newData, { showToast: false });
   };
 
-  // Generate report
+  // Generate report with ISFV workflow integration
   const generateReport = async (reviewedMode: boolean = false) => {
     if (!jobId) {
       toast.error('Job ID is required');
@@ -87,9 +88,44 @@ export default function ReviewScreen({ jobId, onReportGenerated }: ReviewScreenP
 
     setGenerating(true);
     try {
+      // Run contradiction check before generating report (ISFV workflow integration)
+      console.log('Running contradiction check for Review Screen report...');
+      
+      const contradictionData: ReportData = {
+        propertyData: {
+          propertyAddress: assessmentData.propertyAddress || '',
+          structural_condition: assessmentData.structuralCondition || 'good',
+          kitchen_condition: assessmentData.kitchenCondition || 'good',
+          overall_condition: assessmentData.overallCondition || 'good'
+        },
+        riskRatings: assessmentData.riskRatings || {},
+        vraAssessment: {
+          comments: assessmentData.vraComments || '',
+          recommendations: assessmentData.vraRecommendations || ''
+        },
+        salesEvidence: assessmentData.salesEvidence || [],
+        generalComments: assessmentData.generalComments || '',
+        sections: assessmentData
+      };
+
+      const contradictions = checkReportContradictions(contradictionData);
+      const contradictionReport = generateContradictionReport(contradictions);
+      
+      console.log('Review Screen contradiction check results:', contradictionReport);
+
+      // Show contradiction results to user if any issues found
+      if (contradictions.hasContradictions) {
+        toast.error('⚠️ Critical contradictions detected in report - please review before generating');
+        console.warn('CRITICAL CONTRADICTIONS in Review Screen report:', contradictions.contradictions);
+      }
+
       // Save current state with reviewed flag if needed
       if (reviewedMode) {
-        await saveData({ ...assessmentData, reviewed: true }, { showToast: false });
+        await saveData({ 
+          ...assessmentData, 
+          reviewed: true,
+          contradiction_check_results: contradictionReport
+        }, { showToast: false });
       }
 
       const response = await supabase.functions.invoke('generate-report', {
@@ -97,7 +133,8 @@ export default function ReviewScreen({ jobId, onReportGenerated }: ReviewScreenP
           job_id: jobId, 
           reviewed: reviewedMode,
           assessment_data: assessmentData,
-          include_flags: includeFlags
+          include_flags: includeFlags,
+          contradictionCheck: contradictionReport
         }
       });
 
@@ -108,7 +145,12 @@ export default function ReviewScreen({ jobId, onReportGenerated }: ReviewScreenP
       const { report_url } = response.data;
       setReportUrl(report_url);
       onReportGenerated?.(report_url);
-      toast.success('Report generated successfully!');
+      
+      toast.success(
+        contradictions.hasContradictions 
+          ? 'Report generated with contradiction warnings - please review' 
+          : 'Report generated successfully!'
+      );
     } catch (error) {
       console.error('Error generating report:', error);
       toast.error(`Failed to generate report: ${error.message}`);
