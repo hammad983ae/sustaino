@@ -300,13 +300,49 @@ export default function ISFVPlatform() {
         </CardContent>
       </Card>
 
-      {/* Results Panel */}
+      {/* Automation Features Section */}
       {isfvData.automationStatus === 'completed' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="border-2 border-green-200 bg-green-50">
+        <div className="space-y-6">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-green-800">Automated Valuation Results</CardTitle>
+              <CardTitle>Automation Features</CardTitle>
             </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 border rounded-lg">
+                  <h4 className="font-semibold mb-2">Domain API Integration</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Automatic property data retrieval and comparable sales analysis
+                  </p>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h4 className="font-semibold mb-2">Risk Assessment</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Automated risk scoring based on location and property factors
+                  </p>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h4 className="font-semibold mb-2">Market Analysis</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Real-time market trends and comparable property analysis
+                  </p>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h4 className="font-semibold mb-2">Report Generation</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Instant professional report generation with all required sections
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Results Panel */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="border-2 border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-green-800">ISFV Results</CardTitle>
+              </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
@@ -356,6 +392,7 @@ export default function ISFVPlatform() {
               )}
             </CardContent>
           </Card>
+          </div>
         </div>
       )}
 
