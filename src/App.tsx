@@ -86,6 +86,7 @@ import { TBEProgressPaymentDashboard } from "./components/progress-payments/TBEP
 import { IntegrationPlatformDashboard } from "./components/integration-platform/IntegrationPlatformDashboard";
 import PlatformComparison from "./components/analysis/PlatformComparison";
 import ISFVTestReport from "./pages/ISFVTestReport";
+import ContradictionChecker from "./pages/ContradictionChecker";
 
 const queryClient = new QueryClient();
 
@@ -321,6 +322,7 @@ const App = () => (
             <ISFVTestReport />
           </ProtectedRoute>
         } />
+        <Route path="/contradiction-checker" element={<ContradictionChecker />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancelled" element={<PaymentCancelled />} />
         <Route path="/ip-licensing" element={<IPLicensingAgreement />} />

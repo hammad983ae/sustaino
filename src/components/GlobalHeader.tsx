@@ -98,7 +98,17 @@ const GlobalHeader: React.FC = () => {
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
                 >
-                  Work Hub
+                   Work Hub
+                </Link>
+                <Link
+                  to="/contradiction-checker"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    location.pathname === '/contradiction-checker'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Contradiction Checker
                 </Link>
               </nav>
             )}
