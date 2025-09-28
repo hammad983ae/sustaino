@@ -12,7 +12,7 @@
  * - Sales evidence database with weighted adjustments
  * ============================================================================
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -57,6 +57,7 @@ import { OCRFieldComponent } from './OCRFieldComponent';
 import { GeneralCommentsTab } from './GeneralCommentsTab';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import VoiceCommandComponent from '@/components/VoiceCommandComponent';
 
 // Risk Rating Types (1-5 scale as per PropertyPRO standards)
 type RiskLevel = 1 | 2 | 3 | 4 | 5;
@@ -530,6 +531,7 @@ export default function PropertyProValuation() {
 
   const [activeTab, setActiveTab] = useState('automation');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
 
   // Photos and Documents state
   const [reportPhotos, setReportPhotos] = useState<Array<{url: string, name: string, description?: string}>>([]);
@@ -1069,6 +1071,42 @@ export default function PropertyProValuation() {
       return updatedData;
     });
   };
+
+  // Voice command handler
+  const handleVoiceFieldUpdate = useCallback((fieldName: string, value: string) => {
+    console.log('Voice command updating field:', fieldName, 'with value:', value);
+    
+    // Handle nested TBE fields
+    if (fieldName === 'builderName' || fieldName === 'contractPrice' || 
+        fieldName === 'contractDate' || fieldName === 'buildingCost' || 
+        fieldName === 'estimatedCompletionDate') {
+      setFormData(prev => ({
+        ...prev,
+        tbeDetails: {
+          ...prev.tbeDetails,
+          [fieldName]: fieldName === 'contractPrice' || fieldName === 'buildingCost' 
+            ? parseFloat(value.replace(/[^\d.]/g, '')) || 0 
+            : value
+        }
+      }));
+    } else if (fieldName === 'livingArea' || fieldName === 'outdoorArea' || 
+               fieldName === 'otherArea' || fieldName === 'carAccommodation' || 
+               fieldName === 'carAreas' || fieldName === 'marketValue' || 
+               fieldName === 'landValue' || fieldName === 'improvementValue' || 
+               fieldName === 'rentalAssessment' || fieldName === 'insuranceEstimate') {
+      // Handle numeric fields
+      const numericValue = parseFloat(value.replace(/[^\d.]/g, '')) || 0;
+      handleInputChange(fieldName as keyof PropertyProValuationData, numericValue);
+    } else {
+      // Handle regular text fields
+      handleInputChange(fieldName as keyof PropertyProValuationData, value);
+    }
+  }, []);
+
+  // Toggle voice commands
+  const toggleVoiceCommands = useCallback(() => {
+    setIsVoiceEnabled(prev => !prev);
+  }, []);
 
   // Handle risk rating changes
   const handleRiskRatingChange = (field: keyof RiskRating, value: RiskLevel) => {
@@ -1692,7 +1730,15 @@ export default function PropertyProValuation() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="relative max-w-7xl mx-auto p-6 space-y-6">
+      {/* Voice Command Component */}
+      <VoiceCommandComponent
+        onFieldUpdate={handleVoiceFieldUpdate}
+        isEnabled={isVoiceEnabled}
+        onToggle={toggleVoiceCommands}
+      />
+      
+      {/* Original Content */}
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>

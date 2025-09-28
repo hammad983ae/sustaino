@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,8 +7,10 @@ import {
   BarChart3, Shield, Zap, Globe, Brain, TrendingUp,
   DollarSign, Users, Clock, Star, Award, Target
 } from 'lucide-react';
+import VoiceCommandComponent from '@/components/VoiceCommandComponent';
 
 const ICVDashboard: React.FC = () => {
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
   const platformMetrics = [
     { name: 'Analytics Dashboard', completion: 95, status: 'active', users: 1250 },
     { name: 'ESG Platform', completion: 88, status: 'active', users: 890 },
@@ -24,8 +26,28 @@ const ICVDashboard: React.FC = () => {
     { property: 'Retail Shopping Center', value: 62000000, confidence: 97, type: 'Retail' }
   ];
 
+  // Voice command handler for dashboard navigation
+  const handleVoiceFieldUpdate = useCallback((fieldName: string, value: string) => {
+    console.log('ICV Dashboard voice command:', fieldName, value);
+    // Basic navigation commands for dashboard
+    // This could be extended to handle dashboard navigation or data filtering
+  }, []);
+
+  // Toggle voice commands
+  const toggleVoiceCommands = useCallback(() => {
+    setIsVoiceEnabled(prev => !prev);
+  }, []);
+
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+      {/* Voice Command Component */}
+      <VoiceCommandComponent
+        onFieldUpdate={handleVoiceFieldUpdate}
+        isEnabled={isVoiceEnabled}
+        onToggle={toggleVoiceCommands}
+      />
+      
+      {/* Original Dashboard Content */}
       {/* Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-3 mb-4">

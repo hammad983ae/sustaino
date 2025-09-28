@@ -35,3 +35,6 @@ verify_jwt = true
 
 [functions.generate-report-data]
 verify_jwt = true
+
+[functions.voice-to-text]
+verify_jwt = false
