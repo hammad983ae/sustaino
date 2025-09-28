@@ -98,7 +98,11 @@ const PropertyAddressFormWithDomain: React.FC = () => {
       }
     };
 
-    updateReportData(newReportData);
+    updateReportData('propertySearchData', {
+      address: property.address,
+      addressComponents: property.addressComponents,
+      normalized: property.normalized
+    });
 
     // Load additional property details
     loadPropertyDetails(property.id);

@@ -112,10 +112,24 @@ class ApiClient {
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
     
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
     };
+
+    // Add custom headers
+    if (options.headers) {
+      if (options.headers instanceof Headers) {
+        options.headers.forEach((value, key) => {
+          headers[key] = value;
+        });
+      } else if (Array.isArray(options.headers)) {
+        options.headers.forEach(([key, value]) => {
+          headers[key] = value;
+        });
+      } else {
+        Object.assign(headers, options.headers);
+      }
+    }
 
     if (this.token) {
       headers.Authorization = `Bearer ${this.token}`;
@@ -313,8 +327,8 @@ class ApiClient {
   async getUserStats(): Promise<any> {
     const response = await this.request('/user/stats');
     
-    if (response.success && response.data) {
-      return response.data.stats;
+    if (response.success && response.data && typeof response.data === 'object' && 'stats' in response.data) {
+      return (response.data as { stats: any }).stats;
     }
 
     throw new Error(response.message || 'Failed to get user statistics');
