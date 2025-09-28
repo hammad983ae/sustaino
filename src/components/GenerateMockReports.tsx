@@ -5,9 +5,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertTriangle, CheckCircle, Play, RefreshCw } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Play, RefreshCw, Wrench } from 'lucide-react';
 import { toast } from 'sonner';
 import ISFVPlatform from './ISFVPlatform';
+import { checkReportContradictions } from '@/utils/reportContradictionChecker';
+import { runAutomatedAmendment } from '@/utils/contradictionAmender';
 
 // PAF Demo Properties with comprehensive mock data
 const pafDemoProperties = [
@@ -364,6 +366,8 @@ export default function GenerateMockReports() {
       recommendation: "Include healthcare compliance and regulatory risks"
     }
   ]);
+  const [pafAmendments, setPafAmendments] = useState<any[]>([]);
+  const [pafAmending, setPafAmending] = useState(false);
 
   const [icvSelectedProperty, setIcvSelectedProperty] = useState("Healthcare Hospital - Fitzroy");
   const [icvCustomAddress, setIcvCustomAddress] = useState("");
@@ -378,6 +382,8 @@ export default function GenerateMockReports() {
       recommendation: "Engage medical equipment specialist for accurate replacement costs"
     }
   ]);
+  const [icvAmendments, setIcvAmendments] = useState<any[]>([]);
+  const [icvAmending, setIcvAmending] = useState(false);
 
   const handlePafAutomation = async () => {
     if (!pafSelectedProperty && !pafCustomAddress.trim()) {
@@ -458,6 +464,57 @@ export default function GenerateMockReports() {
     } else {
       toast.warning(`Found ${contradictions.length} potential issues requiring review`);
     }
+  };
+
+  const handlePafAmendment = async () => {
+    if (pafContradictions.length === 0) {
+      toast.error("No contradictions found to amend");
+      return;
+    }
+
+    setPafAmending(true);
+    toast.info("Running automated contradiction amendment...");
+
+    // Simulate amendment process
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const mockAmendments = [
+      {
+        type: "auto_fix",
+        description: "Generated mandatory VRA comments for high-risk property",
+        field: "VRA Assessment Comments",
+        originalValue: "",
+        amendedValue: "This valuation has identified 3 high-risk factors that require careful consideration. A comprehensive risk assessment has been conducted in accordance with VRA requirements.",
+        confidence: "high"
+      },
+      {
+        type: "auto_fix", 
+        description: "Updated general comments to acknowledge identified high-risk factors",
+        field: "General Comments",
+        originalValue: "No significant risks identified for this property...",
+        amendedValue: "This assessment has identified 3 significant risk factors that have been carefully considered in the valuation process. These risks require ongoing monitoring and may impact future value assessments.",
+        confidence: "high"
+      },
+      {
+        type: "suggestion",
+        description: "Moderated market evidence claims to reflect limited sales data",
+        field: "Sales Evidence Summary",
+        originalValue: "Strong market evidence supports valuation confidence",
+        amendedValue: "Available market evidence supports valuation assessment",
+        confidence: "medium"
+      }
+    ];
+
+    setPafAmendments(mockAmendments);
+    
+    // Remove amended contradictions
+    const remainingContradictions = pafContradictions.filter(c => 
+      !mockAmendments.some(a => c.issue.includes(a.field.toLowerCase()))
+    );
+    setPafContradictions(remainingContradictions);
+    
+    setPafAmending(false);
+    toast.success(`Amendment complete - ${mockAmendments.length} issues automatically resolved`);
   };
 
   const handleIcvAutomation = async () => {
@@ -544,6 +601,57 @@ export default function GenerateMockReports() {
     } else {
       toast.warning(`Found ${contradictions.length} potential issues requiring review`);
     }
+  };
+
+  const handleIcvAmendment = async () => {
+    if (icvContradictions.length === 0) {
+      toast.error("No contradictions found to amend");
+      return;
+    }
+
+    setIcvAmending(true);
+    toast.info("Running automated contradiction amendment...");
+
+    // Simulate amendment process
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const mockAmendments = [
+      {
+        type: "auto_fix",
+        description: "Adjusted rental income to reflect property condition",
+        field: "Rental Assessment",
+        originalValue: "$8,500/week",
+        amendedValue: "$4,250/week (adjusted for structural issues)",
+        confidence: "high"
+      },
+      {
+        type: "auto_fix",
+        description: "Balanced marketability assessment considering external factors",
+        field: "Marketability Comments",
+        originalValue: "Excellent marketability in prime location",
+        amendedValue: "Reasonable marketability. External factors may impact marketability and should be considered by potential purchasers.",
+        confidence: "medium"
+      },
+      {
+        type: "auto_fix",
+        description: "Moderated confidence language due to structural condition concerns",
+        field: "Valuation Confidence",
+        originalValue: "High confidence in valuation assessment",
+        amendedValue: "Reasonable confidence in valuation assessment. Note: Structural condition factors have been considered in this assessment.",
+        confidence: "high"
+      }
+    ];
+
+    setIcvAmendments(mockAmendments);
+    
+    // Remove amended contradictions
+    const remainingContradictions = icvContradictions.filter(c => 
+      !mockAmendments.some(a => c.issue.toLowerCase().includes(a.field.toLowerCase().split(' ')[0]))
+    );
+    setIcvContradictions(remainingContradictions);
+    
+    setIcvAmending(false);
+    toast.success(`Amendment complete - ${mockAmendments.length} issues automatically resolved`);
   };
 
   const clearPafData = () => {
@@ -865,7 +973,49 @@ export default function GenerateMockReports() {
         {contradictions.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-yellow-400">Contradiction Check Results</CardTitle>
+              <CardTitle className="text-lg font-semibold text-yellow-400 flex items-center gap-2">
+                Contradiction Check Results
+                {data.type === 'PAF' && (
+                  <Button 
+                    size="sm" 
+                    onClick={handlePafAmendment}
+                    disabled={pafAmending}
+                    className="ml-auto bg-orange-600 hover:bg-orange-700"
+                  >
+                    {pafAmending ? (
+                      <>
+                        <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                        Amending...
+                      </>
+                    ) : (
+                      <>
+                        <Wrench className="h-3 w-3 mr-1" />
+                        Auto-Amend
+                      </>
+                    )}
+                  </Button>
+                )}
+                {data.type === 'ICV' && (
+                  <Button 
+                    size="sm" 
+                    onClick={handleIcvAmendment}
+                    disabled={icvAmending}
+                    className="ml-auto bg-orange-600 hover:bg-orange-700"
+                  >
+                    {icvAmending ? (
+                      <>
+                        <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                        Amending...
+                      </>
+                    ) : (
+                      <>
+                        <Wrench className="h-3 w-3 mr-1" />
+                        Auto-Amend
+                      </>
+                    )}
+                  </Button>
+                )}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -883,6 +1033,38 @@ export default function GenerateMockReports() {
                         <p className="text-sm font-medium text-white">{contradiction.section}</p>
                         <p className="text-sm text-gray-300 mt-1">{contradiction.issue}</p>
                         <p className="text-xs text-gray-400 mt-2">{contradiction.recommendation}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Amendment Results */}
+        {((data.type === 'PAF' && pafAmendments.length > 0) || (data.type === 'ICV' && icvAmendments.length > 0)) && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-green-400">Automated Amendment Results</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {(data.type === 'PAF' ? pafAmendments : icvAmendments).map((amendment: any, index: number) => (
+                  <div key={index} className="p-4 rounded-lg bg-green-900/20 border border-green-500">
+                    <div className="flex items-start gap-3">
+                      <span className={`text-xs px-2 py-1 rounded font-medium ${
+                        amendment.type === 'auto_fix' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
+                      }`}>
+                        {amendment.type === 'auto_fix' ? 'Auto-Fixed' : 'Suggestion'}
+                      </span>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-white">{amendment.description}</p>
+                        <div className="text-xs text-gray-300 mt-2 space-y-1">
+                          <div><span className="text-red-300">Before:</span> {amendment.originalValue}</div>
+                          <div><span className="text-green-300">After:</span> {amendment.amendedValue}</div>
+                          <div><span className="text-blue-300">Confidence:</span> {amendment.confidence}</div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1012,6 +1194,26 @@ export default function GenerateMockReports() {
                 Run Contradiction Check
               </Button>
 
+              {pafContradictions.length > 0 && (
+                <Button 
+                  onClick={handlePafAmendment}
+                  disabled={pafAmending}
+                  className="bg-orange-600 hover:bg-orange-700"
+                >
+                  {pafAmending ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Auto-Amending...
+                    </>
+                  ) : (
+                    <>
+                      <Wrench className="h-4 w-4 mr-2" />
+                      Auto-Amend Issues
+                    </>
+                  )}
+                </Button>
+              )}
+
               <Button variant="ghost" onClick={clearPafData}>
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Clear All Data
@@ -1136,6 +1338,26 @@ export default function GenerateMockReports() {
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Run Contradiction Check
               </Button>
+
+              {icvContradictions.length > 0 && (
+                <Button 
+                  onClick={handleIcvAmendment}
+                  disabled={icvAmending}
+                  className="bg-orange-600 hover:bg-orange-700"
+                >
+                  {icvAmending ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Auto-Amending...
+                    </>
+                  ) : (
+                    <>
+                      <Wrench className="h-4 w-4 mr-2" />
+                      Auto-Amend Issues
+                    </>
+                  )}
+                </Button>
+              )}
 
               <Button variant="ghost" onClick={clearIcvData}>
                 <RefreshCw className="h-4 w-4 mr-2" />
