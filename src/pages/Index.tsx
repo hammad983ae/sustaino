@@ -25,7 +25,8 @@ import {
   FileCheck,
   FileText,
   PiggyBank,
-  Users
+  Users,
+  Construction
 } from 'lucide-react';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PAFConfigProvider } from '@/contexts/PAFConfigContext';
@@ -40,6 +41,7 @@ import PropertyProValuation from '@/components/PropertyProValuation';
 import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackground';
 import AuthStatus from '@/components/AuthStatus';
 import { useNavigate } from 'react-router-dom';
+import { TBEProgressPaymentDashboard } from '@/components/progress-payments/TBEProgressPaymentDashboard';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
@@ -156,7 +158,7 @@ const Index = () => {
                     </TabsList>
                     
                     {/* Second row of tabs */}
-                    <TabsList className="grid w-full grid-cols-2 max-w-2xl mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
+                    <TabsList className="grid w-full grid-cols-3 max-w-3xl mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                       <TabsTrigger value="professional-declarations" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <FileCheck className="h-4 w-4" />
                         Professional Declarations
@@ -164,6 +166,10 @@ const Index = () => {
                       <TabsTrigger value="property-pro-valuation" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <TrendingUp className="h-4 w-4" />
                         Property Pro Valuation
+                      </TabsTrigger>
+                      <TabsTrigger value="progress-payments" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <Construction className="h-4 w-4" />
+                        Progress Payments
                       </TabsTrigger>
                     </TabsList>
                   </div>
@@ -544,6 +550,23 @@ const Index = () => {
                       </CardHeader>
                       <CardContent className="p-0">
                         <PropertyProValuation />
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="progress-payments" className="mt-8">
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <Construction className="h-6 w-6 text-purple-700" />
+                          TBE Progress Payments
+                        </CardTitle>
+                        <p className="text-purple-700">
+                          Construction progress payment inspections and fund release assessments for TBE/As If Complete valuations
+                        </p>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                        <TBEProgressPaymentDashboard />
                       </CardContent>
                     </Card>
                   </TabsContent>

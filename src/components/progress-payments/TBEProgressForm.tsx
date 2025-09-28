@@ -13,6 +13,9 @@ import { Badge } from "@/components/ui/badge";
 interface TBEProgressFormProps {
   onClose: () => void;
   onSuccess: () => void;
+  sourceJobId?: string; // From PAF/ISFV workflow
+  sourcePropertyAddress?: string; // From PAF/ISFV workflow
+  sourceValuationType?: 'PAF' | 'ISFV'; // Source workflow type
 }
 
 interface HIAStage {
@@ -24,16 +27,17 @@ interface HIAStage {
   typical_inclusions: any;
 }
 
-export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuccess }) => {
+export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuccess, sourceJobId, sourcePropertyAddress, sourceValuationType }) => {
   const [hiaStages, setHiaStages] = useState<HIAStage[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    property_address: '',
+    property_address: sourcePropertyAddress || '',
     builder_name: '',
     building_contract_number: '',
+    original_valuation_id: sourceJobId || '',
     contract_price: 0,
     contract_date: '',
     current_stage: '',
@@ -43,7 +47,7 @@ export const TBEProgressForm: React.FC<TBEProgressFormProps> = ({ onClose, onSuc
     cost_to_date: 0,
     cost_to_complete: 0,
     inspection_date: '',
-    inspector_notes: '',
+    inspector_notes: sourceValuationType ? `Based on ${sourceValuationType} valuation reference: ${sourceJobId}` : '',
     invoice_amount_claimed: 0,
     fund_release_recommendation: '',
     recommendation_notes: '',
