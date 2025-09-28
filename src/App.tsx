@@ -84,6 +84,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import GlobalHeader from "./components/GlobalHeader";
 import { TBEProgressPaymentDashboard } from "./components/progress-payments/TBEProgressPaymentDashboard";
 import { IntegrationPlatformDashboard } from "./components/integration-platform/IntegrationPlatformDashboard";
+import PlatformComparison from "./components/analysis/PlatformComparison";
 
 const queryClient = new QueryClient();
 
@@ -312,7 +313,8 @@ const App = () => (
                      <TBEProgressPaymentDashboard />
                    </ProtectedRoute>
                  } />
-                 <Route path="/integration-platform" element={<IntegrationPlatformDashboard />} />
+        <Route path="/integration-platform" element={<IntegrationPlatformDashboard />} />
+        <Route path="/platform-comparison" element={<PlatformComparison />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancelled" element={<PaymentCancelled />} />
         <Route path="/ip-licensing" element={<IPLicensingAgreement />} />
