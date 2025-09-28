@@ -153,7 +153,7 @@ const Index = () => {
                     </TabsList>
                     
                     {/* Second row of tabs */}
-                    <TabsList className="grid w-full grid-cols-3 max-w-3xl mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
+                    <TabsList className="grid w-full grid-cols-4 max-w-4xl mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                       <TabsTrigger value="professional-declarations" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <FileCheck className="h-4 w-4" />
                         Professional Declarations
@@ -167,8 +167,8 @@ const Index = () => {
                         Progress Payments
                       </TabsTrigger>
                       <TabsTrigger value="generate-mock-reports" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
-                        <FileCheck className="h-4 w-4" />
-                        Generate Mock Reports
+                        <Users className="h-4 w-4" />
+                        Client Demo
                       </TabsTrigger>
                     </TabsList>
                   </div>
@@ -606,8 +606,8 @@ const Index = () => {
                     <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
                       <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
                         <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
-                          <FileCheck className="h-6 w-6 text-purple-700" />
-                          Generate Mock Reports
+                          <Users className="h-6 w-6 text-purple-700" />
+                          Client Demo
                         </CardTitle>
                         <p className="text-purple-700">
                           Perfect for demonstrating the complete end-to-end workflow to clients with contradiction checking
