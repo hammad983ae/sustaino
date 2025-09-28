@@ -312,11 +312,7 @@ const App = () => (
                      <TBEProgressPaymentDashboard />
                    </ProtectedRoute>
                  } />
-                 <Route path="/integration-platform" element={
-                   <ProtectedRoute>
-                     <IntegrationPlatformDashboard />
-                   </ProtectedRoute>
-                 } />
+                 <Route path="/integration-platform" element={<IntegrationPlatformDashboard />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancelled" element={<PaymentCancelled />} />
         <Route path="/ip-licensing" element={<IPLicensingAgreement />} />
