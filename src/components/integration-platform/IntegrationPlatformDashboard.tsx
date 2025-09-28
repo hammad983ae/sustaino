@@ -23,7 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface Integration {
   id: string;
   institution_name: string;
-  institution_type: 'lender' | 'broker' | 'valuer' | 'professional_service';
+  institution_type: 'lender' | 'broker' | 'valuer' | 'professional_service' | 'government' | 'accounting' | 'settlement' | 'credit_bureau' | 'registry' | 'legal_tech';
   connection_status: 'connected' | 'pending' | 'failed' | 'inactive';
   api_endpoint?: string;
   data_flows: any[];
@@ -59,6 +59,94 @@ export const IntegrationPlatformDashboard = () => {
         },
         {
           id: '2',
+          institution_name: 'PEXA',
+          institution_type: 'settlement',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.pexa.com.au/v3',
+          data_flows: ['settlement_coordination', 'document_exchange', 'funds_transfer'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 2100,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '3',
+          institution_name: 'ASIC Registry',
+          institution_type: 'government',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.asic.gov.au/company-search',
+          data_flows: ['company_searches', 'director_checks', 'business_verification'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 850,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '4',
+          institution_name: 'Equifax',
+          institution_type: 'credit_bureau',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.equifax.com.au/credit-check',
+          data_flows: ['credit_reports', 'identity_verification', 'risk_assessment'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 1650,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '5',
+          institution_name: 'Xero',
+          institution_type: 'accounting',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.xero.com/api.xro/2.0',
+          data_flows: ['financial_statements', 'income_verification', 'transaction_history'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 950,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '6',
+          institution_name: 'Land Registry NSW',
+          institution_type: 'registry',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.nswlrs.com.au/property',
+          data_flows: ['title_searches', 'property_details', 'ownership_history'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 780,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '7',
+          institution_name: 'Australian Taxation Office',
+          institution_type: 'government',
+          connection_status: 'pending',
+          api_endpoint: 'https://api.ato.gov.au/income-verification',
+          data_flows: ['income_verification', 'tax_assessments', 'compliance_checks'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 0,
+          compliance_status: 'requires_review'
+        },
+        {
+          id: '8',
+          institution_name: 'InfoTrack',
+          institution_type: 'legal_tech',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.infotrack.com.au/legal-services',
+          data_flows: ['document_lodgements', 'search_services', 'verification_checks'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 1200,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '9',
+          institution_name: 'MYOB',
+          institution_type: 'accounting',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.myob.com/accountright/v2',
+          data_flows: ['business_financials', 'payroll_data', 'cash_flow_analysis'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 540,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '10',
           institution_name: 'Mortgage Choice',
           institution_type: 'broker',
           connection_status: 'connected',
@@ -66,28 +154,6 @@ export const IntegrationPlatformDashboard = () => {
           data_flows: ['broker_submissions', 'client_referrals', 'progress_updates'],
           last_sync: new Date().toISOString(),
           monthly_transactions: 890,
-          compliance_status: 'compliant'
-        },
-        {
-          id: '3',
-          institution_name: 'Australian Property Institute',
-          institution_type: 'valuer',
-          connection_status: 'pending',
-          api_endpoint: 'https://api.api.org.au/valuations',
-          data_flows: ['valuation_requests', 'inspection_scheduling', 'report_delivery'],
-          last_sync: new Date().toISOString(),
-          monthly_transactions: 0,
-          compliance_status: 'requires_review'
-        },
-        {
-          id: '4',
-          institution_name: 'LegalVision',
-          institution_type: 'professional_service',
-          connection_status: 'connected',
-          api_endpoint: 'https://api.legalvision.com.au/conveyancing',
-          data_flows: ['contract_reviews', 'settlement_coordination', 'compliance_checks'],
-          last_sync: new Date().toISOString(),
-          monthly_transactions: 345,
           compliance_status: 'compliant'
         }
       ];
@@ -118,6 +184,12 @@ export const IntegrationPlatformDashboard = () => {
       case 'lender': return <Building2 className="h-5 w-5" />;
       case 'broker': return <Users className="h-5 w-5" />;
       case 'valuer': return <Activity className="h-5 w-5" />;
+      case 'government': return <Shield className="h-5 w-5" />;
+      case 'accounting': return <Database className="h-5 w-5" />;
+      case 'settlement': return <ArrowUpRight className="h-5 w-5" />;
+      case 'credit_bureau': return <CheckCircle className="h-5 w-5" />;
+      case 'registry': return <Database className="h-5 w-5" />;
+      case 'legal_tech': return <Settings className="h-5 w-5" />;
       default: return <Settings className="h-5 w-5" />;
     }
   };
@@ -130,21 +202,21 @@ export const IntegrationPlatformDashboard = () => {
       description: "Active platform connections"
     },
     {
-      title: "Connected Lenders",
-      value: integrations.filter(i => i.institution_type === 'lender' && i.connection_status === 'connected').length.toString(),
-      icon: <Building2 className="h-5 w-5" />,
-      description: "Financial institutions connected"
+      title: "Government Services",
+      value: integrations.filter(i => ['government', 'registry'].includes(i.institution_type) && i.connection_status === 'connected').length.toString(),
+      icon: <Shield className="h-5 w-5" />,
+      description: "ATO, ASIC, Land Registry connections"
     },
     {
-      title: "Broker Networks",
-      value: integrations.filter(i => i.institution_type === 'broker' && i.connection_status === 'connected').length.toString(),
-      icon: <Users className="h-5 w-5" />,
-      description: "Mortgage broker partnerships"
+      title: "Settlement & Legal",
+      value: integrations.filter(i => ['settlement', 'legal_tech'].includes(i.institution_type) && i.connection_status === 'connected').length.toString(),
+      icon: <ArrowUpRight className="h-5 w-5" />,
+      description: "PEXA & legal technology platforms"
     },
     {
       title: "Monthly Transactions",
       value: integrations.reduce((sum, i) => sum + i.monthly_transactions, 0).toLocaleString(),
-      icon: <ArrowUpRight className="h-5 w-5" />,
+      icon: <Activity className="h-5 w-5" />,
       description: "Cross-platform transactions"
     }
   ];
