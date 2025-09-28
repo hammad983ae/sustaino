@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import BackToDashboard from "@/components/ui/BackToDashboard";
 
 interface Integration {
   id: string;
@@ -225,6 +226,9 @@ export const IntegrationPlatformDashboard = () => {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
+          <div className="flex items-center gap-4 mb-2">
+            <BackToDashboard />
+          </div>
           <h1 className="text-3xl font-bold">Integration Platform</h1>
           <p className="text-muted-foreground mt-2">
             Connect financial institutions, brokers, and professional services to the Powered Platform
