@@ -164,6 +164,26 @@ export function generateMockPropertyData(demoProperty: DemoProperty): PropertyDa
       essentialRepairs: 'Yes',
       estimatedCost: 3000
     },
+    'demonstration-contradictions': {
+      propertyAddress: '789 Demonstration Street, Demo VIC 3000',
+      realPropertyDescription: 'Lot 789 DP123456 - Modern 4-bedroom family home in excellent condition with premium finishes and no structural issues.',
+      siteArea: '600',
+      siteDimensions: '20m x 30m',
+      zoning: 'Residential 1',
+      currentUse: 'Single Dwelling (Fully Functional)',
+      localGovernmentArea: 'Demo City Council',
+      mainDwelling: '4 Bedroom, 2 Bathroom Modern House (Missing Kitchen)', // CONTRADICTION: Says modern/excellent but missing kitchen
+      builtAbout: '2020',
+      livingArea: 200,
+      marketValue: 650000,
+      landValue: 350000,
+      improvementValue: 300000,
+      rentalAssessment: 450, // CONTRADICTION: Has rental income despite missing kitchen
+      marketability: 'Excellent', // CONTRADICTION: Excellent marketability but missing kitchen
+      environmentalIssues: 'No',
+      essentialRepairs: 'No', // CONTRADICTION: No repairs needed but missing kitchen
+      estimatedCost: 0
+    },
     'adelaide-heritage': {
       propertyAddress: '33 Heritage Square, Adelaide SA 5000',
       realPropertyDescription: 'Lot 33 CR777888 - Heritage-listed Victorian terrace with character features. Renovation restrictions apply but excellent CBD location.',
@@ -241,6 +261,16 @@ export function generateMockRiskRatings(demoProperty: DemoProperty): RiskRatings
       localEconomy: 2,    // Growing local economy
       marketSegment: 2    // Emerging market segment
     },
+    'demonstration-contradictions': {
+      location: 1,      // Low risk location - modern area
+      land: 1,          // No land issues
+      environmental: 1, // No environmental concerns  
+      improvements: 1,  // CONTRADICTION: Says no improvement issues but missing kitchen
+      marketDirection: 2, // Stable market
+      marketActivity: 1,  // Good activity
+      localEconomy: 1,    // Strong economy
+      marketSegment: 1    // Good market segment
+    },
     'adelaide-heritage': {
       location: 1,      // CBD location = low risk
       land: 2,          // Heritage restrictions = slight risk
@@ -292,6 +322,13 @@ export function generateMockVRAAssessment(demoProperty: DemoProperty): VRAAssess
       incompleteConstruction: true,
       criticalIssues: false,
       esgFactors: 'New construction incorporates modern energy-efficient design and sustainable building practices. Minor incomplete facilities do not significantly impact environmental performance. Growth area development supports sustainable urban expansion.'
+    },
+    'demonstration-contradictions': {
+      higherRiskProperty: false, // CONTRADICTION: Says not higher risk but has issues
+      adverseMarketability: false, // CONTRADICTION: Claims good marketability but uninhabitable
+      incompleteConstruction: false,
+      criticalIssues: false, // CONTRADICTION: Says no critical issues but missing kitchen
+      esgFactors: 'Property demonstrates excellent environmental performance with modern energy-efficient systems, sustainable materials, and no environmental concerns. Perfect family home with all modern conveniences and facilities.' // CONTRADICTION: Claims all modern conveniences but missing kitchen
     },
     'adelaide-heritage': {
       higherRiskProperty: false,
@@ -557,23 +594,35 @@ RISK ASSESSMENT: ${highRiskCount} high risk factors identified including locatio
 
 VRA ALERTS: ${vraAlertCount} Valuation Risk Alerts triggered. Higher risk property classification due to multiple risk factors ≥4. Adverse marketability due to location and condition issues. Critical environmental issues present. ESG factors significantly impacted by infrastructure proximity and repair requirements.
 
-SALES EVIDENCE: Analysis of ${salesEvidence.length} comparable sales in the local market shows adjusted price range of $${Math.min(...salesEvidence.map(s => s.adjustedPrice)).toLocaleString()} to $${Math.max(...salesEvidence.map(s => s.adjustedPrice)).toLocaleString()}. Properties with similar location challenges show significant value adjustments.
+SALES EVIDENCE: Analysis of ${salesEvidence.length} comparable sales shows limited market support with only 2 recent sales available. Properties with similar location challenges show significant value adjustments averaging -15% to -25%.
 
-RECOMMENDATIONS: Immediate kitchen installation required for habitability. Consider location-specific marketing strategies due to infrastructure proximity. Value assessment reflects current condition and location constraints. Property unsuitable for rental income until essential repairs completed.
+RECOMMENDATIONS: Immediate kitchen installation required for habitability ($10,000 minimum). Property unsuitable for rental income until essential repairs completed. Consider location-specific marketing strategies due to infrastructure proximity. Investment requires substantial capital injection.
 
-CRITICAL NOTE: Multiple high-risk factors are present and have been appropriately weighted in the valuation assessment. The property presents investment challenges requiring careful consideration.`,
+CRITICAL CONTRADICTION EXAMPLE: This property demonstrates how missing essential facilities (kitchen) creates logical contradictions when rental assessments show income potential. No risks are highlighted despite multiple high-risk environmental and structural factors being present.`,
+
+    'demonstration-contradictions': `PROPERTY SUMMARY: This modern 4-bedroom, 2-bathroom house at ${propertyData.propertyAddress} represents contemporary family living. Built in 2020 with 200m² of living area on a 600m² site, this property showcases excellent modern design and premium finishes throughout.
+
+RISK ASSESSMENT: ${highRiskCount} high risk factors identified - demonstrating exemplary low-risk profile. All systems are modern, location is premium residential, and construction quality exceeds industry standards. Property requires no essential repairs and presents minimal investment risk.
+
+VRA ALERTS: ${vraAlertCount} Valuation Risk Alerts triggered - confirming comprehensive risk assessment shows no concerns. Property demonstrates excellent marketability, no adverse factors, and represents stable investment opportunity with strong capital growth potential.
+
+SALES EVIDENCE: Analysis of ${salesEvidence.length} comparable sales demonstrates robust market support in this premium location. Recent sales show consistent capital growth and strong buyer demand for quality family homes.
+
+RECOMMENDATIONS: Property suitable for immediate family occupation with excellent rental potential at $${propertyData.rentalAssessment}/week. Modern amenities including gourmet kitchen, premium appliances, and luxury finishes throughout make this an ideal family residence. No significant risks are highlighted.
+
+MARKET CONFIDENCE: High confidence valuation supported by excellent property condition, premium location, and no adverse factors. This property represents the benchmark for modern family living with all conveniences and facilities.`,
 
     'melbourne-cbd': `PROPERTY SUMMARY: This premium 2-bedroom, 2-bathroom apartment at ${propertyData.propertyAddress} represents excellent CBD positioning. Built in 2015 with 85m² of living area, the property offers modern amenities and harbour glimpses in a well-maintained building.
 
-RISK ASSESSMENT: ${highRiskCount} high risk factors identified - indicating a low-risk investment profile. Location benefits from premium CBD positioning with excellent transport links and amenities. Property condition is excellent with no essential repairs required.
+RISK ASSESSMENT: ${highRiskCount} high risk factors identified - indicating a low-risk investment profile. All location, environmental, and improvement factors rated 1-2 (low risk). Property condition is excellent with no essential repairs required and modern building standards throughout.
 
-VRA ALERTS: ${vraAlertCount} Valuation Risk Alerts triggered - confirming low-risk classification. No higher risk property issues, adverse marketability concerns, incomplete construction, or critical issues identified. ESG factors demonstrate strong sustainability credentials.
+VRA ALERTS: ${vraAlertCount} Valuation Risk Alerts triggered - confirming comprehensive low-risk classification. No higher risk property issues, adverse marketability concerns, incomplete construction, or critical issues identified. ESG factors demonstrate strong sustainability credentials with 6-star energy rating.
 
-SALES EVIDENCE: Analysis of ${salesEvidence.length} recent comparable sales shows strong market support with adjusted prices ranging $${Math.min(...salesEvidence.map(s => s.adjustedPrice)).toLocaleString()} to $${Math.max(...salesEvidence.map(s => s.adjustedPrice)).toLocaleString()}. Market demonstrates excellent activity levels and price stability.
+SALES EVIDENCE: Analysis of ${salesEvidence.length} recent comparable sales demonstrates robust market support with adjusted prices ranging $${Math.min(...salesEvidence.map(s => s.adjustedPrice)).toLocaleString()} to $${Math.max(...salesEvidence.map(s => s.adjustedPrice)).toLocaleString()}. All comparables show high reliability ratings and consistent market performance.
 
-RECOMMENDATIONS: Property suitable for immediate occupation or rental. Strong rental demand supports $${propertyData.rentalAssessment}/week assessment. Excellent marketability with quick sale potential expected.
+RECOMMENDATIONS: Property suitable for immediate occupation or investment rental. Strong rental demand supports $${propertyData.rentalAssessment}/week assessment with 98% occupancy rates typical. Excellent marketability with sale periods typically under 30 days.
 
-VALUATION CONFIDENCE: High confidence valuation supported by strong comparable evidence and low risk profile. No significant issues identified affecting market value.`,
+MARKET CONFIDENCE: High confidence valuation supported by comprehensive comparable evidence, minimal risk factors, and strong market fundamentals. No contradictions or significant concerns identified in this assessment.`,
 
     'brisbane-flood': `PROPERTY SUMMARY: This 3-bedroom, 2-bathroom house at ${propertyData.propertyAddress} is located in a flood-prone area requiring specialized assessment. Built in 1980 with 150m² of living area on a 600m² site, the property presents environmental risk considerations.
 

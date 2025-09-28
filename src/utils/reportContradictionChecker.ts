@@ -18,42 +18,51 @@ export function checkReportContradictions(reportData: ReportData): Contradiction
   const contradictions: string[] = [];
   const warnings: string[] = [];
 
-  // Property condition vs rental assessment
+  // Property condition vs rental assessment - CRITICAL CHECK
   if (reportData.propertyData && reportData.rentalAssessment) {
-    const hasKitchen = reportData.propertyData.kitchen_condition !== 'missing' && 
-                      reportData.propertyData.kitchen_condition !== 'none';
+    const isUninhabitable = reportData.propertyData.kitchen_condition === 'missing' || 
+                           reportData.propertyData.kitchen_condition === 'none' ||
+                           reportData.propertyData.structural_condition === 'very_poor';
     const hasRental = reportData.rentalAssessment.weekly_rent > 0;
     
-    if (!hasKitchen && hasRental) {
-      contradictions.push("Property has no kitchen but shows rental income - uninhabitable properties cannot generate rental income");
+    if (isUninhabitable && hasRental) {
+      contradictions.push("CRITICAL: Property is uninhabitable (missing kitchen/very poor condition) but shows rental income of $" + reportData.rentalAssessment.weekly_rent + "/week - uninhabitable properties cannot generate rental income");
     }
   }
 
-  // Risk ratings vs VRA comments
+  // Risk ratings vs VRA comments - ENHANCED CHECK
   if (reportData.riskRatings && reportData.vraAssessment) {
     const highRiskCount = Object.values(reportData.riskRatings).filter(
-      (rating: any) => rating === 'high' || rating === 'very_high'
+      (rating: any) => rating >= 4
     ).length;
     
     const vraComments = reportData.vraAssessment.comments || '';
     
     if (highRiskCount > 0 && vraComments.trim().length === 0) {
-      contradictions.push("High risk factors identified but no VRA comments provided");
+      contradictions.push(`CRITICAL: ${highRiskCount} high risk factors identified (rating ≥4) but no VRA comments provided - VRA assessment is mandatory for high-risk properties`);
+    }
+    
+    if (highRiskCount > 0 && vraComments.trim().length < 50) {
+      warnings.push(`${highRiskCount} high risk factors found but VRA comments are very brief (${vraComments.length} characters) - consider more detailed assessment`);
     }
   }
 
-  // General comments risk statement vs actual risks
+  // General comments risk statement vs actual risks - ENHANCED CHECK
   if (reportData.generalComments && reportData.riskRatings) {
     const hasHighRisks = Object.values(reportData.riskRatings).some(
-      (rating: any) => rating === 'high' || rating === 'very_high'
+      (rating: any) => rating >= 4
     );
     
-    const claimsNoRisks = reportData.generalComments.toLowerCase().includes('no significant risks') ||
-                         reportData.generalComments.toLowerCase().includes('minimal risk') ||
-                         reportData.generalComments.toLowerCase().includes('low risk profile');
+    const commentLower = reportData.generalComments.toLowerCase();
+    const claimsNoRisks = commentLower.includes('no significant risks') ||
+                         commentLower.includes('minimal risk') ||
+                         commentLower.includes('low risk profile') ||
+                         commentLower.includes('no major concerns') ||
+                         commentLower.includes('no risks highlighted') ||
+                         commentLower.includes('risk-free');
     
     if (hasHighRisks && claimsNoRisks) {
-      contradictions.push("General comments claim low/no risks but high risk factors are present");
+      contradictions.push(`CRITICAL: General comments claim low/no risks but ${Object.values(reportData.riskRatings).filter((r: any) => r >= 4).length} high risk factors (≥4) are present - this is a serious contradiction`);
     }
   }
 

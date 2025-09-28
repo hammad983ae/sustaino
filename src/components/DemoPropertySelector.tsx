@@ -74,6 +74,17 @@ const demoProperties: DemoProperty[] = [
     keyFeatures: ['New construction', 'Incomplete sections', 'Modern design', 'Growth area']
   },
   {
+    id: 'demonstration-contradictions',
+    address: '789 Demonstration Street, Demo VIC 3000',
+    description: 'Perfect for showing contradiction detection - appears normal but contains logical inconsistencies',
+    scenario: 'Contradiction Demonstration Property',
+    riskLevel: 'medium',
+    expectedContradictions: 4,
+    marketValue: 650000,
+    rentalAssessment: 450,
+    keyFeatures: ['Looks professional', 'Contains hidden contradictions', 'Perfect for client demos', 'Shows checker effectiveness']
+  },
+  {
     id: 'adelaide-heritage',
     address: '33 Heritage Square, Adelaide SA 5000',
     description: 'Heritage-listed property with restrictions but excellent location',
