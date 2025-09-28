@@ -11,13 +11,13 @@ import ISFVPlatform from './ISFVPlatform';
 import { checkReportContradictions } from '@/utils/reportContradictionChecker';
 import { runAutomatedAmendment } from '@/utils/contradictionAmender';
 
-// PAF Demo Properties with comprehensive mock data
+// PAF Demo Properties with comprehensive mock data - PROPERTY VALUATIONS ONLY
 const pafDemoProperties = [
   {
     name: "Childcare Centre - Melbourne CBD",
     address: "123 Collins Street, Melbourne VIC 3000",
-    type: "Childcare",
-    reportType: "Long Form",
+    type: "Childcare Property Valuation",
+    reportType: "Long Form Property Valuation",
     features: "150 child capacity, outdoor play areas, commercial kitchen",
     mockData: {
       propertyDetails: {
@@ -25,24 +25,96 @@ const pafDemoProperties = [
         buildingArea: "1,800 sqm",
         yearBuilt: "2019",
         zoning: "Commercial 1 Zone",
-        owner: "Little Learners Pty Ltd"
+        owner: "Little Learners Pty Ltd",
+        title: "Crown Allotment 45, Section 12",
+        council: "City of Melbourne",
+        improvements: "Two-storey childcare facility with outdoor play areas",
+        carParking: "25 spaces including staff and visitor parking"
       },
       valuation: {
         marketValue: "$4,250,000",
         landValue: "$2,800,000",
         improvementValue: "$1,450,000",
-        valuationDate: "September 2024"
+        valuationDate: "September 2024",
+        valuationMethod: "Direct Comparison & Income Capitalisation",
+        capitalisationRate: "6.35%",
+        marketConditions: "Stable with moderate growth in childcare sector"
       },
       income: {
         grossIncome: "$980,000 p.a.",
         operatingExpenses: "$285,000 p.a.",
         netIncome: "$695,000 p.a.",
-        yieldRate: "6.35%"
+        yieldRate: "6.35%",
+        weeklyRent: "$18,846",
+        leaseExpiry: "31/12/2029",
+        tenantName: "Little Learners Pty Ltd",
+        leaseTerm: "10 years",
+        rentReviews: "Annual CPI increases"
       },
+      salesEvidence: [
+        { address: "456 Spencer Street, Melbourne", price: "$3,950,000", date: "Aug 2024", size: "1,650 sqm", rate: "$2,394/sqm" },
+        { address: "789 Elizabeth Street, Melbourne", price: "$4,580,000", date: "Jul 2024", size: "1,920 sqm", rate: "$2,385/sqm" },
+        { address: "321 Queen Street, Melbourne", price: "$3,750,000", date: "Sep 2024", size: "1,550 sqm", rate: "$2,419/sqm" }
+      ],
+      rentalEvidence: [
+        { address: "234 Bourke Street, Melbourne", rent: "$17,500/week", size: "1,680 sqm", rate: "$542/sqm p.a." },
+        { address: "567 Collins Street, Melbourne", rent: "$19,200/week", size: "1,850 sqm", rate: "$540/sqm p.a." },
+        { address: "890 Flinders Street, Melbourne", rent: "$16,800/week", size: "1,620 sqm", rate: "$539/sqm p.a." }
+      ],
       riskFactors: [
         "High regulatory compliance requirements",
-        "Specialized use limits market appeal",
-        "Dependent on license retention"
+        "Specialized use limits market appeal", 
+        "Dependent on license retention",
+        "Limited tenant pool for childcare facilities"
+      ]
+    }
+  },
+  {
+    name: "Apple Orchard - Yarra Valley", 
+    address: "1247 Melba Highway, Dixons Creek VIC 3775",
+    type: "Agricultural Property Valuation",
+    reportType: "Sustino Pro Property Valuation",
+    features: "50 hectares, irrigation system, processing facility",
+    mockData: {
+      propertyDetails: {
+        landArea: "50 hectares (500,000 sqm)",
+        buildingArea: "850 sqm (processing facility)",
+        yearBuilt: "2015 (facility), 1995 (orchard)",
+        zoning: "Farming Zone",
+        owner: "Dixons Creek Orchards Ltd",
+        title: "Crown Portion 245",
+        council: "Yarra Ranges Shire",
+        improvements: "Apple orchard, processing facility, irrigation system",
+        waterRights: "15ML annual allocation"
+      },
+      valuation: {
+        marketValue: "$8,750,000",
+        landValue: "$6,200,000", 
+        improvementValue: "$2,550,000",
+        valuationDate: "September 2024",
+        valuationMethod: "Comparable Sales & Income Approach",
+        capitalisationRate: "4.85%",
+        marketConditions: "Strong demand for premium agricultural land"
+      },
+      income: {
+        grossIncome: "$1,450,000 p.a.",
+        operatingExpenses: "$680,000 p.a.",
+        netIncome: "$770,000 p.a.",
+        yieldRate: "4.85%",
+        cropYield: "450 tonnes annually",
+        pricePerTonne: "$3,200",
+        costPerHectare: "$13,600"
+      },
+      salesEvidence: [
+        { address: "3456 Melba Highway, Coldstream", price: "$7,200,000", date: "Jun 2024", size: "42 hectares", rate: "$171,429/ha" },
+        { address: "7890 Maroondah Highway, Healesville", price: "$9,800,000", date: "Aug 2024", size: "58 hectares", rate: "$169,000/ha" },
+        { address: "1234 Warburton Highway, Seville", price: "$6,500,000", date: "Jul 2024", size: "38 hectares", rate: "$171,053/ha" }
+      ],
+      riskFactors: [
+        "Weather dependency affects yields",
+        "Limited alternative use options",
+        "Seasonal income variation",
+        "Climate change impact on production"
       ]
     }
   },
@@ -81,9 +153,9 @@ const pafDemoProperties = [
   },
   {
     name: "Healthcare Clinic - Box Hill",
-    address: "789 Whitehorse Road, Box Hill VIC 3128",
-    type: "Healthcare",
-    reportType: "Short Form",
+    address: "789 Whitehorse Road, Box Hill VIC 3128", 
+    type: "Healthcare Property Valuation",
+    reportType: "Short Form Property Valuation",
     features: "Medical suites, parking, specialist equipment",
     mockData: {
       propertyDetails: {
@@ -91,24 +163,47 @@ const pafDemoProperties = [
         buildingArea: "980 sqm",
         yearBuilt: "2018",
         zoning: "Commercial 1 Zone",
-        owner: "Eastern Health Services Pty Ltd"
+        owner: "Eastern Health Services Pty Ltd",
+        title: "Lot 15, Plan of Subdivision 845692",
+        council: "Whitehorse City Council",
+        improvements: "Single storey medical clinic with specialist suites",
+        carParking: "18 spaces including disabled access"
       },
       valuation: {
         marketValue: "$2,850,000",
         landValue: "$1,650,000",
         improvementValue: "$1,200,000",
-        valuationDate: "September 2024"
+        valuationDate: "September 2024",
+        valuationMethod: "Direct Comparison Method",
+        capitalisationRate: "6.15%",
+        marketConditions: "Steady demand for medical facilities"
       },
       income: {
         grossIncome: "$485,000 p.a.",
         operatingExpenses: "$125,000 p.a.",
         netIncome: "$360,000 p.a.",
-        yieldRate: "6.15%"
+        yieldRate: "6.15%",
+        weeklyRent: "$9,327",
+        leaseExpiry: "30/06/2028",
+        tenantName: "Eastern Health Services Pty Ltd",
+        leaseTerm: "7 years",
+        rentReviews: "3% annual increases"
       },
+      salesEvidence: [
+        { address: "234 Whitehorse Road, Box Hill", price: "$2,650,000", date: "Jul 2024", size: "920 sqm", rate: "$2,880/sqm" },
+        { address: "567 Station Street, Box Hill", price: "$3,100,000", date: "Aug 2024", size: "1,050 sqm", rate: "$2,952/sqm" },
+        { address: "890 Elgar Road, Box Hill", price: "$2,450,000", date: "Jun 2024", size: "850 sqm", rate: "$2,882/sqm" }
+      ],
+      rentalEvidence: [
+        { address: "123 Burke Road, Camberwell", rent: "$8,500/week", size: "920 sqm", rate: "$481/sqm p.a." },
+        { address: "456 Canterbury Road, Surrey Hills", rent: "$9,800/week", size: "1,050 sqm", rate: "$486/sqm p.a." },
+        { address: "789 Toorak Road, Hawthorn", rent: "$8,200/week", size: "850 sqm", rate: "$502/sqm p.a." }
+      ],
       riskFactors: [
         "Tenant specialization limits appeal",
         "Equipment depreciation",
-        "Healthcare regulation changes"
+        "Healthcare regulation changes",
+        "Single tenant dependency"
       ]
     }
   },
@@ -180,13 +275,13 @@ const pafDemoProperties = [
   }
 ];
 
-// ICV Demo Properties with comprehensive mock data
+// ICV Demo Properties with comprehensive mock data - PROPERTY VALUATIONS ONLY
 const icvDemoProperties = [
   {
     name: "Retail Shopping Centre - Chadstone",
     address: "1341 Dandenong Road, Chadstone VIC 3148",
-    type: "Retail",
-    reportType: "Insurance Valuation",
+    type: "Retail Property Valuation",
+    reportType: "Long Form Property Valuation",
     features: "Major shopping centre, 200+ stores, entertainment precinct",
     mockData: {
       propertyDetails: {
@@ -194,33 +289,53 @@ const icvDemoProperties = [
         buildingArea: "185,000 sqm (GLA)",
         yearBuilt: "1998 (major renovation 2019)",
         zoning: "Commercial 1 Zone",
-        owner: "Vicinity Centres"
+        owner: "Vicinity Centres",
+        title: "Crown Allotment 2, Section A",
+        council: "Stonnington City Council",
+        improvements: "Major regional shopping centre with entertainment precinct",
+        carParking: "6,500 spaces across multiple levels"
       },
       valuation: {
-        insuranceValue: "$850,000,000",
-        replacementCost: "$785,000,000",
-        siteClearance: "$15,000,000",
-        professionalFees: "$50,000,000",
-        valuationDate: "September 2024"
+        marketValue: "$1,100,000,000",
+        landValue: "$450,000,000",
+        improvementValue: "$650,000,000",
+        valuationDate: "September 2024",
+        valuationMethod: "Income Capitalisation Method",
+        capitalisationRate: "4.25%",
+        marketConditions: "Strong institutional demand for prime retail assets"
       },
       income: {
         grossIncome: "$65,500,000 p.a.",
         operatingExpenses: "$18,750,000 p.a.",
         netIncome: "$46,750,000 p.a.",
-        yieldRate: "4.25%"
+        yieldRate: "4.25%",
+        occupancyRate: "98.5%",
+        averageRental: "$1,250/sqm p.a.",
+        tenantMix: "Major retailers, specialty stores, food court, cinema"
       },
+      salesEvidence: [
+        { address: "Westfield Doncaster", price: "$725,000,000", date: "Mar 2024", size: "140,000 sqm", rate: "$5,179/sqm" },
+        { address: "Eastland Shopping Centre", price: "$520,000,000", date: "Jun 2024", size: "95,000 sqm", rate: "$5,474/sqm" },
+        { address: "Box Hill Central", price: "$385,000,000", date: "Feb 2024", size: "75,000 sqm", rate: "$5,133/sqm" }
+      ],
+      rentalEvidence: [
+        { tenant: "Major Department Store", rent: "$8,500,000 p.a.", size: "6,800 sqm", rate: "$1,250/sqm" },
+        { tenant: "Specialty Fashion Retailers", rent: "$18,500,000 p.a.", size: "12,400 sqm", rate: "$1,492/sqm" },
+        { tenant: "Food Court & Restaurants", rent: "$5,200,000 p.a.", size: "3,200 sqm", rate: "$1,625/sqm" }
+      ],
       riskFactors: [
         "Online retail competition impact",
-        "Large scale reconstruction costs",
-        "Tenant mix dependency"
+        "Major tenant lease expiry risk",
+        "Economic downturn sensitivity",
+        "Consumer spending pattern changes"
       ]
     }
   },
   {
     name: "Industrial Warehouse - Dandenong",
     address: "1455 South Gippsland Highway, Dandenong South VIC 3175",
-    type: "Industrial",
-    reportType: "Commercial Valuation",
+    type: "Industrial Property Valuation",
+    reportType: "Short Form Property Valuation",
     features: "Distribution centre, high clearance, loading docks",
     mockData: {
       propertyDetails: {
@@ -228,24 +343,47 @@ const icvDemoProperties = [
         buildingArea: "24,200 sqm",
         yearBuilt: "2020",
         zoning: "Industrial 1 Zone",
-        owner: "Goodman Group"
+        owner: "Goodman Group",
+        title: "Lot 1, Plan of Subdivision 422098",
+        council: "Greater Dandenong City Council",
+        improvements: "Modern distribution centre with cross-dock facility",
+        carParking: "150 spaces including truck parking"
       },
       valuation: {
         marketValue: "$42,500,000",
         landValue: "$18,750,000",
         improvementValue: "$23,750,000",
-        valuationDate: "September 2024"
+        valuationDate: "September 2024",
+        valuationMethod: "Direct Comparison Method",
+        capitalisationRate: "5.85%",
+        marketConditions: "Strong demand for modern logistics facilities"
       },
       income: {
         grossIncome: "$2,850,000 p.a.",
         operatingExpenses: "$485,000 p.a.",
         netIncome: "$2,365,000 p.a.",
-        yieldRate: "5.85%"
+        yieldRate: "5.85%",
+        weeklyRent: "$54,808",
+        leaseExpiry: "30/06/2030",
+        tenantName: "Major Logistics Company",
+        leaseTerm: "12 years",
+        rentReviews: "4% annual or CPI (whichever is greater)"
       },
+      salesEvidence: [
+        { address: "789 Princes Highway, Dandenong", price: "$38,500,000", date: "May 2024", size: "22,000 sqm", rate: "$1,750/sqm" },
+        { address: "456 Cheltenham Road, Keysborough", price: "$46,200,000", date: "Jul 2024", size: "26,800 sqm", rate: "$1,724/sqm" },
+        { address: "123 Boundary Road, Carrum Downs", price: "$35,750,000", date: "Jun 2024", size: "20,500 sqm", rate: "$1,744/sqm" }
+      ],
+      rentalEvidence: [
+        { address: "567 Westall Road, Clayton South", rent: "$48,000/week", size: "20,000 sqm", rate: "$125/sqm p.a." },
+        { address: "890 Heatherton Road, Springvale", rent: "$62,500/week", size: "25,000 sqm", rate: "$130/sqm p.a." },
+        { address: "234 Stud Road, Dandenong", rent: "$42,300/week", size: "18,500 sqm", rate: "$119/sqm p.a." }
+      ],
       riskFactors: [
         "Single tenant dependency",
         "Specialized racking equipment",
-        "Location accessibility changes"
+        "Location accessibility changes",
+        "E-commerce logistics demand fluctuation"
       ]
     }
   },
@@ -761,32 +899,37 @@ export default function GenerateMockReports() {
                         <th className="text-left text-gray-300 p-2">Address</th>
                         <th className="text-left text-gray-300 p-2">Sale Price</th>
                         <th className="text-left text-gray-300 p-2">Date</th>
-                        <th className="text-left text-gray-300 p-2">$/sqm</th>
-                        <th className="text-left text-gray-300 p-2">Adjustments</th>
+                        <th className="text-left text-gray-300 p-2">Size</th>
+                        <th className="text-left text-gray-300 p-2">Rate</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-b border-gray-700">
-                        <td className="text-white p-2">45 Commercial St, Melbourne</td>
-                        <td className="text-white p-2">$2,300,000</td>
-                        <td className="text-white p-2">15/08/2024</td>
-                        <td className="text-white p-2">$1,840</td>
-                        <td className="text-white p-2">+$150,000 (location)</td>
-                      </tr>
-                      <tr className="border-b border-gray-700">
-                        <td className="text-white p-2">78 Business Ave, Fitzroy</td>
-                        <td className="text-white p-2">$2,650,000</td>
-                        <td className="text-white p-2">22/07/2024</td>
-                        <td className="text-white p-2">$2,120</td>
-                        <td className="text-white p-2">-$200,000 (condition)</td>
-                      </tr>
-                      <tr className="border-b border-gray-700">
-                        <td className="text-white p-2">156 Property Rd, Richmond</td>
-                        <td className="text-white p-2">$2,475,000</td>
-                        <td className="text-white p-2">05/09/2024</td>
-                        <td className="text-white p-2">$1,980</td>
-                        <td className="text-white p-2">+$25,000 (timing)</td>
-                      </tr>
+                      {data.mockData?.salesEvidence?.map((sale: any, index: number) => (
+                        <tr key={index} className="border-b border-gray-700">
+                          <td className="text-white p-2">{sale.address}</td>
+                          <td className="text-white p-2">{sale.price}</td>
+                          <td className="text-white p-2">{sale.date}</td>
+                          <td className="text-white p-2">{sale.size}</td>
+                          <td className="text-white p-2">{sale.rate}</td>
+                        </tr>
+                      )) || (
+                        <>
+                          <tr className="border-b border-gray-700">
+                            <td className="text-white p-2">45 Commercial St, Melbourne</td>
+                            <td className="text-white p-2">$2,300,000</td>
+                            <td className="text-white p-2">15/08/2024</td>
+                            <td className="text-white p-2">1,250 sqm</td>
+                            <td className="text-white p-2">$1,840/sqm</td>
+                          </tr>
+                          <tr className="border-b border-gray-700">
+                            <td className="text-white p-2">78 Business Ave, Fitzroy</td>
+                            <td className="text-white p-2">$2,650,000</td>
+                            <td className="text-white p-2">22/07/2024</td>
+                            <td className="text-white p-2">1,380 sqm</td>
+                            <td className="text-white p-2">$1,920/sqm</td>
+                          </tr>
+                        </>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -804,34 +947,39 @@ export default function GenerateMockReports() {
                     <thead>
                       <tr className="border-b border-gray-600">
                         <th className="text-left text-gray-300 p-2">Address</th>
-                        <th className="text-left text-gray-300 p-2">Rent (pa)</th>
-                        <th className="text-left text-gray-300 p-2">Area (sqm)</th>
-                        <th className="text-left text-gray-300 p-2">$/sqm</th>
-                        <th className="text-left text-gray-300 p-2">Lease Term</th>
+                        <th className="text-left text-gray-300 p-2">Rent</th>
+                        <th className="text-left text-gray-300 p-2">Size</th>
+                        <th className="text-left text-gray-300 p-2">Rate</th>
+                        <th className="text-left text-gray-300 p-2">Details</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-b border-gray-700">
-                        <td className="text-white p-2">12 Health Plaza, Melbourne</td>
-                        <td className="text-white p-2">$145,000</td>
-                        <td className="text-white p-2">1,200</td>
-                        <td className="text-white p-2">$121</td>
-                        <td className="text-white p-2">5 + 5 years</td>
-                      </tr>
-                      <tr className="border-b border-gray-700">
-                        <td className="text-white p-2">89 Medical Centre Dr, Fitzroy</td>
-                        <td className="text-white p-2">$168,000</td>
-                        <td className="text-white p-2">1,350</td>
-                        <td className="text-white p-2">$124</td>
-                        <td className="text-white p-2">7 years</td>
-                      </tr>
-                      <tr className="border-b border-gray-700">
-                        <td className="text-white p-2">234 Business St, Richmond</td>
-                        <td className="text-white p-2">$152,000</td>
-                        <td className="text-white p-2">1,280</td>
-                        <td className="text-white p-2">$119</td>
-                        <td className="text-white p-2">6 + 3 years</td>
-                      </tr>
+                      {data.mockData?.rentalEvidence?.map((rental: any, index: number) => (
+                        <tr key={index} className="border-b border-gray-700">
+                          <td className="text-white p-2">{rental.address}</td>
+                          <td className="text-white p-2">{rental.rent}</td>
+                          <td className="text-white p-2">{rental.size}</td>
+                          <td className="text-white p-2">{rental.rate}</td>
+                          <td className="text-white p-2">{rental.details || 'Market lease'}</td>
+                        </tr>
+                      )) || (
+                        <>
+                          <tr className="border-b border-gray-700">
+                            <td className="text-white p-2">12 Health Plaza, Melbourne</td>
+                            <td className="text-white p-2">$145,000 p.a.</td>
+                            <td className="text-white p-2">1,200 sqm</td>
+                            <td className="text-white p-2">$121/sqm</td>
+                            <td className="text-white p-2">5 + 5 years</td>
+                          </tr>
+                          <tr className="border-b border-gray-700">
+                            <td className="text-white p-2">89 Medical Centre Dr, Fitzroy</td>
+                            <td className="text-white p-2">$168,000 p.a.</td>
+                            <td className="text-white p-2">1,350 sqm</td>
+                            <td className="text-white p-2">$124/sqm</td>
+                            <td className="text-white p-2">7 years</td>
+                          </tr>
+                        </>
+                      )}
                     </tbody>
                   </table>
                 </div>
