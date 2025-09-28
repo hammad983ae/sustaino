@@ -300,102 +300,6 @@ export default function ISFVPlatform() {
         </CardContent>
       </Card>
 
-      {/* Automation Features Section */}
-      {isfvData.automationStatus === 'completed' && (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Automation Features</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-semibold mb-2">Domain API Integration</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Automatic property data retrieval and comparable sales analysis
-                  </p>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-semibold mb-2">Risk Assessment</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Automated risk scoring based on location and property factors
-                  </p>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-semibold mb-2">Market Analysis</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Real-time market trends and comparable property analysis
-                  </p>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-semibold mb-2">Report Generation</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Instant professional report generation with all required sections
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Results Panel */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="border-2 border-green-200 bg-green-50">
-              <CardHeader>
-                <CardTitle className="text-green-800">ISFV Results</CardTitle>
-              </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">
-                    ${isfvData.estimatedValue.toLocaleString()}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Estimated Market Value</div>
-                </div>
-                <div className="text-center">
-                  <div className="flex justify-center mb-2">
-                    <Badge className={`${getConfidenceBadgeColor(isfvData.confidence)} text-white`}>
-                      {isfvData.confidence.toUpperCase()} CONFIDENCE
-                    </Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Valuation Confidence</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-600 mb-2">
-                    {isfvData.riskScore}/5
-                  </div>
-                  <div className="text-sm text-muted-foreground">Risk Score</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Contradiction Checker Results */}
-          <Card className="border-2 border-blue-200 bg-blue-50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-800">
-                <FileCheck className="h-5 w-5" />
-                Contradiction Check Results
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isfvData.contradictionResults ? (
-                <div className="p-4 bg-white rounded-lg border">
-                  <pre className="text-sm whitespace-pre-wrap text-gray-700">
-                    {isfvData.contradictionResults}
-                  </pre>
-                </div>
-              ) : (
-                <div className="text-center text-muted-foreground py-4">
-                  <AlertTriangle className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p>Run Contradiction Check from the Control Center above to validate report consistency</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-          </div>
-        </div>
-      )}
-
       {/* Tabs for detailed sections */}
       <Tabs defaultValue="automation" className="w-full">
         <TabsList className="grid w-full grid-cols-8">
@@ -432,6 +336,65 @@ export default function ISFVPlatform() {
             Photos & Annexures
           </TabsTrigger>
         </TabsList>
+
+        {/* Results Panel - shown immediately after tabs when automation completes */}
+        {isfvData.automationStatus === 'completed' && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-6">
+            <Card className="border-2 border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-green-800">ISFV Results</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600 mb-2">
+                      ${isfvData.estimatedValue.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Estimated Market Value</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="flex justify-center mb-2">
+                      <Badge className={`${getConfidenceBadgeColor(isfvData.confidence)} text-white`}>
+                        {isfvData.confidence.toUpperCase()} CONFIDENCE
+                      </Badge>
+                    </div>
+                    <div className="text-sm text-muted-foreground">Valuation Confidence</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-orange-600 mb-2">
+                      {isfvData.riskScore}/5
+                    </div>
+                    <div className="text-sm text-muted-foreground">Risk Score</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contradiction Checker Results */}
+            <Card className="border-2 border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-800">
+                  <FileCheck className="h-5 w-5" />
+                  Contradiction Check Results
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {isfvData.contradictionResults ? (
+                  <div className="p-4 bg-white rounded-lg border">
+                    <pre className="text-sm whitespace-pre-wrap text-gray-700">
+                      {isfvData.contradictionResults}
+                    </pre>
+                  </div>
+                ) : (
+                  <div className="text-center text-muted-foreground py-4">
+                    <AlertTriangle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <p>Run Contradiction Check from the Control Center above to validate report consistency</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         <TabsContent value="automation" className="space-y-4">
           <Card>
