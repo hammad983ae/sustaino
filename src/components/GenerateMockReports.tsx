@@ -122,15 +122,17 @@ export default function GenerateMockReports() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DemoPropertySelector
-          selectedProperty={selectedDemoProperty}
-          onPropertySelect={setSelectedDemoProperty}
-          onGenerateReport={generateDemoMockReport}
-          isGenerating={isGeneratingMock}
-        />
-        
-        {/* Contradiction Checker Results */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="space-y-4">
+          <DemoPropertySelector
+            selectedProperty={selectedDemoProperty}
+            onPropertySelect={setSelectedDemoProperty}
+            onGenerateReport={generateDemoMockReport}
+            isGenerating={isGeneratingMock}
+          />
+        </div>
+        <div className="space-y-4">
+          {/* Contradiction Checker Results */}
         <Card className="h-fit">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -160,7 +162,8 @@ export default function GenerateMockReports() {
               )}
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </div>
       </div>
 
       {/* Demo Instructions */}
