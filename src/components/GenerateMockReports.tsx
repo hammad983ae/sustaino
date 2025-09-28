@@ -350,19 +350,33 @@ const icvDemoProperties = [
 ];
 
 export default function GenerateMockReports() {
-  const [pafSelectedProperty, setPafSelectedProperty] = useState("");
+  const [pafSelectedProperty, setPafSelectedProperty] = useState("Childcare Centre - Melbourne CBD");
   const [pafCustomAddress, setPafCustomAddress] = useState("");
-  const [pafStatus, setPafStatus] = useState("Idle");
+  const [pafStatus, setPafStatus] = useState("Complete");
   const [pafLoading, setPafLoading] = useState(false);
-  const [pafReportData, setPafReportData] = useState<any>(null);
-  const [pafContradictions, setPafContradictions] = useState<any[]>([]);
+  const [pafReportData, setPafReportData] = useState<any>(pafDemoProperties[0]);
+  const [pafContradictions, setPafContradictions] = useState<any[]>([
+    {
+      type: "Warning",
+      section: "Risk Assessment",
+      issue: "Healthcare property missing regulatory risk assessment",
+      recommendation: "Include healthcare compliance and regulatory risks"
+    }
+  ]);
 
-  const [icvSelectedProperty, setIcvSelectedProperty] = useState("");
+  const [icvSelectedProperty, setIcvSelectedProperty] = useState("Healthcare Hospital - Fitzroy");
   const [icvCustomAddress, setIcvCustomAddress] = useState("");
-  const [icvStatus, setIcvStatus] = useState("Idle");
+  const [icvStatus, setIcvStatus] = useState("Complete");
   const [icvLoading, setIcvLoading] = useState(false);
-  const [icvReportData, setIcvReportData] = useState<any>(null);
-  const [icvContradictions, setIcvContradictions] = useState<any[]>([]);
+  const [icvReportData, setIcvReportData] = useState<any>(icvDemoProperties[3]);
+  const [icvContradictions, setIcvContradictions] = useState<any[]>([
+    {
+      type: "Critical",
+      section: "Insurance Valuation",
+      issue: "Specialized medical equipment valuation requires expert assessment",
+      recommendation: "Engage medical equipment specialist for accurate replacement costs"
+    }
+  ]);
 
   const handlePafAutomation = async () => {
     if (!pafSelectedProperty && !pafCustomAddress.trim()) {
