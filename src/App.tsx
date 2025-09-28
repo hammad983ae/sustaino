@@ -103,16 +103,8 @@ const App = () => (
                     <Auth />
                   </ProtectedRoute>
                 } />
-                <Route path="/" element={
-                  <ProtectedRoute>
-                    <Index />
-                  </ProtectedRoute>
-                } />
-                <Route path="/automated-valuation" element={
-                  <ProtectedRoute>
-                    <AutomatedValuation />
-                  </ProtectedRoute>
-                } />
+                <Route path="/" element={<Index />} />
+                <Route path="/automated-valuation" element={<AutomatedValuation />} />
                 <Route path="/index" element={
                   <ProtectedRoute>
                     <Index />
@@ -133,11 +125,7 @@ const App = () => (
                     <PropertyAssessment />
                   </ProtectedRoute>
                 } />
-        <Route path="/automated-report" element={
-          <ProtectedRoute>
-            <AutomatedReport propertyType="commercial" />
-          </ProtectedRoute>
-        } />
+        <Route path="/automated-report" element={<AutomatedReport propertyType="commercial" />} />
                 <Route path="/property-valuations" element={
                   <ProtectedRoute>
                     <PropertyValuations />
@@ -175,11 +163,7 @@ const App = () => (
                     <CostaGroupValuationsPage />
                   </ProtectedRoute>
                 } />
-                <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/folder-manager" element={
                   <ProtectedRoute>
                     <AutomaticFolderManager />
