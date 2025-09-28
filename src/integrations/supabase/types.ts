@@ -2829,6 +2829,174 @@ export type Database = {
           },
         ]
       }
+      residential_sales_evidence: {
+        Row: {
+          adjusted_sale_price: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          car_accommodation_area: number | null
+          car_accommodation_rate: number | null
+          car_accommodation_value: number | null
+          car_spaces: number | null
+          comparable: boolean | null
+          comparison_comments: string | null
+          created_at: string
+          data_source: string | null
+          domain_property_id: string | null
+          dwelling_rate: number | null
+          dwelling_value: number | null
+          extraction_confidence: number | null
+          fpg_count: number | null
+          fpg_rate: number | null
+          fpg_value: number | null
+          id: string
+          improved_land_rate: number | null
+          improvements_rate: number | null
+          land_area: number | null
+          land_rate: number | null
+          land_value: number | null
+          living_area: number | null
+          local_sales_agent: string | null
+          market_movement_percentage: number | null
+          outdoor_areas_count: number | null
+          outdoor_areas_rate: number | null
+          outdoor_areas_value: number | null
+          pool_count: number | null
+          pool_rate: number | null
+          pool_value: number | null
+          postcode: string | null
+          property_address: string
+          property_description: string | null
+          sale_date: string
+          sale_price: number
+          sale_status: string | null
+          shedding_count: number | null
+          shedding_rate: number | null
+          shedding_value: number | null
+          source_url: string | null
+          state: string | null
+          subject_property_id: string | null
+          suburb: string | null
+          total_calculated: number | null
+          total_rounded: number | null
+          updated_at: string
+          user_id: string
+          valuation_date: string | null
+          verification_status: string | null
+          zoning: string | null
+        }
+        Insert: {
+          adjusted_sale_price?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          car_accommodation_area?: number | null
+          car_accommodation_rate?: number | null
+          car_accommodation_value?: number | null
+          car_spaces?: number | null
+          comparable?: boolean | null
+          comparison_comments?: string | null
+          created_at?: string
+          data_source?: string | null
+          domain_property_id?: string | null
+          dwelling_rate?: number | null
+          dwelling_value?: number | null
+          extraction_confidence?: number | null
+          fpg_count?: number | null
+          fpg_rate?: number | null
+          fpg_value?: number | null
+          id?: string
+          improved_land_rate?: number | null
+          improvements_rate?: number | null
+          land_area?: number | null
+          land_rate?: number | null
+          land_value?: number | null
+          living_area?: number | null
+          local_sales_agent?: string | null
+          market_movement_percentage?: number | null
+          outdoor_areas_count?: number | null
+          outdoor_areas_rate?: number | null
+          outdoor_areas_value?: number | null
+          pool_count?: number | null
+          pool_rate?: number | null
+          pool_value?: number | null
+          postcode?: string | null
+          property_address: string
+          property_description?: string | null
+          sale_date: string
+          sale_price: number
+          sale_status?: string | null
+          shedding_count?: number | null
+          shedding_rate?: number | null
+          shedding_value?: number | null
+          source_url?: string | null
+          state?: string | null
+          subject_property_id?: string | null
+          suburb?: string | null
+          total_calculated?: number | null
+          total_rounded?: number | null
+          updated_at?: string
+          user_id: string
+          valuation_date?: string | null
+          verification_status?: string | null
+          zoning?: string | null
+        }
+        Update: {
+          adjusted_sale_price?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          car_accommodation_area?: number | null
+          car_accommodation_rate?: number | null
+          car_accommodation_value?: number | null
+          car_spaces?: number | null
+          comparable?: boolean | null
+          comparison_comments?: string | null
+          created_at?: string
+          data_source?: string | null
+          domain_property_id?: string | null
+          dwelling_rate?: number | null
+          dwelling_value?: number | null
+          extraction_confidence?: number | null
+          fpg_count?: number | null
+          fpg_rate?: number | null
+          fpg_value?: number | null
+          id?: string
+          improved_land_rate?: number | null
+          improvements_rate?: number | null
+          land_area?: number | null
+          land_rate?: number | null
+          land_value?: number | null
+          living_area?: number | null
+          local_sales_agent?: string | null
+          market_movement_percentage?: number | null
+          outdoor_areas_count?: number | null
+          outdoor_areas_rate?: number | null
+          outdoor_areas_value?: number | null
+          pool_count?: number | null
+          pool_rate?: number | null
+          pool_value?: number | null
+          postcode?: string | null
+          property_address?: string
+          property_description?: string | null
+          sale_date?: string
+          sale_price?: number
+          sale_status?: string | null
+          shedding_count?: number | null
+          shedding_rate?: number | null
+          shedding_value?: number | null
+          source_url?: string | null
+          state?: string | null
+          subject_property_id?: string | null
+          suburb?: string | null
+          total_calculated?: number | null
+          total_rounded?: number | null
+          updated_at?: string
+          user_id?: string
+          valuation_date?: string | null
+          verification_status?: string | null
+          zoning?: string | null
+        }
+        Relationships: []
+      }
       sales_evidence: {
         Row: {
           adjustments: Json | null
