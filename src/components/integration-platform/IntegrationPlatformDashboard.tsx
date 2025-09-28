@@ -48,7 +48,7 @@ export const IntegrationPlatformDashboard = () => {
       const sampleData: Integration[] = [
         {
           id: '1',
-          institution_name: 'Commonwealth Bank',
+          institution_name: 'SAM',
           institution_type: 'lender',
           connection_status: 'connected',
           api_endpoint: 'https://api.commbank.com.au/v1',
