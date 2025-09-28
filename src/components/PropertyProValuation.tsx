@@ -1062,9 +1062,8 @@ export default function PropertyProValuation() {
         [field]: value
       };
       
-      // Sync valueComponent with reportType
       if (field === 'reportType') {
-        updatedData.valueComponent = value === 'AS IF COMPLETE' ? 'As If Complete' : 'Existing Property';
+        updatedData.valueComponent = value === 'AS IF COMPLETE (TBE/Construction)' ? 'As If Complete Basis' : 'Existing Property';
       }
       
       return updatedData;
@@ -1426,7 +1425,7 @@ export default function PropertyProValuation() {
             
             // Valuation Summary
             interestValued: formData.interestValued || "Fee Simple Vacant Possession",
-            valueComponent: formData.valueComponent || "Existing Property",
+            valueComponent: formData.valueComponent || (formData.reportType === 'AS IF COMPLETE (TBE/Construction)' ? 'As If Complete Basis' : 'Existing Property'),
             rentalAssessment: formData.rentalAssessment || 0,
             insuranceEstimate: formData.insuranceEstimate || 0,
             landValue: formData.landValue || 0,
@@ -1438,7 +1437,19 @@ export default function PropertyProValuation() {
             valuer: "Professional Valuer",
             apiNumber: "75366",
             inspectionDate: formData.inspectionDate,
-            issueDate: formData.valuationDate
+            issueDate: formData.valuationDate,
+            
+            // TBE/Construction Details (if applicable)
+            tbeDetails: formData.reportType === 'AS IF COMPLETE (TBE/Construction)' ? {
+              contractPrice: formData.tbeDetails?.contractPrice || 0,
+              builderName: formData.tbeDetails?.builderName || '',
+              contractDate: formData.tbeDetails?.contractDate || '',
+              estimatedCompletionDate: formData.tbeDetails?.estimatedCompletionDate || '',
+              buildingCost: formData.tbeDetails?.buildingCost || 0,
+              checkCost: formData.tbeDetails?.checkCost || 0,
+              outOfContractItems: formData.tbeDetails?.outOfContractItems || '',
+              progressPaymentSchedules: formData.tbeDetails?.progressPaymentSchedules || 'No'
+            } : undefined
           }
         }
       });
@@ -1523,7 +1534,7 @@ export default function PropertyProValuation() {
             propertyRiskRatings: formData.propertyRiskRatings,
             marketRiskRatings: formData.marketRiskRatings,
             interestValued: formData.interestValued,
-            valueComponent: formData.valueComponent,
+            valueComponent: formData.valueComponent || (formData.reportType === 'AS IF COMPLETE (TBE/Construction)' ? 'As If Complete Basis' : 'Existing Property'),
             rentalAssessment: Number(formData.rentalAssessment) || 0,
             insuranceEstimate: Number(formData.insuranceEstimate) || 0,
             landValue: Number(formData.landValue) || 0,

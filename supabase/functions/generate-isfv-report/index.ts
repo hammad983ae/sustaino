@@ -100,6 +100,18 @@ interface ISFVReportData {
   improvementsValue: number
   marketValue: number
   
+  // TBE/Construction Details (optional)
+  tbeDetails?: {
+    contractPrice: number
+    builderName: string
+    contractDate: string
+    estimatedCompletionDate: string
+    buildingCost: number
+    checkCost: number
+    outOfContractItems: string
+    progressPaymentSchedules: string
+  }
+  
   // Professional Details
   valuationFirm: string
   valuer: string
@@ -494,6 +506,39 @@ function generateISFVReportHTML(data: ISFVReportData): string {
                 MARKET VALUE: $${data.marketValue.toLocaleString()} (${numberToWords(data.marketValue)} dollars)
             </div>
         </div>
+        
+        ${data.valueComponent === 'As If Complete Basis' && data.tbeDetails ? `
+        <div style="margin-top: 20px; padding: 15px; border: 2px solid #f97316; border-radius: 8px; background-color: #fef3e2;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <strong style="color: #ea580c; font-size: 16px;">📋 AS IF COMPLETE BASIS:</strong>
+                <span style="margin-left: 10px; color: #374151;">This valuation assumes all proposed works are completed as per approved plans and specifications.</span>
+            </div>
+            
+            <div style="margin-top: 15px; border-top: 1px solid #f97316; padding-top: 15px;">
+                <h3 style="color: #ea580c; margin-bottom: 10px;">TBE/Construction Details</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <div class="info-item"><strong>Contract Price:</strong> $${data.tbeDetails.contractPrice.toLocaleString()}</div>
+                        <div class="info-item"><strong>Builder/Developer:</strong> ${data.tbeDetails.builderName || 'Not specified'}</div>
+                        <div class="info-item"><strong>Contract Date:</strong> ${data.tbeDetails.contractDate || 'Not specified'}</div>
+                    </div>
+                    <div>
+                        <div class="info-item"><strong>Building Cost:</strong> $${data.tbeDetails.buildingCost.toLocaleString()}</div>
+                        <div class="info-item"><strong>Estimated Completion:</strong> ${data.tbeDetails.estimatedCompletionDate || 'Not specified'}</div>
+                        <div class="info-item"><strong>Progress Payment Schedules:</strong> ${data.tbeDetails.progressPaymentSchedules}</div>
+                    </div>
+                </div>
+                ${data.tbeDetails.outOfContractItems ? `
+                <div style="margin-top: 10px;">
+                    <div class="info-item"><strong>Out of Contract Items:</strong></div>
+                    <div style="background-color: #f9fafb; padding: 8px; border-radius: 4px; margin-top: 5px; font-size: 12px;">
+                        ${data.tbeDetails.outOfContractItems}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        </div>
+        ` : ''}
     </div>
 
     <div class="signature-section">
