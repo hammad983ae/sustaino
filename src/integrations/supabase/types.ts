@@ -2834,18 +2834,25 @@ export type Database = {
           adjusted_sale_price: number | null
           bathrooms: number | null
           bedrooms: number | null
+          bushfire_risk_zone: string | null
           car_accommodation_area: number | null
           car_accommodation_rate: number | null
           car_accommodation_value: number | null
           car_spaces: number | null
+          coastal_orientation: string | null
           comparable: boolean | null
+          comparable_justification: string | null
           comparison_comments: string | null
           created_at: string
           data_source: string | null
+          distance_to_main_road: number | null
           domain_property_id: string | null
           dwelling_rate: number | null
           dwelling_value: number | null
+          esg_orientation: string | null
+          external_factors: Json | null
           extraction_confidence: number | null
+          flood_risk_zone: string | null
           fpg_count: number | null
           fpg_rate: number | null
           fpg_value: number | null
@@ -2858,6 +2865,7 @@ export type Database = {
           living_area: number | null
           local_sales_agent: string | null
           market_movement_percentage: number | null
+          noise_level_score: number | null
           outdoor_areas_count: number | null
           outdoor_areas_rate: number | null
           outdoor_areas_value: number | null
@@ -2870,11 +2878,15 @@ export type Database = {
           sale_date: string
           sale_price: number
           sale_status: string | null
+          school_zones: string[] | null
+          search_radius_used: number | null
           shedding_count: number | null
           shedding_rate: number | null
           shedding_value: number | null
+          similarity_score: number | null
           source_url: string | null
           state: string | null
+          street_type: string | null
           subject_property_id: string | null
           suburb: string | null
           total_calculated: number | null
@@ -2889,18 +2901,25 @@ export type Database = {
           adjusted_sale_price?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
+          bushfire_risk_zone?: string | null
           car_accommodation_area?: number | null
           car_accommodation_rate?: number | null
           car_accommodation_value?: number | null
           car_spaces?: number | null
+          coastal_orientation?: string | null
           comparable?: boolean | null
+          comparable_justification?: string | null
           comparison_comments?: string | null
           created_at?: string
           data_source?: string | null
+          distance_to_main_road?: number | null
           domain_property_id?: string | null
           dwelling_rate?: number | null
           dwelling_value?: number | null
+          esg_orientation?: string | null
+          external_factors?: Json | null
           extraction_confidence?: number | null
+          flood_risk_zone?: string | null
           fpg_count?: number | null
           fpg_rate?: number | null
           fpg_value?: number | null
@@ -2913,6 +2932,7 @@ export type Database = {
           living_area?: number | null
           local_sales_agent?: string | null
           market_movement_percentage?: number | null
+          noise_level_score?: number | null
           outdoor_areas_count?: number | null
           outdoor_areas_rate?: number | null
           outdoor_areas_value?: number | null
@@ -2925,11 +2945,15 @@ export type Database = {
           sale_date: string
           sale_price: number
           sale_status?: string | null
+          school_zones?: string[] | null
+          search_radius_used?: number | null
           shedding_count?: number | null
           shedding_rate?: number | null
           shedding_value?: number | null
+          similarity_score?: number | null
           source_url?: string | null
           state?: string | null
+          street_type?: string | null
           subject_property_id?: string | null
           suburb?: string | null
           total_calculated?: number | null
@@ -2944,18 +2968,25 @@ export type Database = {
           adjusted_sale_price?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
+          bushfire_risk_zone?: string | null
           car_accommodation_area?: number | null
           car_accommodation_rate?: number | null
           car_accommodation_value?: number | null
           car_spaces?: number | null
+          coastal_orientation?: string | null
           comparable?: boolean | null
+          comparable_justification?: string | null
           comparison_comments?: string | null
           created_at?: string
           data_source?: string | null
+          distance_to_main_road?: number | null
           domain_property_id?: string | null
           dwelling_rate?: number | null
           dwelling_value?: number | null
+          esg_orientation?: string | null
+          external_factors?: Json | null
           extraction_confidence?: number | null
+          flood_risk_zone?: string | null
           fpg_count?: number | null
           fpg_rate?: number | null
           fpg_value?: number | null
@@ -2968,6 +2999,7 @@ export type Database = {
           living_area?: number | null
           local_sales_agent?: string | null
           market_movement_percentage?: number | null
+          noise_level_score?: number | null
           outdoor_areas_count?: number | null
           outdoor_areas_rate?: number | null
           outdoor_areas_value?: number | null
@@ -2980,11 +3012,15 @@ export type Database = {
           sale_date?: string
           sale_price?: number
           sale_status?: string | null
+          school_zones?: string[] | null
+          search_radius_used?: number | null
           shedding_count?: number | null
           shedding_rate?: number | null
           shedding_value?: number | null
+          similarity_score?: number | null
           source_url?: string | null
           state?: string | null
+          street_type?: string | null
           subject_property_id?: string | null
           suburb?: string | null
           total_calculated?: number | null
@@ -3692,6 +3728,10 @@ export type Database = {
           review_mechanism: string
           review_percentage: number
         }
+        Returns: number
+      }
+      calculate_comparable_similarity: {
+        Args: { comparable_property: Json; subject_property: Json }
         Returns: number
       }
       calculate_esg_score: {
