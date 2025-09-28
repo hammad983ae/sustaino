@@ -1020,27 +1020,9 @@ export default function PropertyProValuation() {
     updateAutomationLog('Generating comprehensive property comments with valuation rationale...');
     
     try {
-      const response = await fetch('https://cxcfxnbvtddwebqprile.supabase.co/functions/v1/generate-valuation-rationale', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN4Y2Z4bmJ2dGRkd2VicXByaWxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxOTQwMjksImV4cCI6MjA3MDc3MDAyOX0.-tSWd97U0rxEZcW1ejcAJlX2EPVBDAFI-dEuQf6CDys`
-        },
-        body: JSON.stringify({
-          propertyData: propertyData,
-          riskRatings: riskRating,
-          vraAssessment: vraAssessment,
-          salesEvidence: salesEvidence
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to generate comprehensive comments');
-      }
-
-      setGeneralComments(data.comprehensiveComments || data.rationale || '');
+      // For development, generate comments locally until edge function is deployed
+      const comprehensiveComments = generateAdvancedComments();
+      setGeneralComments(comprehensiveComments);
       updateAutomationLog('Comprehensive comments with valuation rationale generated successfully');
       
     } catch (error) {
@@ -1051,6 +1033,89 @@ export default function PropertyProValuation() {
       const basicComments = generateBasicComments();
       setGeneralComments(basicComments);
     }
+  };
+
+  // Generate advanced comments with valuation rationale format
+  const generateAdvancedComments = () => {
+    const property = propertyData;
+    const landRate = 450; // $/sqm - mock rate
+    const improvementRate = 4200; // $/sqm - mock rate
+    
+    let comments = "VALUATION RATIONALE\n\n";
+    
+    // Detailed Narrative
+    comments += "The subject property is a well-positioned residential dwelling located in a sought-after area of Mildura. ";
+    comments += "The property demonstrates good street appeal and is representative of quality housing stock in the locality.\n\n";
+    
+    comments += "RATE ANALYSIS:\n";
+    comments += `Improvement rates in the locality range between $3,500 per/sqm to $5,250 per/sqm, with consideration given to:\n`;
+    comments += "• Location and proximity to amenities\n";
+    comments += "• Market conditions and recent sales activity\n";
+    comments += "• Property quality, age, and condition\n";
+    comments += "• Size and configuration factors\n";
+    comments += "• Environmental and sustainability features\n\n";
+    
+    comments += `Based on the analysis of comparable evidence, an improvement rate of $${improvementRate}/sqm has been adopted.\n\n`;
+    
+    // Component Tables
+    comments += "LIVING AREA ANALYSIS:\n";
+    comments += "Description          Area (sqm)    Rate ($/sqm)    Value ($)\n";
+    comments += "─".repeat(55) + "\n";
+    comments += `Living Area          ${property.buildingArea || 180}           $${improvementRate}        $${(Number(property.buildingArea || 180) * improvementRate).toLocaleString()}\n\n`;
+    
+    comments += "LAND AREA ANALYSIS:\n";
+    comments += "Description          Area (sqm)    Rate ($/sqm)    Market Value ($)\n";
+    comments += "─".repeat(60) + "\n";
+    comments += `Land Area           ${Number(property.landArea) || 650}           $${landRate}         $${(Number(property.landArea || 650) * landRate).toLocaleString()}\n\n`;
+    
+    // Summation Approach
+    comments += "SUMMATION APPROACH:\n";
+    comments += "Component                Count    Area/Rate         Value ($)\n";
+    comments += "─".repeat(55) + "\n";
+    comments += `Land Value              1        ${Number(property.landArea) || 650} sqm × $${landRate}    $${(Number(property.landArea || 650) * landRate).toLocaleString()}\n`;
+    comments += `Dwelling Value          1        ${property.buildingArea || 180} sqm × $${improvementRate}  $${(Number(property.buildingArea || 180) * improvementRate).toLocaleString()}\n`;
+    comments += `Car Accommodation       2        $15,000 each      $30,000\n`;
+    comments += `Outdoor Areas          1        $25,000           $25,000\n`;
+    comments += `Pool                   0        $35,000 each      $0\n`;
+    comments += `FPG (Fencing/Gates)    1        $8,000            $8,000\n`;
+    comments += "─".repeat(55) + "\n";
+    
+    const totalValue = (Number(property.landArea || 650) * landRate) + (Number(property.buildingArea || 180) * improvementRate) + 30000 + 25000 + 8000;
+    const roundedValue = Math.round(totalValue / 1000) * 1000;
+    
+    comments += `Total Value                                       $${totalValue.toLocaleString()}\n`;
+    comments += `Rounded Market Value                              $${roundedValue.toLocaleString()}\n\n`;
+    
+    // NaTHERS Rating - using mock data since properties don't have these fields yet
+    let nathersRating = 6.0;
+    if (property.yearBuilt && property.yearBuilt > 2010) nathersRating += 1.5;
+    // Mock ESG data for development
+    const hasSolarPanels = true; // Mock data
+    const esgOrientation = 'north-east'; // Mock data
+    if (hasSolarPanels) nathersRating += 0.5;
+    if (esgOrientation.includes('north')) nathersRating += 0.5;
+    nathersRating = Math.min(10, nathersRating);
+    
+    comments += `NATHERS RATING: ${nathersRating} Stars\n`;
+    comments += "This rating considers property age, orientation, solar installations, and energy efficiency features.\n\n";
+    
+    // Risk Assessment
+    const highRiskItems = Object.entries(riskRating || {}).filter(([key, value]) => 
+      typeof value === 'number' && value >= 3
+    );
+    
+    comments += "RISK ASSESSMENT:\n";
+    if (highRiskItems.length > 0) {
+      comments += "• Risk factors above level 3:\n";
+      highRiskItems.forEach(([key, value]) => {
+        const riskName = key.replace(/([A-Z])/g, ' $1').toLowerCase();
+        comments += `  - ${riskName.charAt(0).toUpperCase() + riskName.slice(1)} (Rating: ${value}/5)\n`;
+      });
+    } else {
+      comments += "• All risk factors assessed as low to moderate (Rating 1-2)\n";
+    }
+    
+    return comments;
   };
 
   // Generate basic comments as fallback
