@@ -1739,6 +1739,75 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_integrations: {
+        Row: {
+          api_endpoint: string | null
+          api_key_encrypted: string | null
+          compliance_notes: string | null
+          compliance_status: string
+          configuration: Json | null
+          connection_status: string
+          contact_email: string | null
+          contact_phone: string | null
+          contract_end_date: string | null
+          contract_start_date: string | null
+          created_at: string
+          data_flows: Json | null
+          id: string
+          institution_name: string
+          institution_type: string
+          last_sync: string | null
+          monthly_transactions: number | null
+          service_level: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          api_endpoint?: string | null
+          api_key_encrypted?: string | null
+          compliance_notes?: string | null
+          compliance_status?: string
+          configuration?: Json | null
+          connection_status?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          created_at?: string
+          data_flows?: Json | null
+          id?: string
+          institution_name: string
+          institution_type: string
+          last_sync?: string | null
+          monthly_transactions?: number | null
+          service_level?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          api_endpoint?: string | null
+          api_key_encrypted?: string | null
+          compliance_notes?: string | null
+          compliance_status?: string
+          configuration?: Json | null
+          connection_status?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          created_at?: string
+          data_flows?: Json | null
+          id?: string
+          institution_name?: string
+          institution_type?: string
+          last_sync?: string | null
+          monthly_transactions?: number | null
+          service_level?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       pool_investments: {
         Row: {
           actual_returns: number | null

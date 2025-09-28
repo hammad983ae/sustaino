@@ -26,7 +26,8 @@ import {
   FileText,
   PiggyBank,
   Users,
-  Construction
+  Construction,
+  Network
 } from 'lucide-react';
 import PropertyAssessmentForm from '@/components/PropertyAssessmentForm';
 import { PAFConfigProvider } from '@/contexts/PAFConfigContext';
@@ -477,6 +478,22 @@ const Index = () => {
                               <CardContent>
                                 <p className="text-sm text-slate-600">
                                   Comprehensive ESG assessment, climate risk analysis, and carbon farming projects
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </Link>
+
+                          <Link to="/integration-platform">
+                            <Card className="bg-gradient-to-br from-white to-cyan-50/50 border border-cyan-100 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105">
+                              <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-cyan-700">
+                                  <Network className="h-5 w-5" />
+                                  Integration Platform
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-slate-600">
+                                  Connect financial institutions, brokers, and professional services to the Powered Platform
                                 </p>
                               </CardContent>
                             </Card>

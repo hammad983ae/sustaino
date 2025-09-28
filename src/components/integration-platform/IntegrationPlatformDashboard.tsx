@@ -25,8 +25,8 @@ interface Integration {
   institution_name: string;
   institution_type: 'lender' | 'broker' | 'valuer' | 'professional_service';
   connection_status: 'connected' | 'pending' | 'failed' | 'inactive';
-  api_endpoint: string;
-  data_flows: string[];
+  api_endpoint?: string;
+  data_flows: any[];
   last_sync: string;
   monthly_transactions: number;
   compliance_status: 'compliant' | 'requires_review' | 'non_compliant';
@@ -44,13 +44,55 @@ export const IntegrationPlatformDashboard = () => {
 
   const fetchIntegrations = async () => {
     try {
-      const { data, error } = await supabase
-        .from('platform_integrations')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setIntegrations(data || []);
+      // Sample data for demonstration
+      const sampleData: Integration[] = [
+        {
+          id: '1',
+          institution_name: 'Commonwealth Bank',
+          institution_type: 'lender',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.commbank.com.au/v1',
+          data_flows: ['loan_applications', 'credit_assessments', 'property_valuations'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 1250,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '2',
+          institution_name: 'Mortgage Choice',
+          institution_type: 'broker',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.mortgagechoice.com.au/v2',
+          data_flows: ['broker_submissions', 'client_referrals', 'progress_updates'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 890,
+          compliance_status: 'compliant'
+        },
+        {
+          id: '3',
+          institution_name: 'Australian Property Institute',
+          institution_type: 'valuer',
+          connection_status: 'pending',
+          api_endpoint: 'https://api.api.org.au/valuations',
+          data_flows: ['valuation_requests', 'inspection_scheduling', 'report_delivery'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 0,
+          compliance_status: 'requires_review'
+        },
+        {
+          id: '4',
+          institution_name: 'LegalVision',
+          institution_type: 'professional_service',
+          connection_status: 'connected',
+          api_endpoint: 'https://api.legalvision.com.au/conveyancing',
+          data_flows: ['contract_reviews', 'settlement_coordination', 'compliance_checks'],
+          last_sync: new Date().toISOString(),
+          monthly_transactions: 345,
+          compliance_status: 'compliant'
+        }
+      ];
+      
+      setIntegrations(sampleData);
     } catch (error: any) {
       toast({
         title: "Error",
