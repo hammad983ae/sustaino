@@ -22,6 +22,7 @@ import { ReportDataProvider } from "@/contexts/ReportDataContext";
 import { BrandingProvider } from "@/contexts/BrandingContext";
 import { PropertyProvider } from "@/contexts/PropertyContext";
 import { ValuationProvider } from "@/contexts/ValuationContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
@@ -38,6 +39,7 @@ import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
 import ClientDemo from "./pages/ClientDemo";
+import Auth from "./pages/Auth";
 
 import AutomatedReport from "./pages/AutomatedReport";
 import ComprehensivePropertyValuation from "./components/ComprehensivePropertyValuation";
@@ -78,70 +80,247 @@ import ConceptsAndPlans from "./pages/ConceptsAndPlans";
 import DigitalContracts from "./pages/DigitalContracts";
 import Marketing from "./pages/Marketing";
 import { EPAT } from "./components/EPAT";
+import ProtectedRoute from "./components/ProtectedRoute";
+import GlobalHeader from "./components/GlobalHeader";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <BrandingProvider>
-      <PropertyProvider>
-        <ReportDataProvider>
-          <ValuationProvider>
-            <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/automated-valuation" element={<AutomatedValuation />} />
-                <Route path="/index" element={<Index />} />
-                <Route path="/report" element={<Report />} />
-                <Route path="/renewable-energy" element={<RenewableEnergyValuations />} />
-                <Route path="/property-assessment" element={<PropertyAssessment />} />
-        <Route path="/automated-report" element={<AutomatedReport propertyType="commercial" />} />
-                <Route path="/property-valuations" element={<PropertyValuations />} />
-                <Route path="/work-hub" element={<WorkHubPage />} />
-                <Route path="/white-label" element={<WhiteLabelConfig />} />
+    <AuthProvider>
+      <BrandingProvider>
+        <PropertyProvider>
+          <ReportDataProvider>
+            <ValuationProvider>
+              <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <GlobalHeader />
+                <Routes>
+                <Route path="/auth" element={
+                  <ProtectedRoute requireAuth={false}>
+                    <Auth />
+                  </ProtectedRoute>
+                } />
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <Index />
+                  </ProtectedRoute>
+                } />
+                <Route path="/automated-valuation" element={
+                  <ProtectedRoute>
+                    <AutomatedValuation />
+                  </ProtectedRoute>
+                } />
+                <Route path="/index" element={
+                  <ProtectedRoute>
+                    <Index />
+                  </ProtectedRoute>
+                } />
+                <Route path="/report" element={
+                  <ProtectedRoute>
+                    <Report />
+                  </ProtectedRoute>
+                } />
+                <Route path="/renewable-energy" element={
+                  <ProtectedRoute>
+                    <RenewableEnergyValuations />
+                  </ProtectedRoute>
+                } />
+                <Route path="/property-assessment" element={
+                  <ProtectedRoute>
+                    <PropertyAssessment />
+                  </ProtectedRoute>
+                } />
+        <Route path="/automated-report" element={
+          <ProtectedRoute>
+            <AutomatedReport propertyType="commercial" />
+          </ProtectedRoute>
+        } />
+                <Route path="/property-valuations" element={
+                  <ProtectedRoute>
+                    <PropertyValuations />
+                  </ProtectedRoute>
+                } />
+                <Route path="/work-hub" element={
+                  <ProtectedRoute>
+                    <WorkHubPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/white-label" element={
+                  <ProtectedRoute>
+                    <WhiteLabelConfig />
+                  </ProtectedRoute>
+                } />
                 <Route path="/client-demo" element={<ClientDemo />} />
                 
-                <Route path="/comprehensive-valuation" element={<ComprehensivePropertyValuation />} />
-                <Route path="/comprehensive-valuation-analysis" element={<ComprehensiveValuationAnalysis />} />
-                <Route path="/crypto-trading" element={<CryptoTradingDashboard />} />
-                <Route path="/costa-group-valuations" element={<CostaGroupValuationsPage />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/folder-manager" element={<AutomaticFolderManager />} />
-                <Route path="/esg-climate-assessment" element={<ESGClimateAssessment />} />
-                <Route path="/insurance-valuations" element={<InsuranceValuationsPage />} />
+                <Route path="/comprehensive-valuation" element={
+                  <ProtectedRoute>
+                    <ComprehensivePropertyValuation />
+                  </ProtectedRoute>
+                } />
+                <Route path="/comprehensive-valuation-analysis" element={
+                  <ProtectedRoute>
+                    <ComprehensiveValuationAnalysis />
+                  </ProtectedRoute>
+                } />
+                <Route path="/crypto-trading" element={
+                  <ProtectedRoute>
+                    <CryptoTradingDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/costa-group-valuations" element={
+                  <ProtectedRoute>
+                    <CostaGroupValuationsPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/folder-manager" element={
+                  <ProtectedRoute>
+                    <AutomaticFolderManager />
+                  </ProtectedRoute>
+                } />
+                <Route path="/esg-climate-assessment" element={
+                  <ProtectedRoute>
+                    <ESGClimateAssessment />
+                  </ProtectedRoute>
+                } />
+                <Route path="/insurance-valuations" element={
+                  <ProtectedRoute>
+                    <InsuranceValuationsPage />
+                  </ProtectedRoute>
+                } />
                 <Route path="/fullscreen-demo" element={<FullScreenDemo />} />
                 <Route path="/social-demo" element={<SocialDemo />} />
-                <Route path="/financial-reporting" element={<FinancialReporting />} />
-                <Route path="/rent-revision" element={<RentRevisionPage />} />
-                <Route path="/rent-determination" element={<RentDeterminationPage />} />
-                <Route path="/plant-equipment" element={<PlantAndEquipmentPage />} />
-                <Route path="/information-memorandum" element={<InformationMemorandum />} />
-                <Route path="/investment-platform" element={<InvestmentPlatformPage />} />
-                <Route path="/brick-by-brick" element={<BrickByBrickPage />} />
-                <Route path="/esg-strategy-analysis" element={<ESGStrategyAnalysis />} />
-                <Route path="/sam-platform" element={<SAMPlatform />} />
-                <Route path="/databases" element={<DataBases />} />
-                <Route path="/reality-sales" element={<RealitySales />} />
-                <Route path="/auction-sphere-pos" element={<AuctionSpherePOSPage />} />
-                <Route path="/advertising-platforms" element={<AdvertisingPlatforms />} />
-                <Route path="/digital-contracts" element={<DigitalContracts />} />
-                <Route path="/nasdaq-analysis" element={<NASDAQCompetitorAnalysis />} />
-                <Route path="/digital-valuation" element={<DigitalAssetValuationEngine />} />
-                <Route path="/platform-valuation" element={<ComprehensivePlatformValuation />} />
-                <Route path="/market-strategy" element={<SustanoSphereMarketStrategy />} />
-                <Route path="/sustano-sphere-digital-assets" element={<SustanoSphereDigitalAssetValuation />} />
-                <Route path="/lovable-partnership" element={<LovablePartnershipProposal />} />
+                <Route path="/financial-reporting" element={
+                  <ProtectedRoute>
+                    <FinancialReporting />
+                  </ProtectedRoute>
+                } />
+                <Route path="/rent-revision" element={
+                  <ProtectedRoute>
+                    <RentRevisionPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/rent-determination" element={
+                  <ProtectedRoute>
+                    <RentDeterminationPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/plant-equipment" element={
+                  <ProtectedRoute>
+                    <PlantAndEquipmentPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/information-memorandum" element={
+                  <ProtectedRoute>
+                    <InformationMemorandum />
+                  </ProtectedRoute>
+                } />
+                <Route path="/investment-platform" element={
+                  <ProtectedRoute>
+                    <InvestmentPlatformPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/brick-by-brick" element={
+                  <ProtectedRoute>
+                    <BrickByBrickPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/esg-strategy-analysis" element={
+                  <ProtectedRoute>
+                    <ESGStrategyAnalysis />
+                  </ProtectedRoute>
+                } />
+                <Route path="/sam-platform" element={
+                  <ProtectedRoute>
+                    <SAMPlatform />
+                  </ProtectedRoute>
+                } />
+                <Route path="/databases" element={
+                  <ProtectedRoute>
+                    <DataBases />
+                  </ProtectedRoute>
+                } />
+                <Route path="/reality-sales" element={
+                  <ProtectedRoute>
+                    <RealitySales />
+                  </ProtectedRoute>
+                } />
+                <Route path="/auction-sphere-pos" element={
+                  <ProtectedRoute>
+                    <AuctionSpherePOSPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/advertising-platforms" element={
+                  <ProtectedRoute>
+                    <AdvertisingPlatforms />
+                  </ProtectedRoute>
+                } />
+                <Route path="/digital-contracts" element={
+                  <ProtectedRoute>
+                    <DigitalContracts />
+                  </ProtectedRoute>
+                } />
+                <Route path="/nasdaq-analysis" element={
+                  <ProtectedRoute>
+                    <NASDAQCompetitorAnalysis />
+                  </ProtectedRoute>
+                } />
+                <Route path="/digital-valuation" element={
+                  <ProtectedRoute>
+                    <DigitalAssetValuationEngine />
+                  </ProtectedRoute>
+                } />
+                <Route path="/platform-valuation" element={
+                  <ProtectedRoute>
+                    <ComprehensivePlatformValuation />
+                  </ProtectedRoute>
+                } />
+                <Route path="/market-strategy" element={
+                  <ProtectedRoute>
+                    <SustanoSphereMarketStrategy />
+                  </ProtectedRoute>
+                } />
+                <Route path="/sustano-sphere-digital-assets" element={
+                  <ProtectedRoute>
+                    <SustanoSphereDigitalAssetValuation />
+                  </ProtectedRoute>
+                } />
+                <Route path="/lovable-partnership" element={
+                  <ProtectedRoute>
+                    <LovablePartnershipProposal />
+                  </ProtectedRoute>
+                } />
                 <Route path="/brochures" element={<BrochureViewer />} />
-                <Route path="/development-site-valuation" element={<DevelopmentSiteValuation />} />
-        <Route path="/mildura-valuation" element={<MilduraPropertyValuation />} />
-        <Route path="/mildura-report" element={<MilduraValuationReport />} />
+                <Route path="/development-site-valuation" element={
+                  <ProtectedRoute>
+                    <DevelopmentSiteValuation />
+                  </ProtectedRoute>
+                } />
+        <Route path="/mildura-valuation" element={
+          <ProtectedRoute>
+            <MilduraPropertyValuation />
+          </ProtectedRoute>
+        } />
+        <Route path="/mildura-report" element={
+          <ProtectedRoute>
+            <MilduraValuationReport />
+          </ProtectedRoute>
+        } />
                  <Route path="/social-media-assets" element={<SocialMediaAssets />} />
                  <Route path="/concepts-and-plans" element={<ConceptsAndPlans />} />
                  <Route path="/marketing" element={<Marketing />} />
-                 <Route path="/epat" element={<EPAT onBackToDashboard={() => window.location.href = '/dashboard'} />} />
+                 <Route path="/epat" element={
+                   <ProtectedRoute>
+                     <EPAT onBackToDashboard={() => window.location.href = '/dashboard'} />
+                   </ProtectedRoute>
+                 } />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancelled" element={<PaymentCancelled />} />
         <Route path="/ip-licensing" element={<IPLicensingAgreement />} />
@@ -150,14 +329,15 @@ const App = () => (
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-      </ValuationProvider>
-    </ReportDataProvider>
-  </PropertyProvider>
-</BrandingProvider>
-</QueryClientProvider>
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </ValuationProvider>
+        </ReportDataProvider>
+      </PropertyProvider>
+    </BrandingProvider>
+    </AuthProvider>
+  </QueryClientProvider>
 );
 
 export default App;

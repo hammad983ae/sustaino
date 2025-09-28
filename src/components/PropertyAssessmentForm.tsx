@@ -14,6 +14,7 @@ import JobSelector from './JobSelector';
 
 // Step Components
 import PropertyAddressForm from '@/components/PropertyAddressForm';
+import PropertyAddressFormWithDomain from '@/components/PropertyAddressFormWithDomain';
 import { AutofillAddressFields } from '@/components/AutofillAddressFields';
 import AddressConfirmation from '@/components/planning/AddressConfirmation';
 import RentalConfiguration from '@/components/RentalConfiguration';
@@ -71,7 +72,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     {
       title: "Property Address",
       subtitle: "Find and configure address to begin your valuation report",
-      component: <PropertyAddressForm />,
+      component: <PropertyAddressFormWithDomain />,
       validation: () => {
         const hasAddress = !!(addressData.propertyAddress || addressData.streetNumber);
         return hasAddress;
