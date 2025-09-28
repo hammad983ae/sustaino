@@ -360,31 +360,61 @@ class ApiClient {
     return this.refreshToken;
   }
 
-  // Domain API methods
+  // Domain API methods using Supabase functions
   async suggestProperties(terms: string, options: { pageSize?: number; channel?: string } = {}): Promise<any> {
-    const params = new URLSearchParams({
-      terms,
-      pageSize: String(options.pageSize || 20),
-      channel: options.channel || 'All'
-    });
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      const { data, error } = await supabase.functions.invoke('domain-integration', {
+        body: {
+          terms,
+          options: {
+            pageSize: options.pageSize || 20,
+            channel: options.channel || 'All'
+          }
+        }
+      });
 
-    const response = await this.request(`/domain/suggest?${params.toString()}`);
-    
-    if (response.success) {
-      return response;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Failed to fetch property suggestions');
+      }
+
+      if (data?.success) {
+        return data;
+      }
+
+      throw new Error(data?.error || 'Failed to fetch property suggestions');
+    } catch (error) {
+      console.error('Property suggestion error:', error);
+      throw error;
     }
-
-    throw new Error(response.message || 'Failed to fetch property suggestions');
   }
 
   async getPropertyDetails(domainId: string): Promise<any> {
-    const response = await this.request(`/domain/property/${domainId}`);
-    
-    if (response.success) {
-      return response;
-    }
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      const { data, error } = await supabase.functions.invoke('domain-integration', {
+        body: {
+          propertyId: domainId
+        }
+      });
 
-    throw new Error(response.message || 'Failed to fetch property details');
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Failed to fetch property details');
+      }
+
+      if (data?.success) {
+        return data;
+      }
+
+      throw new Error(data?.error || 'Failed to fetch property details');
+    } catch (error) {
+      console.error('Property details error:', error);
+      throw error;
+    }
   }
 
   async saveProperty(propertyData: {

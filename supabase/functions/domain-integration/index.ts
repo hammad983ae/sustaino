@@ -243,6 +243,51 @@ Deno.serve(async (req) => {
 
     if (req.method === 'POST') {
       const body = await req.json()
+      
+      // Handle direct function calls (without path routing)
+      if (!path || path === '/') {
+        if (body.terms) {
+          // Property suggestions
+          const { terms, options = {} } = body
+          const params = new URLSearchParams({
+            terms: terms,
+            pageSize: String(options.pageSize || 20),
+            channel: options.channel || 'All'
+          })
+
+          const response = await domainRequest(`/v1/properties/_suggest?${params.toString()}`, token, config)
+          
+          // Transform response to match expected format
+          const transformedData = response.map((property: any) => ({
+            id: property.id,
+            address: property.address,
+            addressComponents: property.addressComponents,
+            relativeScore: property.relativeScore,
+            normalized: {
+              unitNumber: property.addressComponents?.unitNumber || '',
+              streetNumber: property.addressComponents?.streetNumber || '',
+              streetName: property.addressComponents?.streetName || '',
+              streetType: property.addressComponents?.streetType || '',
+              streetTypeLong: property.addressComponents?.streetTypeLong || '',
+              suburb: property.addressComponents?.suburb || '',
+              postcode: property.addressComponents?.postcode || property.addressComponents?.postCode || '',
+              state: property.addressComponents?.state || '',
+              fullAddress: property.address
+            }
+          }))
+          
+          return new Response(JSON.stringify({ success: true, data: transformedData }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        } else if (body.propertyId) {
+          // Property details
+          const response = await domainRequest(`/v1/properties/${body.propertyId}`, token, config)
+          
+          return new Response(JSON.stringify({ success: true, data: response }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        }
+      }
 
       switch (path) {
         case '/proxy': {
@@ -255,6 +300,51 @@ Deno.serve(async (req) => {
           })
           
           return new Response(JSON.stringify(response), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        }
+
+        case '/suggest': {
+          // Property suggestions endpoint
+          const { terms, options = {} } = body
+          const params = new URLSearchParams({
+            terms: terms,
+            pageSize: String(options.pageSize || 20),
+            channel: options.channel || 'All'
+          })
+
+          const response = await domainRequest(`/v1/properties/_suggest?${params.toString()}`, token, config)
+          
+          // Transform response to match expected format
+          const transformedData = response.map((property: any) => ({
+            id: property.id,
+            address: property.address,
+            addressComponents: property.addressComponents,
+            relativeScore: property.relativeScore,
+            normalized: {
+              unitNumber: property.addressComponents?.unitNumber || '',
+              streetNumber: property.addressComponents?.streetNumber || '',
+              streetName: property.addressComponents?.streetName || '',
+              streetType: property.addressComponents?.streetType || '',
+              streetTypeLong: property.addressComponents?.streetTypeLong || '',
+              suburb: property.addressComponents?.suburb || '',
+              postcode: property.addressComponents?.postcode || property.addressComponents?.postCode || '',
+              state: property.addressComponents?.state || '',
+              fullAddress: property.address
+            }
+          }))
+          
+          return new Response(JSON.stringify({ success: true, data: transformedData }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        }
+
+        case '/property-details': {
+          // Get property details by ID
+          const { propertyId } = body
+          const response = await domainRequest(`/v1/properties/${propertyId}`, token, config)
+          
+          return new Response(JSON.stringify({ success: true, data: response }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           })
         }

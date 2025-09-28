@@ -44,3 +44,6 @@ verify_jwt = false
 
 [functions.generate-isfv-report]
 verify_jwt = false
+
+[functions.domain-integration]
+verify_jwt = true
