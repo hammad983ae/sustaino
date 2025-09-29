@@ -1591,7 +1591,14 @@ export default function GenerateMockReports() {
     setPafAmending(true);
     
     try {
-      const result = await runAutomatedAmendment(pafReportData.mockData, pafContradictions);
+      // Create a proper ContradictionResult object
+      const contradictionResult = {
+        hasContradictions: true,
+        contradictions: pafContradictions.map(c => c.issue || c),
+        warnings: []
+      };
+      
+      const result = await runAutomatedAmendment(pafReportData.mockData, contradictionResult);
       const amendments = result.amendments || [];
       setPafAmendments(amendments);
       
@@ -1616,7 +1623,14 @@ export default function GenerateMockReports() {
     setIcvAmending(true);
     
     try {
-      const result = await runAutomatedAmendment(icvReportData.mockData, icvContradictions);
+      // Create a proper ContradictionResult object
+      const contradictionResult = {
+        hasContradictions: true,
+        contradictions: icvContradictions.map(c => c.issue || c),
+        warnings: []
+      };
+      
+      const result = await runAutomatedAmendment(icvReportData.mockData, contradictionResult);
       const amendments = result.amendments || [];
       setIcvAmendments(amendments);
       
