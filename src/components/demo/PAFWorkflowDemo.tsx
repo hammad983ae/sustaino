@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ContradictionChecker } from '@/components/reports/ContradictionChecker';
+import { ContradictionAmender } from '@/components/reports/ContradictionAmender';
 import { 
   FileText, 
   MapPin, 
@@ -17,12 +19,16 @@ import {
   Home,
   Scale,
   Camera,
-  Users
+  Users,
+  Eye,
+  AlertTriangle
 } from 'lucide-react';
 
 export const PAFWorkflowDemo = () => {
   const [activeSection, setActiveSection] = useState('overview');
   const [completedSections, setCompletedSections] = useState(new Set());
+  const [viewingReport, setViewingReport] = useState(false);
+  const [showContradictionChecker, setShowContradictionChecker] = useState(false);
 
   const pafSections = [
     {
@@ -78,7 +84,7 @@ export const PAFWorkflowDemo = () => {
       description: 'Property condition and improvement details',
       icon: Camera,
       required: true,
-      estimated_time: '45 min',
+      estimated_time: '15 min',
       example_data: {
         condition: 'Good overall condition',
         improvements: 'Recent kitchen renovation',
@@ -93,7 +99,7 @@ export const PAFWorkflowDemo = () => {
       description: 'Environmental, social, and governance factors',
       icon: Leaf,
       required: true,
-      estimated_time: '15 min',
+      estimated_time: '8 min',
       example_data: {
         energy_rating: '7.5 stars',
         environmental_score: '85%',
@@ -108,7 +114,7 @@ export const PAFWorkflowDemo = () => {
       description: 'Risk factors and mitigation strategies',
       icon: Shield,
       required: true,
-      estimated_time: '10 min',
+      estimated_time: '5 min',
       example_data: {
         flood_risk: 'Low risk zone',
         bushfire_risk: 'Minimal risk',
@@ -123,7 +129,7 @@ export const PAFWorkflowDemo = () => {
       description: 'Methodology and final valuation conclusion',
       icon: Building,
       required: true,
-      estimated_time: '20 min',
+      estimated_time: '8 min',
       example_data: {
         primary_method: 'Direct Comparison',
         secondary_method: 'Cost Approach',
@@ -188,9 +194,11 @@ export const PAFWorkflowDemo = () => {
         </div>
 
         <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="overview">Sections Overview</TabsTrigger>
             <TabsTrigger value="workflow">Step-by-Step Workflow</TabsTrigger>
+            <TabsTrigger value="report">View Report</TabsTrigger>
+            <TabsTrigger value="quality">Quality Check</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
@@ -318,20 +326,206 @@ export const PAFWorkflowDemo = () => {
                       <p className="text-sm">✓ Ready for client delivery</p>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Next Actions</h4>
-                      <Button className="w-full mb-2" size="sm">
-                        <FileText className="h-4 w-4 mr-2" />
-                        Generate Final Report
+                      <h4 className="font-semibold mb-2">Actions</h4>
+                      <Button 
+                        className="w-full mb-2" 
+                        size="sm"
+                        onClick={() => setActiveSection('report')}
+                      >
+                        <Eye className="h-4 w-4 mr-2" />
+                        View Report
                       </Button>
-                      <Button variant="outline" className="w-full" size="sm">
-                        <Users className="h-4 w-4 mr-2" />
-                        Send to Client
+                      <Button 
+                        variant="outline" 
+                        className="w-full" 
+                        size="sm"
+                        onClick={() => setActiveSection('quality')}
+                      >
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        Quality Check
                       </Button>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          <TabsContent value="report" className="space-y-6">
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    PAF Report - Property Assessment Form
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {/* Executive Summary */}
+                    <div className="border-b pb-4">
+                      <h3 className="text-lg font-semibold mb-3">Executive Summary</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground">Property Address</p>
+                          <p className="font-medium">456 Bourke Street, Melbourne VIC 3000</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Market Value</p>
+                          <p className="text-xl font-bold text-green-600">$1,320,000</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Property Type</p>
+                          <p className="font-medium">Residential House</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Effective Date</p>
+                          <p className="font-medium">{new Date().toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Report Sections */}
+                    {pafSections.map((section) => (
+                      <div key={section.id} className="border-b pb-4 last:border-b-0">
+                        <div className="flex items-center gap-2 mb-3">
+                          <section.icon className="h-5 w-5 text-primary" />
+                          <h3 className="text-lg font-semibold">{section.title}</h3>
+                          {completedSections.has(section.id) && (
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                        
+                        {completedSections.has(section.id) ? (
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <div className="grid md:grid-cols-2 gap-3">
+                              {Object.entries(section.example_data).map(([key, value]) => (
+                                <div key={key} className="flex justify-between">
+                                  <span className="text-sm text-muted-foreground capitalize">
+                                    {key.replace(/_/g, ' ')}:
+                                  </span>
+                                  <span className="text-sm font-medium">{value}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground italic">
+                            Section pending completion
+                          </p>
+                        )}
+                      </div>
+                    ))}
+
+                    {completedSections.size === pafSections.length && (
+                      <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h4 className="font-semibold text-green-700 mb-2">Valuation Conclusion</h4>
+                        <p className="text-sm mb-3">
+                          Based on comprehensive analysis of all property factors, market conditions, 
+                          and comparable sales, the market value of the subject property is assessed at 
+                          $1,320,000 as at {new Date().toLocaleDateString()}.
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <Badge className="bg-green-500">Certified Valuation</Badge>
+                          <Badge variant="outline">95% Confidence</Badge>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="quality" className="space-y-6">
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5" />
+                    Quality Assurance & Contradiction Checking
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    Automated quality checking and contradiction detection for PAF reports.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <Button 
+                      onClick={() => setShowContradictionChecker(!showContradictionChecker)}
+                      variant={showContradictionChecker ? "default" : "outline"}
+                      className="w-full"
+                    >
+                      <AlertTriangle className="h-4 w-4 mr-2" />
+                      {showContradictionChecker ? 'Hide' : 'Show'} Contradiction Checker Demo
+                    </Button>
+                    
+                    {showContradictionChecker && (
+                      <div className="space-y-6">
+                        <ContradictionChecker
+                          reportData={{
+                            property_address: "456 Bourke Street, Melbourne VIC 3000",
+                            market_value: 1320000,
+                            property_type: "Residential House",
+                            land_area: "650 sqm",
+                            building_area: "280 sqm",
+                            bedrooms: 4,
+                            bathrooms: 3,
+                            condition: "Good overall condition",
+                            market_trend: "Stable with moderate growth",
+                            comparable_sales: "8 sales in past 12 months",
+                            median_price: 1180000,
+                            energy_rating: "7.5 stars",
+                            zoning: "Residential 1 Zone (R1Z)"
+                          }}
+                          reportType="PAF"
+                        />
+                        
+                        <ContradictionAmender
+                          reportData={{
+                            valuation: { marketValue: 1320000 },
+                            propertyDetails: { 
+                              salePrice: 1320000,
+                              condition: "Good overall condition"
+                            },
+                            rental: { weeklyRent: 800 },
+                            inspectionDate: new Date().toISOString(),
+                            valuationDate: new Date().toISOString()
+                          }}
+                          contradictions={[
+                            {
+                              id: "1",
+                              type: "data_inconsistency",
+                              severity: "medium",
+                              description: "Market value ($1,320,000) significantly above median price ($1,180,000) for comparable properties",
+                              field: "market_value",
+                              suggested_fix: "Review comparable sales analysis and justify premium",
+                              confidence: 0.8
+                            },
+                            {
+                              id: "2", 
+                              type: "logical_conflict",
+                              severity: "low",
+                              description: "High energy rating (7.5 stars) not reflected in ESG assessment premiums",
+                              field: "energy_rating",
+                              suggested_fix: "Apply sustainability premium to valuation",
+                              confidence: 0.65
+                            }
+                          ]}
+                          onAmendmentSaved={(amendments) => {
+                            console.log('Amendments saved:', amendments);
+                          }}
+                          onReportUpdated={(updatedData) => {
+                            console.log('Report updated:', updatedData);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>

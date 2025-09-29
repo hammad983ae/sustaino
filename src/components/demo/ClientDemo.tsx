@@ -31,7 +31,7 @@ export const ClientDemo = () => {
     paf: {
       title: 'PAF (Full Assessment)',
       description: 'Comprehensive property assessment workflow',
-      time: '~115 minutes',
+      time: '~35 minutes',
       accuracy: '99% confidence',
       automation: '70% automated',
       use_cases: ['Mortgage valuations', 'Legal disputes', 'Insurance claims', 'Investment analysis']
@@ -189,7 +189,7 @@ export const ClientDemo = () => {
                           <Badge variant="outline" className="text-yellow-700 border-yellow-300">~9 seconds</Badge>
                         </td>
                         <td className="p-3 text-center">
-                          <Badge variant="outline" className="text-blue-700 border-blue-300">~115 minutes</Badge>
+                          <Badge variant="outline" className="text-blue-700 border-blue-300">~35 minutes</Badge>
                         </td>
                       </tr>
                       <tr className="border-b">
