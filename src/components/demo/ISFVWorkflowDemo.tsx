@@ -13,7 +13,8 @@ import {
   Clock,
   ArrowRight,
   Zap,
-  Target
+  Target,
+  BarChart3
 } from 'lucide-react';
 
 export const ISFVWorkflowDemo = () => {
@@ -71,9 +72,9 @@ export const ISFVWorkflowDemo = () => {
       title: 'Professional Review',
       description: 'Valuer verification and sign-off',
       icon: CheckCircle,
-      status: 'pending',
-      time: '15 min',
-      data: 'Awaiting licensed valuer approval'
+      status: 'completed',
+      time: '0.5s',
+      data: 'Licensed valuer approval completed'
     }
   ];
 
@@ -83,7 +84,7 @@ export const ISFVWorkflowDemo = () => {
     
     const interval = setInterval(() => {
       setCurrentStep(prev => {
-        if (prev >= automationSteps.length - 2) {
+        if (prev >= automationSteps.length - 1) {
           clearInterval(interval);
           setIsRunning(false);
           return prev;
@@ -184,7 +185,7 @@ export const ISFVWorkflowDemo = () => {
           })}
         </div>
 
-        {currentStep >= automationSteps.length - 2 && (
+        {currentStep >= automationSteps.length - 1 && (
           <Card className="mt-6 border-green-200 bg-green-50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-green-700">
@@ -193,25 +194,95 @@ export const ISFVWorkflowDemo = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold mb-2">Valuation Result</h4>
-                  <p className="text-2xl font-bold text-green-700">$1,250,000</p>
-                  <p className="text-sm text-muted-foreground">95% confidence interval: ±5%</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">Next Steps</h4>
-                  <div className="space-y-1 text-sm">
-                    <p>• Professional valuer review required</p>
-                    <p>• Digital signature and certification</p>
-                    <p>• Final report delivery to client</p>
+              <div className="space-y-6">
+                {/* Executive Summary */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Valuation Result</h4>
+                    <p className="text-2xl font-bold text-green-700">$1,250,000</p>
+                    <p className="text-sm text-muted-foreground">95% confidence interval: ±5%</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Report Details</h4>
+                    <div className="space-y-1 text-sm">
+                      <p><strong>Property:</strong> 123 Collins Street, Melbourne VIC 3000</p>
+                      <p><strong>Report Type:</strong> Instant Statutory Form Valuation (ISFV)</p>
+                      <p><strong>Effective Date:</strong> {new Date().toLocaleDateString()}</p>
+                      <p><strong>Valuer:</strong> Licensed Professional Valuer</p>
+                    </div>
                   </div>
                 </div>
+
+                {/* Report Sections */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold border-b pb-2">Report Sections</h4>
+                  
+                  <div className="grid gap-4">
+                    <div className="bg-white p-4 rounded-lg border">
+                      <h5 className="font-medium mb-2 flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        Property Identification
+                      </h5>
+                      <div className="text-sm space-y-1">
+                        <p><strong>Address:</strong> 123 Collins Street, Melbourne VIC 3000</p>
+                        <p><strong>Property Type:</strong> Residential House</p>
+                        <p><strong>Land Area:</strong> 650 sqm</p>
+                        <p><strong>Building Area:</strong> 280 sqm</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-lg border">
+                      <h5 className="font-medium mb-2 flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4" />
+                        Market Analysis
+                      </h5>
+                      <div className="text-sm space-y-1">
+                        <p><strong>Market Trend:</strong> Stable with moderate growth</p>
+                        <p><strong>Comparable Sales:</strong> 8 recent sales analyzed</p>
+                        <p><strong>Market Value Range:</strong> $1,187,500 - $1,312,500</p>
+                        <p><strong>Confidence Level:</strong> 95%</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-lg border">
+                      <h5 className="font-medium mb-2 flex items-center gap-2">
+                        <Target className="h-4 w-4" />
+                        Valuation Conclusion
+                      </h5>
+                      <div className="text-sm space-y-1">
+                        <p><strong>Market Value:</strong> $1,250,000</p>
+                        <p><strong>Valuation Method:</strong> Automated Comparative Market Analysis</p>
+                        <p><strong>Effective Date:</strong> {new Date().toLocaleDateString()}</p>
+                        <p><strong>Purpose:</strong> Statutory Form Valuation</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-lg border">
+                      <h5 className="font-medium mb-2 flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4" />
+                        Professional Certification
+                      </h5>
+                      <div className="text-sm space-y-1">
+                        <p><strong>Valuer:</strong> Licensed Professional Valuer (API Certified)</p>
+                        <p><strong>Registration:</strong> VIC12345</p>
+                        <p><strong>Certification Date:</strong> {new Date().toLocaleDateString()}</p>
+                        <p><strong>Digital Signature:</strong> ✓ Verified</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-4">
+                  <Button className="flex-1" variant="default">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Download Full Report
+                  </Button>
+                  <Button className="flex-1" variant="outline">
+                    <ArrowRight className="h-4 w-4 mr-2" />
+                    Continue to Professional Tab
+                  </Button>
+                </div>
               </div>
-              <Button className="mt-4 w-full" variant="outline">
-                <ArrowRight className="h-4 w-4 mr-2" />
-                Continue to Professional Tab
-              </Button>
             </CardContent>
           </Card>
         )}
