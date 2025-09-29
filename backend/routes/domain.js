@@ -68,7 +68,15 @@ router.get('/property/:id', async (req, res) => {
       });
     }
     
+    console.log('Domain API: Attempting to fetch property details for ID:', id);
+    
     const propertyDetails = await domainAPI.getPropertyDetails(id);
+    
+    console.log('Backend: Domain API property details response:', {
+      id,
+      hasPhotos: propertyDetails?.photos ? `${propertyDetails.photos.length} photos` : 'no photos',
+      photos: propertyDetails?.photos
+    });
     
     res.json({
       success: true,
@@ -78,10 +86,21 @@ router.get('/property/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Domain property details error:', error);
-    res.status(500).json({
+    console.error('Error details:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data
+    });
+    
+    // Return a more specific error response
+    const statusCode = error.response?.status || 500;
+    const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch property details';
+    
+    res.status(statusCode).json({
       success: false,
-      message: 'Failed to fetch property details',
-      error: error.message
+      message: errorMessage,
+      error: error.message,
+      details: error.response?.data
     });
   }
 });
@@ -104,7 +123,35 @@ router.post('/property/save', [
       });
     }
     
-    const { domainId, address, addressComponents, jobId } = req.body;
+    const { domainId, address, addressComponents, jobId, propertyDetails } = req.body;
+    
+    // Extract the actual property data from the nested structure
+    const actualPropertyData = propertyDetails?.property || propertyDetails?.data || propertyDetails;
+    
+    console.log('Backend: Saving property with data:', {
+      domainId,
+      address,
+      addressComponents,
+      jobId,
+      propertyDetails: propertyDetails ? 'present' : 'null',
+      photos: actualPropertyData?.photos ? `${actualPropertyData.photos.length} photos` : 'no photos'
+    });
+    
+    console.log('Backend: Full propertyDetails object received:', JSON.stringify(propertyDetails, null, 2));
+    
+    console.log('Backend: actualPropertyData structure:', {
+      hasData: !!actualPropertyData,
+      hasPhotos: !!actualPropertyData?.photos,
+      photosLength: actualPropertyData?.photos?.length || 0,
+      keys: actualPropertyData ? Object.keys(actualPropertyData) : []
+    });
+    
+    if (actualPropertyData?.photos) {
+      console.log('Backend: Property photos from Domain API:', actualPropertyData.photos);
+      console.log('Backend: First photo example:', actualPropertyData.photos[0]);
+    } else {
+      console.log('Backend: No photos in property data');
+    }
     
     // Check if property already exists
     let property = await Property.findOne({
@@ -116,6 +163,7 @@ router.post('/property/save', [
     if (property) {
       // Update existing property with Domain data
       property.domainId = domainId;
+      property.domainApiResponse = propertyDetails; // Save complete API response
       property.address = {
         streetNumber: addressComponents.streetNumber || '',
         streetName: addressComponents.streetName || '',
@@ -128,12 +176,65 @@ router.post('/property/save', [
         fullAddress: address
       };
       
+      // Update with detailed property data if available
+      if (actualPropertyData) {
+        property.details = {
+          propertyType: actualPropertyData.propertyType || 'residential',
+          landArea: {
+            value: actualPropertyData.areaSize || 0,
+            unit: 'sqm'
+          },
+          buildingArea: {
+            value: actualPropertyData.internalArea || 0,
+            unit: 'sqm'
+          },
+          yearBuilt: actualPropertyData.created ? new Date(actualPropertyData.created).getFullYear() : null,
+          bedrooms: actualPropertyData.bedrooms || 0,
+          bathrooms: actualPropertyData.bathrooms || 0,
+          carSpaces: actualPropertyData.carSpaces || 0,
+          zoning: actualPropertyData.zone || '',
+          features: actualPropertyData.features || [],
+          lotNumber: actualPropertyData.lotNumber || '',
+          planNumber: actualPropertyData.planNumber || '',
+          flatNumber: actualPropertyData.flatNumber || '',
+          sectionNumber: actualPropertyData.sectionNumber || '',
+          storeys: actualPropertyData.storeys || '',
+          landUse: actualPropertyData.landUse || '',
+          propertyCategory: actualPropertyData.propertyCategory || '',
+          title: actualPropertyData.title || '',
+          isResidential: actualPropertyData.isResidential || false
+        };
+        
+        // Add coordinates if available
+        if (actualPropertyData.addressCoordinate) {
+          property.address.coordinates = {
+            latitude: actualPropertyData.addressCoordinate.lat,
+            longitude: actualPropertyData.addressCoordinate.lon
+          };
+        }
+        
+        // Add property photos if available
+        if (actualPropertyData?.photos && Array.isArray(actualPropertyData.photos)) {
+          console.log('Backend: Adding photos to existing property:', actualPropertyData.photos);
+          property.photos = actualPropertyData.photos.map(photo => ({
+            url: photo.fullUrl || photo.url || photo.imageUrl || '',
+            caption: photo.caption || photo.description || '',
+            type: photo.imageType || photo.type || 'exterior',
+            uploadedAt: photo.date ? new Date(photo.date) : new Date()
+          }));
+          console.log('Backend: Mapped photos for existing property:', property.photos);
+        } else {
+          console.log('Backend: No photos to add to existing property');
+        }
+      }
+      
       await property.save();
     } else {
       // Create new property
       property = new Property({
         user: req.user._id,
         domainId: domainId,
+        domainApiResponse: propertyDetails, // Save complete API response
         address: {
           streetNumber: addressComponents.streetNumber || '',
           streetName: addressComponents.streetName || '',
@@ -143,13 +244,53 @@ router.post('/property/save', [
           state: addressComponents.state || '',
           postcode: addressComponents.postcode || addressComponents.postCode || '',
           country: 'Australia',
-          fullAddress: address
+          fullAddress: address,
+          coordinates: actualPropertyData?.addressCoordinate ? {
+            latitude: actualPropertyData.addressCoordinate.lat,
+            longitude: actualPropertyData.addressCoordinate.lon
+          } : undefined
         },
         details: {
-          propertyType: 'residential', // Default, can be updated later
-          landArea: { value: 0, unit: 'sqm' },
-          buildingArea: { value: 0, unit: 'sqm' }
-        }
+          propertyType: actualPropertyData?.propertyType || 'residential',
+          landArea: {
+            value: actualPropertyData?.areaSize || 0,
+            unit: 'sqm'
+          },
+          buildingArea: {
+            value: actualPropertyData?.internalArea || 0,
+            unit: 'sqm'
+          },
+          yearBuilt: actualPropertyData?.created ? new Date(actualPropertyData.created).getFullYear() : null,
+          bedrooms: actualPropertyData?.bedrooms || 0,
+          bathrooms: actualPropertyData?.bathrooms || 0,
+          carSpaces: actualPropertyData?.carSpaces || 0,
+          zoning: actualPropertyData?.zone || '',
+          features: actualPropertyData?.features || [],
+          lotNumber: actualPropertyData?.lotNumber || '',
+          planNumber: actualPropertyData?.planNumber || '',
+          flatNumber: actualPropertyData?.flatNumber || '',
+          sectionNumber: actualPropertyData?.sectionNumber || '',
+          storeys: actualPropertyData?.storeys || '',
+          landUse: actualPropertyData?.landUse || '',
+          propertyCategory: actualPropertyData?.propertyCategory || '',
+          title: actualPropertyData?.title || '',
+          isResidential: actualPropertyData?.isResidential || false
+        },
+        photos: actualPropertyData?.photos && Array.isArray(actualPropertyData.photos) ? 
+          (() => {
+            console.log('Backend: Adding photos to new property:', actualPropertyData.photos);
+            const mappedPhotos = actualPropertyData.photos.map(photo => ({
+              url: photo.fullUrl || photo.url || photo.imageUrl || '',
+              caption: photo.caption || photo.description || '',
+              type: photo.imageType || photo.type || 'exterior',
+              uploadedAt: photo.date ? new Date(photo.date) : new Date()
+            }));
+            console.log('Backend: Mapped photos for new property:', mappedPhotos);
+            return mappedPhotos;
+          })() : (() => {
+            console.log('Backend: No photos to add to new property');
+            return [];
+          })()
       });
       
       await property.save();
@@ -157,6 +298,10 @@ router.post('/property/save', [
     
     // Populate the property for response
     await property.populate('user', 'firstName lastName email');
+    
+    console.log('Backend: Property saved successfully:', property._id);
+    console.log('Backend: Property address:', property.address);
+    console.log('Backend: Property photos after save:', property.photos);
     
     res.status(201).json({
       success: true,
@@ -166,14 +311,16 @@ router.post('/property/save', [
         jobId: jobId || null
       }
     });
-  } catch (error) {
-    console.error('Domain property save error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to save property',
-      error: error.message
-    });
-  }
+      } catch (error) {
+        console.error('Domain property save error:', error);
+        console.error('Domain property save error stack:', error.stack);
+        res.status(500).json({
+          success: false,
+          message: 'Failed to save property',
+          error: error.message,
+          stack: error.stack
+        });
+      }
 });
 
 // @route   GET /api/domain/listings

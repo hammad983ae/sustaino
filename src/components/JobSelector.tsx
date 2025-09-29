@@ -40,9 +40,9 @@ const JobSelector: React.FC<JobSelectorProps> = ({ onStartFresh, onLoadJob, onCr
     }
   };
 
-  const handleJobCreated = (jobId: string) => {
+  const handleJobCreated = (jobId: string, propertyId?: string) => {
     setShowJobCreation(false);
-    onCreateNewJob(jobId);
+    onCreateNewJob(jobId, propertyId);
   };
 
   const getStatusColor = (status: string) => {

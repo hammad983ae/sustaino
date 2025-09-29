@@ -102,22 +102,28 @@ const App = () => (
               <Toaster />
               <Sonner />
               <BrowserRouter>
-                <GlobalHeader />
                 <Routes>
                 <Route path="/auth" element={
                   <ProtectedRoute requireAuth={false}>
                     <Auth />
                   </ProtectedRoute>
                 } />
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <GlobalHeader />
+                    <Index />
+                  </ProtectedRoute>
+                } />
                 <Route path="/automated-valuation" element={<AutomatedValuation />} />
                 <Route path="/index" element={
                   <ProtectedRoute>
+                    <GlobalHeader />
                     <Index />
                   </ProtectedRoute>
                 } />
                 <Route path="/report" element={
                   <ProtectedRoute>
+                    <GlobalHeader />
                     <Report />
                   </ProtectedRoute>
                 } />
@@ -128,6 +134,7 @@ const App = () => (
                 } />
                 <Route path="/property-assessment" element={
                   <ProtectedRoute>
+                    <GlobalHeader />
                     <PropertyAssessment />
                   </ProtectedRoute>
                 } />

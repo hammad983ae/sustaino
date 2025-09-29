@@ -433,7 +433,9 @@ export const ReportDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     const handleDataRefresh = async (event: CustomEvent) => {
       const { data } = event.detail;
+      console.log('ReportDataContext received dataRefreshed event:', data);
       if (data?.reportData) {
+        console.log('Updating report data:', data.reportData);
         setReportData(data.reportData);
       }
     };

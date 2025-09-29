@@ -61,7 +61,9 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     const handleDataRefresh = async (event: CustomEvent) => {
       const { data } = event.detail;
+      console.log('PropertyContext received dataRefreshed event:', data);
       if (data?.addressData) {
+        console.log('Updating address data:', data.addressData);
         setAddressData(prev => ({ ...prev, ...data.addressData }));
       }
     };

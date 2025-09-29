@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
 import { Camera, Upload, Save } from 'lucide-react';
+import { useProperty } from '@/contexts/PropertyContext';
+import { apiClient } from '@/lib/api';
 
 interface PropertyPhotosProps {
   propertyAddress: string;
@@ -14,6 +16,7 @@ const PropertyPhotos = ({ propertyAddress }: PropertyPhotosProps) => {
   const { reportData, updateReportData } = useReportData();
   const { saveData, loadData, isSaving } = useUniversalSave('PropertyPhotos');
   const [localPhotos, setLocalPhotos] = useState<any[]>([]);
+  const [jobPropertyPhotos, setJobPropertyPhotos] = useState<any[]>([]);
   
   // Default photos if no uploaded photos
   const defaultPhotos = [
@@ -82,15 +85,89 @@ const PropertyPhotos = ({ propertyAddress }: PropertyPhotosProps) => {
     });
   }, [loadData]);
 
+  // Load property photos from job data
+  useEffect(() => {
+    const loadJobPhotos = async () => {
+      try {
+        // Get current job ID from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobId = urlParams.get('jobId') || localStorage.getItem('currentJobId');
+        
+        if (jobId) {
+          console.log('PropertyPhotos: Loading job photos for jobId:', jobId);
+          
+          const response = await apiClient.getJob(jobId);
+          if (response.success && response.data.job.property?.photos) {
+            console.log('PropertyPhotos: Found property photos:', response.data.job.property.photos);
+            setJobPropertyPhotos(response.data.job.property.photos);
+          } else {
+            console.log('PropertyPhotos: No property photos found in job');
+            console.log('PropertyPhotos: Job response:', response);
+            console.log('PropertyPhotos: Job property:', response.data?.job?.property);
+          }
+        }
+      } catch (error) {
+        console.error('PropertyPhotos: Error loading job photos:', error);
+      }
+    };
+    
+    loadJobPhotos();
+  }, []);
+
+  // Also listen for job loaded events
+  useEffect(() => {
+    const handleJobLoaded = (event: CustomEvent) => {
+      console.log('PropertyPhotos: Job loaded event received:', event.detail);
+      // Reload photos when job is loaded
+      const loadJobPhotos = async () => {
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const jobId = urlParams.get('jobId') || localStorage.getItem('currentJobId');
+          
+          if (jobId) {
+            console.log('PropertyPhotos: Reloading job photos for jobId:', jobId);
+            
+            const response = await apiClient.getJob(jobId);
+            if (response.success && response.data.job.property?.photos) {
+              console.log('PropertyPhotos: Found property photos on reload:', response.data.job.property.photos);
+              setJobPropertyPhotos(response.data.job.property.photos);
+            }
+          }
+        } catch (error) {
+          console.error('PropertyPhotos: Error reloading job photos:', error);
+        }
+      };
+      
+      loadJobPhotos();
+    };
+
+    window.addEventListener('jobLoadedIntoSession', handleJobLoaded as EventListener);
+    
+    return () => {
+      window.removeEventListener('jobLoadedIntoSession', handleJobLoaded as EventListener);
+    };
+  }, []);
+
   // Use uploaded photos from report data if available, otherwise use defaults
   const uploadedPhotos = reportData.fileAttachments?.propertyPhotos || [];
   const savedPhotos = localPhotos.length > 0 ? localPhotos : uploadedPhotos;
-  const photos = savedPhotos.length > 0 
-    ? savedPhotos.map(photo => ({
+  
+  // Combine job property photos with other photos
+  const allPhotos = [...jobPropertyPhotos, ...savedPhotos];
+  
+  console.log('PropertyPhotos: Photo data:', {
+    jobPropertyPhotos: jobPropertyPhotos.length,
+    savedPhotos: savedPhotos.length,
+    allPhotos: allPhotos.length,
+    jobPropertyPhotosData: jobPropertyPhotos
+  });
+  
+  const photos = allPhotos.length > 0 
+    ? allPhotos.map(photo => ({
         src: photo.url || photo.src,
-        alt: photo.description || photo.alt || photo.name,
-        title: photo.title || (photo.name ? photo.name.split('.')[0].replace(/[_-]/g, ' ') : 'Property Photo'),
-        description: photo.description || 'Property photo'
+        alt: photo.caption || photo.description || photo.alt || photo.name,
+        title: photo.type || photo.title || (photo.name ? photo.name.split('.')[0].replace(/[_-]/g, ' ') : 'Property Photo'),
+        description: photo.caption || photo.description || 'Property photo'
       }))
     : defaultPhotos;
 

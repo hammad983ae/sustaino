@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useJobManager } from './useJobManager';
+import { apiClient } from '@/lib/api';
 // Import migration but don't auto-run to allow fresh starts
 // import '@/utils/dataMigration';
 
@@ -20,6 +20,10 @@ interface UnifiedData {
   includeFlags?: Record<string, boolean>; // For include/exclude toggles
   ocrResults?: string; // For OCR extracted text
   reviewed?: boolean; // For review status
+  // MongoDB integration
+  assessmentId?: string; // MongoDB assessment ID
+  jobId?: string; // MongoDB job ID
+  propertyId?: string; // MongoDB property ID
 }
 
 interface SaveOptions {
@@ -47,19 +51,30 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      const userId = user?.id || 'demo_user';
-      const isDemo = !user;
-
-      // Only load existing data if not starting fresh
-      if (!startFresh) {
-        const stored = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          dataRef.current = parsed;
-          setCurrentJobId(parsed.loadedFromJobId || null);
-          return parsed;
+      // Use custom backend authentication instead of Supabase
+      const isAuthenticated = apiClient.isAuthenticated();
+      let userId = 'demo_user';
+      let isDemo = true;
+      
+      if (isAuthenticated) {
+        try {
+          const user = await apiClient.getCurrentUser();
+          userId = user._id;
+          isDemo = false;
+        } catch (error) {
+          console.warn('Failed to get current user, falling back to demo mode:', error);
+          userId = 'demo_user';
+          isDemo = true;
         }
+      }
+
+      // Always try to load existing data first
+      const stored = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        dataRef.current = parsed;
+        setCurrentJobId(parsed.loadedFromJobId || null);
+        return parsed;
       }
 
       // Initialize new data structure
@@ -125,8 +140,23 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
       
       try {
         const currentData = await getCurrentData();
-        const { data: { user } } = await supabase.auth.getUser();
-        const userId = user?.id || 'demo_user';
+        
+        // Use custom backend authentication instead of Supabase
+        const isAuthenticated = apiClient.isAuthenticated();
+        let userId = 'demo_user';
+        let isDemo = true;
+        
+        if (isAuthenticated) {
+          try {
+            const user = await apiClient.getCurrentUser();
+            userId = user._id;
+            isDemo = false;
+          } catch (error) {
+            console.warn('Failed to get current user during save, falling back to demo mode:', error);
+            userId = 'demo_user';
+            isDemo = true;
+          }
+        }
         
         // Merge updates with current data
         const updatedData: UnifiedData = {
@@ -134,7 +164,7 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
           ...updates,
           lastUpdated: new Date().toISOString(),
           userId,
-          isDemo: !user
+          isDemo
         };
 
         // Deep merge for nested objects
@@ -148,7 +178,31 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
           updatedData.componentData = { ...currentData.componentData, ...updates.componentData };
         }
 
-        // Save to localStorage
+          // Save to MongoDB if we have an assessment ID and user is authenticated
+          if (updatedData.assessmentId && apiClient.isAuthenticated() && !updatedData.assessmentId.startsWith('demo_')) {
+          try {
+            const assessmentData = {
+              addressData: updatedData.addressData,
+              reportConfig: updatedData.reportData?.reportConfig,
+              currentStep: updatedData.assessmentProgress.currentStep,
+              completedSteps: updatedData.assessmentProgress.completedSteps,
+              // Map component data to step data
+              steps: Object.keys(updatedData.componentData).map((key, index) => ({
+                stepId: index.toString(),
+                stepName: key,
+                completed: updatedData.assessmentProgress.completedSteps[index] || false,
+                data: updatedData.componentData[key]
+              }))
+            };
+
+            await apiClient.updateAssessment(updatedData.assessmentId, assessmentData);
+            console.log('Assessment data saved to MongoDB');
+          } catch (mongoError) {
+            console.warn('Failed to save to MongoDB, falling back to localStorage:', mongoError);
+          }
+        }
+
+        // Save to localStorage (always as backup)
         const storageKey = `${STORAGE_KEY}_${userId}`;
         localStorage.setItem(storageKey, JSON.stringify(updatedData));
         
@@ -337,6 +391,100 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
     }
   }, [toast]);
 
+  // Create new assessment in MongoDB
+  const createAssessment = useCallback(async (jobId: string, propertyId: string) => {
+    try {
+      const currentData = await getCurrentData();
+      
+      // Check authentication using custom backend
+      const isAuthenticated = apiClient.isAuthenticated();
+      
+      // If user is not authenticated, create a demo assessment in localStorage only
+      if (!isAuthenticated) {
+        console.log('User not authenticated, creating demo assessment in localStorage');
+        
+        // Generate a demo assessment ID
+        const demoAssessmentId = `demo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        
+        // Update current data with demo assessment ID
+        await saveData({
+          assessmentId: demoAssessmentId,
+          jobId,
+          propertyId
+        });
+        
+        setCurrentJobId(jobId);
+        return { 
+          success: true, 
+          assessmentId: demoAssessmentId, 
+          jobId,
+          isDemo: true 
+        };
+      }
+
+      // User is authenticated, create real MongoDB assessment
+      const assessmentData = {
+        jobId,
+        propertyId,
+        addressData: {
+          ...currentData.addressData,
+          propertyAddress: currentData.addressData?.propertyAddress || 'Address to be confirmed'
+        },
+        reportConfig: {
+          ...currentData.reportData?.reportConfig,
+          propertyType: currentData.reportData?.reportConfig?.propertyType || 'residential',
+          purpose: currentData.reportData?.reportConfig?.purpose || 'other'
+        },
+        currentStep: currentData.assessmentProgress.currentStep,
+        completedSteps: currentData.assessmentProgress.completedSteps
+      };
+
+      console.log('Creating assessment with data:', assessmentData);
+      console.log('Job ID:', jobId, 'Property ID:', propertyId);
+      console.log('Address data:', assessmentData.addressData);
+      console.log('Report config:', assessmentData.reportConfig);
+
+      const response = await apiClient.createAssessment(assessmentData);
+      
+      if (response.success) {
+        const assessmentId = response.data.assessment._id;
+        
+        // Update current data with assessment ID
+        await saveData({
+          assessmentId,
+          jobId,
+          propertyId
+        });
+        
+        setCurrentJobId(jobId);
+        return { success: true, assessmentId, jobId, isDemo: false };
+      }
+      
+      return { success: false, error: response.message };
+    } catch (error) {
+      console.error('Error creating assessment:', error);
+      
+      // Fallback to demo assessment if MongoDB fails
+      console.log('MongoDB assessment creation failed, falling back to demo assessment');
+      const demoAssessmentId = `demo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      await saveData({
+        assessmentId: demoAssessmentId,
+        jobId,
+        propertyId
+      });
+      
+      setCurrentJobId(jobId);
+      return { 
+        success: true, 
+        assessmentId: demoAssessmentId, 
+        jobId,
+        isDemo: true,
+        warning: 'Assessment created in demo mode due to authentication issues'
+      };
+    }
+  }, [getCurrentData, saveData]);
+
   // Archive current session and start fresh
   const completeAndStartFresh = useCallback(async () => {
     try {
@@ -378,6 +526,8 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
         // Immediately refresh data in contexts
         const refreshedData = await getCurrentData();
         
+        console.log('Dispatching dataRefreshed event with data:', refreshedData);
+        
         // Dispatch detailed refresh event with the actual data
         window.dispatchEvent(new CustomEvent('dataRefreshed', { 
           detail: { 
@@ -411,6 +561,9 @@ export const useUnifiedDataManager = (startFresh: boolean = false) => {
     completeAndStartFresh,
     loadExistingJob,
     currentJobId,
+    
+    // MongoDB integration
+    createAssessment,
     
     // Component-specific operations
     loadComponentData,

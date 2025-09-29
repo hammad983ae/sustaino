@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,16 @@ const PropertySearchAnalysis = () => {
   const [analysisData, setAnalysisData] = useState<PropertyAnalysisData | null>(null);
   const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { updateAddressData } = useProperty();
+  const { addressData, updateAddressData } = useProperty();
+
+  // Load property data when component mounts or when addressData changes
+  useEffect(() => {
+    if (addressData?.propertyAddress) {
+      console.log('PropertySearchAnalysis: Loading property data:', addressData);
+      setPropertyAddress(addressData.propertyAddress);
+      setSelectedState(addressData.state || '');
+    }
+  }, [addressData]);
 
   const handleIdentifyAddress = async () => {
     if (!propertyAddress.trim()) {

@@ -72,6 +72,10 @@ const propertySchema = new mongoose.Schema({
     unique: true,
     sparse: true // Allows multiple null values
   },
+  domainApiResponse: {
+    type: mongoose.Schema.Types.Mixed,
+    default: null
+  },
   address: {
     type: addressSchema,
     required: true

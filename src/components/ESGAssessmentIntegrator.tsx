@@ -5,22 +5,24 @@
  * ============================================================================
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { useProperty } from '@/contexts/PropertyContext';
 
 const ESGAssessmentIntegrator: React.FC = () => {
   const { reportData, updateReportData } = useReportData();
   const { addressData } = useProperty();
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
     console.log('ESGAssessmentIntegrator: Processing PAF ESG data extraction');
     
-    // Extract ESG data from PAF into Section 13
-    if (reportData.reportConfig || reportData.propertyDetails) {
+    // Only process once when we have the required data and haven't processed yet
+    if ((reportData.reportConfig || reportData.propertyDetails) && !hasProcessed.current) {
       extractESGDataFromPAF();
+      hasProcessed.current = true;
     }
-  }, [reportData.reportConfig, reportData.propertyDetails, reportData.environmentalAssessment, addressData]);
+  }, [reportData.reportConfig, reportData.propertyDetails]); // Remove addressData dependency
 
   const extractESGDataFromPAF = () => {
     const esgData: any = {

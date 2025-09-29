@@ -31,9 +31,9 @@ const validateJob = [
     'purchase', 'sale', 'refinance', 'insurance', 'taxation',
     'development', 'investment', 'legal', 'other'
   ]).withMessage('Invalid purpose'),
-  body('client.name').notEmpty().withMessage('Client name is required'),
-  body('client.email').isEmail().withMessage('Valid client email is required'),
-  body('propertyId').isMongoId().withMessage('Valid property ID is required')
+  body('client.name').optional({ nullable: true, checkFalsy: true }).notEmpty().withMessage('Client name is required'),
+  body('client.email').optional({ nullable: true, checkFalsy: true }).isEmail().withMessage('Valid client email is required'),
+  body('propertyId').optional({ nullable: true }).isMongoId().withMessage('Valid property ID is required')
 ];
 
 // @route   GET /api/jobs
@@ -108,6 +108,10 @@ router.get('/:id', async (req, res) => {
       });
     }
     
+    console.log('Backend: Job found:', job._id);
+    console.log('Backend: Job property:', job.property);
+    console.log('Backend: Property address:', job.property?.address);
+    
     res.json({
       success: true,
       data: { job }
@@ -124,6 +128,7 @@ router.post('/', validateJob, async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Job creation validation errors:', errors.array());
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
@@ -133,24 +138,27 @@ router.post('/', validateJob, async (req, res) => {
     
     const { propertyId, ...jobData } = req.body;
     
-    // Verify property exists and belongs to user
-    const property = await Property.findOne({
-      _id: propertyId,
-      user: req.user._id,
-      isActive: true
-    });
-    
-    if (!property) {
-      return res.status(404).json({
-        success: false,
-        message: 'Property not found'
+    // Verify property exists and belongs to user (only if propertyId is provided)
+    let property = null;
+    if (propertyId) {
+      property = await Property.findOne({
+        _id: propertyId,
+        user: req.user._id,
+        isActive: true
       });
+      
+      if (!property) {
+        return res.status(404).json({
+          success: false,
+          message: 'Property not found'
+        });
+      }
     }
     
     const job = new Job({
       ...jobData,
       user: req.user._id,
-      property: propertyId
+      property: propertyId || undefined
     });
     
     await job.save();
@@ -189,11 +197,19 @@ router.put('/:id', async (req, res) => {
       });
     }
     
+    console.log('Backend: Updating job with data:', req.body);
+    
     // Update job fields
     Object.keys(req.body).forEach(key => {
       if (req.body[key] !== undefined) {
         job[key] = req.body[key];
       }
+    });
+    
+    console.log('Backend: Job after update:', {
+      _id: job._id,
+      propertyId: job.property,
+      property: job.property
     });
     
     await job.save();

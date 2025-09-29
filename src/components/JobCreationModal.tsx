@@ -54,6 +54,7 @@ const JobCreationModal: React.FC<JobCreationModalProps> = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<PropertySuggestion | null>(null);
+  const [currentJobId, setCurrentJobId] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Form data
@@ -120,12 +121,120 @@ const JobCreationModal: React.FC<JobCreationModalProps> = ({
     }));
   };
 
-  const handlePropertySelect = (property: PropertySuggestion) => {
+  const handlePropertySelect = async (property: PropertySuggestion) => {
     setSelectedProperty(property);
     setFormData(prev => ({
       ...prev,
       propertyAddress: property.address
     }));
+
+    // Create job if not already created
+    if (!currentJobId) {
+      try {
+        setIsLoading(true);
+        const jobData = {
+          title: formData.title || `Property Assessment - ${property.address}`,
+          description: formData.description || '',
+          jobType: formData.jobType || 'Property Valuation',
+          purpose: formData.purpose || 'valuation',
+          propertyId: null, // Will be set after property is saved
+          client: {
+            name: formData.clientName || '',
+            email: formData.clientEmail || '',
+            phone: formData.clientPhone || '',
+            company: formData.clientCompany || ''
+          },
+          dueDate: formData.dueDate || null,
+          priority: formData.priority || 'medium',
+          estimatedValue: formData.estimatedValue ? parseFloat(formData.estimatedValue) : 0,
+          notes: formData.specialInstructions || ''
+        };
+
+        const response = await apiClient.createJob(jobData);
+        if (response.success) {
+          const jobId = response.data.job._id;
+          setCurrentJobId(jobId);
+          
+          // Fetch detailed property data from Domain API
+          console.log('Fetching property details for ID:', property.id);
+          let propertyDetails = { success: false, data: null };
+          try {
+            propertyDetails = await apiClient.getPropertyDetails(property.id);
+            console.log('Property details response:', propertyDetails);
+            if (propertyDetails.success && propertyDetails.data?.property?.photos) {
+              console.log('Property has photos:', propertyDetails.data.property.photos);
+            } else {
+              console.log('Property has no photos or photos not found');
+            }
+          } catch (error) {
+            console.error('Error fetching property details:', error);
+            console.log('Using basic property data from suggestions');
+            
+            // Show user-friendly error message
+            toast({
+              title: "Property Details Unavailable",
+              description: "Could not fetch detailed property information. Using basic property data.",
+              variant: "default"
+            });
+          }
+          
+          // Save property data to database with all details
+          console.log('Saving property data to database:', {
+            domainId: property.id,
+            address: property.address,
+            addressComponents: property.addressComponents,
+            propertyDetails: propertyDetails.success ? propertyDetails.data : null,
+            photos: propertyDetails.success && propertyDetails.data?.property?.photos ? `${propertyDetails.data.property.photos.length} photos` : 'no photos'
+          });
+          
+          console.log('Full propertyDetails object:', propertyDetails);
+          if (propertyDetails.success && propertyDetails.data?.property?.photos) {
+            console.log('Photos array from Domain API:', propertyDetails.data.property.photos);
+            console.log('First photo example:', propertyDetails.data.property.photos[0]);
+          }
+          
+          const propertyResponse = await apiClient.saveProperty({
+            domainId: property.id,
+            address: property.address,
+            addressComponents: property.addressComponents,
+            propertyDetails: propertyDetails.success ? propertyDetails.data : null,
+            jobId: jobId
+          });
+          
+          console.log('Property save response:', propertyResponse);
+          console.log('Property save success:', propertyResponse.success);
+          console.log('Property data:', propertyResponse.data);
+
+          if (propertyResponse.success) {
+            // Update job with property ID
+            console.log('Updating job with property ID:', propertyResponse.data.property._id);
+            try {
+              const updateResponse = await apiClient.updateJob(jobId, {
+                property: propertyResponse.data.property._id
+              });
+              console.log('Job update response:', updateResponse);
+            } catch (error) {
+              console.error('Error updating job with property:', error);
+            }
+          }
+
+          toast({
+            title: "Job Created",
+            description: "Job created successfully with property data",
+            variant: "default"
+          });
+        }
+      } catch (error) {
+        console.error('Error creating job:', error);
+        toast({
+          title: "Error",
+          description: "Failed to create job",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const validateStep = (step: number): boolean => {
@@ -169,23 +278,24 @@ const JobCreationModal: React.FC<JobCreationModalProps> = ({
       return;
     }
 
+    if (!currentJobId) {
+      toast({
+        title: "Error",
+        description: "No job created. Please select a property first.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // First, save the property data
-      const propertyData = await apiClient.saveProperty({
-        domainId: selectedProperty?.id,
-        address: selectedProperty?.address,
-        addressComponents: selectedProperty?.addressComponents
-      });
-
-      // Then create the job
-      const jobData = await apiClient.createJob({
+      // Update the existing job with final form data
+      const jobData = await apiClient.updateJob(currentJobId, {
         title: formData.title,
         description: formData.description,
         jobType: formData.jobType,
         purpose: formData.purpose,
-        propertyId: propertyData.data.property._id,
         client: {
           name: formData.clientName,
           email: formData.clientEmail,
@@ -203,11 +313,32 @@ const JobCreationModal: React.FC<JobCreationModalProps> = ({
         description: "Job created successfully!",
       });
 
-      onJobCreated(jobData.data.job._id);
+      // Get property ID from the job or property response
+      let propertyId = null;
+      if (selectedProperty) {
+        // Try to get property ID from the property response
+        try {
+          const propertyResponse = await apiClient.saveProperty({
+            domainId: selectedProperty.id,
+            address: selectedProperty.address,
+            addressComponents: selectedProperty.addressComponents,
+            propertyDetails: null,
+            jobId: currentJobId
+          });
+          if (propertyResponse.success) {
+            propertyId = propertyResponse.data.property._id;
+          }
+        } catch (error) {
+          console.error('Error getting property ID:', error);
+        }
+      }
+      
+      onJobCreated(currentJobId, propertyId);
       onClose();
       
       // Reset form
       setCurrentStep(1);
+      setCurrentJobId(null);
       setFormData({
         title: '',
         description: '',

@@ -71,10 +71,33 @@ class DomainAPI {
    */
   async getPropertyDetails(propertyId) {
     try {
+      console.log('Domain API: Fetching property details for ID:', propertyId);
+      console.log('Domain API: Full URL will be:', `${this.baseURL}/properties/${propertyId}`);
+      console.log('Domain API: Using API key:', this.apiKey ? 'Present' : 'Missing');
+      
       const response = await this.client.get(`/properties/${propertyId}`);
+      console.log('Domain API: Raw response data:', {
+        hasPhotos: response.data?.photos ? `${response.data.photos.length} photos` : 'no photos',
+        photos: response.data?.photos
+      });
       return response.data;
     } catch (error) {
       console.error('Domain API getPropertyDetails error:', error.response?.data || error.message);
+      console.error('Domain API error status:', error.response?.status);
+      console.error('Domain API error URL:', error.config?.url);
+      console.error('Domain API error headers:', error.config?.headers);
+      
+      // Check for specific error types
+      if (error.response?.status === 401) {
+        throw new Error('Domain API authentication failed. Please check API credentials.');
+      } else if (error.response?.status === 403) {
+        throw new Error('Domain API access forbidden. Please check API permissions.');
+      } else if (error.response?.status === 404) {
+        throw new Error(`Property with ID ${propertyId} not found in Domain API.`);
+      } else if (error.response?.status === 429) {
+        throw new Error('Domain API rate limit exceeded. Please try again later.');
+      }
+      
       throw new Error(`Failed to fetch property details: ${error.response?.data?.message || error.message}`);
     }
   }

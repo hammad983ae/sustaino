@@ -1,13 +1,53 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useReportData } from '@/contexts/ReportDataContext';
 import { validateAndFilterReportData } from '@/lib/reportDataValidation';
+import { supabase } from '@/lib/supabase';
 
 const ReportDataLoader = () => {
   const { updateReportData } = useReportData();
+  const hasLoaded = useRef(false);
 
   useEffect(() => {
-    const loadGeneratedReportData = () => {
-      // Check if we have current report data from generation
+    const loadGeneratedReportData = async () => {
+      // Prevent multiple loads
+      if (hasLoaded.current) {
+        return;
+      }
+      // First, try to load from unified property data (job data)
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const userId = user?.id || 'demo_user';
+        const unifiedData = localStorage.getItem(`unified_property_data_${userId}`);
+        
+        if (unifiedData) {
+          const parsed = JSON.parse(unifiedData);
+          console.log('Loading job data into report context:', parsed);
+          
+          // Load report data from job
+          if (parsed.reportData) {
+            const { reportData: jobReportData } = parsed;
+            
+            // Update report context with job data
+            if (jobReportData.reportConfig) {
+              updateReportData('reportConfig', jobReportData.reportConfig);
+            }
+            if (jobReportData.clientDetails) {
+              updateReportData('clientDetails', jobReportData.clientDetails);
+            }
+            if (jobReportData.propertyDetails) {
+              updateReportData('propertyDetails', jobReportData.propertyDetails);
+            }
+            
+            console.log('Successfully loaded job data into report context');
+            hasLoaded.current = true;
+            return; // Exit early if we loaded job data
+          }
+        }
+      } catch (error) {
+        console.error('Error loading job data:', error);
+      }
+      
+      // Fallback: Check if we have current report data from generation
       const currentReportData = localStorage.getItem('currentReportData');
       if (currentReportData) {
         try {
@@ -87,6 +127,7 @@ const ReportDataLoader = () => {
             updateReportData('generatedSections' as any, sections);
 
             console.log('Successfully loaded all available data into report context');
+            hasLoaded.current = true;
             
             // Log any warnings
             if (validation.validation?.warnings?.length > 0) {
@@ -103,7 +144,7 @@ const ReportDataLoader = () => {
     };
 
     loadGeneratedReportData();
-  }, [updateReportData]);
+  }, []); // Remove updateReportData dependency to prevent loops
 
   // This component doesn't render anything
   return null;

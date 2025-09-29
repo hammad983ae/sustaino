@@ -360,31 +360,34 @@ class ApiClient {
     return this.refreshToken;
   }
 
-  // Domain API methods using Supabase functions
+  // Domain API methods using Node backend
   async suggestProperties(terms: string, options: { pageSize?: number; channel?: string } = {}): Promise<any> {
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
-      
-      const { data, error } = await supabase.functions.invoke('domain-integration', {
-        body: {
-          terms,
-          options: {
-            pageSize: options.pageSize || 20,
-            channel: options.channel || 'All'
-          }
+      const params = new URLSearchParams({
+        terms,
+        pageSize: String(options.pageSize || 20),
+        channel: options.channel || 'All'
+      });
+
+      const response = await fetch(`${this.baseURL}/domain/suggest?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.getToken()}`,
+          'Content-Type': 'application/json'
         }
       });
 
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Failed to fetch property suggestions');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      if (data?.success) {
+      const data = await response.json();
+
+      if (data.success) {
         return data;
       }
 
-      throw new Error(data?.error || 'Failed to fetch property suggestions');
+      throw new Error(data.message || 'Failed to fetch property suggestions');
     } catch (error) {
       console.error('Property suggestion error:', error);
       throw error;
@@ -393,24 +396,25 @@ class ApiClient {
 
   async getPropertyDetails(domainId: string): Promise<any> {
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
-      
-      const { data, error } = await supabase.functions.invoke('domain-integration', {
-        body: {
-          propertyId: domainId
+      const response = await fetch(`${this.baseURL}/domain/property/${domainId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.getToken()}`,
+          'Content-Type': 'application/json'
         }
       });
 
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Failed to fetch property details');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      if (data?.success) {
+      const data = await response.json();
+
+      if (data.success) {
         return data;
       }
 
-      throw new Error(data?.error || 'Failed to fetch property details');
+      throw new Error(data.message || 'Failed to fetch property details');
     } catch (error) {
       console.error('Property details error:', error);
       throw error;
@@ -421,7 +425,17 @@ class ApiClient {
     domainId: string;
     address: string;
     addressComponents: any;
+    propertyDetails?: any;
+    jobId?: string;
   }): Promise<any> {
+    console.log('ApiClient: Sending property data to backend:', {
+      domainId: propertyData.domainId,
+      address: propertyData.address,
+      hasPropertyDetails: !!propertyData.propertyDetails,
+      hasPhotos: propertyData.propertyDetails?.photos ? `${propertyData.propertyDetails.photos.length} photos` : 'no photos',
+      jobId: propertyData.jobId
+    });
+    
     const response = await this.request('/domain/property/save', {
       method: 'POST',
       body: JSON.stringify(propertyData)
@@ -590,6 +604,7 @@ class ApiClient {
   }
 
   async createAssessment(assessmentData: any): Promise<any> {
+    console.log('Creating assessment with data:', assessmentData);
     const response = await this.request('/assessments', {
       method: 'POST',
       body: JSON.stringify(assessmentData)
@@ -599,6 +614,7 @@ class ApiClient {
       return response;
     }
 
+    console.error('Assessment creation failed:', response);
     throw new Error(response.message || 'Failed to create assessment');
   }
 

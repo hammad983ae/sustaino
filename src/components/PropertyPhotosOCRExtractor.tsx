@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { useUniversalSave } from '@/hooks/useUniversalSave';
 import { supabase } from '@/integrations/supabase/client';
 import DocumentUploadWithPreview from './DocumentUploadWithPreview';
+import { apiClient } from '@/lib/api';
 
 interface PhotoWithOCR {
   id: string;
@@ -43,9 +44,12 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
     description: ''
   });
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [forceRender, setForceRender] = useState(0);
   const { toast } = useToast();
   const { updateReportData, reportData } = useReportData();
   const { saveData, loadData, isSaving } = useUniversalSave('PropertyPhotosOCRExtractor');
+
+  console.log('PropertyPhotosOCRExtractor: Component mounted');
 
   // Load existing photos from reportData
   useEffect(() => {
@@ -63,6 +67,160 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
       setPhotos(existingPhotos);
     }
   }, [reportData.fileAttachments?.photos]);
+
+  // Load property photos from job data
+  useEffect(() => {
+    const loadJobPhotos = async () => {
+      try {
+        // Get current job ID from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobIdFromUrl = urlParams.get('jobId');
+        const jobIdFromStorage = localStorage.getItem('currentJobId');
+        const jobId = jobIdFromUrl || jobIdFromStorage;
+        
+        console.log('PropertyPhotosOCRExtractor: useEffect triggered');
+        console.log('PropertyPhotosOCRExtractor: jobIdFromUrl:', jobIdFromUrl);
+        console.log('PropertyPhotosOCRExtractor: jobIdFromStorage:', jobIdFromStorage);
+        console.log('PropertyPhotosOCRExtractor: final jobId:', jobId);
+        console.log('PropertyPhotosOCRExtractor: localStorage keys:', Object.keys(localStorage));
+        
+        if (jobId) {
+          console.log('PropertyPhotosOCRExtractor: Loading job photos for jobId:', jobId);
+          
+          const response = await apiClient.getJob(jobId);
+          if (response.success && response.data.job.property?.photos) {
+            console.log('PropertyPhotosOCRExtractor: Found property photos:', response.data.job.property.photos);
+            
+            // Convert job photos to PhotoWithOCR format
+            const jobPhotos = response.data.job.property.photos.map((photo: any, index: number) => ({
+              id: `job-${index}`,
+              file: new File([], photo.caption || `photo-${index}.jpg`),
+              url: photo.url || '',
+              name: photo.caption || `Property Photo ${index + 1}`,
+              description: photo.caption || '',
+              ocrText: '',
+              ocrProcessed: false,
+              ocrConfidence: 0
+            }));
+            
+            // Add job photos to existing photos
+            setPhotos(prev => [...prev, ...jobPhotos]);
+            setForceRender(prev => prev + 1);
+            console.log('PropertyPhotosOCRExtractor: Photos updated, total photos:', [...prev, ...jobPhotos].length);
+        } else {
+          console.log('PropertyPhotosOCRExtractor: No property photos found in job');
+          console.log('PropertyPhotosOCRExtractor: Job response:', response);
+          console.log('PropertyPhotosOCRExtractor: Job property:', response.data?.job?.property);
+        }
+        } else {
+          console.log('PropertyPhotosOCRExtractor: No job ID found, cannot load photos');
+          console.log('PropertyPhotosOCRExtractor: Will try to get job ID from unified data');
+          
+          // Try to get job ID from unified data
+          try {
+            const { data: { user } } = await supabase.auth.getUser();
+            const userId = user?.id || 'demo_user';
+            const unifiedData = localStorage.getItem(`unified_property_data_${userId}`);
+            if (unifiedData) {
+              const parsed = JSON.parse(unifiedData);
+              const jobIdFromUnified = parsed.loadedFromJobId;
+              console.log('PropertyPhotosOCRExtractor: jobId from unified data:', jobIdFromUnified);
+              
+              if (jobIdFromUnified) {
+                console.log('PropertyPhotosOCRExtractor: Loading job photos with unified jobId:', jobIdFromUnified);
+                try {
+                  const response = await apiClient.getJob(jobIdFromUnified);
+                  console.log('PropertyPhotosOCRExtractor: API response:', response);
+                  console.log('PropertyPhotosOCRExtractor: Response success:', response.success);
+                  console.log('PropertyPhotosOCRExtractor: Response data:', response.data);
+                  
+                  if (response.success && response.data.job.property?.photos) {
+                    console.log('PropertyPhotosOCRExtractor: Found property photos with unified jobId:', response.data.job.property.photos);
+                    
+                    const jobPhotos = response.data.job.property.photos.map((photo: any, index: number) => ({
+                      id: `job-${index}`,
+                      file: new File([], photo.caption || `photo-${index}.jpg`),
+                      url: photo.url || '',
+                      name: photo.caption || `Property Photo ${index + 1}`,
+                      description: photo.caption || '',
+                      ocrText: '',
+                      ocrProcessed: false,
+                      ocrConfidence: 0
+                    }));
+                    
+                    setPhotos(prev => [...prev, ...jobPhotos]);
+                    setForceRender(prev => prev + 1);
+                    console.log('PropertyPhotosOCRExtractor: Photos updated with unified jobId, total photos:', jobPhotos.length);
+                  } else {
+                    console.log('PropertyPhotosOCRExtractor: No photos found in response');
+                    console.log('PropertyPhotosOCRExtractor: Job property:', response.data?.job?.property);
+                  }
+                } catch (apiError) {
+                  console.error('PropertyPhotosOCRExtractor: API call failed:', apiError);
+                }
+              }
+            }
+          } catch (error) {
+            console.error('PropertyPhotosOCRExtractor: Error getting job ID from unified data:', error);
+          }
+        }
+      } catch (error) {
+        console.error('PropertyPhotosOCRExtractor: Error loading job photos:', error);
+      }
+    };
+    
+    loadJobPhotos();
+  }, []);
+
+  // Listen for job loaded events
+  useEffect(() => {
+    const handleJobLoaded = (event: CustomEvent) => {
+      console.log('PropertyPhotosOCRExtractor: Job loaded event received:', event.detail);
+      // Reload photos when job is loaded
+      const loadJobPhotos = async () => {
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const jobId = urlParams.get('jobId') || localStorage.getItem('currentJobId');
+          
+          if (jobId) {
+            console.log('PropertyPhotosOCRExtractor: Reloading job photos for jobId:', jobId);
+            
+            const response = await apiClient.getJob(jobId);
+            if (response.success && response.data.job.property?.photos) {
+              console.log('PropertyPhotosOCRExtractor: Found property photos on reload:', response.data.job.property.photos);
+              
+              // Convert job photos to PhotoWithOCR format
+              const jobPhotos = response.data.job.property.photos.map((photo: any, index: number) => ({
+                id: `job-${index}`,
+                file: new File([], photo.caption || `photo-${index}.jpg`),
+                url: photo.url || '',
+                name: photo.caption || `Property Photo ${index + 1}`,
+                description: photo.caption || '',
+                ocrText: '',
+                ocrProcessed: false,
+                ocrConfidence: 0
+              }));
+              
+              // Add job photos to existing photos
+              setPhotos(prev => [...prev, ...jobPhotos]);
+              setForceRender(prev => prev + 1);
+              console.log('PropertyPhotosOCRExtractor: Photos updated on reload, total photos:', [...prev, ...jobPhotos].length);
+            }
+          }
+        } catch (error) {
+          console.error('PropertyPhotosOCRExtractor: Error reloading job photos:', error);
+        }
+      };
+      
+      loadJobPhotos();
+    };
+
+    window.addEventListener('jobLoadedIntoSession', handleJobLoaded as EventListener);
+    
+    return () => {
+      window.removeEventListener('jobLoadedIntoSession', handleJobLoaded as EventListener);
+    };
+  }, []);
 
   // Save photos data
   const handleSavePhotos = useCallback(async () => {
@@ -440,6 +598,57 @@ const PropertyPhotosOCRExtractor: React.FC = () => {
               </Button>
             </label>
           </div>
+
+          {/* Property Images from Domain API */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Camera className="h-5 w-5" />
+                Property Images
+                <Badge variant="secondary">{photos.length} photos</Badge>
+                <Badge variant="outline">Render: {forceRender}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {photos.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {photos.map((photo) => (
+                    <div key={photo.id} className="relative group">
+                      <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                        <img 
+                          src={photo.url} 
+                          alt={photo.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            console.error('Image failed to load:', photo.url);
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <p className="text-sm font-medium truncate">{photo.name}</p>
+                        {photo.description && (
+                          <p className="text-xs text-muted-foreground truncate">{photo.description}</p>
+                        )}
+                        {photo.ocrProcessed && (
+                          <Badge variant="outline" className="text-xs mt-1">
+                            OCR Processed
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No photos loaded yet</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Debug: photos.length = {photos.length}, forceRender = {forceRender}
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Save Button */}
           {photos.length > 0 && (

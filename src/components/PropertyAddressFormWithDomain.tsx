@@ -55,6 +55,106 @@ const PropertyAddressFormWithDomain: React.FC = () => {
     }
   }, [reportData?.propertyDetails?.domainId]);
 
+  // Load job data from database when component mounts
+  useEffect(() => {
+    const loadJobDataFromDB = async () => {
+      try {
+        // Get current job ID from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobId = urlParams.get('jobId') || localStorage.getItem('currentJobId');
+        
+        if (jobId) {
+          console.log('PropertyAddressFormWithDomain: Loading job data from DB for jobId:', jobId);
+          
+          // Fetch job data from backend
+          const response = await apiClient.getJob(jobId);
+          if (response.success) {
+            const job = response.data.job;
+            console.log('PropertyAddressFormWithDomain: Job data from DB:', job);
+            
+            if (job.property) {
+              const property = job.property;
+              console.log('PropertyAddressFormWithDomain: Property data from DB:', property);
+              
+              // Update address data
+              const newAddressData = {
+                propertyAddress: property.fullAddress || `${property.address.streetNumber || ''} ${property.address.streetName || ''} ${property.address.streetType || ''}, ${property.address.suburb || ''}, ${property.address.state || ''} ${property.address.postcode || ''}`.trim(),
+                unitNumber: property.address.unitNumber || '',
+                streetNumber: property.address.streetNumber || '',
+                streetName: property.address.streetName || '',
+                streetType: property.address.streetType || '',
+                suburb: property.address.suburb || '',
+                state: property.address.state || '',
+                postcode: property.address.postcode || '',
+                country: property.address.country || 'Australia',
+                lotNumber: property.address.lotNumber || '',
+                planNumber: property.address.planNumber || ''
+              };
+              
+              updateAddressData(newAddressData);
+              
+              // Create property suggestion for display
+              const mockProperty: PropertySuggestion = {
+                id: property.domainId || 'db-property',
+                address: newAddressData.propertyAddress,
+                addressComponents: {
+                  unitNumber: property.address.unitNumber || '',
+                  streetNumber: property.address.streetNumber || '',
+                  streetName: property.address.streetName || '',
+                  streetType: property.address.streetType || '',
+                  suburb: property.address.suburb || '',
+                  postcode: property.address.postcode || '',
+                  state: property.address.state || ''
+                },
+                relativeScore: 100,
+                normalized: {
+                  unitNumber: property.address.unitNumber || '',
+                  streetNumber: property.address.streetNumber || '',
+                  streetName: property.address.streetName || '',
+                  streetType: property.address.streetType || '',
+                  suburb: property.address.suburb || '',
+                  postcode: property.address.postcode || '',
+                  state: property.address.state || '',
+                  fullAddress: newAddressData.propertyAddress
+                }
+              };
+              
+              setSelectedProperty(mockProperty);
+              
+              // Update report data
+              const newReportData = {
+                ...reportData,
+                propertyDetails: {
+                  ...reportData.propertyDetails,
+                  domainId: property.domainId,
+                  address: newAddressData.propertyAddress,
+                  addressComponents: property.address,
+                  propertyType: property.details?.propertyType || 'residential',
+                  landArea: property.details?.landArea?.value || '',
+                  buildingArea: property.details?.buildingArea?.value || '',
+                  yearBuilt: property.details?.yearBuilt || '',
+                  bedrooms: property.details?.bedrooms || '',
+                  bathrooms: property.details?.bathrooms || '',
+                  carSpaces: property.details?.carSpaces || '',
+                  zoning: property.details?.zoning || '',
+                  features: property.details?.features || []
+                }
+              };
+              
+              updateReportData('propertyDetails', newReportData.propertyDetails);
+              
+              console.log('PropertyAddressFormWithDomain: Form populated with DB data');
+            }
+          }
+        }
+      } catch (error) {
+        console.error('PropertyAddressFormWithDomain: Error loading job data from DB:', error);
+      }
+    };
+    
+    loadJobDataFromDB();
+  }, []);
+
   const loadPropertyDetails = async (domainId: string) => {
     setIsLoading(true);
     try {

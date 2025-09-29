@@ -164,6 +164,15 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
   const generateReportData = async () => {
     console.log('Generating report with data:', assessmentData);
     
+    // Check if we have MongoDB assessment data
+    const hasMongoDBData = assessmentData.reportData?.assessmentId || 
+                          assessmentData.reportData?.jobId ||
+                          localStorage.getItem('unified_property_data');
+    
+    if (hasMongoDBData) {
+      console.log('Using MongoDB assessment data for report generation');
+    }
+    
     // Only require address - everything else can be acknowledged as missing
     const hasAddress = assessmentData.addressData?.propertyAddress || assessmentData.reportData?.propertySearchData?.confirmedAddress;
 
@@ -203,7 +212,10 @@ const GenerateReportData: React.FC<GenerateReportDataProps> = ({
       const enhancedAssessmentData = {
         ...assessmentData,
         quickDataEntry,
-        acknowledgedMissing: Array.from(acknowledgedMissing)
+        acknowledgedMissing: Array.from(acknowledgedMissing),
+        // Include MongoDB assessment ID if available
+        assessmentId: assessmentData.reportData?.assessmentId,
+        jobId: assessmentData.reportData?.jobId
       };
 
       const reportPayload = {

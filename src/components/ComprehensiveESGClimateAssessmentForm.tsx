@@ -18,6 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useReportData } from '@/contexts/ReportDataContext';
+import { useProperty } from '@/contexts/PropertyContext';
 
 interface ComprehensiveESGData {
   // Property Assessment Form
@@ -123,6 +125,9 @@ interface ComprehensiveESGData {
 }
 
 export const ComprehensiveESGClimateAssessmentForm: React.FC = () => {
+  const { reportData } = useReportData();
+  const { addressData } = useProperty();
+  
   const [formData, setFormData] = useState<ComprehensiveESGData>({
     // Property Assessment Form defaults
     propertyName: '',
@@ -218,6 +223,66 @@ export const ComprehensiveESGClimateAssessmentForm: React.FC = () => {
   });
 
   const [calculatedResults, setCalculatedResults] = useState<any>(null);
+
+  // Auto-populate form data from report context
+  useEffect(() => {
+    if (reportData.environmentalAssessment) {
+      console.log('Auto-populating ESG form with data from report context:', reportData.environmentalAssessment);
+      setFormData(prev => ({
+        ...prev,
+        // Property Assessment Form data
+        propertyName: reportData.environmentalAssessment.propertyName || 
+                     reportData.propertyDetails?.propertyName || 
+                     addressData.propertyAddress || 
+                     prev.propertyName,
+        location: reportData.environmentalAssessment.location || 
+                 reportData.locationData?.propertyAddress || 
+                 addressData.propertyAddress || 
+                 prev.location,
+        propertyType: reportData.environmentalAssessment.propertyType || 
+                     reportData.reportConfig?.propertyType || 
+                     reportData.propertyDetails?.propertyType || 
+                     prev.propertyType,
+        yearBuilt: reportData.environmentalAssessment.yearBuilt || 
+                  reportData.propertyDetails?.yearBuilt || 
+                  reportData.propertyDetails?.constructionYear || 
+                  prev.yearBuilt,
+        squareMetres: reportData.environmentalAssessment.squareMetres || 
+                     reportData.propertyDetails?.buildingArea || 
+                     reportData.propertyDetails?.floorArea || 
+                     prev.squareMetres,
+        
+        // Energy Efficiency
+        actualEnergyUse: reportData.environmentalAssessment.actualEnergyUse || 
+                        reportData.environmentalAssessment?.energyUse || 
+                        prev.actualEnergyUse,
+        benchmarkEnergyUse: reportData.environmentalAssessment.benchmarkEnergyUse || 
+                           reportData.environmentalAssessment?.benchmarkEnergyUse || 
+                           prev.benchmarkEnergyUse,
+        
+        // Water Conservation
+        waterEfficientFixtures: reportData.environmentalAssessment.waterEfficientFixtures || 
+                               reportData.environmentalAssessment?.waterEfficiency || 
+                               prev.waterEfficientFixtures,
+        
+        // Sustainability data
+        sustainabilityRating: reportData.environmentalAssessment.sustainabilityRating || 
+                             reportData.environmentalAssessment?.sustainability || 
+                             prev.sustainabilityRating,
+        epaData: reportData.environmentalAssessment.epaData || 
+                reportData.environmentalAssessment?.epaData || 
+                prev.epaData,
+        contamination: reportData.environmentalAssessment.contamination || 
+                      reportData.environmentalAssessment?.contamination || 
+                      prev.contamination
+      }));
+    }
+  }, [reportData.environmentalAssessment, reportData.propertyDetails, reportData.reportConfig, addressData.propertyAddress]);
+
+  // Display current form data for debugging
+  useEffect(() => {
+    console.log('Current ESG form data:', formData);
+  }, [formData]);
 
   const calculateESGAssessment = () => {
     // Basic ESG Score

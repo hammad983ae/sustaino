@@ -11,6 +11,7 @@ import { useProgressiveReportSaving } from "@/hooks/useProgressiveReportSaving";
 import { Badge } from "@/components/ui/badge";
 import ReportDataPrePopulation from "@/components/ReportDataPrePopulation";
 import ReportDataLoader from "@/components/ReportDataLoader";
+import MongoDBDataLoader from "@/components/MongoDBDataLoader";
 import SectionDataExtractor from "@/components/SectionDataExtractor";
 import ReportConfigurationIntegrator from "@/components/ReportConfigurationIntegrator";
 import ESGAssessmentIntegrator from "@/components/ESGAssessmentIntegrator";
@@ -24,6 +25,8 @@ import { PropertyTypeLockProvider } from "@/components/PropertyTypeLockProvider"
 
 const ReportViewer = () => {
   const { toast } = useToast();
+  const [assessmentId, setAssessmentId] = useState<string | undefined>();
+  const [jobId, setJobId] = useState<string | undefined>();
   const sections = [
     { title: "Executive Summary and Contents" },
     { title: "RPD and Location" },
@@ -57,6 +60,34 @@ const ReportViewer = () => {
 
   // Load saved progress on component mount, but ensure it starts from section 0
   useEffect(() => {
+    // Check for assessment ID or job ID in URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const assessmentIdParam = urlParams.get('assessmentId');
+    const jobIdParam = urlParams.get('jobId');
+    
+    if (assessmentIdParam) {
+      setAssessmentId(assessmentIdParam);
+    }
+    if (jobIdParam) {
+      setJobId(jobIdParam);
+    }
+
+    // Check localStorage for current assessment data
+    const currentData = localStorage.getItem('unified_property_data');
+    if (currentData) {
+      try {
+        const parsed = JSON.parse(currentData);
+        if (parsed.assessmentId) {
+          setAssessmentId(parsed.assessmentId);
+        }
+        if (parsed.jobId) {
+          setJobId(parsed.jobId);
+        }
+      } catch (error) {
+        console.error('Error parsing localStorage data:', error);
+      }
+    }
+
     // Check for report data from Property Assessment Form
     const currentReportData = localStorage.getItem('currentReportData');
     if (currentReportData) {
@@ -137,6 +168,19 @@ const ReportViewer = () => {
              }}>
           {/* Load generated data into report context */}
           <ReportDataLoader />
+          {/* MongoDB Assessment Data Loader */}
+          <MongoDBDataLoader 
+            assessmentId={assessmentId} 
+            jobId={jobId}
+            onDataLoaded={(data) => {
+              console.log('MongoDB assessment data loaded:', data);
+              toast({
+                title: "Assessment Data Loaded",
+                description: "Data from MongoDB assessment loaded successfully",
+                variant: "default"
+              });
+            }}
+          />
           {/* Data Pre-population Component */}
           <ReportDataPrePopulation />
           {/* Essential data integrators */}

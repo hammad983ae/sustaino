@@ -31,12 +31,12 @@ const jobSchema = new mongoose.Schema({
   property: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Property',
-    required: true
+    required: false
   },
   jobNumber: {
     type: String,
     unique: true,
-    required: true
+    required: false
   },
   title: {
     type: String,

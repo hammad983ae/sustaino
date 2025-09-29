@@ -61,7 +61,8 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     clearAllData, 
     completeAndStartFresh, 
     loadExistingJob,
-    currentJobId 
+    currentJobId,
+    createAssessment
   } = useUnifiedDataManager(!sessionStarted);
   const { reportData, updateReportData } = useReportData();
   const { addressData, getFormattedAddress } = useProperty();
@@ -293,6 +294,40 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
     }
   };
 
+  // Create MongoDB assessment when starting with job
+  const handleCreateAssessment = async (jobId: string, propertyId: string) => {
+    try {
+      const result = await createAssessment(jobId, propertyId);
+      if (result.success) {
+        setSessionStarted(true);
+        setShowJobSelector(false);
+        
+        if (result.isDemo) {
+          toast({
+            title: "Demo Assessment Created",
+            description: result.warning || "Assessment created in demo mode (localStorage only)",
+            variant: "default"
+          });
+        } else {
+          toast({
+            title: "Assessment Created",
+            description: "MongoDB assessment created successfully",
+            variant: "default"
+          });
+        }
+      } else {
+        throw new Error(result.error || 'Failed to create assessment');
+      }
+    } catch (error) {
+      console.error('Failed to create assessment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create assessment. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleLoadJob = async (jobId: string) => {
     try {
       const result = await loadExistingJob(jobId);
@@ -445,7 +480,7 @@ const PropertyAssessmentForm: React.FC<PropertyAssessmentFormProps> = ({
         <JobSelector
           onStartFresh={handleStartFresh}
           onLoadJob={handleLoadJob}
-          onCreateNewJob={() => {}} // Placeholder - this flow won't be used in this version
+          onCreateNewJob={(jobId, propertyId) => handleCreateAssessment(jobId, propertyId || '')}
           onClose={() => setShowJobSelector(false)}
         />
       </div>
