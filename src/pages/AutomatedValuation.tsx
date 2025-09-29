@@ -39,7 +39,6 @@ import PropertyUpdateFeed from "@/components/PropertyUpdateFeed";
 import ConstructionCostIndex from "@/components/ConstructionCostIndex";
 import DevelopmentCalculator from "@/components/DevelopmentCalculator";
 import PEXAIntegration from "@/components/PEXAIntegration";
-import AdvertisingValuationDashboard from "@/components/AdvertisingValuationDashboard";
 import Enhanced3DCard from "@/components/Enhanced3DCard";
 
 // Import professional images
@@ -537,7 +536,6 @@ export default function AutomatedValuation() {
                         <ConstructionCostIndex />
                         <DevelopmentCalculator />
                         <PEXAIntegration />
-                        <AdvertisingValuationDashboard />
                       </div>
                     </TabsContent>
                   </Tabs>

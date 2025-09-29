@@ -65,6 +65,7 @@ import DataBases from "./pages/DataBases";
 import RealitySales from "./pages/RealitySales";
 import AuctionSpherePOSPage from "./pages/AuctionSpherePOS";
 import AdvertisingPlatforms from "./pages/AdvertisingPlatforms";
+import AdvertisingValuation from "./pages/AdvertisingValuation";
 import BrochureViewer from "./pages/BrochureViewer";
 import DevelopmentSiteValuation from "./pages/DevelopmentSiteValuation";
 import NASDAQCompetitorAnalysis from "./components/NASDAQCompetitorAnalysis";
@@ -249,6 +250,11 @@ const App = () => (
                 <Route path="/advertising-platforms" element={
                   <ProtectedRoute>
                     <AdvertisingPlatforms />
+                  </ProtectedRoute>
+                } />
+                <Route path="/advertising-valuation" element={
+                  <ProtectedRoute>
+                    <AdvertisingValuation />
                   </ProtectedRoute>
                 } />
                 <Route path="/digital-contracts" element={
