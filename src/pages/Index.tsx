@@ -43,6 +43,7 @@ import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackg
 import AuthStatus from '@/components/AuthStatus';
 import { useNavigate } from 'react-router-dom';
 import { TBEProgressPaymentDashboard } from '@/components/progress-payments/TBEProgressPaymentDashboard';
+import { ClientDemo } from '@/components/demo/ClientDemo';
 
 
 
@@ -148,7 +149,7 @@ const Index = () => {
                     </TabsList>
                     
                     {/* Second row of tabs */}
-                    <TabsList className="grid w-full grid-cols-4 max-w-4xl mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
+                    <TabsList className="grid w-full grid-cols-4 max-w-5xl mx-auto bg-white/80 backdrop-blur-sm shadow-sm border border-purple-200/50 rounded-xl p-1">
                       <TabsTrigger value="professional-declarations" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <FileCheck className="h-4 w-4" />
                         Professional Declarations
@@ -160,6 +161,10 @@ const Index = () => {
                       <TabsTrigger value="progress-payments" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <Construction className="h-4 w-4" />
                         Progress Payments
+                      </TabsTrigger>
+                      <TabsTrigger value="client-demo" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
+                        <Users className="h-4 w-4" />
+                        Client Demo
                       </TabsTrigger>
                     </TabsList>
                   </div>
@@ -589,6 +594,23 @@ const Index = () => {
                       </CardHeader>
                       <CardContent className="p-0">
                         <TBEProgressPaymentDashboard />
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="client-demo" className="mt-8">
+                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
+                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
+                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
+                          <Users className="h-6 w-6 text-purple-700" />
+                          Client Demo Platform
+                        </CardTitle>
+                        <p className="text-purple-700">
+                          Interactive demonstrations of ISFV automation and PAF professional workflows
+                        </p>
+                      </CardHeader>
+                      <CardContent className="p-8">
+                        <ClientDemo />
                       </CardContent>
                     </Card>
                   </TabsContent>
