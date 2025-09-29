@@ -1338,32 +1338,40 @@ KEY RISK MITIGATION STRATEGIES:
                 <CardTitle>PAF Report - All Tabs Completed</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="p-4 border rounded-lg bg-green-50">
-                    <h4 className="font-semibold text-green-800">Executive Summary</h4>
-                    <p className="text-sm text-green-700 mt-2">{pafReportData.mockData.executiveSummary}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-blue-50">
-                    <h4 className="font-semibold text-blue-800">Property Details</h4>
-                    <p className="text-sm text-blue-700 mt-2">{pafReportData.mockData.propertyDetails}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-purple-50">
-                    <h4 className="font-semibold text-purple-800">Market Analysis</h4>
-                    <p className="text-sm text-purple-700 mt-2">{pafReportData.mockData.marketAnalysis}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-orange-50">
-                    <h4 className="font-semibold text-orange-800">Income Analysis</h4>
-                    <p className="text-sm text-orange-700 mt-2">{pafReportData.mockData.incomeAnalysis}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-red-50">
-                    <h4 className="font-semibold text-red-800">Risk Assessment</h4>
-                    <p className="text-sm text-red-700 mt-2">{pafReportData.mockData.riskAssessment}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-gray-50">
-                    <h4 className="font-semibold text-gray-800">All Tabs Complete</h4>
-                    <p className="text-sm text-gray-700 mt-2">✓ Every section filled with comprehensive data</p>
-                  </div>
-                </div>
+                <Tabs defaultValue="executive" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="executive">Executive Summary</TabsTrigger>
+                    <TabsTrigger value="property">Property Details</TabsTrigger>
+                    <TabsTrigger value="market">Market Analysis</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="executive" className="mt-4">
+                    <div className="p-6 border rounded-lg bg-green-50">
+                      <h4 className="font-semibold text-green-800 mb-4">Executive Summary</h4>
+                      <div className="text-sm text-green-700 whitespace-pre-wrap leading-relaxed">
+                        {pafReportData.mockData.executiveSummary}
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="property" className="mt-4">
+                    <div className="p-6 border rounded-lg bg-blue-50">
+                      <h4 className="font-semibold text-blue-800 mb-4">Property Details</h4>
+                      <div className="text-sm text-blue-700 whitespace-pre-wrap leading-relaxed">
+                        {pafReportData.mockData.propertyDetails}
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="market" className="mt-4">
+                    <div className="p-6 border rounded-lg bg-purple-50">
+                      <h4 className="font-semibold text-purple-800 mb-4">Market Analysis</h4>
+                      <div className="text-sm text-purple-700 whitespace-pre-wrap leading-relaxed">
+                        {pafReportData.mockData.marketAnalysis}
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           )}
@@ -1479,32 +1487,40 @@ KEY RISK MITIGATION STRATEGIES:
                 <CardTitle>ICV Report - All Tabs Completed</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="p-4 border rounded-lg bg-green-50">
-                    <h4 className="font-semibold text-green-800">Executive Summary</h4>
-                    <p className="text-sm text-green-700 mt-2">{icvReportData.mockData.executiveSummary}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-blue-50">
-                    <h4 className="font-semibold text-blue-800">Property Details</h4>
-                    <p className="text-sm text-blue-700 mt-2">{icvReportData.mockData.propertyDetails}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-purple-50">
-                    <h4 className="font-semibold text-purple-800">Market Analysis</h4>
-                    <p className="text-sm text-purple-700 mt-2">{icvReportData.mockData.marketAnalysis}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-orange-50">
-                    <h4 className="font-semibold text-orange-800">Income Analysis</h4>
-                    <p className="text-sm text-orange-700 mt-2">{icvReportData.mockData.incomeAnalysis}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-red-50">
-                    <h4 className="font-semibold text-red-800">Risk Assessment</h4>
-                    <p className="text-sm text-red-700 mt-2">{icvReportData.mockData.riskAssessment}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-gray-50">
-                    <h4 className="font-semibold text-gray-800">All Tabs Complete</h4>
-                    <p className="text-sm text-gray-700 mt-2">✓ Every section filled with comprehensive data</p>
-                  </div>
-                </div>
+                <Tabs defaultValue="executive" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="executive">Executive Summary</TabsTrigger>
+                    <TabsTrigger value="property">Property Details</TabsTrigger>
+                    <TabsTrigger value="market">Market Analysis</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="executive" className="mt-4">
+                    <div className="p-6 border rounded-lg bg-green-50">
+                      <h4 className="font-semibold text-green-800 mb-4">Executive Summary</h4>
+                      <div className="text-sm text-green-700 whitespace-pre-wrap leading-relaxed">
+                        {icvReportData.mockData.executiveSummary}
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="property" className="mt-4">
+                    <div className="p-6 border rounded-lg bg-blue-50">
+                      <h4 className="font-semibold text-blue-800 mb-4">Property Details</h4>
+                      <div className="text-sm text-blue-700 whitespace-pre-wrap leading-relaxed">
+                        {icvReportData.mockData.propertyDetails}
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="market" className="mt-4">
+                    <div className="p-6 border rounded-lg bg-purple-50">
+                      <h4 className="font-semibold text-purple-800 mb-4">Market Analysis</h4>
+                      <div className="text-sm text-purple-700 whitespace-pre-wrap leading-relaxed">
+                        {icvReportData.mockData.marketAnalysis}
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           )}
