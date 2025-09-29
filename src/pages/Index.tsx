@@ -43,7 +43,7 @@ import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackg
 import AuthStatus from '@/components/AuthStatus';
 import { useNavigate } from 'react-router-dom';
 import { TBEProgressPaymentDashboard } from '@/components/progress-payments/TBEProgressPaymentDashboard';
-import { DemoPlatform } from '@/components/demo/DemoPlatform';
+
 
 
 const Index = () => {
@@ -96,12 +96,6 @@ const Index = () => {
                 <div className="flex items-center gap-3">
                   <AuthStatus />
                   
-                  <Link to="/client-demo">
-                    <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-emerald-200 text-emerald-700 hover:bg-emerald-50">
-                      <Shield className="w-4 h-4 mr-2" />
-                      Client Demo
-                    </Button>
-                  </Link>
                 </div>
               </div>
               
@@ -166,10 +160,6 @@ const Index = () => {
                       <TabsTrigger value="progress-payments" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
                         <Construction className="h-4 w-4" />
                         Progress Payments
-                      </TabsTrigger>
-                      <TabsTrigger value="generate-mock-reports" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-lg">
-                        <Users className="h-4 w-4" />
-                        Client Demo
                       </TabsTrigger>
                     </TabsList>
                   </div>
@@ -603,22 +593,6 @@ const Index = () => {
                     </Card>
                   </TabsContent>
 
-                  <TabsContent value="generate-mock-reports" className="mt-8">
-                    <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-purple-200/50">
-                      <CardHeader className="border-b border-purple-100 bg-gradient-to-r from-purple-50/50 to-blue-50/30">
-                        <CardTitle className="text-2xl flex items-center gap-3 text-purple-800">
-                          <Users className="h-6 w-6 text-purple-700" />
-                          Client Demo
-                        </CardTitle>
-                        <p className="text-purple-700">
-                          Perfect for demonstrating the complete end-to-end workflow to clients with contradiction checking
-                        </p>
-                      </CardHeader>
-                      <CardContent className="p-0">
-                        <DemoPlatform />
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
                 </Tabs>
               </div>
             </div>

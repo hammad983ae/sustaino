@@ -38,7 +38,7 @@ import PropertyValuations from "./pages/PropertyValuations";
 import PropertyAssessment from "./pages/PropertyAssessment";
 import WorkHubPage from "./pages/WorkHub";
 import WhiteLabelConfig from "./pages/WhiteLabelConfig";
-import ClientDemo from "./pages/ClientDemo";
+
 import Auth from "./pages/Auth";
 
 import AutomatedReport from "./pages/AutomatedReport";
@@ -146,7 +146,7 @@ const App = () => (
                     <WhiteLabelConfig />
                   </ProtectedRoute>
                 } />
-                <Route path="/client-demo" element={<ClientDemo />} />
+                
                 
                 <Route path="/comprehensive-valuation" element={
                   <ProtectedRoute>
