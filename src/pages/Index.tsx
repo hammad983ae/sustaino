@@ -43,7 +43,7 @@ import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackg
 import AuthStatus from '@/components/AuthStatus';
 import { useNavigate } from 'react-router-dom';
 import { TBEProgressPaymentDashboard } from '@/components/progress-payments/TBEProgressPaymentDashboard';
-import GenerateMockReports from '@/components/GenerateMockReports';
+
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState('form');
@@ -614,7 +614,9 @@ const Index = () => {
                         </p>
                       </CardHeader>
                       <CardContent className="p-0">
-                        <GenerateMockReports />
+                        <div className="p-6 text-center">
+                          <p className="text-muted-foreground">Demo functionality removed - ready to rebuild</p>
+                        </div>
                       </CardContent>
                     </Card>
                   </TabsContent>
