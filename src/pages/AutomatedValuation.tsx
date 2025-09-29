@@ -63,10 +63,10 @@ export default function AutomatedValuation() {
     // Navigate to specific platforms based on property type
     if (type === "residential") {
       // Navigate to ISFV (Property Pro Valuation) for residential
-      window.location.href = "/valuation-analysis"; // ISFV platform
+      window.location.href = "/comprehensive-valuation-analysis"; // ISFV platform
     } else {
       // Navigate to PAF function for commercial, agricultural, specialised, development
-      window.location.href = "/valuation-analysis"; // PAF platform  
+      window.location.href = "/comprehensive-valuation-analysis"; // PAF platform  
     }
   };
   const handleSetupMethodSelect = (method: "quick" | "advanced") => {
