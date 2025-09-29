@@ -1099,7 +1099,7 @@ KEY RISK MITIGATION STRATEGIES:
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">EPAT™ Demo Reports</h1>
+        <h1 className="text-4xl font-bold mb-4">Professional Valuation Demo Reports</h1>
         <p className="text-lg text-muted-foreground">
           Experience our complete valuation platform with instant report generation
         </p>
