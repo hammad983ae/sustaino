@@ -43,6 +43,7 @@ import PropertyValuation3DBackground from '@/components/PropertyValuation3DBackg
 import AuthStatus from '@/components/AuthStatus';
 import { useNavigate } from 'react-router-dom';
 import { TBEProgressPaymentDashboard } from '@/components/progress-payments/TBEProgressPaymentDashboard';
+import { DemoPlatform } from '@/components/demo/DemoPlatform';
 
 
 const Index = () => {
@@ -614,9 +615,7 @@ const Index = () => {
                         </p>
                       </CardHeader>
                       <CardContent className="p-0">
-                        <div className="p-6 text-center">
-                          <p className="text-muted-foreground">Demo functionality removed - ready to rebuild</p>
-                        </div>
+                        <DemoPlatform />
                       </CardContent>
                     </Card>
                   </TabsContent>
