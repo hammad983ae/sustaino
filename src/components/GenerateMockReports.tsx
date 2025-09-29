@@ -173,6 +173,88 @@ export default function GenerateMockReports() {
   const [pafAmending, setPAFAmending] = useState(false);
   const [icvAmending, setICVAmending] = useState(false);
 
+  // Clear data functions
+  const clearISFVData = () => {
+    setSelectedISFVProperty('');
+    setISFVGenerated(false);
+    setISFVContradictions([]);
+    setISFVAmendments([]);
+    setISFVReportData({
+      propertyAddress: "",
+      estimatedValue: 0,
+      confidence: 'medium',
+      riskScore: 0,
+      automationStatus: 'idle',
+      lastUpdated: '',
+      mockData: {
+        propertyData: {
+          propertyType: "",
+          landArea: "",
+          buildingArea: "",
+          bedrooms: 0,
+          bathrooms: 0,
+          carSpaces: 0,
+          yearBuilt: 0,
+          structural_condition: '',
+          kitchen_condition: '',
+          overall_condition: ''
+        },
+        riskRatings: {
+          environmental: 0,
+          structural: 0,
+          market: 0,
+          legal: 0,
+          economic: 0
+        },
+        vraAssessment: { comments: '', recommendations: '' },
+        salesEvidence: [],
+        generalComments: '',
+        contradictionResults: ''
+      }
+    });
+    toast.success('ISFV data cleared successfully');
+  };
+
+  const clearPAFData = () => {
+    setSelectedPAFProperty('');
+    setPAFGenerated(false);
+    setPAFContradictions([]);
+    setPAFAmendments([]);
+    setPAFReportData({
+      propertyAddress: "",
+      estimatedValue: 0,
+      reportType: "",
+      mockData: {
+        executiveSummary: "",
+        propertyDetails: "",
+        marketAnalysis: "",
+        incomeAnalysis: "",
+        riskAssessment: ""
+      }
+    });
+    toast.success('PAF data cleared successfully');
+  };
+
+  const clearICVData = () => {
+    setSelectedICVProperty('');
+    setICVGenerated(false);
+    setICVContradictions([]);
+    setICVAmendments([]);
+    setICVReportData({
+      propertyAddress: "",
+      estimatedValue: 0,
+      reportType: "",
+      mockData: {
+        executiveSummary: "",
+        propertyDetails: "",
+        marketAnalysis: "",
+        incomeAnalysis: "",
+        riskAssessment: ""
+      }
+    });
+    toast.success('ICV data cleared successfully');
+  };
+
   // Generate functions - instant generation for demo
   const generateISFVReport = async () => {
     if (!selectedISFVProperty) {
@@ -181,6 +263,15 @@ export default function GenerateMockReports() {
     }
 
     setISFVGenerating(true);
+    
+    // Update with selected property data
+    const selectedProp = isfvDemoProperties.find(p => p.name === selectedISFVProperty);
+    if (selectedProp) {
+      setISFVReportData(prev => ({
+        ...prev,
+        propertyAddress: selectedProp.address
+      }));
+    }
     
     // Instant generation for demo
     setTimeout(() => {
@@ -198,6 +289,16 @@ export default function GenerateMockReports() {
 
     setPAFGenerating(true);
     
+    // Update with selected property data
+    const selectedProp = pafDemoProperties.find(p => p.name === selectedPAFProperty);
+    if (selectedProp) {
+      setPAFReportData(prev => ({
+        ...prev,
+        propertyAddress: selectedProp.address,
+        reportType: selectedProp.reportType
+      }));
+    }
+    
     // Instant generation for demo
     setTimeout(() => {
       setPAFGenerated(true);
@@ -213,6 +314,16 @@ export default function GenerateMockReports() {
     }
 
     setICVGenerating(true);
+    
+    // Update with selected property data
+    const selectedProp = icvDemoProperties.find(p => p.name === selectedICVProperty);
+    if (selectedProp) {
+      setICVReportData(prev => ({
+        ...prev,
+        propertyAddress: selectedProp.address,
+        reportType: selectedProp.reportType
+      }));
+    }
     
     // Instant generation for demo
     setTimeout(() => {
@@ -435,6 +546,15 @@ export default function GenerateMockReports() {
                   )}
                 </Button>
                 
+                <Button 
+                  onClick={clearISFVData}
+                  variant="outline"
+                  className="border-gray-300"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Clear All Data
+                </Button>
+                
                 {isfvGenerated && (
                   <>
                     <Button 
@@ -540,6 +660,15 @@ export default function GenerateMockReports() {
                       Generate PAF Report
                     </>
                   )}
+                </Button>
+                
+                <Button 
+                  onClick={clearPAFData}
+                  variant="outline"
+                  className="border-gray-300"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Clear All Data
                 </Button>
                 
                 {pafGenerated && (
@@ -672,6 +801,15 @@ export default function GenerateMockReports() {
                       Generate ICV Report
                     </>
                   )}
+                </Button>
+                
+                <Button 
+                  onClick={clearICVData}
+                  variant="outline"
+                  className="border-gray-300"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Clear All Data
                 </Button>
                 
                 {icvGenerated && (
