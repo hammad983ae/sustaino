@@ -6,7 +6,7 @@
  * ============================================================================
  */
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import WebDataUploadInterface from '@/components/WebDataUploadInterface';
 import DataStorageViewer from '@/components/DataStorageViewer';
@@ -44,6 +44,7 @@ import Enhanced3DCard from "@/components/Enhanced3DCard";
 // Import professional images
 import automatedValuationPlatform from '@/assets/automated-valuation-platform.jpg';
 export default function AutomatedValuation() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState("propertyType");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [setupMethod, setSetupMethod] = useState<"quick" | "advanced" | null>(null);
@@ -63,10 +64,10 @@ export default function AutomatedValuation() {
     // Navigate to specific platforms based on property type
     if (type === "residential") {
       // Navigate to ISFV (Property Pro Valuation) for residential
-      window.location.href = "/comprehensive-valuation-analysis"; // ISFV platform
+      navigate("/comprehensive-valuation-analysis"); // ISFV platform
     } else {
       // Navigate to PAF function for commercial, agricultural, specialised, development
-      window.location.href = "/comprehensive-valuation-analysis"; // PAF platform  
+      navigate("/comprehensive-valuation-analysis"); // PAF platform  
     }
   };
   const handleSetupMethodSelect = (method: "quick" | "advanced") => {
